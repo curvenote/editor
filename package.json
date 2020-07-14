@@ -1,0 +1,89 @@
+{
+  "name": "@iooxa/editor",
+  "version": "0.0.1",
+  "description": "Schema and markdown parser for the iooxa editor",
+  "author": "Rowan Cockett <rowan@iooxa.com>",
+  "homepage": "https://github.com/iooxa/editor",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "src": "src",
+    "test": "test"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iooxa/editor.git"
+  },
+  "scripts": {
+    "prepublishOnly": "yarn run compile",
+    "test": "jest",
+    "build": "tsc",
+    "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
+    "compile": "yarn run clean && tsc -p .",
+    "watch": "tsc -w -p .",
+    "clean": "rm -rf dist"
+  },
+  "bugs": {
+    "url": "https://github.com/iooxa/editor/issues"
+  },
+  "dependencies": {
+    "markdown-it": "^11.0.0",
+    "orderedmap": "^1.1.1",
+    "prosemirror-collab": "^1.2.2",
+    "prosemirror-markdown": "^1.4.5",
+    "prosemirror-model": "^1.9.1",
+    "prosemirror-schema-list": "^1.1.2",
+    "prosemirror-state": "^1.3.2",
+    "prosemirror-transform": "^1.2.3",
+    "prosemirror-view": "^1.13.11"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "@types/mocha": "^8.0.0",
+    "@sinonjs/fake-timers": "^6.0.1",
+    "@types/jest": "^25.2.3",
+    "@types/jsdom": "^12.2.4",
+    "@types/lodash.isequal": "^4.5.5",
+    "@types/markdown-it": "^10.0.1",
+    "@types/orderedmap": "^1.0.0",
+    "@types/prosemirror-collab": "^1.0.2",
+    "@types/prosemirror-markdown": "^1.0.3",
+    "@types/prosemirror-model": "^1.7.2",
+    "@types/prosemirror-schema-basic": "^1.0.1",
+    "@types/prosemirror-schema-list": "^1.0.1",
+    "@types/prosemirror-state": "^1.2.3",
+    "@types/prosemirror-test-builder": "^1.0.1",
+    "@types/prosemirror-transform": "^1.1.1",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-airbnb-typescript": "^6.3.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-jest": "^23.13.1",
+    "jest": "^24.9.0",
+    "jsdom": "^16.1.0",
+    "lodash.isequal": "^4.5.0",
+    "prosemirror-test-builder": "^1.0.3",
+    "ts-jest": "^26.0.0",
+    "typescript": "^3.9.6",
+    "eslint-plugin-no-only-tests": "^2.4.0",
+    "eslint-plugin-no-skip-tests": "^1.1.0"
+  }
+}
