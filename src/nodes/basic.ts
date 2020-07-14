@@ -3,6 +3,10 @@ import { addListNodes } from 'prosemirror-schema-list';
 import OrderedMap from 'orderedmap';
 import { NodeGroups } from './types';
 
+export const doc: NodeSpec = {
+  content: `(${NodeGroups.block} | ${NodeGroups.top})+`,
+};
+
 export const paragraph: NodeSpec = {
   content: `${NodeGroups.inline}*`,
   group: NodeGroups.block,
