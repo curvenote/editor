@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { setInnerHTML } from './utils';
-import { upgrade } from '.';
+import { migrateHTML } from '.';
 
 const { document, DOMParser } = new JSDOM('').window;
 
@@ -20,7 +20,7 @@ describe('Upgrades', () => {
   it('should bring nested variables to the top', () => {
     const content = nestedVariable;
     const before = getElement(content);
-    const after = upgrade(content, document, DOMParser);
+    const after = migrateHTML(content, document, DOMParser);
     expect(before.children.length).toBe(1);
     expect(before.children[0].nodeName).toBe('P');
     expect(before.children[0].children[0].nodeName).toBe('INK-VAR');
@@ -34,7 +34,7 @@ describe('Upgrades', () => {
   it('Change the displays to the correct format', () => {
     const content = displays;
     const before = getElement(content);
-    const after = upgrade(content, document, DOMParser);
+    const after = migrateHTML(content, document, DOMParser);
     expect(before.children.length).toBe(1);
     expect(before.children[0].nodeName).toBe('P');
     expect(before.children[0].children[0].nodeName).toBe('INK-DISPLAY');
@@ -56,7 +56,7 @@ describe('Upgrades', () => {
   it('Change the dynamics to the correct format', () => {
     const content = dynamics;
     const before = getElement(content);
-    const after = upgrade(content, document, DOMParser);
+    const after = migrateHTML(content, document, DOMParser);
     expect(before.children.length).toBe(1);
     expect(before.children[0].nodeName).toBe('P');
     expect(before.children[0].children[0].nodeName).toBe('INK-DYNAMIC');
@@ -70,7 +70,7 @@ describe('Upgrades', () => {
   it('Change the ranges to the correct format', () => {
     const content = ranges;
     const before = getElement(content);
-    const after = upgrade(content, document, DOMParser);
+    const after = migrateHTML(content, document, DOMParser);
     expect(before.children.length).toBe(1);
     expect(before.children[0].nodeName).toBe('P');
     expect(before.children[0].children[0].nodeName).toBe('INK-RANGE');
@@ -84,7 +84,7 @@ describe('Upgrades', () => {
   it('Change the aside', () => {
     const content = asides;
     const before = getElement(content);
-    const after = upgrade(content, document, DOMParser);
+    const after = migrateHTML(content, document, DOMParser);
     expect(before.children.length).toBe(2);
     expect(before.children[0].nodeName).toBe('P');
     expect(before.children[1].nodeName).toBe('INK-ASIDE');
@@ -95,7 +95,7 @@ describe('Upgrades', () => {
   it('Change the callouts', () => {
     const content = callouts;
     const before = getElement(content);
-    const after = upgrade(content, document, DOMParser);
+    const after = migrateHTML(content, document, DOMParser);
     expect(before.children.length).toBe(3);
     expect(before.children[0].nodeName).toBe('P');
     expect(before.children[1].nodeName).toBe('INK-CALLOUT');
