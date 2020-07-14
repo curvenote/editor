@@ -1,5 +1,5 @@
 import { nodes, compare } from '../../test/build';
-import { fromMarkdown, toMarkdown } from './markdown';
+import { fromMarkdown, toMarkdown } from '.';
 
 const {
   doc, blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, a, link, br, img,

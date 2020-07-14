@@ -1,6 +1,9 @@
 import { JSDOM } from 'jsdom';
-import { getEditorState } from '.';
+import { Schema } from 'prosemirror-model';
+import { fromHTML } from '.';
+import { nodes, marks } from '..';
 
+const schema = new Schema({ nodes, marks });
 const { document, DOMParser } = new JSDOM('').window;
 
 
@@ -9,15 +12,13 @@ const v1 = '<r-var name="v" value="1" format=".0f"></r-var><h1 id="create-some-v
 
 describe('Upgrades', () => {
   it('should update v0', () => {
-    const state = getEditorState(v0, 0, document, DOMParser);
-    const doc = state.doc.toJSON();
+    const doc = fromHTML(v0, schema, document, DOMParser).toJSON();
     expect(doc.content[0].type).toBe('var');
     expect(doc.content[1].type).toBe('var');
     expect(doc.content[4].content[0].attrs.changeFunction).toBe('{x: value}');
   });
   it('should not change v1', () => {
-    const state = getEditorState(v1, 0, document, DOMParser);
-    const doc = state.doc.toJSON();
+    const doc = fromHTML(v1, schema, document, DOMParser).toJSON();
     expect(doc.content[0].type).toBe('var');
   });
 });

@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Node as ProsemirrorNode } from 'prosemirror-model';
+import { Node as ProsemirrorNode, Schema } from 'prosemirror-model';
 import { builders } from 'prosemirror-test-builder';
 import isEqual from 'lodash.isequal';
-import { schema } from '../src';
+import * as src from '../src';
+
+const schema = new Schema({ nodes: src.nodes, marks: src.marks });
 
 export const nodes = builders(schema, {
   p: { nodeType: 'paragraph' },

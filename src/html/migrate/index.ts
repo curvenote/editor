@@ -1,31 +1,31 @@
-import { setInnerHTML } from '../utils';
-import { Parser } from '../types';
+import { setInnerHTML } from './utils';
+import { Parser } from '../../types';
 
 function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parser) {
   // Bring all variables to the top of the document:
   const vars = Array.from(element.querySelectorAll('ink-var'));
   vars.reverse().forEach((n) => {
-    n.parentElement.removeChild(n);
+    n.parentElement?.removeChild(n);
     element.prepend(n);
   });
   const displays = Array.from(element.querySelectorAll('ink-display'));
   displays.forEach((n) => {
     const transform = n.getAttribute('transform');
-    const name = n.getAttribute('name');
+    const name = n.getAttribute('name') ?? '';
     n.setAttribute(':value', transform || name);
     n.removeAttribute('transform');
     n.removeAttribute('name');
   });
   const dynamics = Array.from(element.querySelectorAll('ink-dynamic'));
   dynamics.forEach((n) => {
-    const name = n.getAttribute('name');
+    const name = n.getAttribute('name') ?? '';
     n.setAttribute(':value', name);
     n.setAttribute(':change', `{${n.getAttribute('name')}: value}`);
     n.removeAttribute('name');
   });
   const ranges = Array.from(element.querySelectorAll('ink-range'));
   ranges.forEach((n) => {
-    const name = n.getAttribute('name');
+    const name = n.getAttribute('name') ?? '';
     n.setAttribute(':value', name);
     n.setAttribute(':change', `{${n.getAttribute('name')}: value}`);
     n.removeAttribute('name');
@@ -47,7 +47,7 @@ function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parse
   return setInnerHTML(document.createElement('div'), html.replace(/<ink-/g, '<r-').replace(/<\/ink-/g, '</r-'), DOMParser);
 }
 
-export function upgrade(content: string, document: Document, DOMParser: Parser) {
+export function migrateHTML(content: string, document: Document, DOMParser: Parser) {
   const element = setInnerHTML(document.createElement('div'), content, DOMParser) as HTMLDivElement;
   return migrateV0(element, document, DOMParser);
 }

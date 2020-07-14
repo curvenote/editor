@@ -1,5 +1,5 @@
 import { JSDOM } from 'jsdom';
-import { setInnerHTML } from '../utils';
+import { setInnerHTML } from './utils';
 import { upgrade } from '.';
 
 const { document, DOMParser } = new JSDOM('').window;

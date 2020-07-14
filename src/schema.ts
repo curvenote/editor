@@ -1,6 +1,5 @@
-import { Schema, NodeSpec, MarkSpec } from 'prosemirror-model';
-import { addListNodes } from 'prosemirror-schema-list';
-import OrderedMap from 'orderedmap';
+import { NodeSpec, MarkSpec } from 'prosemirror-model';
+import * as basic from './nodes/basic';
 import variable from './nodes/variable';
 import display from './nodes/display';
 import range from './nodes/range';
@@ -10,88 +9,22 @@ import callout from './nodes/callout';
 import equation from './nodes/equation';
 import { NodeGroups, MarkGroups } from './nodes/types';
 
-const listNodes = addListNodes(OrderedMap.from({}), `paragraph ${NodeGroups.block}*`, NodeGroups.block);
 
 export const nodes = {
   doc: {
     content: `(${NodeGroups.block} | ${NodeGroups.top})+`,
   } as NodeSpec,
-  paragraph: {
-    content: `${NodeGroups.inline}*`,
-    group: NodeGroups.block,
-    parseDOM: [{ tag: 'p' }],
-    toDOM() { return ['p', 0]; },
-  } as NodeSpec,
-  blockquote: {
-    content: `${NodeGroups.block}+`,
-    group: NodeGroups.block,
-    defining: true,
-    parseDOM: [{ tag: 'blockquote' }],
-    toDOM() { return ['blockquote', 0]; },
-  } as NodeSpec,
-  horizontal_rule: {
-    group: NodeGroups.block,
-    parseDOM: [{ tag: 'hr' }],
-    toDOM() { return ['hr']; },
-  } as NodeSpec,
-  heading: {
-    attrs: { level: { default: 1 } },
-    content: `${NodeGroups.inline}*`,
-    group: NodeGroups.block,
-    defining: true,
-    parseDOM: [
-      { tag: 'h1', attrs: { level: 1 } },
-      { tag: 'h2', attrs: { level: 2 } },
-      { tag: 'h3', attrs: { level: 3 } },
-      { tag: 'h4', attrs: { level: 4 } },
-      { tag: 'h5', attrs: { level: 5 } },
-      { tag: 'h6', attrs: { level: 6 } },
-    ],
-    toDOM(node) { return [`h${node.attrs.level}`, 0]; },
-  } as NodeSpec,
-  code_block: {
-    content: `${NodeGroups.text}*`,
-    marks: '',
-    group: NodeGroups.block,
-    code: true,
-    defining: true,
-    parseDOM: [{ tag: 'pre', preserveWhitespace: 'full' }],
-    toDOM() { return ['pre', ['code', 0]]; },
-  } as NodeSpec,
-  text: {
-    group: NodeGroups.inline,
-  } as NodeSpec,
-  image: {
-    inline: true,
-    attrs: {
-      src: {},
-      alt: { default: null },
-      title: { default: null },
-    },
-    group: NodeGroups.inline,
-    draggable: true,
-    parseDOM: [{
-      tag: 'img[src]',
-      getAttrs(dom: any) {
-        return {
-          src: dom.getAttribute('src'),
-          title: dom.getAttribute('title'),
-          alt: dom.getAttribute('alt'),
-        };
-      },
-    }],
-    toDOM(node) { const { src, alt, title } = node.attrs; return ['img', { src, alt, title }]; },
-  } as NodeSpec,
-  hard_break: {
-    inline: true,
-    group: NodeGroups.inline,
-    selectable: false,
-    parseDOM: [{ tag: 'br' }],
-    toDOM() { return ['br']; },
-  } as NodeSpec,
-  ordered_list: listNodes.get('ordered_list'),
-  bullet_list: listNodes.get('bullet_list'),
-  list_item: listNodes.get('list_item'),
+  paragraph: basic.paragraph,
+  blockquote: basic.blockquote,
+  horizontal_rule: basic.horizontal_rule,
+  heading: basic.heading,
+  code_block: basic.code_block,
+  text: basic.text,
+  image: basic.image,
+  hard_break: basic.hard_break,
+  ordered_list: basic.ordered_list,
+  bullet_list: basic.bullet_list,
+  list_item: basic.list_item,
   var: variable, // TODO: Update this to full `variable`
   display,
   dynamic,
@@ -165,6 +98,3 @@ export const marks = {
     group: MarkGroups.format,
   } as MarkSpec,
 };
-
-// NOTE: this should not be used in the frontend. Create your own!
-export const schema = new Schema({ nodes, marks });
