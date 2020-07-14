@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -36,31 +34,16 @@ jobs:
       with:
         node-version: 12.x
 
-    - name: add keyfile.json
-      env:
-        KEYFILE_CONTENT: ${{ secrets.DEV_1_KEYFILE_JSON }}
-      run: |
-        echo "$KEYFILE_CONTENT" >> config/dev/iooxa-dev-1/keyfile.json
-
-    - name: add secrets.json
-      env:
-        SECRETS_CONTENT: ${{ secrets.DEV_1_SECRETS_JSON }}
-      run: |
-        echo "$SECRETS_CONTENT" >> config/dev/iooxa-dev-1/secrets.json
-
     # Runs a set of commands using the runners shell
-    - name: install the packages
+    - name: install
       run: |
-        pushd packages
-        make ci-install
+        yarn install
 
-    - name: run the linter
+    - name: lint
       run: |
-        pushd packages
-        make lint
-    
-    - name: run tests
+        yarn run lint
+
+    - name: test
       run: |
-        pushd packages
-        make test
+        yarn run test
 
