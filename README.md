@@ -1,4 +1,5 @@
 # `@iooxa/editor`
+[![Tests Passing](https://action-badges.now.sh/iooxa/editor?action=CI)](https://github.com/iooxa/editor/actions?query=workflow%3ACI)
 
 **Overview & Goals**
 * Provide a typed schema for writing reactive scientific documents using [iooxa components](https://iooxa.dev)
