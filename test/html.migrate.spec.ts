@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
-import { setInnerHTML } from './utils';
-import { migrateHTML } from '.';
+import { setInnerHTML } from '../src/html/migrate/utils';
+import { migrateHTML } from '../src/html/migrate';
 
 const { document, DOMParser } = new JSDOM('').window;
 

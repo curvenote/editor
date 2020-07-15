@@ -1,8 +1,8 @@
 import { JSDOM } from 'jsdom';
-import { fromHTML, toHTML } from '.';
-import { Schema, nodes, marks } from '..';
-import { compare, tnodes, tdoc } from '../../test/build';
-import { migrateHTML } from './migrate';
+import { fromHTML, toHTML } from '../src/html';
+import { Schema, nodes, marks } from '../src';
+import { compare, tnodes, tdoc } from './build';
+import { migrateHTML } from '../src/html/migrate';
 
 const { document, DOMParser } = new JSDOM('').window;
 const schema = new Schema({ nodes, marks });

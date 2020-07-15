@@ -1,5 +1,5 @@
-import { compare, tnodes, tdoc } from '../../test/build';
-import { fromMarkdown, toMarkdown } from '.';
+import { compare, tnodes, tdoc } from './build';
+import { fromMarkdown, toMarkdown } from '../src/markdown';
 
 const {
   blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, a, link, br, img,
