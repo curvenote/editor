@@ -19,7 +19,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*",
+    "src/**/*"
   ],
   "exclude": [
     "**/*.spec.ts"
