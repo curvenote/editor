@@ -17,15 +17,19 @@ const display: NodeSpec = {
   },
   toDOM(node) {
     const { value, valueFunction, format } = node.attrs;
-    return ['r-display', { value, ':value': valueFunction, format }];
+    return ['r-display', {
+      value: value || undefined,
+      ':value': valueFunction || undefined,
+      format: format || undefined,
+    }];
   },
   parseDOM: [{
     tag: 'r-display',
     getAttrs(dom: any): DisplayAttrs {
       return {
-        value: dom.getAttribute('value'),
-        valueFunction: dom.getAttribute(':value'),
-        format: dom.getAttribute('format'),
+        value: dom.getAttribute('value') ?? '',
+        valueFunction: dom.getAttribute(':value') ?? '',
+        format: dom.getAttribute('format') ?? '',
       };
     },
   }],

@@ -8,32 +8,37 @@ export type VariableAttrs = {
   format?: string;
 };
 
+const DEFAULT_FORMAT = '.1f';
+
 const variable: NodeSpec = {
   // inline: true,
   group: NodeGroups.top,
   content: '',
   attrs: {
     name: {},
-    value: { default: '0' },
+    value: { default: '' },
     valueFunction: { default: '' },
-    format: { default: '.1f' },
+    format: { default: DEFAULT_FORMAT },
   },
   toDOM(node) {
     const {
       name, value, valueFunction, format,
     } = node.attrs;
     return ['r-var', {
-      name, value, ':value': valueFunction, format,
+      name,
+      value: value || undefined,
+      ':value': valueFunction || undefined,
+      format,
     }];
   },
   parseDOM: [{
     tag: 'r-var',
     getAttrs(dom: any): VariableAttrs {
       return {
-        name: dom.getAttribute('name'),
-        value: dom.getAttribute('value'),
-        valueFunction: dom.getAttribute(':value'),
-        format: dom.getAttribute('format'),
+        name: dom.getAttribute('name') ?? '',
+        value: dom.getAttribute('value') ?? '',
+        valueFunction: dom.getAttribute(':value') ?? '',
+        format: dom.getAttribute('format') ?? DEFAULT_FORMAT,
       };
     },
   }],

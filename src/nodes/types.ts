@@ -4,6 +4,7 @@ export enum NodeGroups {
   'inline' = 'inline',
   'text' = 'text',
 }
+
 export enum MarkGroups {
   'format' = 'format',
 }

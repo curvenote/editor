@@ -1,24 +1,75 @@
 import { JSDOM } from 'jsdom';
-import { Schema } from 'prosemirror-model';
-import { fromHTML } from '.';
-import { nodes, marks } from '..';
+import { fromHTML, toHTML } from '.';
+import { Schema, nodes, marks } from '..';
+import { compare, tnodes, tdoc } from '../../test/build';
+import { migrateHTML } from './migrate';
 
-const schema = new Schema({ nodes, marks });
 const { document, DOMParser } = new JSDOM('').window;
+const schema = new Schema({ nodes, marks });
 
+const same = compare(
+  (c) => fromHTML(c, schema, document, DOMParser),
+  (doc) => toHTML(doc, schema, document),
+);
 
-const v0 = '<p>We have some variables!</p><p><ink-var name="x" value="3" format=".1f"></ink-var></p><p><ink-range name="x"></ink-range><ink-equation>x =</ink-equation> <ink-display name="x" format=".1f" transform=""></ink-display></p><p>Note that you can talk about the variable and show it: <ink-display name="x" format=".3f" transform=""></ink-display> (e.g. with way more accuracy!).</p><p>And the <code>range</code> again: <ink-range name="x"></ink-range></p><p>We can also create derived values for our variables. For example: <ink-var name="x2" value="" :value="x ** 2" format=".0f"></ink-var>.</p><p>This is a user defined function that evaluates <ink-equation>x^2</ink-equation>. In this case, the square of <ink-display name="x" format=".0f" transform=""></ink-display> is <strong><ink-display name="x2" format="" transform=""></ink-display></strong>.</p>';
-const v1 = '<r-var name="v" value="1" format=".0f"></r-var><h1 id="create-some-variables">Create some variables</h1><p><r-range value="10" :value="v" :change="{v: value}" min="0" max="100" step="1"></r-range></p><p><r-display value="" :value="v" format=""></r-display> and <r-display value="" :value="v + 1" format=""></r-display></p><aside><p>This is over here!</p></aside><aside class="callout info"><p>This is a callout!</p></aside><p>This is half: <r-equation>\\frac{1}{2}</r-equation> which is nice!</p>';
+const {
+  blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, a, link, br, img,
+  variable, variableDerived, equation, equationInline,
+  range, dynamic,
+} = tnodes;
 
-describe('Upgrades', () => {
-  it('should update v0', () => {
-    const doc = fromHTML(v0, schema, document, DOMParser).toJSON();
-    expect(doc.content[0].type).toBe('var');
-    expect(doc.content[1].type).toBe('var');
-    expect(doc.content[4].content[0].attrs.changeFunction).toBe('{x: value}');
-  });
-  it('should not change v1', () => {
-    const doc = fromHTML(v1, schema, document, DOMParser).toJSON();
-    expect(doc.content[0].type).toBe('var');
-  });
+describe('HTML Upgrades', () => {
+  it('upgrades and hoists variables', () => (
+    same(
+      migrateHTML('<p>hello</p><p><ink-var name="x" value="1" format=".0f"></ink-var>world</p>', document, DOMParser).innerHTML,
+      tdoc(variable(), p('hello'), p('world')),
+    )));
+  it('upgrades equations', () => (
+    same(
+      migrateHTML('<p><ink-equation inline>y = mx + b</ink-equation></p>', document, DOMParser).innerHTML,
+      tdoc(p('', equationInline('y = mx + b'))),
+    )));
+});
+
+describe('HTML', () => {
+  it('parses headings', () => (
+    same(
+      '<h1>one</h1><h2>two</h2><p>three</p>',
+      tdoc(h1('one'), h2('two'), p('three')),
+    )));
+  it('parses variables', () => (
+    same(
+      '<r-var name="x" value="1" format=".0f"></r-var>',
+      tdoc(variable()),
+    )));
+  it('parses derived variables', () => (
+    same(
+      '<r-var name="y" :value="x + 1" format=".0f"></r-var>',
+      tdoc(variableDerived()),
+    )));
+  it('parses ranges', () => (
+    same(
+      '<p><r-range :value="v" :change="{v: value}" min="0" max="10" step="0.1"></r-range></p>',
+      tdoc(p('', range())),
+    )));
+  it('parses dynamics', () => (
+    same(
+      '<p><r-dynamic :value="v" :change="{v: value}" format=".0f" min="0" max="10" step="0.1"></r-dynamic></p>',
+      tdoc(p('', dynamic())),
+    )));
+  it('parses equations', () => (
+    same(
+      '<p><r-equation>y = mx + b</r-equation></p>',
+      tdoc(p('', equation('y = mx + b'))),
+    )));
+  it('parses inline equations', () => (
+    same(
+      '<p><r-equation inline="">y = mx + b</r-equation></p>',
+      tdoc(p('', equationInline('y = mx + b'))),
+    )));
+  it('does not parse scripts', () => (
+    same(
+      { before: '<script>alert("hi");</script>', after: '<p></p>' },
+      tdoc(p()),
+    )));
 });
