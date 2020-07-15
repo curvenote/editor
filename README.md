@@ -1,5 +1,6 @@
 # `@iooxa/editor`
-[![Tests Passing](https://action-badges.now.sh/iooxa/editor?action=CI)](https://github.com/iooxa/editor/actions?query=workflow%3ACI)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/iooxa/editor/blob/master/LICENSE)
+![CI](https://github.com/iooxa/editor/workflows/CI/badge.svg)
 
 **Overview & Goals**
 * Provide a typed schema for writing reactive scientific documents using [iooxa components](https://iooxa.dev)
