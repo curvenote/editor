@@ -16,7 +16,7 @@
 
 ## Schema
 
-The schema has `Nodes` and `Marks` where `Nodes` are basically a block of content (paragraph, code, etc.), and `Marks` are inline modifications to the content (bold, emphasis, links, etc.). See the ProseMirror docs for a [visual explination](https://prosemirror.net/docs/guide/#doc).
+The schema has `Nodes` and `Marks` where `Nodes` are basically a block of content (paragraph, code, etc.), and `Marks` are inline modifications to the content (bold, emphasis, links, etc.). See the ProseMirror docs for a [visual explanation](https://prosemirror.net/docs/guide/#doc).
 
 **Overview of `Nodes`**
 
