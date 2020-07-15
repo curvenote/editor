@@ -50,6 +50,50 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 * strikethrough
 * underline
 
+
+## Simple Example
+
+This moves from markdown --> JSON --> HTML. The JSON is the intermediate representation for `@iooxa/editor`.
+
+```javascript
+import { Schema, nodes, marks, fromMarkdown, toHTML } from '@iooxa/editor';
+import { JSDOM } from 'jsdom';
+
+const schema = new Schema({ nodes, marks });
+
+const content = '# Hello `@iooxa/editor`!';
+const doc = fromMarkdown(content, schema);
+
+console.log(doc.toJSON());
+>> {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": { "level": 1 },
+        "content": [
+          { "type": "text", "text": "Hello " },
+          {
+            "type": "text",
+            "marks": [ { "type": "code" } ],
+            "text": "@iooxa/editor"
+          },
+          { "type": "text", "text": "!" }
+        ]
+      }
+    ]
+  }
+
+// Assuming we are in node, just use `document` if in a browser!
+const { document } = new JSDOM('').window;
+
+// Now move the document back out to html
+const html = toHTML(doc, schema, document);
+
+console.log(html);
+>> "<h1>Hello <code>@iooxa/editor</code>!</h1>"
+```
+
 ### Roadmap
 
 * Integrate other `@iooxa/components` as nodes
