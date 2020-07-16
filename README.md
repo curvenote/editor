@@ -21,13 +21,13 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 
 **Overview of `Nodes`**
 
-* paragraph
-* blockquote
-* horizontal_rule
-* heading
-* code_block
 * text
+* paragraph
+* heading
+* blockquote
+* code_block
 * image
+* horizontal_rule
 * hard_break
 * ordered_list
 * bullet_list
