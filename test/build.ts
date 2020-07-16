@@ -30,8 +30,8 @@ export const tnodes = builders(schema, {
   dynamic: {
     nodeType: 'dynamic', valueFunction: 'v', changeFunction: '{v: value}', min: '0', max: '10', step: '0.1', format: '.0f',
   },
-  equation: { nodeType: 'equation', inline: false },
-  equationInline: { nodeType: 'equation', inline: true },
+  equation: { nodeType: 'equation' },
+  equationBlock: { nodeType: 'equation_block' },
 });
 
 export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);

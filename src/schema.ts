@@ -7,17 +7,18 @@ import dynamic from './nodes/dynamic';
 import aside from './nodes/aside';
 import callout from './nodes/callout';
 import equation from './nodes/equation';
+import equation_block from './nodes/equation_block';
 
 
 export const nodes = {
   doc: basic.doc,
-  paragraph: basic.paragraph,
-  blockquote: basic.blockquote,
-  horizontal_rule: basic.horizontal_rule,
-  heading: basic.heading,
-  code_block: basic.code_block,
   text: basic.text,
+  paragraph: basic.paragraph,
+  heading: basic.heading,
+  blockquote: basic.blockquote,
+  code_block: basic.code_block,
   image: basic.image,
+  horizontal_rule: basic.horizontal_rule,
   hard_break: basic.hard_break,
   ordered_list: basic.ordered_list,
   bullet_list: basic.bullet_list,
@@ -29,6 +30,7 @@ export const nodes = {
   callout,
   aside,
   equation,
+  equation_block,
 };
 
 export const marks = {
