@@ -3205,6 +3205,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+markdown-it-texmath@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/markdown-it-texmath/-/markdown-it-texmath-0.7.2.tgz#2f51f154483c522d2bfef47da31d0135e0771d21"
+  integrity sha512-DAxM3D73BlRfpO6cnR2x27uOwGeTqQ/Yz6pUHE2iL/AzctEYSk3UmGxZYZGdU5B43AZD7kpdcU4wPNMF5Zhuqw==
+
 markdown-it@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-10.0.0.tgz#abfc64f141b1722d663402044e43927f1f50a8dc"
