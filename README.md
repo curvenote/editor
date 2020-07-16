@@ -50,6 +50,7 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 * subscript
 * strikethrough
 * underline
+* abbr
 
 
 ## Simple Example

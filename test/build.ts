@@ -32,6 +32,7 @@ export const tnodes = builders(schema, {
   },
   equation: { nodeType: 'equation' },
   equationBlock: { nodeType: 'equation_block' },
+  abbr: { nodeType: 'abbr', title: 'Cascading Style Sheets' },
 });
 
 export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);

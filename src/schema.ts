@@ -42,4 +42,5 @@ export const marks = {
   subscript: basicMarks.subscript,
   strikethrough: basicMarks.strikethrough,
   underline: basicMarks.underline,
+  abbr: basicMarks.abbr,
 };

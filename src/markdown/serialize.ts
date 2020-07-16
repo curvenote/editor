@@ -117,4 +117,15 @@ export const markdownSerializer = new MarkdownSerializer({
     close(_state, _mark, parent, index) { return backticksFor(parent.child(index - 1), 1); },
     escape: false,
   },
+  abbr: {
+    // {abbr}`CSS (Cascading Style Sheets)`
+    open(_state, _mark, parent, index) {
+      return `{abbr}${backticksFor(parent.child(index), -1)}`;
+    },
+    close(_state, _mark, parent, index) {
+      const { title } = _mark.attrs;
+      const paren = title ? ` (${title})` : '';
+      return `${paren}${backticksFor(parent.child(index - 1), 1)}`;
+    },
+  },
 });

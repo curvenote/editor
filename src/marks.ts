@@ -15,11 +15,13 @@ export const link: MarkSpec = {
   }],
   toDOM(node) { const { href, title } = node.attrs; return ['a', { href, title }, 0]; },
 };
+
 export const code: MarkSpec = {
   parseDOM: [{ tag: 'code' }],
   toDOM() { return ['code', 0]; },
   excludes: MarkGroups.format,
 };
+
 export const em: MarkSpec = {
   parseDOM: [
     { tag: 'i' },
@@ -29,6 +31,7 @@ export const em: MarkSpec = {
   toDOM() { return ['em', 0]; },
   group: MarkGroups.format,
 };
+
 export const strong: MarkSpec = {
   parseDOM: [
     { tag: 'strong' },
@@ -41,25 +44,43 @@ export const strong: MarkSpec = {
   toDOM() { return ['strong', 0]; },
   group: MarkGroups.format,
 };
+
 export const superscript: MarkSpec = {
   toDOM() { return ['sup', 0]; },
   parseDOM: [{ tag: 'sup' }],
   excludes: 'subscript',
   group: MarkGroups.format,
 };
+
 export const subscript: MarkSpec = {
   toDOM() { return ['sub', 0]; },
   parseDOM: [{ tag: 'sub' }],
   excludes: 'superscript',
   group: MarkGroups.format,
 };
+
 export const strikethrough: MarkSpec = {
   toDOM() { return ['s', 0]; },
   parseDOM: [{ tag: 's' }],
   group: MarkGroups.format,
 };
+
 export const underline: MarkSpec = {
   toDOM() { return ['u', 0]; },
   parseDOM: [{ tag: 'u' }],
   group: MarkGroups.format,
+};
+
+export const abbr: MarkSpec = {
+  attrs: {
+    title: { default: '' },
+  },
+  inclusive: false,
+  parseDOM: [{
+    tag: 'abbr',
+    getAttrs(dom: any) {
+      return { title: dom.getAttribute('title') };
+    },
+  }],
+  toDOM(node) { const { title } = node.attrs; return ['abbr', { title }, 0]; },
 };
