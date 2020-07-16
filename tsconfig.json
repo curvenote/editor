@@ -14,6 +14,10 @@
         "node_modules/*"
       ]
     },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
     "resolveJsonModule": true,
     "declaration": true,
     "skipLibCheck": true
