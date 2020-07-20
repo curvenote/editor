@@ -23,7 +23,6 @@ type RoleConstructor = {
 const knownRoles: Record<string, RoleConstructor> = {
   math: {
     token: 'math_inline',
-    attrs: {},
     renderer: (tokens, idx) => {
       const token = tokens[idx];
       return `<span class="math">${escapeHtml(token.content)}</span>`;
@@ -40,6 +39,20 @@ const knownRoles: Record<string, RoleConstructor> = {
     renderer: (tokens, idx) => {
       const token = tokens[idx];
       return `<abbr title="${escapeHtml(token.attrGet('title') ?? '')}">${escapeHtml(token.content)}</abbr>`;
+    },
+  },
+  sub: {
+    token: 'sub',
+    renderer: (tokens, idx) => {
+      const token = tokens[idx];
+      return `<sub>${escapeHtml(token.content)}</sub>`;
+    },
+  },
+  sup: {
+    token: 'sup',
+    renderer: (tokens, idx) => {
+      const token = tokens[idx];
+      return `<sup>${escapeHtml(token.content)}</sup>`;
     },
   },
 };

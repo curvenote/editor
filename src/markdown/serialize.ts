@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { Node as ProsemirrorNode, Mark, Fragment } from 'prosemirror-model';
-import { MarkdownSerializer } from 'prosemirror-markdown';
+import { MarkdownSerializer, MarkSerializerConfig, MarkSerializerMethod } from 'prosemirror-markdown';
 
 // Taken from https://github.com/ProseMirror/prosemirror-markdown/blob/master/src/to_markdown.js
 // MIT License https://github.com/ProseMirror/prosemirror-markdown/blob/master/LICENSE
@@ -29,6 +30,16 @@ function isPlainURL(link: Mark, parent: Fragment, index: number, side: number) {
   const next = parent.child(index + (side < 0 ? -2 : 1));
   return !link.isInSet(next.marks);
 }
+
+const wrapMark = (token: string, close?: MarkSerializerMethod): MarkSerializerConfig => ({
+  open(_state, _mark, parent, index) {
+    return `{${token}}${backticksFor(parent.child(index), -1)}`;
+  },
+  close(_state, _mark, parent, index) {
+    const extra = close ? close(_state, _mark, parent, index) : '';
+    return `${extra}${backticksFor(parent.child(index - 1), 1)}`;
+  },
+});
 
 export const markdownSerializer = new MarkdownSerializer({
   text(state, node) {
@@ -96,6 +107,14 @@ export const markdownSerializer = new MarkdownSerializer({
     state.write('$$');
     state.closeBlock(node);
   },
+  callout(state, node) {
+    state.ensureNewLine();
+    state.write('::: warning');
+    state.ensureNewLine();
+    state.renderContent(node);
+    state.write(':::');
+    state.closeBlock(node);
+  },
 }, {
   em: {
     open: '*', close: '*', mixable: true, expelEnclosingWhitespace: true,
@@ -117,15 +136,7 @@ export const markdownSerializer = new MarkdownSerializer({
     close(_state, _mark, parent, index) { return backticksFor(parent.child(index - 1), 1); },
     escape: false,
   },
-  abbr: {
-    // {abbr}`CSS (Cascading Style Sheets)`
-    open(_state, _mark, parent, index) {
-      return `{abbr}${backticksFor(parent.child(index), -1)}`;
-    },
-    close(_state, _mark, parent, index) {
-      const { title } = _mark.attrs;
-      const paren = title ? ` (${title})` : '';
-      return `${paren}${backticksFor(parent.child(index - 1), 1)}`;
-    },
-  },
+  abbr: wrapMark('abbr', (state, mark) => (mark.attrs.title ? ` (${mark.attrs.title})` : '')),
+  subscript: wrapMark('sub'),
+  superscript: wrapMark('sup'),
 });

@@ -6,7 +6,7 @@ import { getRole, addRenderers } from './roles';
 // Ported from https://github.com/executablebooks/markdown-it-py/blob/master/markdown_it/extensions/myst_role/index.py
 // MIT License: https://github.com/executablebooks/markdown-it-py/blob/master/LICENSE
 
-const PATTERN = /^\{([a-zA-Z_\-+:]{1,36})\}(`+)(?!`)(.+?)(?<!`)\2(?!`)/;
+const PATTERN = /^\{([a-zA-Z_\-+:]{1,36})\}(`+)(?!`)(.+?)(?<!`)\2(?!`)/; // e.g. {role}`text`
 
 function myst_role(state: StateInline, silent: boolean) {
   if (state.src.charCodeAt(state.pos - 1) === 0x5C) { /* \ */

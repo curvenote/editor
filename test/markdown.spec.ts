@@ -3,9 +3,9 @@ import { fromMarkdown, toMarkdown } from '../src/markdown';
 import { nodes, marks, Schema } from '../src';
 
 const {
-  blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, a, link, br, img,
-  abbr,
-  equation, equationBlock,
+  blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, code_block, a, link, br, img,
+  abbr, subscript, superscript,
+  equation, equationBlock, callout,
 } = tnodes;
 const schema = new Schema({ nodes, marks });
 
@@ -26,5 +26,52 @@ describe('Markdown', () => {
   it('parses myst abbr', () => same(
     'Well {abbr}`CSS (Cascading Style Sheets)` is cool?',
     tdoc(p('Well ', abbr('CSS'), ' is cool?')),
+  ));
+  it('parses subscript abbr', () => same(
+    'H{sub}`2`O',
+    tdoc(p('H', subscript('2'), 'O')),
+  ));
+  it('parses links', () => same(
+    'This is an [example](https://example.com) of a link',
+    tdoc(p('This is an ', a('example'), ' of a link')),
+  ));
+  it('parses auto links', () => same(
+    'Example: <https://example.com> is a link',
+    tdoc(p('Example: ', a('https://example.com'), ' is a link')),
+  ));
+  it('simplifies bare links', () => same(
+    {
+      before: 'This is an [https://example.com](https://example.com) of a link',
+      after: 'This is an <https://example.com> of a link',
+    },
+    tdoc(p('This is an ', a('https://example.com'), ' of a link')),
+  ));
+  it('Directive content', () => same(
+    {
+      before: '```python\nimport numpy as np\nnp.array(5)\n```',
+      after: '```\nimport numpy as np\nnp.array(5)\n```',
+    },
+    tdoc(code_block('import numpy as np\nnp.array(5)')),
+  ));
+  it('Directive content', () => same(
+    {
+      before: '::: warning\nThis is *directive* content\n:::',
+      after: '::: warning\nThis is *directive* content\n\n:::', // TODO: This isn't awesome...
+    },
+    tdoc(callout('', p('This is ', em('directive'), ' content'))),
+  ));
+  it('Directive content', () => same(
+    {
+      before: '::: warning\nThis is *directive* content\n:::',
+      after: '::: warning\nThis is *directive* content\n\n:::', // TODO: This isn't awesome...
+    },
+    tdoc(callout('', p('This is ', em('directive'), ' content'))),
+  ));
+  it('Directive content', () => same(
+    {
+      before: '``` {warning}\nThis is *directive* content\n```',
+      after: '::: warning\nThis is *directive* content\n\n:::', // TODO: This isn't awesome...
+    },
+    tdoc(callout('', p('This is ', em('directive'), ' content'))),
   ));
 });

@@ -6,6 +6,7 @@ import Token from 'markdown-it/lib/token';
 // @ts-ignore
 import { MarkdownParser } from 'prosemirror-markdown';
 import { myst_role_plugin } from './markdown-it-myst/myst_role';
+import { myst_directives_plugin } from './markdown-it-myst/myst_directives';
 
 // TODO: Use prosemirror-markdown when https://github.com/ProseMirror/prosemirror-markdown/issues/43 is resolved
 
@@ -17,7 +18,10 @@ const rules = {
   ordered_list: { block: 'ordered_list', getAttrs: (tok: Token) => ({ order: +(tok.attrGet('start') ?? 1) }) },
   heading: { block: 'heading', getAttrs: (tok: Token) => ({ level: +tok.tag.slice(1) }) },
   code_block: { block: 'code_block' },
-  fence: { block: 'code_block', getAttrs: (tok: Token) => ({ params: tok.info || '' }) },
+  fence: {
+    block: 'code_block',
+    getAttrs: (tok: Token) => ({ params: tok.info || '' }),
+  },
   hr: { node: 'horizontal_rule' },
   image: {
     node: 'image',
@@ -55,6 +59,15 @@ const rules = {
     noCloseToken: true,
   },
 
+  container_admonitions: {
+    block: 'callout',
+    getAttrs: (tok: Token) => {
+      const kind = tok.attrGet('kind') ?? '';
+      const title = tok.attrGet('title') ?? '';
+      return { kind, title };
+    },
+  },
+
   // myst_role: { mark: 'code', noCloseToken: true },
 };
 
@@ -65,6 +78,7 @@ export function getMarkdownParser(schema: Schema) {
     delimiters: 'dollars',
   });
   tokenizer.use(myst_role_plugin);
+  tokenizer.use(myst_directives_plugin);
   type Parser = { parse: (content: string) => ProsemirrorNode };
   const parser: Parser = new MarkdownParser(schema, tokenizer, rules);
   return parser;

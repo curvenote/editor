@@ -17,7 +17,8 @@ export const tnodes = builders(schema, {
   pre: { nodeType: 'code_block' },
   br: { nodeType: 'hard_break' },
   img: { nodeType: 'image', src: 'img.png', alt: 'x' },
-  a: { markType: 'link', href: 'foo' },
+  a: { markType: 'link', href: 'https://example.com' },
+  callout: { nodeType: 'callout', kind: 'warning' },
   variable: {
     nodeType: 'var', name: 'x', value: '1', format: '.0f',
   },
