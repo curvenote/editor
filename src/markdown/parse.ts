@@ -4,7 +4,7 @@ import markdownTexMath from 'markdown-it-texmath';
 import Token from 'markdown-it/lib/token';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
-import { MarkdownParser } from './from_markdown';
+import { MarkdownParser } from 'prosemirror-markdown';
 import { myst_role_plugin } from './markdown-it-myst/myst_role';
 
 // TODO: Use prosemirror-markdown when https://github.com/ProseMirror/prosemirror-markdown/issues/43 is resolved
@@ -29,9 +29,9 @@ const rules = {
   },
   hardbreak: { node: 'hard_break' },
 
-  math_inline: { block: 'equation', noOpenClose: true },
-  math_inline_double: { block: 'equation', noOpenClose: true },
-  math_block: { block: 'equation_block', noOpenClose: true },
+  math_inline: { block: 'equation', noCloseToken: true },
+  math_inline_double: { block: 'equation', noCloseToken: true },
+  math_block: { block: 'equation_block', noCloseToken: true },
 
   link: {
     mark: 'link',
@@ -44,15 +44,18 @@ const rules = {
   strong: { mark: 'strong' },
   code_inline: { mark: 'code' },
 
+  sub: { mark: 'subscript', noCloseToken: true },
+  sup: { mark: 'superscript', noCloseToken: true },
+
   abbr: {
     mark: 'abbr',
     getAttrs: (tok: Token) => ({
       title: tok.attrGet('title') || null,
     }),
-    noOpenClose: true,
+    noCloseToken: true,
   },
 
-  // myst_role: { mark: 'code', noOpenClose: true },
+  // myst_role: { mark: 'code', noCloseToken: true },
 };
 
 export function getMarkdownParser(schema: Schema) {
