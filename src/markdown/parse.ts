@@ -5,7 +5,7 @@ import Token from 'markdown-it/lib/token';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { MarkdownParser } from 'prosemirror-markdown';
-import { myst_role_plugin } from './markdown-it-myst/myst_role';
+import { myst_role_plugin } from './markdown-it-myst/myst_roles';
 import { myst_directives_plugin } from './markdown-it-myst/myst_directives';
 
 // TODO: Use prosemirror-markdown when https://github.com/ProseMirror/prosemirror-markdown/issues/43 is resolved
