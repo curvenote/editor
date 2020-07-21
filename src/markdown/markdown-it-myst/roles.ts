@@ -34,11 +34,13 @@ const knownRoles: Record<string, RoleConstructor> = {
       const match = ABBR_PATTERN.exec(content);
       if (match == null) return { attrs: { title: '' }, content };
       const [, modified, title] = match;
-      return { attrs: { title }, content: modified.trim() };
+      return { attrs: { title: title.trim() }, content: modified.trim() };
     },
     renderer: (tokens, idx) => {
       const token = tokens[idx];
-      return `<abbr title="${escapeHtml(token.attrGet('title') ?? '')}">${escapeHtml(token.content)}</abbr>`;
+      const title = token.attrGet('title') ?? '';
+      const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+      return `<abbr${titleAttr}>${escapeHtml(token.content)}</abbr>`;
     },
   },
   sub: {
@@ -63,7 +65,7 @@ const genericRole: RoleConstructor = {
     const token = tokens[idx];
     const name = token.meta?.name ?? 'unknown';
     return (
-      `<code class="myst-role">\n{{${name}}}[${escapeHtml(token.content)}]\n</code>`
+      `<code class="myst-role">{${name}}[${escapeHtml(token.content)}]</code>`
     );
   },
 };
@@ -84,4 +86,5 @@ export function addRenderers(md: MarkdownIt) {
     if (md.renderer.rules[token]) return;
     md.renderer.rules[token] = renderer;
   });
+  md.renderer.rules[genericRole.token] = genericRole.renderer;
 }

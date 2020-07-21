@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it';
-import { myst_role_plugin } from './myst_role';
+import { myst_role_plugin } from './myst_roles';
 import { myst_directives_plugin } from './myst_directives';
 
 const tokenizer = MarkdownIt('commonmark', { html: false });
@@ -23,11 +23,11 @@ describe('Markdown', () => {
     'Well <abbr title="Cascading Style Sheets">CSS</abbr> is cool?',
   ));
   it('parses myst admonitions, ``` style', () => sameF(
-    '```{warning} A title\nThis is *directive* content\n```',
-    '<details><summary>A title</summary>\n<p>This is <em>directive</em> content</p>\n</details>',
+    '```{warning} This is\n*directive* content\n```',
+    '<aside class="callout warning"><header>Warning</header>\n<p>This is <em>directive</em> content</p>\n</aside>',
   ));
   it('parses myst admonitions, ::: style', () => sameF(
-    ':::warning A title\nThis is *directive* content\n:::',
-    '<details><summary>A title</summary>\n<p>This is <em>directive</em> content</p>\n</details>',
+    ':::warning\nThis is *directive* content\n:::',
+    '<aside class="callout warning"><header>Warning</header>\n<p>This is <em>directive</em> content</p>\n</aside>',
   ));
 });
