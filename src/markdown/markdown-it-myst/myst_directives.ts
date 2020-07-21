@@ -103,4 +103,3 @@ export function myst_directives_plugin(md: MarkdownIt) {
   md.core.ruler.after('block', 'strip_options', stripOptions);
   md.core.ruler.after('strip_options', 'clean_admonitions', cleanAdmonitions);
 }
-

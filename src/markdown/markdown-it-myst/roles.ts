@@ -2,8 +2,11 @@
 import { escapeHtml } from 'markdown-it/lib/common/utils';
 import Token from 'markdown-it/lib/token';
 import MarkdownIt from 'markdown-it';
+import Renderer from 'markdown-it/lib/renderer';
+import { StateEnv } from './state';
 
 const ABBR_PATTERN = /^(.+?)\(([^()]+)\)$/; // e.g. 'CSS (Cascading Style Sheets)'
+const REF_PATTERN = /^(.+?)<([^<>]+)>$/; // e.g. 'Labeled Reference <ref>'
 
 type Attrs = Record<string, any>;
 
@@ -17,7 +20,9 @@ type RoleConstructor = {
   token: string;
   attrs?: Attrs;
   getAttrs?: (content: string) => { attrs: Attrs; content?: string };
-  renderer: (tokens: Token[], idx: number) => string;
+  renderer: (
+    tokens: Token[], idx: number, options: MarkdownIt.Options, env: StateEnv, self: Renderer,
+  ) => string;
 };
 
 const knownRoles: Record<string, RoleConstructor> = {
@@ -55,6 +60,21 @@ const knownRoles: Record<string, RoleConstructor> = {
     renderer: (tokens, idx) => {
       const token = tokens[idx];
       return `<sup>${escapeHtml(token.content)}</sup>`;
+    },
+  },
+  ref: {
+    token: 'ref',
+    getAttrs(content) {
+      const match = REF_PATTERN.exec(content);
+      if (match == null) return { attrs: { ref: content }, content: '' };
+      const [, modified, ref] = match;
+      return { attrs: { ref: ref.trim() }, content: modified.trim() };
+    },
+    renderer: (tokens, idx, opts, env) => {
+      const token = tokens[idx];
+      const ref = token.attrGet('ref') ?? '';
+      const { name, title } = env.targets[ref] ?? {};
+      return `<a href="#${name}" title="${title}">${escapeHtml(token.content || (title ?? ''))}</a>`;
     },
   },
 };
