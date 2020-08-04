@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups } from './types';
+import { NodeGroups, FormatMarkdown } from './types';
 
 const aside: NodeSpec = {
   group: NodeGroups.top,
@@ -8,6 +8,15 @@ const aside: NodeSpec = {
   parseDOM: [
     { tag: 'aside' },
   ],
+};
+
+export const toMarkdown: FormatMarkdown = (state, node) => {
+  state.ensureNewLine();
+  state.write('```{margin}');
+  state.ensureNewLine();
+  state.renderContent(node);
+  state.write('```');
+  state.closeBlock(node);
 };
 
 export default aside;
