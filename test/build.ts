@@ -46,7 +46,8 @@ export function compare(
   }
 
   function serialize(doc: ProsemirrorNode, text: string) {
-    expect(to(doc)).toEqual(text);
+    const ctx = ' oncontextmenu="return false;"';
+    expect(to(doc).replace(ctx, '')).toEqual(text);
   }
 
   function same(text: string | {before: string; after: string}, doc: ProsemirrorNode) {
