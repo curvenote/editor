@@ -109,10 +109,11 @@ export const markdownSerializer = new MarkdownSerializer({
   },
   callout(state, node) {
     state.ensureNewLine();
-    state.write('::: warning');
+    const { kind } = node.attrs;
+    state.write(`\`\`\`{${kind}}`);
     state.ensureNewLine();
     state.renderContent(node);
-    state.write(':::');
+    state.write('```');
     state.closeBlock(node);
   },
 }, {
