@@ -1,16 +1,10 @@
 import * as basic from './nodes/basic';
 import * as basicMarks from './marks';
-import variable from './nodes/variable';
-import display from './nodes/display';
-import range from './nodes/range';
-import dynamic from './nodes/dynamic';
-import aside from './nodes/aside';
-import callout from './nodes/callout';
-import equation from './nodes/equation';
-import equation_block from './nodes/equation_block';
+import * as Nodes from './nodes';
 
 
 export const nodes = {
+  // Basic markdown
   doc: basic.doc,
   text: basic.text,
   paragraph: basic.paragraph,
@@ -23,14 +17,17 @@ export const nodes = {
   ordered_list: basic.ordered_list,
   bullet_list: basic.bullet_list,
   list_item: basic.list_item,
-  var: variable, // TODO: Update this to full `variable`
-  display,
-  dynamic,
-  range,
-  callout,
-  aside,
-  equation,
-  equation_block,
+  // Presentational components
+  callout: Nodes.Callout.default,
+  aside: Nodes.Aside.default,
+  math: Nodes.Math.default,
+  equation: Nodes.Equation.default,
+  // Reactive components
+  variable: Nodes.Variable.default,
+  display: Nodes.Display.default,
+  dynamic: Nodes.Dynamic.default,
+  range: Nodes.Range.default,
+  switch: Nodes.Switch.default,
 };
 
 export const marks = {

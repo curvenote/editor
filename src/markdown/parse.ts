@@ -1,14 +1,8 @@
 import { Schema, Node as ProsemirrorNode } from 'prosemirror-model';
-import MarkdownIt from 'markdown-it';
-import markdownTexMath from 'markdown-it-texmath';
 import Token from 'markdown-it/lib/token';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import { MarkdownParser } from 'prosemirror-markdown';
-import { myst_role_plugin } from './markdown-it-myst/myst_roles';
-import { myst_directives_plugin } from './markdown-it-myst/myst_directives';
+import MyST from 'markdown-it-myst';
 
-// TODO: Use prosemirror-markdown when https://github.com/ProseMirror/prosemirror-markdown/issues/43 is resolved
 
 const rules = {
   blockquote: { block: 'blockquote' },
@@ -33,9 +27,9 @@ const rules = {
   },
   hardbreak: { node: 'hard_break' },
 
-  math_inline: { block: 'equation', noCloseToken: true },
-  math_inline_double: { block: 'equation', noCloseToken: true },
-  math_block: { block: 'equation_block', noCloseToken: true },
+  math_inline: { block: 'math', noCloseToken: true },
+  math_inline_double: { block: 'math', noCloseToken: true },
+  math_block: { block: 'equation', noCloseToken: true },
 
   link: {
     mark: 'link',
@@ -72,13 +66,7 @@ const rules = {
 };
 
 export function getMarkdownParser(schema: Schema) {
-  const tokenizer = MarkdownIt('commonmark', { html: false });
-  tokenizer.use(markdownTexMath, {
-    engine: null, // We are not going to render ever.
-    delimiters: 'dollars',
-  });
-  tokenizer.use(myst_role_plugin);
-  tokenizer.use(myst_directives_plugin);
+  const tokenizer = MyST();
   type Parser = { parse: (content: string) => ProsemirrorNode };
   const parser: Parser = new MarkdownParser(schema, tokenizer, rules);
   return parser;
