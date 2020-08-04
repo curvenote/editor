@@ -499,13 +499,6 @@
   resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-2.1.0.tgz#ea3dd64c4805597311790b61e872cbd1ed2cd806"
   integrity sha512-Q7DYAOi9O/+cLLhdaSvKdaumWyHbm7HAk/bFwwyTuU0arR5yyCeW5GOoqt4tJTpDRxhpx9Q8kQL6vMpuw9hDSw==
 
-"@types/markdown-it-container@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@types/markdown-it-container/-/markdown-it-container-2.0.3.tgz#436de4c019d7d71b60f759037fd4d03611569eb8"
-  integrity sha512-ouJluaEGWV7clX7NVMRjkQfS/a11hFXDG1U04l8vrS1P2UgAFPlgMpk1rAPgK0MWU1NhcBYWVW7w/SpgePLs0A==
-  dependencies:
-    "@types/markdown-it" "*"
-
 "@types/markdown-it@*", "@types/markdown-it@^10.0.1":
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-10.0.1.tgz#94e252ab689c8e9ceb9aff2946e0a458390105eb"
@@ -533,15 +526,6 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/orderedmap/-/orderedmap-1.0.0.tgz#807455a192bba52cbbb4517044bc82bdbfa8c596"
   integrity sha512-dxKo80TqYx3YtBipHwA/SdFmMMyLCnP+5mkEqN0eMjcTBzHkiiX0ES118DsjDBjvD+zeSsSU9jULTZ+frog+Gw==
-
-"@types/prosemirror-collab@^1.0.2":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@types/prosemirror-collab/-/prosemirror-collab-1.1.0.tgz#45470ee909fe8d8c4e4ec743e5918676b21bf9fe"
-  integrity sha512-YxXFtxblWVTSKupWTYYKcoCYIdzW2aeJkuPiRBjkcsbM1xFYDM1Urzu2nG967X+RB6VbwJsWEs41fM4LMWZT5g==
-  dependencies:
-    "@types/prosemirror-model" "*"
-    "@types/prosemirror-state" "*"
-    "@types/prosemirror-transform" "*"
 
 "@types/prosemirror-markdown@^1.0.3":
   version "1.0.3"
@@ -3217,6 +3201,15 @@ markdown-it-container@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-it-container/-/markdown-it-container-3.0.0.tgz#1d19b06040a020f9a827577bb7dbf67aa5de9a5b"
   integrity sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==
 
+markdown-it-myst@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.4.tgz#0e5e4a49399f27dc794a702b0b27675e613e5216"
+  integrity sha512-8GgBfsvaMZ+0sLqGoCFV0J9AN2jQyh7ms6NMMvo3GJuPeaxwWdw0JnDB9ALDWXebBuTzOVu7fTzeGqsQIFlpMg==
+  dependencies:
+    markdown-it "^11.0.0"
+    markdown-it-container "^3.0.0"
+    markdown-it-texmath "^0.7.2"
+
 markdown-it-texmath@^0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/markdown-it-texmath/-/markdown-it-texmath-0.7.2.tgz#2f51f154483c522d2bfef47da31d0135e0771d21"
@@ -3788,13 +3781,6 @@ prop-types@^15.7.2:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.8.1"
-
-prosemirror-collab@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/prosemirror-collab/-/prosemirror-collab-1.2.2.tgz#8d2c0e82779cfef5d051154bd0836428bd6d9c4a"
-  integrity sha512-tBnHKMLgy5Qmx9MYVcLfs3pAyjtcqYYDd9kp3y+LSiQzkhMQDfZSV3NXWe4Gsly32adSef173BvObwfoSQL5MA==
-  dependencies:
-    prosemirror-state "^1.0.0"
 
 prosemirror-markdown@^1.5.0:
   version "1.5.0"
