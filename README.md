@@ -1,4 +1,5 @@
 # @iooxa/editor
+[![@iooxa/editor on npm](https://img.shields.io/npm/v/@iooxa/editor.svg)](https://www.npmjs.com/package/@iooxa/editor)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/iooxa/editor/blob/master/LICENSE)
 ![CI](https://github.com/iooxa/editor/workflows/CI/badge.svg)
 
