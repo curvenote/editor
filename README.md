@@ -6,7 +6,7 @@
 * Provide a typed schema for writing reactive scientific documents using [iooxa components](https://iooxa.dev)
   * Uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in the rendered HTML output for non-standard components
   * Uses standard html for all other compnents, with no styling enforced
-* Interoperability with CommonMark markdown and (eventually) [myst](https://myst-parser.readthedocs.io/)
+* Interoperability with CommonMark markdown and [myst](https://github.com/executablebooks/markdown-it-myst)
   * Through `fromMarkdown` and `toMarkdown` methods
 * Provide components for [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editing of reactive documents
   * Initial library won't have a drop-in UI for the editor, although there will probably be a simple demo
@@ -21,24 +21,29 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 
 **Overview of `Nodes`**
 
-* text
-* paragraph
-* heading
-* blockquote
-* code_block
-* image
-* horizontal_rule
-* hard_break
-* ordered_list
-* bullet_list
-* list_item
-* [variable](https://iooxa.dev/components/variable)
-* [display](https://iooxa.dev/components/display)
-* [dynamic](https://iooxa.dev/components/dynamic)
-* [range](https://iooxa.dev/components/range)
-* [callout](https://iooxa.dev/article/callout)
-* [aside](https://iooxa.dev/article/aside)
-* [equation](https://iooxa.dev/article/equation)
+* Basic Markdown
+  * text
+  * paragraph
+  * heading
+  * blockquote
+  * code_block
+  * image
+  * horizontal_rule
+  * hard_break
+  * ordered_list
+  * bullet_list
+  * list_item
+* Presentational Components
+  * [callout](https://iooxa.dev/article/callout)
+  * [aside](https://iooxa.dev/article/aside)
+  * [math](https://iooxa.dev/article/math)
+  * [equation](https://iooxa.dev/article/equation)
+* Reactive Components
+  * [variable](https://iooxa.dev/components/variable)
+  * [display](https://iooxa.dev/components/display)
+  * [dynamic](https://iooxa.dev/components/dynamic)
+  * [range](https://iooxa.dev/components/range)
+  * [switch](https://iooxa.dev/components/switch)
 
 **Overview of `Marks`**
 
