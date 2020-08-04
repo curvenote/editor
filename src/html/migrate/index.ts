@@ -1,7 +1,7 @@
 import { setInnerHTML } from './utils';
 import { Parser } from '../../types';
 
-function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parser) {
+function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parser): HTMLDivElement {
   // Bring all variables to the top of the document:
   const vars = Array.from(element.querySelectorAll('ink-var'));
   vars.reverse().forEach((n) => {
@@ -44,10 +44,18 @@ function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parse
     n.replaceWith(callout);
   });
   const html = element.innerHTML;
-  return setInnerHTML(document.createElement('div'), html.replace(/<ink-/g, '<r-').replace(/<\/ink-/g, '</r-'), DOMParser);
+  return setInnerHTML(document.createElement('div'), html.replace(/<ink-/g, '<r-').replace(/<\/ink-/g, '</r-'), DOMParser) as HTMLDivElement;
+}
+
+function migrateV1(element: HTMLDivElement): HTMLDivElement {
+  const equations = Array.from(element.querySelectorAll('p > r-equation'));
+  equations.forEach((n) => {
+    n.setAttribute('inline', '');
+  });
+  return element;
 }
 
 export function migrateHTML(content: string, document: Document, DOMParser: Parser) {
   const element = setInnerHTML(document.createElement('div'), content, DOMParser) as HTMLDivElement;
-  return migrateV0(element, document, DOMParser);
+  return migrateV1(migrateV0(element, document, DOMParser));
 }
