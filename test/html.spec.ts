@@ -14,7 +14,7 @@ const same = compare(
 
 const {
   blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, a, link, br, img,
-  variable, variableDerived, equation, equationBlock,
+  variable, variableDerived, math, equation,
   range, dynamic,
 } = tnodes;
 
@@ -27,7 +27,7 @@ describe('HTML Upgrades', () => {
   it('upgrades equations', () => (
     same(
       migrateHTML('<p>A line is: <ink-equation inline>y = mx + b</ink-equation></p>', document, DOMParser).innerHTML,
-      tdoc(p('A line is: ', equation('y = mx + b'))),
+      tdoc(p('A line is: ', math('y = mx + b'))),
     )));
 });
 
@@ -60,12 +60,12 @@ describe('HTML', () => {
   it('parses equations', () => (
     same(
       '<p>A line is: <r-equation inline="">y = mx + b</r-equation></p>',
-      tdoc(p('A line is: ', equation('y = mx + b'))),
+      tdoc(p('A line is: ', math('y = mx + b'))),
     )));
   it('parses inline equations', () => (
     same(
       '<p>A line is:</p><r-equation>y = mx + b</r-equation>',
-      tdoc(p('A line is:'), equationBlock('y = mx + b')),
+      tdoc(p('A line is:'), equation('y = mx + b')),
     )));
   it('does not parse scripts', () => (
     same(

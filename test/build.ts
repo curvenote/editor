@@ -20,10 +20,10 @@ export const tnodes = builders(schema, {
   a: { markType: 'link', href: 'https://example.com' },
   callout: { nodeType: 'callout', kind: 'warning' },
   variable: {
-    nodeType: 'var', name: 'x', value: '1', format: '.0f',
+    nodeType: 'variable', name: 'x', value: '1', format: '.0f',
   },
   variableDerived: {
-    nodeType: 'var', name: 'y', valueFunction: 'x + 1', format: '.0f',
+    nodeType: 'variable', name: 'y', valueFunction: 'x + 1', format: '.0f',
   },
   range: {
     nodeType: 'range', valueFunction: 'v', changeFunction: '{v: value}', min: '0', max: '10', step: '0.1',
@@ -31,8 +31,8 @@ export const tnodes = builders(schema, {
   dynamic: {
     nodeType: 'dynamic', valueFunction: 'v', changeFunction: '{v: value}', min: '0', max: '10', step: '0.1', format: '.0f',
   },
+  math: { nodeType: 'math' },
   equation: { nodeType: 'equation' },
-  equationBlock: { nodeType: 'equation_block' },
   abbr: { nodeType: 'abbr', title: 'Cascading Style Sheets' },
 });
 
