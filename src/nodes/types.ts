@@ -1,3 +1,6 @@
+import { MarkdownSerializerState } from 'prosemirror-markdown';
+import { Node, Schema } from 'prosemirror-model';
+
 export enum NodeGroups {
   'top' = 'topblock',
   'block' = 'block',
@@ -8,3 +11,25 @@ export enum NodeGroups {
 export enum MarkGroups {
   'format' = 'format',
 }
+
+export type Attr = {
+  name: string;
+  func: boolean | 'only';
+  default: string | false;
+  optional: boolean;
+};
+
+export type NodeDef = {
+  tag: string;
+  name: string;
+  attrs: Attr[];
+  inline: boolean;
+  group: NodeGroups;
+};
+
+export type FormatMarkdown<S extends Schema<any, any> = any> = (
+  state: MarkdownSerializerState<S>,
+  node: Node<S>,
+  parent: Node<S>,
+  index: number
+) => void;
