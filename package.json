@@ -1,18 +1,14 @@
 {
   "name": "@iooxa/editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Schema and markdown parser for the iooxa editor",
   "author": "Rowan Cockett <rowan@iooxa.com>",
   "homepage": "https://github.com/iooxa/editor",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "directories": {
-    "src": "src",
-    "test": "test"
-  },
   "files": [
-    "src"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
@@ -22,15 +18,15 @@
     "url": "git+https://github.com/iooxa/editor.git"
   },
   "scripts": {
+    "clean": "rm -rf dist",
+    "compile": "yarn run clean && tsc -p .",
+    "build": "tsc",
+    "build:watch": "tsc -w -p .",
     "prepublishOnly": "yarn run compile",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
-    "build": "tsc",
-    "build:watch": "tsc -w -p .",
-    "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
-    "compile": "yarn run clean && tsc -p .",
-    "clean": "rm -rf dist"
+    "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json"
   },
   "bugs": {
     "url": "https://github.com/iooxa/editor/issues"
