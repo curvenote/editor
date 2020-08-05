@@ -5,6 +5,7 @@ export type Attrs = {
   value?: string;
   valueFunction?: string;
   format?: string;
+  transformFunction?: string;
 };
 
 export const def: NodeDef = {
@@ -13,6 +14,7 @@ export const def: NodeDef = {
   attrs: [
     attr('value'),
     attr('format', false),
+    attr('transform', 'only'),
   ],
   inline: true,
   group: NodeGroups.inline,
