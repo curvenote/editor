@@ -71,6 +71,7 @@ export const markdownSerializer = new MarkdownSerializer({
   dynamic: nodes.Dynamic.toMarkdown,
   range: nodes.Range.toMarkdown,
   switch: nodes.Switch.toMarkdown,
+  button: nodes.Button.toMarkdown,
 }, {
   em: {
     open: '*', close: '*', mixable: true, expelEnclosingWhitespace: true,

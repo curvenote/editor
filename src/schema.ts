@@ -28,6 +28,7 @@ export const nodes = {
   dynamic: Nodes.Dynamic.default,
   range: Nodes.Range.default,
   switch: Nodes.Switch.default,
+  button: Nodes.Button.default,
 };
 
 export const marks = {

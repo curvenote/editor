@@ -15,7 +15,9 @@ export const createAttr = (name: string, func: boolean | 'only' = true, defaultV
   };
 };
 
-export const createSpec = (def: NodeDef): NodeSpec => {
+type DomAttrs = Record<string, string>;
+
+export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttrs): NodeSpec => {
   const attrs: Record<string, AttributeSpec> = {};
   def.attrs.forEach((attr) => {
     if (attr.func !== 'only') {
@@ -30,7 +32,7 @@ export const createSpec = (def: NodeDef): NodeSpec => {
     group: def.group,
     attrs,
     toDOM(node) {
-      const props: Record<string, string> = {};
+      const props: DomAttrs = {};
       def.attrs.forEach((attr) => {
         const [value, valueFunction] = [node.attrs[attr.name], node.attrs[`${attr.name}Function`]];
         if (value && attr.func !== 'only') props[attr.name] = value;
@@ -38,7 +40,7 @@ export const createSpec = (def: NodeDef): NodeSpec => {
       });
       // TODO: This might need to be an option to turn off the context menu?
       props.oncontextmenu = 'return false;';
-      return [def.tag, props];
+      return [def.tag, domAttrs ? domAttrs(props) : props];
     },
     parseDOM: [{
       tag: def.tag,

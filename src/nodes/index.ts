@@ -9,3 +9,4 @@ export * as Display from './reactive/display';
 export * as Dynamic from './reactive/dynamic';
 export * as Range from './reactive/range';
 export * as Switch from './reactive/switch';
+export * as Button from './reactive/button';
