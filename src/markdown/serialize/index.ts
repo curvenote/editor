@@ -96,5 +96,6 @@ export const markdownSerializer = new MarkdownSerializer({
   abbr: wrapMark('abbr', (state, mark) => (mark.attrs.title ? ` (${mark.attrs.title})` : '')),
   subscript: wrapMark('sub'),
   superscript: wrapMark('sup'),
+  strikethrough: wrapMark('strike'),
 });
 
