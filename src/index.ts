@@ -7,3 +7,4 @@ export * as Nodes from './nodes';
 
 export { fromHTML, toHTML, migrateHTML } from './html';
 export { fromMarkdown, toMarkdown } from './markdown';
+export { fromText, toText } from './text';
