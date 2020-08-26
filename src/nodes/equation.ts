@@ -6,7 +6,7 @@ export type EquationAttrs = {
 
 const equation: NodeSpec = {
   group: NodeGroups.top,
-  // Content can have display elements inside of it for dynamic equaitons
+  // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
   draggable: false,
   // The view treat the node as a leaf, even though it technically has content

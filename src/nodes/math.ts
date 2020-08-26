@@ -6,7 +6,7 @@ export type MathAttrs = {
 
 const math: NodeSpec = {
   group: NodeGroups.inline,
-  // Content can have display elements inside of it for dynamic equaitons
+  // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
   inline: true,
   draggable: false,
