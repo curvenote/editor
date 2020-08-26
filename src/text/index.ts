@@ -19,5 +19,5 @@ export function toText(doc: ProsemirrorNode, schema: Schema, document: Document)
     .fromSchema(schema)
     .serializeFragment(doc.content, { document });
   div.appendChild(frag);
-  return div.textContent;
+  return div.textContent ?? '';
 }
