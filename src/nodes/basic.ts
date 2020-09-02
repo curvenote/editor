@@ -60,13 +60,14 @@ export const text: NodeSpec = {
 };
 
 export const image: NodeSpec = {
-  inline: true,
   attrs: {
     src: {},
     alt: { default: null },
     title: { default: null },
+    align: { default: 'center' },
+    width: { default: 50 },
   },
-  group: NodeGroups.inline,
+  group: NodeGroups.block,
   draggable: true,
   parseDOM: [{
     tag: 'img[src]',
@@ -75,10 +76,18 @@ export const image: NodeSpec = {
         src: dom.getAttribute('src'),
         title: dom.getAttribute('title'),
         alt: dom.getAttribute('alt'),
+        align: dom.getAttribute('align') ?? 'center',
+        width: Number.parseInt((dom.getAttribute('width') ?? '50').replace('%', ''), 10) || 50,
       };
     },
   }],
-  toDOM(node) { const { src, alt, title } = node.attrs; return ['img', { src, alt, title }]; },
+  toDOM(node) {
+    const {
+      src, alt, title, align, width,
+    } = node.attrs; return ['img', {
+      src, alt, title, align, width: `${width}%`,
+    }];
+  },
 };
 
 export const hard_break: NodeSpec = {
