@@ -4,7 +4,7 @@ import { Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import Editor from './src/Editor';
 import { getEditorState } from './src/prosemirror';
-
+import './src/editor.css';
 
 declare global {
   interface Window {

@@ -1,0 +1,59 @@
+.ProseMirror {
+  position: relative;
+}
+
+.ProseMirror {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
+}
+
+.ProseMirror pre {
+  white-space: pre-wrap;
+}
+
+.ProseMirror li {
+  position: relative;
+}
+
+.ProseMirror-hideselection *::selection { background: transparent; }
+.ProseMirror-hideselection *::-moz-selection { background: transparent; }
+.ProseMirror-hideselection { caret-color: transparent; }
+
+.hidden { display: none; }
+.ProseMirror-hideselection .equation-tooltip *::selection { background-color: transparent; }
+.ProseMirror-hideselection .equation-tooltip *::-moz-selection { background-color: transparent; }
+.equation-tooltip {
+  cursor: auto;
+  left: 0px;
+  padding: 10px;
+  position: absolute;
+  width: calc(100% - 20px);
+  background-color: rgba(250, 250, 250, 0.9);
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
+  border: 1px solid silver;
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+.equation-tooltip.inline {
+  top: calc(100% + 10px);
+  width: 300px;
+}
+.equation-tooltip::before {
+  border: 5px solid silver;
+  border-top-width: 0px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  content: " ";
+  height: 0;
+  width: 0;
+}
+.equation-tooltip.inline::before {
+  left: 2px;
+}
