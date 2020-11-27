@@ -88,6 +88,7 @@ class ImageView {
     return true;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   destroy() {
     // TODO: Delete the actual image that was uploaded?
   }

@@ -51,14 +51,18 @@ const Editor = (props: Props) => {
 
   // The editor is only created once, so it needs the up to date callbacks.
   const call = useRef({ onFocus, onEdit });
-  const maybeFocus = (focus: boolean) => { if (focused !== focus) onFocus(focus); };
-  useEffect(() => { call.current = { onFocus: maybeFocus, onEdit }; }, [maybeFocus, onEdit]);
+  useEffect(() => {
+    call.current = {
+      onFocus: (focus: boolean) => { if (focused !== focus) onFocus(focus); },
+      onEdit,
+    };
+  }, [focused, onFocus, onEdit]);
 
   // Create editor view.
   useEffect(() => {
-    console.log('HI!')
+    console.log('HI!');
     if (editorView.current || !editorEl.current || !state) return;
-    console.log('HI1!')
+    console.log('HI1!');
     editorView.current = getEditorView(
       editorEl.current,
       state,

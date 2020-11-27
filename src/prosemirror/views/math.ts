@@ -8,7 +8,7 @@ import { isEditable } from '../plugins/editable';
 
 class MathView {
   // The node's representation in the editor (empty, for now)
-  dom: HTMLElement & { editing: boolean; requestUpdate: () => void};
+  dom: HTMLElement & { editing: boolean; requestUpdate: () => void };
 
   tooltip: HTMLElement;
 

@@ -7,17 +7,21 @@
       "dom.iterable",
       "esnext"
     ],
+    "outDir": "dist",
+    "baseUrl": "src/",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
     "strict": true,
+    "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "removeComments": true,
     "jsx": "react-jsx",
     "typeRoots": [
       "./node_modules/@types",
@@ -26,7 +30,10 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src",
-    "ext"
+    "src/**/*",
+    "demo.tsx"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
   ]
 }
