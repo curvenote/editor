@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   InputRule, wrappingInputRule, textblockTypeInputRule,
   smartQuotes,
@@ -6,7 +7,7 @@ import { Schema } from 'prosemirror-model';
 import { insertNodeRule, markInputRule } from './utils';
 
 export const quotes = (schema: Schema) => smartQuotes;
-export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, "…")];
+export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, '…')];
 
 export const blockquote = (schema: Schema) => [wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote)];
 
@@ -40,9 +41,9 @@ export const lists = (schema: Schema) => [
     /^\s*(\d+)\.\s$/,
     schema.nodes.ordered_list,
     (match) => ({ order: +match[1] }),
-    (match, node) => node.childCount + node.attrs.order === +match[1]
+    (match, node) => node.childCount + node.attrs.order === +match[1],
   ),
-  wrappingInputRule(/^\s*([-+*])\s$/, schema.nodes.bullet_list)
+  wrappingInputRule(/^\s*([-+*])\s$/, schema.nodes.bullet_list),
 ];
 
 export const codeBlock = (schema: Schema) => [
@@ -55,11 +56,11 @@ export const codeInline = (schema: Schema) => [
   markInputRule(/`([\W\w]+)`$/, schema.marks.code),
 ];
 
-export const headings = (schema: Schema, maxLevel=6) => [
+export const headings = (schema: Schema, maxLevel = 6) => [
   textblockTypeInputRule(
     new RegExp(`^(#{1,${maxLevel}})\\s$`),
     schema.nodes.heading,
-    (match) => ({ level: match[1].length })
+    (match) => ({ level: match[1].length }),
   ),
 ];
 

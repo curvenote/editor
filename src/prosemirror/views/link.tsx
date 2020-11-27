@@ -10,9 +10,12 @@ class LinkView {
 
   view: EditorView;
 
+  getPos?: () => number;
+
   constructor(node: Node, view: EditorView, getPos: (() => number) | undefined) {
     this.node = node;
     this.view = view;
+    this.getPos = getPos;
     this.dom = document.createElement<'a'>('a');
     const { href, title } = node.attrs;
     this.dom.setAttribute('href', href);

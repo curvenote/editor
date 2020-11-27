@@ -5,17 +5,17 @@ const theme = createMuiTheme({});
 
 export type Options = {
   image: {
-    upload:  (file: File) => Promise<string>;
+    upload: (file: File) => Promise<string>;
     downloadUrl: (src: string) => Promise<string>;
-  },
-  theme: Theme,
+  };
+  theme: Theme;
   onSuggestion: (action: SuggestionAction) => boolean | typeof KEEP_SELECTION_ALIVE;
-  focusSelected: (focus: boolean) => void,
+  focusSelected: (focus: boolean) => void;
 };
 
 const connect: Options = {
   image: {
-    upload: (file) => {console.log(file); throw new Error('upload not setup');},
+    upload: (file) => { console.log(file); throw new Error('upload not setup'); },
     downloadUrl: async (src) => src,
   },
   theme,
@@ -23,4 +23,4 @@ const connect: Options = {
   focusSelected: (focus: boolean) => console.log('Focus lost!'),
 };
 
-export default connect
+export default connect;

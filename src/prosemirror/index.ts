@@ -83,15 +83,16 @@ export function getEditorView(
     // This is set in the middleware `tr.setMeta(editable, false)`
     editable: (s) => isEditable(s),
     handleClickOn: (view, pos, node, nodePos, event, direct) => {
-      // TODO: Better right click
-      // if (direct && event.button === 2) {
-      //   // TODO: Not awesome interaction with material components here...
-      //   event.preventDefault();
-      //   event.stopPropagation();
-      //   event.stopImmediatePropagation();
-      //   store.dispatch(setAttributeEditor(true, view.nodeDOM(nodePos)));
-      //   return false;
-      // }
+      if (direct && event.button === 2) {
+        // TODO: Not awesome interaction with material components here...
+        // TODO: Better right click
+        console.log('RIGHT CLICK?!');
+        // event.preventDefault();
+        // event.stopPropagation();
+        // event.stopImmediatePropagation();
+        // store.dispatch(setAttributeEditor(true, view.nodeDOM(nodePos)));
+        return false;
+      }
       return false;
     },
     handlePaste: (view, event, slice) => (

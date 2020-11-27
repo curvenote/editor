@@ -97,12 +97,14 @@ export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | nul
   fileToDataUrl(images[0], async (canvas) => {
     const uri = canvas.toDataURL('image/png');
     const finish = addImagePlaceholder(view, uri);
-    let s: string | null = null;
+    let s: string | null;
     try {
       s = await connect.image.upload(images[0]);
-      if (s != null) { finish.success(s); return; }
-    } catch (error) {}
-    finish.fail();
+    } catch (error) {
+      s = null;
+    }
+    if (s == null) { finish.fail(); return; }
+    finish.success(s);
   });
   return true;
 };
