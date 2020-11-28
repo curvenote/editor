@@ -3,7 +3,7 @@ import {
   makeStyles,
   createStyles, Theme, Paper, Grid, Popover, Slider,
 } from '@material-ui/core';
-import MenuIcon from '../../../menu/Icon';
+import MenuIcon from '../../../components/Menu/Icon';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
