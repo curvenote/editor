@@ -10,7 +10,7 @@ module.exports = {
     usedExports: true,
   },
   entry: {
-    app: './demo.tsx',
+    app: './demo/index.tsx',
   },
   externals: {
     katex: 'katex',
@@ -19,7 +19,7 @@ module.exports = {
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: '@iooxa/editor',
-      template: 'index.html',
+      template: 'demo/index.html',
     }),
   ],
   output: {

@@ -1,9 +1,10 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
-import { KEEP_SELECTION_ALIVE, SuggestionAction } from './plugins/suggestion';
+import { KEEP_SELECTION_ALIVE, SuggestionAction } from './prosemirror/plugins/suggestion';
 
 const theme = createMuiTheme({});
 
 export type Options = {
+  transformKeyToId: (key: any) => string;
   image: {
     upload: (file: File) => Promise<string>;
     downloadUrl: (src: string) => Promise<string>;
@@ -13,7 +14,8 @@ export type Options = {
   focusSelected: (focus: boolean) => void;
 };
 
-const connect: Options = {
+const config: Options = {
+  transformKeyToId: (key) => key,
   image: {
     upload: (file) => { console.log(file); throw new Error('upload not setup'); },
     downloadUrl: async (src) => src,
@@ -23,4 +25,4 @@ const connect: Options = {
   focusSelected: (focus: boolean) => console.log('Focus lost!'),
 };
 
-export default connect;
+export default config;

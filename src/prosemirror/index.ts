@@ -11,7 +11,7 @@ import schema from './schema';
 import suggestion from './plugins/suggestion';
 import { buildKeymap } from './keymap';
 import inputrules from './inputrules';
-import connect from './connect';
+import config from '../config';
 import MathView from './views/math';
 import { getImagePlaceholderPlugin, uploadAndInsertImages } from './views/image/placeholder';
 import ImageView from './views/image';
@@ -24,7 +24,7 @@ export function getPlugins(version: number, startEditable: boolean) {
   return [
     editablePlugin(startEditable),
     ...suggestion(
-      connect.onSuggestion,
+      config.onSuggestion,
       /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{))$/,
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
@@ -40,7 +40,7 @@ export function getPlugins(version: number, startEditable: boolean) {
   ];
 }
 
-export function getEditorState(content: string, version: number, startEditable: boolean) {
+export function createEditorState(content: string, version: number, startEditable: boolean) {
   const plugins = getPlugins(version, startEditable);
   console.log('Getting editor state!', plugins);
   let state: EditorState;

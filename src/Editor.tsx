@@ -1,10 +1,15 @@
 import React, {
   useEffect, useRef, useState, CSSProperties,
 } from 'react';
-import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
 import { getEditorView } from './prosemirror';
+import { Dispatch, State } from './store';
+import {
+  focusEditorView, subscribeView, unsubscribeView, updateProsemirrorState,
+} from './store/prosemirror/actions';
+import { getEditorState, isEditorViewFocused } from './store/prosemirror/selectors';
 
 const prompts = [
   'Type \'/\' for commands, or just start writing!',
@@ -25,62 +30,60 @@ const promptStyle: CSSProperties = {
 };
 
 type Props = {
-  focused: boolean;
-  hasContent: boolean;
-  state: EditorState | null;
-  onFocus: (focused: boolean) => void;
-  onEdit: (view: EditorView, tr: Transaction, scroll: number) => EditorState;
-  subscribeView: (id: string, view: EditorView) => void;
-  unsubscribeView: (id: string) => void;
+  stateKey: string;
 };
 
 const Editor = (props: Props) => {
-  const {
-    focused, state,
-    onFocus, onEdit,
-    subscribeView, unsubscribeView,
-    hasContent,
-  } = props;
+  const { stateKey } = props;
 
-  const [id] = useState(uuid());
+  const dispatch = useDispatch<Dispatch>();
+
+  const [viewId] = useState(uuid());
   const editorEl = useRef<HTMLDivElement>(null);
   const editorView = useRef<EditorView>();
+
+  const hasContent = true;
+
+  const editorState = useSelector((state: State) => getEditorState(state, stateKey));
+  const focused = useSelector((state: State) => isEditorViewFocused(state, stateKey, viewId));
 
   const [prompt, setPrompt] = useState(prompts[0]);
   useEffect(() => setPrompt(prompts[Math.floor(Math.random() * prompts.length)]), [hasContent]);
 
-  // The editor is only created once, so it needs the up to date callbacks.
-  const call = useRef({ onFocus, onEdit });
+  // Create editorView
   useEffect(() => {
-    call.current = {
-      onFocus: (focus: boolean) => { if (focused !== focus) onFocus(focus); },
-      onEdit,
-    };
-  }, [focused, onFocus, onEdit]);
-
-  // Create editor view.
-  useEffect(() => {
-    console.log('HI!');
-    if (editorView.current || !editorEl.current || !state) return;
-    console.log('HI1!');
+    if (editorView.current || !editorEl.current || !editorState) return;
     editorView.current = getEditorView(
       editorEl.current,
-      state,
+      editorState,
       (tr) => {
-        call.current.onFocus(true);
-        const next = call.current.onEdit(editorView.current as EditorView, tr, window.scrollY);
+        const view = editorView.current as EditorView;
+        const next = view.state.apply(tr);
+        dispatch(updateProsemirrorState(stateKey, viewId, next));
+        // Immidiately update the view.
+        // This is important for properly handling selections.
+        // Cannot use react event loop here.
         editorView.current?.updateState(next);
       },
     );
-    (editorView.current.dom as HTMLElement).onblur = () => call.current.onFocus(false);
-    // The reducer must immidiately update the view.
-    // This is important for properly handling selections.
-    // Cannot use react event loop here.
-    subscribeView(id, editorView.current);
+    (editorView.current.dom as HTMLElement).onfocus = () => {
+      dispatch(focusEditorView(stateKey, viewId, true));
+    };
+    (editorView.current.dom as HTMLElement).onblur = () => {
+      dispatch(focusEditorView(stateKey, viewId, false));
+    };
+    dispatch(subscribeView(stateKey, viewId, editorView.current));
     setPrompt(prompts[0]);
-  }, [editorEl, state]);
-  useEffect(() => () => { if (editorView.current) unsubscribeView(id); }, []);
+  }, [editorView.current == null, editorEl.current == null, editorState == null]);
 
+  // Unsubscribe when it goes away
+  useEffect(() => () => {
+    if (editorView.current) {
+      dispatch(unsubscribeView(stateKey, viewId));
+    }
+  }, []);
+
+  // Handle an external focus event:
   useEffect(() => {
     if (editorEl.current == null) return;
     if (!focused) {

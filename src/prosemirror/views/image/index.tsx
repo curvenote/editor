@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import connect from '../../connect';
+import config from '../../../config';
 import ImageEditor from './ImageEditor';
 import { updateNodeAttrs } from '../../utils';
 import { AlignOptions } from './ImageToolbar';
@@ -54,7 +54,7 @@ class ImageView {
 
     render(<ImageEditor {...{ onAlign, onWidth, onDelete }} ref={(r) => { this.editor = r; }} />,
       this.dom, async () => {
-        const url = await connect.image.downloadUrl(src);
+        const url = await config.image.downloadUrl(src);
         this.editor?.setState({
           src: url, alt, title, align, width,
         });

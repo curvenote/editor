@@ -9,7 +9,7 @@ import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
-import connect from './connect';
+import config from '../config';
 
 type KeyMap = (
   state: EditorState<Schema>, dispatch?: ((p: Transaction<Schema>) => void)
@@ -32,7 +32,7 @@ export function buildKeymap(schema: Schema) {
   bind('Alt-ArrowDown', joinDown);
   bind('Mod-BracketLeft', lift);
   bind('Escape', chainCommands(undoInputRule, selectParentNode, () => {
-    connect.focusSelected(false);
+    config.focusSelected(false);
     return true;
   }));
 

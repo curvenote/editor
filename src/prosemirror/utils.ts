@@ -1,7 +1,5 @@
-import { NodeType } from 'prosemirror-model';
-import { liftListItem, wrapInList as wrapInListPM } from 'prosemirror-schema-list';
-import { EditorState, NodeSelection } from 'prosemirror-state';
-import { ContentNodeWithPos, hasParentNode } from 'prosemirror-utils';
+import { NodeSelection } from 'prosemirror-state';
+import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 
 export function updateNodeAttrs(
@@ -16,6 +14,3 @@ export function updateNodeAttrs(
   tr.setSelection(NodeSelection.create(tr.doc, node.pos));
   view.dispatch(tr);
 }
-
-
-
