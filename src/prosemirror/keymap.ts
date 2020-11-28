@@ -52,8 +52,6 @@ export function buildKeymap(schema: Schema) {
   if (schema.marks.code) bind('Mod-C', toggleMark(schema.marks.code));
   // if (schema.nodes.code_block) bind('Mod-M', setBlockType(schema.nodes.code_block));
 
-  if (schema.nodes.ordered_list) bind('Mod-Shift-7', wrapInList(schema.nodes.ordered_list));
-  if (schema.nodes.bullet_list) bind('Mod-Shift-8', wrapInList(schema.nodes.bullet_list));
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
   if (schema.nodes.hard_break) {
     const br = schema.nodes.hard_break;
@@ -69,6 +67,9 @@ export function buildKeymap(schema: Schema) {
   if (schema.nodes.list_item) {
     // TODO: Could improve this a bunch!!
     bind('Enter', splitListItem(schema.nodes.list_item));
+
+    bind('Mod-Shift-7', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.ordered_list)));
+    bind('Mod-Shift-8', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.bullet_list)));
     // Always capture the Tab.
     const cmdLift = chainCommands(liftListItem(schema.nodes.list_item), () => true);
     const cmdSink = chainCommands(sinkListItem(schema.nodes.list_item), () => true);
