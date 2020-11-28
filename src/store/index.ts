@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import * as selectors from './state/selectors';
+import * as selectors from './selectors';
 import reducer from './reducers';
 
 export { default as middleware } from './state/middleware';

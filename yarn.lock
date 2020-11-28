@@ -43,6 +43,16 @@
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
   integrity sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==
 
+"@iooxa/runtime@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@iooxa/runtime/-/runtime-0.2.5.tgz#2c8bc084f7b0f9857f20db0a6a3c7a2b2748d73e"
+  integrity sha512-HJ/9rLqUDweiQ9eF5NyBfhMzreH8Xx6gAcpezv7NX1GRK4Y5nHY8AJ6SYEHDEG3IqVfqxWFzJnRvxSzTerOGOw==
+  dependencies:
+    lodash.isequal "^4.5.0"
+    redux "^4.0.5"
+    redux-thunk "^2.3.0"
+    uuid "^7.0.3"
+
 "@iooxa/schema@file:../schema":
   version "0.0.6"
   dependencies:
@@ -2051,6 +2061,11 @@ emoji-regex@^9.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.0.tgz#a26da8e832b16a9753309f25e35e3c0efb9a066a"
   integrity sha512-DNc3KFPK18bPdElMJnf/Pkv5TXhxFU3YFDEuGLDRtPmV4rkmCjBkCSEp22u6rBHdSN9Vlp/GK7k98prmE1Jgug==
 
+emoji.json@^13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/emoji.json/-/emoji.json-13.1.0.tgz#116e46dc57c97af7ec2605ec88cfff31e9bcbade"
+  integrity sha512-ibJCYVe3Ilic4euofl0ozWqkmqXXsCuhuOuwhwAoG9qsMizNGI8aa7P4QIKlZ8NLgXx+pnVT2t6ZTvQczIv/ZA==
+
 emojis-list@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
@@ -2842,6 +2857,11 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+
+fuse.js@^6.4.3:
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.4.3.tgz#aadd6ac34aab5b1d6e6c60462fcb4d1c3f53bb01"
+  integrity sha512-JNgngolukIrqwayWnvy6NLH63hmwKPhm63o0uyBg51jPD0j09IvAzlV1rTXfAsgxpghI7khAo6Mv+EmvjDWXig==
 
 get-caller-file@^2.0.1:
   version "2.0.5"
@@ -6388,6 +6408,11 @@ uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 uuid@^8.3.1:
   version "8.3.1"

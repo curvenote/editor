@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import {
-  actions, Editor, EditorMenu, Store,
+  actions, Editor, EditorMenu, Store, setup,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -21,6 +21,7 @@ const store: Store = createStore(
     ...middleware,
   ),
 );
+setup(store);
 const stateKey = 'TEST';
 
 window.store = store;

@@ -3,13 +3,11 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectionIsChildOf, selectionIsMarkedWith, getEditorState, getUI,
-} from '../store/state/selectors';
+import { MarkType, NodeType } from 'prosemirror-model';
+import { selectors, actions } from '../store';
 import { Dispatch, State } from '../store/types';
 import schema from '../prosemirror/schema';
 import MenuIcon from './Icon';
-import { toggleMark, wrapInList } from '../store/state/actions';
 import config from '../config';
 import { isEditable } from '../prosemirror/plugins/editable';
 
@@ -44,14 +42,14 @@ const EditorMenu = (props: Props) => {
   const stateId = config.transformKeyToId(stateKey);
 
   const off = disabled || useSelector((state: State) => (
-    !isEditable(getEditorState(state, stateKey))
+    !isEditable(selectors.getEditorState(state, stateKey))
   ));
 
   const viewId = useSelector((state: State) => (
-    getUI(state).viewId
+    selectors.getUI(state).viewId
   ));
 
-  const active = useSelector((state: State) => selectionIsMarkedWith(state, stateId, {
+  const active = useSelector((state: State) => selectors.selectionIsMarkedWith(state, stateId, {
     strong: schema.marks.strong,
     em: schema.marks.em,
     sub: schema.marks.subscript,
@@ -62,41 +60,35 @@ const EditorMenu = (props: Props) => {
     code: schema.marks.code,
   }));
 
-  const parents = useSelector((state: State) => selectionIsChildOf(state, stateId, {
+  const parents = useSelector((state: State) => selectors.selectionIsChildOf(state, stateId, {
     ul: schema.nodes.bullet_list,
     ol: schema.nodes.ordered_list,
   }));
 
-  const clickBulletList = () => dispatch(wrapInList(stateId, viewId, schema.nodes.bullet_list));
-  const clickOrderedList = () => dispatch(wrapInList(stateId, viewId, schema.nodes.ordered_list));
-  const clickStrong = () => dispatch(toggleMark(stateId, viewId, schema.marks.strong));
-  const clickEm = () => dispatch(toggleMark(stateId, viewId, schema.marks.em));
-  const clickSub = () => dispatch(toggleMark(stateId, viewId, schema.marks.subscript));
-  const clickSup = () => dispatch(toggleMark(stateId, viewId, schema.marks.superscript));
-  const clickStrike = () => dispatch(toggleMark(stateId, viewId, schema.marks.strikethrough));
-  const clickUnderline = () => dispatch(toggleMark(stateId, viewId, schema.marks.underline));
-  const clickCode = () => dispatch(toggleMark(stateId, viewId, schema.marks.code));
+  // Helper functions
+  const toggleMark = (mark: MarkType) => () => dispatch(actions.toggleMark(stateId, viewId, mark));
+  const wrapInList = (node: NodeType) => () => dispatch(actions.wrapInList(stateId, viewId, node));
 
   const clickLink = () => {
     // eslint-disable-next-line no-alert
     const href = prompt('Url?');
     if (!href) return;
-    dispatch(toggleMark(stateId, viewId, schema.marks.link, { href }));
+    dispatch(actions.toggleMark(stateId, viewId, schema.marks.link, { href }));
   };
 
   return (
     <Grid container alignItems="center" className={`${classes.root} ${standAlone ? classes.center : classes.pad}`} wrap="nowrap">
       {!standAlone && <MenuIcon kind="divider" />}
-      <MenuIcon kind="bold" active={active.strong} disabled={off} onClick={clickStrong} />
-      <MenuIcon kind="italic" active={active.em} disabled={off} onClick={clickEm} />
-      <MenuIcon kind="code" active={active.code} disabled={off} onClick={clickCode} />
-      <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
-      <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSup} />
-      <MenuIcon kind="strikethrough" active={active.strike} disabled={off} onClick={clickStrike} />
-      <MenuIcon kind="underline" active={active.underline} disabled={off} onClick={clickUnderline} />
+      <MenuIcon kind="bold" active={active.strong} disabled={off} onClick={toggleMark(schema.marks.strong)} />
+      <MenuIcon kind="italic" active={active.em} disabled={off} onClick={toggleMark(schema.marks.em)} />
+      <MenuIcon kind="code" active={active.code} disabled={off} onClick={toggleMark(schema.marks.code)} />
+      <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={toggleMark(schema.marks.subscript)} />
+      <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={toggleMark(schema.marks.superscript)} />
+      <MenuIcon kind="strikethrough" active={active.strike} disabled={off} onClick={toggleMark(schema.marks.strikethrough)} />
+      <MenuIcon kind="underline" active={active.underline} disabled={off} onClick={toggleMark(schema.marks.underline)} />
       <MenuIcon kind="divider" />
-      <MenuIcon kind="ul" active={parents.ul} disabled={off} onClick={clickBulletList} />
-      <MenuIcon kind="ol" active={parents.ol} disabled={off} onClick={clickOrderedList} />
+      <MenuIcon kind="ul" active={parents.ul} disabled={off} onClick={wrapInList(schema.nodes.bullet_list)} />
+      <MenuIcon kind="ol" active={parents.ol} disabled={off} onClick={wrapInList(schema.nodes.ordered_list)} />
       <MenuIcon kind="divider" />
       <MenuIcon kind="link" active={active.linked} disabled={off} onClick={clickLink} />
     </Grid>

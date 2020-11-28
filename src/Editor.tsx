@@ -4,9 +4,10 @@ import React, {
 import { EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEditorView } from './prosemirror';
-import { Dispatch, State, actions } from './store';
-import { getEditorState, isEditorViewFocused } from './store/state/selectors';
+import { createEditorView } from './prosemirror';
+import {
+  Dispatch, State, actions, selectors,
+} from './store';
 
 const prompts = [
   'Type \'/\' for commands, or just start writing!',
@@ -41,8 +42,12 @@ const Editor = (props: Props) => {
 
   const hasContent = true;
 
-  const editorState = useSelector((state: State) => getEditorState(state, stateKey));
-  const focused = useSelector((state: State) => isEditorViewFocused(state, stateKey, viewId));
+  const editorState = useSelector(
+    (state: State) => selectors.getEditorState(state, stateKey),
+  );
+  const focused = useSelector(
+    (state: State) => (selectors.isEditorViewFocused(state, stateKey, viewId)),
+  );
 
   const [prompt, setPrompt] = useState(prompts[0]);
   useEffect(() => setPrompt(prompts[Math.floor(Math.random() * prompts.length)]), [hasContent]);
@@ -50,7 +55,7 @@ const Editor = (props: Props) => {
   // Create editorView
   useEffect(() => {
     if (editorView.current || !editorEl.current || !editorState) return;
-    editorView.current = getEditorView(
+    editorView.current = createEditorView(
       editorEl.current,
       editorState,
       (tr) => {

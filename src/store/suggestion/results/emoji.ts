@@ -1,0 +1,78 @@
+import Fuse from 'fuse.js';
+import { AppThunk } from '../../types';
+import { getSuggestion } from '../selectors';
+import { EmojiResult } from '../types';
+
+const options = {
+  shouldSort: true,
+  threshold: 0.4,
+  location: 0,
+  distance: 100,
+  minMatchCharLength: 1,
+  keys: [
+    {
+      name: 's',
+      weight: 0.4,
+    },
+    {
+      name: 'o',
+      weight: 0.3,
+    },
+    {
+      name: 'n',
+      weight: 0.3,
+    },
+  ],
+};
+
+let fuse: Fuse<EmojiResult> | null = null;
+
+async function getFuse() {
+  if (fuse) return fuse;
+  const emoji = await import('./emoji.json');
+  fuse = new Fuse(emoji.emoji, options);
+  return fuse;
+}
+
+// This is in emoji.default if it needs to be recreated.
+// This is now async and broken into modules.
+export const startingSuggestions = [{
+  c: '👍', n: 'Thumbs Up', s: '+1', o: 'thumbsup',
+}, {
+  c: '👎', n: 'Thumbs Down', s: '-1', o: 'thumbsdown',
+}, {
+  c: '😀', n: 'Grinning Face', s: 'grinning', o: ' :D',
+}, {
+  c: '❤️', n: 'Red Heart', s: 'heart', o: ' <3',
+}, {
+  c: '🚀', n: 'Rocket', s: 'rocket', o: '',
+}, {
+  c: '🎉', n: 'Party Popper', s: 'tada', o: '',
+}, {
+  c: '👀', n: 'Eyes', s: 'eyes', o: '',
+}, {
+  c: '😕', n: 'Confused Face', s: 'confused', o: '',
+}];
+
+export function chooseSelection(result: EmojiResult): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const { view, range: { from, to } } = getSuggestion(getState());
+    if (view == null) return false;
+    const { tr } = view.state;
+    tr.insertText(`${result.c} `, from, to);
+    view.dispatch(tr);
+    return true;
+  };
+}
+
+export function filterResults(search: string, callback: (results: EmojiResult[]) => void): void {
+  if (search === 'D') {
+    callback(startingSuggestions.filter((e) => e.n === 'Grinning Face') as EmojiResult[]);
+    return;
+  }
+  // This lets the keystroke go through:
+  setTimeout(async () => {
+    const results = (await getFuse())?.search(search as string);
+    callback(results?.map((result) => result.item) as EmojiResult[]);
+  }, 1);
+}

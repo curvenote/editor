@@ -2,19 +2,24 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import {
   Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer,
 } from 'redux';
+import { types as runtimeTypes } from '@iooxa/runtime';
 import { ProsemirrorState, ProsemirrorActionTypes } from './state/types';
 import { UIState, UIActionTypes } from './ui/types';
+import { SuggestionState, SuggestionActionTypes } from './suggestion/types';
 
 export interface State {
   prosemirror: {
     state: ProsemirrorState;
     ui: UIState;
+    suggestion: SuggestionState;
   };
+  runtime: runtimeTypes.State['runtime'];
 }
 
 export type PROSEMIRROR_ACTIONS = (
   ProsemirrorActionTypes |
-  UIActionTypes
+  UIActionTypes |
+  SuggestionActionTypes
 );
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, null, Action<string>>;

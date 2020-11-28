@@ -1,5 +1,4 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
-import { KEEP_SELECTION_ALIVE, SuggestionAction } from './prosemirror/plugins/suggestion';
 
 const theme = createMuiTheme({});
 
@@ -10,8 +9,6 @@ export type Options = {
     downloadUrl: (src: string) => Promise<string>;
   };
   theme: Theme;
-  onSuggestion: (action: SuggestionAction) => boolean | typeof KEEP_SELECTION_ALIVE;
-  focusSelected: (focus: boolean) => void;
 };
 
 const config: Options = {
@@ -21,8 +18,6 @@ const config: Options = {
     downloadUrl: async (src) => src,
   },
   theme,
-  onSuggestion: (action) => { console.log(action); return false; },
-  focusSelected: (focus: boolean) => console.log('Focus lost!'),
 };
 
 export default config;

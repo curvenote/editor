@@ -11,12 +11,13 @@ import schema from './schema';
 import suggestion from './plugins/suggestion';
 import { buildKeymap } from './keymap';
 import inputrules from './inputrules';
-import config from '../config';
+import store from '../connect';
 import MathView from './views/math';
 import { getImagePlaceholderPlugin, uploadAndInsertImages } from './views/image/placeholder';
 import ImageView from './views/image';
 import { editablePlugin, isEditable } from './plugins/editable';
 import LinkView from './views/link';
+import { handleSuggestion } from '../store/suggestion/actions';
 
 export { schema };
 
@@ -24,7 +25,7 @@ export function getPlugins(version: number, startEditable: boolean) {
   return [
     editablePlugin(startEditable),
     ...suggestion(
-      config.onSuggestion,
+      (action) => store.dispatch(handleSuggestion(action)),
       /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{))$/,
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
@@ -42,7 +43,6 @@ export function getPlugins(version: number, startEditable: boolean) {
 
 export function createEditorState(content: string, version: number, startEditable: boolean) {
   const plugins = getPlugins(version, startEditable);
-  console.log('Getting editor state!', plugins);
   let state: EditorState;
   try {
     const data = JSON.parse(content);
@@ -58,7 +58,7 @@ export function createEditorState(content: string, version: number, startEditabl
   return state;
 }
 
-export function getEditorView(
+export function createEditorView(
   dom: HTMLDivElement,
   state: EditorState,
   dispatch: (tr: Transaction) => void,
