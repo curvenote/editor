@@ -4,12 +4,12 @@ import { Theme } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarkType, NodeType } from 'prosemirror-model';
-import { selectors, actions } from '../store';
-import { Dispatch, State } from '../store/types';
-import schema from '../prosemirror/schema';
+import { selectors, actions } from '../../store';
+import { Dispatch, State } from '../../store/types';
+import schema from '../../prosemirror/schema';
 import MenuIcon from './Icon';
-import config from '../config';
-import { isEditable } from '../prosemirror/plugins/editable';
+import config from '../../config';
+import { isEditable } from '../../prosemirror/plugins/editable';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {

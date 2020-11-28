@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import {
-  actions, Editor, EditorMenu, Store, setup,
+  actions, Editor, EditorMenu, Store, setup, Suggestion,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -33,6 +33,7 @@ ReactDOM.render(
       <EditorMenu standAlone stateKey={stateKey} />
       <Editor stateKey={stateKey} />
       <Editor stateKey={stateKey} />
+      <Suggestion />
     </React.StrictMode>
   </Provider>,
   document.getElementById('root'),

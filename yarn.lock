@@ -1524,6 +1524,11 @@ compression@^1.7.4:
     safe-buffer "5.1.2"
     vary "~1.1.2"
 
+compute-scroll-into-view@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/compute-scroll-into-view/-/compute-scroll-into-view-1.0.16.tgz#5b7bf4f7127ea2c19b750353d7ce6776a90ee088"
+  integrity sha512-a85LHKY81oQnikatZYA90pufpZ6sQx++BoCxOEMsjpZx+ZnaKGQnCyCehTRr/1p9GBIAHTjcU9k71kSYWloLiQ==
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -2061,10 +2066,10 @@ emoji-regex@^9.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.0.tgz#a26da8e832b16a9753309f25e35e3c0efb9a066a"
   integrity sha512-DNc3KFPK18bPdElMJnf/Pkv5TXhxFU3YFDEuGLDRtPmV4rkmCjBkCSEp22u6rBHdSN9Vlp/GK7k98prmE1Jgug==
 
-emoji.json@^13.1.0:
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/emoji.json/-/emoji.json-13.1.0.tgz#116e46dc57c97af7ec2605ec88cfff31e9bcbade"
-  integrity sha512-ibJCYVe3Ilic4euofl0ozWqkmqXXsCuhuOuwhwAoG9qsMizNGI8aa7P4QIKlZ8NLgXx+pnVT2t6ZTvQczIv/ZA==
+emoji.json@^12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/emoji.json/-/emoji.json-12.1.1.tgz#fd0fb150fbafd6a8260ac6b28fce4a777abf75fa"
+  integrity sha512-oW/iqLXVeJM6aRWVLyz/cJ9BZXYQu2RnKsQOi8S9Vd6BM8pc9Hud42MV36r7f3OQVXf3FbfQZrCUz3mvKAMFIA==
 
 emojis-list@^3.0.0:
   version "3.0.0"
@@ -5562,6 +5567,13 @@ schema-utils@^3.0.0:
     "@types/json-schema" "^7.0.6"
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
+
+scroll-into-view-if-needed@^2.2.26:
+  version "2.2.26"
+  resolved "https://registry.yarnpkg.com/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.26.tgz#e4917da0c820135ff65ad6f7e4b7d7af568c4f13"
+  integrity sha512-SQ6AOKfABaSchokAmmaxVnL9IArxEnLEX9j4wAZw+x4iUTb40q7irtHG3z4GtAWz5veVZcCnubXDBRyLVQaohw==
+  dependencies:
+    compute-scroll-into-view "^1.0.16"
 
 select-hose@^2.0.0:
   version "2.0.0"
