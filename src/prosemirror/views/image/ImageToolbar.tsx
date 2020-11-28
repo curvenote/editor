@@ -1,78 +1,26 @@
 import React from 'react';
 import {
-  Tooltip, IconButton, SvgIconProps, makeStyles,
-  createStyles, Theme, Paper, Divider, Grid, Popover, Slider,
+  makeStyles,
+  createStyles, Theme, Paper, Grid, Popover, Slider,
 } from '@material-ui/core';
-import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
-import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
-import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
-import DeleteIcon from '@material-ui/icons/Delete';
+import MenuIcon from '../../../menu/Icon';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     width: 'fit-content',
-    marginTop: -15,
     fontSize: 20,
-    color: theme.palette.text.secondary,
-    '& > div': {
-      display: 'inline-block',
-    },
-    '& svg': {
-      margin: 4,
-      padding: 2,
-      borderRadius: 4,
-    },
-    '& button:hover': {
-      color: 'white',
-      backgroundColor: 'transparent',
-    },
-    '& button:hover svg': {
-      backgroundColor: theme.palette.text.secondary,
-    },
-    '& hr': {
-      margin: theme.spacing(0, 0.2),
-      height: 20,
-    },
   },
   paper: {
     position: 'absolute',
-    width: 200,
+    width: 215,
     overflow: 'hidden',
-    height: 33,
+    height: 37,
     zIndex: 1,
-  },
-  boldIcon: {
-    color: 'white',
-    '& svg': {
-      backgroundColor: theme.palette.text.secondary,
-    },
   },
   popover: {
     overflow: 'visible',
   },
 }));
-
-const getButton = (
-  title: string,
-  click: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-  Icon: (props: SvgIconProps) => JSX.Element,
-  selected = false,
-  className = '',
-) => (
-  <Tooltip title={title}>
-    <div>
-      <IconButton
-        size="small"
-        onClick={(e) => { e.preventDefault(); click(e); }}
-        className={selected ? className : ''}
-        disableRipple
-      >
-        <Icon fontSize="small" />
-      </IconButton>
-    </div>
-  </Tooltip>
-);
 
 export type AlignOptions = 'left' | 'center' | 'right';
 
@@ -117,11 +65,11 @@ const ImageToolbar = (props: Props) => {
       }}
     >
       <Grid container alignItems="center" justify="center" className={classes.root}>
-        {getButton('Align left', doAlign('left'), FormatAlignLeftIcon, align === 'left', classes.boldIcon)}
-        {getButton('Align center', doAlign('center'), FormatAlignCenterIcon, align === 'center', classes.boldIcon)}
-        {getButton('Align right', doAlign('right'), FormatAlignRightIcon, align === 'right', classes.boldIcon)}
-        <Divider orientation="vertical" style={{ width: 0 }} />
-        {getButton('Adjust width', handleClick, PhotoSizeSelectLargeIcon, openWidth, classes.boldIcon)}
+        <MenuIcon kind="left" active={align === 'left'} onClick={doAlign('left')} />
+        <MenuIcon kind="center" active={align === 'center'} onClick={doAlign('center')} />
+        <MenuIcon kind="right" active={align === 'right'} onClick={doAlign('right')} />
+        <MenuIcon kind="divider" />
+        <MenuIcon kind="imageWidth" active={openWidth} onClick={handleClick} />
         <Popover
           open={openWidth}
           anchorEl={anchorEl}
@@ -146,8 +94,8 @@ const ImageToolbar = (props: Props) => {
             />
           </div>
         </Popover>
-        <Divider orientation="vertical" style={{ width: 0 }} />
-        {getButton('Remove', onDelete, DeleteIcon)}
+        <MenuIcon kind="divider" />
+        <MenuIcon kind="remove" onClick={onDelete} dangerous />
       </Grid>
     </Paper>
   );

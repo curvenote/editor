@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import {
-  createStyles, IconButton, makeStyles, SvgIcon, Theme, Tooltip,
+  createStyles, Divider, IconButton, makeStyles, SvgIcon, Theme, Tooltip,
 } from '@material-ui/core';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
@@ -11,10 +11,12 @@ import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import LinkIcon from '@material-ui/icons/Link';
 import CodeIcon from '@material-ui/icons/Code';
+import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
+import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
+import DeleteIcon from '@material-ui/icons/Delete';
 // import AddIcon from '@material-ui/icons/Add';
-// import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-// import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
-// import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
 
@@ -34,6 +36,9 @@ function SuperscriptIcon(props: any) {
   );
 }
 
+const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
+const deMacify = (title: string) => (mac ? title : title.replace('⌘', 'Ctrl-'));
+
 const icons = {
   bold: { title: 'Bold ⌘B', Icon: FormatBoldIcon },
   italic: { title: 'Italic ⌘I', Icon: FormatItalicIcon },
@@ -45,51 +50,83 @@ const icons = {
   ul: { title: 'Bullet Point List ⌘⇧8', Icon: FormatListBulletedIcon },
   ol: { title: 'Ordered List ⌘⇧7', Icon: FormatListNumberedIcon },
   link: { title: 'Link ⌘K', Icon: LinkIcon },
+  left: { title: 'Align Left', Icon: FormatAlignLeftIcon },
+  center: { title: 'Align Center', Icon: FormatAlignCenterIcon },
+  right: { title: 'Align Right', Icon: FormatAlignRightIcon },
+  imageWidth: { title: 'Adjust Width', Icon: PhotoSizeSelectLargeIcon },
+  remove: { title: 'Remove', Icon: DeleteIcon },
 };
 
-export type IconTypes = keyof typeof icons;
+export type IconTypes = keyof typeof icons | 'divider';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-  boldIcon: {
-    color: 'white',
-    '& svg': {
-      backgroundColor: theme.palette.text.secondary,
+  root: {
+    color: theme.palette.text.secondary,
+    '& button:hover': {
+      backgroundColor: 'transparent',
     },
+    '& button.active svg, button:hover svg': {
+      backgroundColor: theme.palette.text.secondary,
+      color: 'white',
+    },
+    '& button:hover svg.dangerous': {
+      backgroundColor: 'transparent',
+      color: theme.palette.error.main,
+    },
+    '& svg': {
+      margin: 4,
+      padding: 2,
+      borderRadius: 4,
+    },
+  },
+  hr: {
+    margin: theme.spacing(0, 0.5),
+    height: 20,
   },
 }));
 
 type Props = {
   kind: IconTypes;
-  disabled: boolean;
-  active: boolean;
-  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  dangerous?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 const MenuIcon = (props: Props) => {
   const {
-    kind, active, disabled, onClick,
+    kind, active, dangerous, disabled, onClick,
   } = props;
 
   const classes = useStyles();
 
+  if (kind === 'divider') return <Divider className={classes.hr} orientation="vertical" />;
+
   const { title, Icon } = icons[kind];
 
   return (
-    <Tooltip title={title}>
-      <div>
+    <Tooltip title={deMacify(title)}>
+      <div className={classes.root}>
         <IconButton
           disabled={disabled}
-          className={active ? classes.boldIcon : ''}
+          className={active ? 'active' : ''}
           size="small"
-          onClickCapture={(e) => { e.stopPropagation(); e.preventDefault(); onClick(); }}
+          onClickCapture={(e) => { e.stopPropagation(); e.preventDefault(); onClick?.(e); }}
           disableRipple
         >
-          <Icon fontSize="small" />
+          <Icon fontSize="small" className={dangerous ? 'dangerous' : ''} />
         </IconButton>
       </div>
     </Tooltip>
   );
+};
+
+MenuIcon.defaultProps = {
+  disabled: false,
+  active: false,
+  dangerous: false,
+  onClick: undefined,
 };
 
 export default MenuIcon;

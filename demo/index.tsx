@@ -24,7 +24,7 @@ const store: Store = createStore(
 const stateKey = 'TEST';
 
 window.store = store;
-store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello world!</p>', 0));
+store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello world!</p><img src="https://iooxa.dev/images/logo.png">', 0));
 
 ReactDOM.render(
   <Provider store={store}>

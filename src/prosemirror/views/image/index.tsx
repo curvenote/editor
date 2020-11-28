@@ -52,18 +52,21 @@ class ImageView {
       this.view.dispatch(tr);
     };
 
-    render(<ImageEditor {...{ onAlign, onWidth, onDelete }} ref={(r) => { this.editor = r; }} />,
-      this.dom, async () => {
+    render(
+      <ImageEditor {...{ onAlign, onWidth, onDelete }} ref={(r) => { this.editor = r; }} />,
+      this.dom,
+      async () => {
         const url = await config.image.downloadUrl(src);
         this.editor?.setState({
           src: url, alt, title, align, width,
         });
-      });
+      },
+    );
   }
 
   selectNode() {
     const edit = isEditable(this.view.state);
-    this.editor?.setState({ open: true, edit });
+    this.editor?.setState({ open: this.view.hasFocus(), edit });
   }
 
   deselectNode() {
