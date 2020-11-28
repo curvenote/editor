@@ -6,8 +6,8 @@ const updateProsemirrorViewsMiddleware: Middleware = (
     const result = next(action);
     if (action.type === UPDATE_PROSEMIRROR_STATE) {
       const { stateId, viewId, editorState } = (action as UpdateProsemirrorState).payload;
-      const state = store.getState().prosemirror.state[stateId];
-      const { views } = store.getState().prosemirror;
+      const state = store.getState().prosemirror.state.editors[stateId];
+      const { views } = store.getState().prosemirror.state;
       if (state == null) return result;
       state.viewIds.forEach((id) => {
         if (id === viewId) return;

@@ -1,9 +1,9 @@
-import * as actions from './prosemirror/actions';
-import * as selectors from './prosemirror/selectors';
-import reducer from './prosemirror/reducers';
+import * as actions from './actions';
+import * as selectors from './state/selectors';
+import reducer from './reducers';
 
-export { default as middleware } from './prosemirror/middleware';
+export { default as middleware } from './state/middleware';
 export * from './types';
-export * from './prosemirror/types';
+export * from './state/types';
 
 export { reducer, actions, selectors };

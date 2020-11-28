@@ -2,14 +2,19 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import {
   Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer,
 } from 'redux';
-import { ProsemirrorState, ProsemirrorActionTypes } from './prosemirror/types';
+import { ProsemirrorState, ProsemirrorActionTypes } from './state/types';
+import { UIState, UIActionTypes } from './ui/types';
 
 export interface State {
-  prosemirror: ProsemirrorState;
+  prosemirror: {
+    state: ProsemirrorState;
+    ui: UIState;
+  };
 }
 
 export type PROSEMIRROR_ACTIONS = (
-  ProsemirrorActionTypes
+  ProsemirrorActionTypes |
+  UIActionTypes
 );
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, null, Action<string>>;

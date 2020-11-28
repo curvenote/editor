@@ -5,11 +5,11 @@ import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectionIsChildOf, selectionIsMarkedWith, getEditorState, getUI,
-} from '../store/prosemirror/selectors';
+} from '../store/state/selectors';
 import { Dispatch, State } from '../store/types';
 import schema from '../prosemirror/schema';
 import MenuIcon from './Icon';
-import { toggleMark, wrapInList } from '../store/prosemirror/actions';
+import { toggleMark, wrapInList } from '../store/state/actions';
 import config from '../config';
 import { isEditable } from '../prosemirror/plugins/editable';
 

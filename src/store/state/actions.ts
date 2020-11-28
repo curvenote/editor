@@ -6,12 +6,13 @@ import { MarkType, NodeType } from 'prosemirror-model';
 import {
   ProsemirrorActionTypes,
   UPDATE_PROSEMIRROR_STATE, INIT_PROSEMIRROR_STATE,
-  SUBSCRIBE_PROSEMIRROR_VIEW, UNSUBSCRIBE_PROSEMIRROR_VIEW, SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW,
+  SUBSCRIBE_PROSEMIRROR_VIEW, UNSUBSCRIBE_PROSEMIRROR_VIEW,
 } from './types';
 import { State, AppThunk } from '../types';
 import { getEditor, getEditorState, selectionIsChildOf } from './selectors';
 import schema from '../../prosemirror/schema';
 import config from '../../config';
+import { focusEditorView } from '../ui/actions';
 
 function selectNode(stateId: any, pos: number) {
   return (dispatch: any, getState: () => State) => {
@@ -59,6 +60,8 @@ export function applyProsemirrorTransaction(
     return true;
   };
 }
+
+
 export function subscribeView(
   stateKey: any, viewId: string, view: EditorView,
 ): ProsemirrorActionTypes {
@@ -79,24 +82,6 @@ export function unsubscribeView(
   };
 }
 
-
-export function selectEditorView(stateKey: any, viewId: string): ProsemirrorActionTypes {
-  const stateId = config.transformKeyToId(stateKey);
-  return {
-    type: SELECT_EDITOR_VIEW,
-    payload: { stateId, viewId },
-  };
-}
-
-export function focusEditorView(
-  stateKey: any, viewId: string | null, focused: boolean,
-): ProsemirrorActionTypes {
-  const stateId = config.transformKeyToId(stateKey);
-  return {
-    type: FOCUS_EDITOR_VIEW,
-    payload: { stateId, viewId, focused },
-  };
-}
 export function toggleMark(
   stateKey: any, viewId: string | null, mark: MarkType, attrs?: {[key: string]: any},
 ): AppThunk<boolean> {

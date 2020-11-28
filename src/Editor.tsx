@@ -5,11 +5,8 @@ import { EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEditorView } from './prosemirror';
-import { Dispatch, State } from './store';
-import {
-  focusEditorView, subscribeView, unsubscribeView, updateProsemirrorState,
-} from './store/prosemirror/actions';
-import { getEditorState, isEditorViewFocused } from './store/prosemirror/selectors';
+import { Dispatch, State, actions } from './store';
+import { getEditorState, isEditorViewFocused } from './store/state/selectors';
 
 const prompts = [
   'Type \'/\' for commands, or just start writing!',
@@ -59,7 +56,7 @@ const Editor = (props: Props) => {
       (tr) => {
         const view = editorView.current as EditorView;
         const next = view.state.apply(tr);
-        dispatch(updateProsemirrorState(stateKey, viewId, next));
+        dispatch(actions.updateProsemirrorState(stateKey, viewId, next));
         // Immidiately update the view.
         // This is important for properly handling selections.
         // Cannot use react event loop here.
@@ -67,19 +64,19 @@ const Editor = (props: Props) => {
       },
     );
     (editorView.current.dom as HTMLElement).onfocus = () => {
-      dispatch(focusEditorView(stateKey, viewId, true));
+      dispatch(actions.focusEditorView(stateKey, viewId, true));
     };
     (editorView.current.dom as HTMLElement).onblur = () => {
-      dispatch(focusEditorView(stateKey, viewId, false));
+      dispatch(actions.focusEditorView(stateKey, viewId, false));
     };
-    dispatch(subscribeView(stateKey, viewId, editorView.current));
+    dispatch(actions.subscribeView(stateKey, viewId, editorView.current));
     setPrompt(prompts[0]);
   }, [editorView.current == null, editorEl.current == null, editorState == null]);
 
   // Unsubscribe when it goes away
   useEffect(() => () => {
     if (editorView.current) {
-      dispatch(unsubscribeView(stateKey, viewId));
+      dispatch(actions.unsubscribeView(stateKey, viewId));
     }
   }, []);
 

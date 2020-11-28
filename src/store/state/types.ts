@@ -7,19 +7,8 @@ export const UNSUBSCRIBE_PROSEMIRROR_VIEW = 'UNSUBSCRIBE_PROSEMIRROR_VIEW';
 
 export const UPDATE_PROSEMIRROR_STATE = 'UPDATE_PROSEMIRROR_STATE';
 
-export const SELECT_EDITOR_VIEW = 'SELECT_EDITOR_VIEW';
-export const FOCUS_EDITOR_VIEW = 'FOCUS_EDITOR_VIEW';
-
-
-export type ProsemirrorUIState = {
-  stateId: string | null;
-  viewId: string | null;
-  focused: boolean;
-};
-
-
 export type ProsemirrorState = {
-  state: {
+  editors: {
     [stateId: string]: {
       state: EditorState;
       viewIds: string[];
@@ -31,7 +20,6 @@ export type ProsemirrorState = {
       view: EditorView;
     };
   };
-  ui: ProsemirrorUIState;
 };
 
 export interface InitProsemirrorState {
@@ -70,30 +58,9 @@ export interface UnsubscribeProsemirrorView {
   };
 }
 
-
-export interface SelectEditorViewAction {
-  type: typeof SELECT_EDITOR_VIEW;
-  payload: {
-    stateId: string;
-    viewId: string;
-  };
-}
-
-export interface FocusEditorViewAction {
-  type: typeof FOCUS_EDITOR_VIEW;
-  payload: {
-    stateId: string;
-    viewId: string | null;
-    focused: boolean;
-  };
-}
-
-
 export type ProsemirrorActionTypes = (
   InitProsemirrorState |
   UpdateProsemirrorState |
   SubscribeProsemirrorView |
-  UnsubscribeProsemirrorView |
-  SelectEditorViewAction |
-  FocusEditorViewAction
+  UnsubscribeProsemirrorView
 );
