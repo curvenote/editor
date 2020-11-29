@@ -2,7 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CopyPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -20,6 +20,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: '@iooxa/editor',
       template: 'demo/index.html',
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'editor.css', to: 'editor.css' },
+      ],
     }),
   ],
   output: {
