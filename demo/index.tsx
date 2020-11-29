@@ -8,7 +8,7 @@ import {
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
-import '../src/editor.css';
+import '../editor.css';
 import { Options } from '../src/connect';
 
 declare global {
@@ -28,7 +28,7 @@ const theme = createMuiTheme({});
 const opts: Options = {
   transformKeyToId: (key) => key,
   image: {
-    upload: (file) => { console.log(file); throw new Error('upload not setup'); },
+    upload: async (file) => { console.log(file); throw new Error('upload not setup'); },
     downloadUrl: async (src) => src,
   },
   theme,

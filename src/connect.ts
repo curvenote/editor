@@ -5,7 +5,7 @@ import { Store } from './store/types';
 export type Options = {
   transformKeyToId: (key: any) => string;
   image: {
-    upload: (file: File) => Promise<string>;
+    upload: (file: File) => Promise<string | null>;
     downloadUrl: (src: string) => Promise<string>;
   };
   theme: Theme;
@@ -42,9 +42,11 @@ export const store: Pick<Store, 'getState' | 'dispatch'> = {
 
 export const opts: Options = {
   transformKeyToId: (key: any) => ref.opts().transformKeyToId(key),
-  image: {
-    upload: (file: File) => ref.opts().image.upload(file),
-    downloadUrl: (src: string) => ref.opts().image.downloadUrl(src),
+  get image() {
+    return {
+      upload: (file: File) => ref.opts().image.upload(file),
+      downloadUrl: (src: string) => ref.opts().image.downloadUrl(src),
+    };
   },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },
