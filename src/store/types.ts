@@ -6,12 +6,14 @@ import { types as runtimeTypes } from '@iooxa/runtime';
 import { ProsemirrorState, ProsemirrorActionTypes } from './state/types';
 import { UIState, UIActionTypes } from './ui/types';
 import { SuggestionState, SuggestionActionTypes } from './suggestion/types';
+import { AttributesState, AttributesActionTypes } from './attrs/types';
 
 export interface State {
   prosemirror: {
     state: ProsemirrorState;
     ui: UIState;
     suggestion: SuggestionState;
+    attrs: AttributesState;
   };
   runtime: runtimeTypes.State['runtime'];
 }
@@ -19,7 +21,8 @@ export interface State {
 export type PROSEMIRROR_ACTIONS = (
   ProsemirrorActionTypes |
   UIActionTypes |
-  SuggestionActionTypes
+  SuggestionActionTypes |
+  AttributesActionTypes
 );
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, null, Action<string>>;
