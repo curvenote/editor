@@ -7,6 +7,7 @@ import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+import { collab } from 'prosemirror-collab';
 import schema from './schema';
 import suggestion from './plugins/suggestion';
 import { buildKeymap } from './keymap';
@@ -36,7 +37,7 @@ export function getPlugins(version: number, startEditable: boolean) {
     keymap(baseKeymap),
     dropCursor(),
     gapCursor(),
-    // collab({ version }),
+    collab({ version }),
     history(),
   ];
 }
