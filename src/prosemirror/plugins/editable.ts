@@ -4,7 +4,7 @@ import {
 
 const key = new PluginKey('editable');
 
-export const isEditable = (state: EditorState | null): boolean => {
+export const isEditable = (state?: EditorState | null): boolean => {
   if (state == null) return false;
   const plugin = key.get(state);
   return plugin?.getState(state) ?? false;

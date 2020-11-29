@@ -87,7 +87,7 @@ export function filterResults(
   callback: (results: VariableResult[]) => void,
 ): void {
   if (kind === SuggestionKind.display && search.endsWith('}}')) {
-    cancelSuggestion(getState().prosemirror.suggestion.view as EditorView);
+    cancelSuggestion(getState().editor.suggestion.view as EditorView);
     // Not sure why this needs to be async
     setTimeout(() => dispatch(chooseSelection(kind, getFirstSuggestion(kind))), 5);
     return;

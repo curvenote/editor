@@ -1,21 +1,21 @@
 import {
-  INIT_PROSEMIRROR_STATE, UPDATE_PROSEMIRROR_STATE,
-  SUBSCRIBE_PROSEMIRROR_VIEW, UNSUBSCRIBE_PROSEMIRROR_VIEW,
-  ProsemirrorActionTypes, ProsemirrorState,
+  INIT_EDITOR_STATE, UPDATE_EDITOR_STATE,
+  SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW,
+  EditorActionTypes, EditorsState,
 } from './types';
 import { createEditorState } from '../../prosemirror';
 
-export const initialState: ProsemirrorState = {
+export const initialState: EditorsState = {
   editors: {},
   views: {},
 };
 
-const prosemirrorReducer = (
+const editorReducer = (
   state = initialState,
-  action: ProsemirrorActionTypes,
-): ProsemirrorState => {
+  action: EditorActionTypes,
+): EditorsState => {
   switch (action.type) {
-    case INIT_PROSEMIRROR_STATE: {
+    case INIT_EDITOR_STATE: {
       const {
         stateId, content, editable, version,
       } = action.payload;
@@ -31,7 +31,7 @@ const prosemirrorReducer = (
         },
       };
     }
-    case SUBSCRIBE_PROSEMIRROR_VIEW: {
+    case SUBSCRIBE_EDITOR_VIEW: {
       const {
         stateId, viewId, view,
       } = action.payload;
@@ -49,13 +49,13 @@ const prosemirrorReducer = (
         },
       };
     }
-    case UNSUBSCRIBE_PROSEMIRROR_VIEW: {
+    case UNSUBSCRIBE_EDITOR_VIEW: {
       const {
         stateId, viewId,
       } = action.payload;
       const editor = state.editors[stateId];
       if (editor === undefined) throw new Error('Editor state has not been setup.');
-      const newState: ProsemirrorState = {
+      const newState: EditorsState = {
         ...state,
         editors: {
           ...state.editors,
@@ -77,7 +77,7 @@ const prosemirrorReducer = (
       delete newState.views[viewId];
       return newState;
     }
-    case UPDATE_PROSEMIRROR_STATE: {
+    case UPDATE_EDITOR_STATE: {
       const { stateId, editorState } = action.payload;
       const editor = state.editors[stateId];
       if (editor === undefined) throw new Error('Editor state has not been setup.');
@@ -97,4 +97,4 @@ const prosemirrorReducer = (
   }
 };
 
-export default prosemirrorReducer;
+export default editorReducer;

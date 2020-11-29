@@ -27,6 +27,7 @@
       "./node_modules/@types",
       "./types"
     ],
+    "declaration": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [

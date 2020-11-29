@@ -1,15 +1,15 @@
 import runtime from '@iooxa/runtime';
 import { combineReducers } from 'redux';
 import {
-  State, PROSEMIRROR_ACTIONS, Reducer, reducer,
+  State, EditorActions, Reducer, reducer,
 } from '../src';
 
 const combinedReducers: Reducer = combineReducers({
-  prosemirror: reducer,
+  editor: reducer,
   runtime: runtime.reducer,
 }) as Reducer;
 
-function rootReducer(state: State | undefined, action: PROSEMIRROR_ACTIONS): State {
+function rootReducer(state: State | undefined, action: EditorActions): State {
   console.log('New Action: ', action);
   return combinedReducers(state, action);
 }

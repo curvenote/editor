@@ -1,22 +1,51 @@
 /* eslint-disable no-underscore-dangle */
+import { Theme } from '@material-ui/core';
 import { Store } from './store/types';
 
-type Ref<T> = { current: () => T; _current?: T };
+export type Options = {
+  transformKeyToId: (key: any) => string;
+  image: {
+    upload: (file: File) => Promise<string>;
+    downloadUrl: (src: string) => Promise<string>;
+  };
+  theme: Theme;
+  throttle: number;
+};
 
-const storeRef: Ref<Store> = {
-  current() {
-    if (storeRef._current === undefined) throw new Error('Must init store.');
-    return storeRef._current;
+type Ref<T> = {
+  store: () => T;
+  _store?: T;
+  opts: () => Options;
+  _opts?: Options;
+};
+
+const ref: Ref<Store> = {
+  store() {
+    if (ref._store === undefined) throw new Error('Must init store.');
+    return ref._store;
+  },
+  opts() {
+    if (ref._opts === undefined) throw new Error('Must init opts.');
+    return ref._opts;
   },
 };
 
-export function setup(store: Store) {
-  storeRef._current = store;
+export function setup(store: Store, opts: Options) {
+  ref._store = store;
+  ref._opts = opts;
 }
 
-const store: Pick<Store, 'getState' | 'dispatch'> = {
-  getState: () => storeRef.current().getState(),
-  dispatch: (action: any) => storeRef.current().dispatch(action),
+export const store: Pick<Store, 'getState' | 'dispatch'> = {
+  getState: () => ref.store().getState(),
+  dispatch: (action: any) => ref.store().dispatch(action),
 };
 
-export default store;
+export const opts: Options = {
+  transformKeyToId: (key: any) => ref.opts().transformKeyToId(key),
+  image: {
+    upload: (file: File) => ref.opts().image.upload(file),
+    downloadUrl: (src: string) => ref.opts().image.downloadUrl(src),
+  },
+  get theme() { return ref.opts().theme; },
+  get throttle() { return ref.opts().throttle; },
+};

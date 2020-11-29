@@ -2,8 +2,10 @@ import React, {
   useEffect, useRef, useState, CSSProperties,
 } from 'react';
 import { EditorView } from 'prosemirror-view';
-import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
+import throttle from 'lodash.throttle';
+import { EditorState } from 'prosemirror-state';
+import { opts } from './connect';
 import { createEditorView } from './prosemirror';
 import {
   Dispatch, State, actions, selectors,
@@ -28,22 +30,22 @@ const promptStyle: CSSProperties = {
 };
 
 type Props = {
-  stateKey: string;
+  stateKey: any;
+  viewId: string;
 };
 
 const Editor = (props: Props) => {
-  const { stateKey } = props;
+  const { stateKey, viewId } = props;
 
   const dispatch = useDispatch<Dispatch>();
 
-  const [viewId] = useState(uuid());
   const editorEl = useRef<HTMLDivElement>(null);
   const editorView = useRef<EditorView>();
 
   const hasContent = true;
 
   const editorState = useSelector(
-    (state: State) => selectors.getEditorState(state, stateKey),
+    (state: State) => selectors.getEditorState(state, stateKey)?.state,
   );
   const focused = useSelector(
     (state: State) => (selectors.isEditorViewFocused(state, stateKey, viewId)),
@@ -55,13 +57,17 @@ const Editor = (props: Props) => {
   // Create editorView
   useEffect(() => {
     if (editorView.current || !editorEl.current || !editorState) return;
+    const doUpdateState = (next: EditorState) => (
+      dispatch(actions.updateEditorState(stateKey, viewId, next))
+    );
+    const updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
     editorView.current = createEditorView(
       editorEl.current,
       editorState,
       (tr) => {
         const view = editorView.current as EditorView;
         const next = view.state.apply(tr);
-        dispatch(actions.updateProsemirrorState(stateKey, viewId, next));
+        updateState(next);
         // Immidiately update the view.
         // This is important for properly handling selections.
         // Cannot use react event loop here.
@@ -69,10 +75,10 @@ const Editor = (props: Props) => {
       },
     );
     (editorView.current.dom as HTMLElement).onfocus = () => {
-      dispatch(actions.focusEditorView(stateKey, viewId, true));
+      dispatch(actions.focusEditorView(viewId, true));
     };
     (editorView.current.dom as HTMLElement).onblur = () => {
-      dispatch(actions.focusEditorView(stateKey, viewId, false));
+      dispatch(actions.focusEditorView(viewId, false));
     };
     dispatch(actions.subscribeView(stateKey, viewId, editorView.current));
     setPrompt(prompts[0]);

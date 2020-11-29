@@ -5,7 +5,7 @@ import { MarkType, NodeType, Node } from 'prosemirror-model';
 import { Nodes } from '@iooxa/schema';
 import { AppThunk } from '../types';
 import {
-  getEditorState, getSelectedEditorAndViews, getUI, selectionIsChildOf,
+  getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf,
 } from '../selectors';
 import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
@@ -16,14 +16,14 @@ export function toggleMark(
   stateKey: any, viewId: string | null, mark: MarkType, attrs?: {[key: string]: any},
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const editorState = getEditorState(getState(), stateKey);
+    const editorState = getEditorState(getState(), stateKey)?.state;
     if (editorState == null) return false;
     const action = toggleMarkPM(mark, attrs);
     const result = action(
       editorState,
       (tr: Transaction) => dispatch(applyProsemirrorTransaction(stateKey, tr)),
     );
-    if (result) dispatch(focusEditorView(stateKey, viewId, true));
+    if (result) dispatch(focusEditorView(viewId, true));
     return result;
   };
 }
@@ -32,7 +32,7 @@ export function wrapInList(
   stateKey: string, viewId: string | null, node: NodeType, test = false,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const editorState = getEditorState(getState(), stateKey);
+    const editorState = getEditorState(getState(), stateKey)?.state;
     if (editorState == null) return false;
     const action = selectionIsChildOf(getState(), stateKey, { node }).node
       ? liftListItem(schema.nodes.list_item)
@@ -42,7 +42,7 @@ export function wrapInList(
       editorState,
       (tr: Transaction) => dispatch(applyProsemirrorTransaction(stateKey, tr)),
     );
-    if (result) dispatch(focusEditorView(stateKey, viewId, true));
+    if (result) dispatch(focusEditorView(viewId, true));
     return result;
   };
 }
@@ -52,7 +52,7 @@ function wrapIn(node: NodeType, list = false): AppThunk<boolean> {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
     if (list) {
-      const { viewId } = getUI(getState());
+      const { viewId } = getEditorUI(getState());
       return dispatch(wrapInList(editor.stateId, viewId, node));
     }
     const action = wrapInPM(node);

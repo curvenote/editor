@@ -8,7 +8,7 @@ import { selectors, actions } from '../../store';
 import { Dispatch, State } from '../../store/types';
 import schema from '../../prosemirror/schema';
 import MenuIcon from './Icon';
-import config from '../../config';
+import { opts } from '../../connect';
 import { isEditable } from '../../prosemirror/plugins/editable';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 interface Props{
+  stateKey: any;
   standAlone?: boolean;
   disabled?: boolean;
-  stateKey: string;
 }
 
 const EditorMenu = (props: Props) => {
@@ -39,14 +39,15 @@ const EditorMenu = (props: Props) => {
 
   const dispatch = useDispatch<Dispatch>();
 
-  const stateId = config.transformKeyToId(stateKey);
+  const stateId = opts.transformKeyToId(stateKey);
 
-  const off = disabled || useSelector((state: State) => (
-    !isEditable(selectors.getEditorState(state, stateKey))
+  let off = useSelector((state: State) => (
+    !isEditable(selectors.getEditorState(state, stateKey)?.state)
   ));
+  off = off || (disabled as boolean);
 
   const viewId = useSelector((state: State) => (
-    selectors.getUI(state).viewId
+    selectors.getEditorUI(state).viewId
   ));
 
   const active = useSelector((state: State) => selectors.selectionIsMarkedWith(state, stateId, {

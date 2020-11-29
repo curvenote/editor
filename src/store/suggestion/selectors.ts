@@ -1,3 +1,3 @@
 import { State } from '../types';
 
-export const getSuggestion = (state: State) => state.prosemirror.suggestion;
+export const getSuggestion = (state: State) => state.editor.suggestion;

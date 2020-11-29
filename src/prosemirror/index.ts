@@ -11,7 +11,7 @@ import schema from './schema';
 import suggestion from './plugins/suggestion';
 import { buildKeymap } from './keymap';
 import inputrules from './inputrules';
-import store from '../connect';
+import { store } from '../connect';
 import MathView from './views/math';
 import { getImagePlaceholderPlugin, uploadAndInsertImages } from './views/image/placeholder';
 import ImageView from './views/image';

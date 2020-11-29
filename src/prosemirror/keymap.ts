@@ -9,7 +9,7 @@ import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
-import store from '../connect';
+import { store } from '../connect';
 import { focusSelectedEditorView } from '../store/ui/actions';
 
 type KeyMap = (

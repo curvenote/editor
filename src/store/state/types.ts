@@ -1,13 +1,13 @@
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
-export const INIT_PROSEMIRROR_STATE = 'INIT_PROSEMIRROR_STATE';
-export const SUBSCRIBE_PROSEMIRROR_VIEW = 'SUBSCRIBE_PROSEMIRROR_VIEW';
-export const UNSUBSCRIBE_PROSEMIRROR_VIEW = 'UNSUBSCRIBE_PROSEMIRROR_VIEW';
+export const INIT_EDITOR_STATE = 'INIT_EDITOR_STATE';
+export const SUBSCRIBE_EDITOR_VIEW = 'SUBSCRIBE_EDITOR_VIEW';
+export const UNSUBSCRIBE_EDITOR_VIEW = 'UNSUBSCRIBE_EDITOR_VIEW';
 
-export const UPDATE_PROSEMIRROR_STATE = 'UPDATE_PROSEMIRROR_STATE';
+export const UPDATE_EDITOR_STATE = 'UPDATE_EDITOR_STATE';
 
-export type ProsemirrorState = {
+export type EditorsState = {
   editors: {
     [stateId: string]: {
       state: EditorState;
@@ -22,8 +22,8 @@ export type ProsemirrorState = {
   };
 };
 
-export interface InitProsemirrorState {
-  type: typeof INIT_PROSEMIRROR_STATE;
+export interface InitEditorState {
+  type: typeof INIT_EDITOR_STATE;
   payload: {
     stateId: string;
     editable: boolean;
@@ -32,8 +32,8 @@ export interface InitProsemirrorState {
   };
 }
 
-export interface UpdateProsemirrorState {
-  type: typeof UPDATE_PROSEMIRROR_STATE;
+export interface UpdateEditorState {
+  type: typeof UPDATE_EDITOR_STATE;
   payload: {
     stateId: string;
     viewId: string | null;
@@ -41,8 +41,8 @@ export interface UpdateProsemirrorState {
   };
 }
 
-export interface SubscribeProsemirrorView {
-  type: typeof SUBSCRIBE_PROSEMIRROR_VIEW;
+export interface SubscribeEditorView {
+  type: typeof SUBSCRIBE_EDITOR_VIEW;
   payload: {
     stateId: string;
     viewId: string;
@@ -50,17 +50,17 @@ export interface SubscribeProsemirrorView {
   };
 }
 
-export interface UnsubscribeProsemirrorView {
-  type: typeof UNSUBSCRIBE_PROSEMIRROR_VIEW;
+export interface UnsubscribeEditorView {
+  type: typeof UNSUBSCRIBE_EDITOR_VIEW;
   payload: {
     stateId: string;
     viewId: string;
   };
 }
 
-export type ProsemirrorActionTypes = (
-  InitProsemirrorState |
-  UpdateProsemirrorState |
-  SubscribeProsemirrorView |
-  UnsubscribeProsemirrorView
+export type EditorActionTypes = (
+  InitEditorState |
+  UpdateEditorState |
+  SubscribeEditorView |
+  UnsubscribeEditorView
 );

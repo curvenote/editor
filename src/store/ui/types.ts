@@ -18,7 +18,7 @@ export interface SelectEditorViewAction {
 export interface FocusEditorViewAction {
   type: typeof FOCUS_EDITOR_VIEW;
   payload: {
-    stateId: string;
+    stateId: string | null;
     viewId: string | null;
     focused: boolean;
   };

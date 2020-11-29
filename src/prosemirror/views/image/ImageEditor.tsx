@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import ImageToolbar, { AlignOptions } from './ImageToolbar';
-import config from '../../../config';
+import { opts } from '../../../connect';
 
 
 type Props = {
@@ -41,7 +41,7 @@ class ImageEditor extends Component<Props, State> {
       open, edit, src, alt, title, align, width,
     } = this.state;
     return (
-      <ThemeProvider theme={config.theme}>
+      <ThemeProvider theme={opts.theme}>
         <div style={{ textAlign: align, margin: '1.5em 0' }}>
           <img src={src} alt={alt} title={title} width={`${width}%`} style={{ outline: open ? '2px solid #8cf' : 'none' }} />
           <ImageToolbar

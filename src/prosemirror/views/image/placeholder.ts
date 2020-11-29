@@ -1,7 +1,7 @@
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
-import config from '../../../config';
+import { opts } from '../../../connect';
 
 export const key = new PluginKey('placeholder');
 
@@ -99,7 +99,7 @@ export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | nul
     const finish = addImagePlaceholder(view, uri);
     let s: string | null;
     try {
-      s = await config.image.upload(images[0]);
+      s = await opts.image.upload(images[0]);
     } catch (error) {
       s = null;
     }

@@ -1,15 +1,15 @@
 import { EditorView } from 'prosemirror-view';
-import config from '../../config';
+import { opts } from '../../connect';
 import { State } from '../types';
 
 export function getEditor(state: State, stateKey: any | null) {
   if (stateKey == null) return { state: null, views: [] };
-  const stateId = config.transformKeyToId(stateKey);
-  const editor = state.prosemirror.state.editors[stateId];
+  const stateId = opts.transformKeyToId(stateKey);
+  const editor = state.editor.state.editors[stateId];
   if (!editor) return { state: null, views: [] };
   const views: EditorView[] = [];
   editor.viewIds.forEach((viewId) => {
-    const { view } = state.prosemirror.state.views[viewId];
+    const { view } = state.editor.state.views[viewId];
     views.push(view);
   });
   return {
@@ -17,9 +17,17 @@ export function getEditor(state: State, stateKey: any | null) {
   };
 }
 
+export function getEditorView(state: State, viewId: string | null) {
+  const blank = { stateId: [], view: null };
+  if (viewId == null) return blank;
+  const view = state.editor.state.views[viewId];
+  return view ?? blank;
+}
+
 export function getEditorState(state: State, stateKey: any | null) {
-  if (stateKey == null) return null;
-  const stateId = config.transformKeyToId(stateKey);
-  const editor = state.prosemirror.state.editors[stateId];
-  return editor.state ?? null;
+  const blank = { state: null, viewIds: [] };
+  if (stateKey == null) return blank;
+  const stateId = opts.transformKeyToId(stateKey);
+  const editor = state.editor.state.editors[stateId];
+  return editor ?? blank;
 }
