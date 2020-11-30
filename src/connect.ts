@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Theme } from '@material-ui/core';
+import { EditorState, Transaction } from 'prosemirror-state';
 import { Store } from './store/types';
 
 export type Options = {
@@ -8,6 +9,9 @@ export type Options = {
     upload: (file: File) => Promise<string | null>;
     downloadUrl: (src: string) => Promise<string>;
   };
+  modifyTransaction?: (
+    stateKey: any, viewId: string, state: EditorState, transaction: Transaction
+  ) => Transaction;
   theme: Theme;
   throttle: number;
 };
@@ -40,13 +44,22 @@ export const store: Pick<Store, 'getState' | 'dispatch'> = {
   dispatch: (action: any) => ref.store().dispatch(action),
 };
 
-export const opts: Options = {
+export const opts: Required<Options> = {
   transformKeyToId: (key: any) => ref.opts().transformKeyToId(key),
   get image() {
     return {
       upload: (file: File) => ref.opts().image.upload(file),
       downloadUrl: (src: string) => ref.opts().image.downloadUrl(src),
     };
+  },
+  modifyTransaction(
+    stateKey: any, viewId: string, state: EditorState, transaction: Transaction,
+  ) {
+    const { modifyTransaction } = ref.opts();
+    if (modifyTransaction) {
+      return modifyTransaction(stateKey, viewId, state, transaction);
+    }
+    return transaction;
   },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },

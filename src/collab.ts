@@ -1,2 +1,2 @@
-export { receiveTransaction, getVersion } from 'prosemirror-collab';
+export { receiveTransaction, getVersion, sendableSteps } from 'prosemirror-collab';
 export { Step } from 'prosemirror-transform';

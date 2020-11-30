@@ -7,4 +7,7 @@ export { default as EditorMenu } from './components/Menu';
 export { default as Suggestion } from './components/Suggestion';
 
 export { setup } from './connect';
+export type { Options } from './connect';
 export { collab };
+
+export { isEditable, setEditable } from './prosemirror/plugins/editable';

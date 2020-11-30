@@ -66,7 +66,8 @@ const Editor = (props: Props) => {
       editorState,
       (tr) => {
         const view = editorView.current as EditorView;
-        const next = view.state.apply(tr);
+        const mtr = opts.modifyTransaction(stateKey, viewId, view.state, tr);
+        const next = view.state.apply(mtr);
         updateState(next);
         // Immidiately update the view.
         // This is important for properly handling selections.
