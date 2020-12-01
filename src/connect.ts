@@ -2,6 +2,7 @@
 import { Theme } from '@material-ui/core';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Store } from './store/types';
+import setupComponents from './components';
 
 export type Options = {
   transformKeyToId: (key: any) => string;
@@ -37,6 +38,7 @@ const ref: Ref<Store> = {
 export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
+  setupComponents(store);
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {

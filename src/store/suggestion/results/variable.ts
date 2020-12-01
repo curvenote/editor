@@ -1,9 +1,10 @@
 import { EditorView } from 'prosemirror-view';
 import { AppThunk, State, Dispatch } from '../../types';
 import { getSuggestion } from '../selectors';
-import { insertVariable, insertDisplay } from '../../actions/editor';
+import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, VariableResult, SuggestionKind } from '../types';
 import { KEEP_SELECTION_ALIVE, cancelSuggestion } from '../../../prosemirror/plugins/suggestion';
+import schema from '../../../prosemirror/schema';
 
 type VarSuggestionKinds = SuggestionKind.variable | SuggestionKind.display;
 
@@ -42,7 +43,7 @@ function createVariable(dispatch: Dispatch, trigger: string, search: string) {
 
 function createDisplay(dispatch: Dispatch, search: string) {
   const valueFunction = (search.endsWith('}}') ? search.slice(0, -2) : search).trim();
-  dispatch(insertDisplay({ valueFunction }));
+  dispatch(insertInlineNode(schema.nodes.display, { valueFunction }));
   return true;
 }
 

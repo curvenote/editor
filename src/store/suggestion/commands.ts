@@ -2,6 +2,7 @@ export enum CommandNames {
   'callout' = 'callout',
   'aside' = 'aside',
   'math' = 'math',
+  'equation' = 'equation',
   'horizontal_rule' = 'horizontal_rule',
   'bullet_list' = 'bullet_list',
   'ordered_list' = 'ordered_list',
@@ -12,6 +13,7 @@ export enum CommandNames {
   'heading4' = 'heading4',
   'heading5' = 'heading5',
   'heading6' = 'heading6',
+  'code' = 'code',
   'variable' = 'variable',
   'display' = 'display',
   'range' = 'range',
@@ -46,6 +48,12 @@ export const commands: CommandResult[] = [
     shortcut: '$$',
   },
   {
+    name: CommandNames.equation,
+    title: 'Equation',
+    description: 'Add a block equation',
+    shortcut: '$$',
+  },
+  {
     name: CommandNames.horizontal_rule,
     title: 'Divider',
     description: 'Insert a horizontal rule',
@@ -68,6 +76,12 @@ export const commands: CommandResult[] = [
     title: 'Emoji',
     description: 'Add some emotion to your work 🎉',
     shortcut: ':',
+  },
+  {
+    name: CommandNames.code,
+    title: 'Code Block',
+    description: 'Add a block of code',
+    shortcut: '```',
   },
   {
     name: CommandNames.variable,

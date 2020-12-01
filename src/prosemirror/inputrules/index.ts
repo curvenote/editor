@@ -17,6 +17,7 @@ const inputrules = (schema: Schema) => inputRules({
     ...rules.codeBlock(schema),
     ...rules.codeInline(schema),
     ...rules.headings(schema),
+    ...rules.equation(schema),
     ...rules.mathInline(schema),
     ...rules.hr(schema),
     ...rules.slider(schema),

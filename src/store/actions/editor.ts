@@ -1,8 +1,9 @@
-import { NodeSelection, Transaction } from 'prosemirror-state';
+import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
 import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { MarkType, NodeType, Node } from 'prosemirror-model';
 import { Nodes } from '@iooxa/schema';
+import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
 import { AppThunk } from '../types';
 import {
   getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf,
@@ -47,11 +48,15 @@ export function wrapInList(
   };
 }
 
-function wrapIn(node: NodeType, list = false): AppThunk<boolean> {
+export function wrapIn(node: NodeType): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
-    if (list) {
+    const isList = (
+      node === schema.nodes.ordered_list
+      || node === schema.nodes.bullet_list
+    );
+    if (isList) {
       const { viewId } = getEditorUI(getState());
       return dispatch(wrapInList(editor.stateId, viewId, node));
     }
@@ -66,19 +71,40 @@ function wrapIn(node: NodeType, list = false): AppThunk<boolean> {
 }
 
 
-function replaceSelection(node: Node): AppThunk<boolean> {
+function getContent(state: EditorState, content?: Node) {
+  let nodeContent = content;
+  if (!nodeContent && !state.selection.empty) {
+    const { from, to } = state.selection;
+    const text = state.doc.textBetween(from, to);
+    nodeContent = schema.text(text);
+  }
+  return nodeContent;
+}
+
+const selectNode = (tr: Transaction) => {
+  const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
+  const resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
+  try {
+    return tr.setSelection(new NodeSelection(resolvedPos));
+  } catch (error) {
+    return tr;
+  }
+};
+
+
+export function replaceSelection(
+  node: NodeType, attrs?: { [index: string]: any }, content?: Node,
+): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
-    const { tr } = editor.state;
-    dispatch(applyProsemirrorTransaction(
-      editor.stateId,
-      tr.replaceSelectionWith(node).scrollIntoView(),
-    ));
-    return true;
+    const nodeContent = getContent(editor.state, content);
+    const selectParagraph = selectParentNodeOfType(schema.nodes.paragraph);
+    const replaceWithNode = replaceSelectedNode(node.create(attrs, nodeContent));
+    const tr = replaceWithNode(selectParagraph(editor.state.tr));
+    return dispatch(applyProsemirrorTransaction(editor.stateId, tr));
   };
 }
-
 
 function setBlockType(node: NodeType, attrs?: {[index: string]: any}): AppThunk<boolean> {
   return (dispatch, getState) => {
@@ -94,7 +120,7 @@ function setBlockType(node: NodeType, attrs?: {[index: string]: any}): AppThunk<
   };
 }
 
-function insertNode(
+export function insertNode(
   node: NodeType, attrs?: { [index: string]: any }, content?: Node,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
@@ -103,60 +129,32 @@ function insertNode(
     const tr = editor.state.tr.insert(
       editor.state.tr.selection.$from.pos, node.create(attrs, content),
     ).scrollIntoView();
-    // TODO: This leave the paragraph empty, and does not select
     dispatch(applyProsemirrorTransaction(editor.stateId, tr));
     return true;
   };
 }
 
-
-function insertInlineNode(
+export function insertInlineNode(
   node: NodeType, attrs?: { [index: string]: any }, content?: Node,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
+    const nodeContent = getContent(editor.state, content);
     const tr = editor.state.tr.replaceSelectionWith(
-      node.create(attrs, content), false,
+      node.create(attrs, nodeContent), false,
     ).scrollIntoView();
-    const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
-    const resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
-    const selected = tr.setSelection(new NodeSelection(resolvedPos));
-    dispatch(applyProsemirrorTransaction(editor.stateId, selected));
+    dispatch(applyProsemirrorTransaction(editor.stateId, selectNode(tr)));
     // TODO: This should go in a better place, not passing the dom here, should be a better action
     // dispatch(setAttributeEditor(true));
     return true;
   };
 }
 
-export const wrapInCallout = () => wrapIn(schema.nodes.callout);
-export const wrapInAside = () => wrapIn(schema.nodes.aside);
-
-export const wrapInOrderedList = () => wrapIn(schema.nodes.ordered_list, true);
-export const wrapInBulletList = () => wrapIn(schema.nodes.bullet_list, true);
-export const insertHorizontalRule = () => (
-  replaceSelection(schema.nodes.horizontal_rule.create())
-);
 export const wrapInHeading = (level: number) => setBlockType(schema.nodes.heading, { level });
-export const insertMath = () => insertNode(schema.nodes.math);
 
 export const insertVariable = (
   attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },
 ) => (
-  insertNode(schema.nodes.variable, attrs)
-);
-export const insertDisplay = (attrs?: Nodes.Display.Attrs) => (
-  insertInlineNode(schema.nodes.display, attrs)
-);
-export const insertRange = (attrs: Nodes.Range.Attrs) => (
-  insertInlineNode(schema.nodes.range, attrs)
-);
-export const insertDynamic = (attrs: Nodes.Dynamic.Attrs) => (
-  insertInlineNode(schema.nodes.dynamic, attrs)
-);
-export const insertSwitch = (attrs: Nodes.Switch.Attrs) => (
-  insertInlineNode(schema.nodes.switch, attrs)
-);
-export const insertButton = (attrs: Nodes.Button.Attrs) => (
-  insertInlineNode(schema.nodes.button, attrs)
+  replaceSelection(schema.nodes.variable, attrs)
 );

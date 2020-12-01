@@ -16,7 +16,8 @@ import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
 import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
 import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import AddIcon from '@material-ui/icons/Add';
+import FunctionsIcon from '@material-ui/icons/Functions';
+import AddIcon from '@material-ui/icons/Add';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
 
@@ -37,24 +38,28 @@ function SuperscriptIcon(props: any) {
 }
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
-const deMacify = (title: string) => (mac ? title : title.replace('⌘', 'Ctrl-'));
+const deMacify = (title: string | React.ReactElement) => (
+  mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-')
+);
 
 const icons = {
-  bold: { title: 'Bold ⌘B', Icon: FormatBoldIcon },
-  italic: { title: 'Italic ⌘I', Icon: FormatItalicIcon },
-  code: { title: 'Code ⌘⇧C', Icon: CodeIcon },
-  subscript: { title: 'Subscript', Icon: SubscriptIcon },
-  superscript: { title: 'Superscript', Icon: SuperscriptIcon },
-  strikethrough: { title: 'Strikethrough', Icon: StrikethroughSIcon },
-  underline: { title: 'Underline ⌘U', Icon: FormatUnderlinedIcon },
-  ul: { title: 'Bullet Point List ⌘⇧8', Icon: FormatListBulletedIcon },
-  ol: { title: 'Ordered List ⌘⇧7', Icon: FormatListNumberedIcon },
-  link: { title: 'Link ⌘K', Icon: LinkIcon },
-  left: { title: 'Align Left', Icon: FormatAlignLeftIcon },
-  center: { title: 'Align Center', Icon: FormatAlignCenterIcon },
-  right: { title: 'Align Right', Icon: FormatAlignRightIcon },
-  imageWidth: { title: 'Adjust Width', Icon: PhotoSizeSelectLargeIcon },
-  remove: { title: 'Remove', Icon: DeleteIcon },
+  bold: { help: 'Bold ⌘B', Icon: FormatBoldIcon },
+  italic: { help: 'Italic ⌘I', Icon: FormatItalicIcon },
+  code: { help: 'Code ⌘⇧C', Icon: CodeIcon },
+  subscript: { help: 'Subscript', Icon: SubscriptIcon },
+  superscript: { help: 'Superscript', Icon: SuperscriptIcon },
+  strikethrough: { help: 'Strikethrough', Icon: StrikethroughSIcon },
+  underline: { help: 'Underline ⌘U', Icon: FormatUnderlinedIcon },
+  ul: { help: 'Bullet Point List ⌘⇧8', Icon: FormatListBulletedIcon },
+  ol: { help: 'Ordered List ⌘⇧7', Icon: FormatListNumberedIcon },
+  link: { help: 'Link ⌘K', Icon: LinkIcon },
+  left: { help: 'Align Left', Icon: FormatAlignLeftIcon },
+  center: { help: 'Align Center', Icon: FormatAlignCenterIcon },
+  right: { help: 'Align Right', Icon: FormatAlignRightIcon },
+  imageWidth: { help: 'Adjust Width', Icon: PhotoSizeSelectLargeIcon },
+  remove: { help: 'Remove', Icon: DeleteIcon },
+  math: { help: 'Inline Math', Icon: FunctionsIcon },
+  more: { help: 'Insert', Icon: AddIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';
@@ -103,10 +108,10 @@ const MenuIcon = (props: Props) => {
 
   if (kind === 'divider') return <Divider className={classes.hr} orientation="vertical" />;
 
-  const { title, Icon } = icons[kind];
+  const { help, Icon } = icons[kind];
 
   return (
-    <Tooltip title={deMacify(title)}>
+    <Tooltip title={deMacify(help)}>
       <div className={classes.root}>
         <IconButton
           disabled={disabled}

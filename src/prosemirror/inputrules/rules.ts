@@ -64,6 +64,11 @@ export const headings = (schema: Schema, maxLevel = 6) => [
   ),
 ];
 
+
+export const equation = (schema: Schema) => [
+  insertNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
+];
+
 export const mathInline = (schema: Schema) => [
   insertNodeRule(
     // $Ax=b$ or $$, only select if there is not content.

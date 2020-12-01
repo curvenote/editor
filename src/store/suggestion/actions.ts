@@ -14,6 +14,8 @@ import * as emoji from './results/emoji';
 import * as command from './results/command';
 import * as variable from './results/variable';
 
+export { executeCommand } from './results/command';
+
 // Some utilities
 function positiveModulus(n: number, m: number) {
   return ((n % m) + m) % m;

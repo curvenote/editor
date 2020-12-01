@@ -1,0 +1,7 @@
+// style.scss
+@use 'prosemirror';
+@use 'equationTooltip';
+@use 'article/index.scss';
+@use 'selected';
+
+.hidden { display: none; }
