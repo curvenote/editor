@@ -16,8 +16,10 @@ import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
 import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
 import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
 import DeleteIcon from '@material-ui/icons/Delete';
+import LinkOffIcon from '@material-ui/icons/LinkOff';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import AddIcon from '@material-ui/icons/Add';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
 
@@ -58,8 +60,10 @@ const icons = {
   right: { help: 'Align Right', Icon: FormatAlignRightIcon },
   imageWidth: { help: 'Adjust Width', Icon: PhotoSizeSelectLargeIcon },
   remove: { help: 'Remove', Icon: DeleteIcon },
+  unlink: { help: 'Unlink', Icon: LinkOffIcon },
   math: { help: 'Inline Math', Icon: FunctionsIcon },
   more: { help: 'Insert', Icon: AddIcon },
+  open: { help: 'Open in New Tab', Icon: OpenInNewIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     position: 'absolute',
     width: 215,
     overflow: 'hidden',
-    height: 37,
+    height: 38,
     zIndex: 1,
   },
   popover: {

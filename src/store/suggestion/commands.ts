@@ -1,4 +1,5 @@
 export enum CommandNames {
+  'link' = 'link',
   'callout' = 'callout',
   'aside' = 'aside',
   'math' = 'math',

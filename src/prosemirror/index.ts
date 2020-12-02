@@ -14,11 +14,12 @@ import { buildKeymap } from './keymap';
 import inputrules from './inputrules';
 import { store } from '../connect';
 import MathView from './views/math';
-import { getImagePlaceholderPlugin, uploadAndInsertImages } from './views/image/placeholder';
 import ImageView from './views/image';
-import { editablePlugin, isEditable } from './plugins/editable';
 import LinkView from './views/link';
+import { getImagePlaceholderPlugin, uploadAndInsertImages } from './views/image/placeholder';
+import { editablePlugin, isEditable } from './plugins/editable';
 import { handleSuggestion } from '../store/suggestion/actions';
+import linkViewPlugin from './plugins/link';
 
 export { schema };
 
@@ -31,6 +32,7 @@ export function getPlugins(version: number, startEditable: boolean) {
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
+    linkViewPlugin,
     getImagePlaceholderPlugin(),
     inputrules(schema),
     keymap(buildKeymap(schema)),

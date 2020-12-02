@@ -2,7 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+// const CopyPlugin = require('copy-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -12,20 +12,20 @@ module.exports = {
   entry: {
     app: './demo/index.tsx',
   },
-  externals: {
-    katex: 'katex',
-  },
+  // externals: {
+  //   katex: 'katex',
+  // },
   plugins: [
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: '@iooxa/editor',
       template: 'demo/index.html',
     }),
-    new CopyPlugin({
-      patterns: [
-        { from: 'editor.css', to: 'editor.css' },
-      ],
-    }),
+    // new CopyPlugin({
+    //   patterns: [
+    //     { from: 'editor.css', to: 'editor.css' },
+    //   ],
+    // }),
   ],
   output: {
     filename: 'demo.min.js',
@@ -39,10 +39,11 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
+        test: /\.s?css$/,
         use: [
           'style-loader',
           'css-loader',
+          'sass-loader',
         ],
       },
       {

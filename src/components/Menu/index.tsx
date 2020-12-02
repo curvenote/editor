@@ -77,19 +77,12 @@ const EditorMenu = (props: Props) => {
     math: schema.nodes.math,
   }));
 
-  // TODO: make this memoized
+  // TODO: make this memoized and move to just commands
 
   // Helper functions
   const toggleMark = (mark: MarkType) => () => dispatch(actions.toggleMark(stateId, viewId, mark));
   const wrapInline = (node: NodeType) => () => dispatch(actions.insertInlineNode(node));
   const command = (name: CommandNames) => () => dispatch(actions.executeCommand(name, viewId));
-
-  const clickLink = () => {
-    // eslint-disable-next-line no-alert
-    const href = prompt('Url?');
-    if (!href) return;
-    dispatch(actions.toggleMark(stateId, viewId, schema.marks.link, { href }));
-  };
 
   return (
     <Grid container alignItems="center" className={`${classes.root} ${standAlone ? classes.center : classes.pad}`} wrap="nowrap">
@@ -105,7 +98,7 @@ const EditorMenu = (props: Props) => {
       <MenuIcon kind="ul" active={parents.ul} disabled={off} onClick={command(CommandNames.bullet_list)} />
       <MenuIcon kind="ol" active={parents.ol} disabled={off} onClick={command(CommandNames.ordered_list)} />
       <MenuIcon kind="divider" />
-      <MenuIcon kind="link" active={active.linked} disabled={off} onClick={clickLink} />
+      <MenuIcon kind="link" active={active.linked} disabled={off} onClick={command(CommandNames.link)} />
       <MenuIcon kind="divider" />
       <MenuIcon kind="more" disabled={off} onClick={onOpen} aria-controls="insert-menu" />
       {Boolean(anchorEl) && (

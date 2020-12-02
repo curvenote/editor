@@ -6,6 +6,7 @@ import * as actions from '../../actions/editor';
 import { commands, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import schema from '../../../prosemirror/schema';
+import { getLinkBoundsIfTheyExist } from '../../../prosemirror/utils';
 import { getEditorView } from '../../state/selectors';
 
 const options = {
@@ -48,6 +49,21 @@ export function executeCommand(
       view = viewOrId;
     }
     switch (command) {
+      case CommandNames.link: {
+        removeText();
+        const linkBounds = getLinkBoundsIfTheyExist(view.state);
+        if (linkBounds) {
+          const { from, to } = linkBounds;
+          view.dispatch(view.state.tr.removeMark(from, to, schema.marks.link));
+          return true;
+        }
+        // eslint-disable-next-line no-alert
+        const href = prompt('Link Url?');
+        if (!href) return false;
+        const { from, to } = view.state.selection;
+        view.dispatch(view.state.tr.addMark(from, to, schema.marks.link.create({ href })));
+        return true;
+      }
       case CommandNames.callout:
         removeText();
         dispatch(actions.wrapIn(schema.nodes.callout));
