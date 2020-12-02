@@ -151,7 +151,10 @@ export function insertInlineNode(
   };
 }
 
-export const wrapInHeading = (level: number) => setBlockType(schema.nodes.heading, { level });
+export const wrapInHeading = (level: number) => {
+  if (level === 0) return setBlockType(schema.nodes.paragraph);
+  return setBlockType(schema.nodes.heading, { level });
+};
 
 export const insertVariable = (
   attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },

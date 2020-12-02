@@ -8,6 +8,7 @@ export enum CommandNames {
   'bullet_list' = 'bullet_list',
   'ordered_list' = 'ordered_list',
   'emoji' = 'emoji',
+  'paragraph' = 'paragraph',
   'heading1' = 'heading1',
   'heading2' = 'heading2',
   'heading3' = 'heading3',
@@ -117,6 +118,12 @@ export const commands: CommandResult[] = [
     name: CommandNames.button,
     title: 'Inline Button',
     description: 'Insert a button',
+  },
+  {
+    name: CommandNames.paragraph,
+    title: 'Paragraph',
+    description: 'Turn header into a paragraph',
+    shortcut: '⌘⌥0',
   },
   {
     name: CommandNames.heading1,

@@ -36,7 +36,10 @@ export const startingSuggestions = commands;
 
 
 export function executeCommand(
-  command: CommandNames, viewOrId: EditorView | string | null, removeText = () => true,
+  command: CommandNames,
+  viewOrId: EditorView | string | null,
+  removeText = () => true,
+  replace = false,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     let view: EditorView;
@@ -48,6 +51,9 @@ export function executeCommand(
     } else {
       view = viewOrId;
     }
+
+    const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
+
     switch (command) {
       case CommandNames.link: {
         removeText();
@@ -74,7 +80,11 @@ export function executeCommand(
         return true;
       case CommandNames.horizontal_rule:
         removeText();
-        dispatch(actions.replaceSelection(schema.nodes.horizontal_rule));
+        dispatch(replaceOrInsert(schema.nodes.horizontal_rule));
+        return true;
+      case CommandNames.paragraph:
+        removeText();
+        dispatch(actions.wrapInHeading(0));
         return true;
       case CommandNames.heading1:
       case CommandNames.heading2:
@@ -103,11 +113,11 @@ export function executeCommand(
         return true;
       case CommandNames.equation:
         removeText();
-        dispatch(actions.replaceSelection(schema.nodes.equation));
+        dispatch(replaceOrInsert(schema.nodes.equation));
         return true;
       case CommandNames.code:
         removeText();
-        dispatch(actions.replaceSelection(schema.nodes.code_block));
+        dispatch(replaceOrInsert(schema.nodes.code_block));
         // TODO: Put cursor inside of code
         return true;
       case CommandNames.variable:
@@ -159,7 +169,7 @@ export function chooseSelection(result: CommandResult): AppThunk<boolean> {
       view.dispatch(tr);
       return true;
     };
-    return dispatch(executeCommand(result.name, view, removeText));
+    return dispatch(executeCommand(result.name, view, removeText, true));
   };
 }
 
