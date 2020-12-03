@@ -35,7 +35,7 @@ const Comment: React.FC<Props> = (props) => {
       style={selected ? { backgroundColor: HIGHLIGHT_COLOR } : {}}
       ref={selected ? (el) => {
         if (el == null) return;
-        scrollIntoView(el, { behavior: 'smooth', scrollMode: 'if-needed' });
+        scrollIntoView(el, { behavior: 'smooth', scrollMode: 'if-needed', boundary: el.parentElement?.parentElement });
       } : null}
     >
       {children}
