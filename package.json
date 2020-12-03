@@ -1,9 +1,9 @@
 {
-  "name": "@iooxa/editor",
+  "name": "@iooxa/schema",
   "version": "0.0.6",
-  "description": "Schema and markdown parser for the iooxa editor",
+  "description": "Schema and markdown parser for @iooxa/editor",
   "author": "Rowan Cockett <rowan@iooxa.com>",
-  "homepage": "https://github.com/iooxa/editor",
+  "homepage": "https://github.com/iooxa/schema",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iooxa/editor.git"
+    "url": "git+https://github.com/iooxa/schema.git"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -29,7 +29,7 @@
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json"
   },
   "bugs": {
-    "url": "https://github.com/iooxa/editor/issues"
+    "url": "https://github.com/iooxa/schema/issues"
   },
   "dependencies": {
     "markdown-it": "^11.0.0",
@@ -37,11 +37,11 @@
     "orderedmap": "^1.1.1",
     "prosemirror-collab": "^1.2.2",
     "prosemirror-markdown": "^1.5.0",
-    "prosemirror-model": "^1.6.4",
+    "prosemirror-model": "^1.12.0",
     "prosemirror-schema-list": "^1.1.4",
-    "prosemirror-state": "^1.2.2",
+    "prosemirror-state": "^1.3.3",
     "prosemirror-transform": "^1.2.8",
-    "prosemirror-view": "^1.6.8"
+    "prosemirror-view": "^1.16.3"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.7.4",
@@ -53,12 +53,12 @@
     "@types/orderedmap": "^1.0.0",
     "@types/prosemirror-collab": "^1.1.0",
     "@types/prosemirror-markdown": "^1.0.3",
-    "@types/prosemirror-model": "^1.7.2",
+    "@types/prosemirror-model": "^1.11.1",
     "@types/prosemirror-schema-list": "^1.0.1",
     "@types/prosemirror-state": "^1.2.5",
     "@types/prosemirror-test-builder": "^1.0.1",
     "@types/prosemirror-transform": "^1.1.1",
-    "@types/prosemirror-view": "^1.15.1",
+    "@types/prosemirror-view": "^1.16.1",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.10.0",
     "eslint": "^6.7.2",
@@ -81,6 +81,6 @@
     "jsdom": "^16.1.0",
     "prosemirror-test-builder": "^1.0.3",
     "ts-jest": "^26.0.0",
-    "typescript": "^3.9.6"
+    "typescript": "^4.1.2"
   }
 }
