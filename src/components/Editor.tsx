@@ -5,11 +5,11 @@ import { EditorView } from 'prosemirror-view';
 import { useDispatch, useSelector } from 'react-redux';
 import throttle from 'lodash.throttle';
 import { EditorState } from 'prosemirror-state';
-import { opts } from './connect';
-import { createEditorView } from './prosemirror';
+import { opts } from '../connect';
+import { createEditorView } from '../prosemirror';
 import {
   Dispatch, State, actions, selectors,
-} from './store';
+} from '../store';
 
 const prompts = [
   'Type \'/\' for commands, or just start writing!',
