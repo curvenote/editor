@@ -3,6 +3,9 @@ import { Node, NodeSpec, AttributeSpec } from 'prosemirror-model';
 import { NodeDef, Attr } from './nodes/types';
 
 export const DEFAULT_FORMAT = '.1f';
+export const DEFAULT_IMAGE_WIDTH = 70;
+
+export const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
 
 export const createAttr = (name: string, func: boolean | 'only' = true, defaultValue: string | false = ''): Attr => {
   if (defaultValue === false) {

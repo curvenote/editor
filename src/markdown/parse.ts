@@ -2,6 +2,7 @@ import { Schema, Node as ProsemirrorNode } from 'prosemirror-model';
 import Token from 'markdown-it/lib/token';
 import { MarkdownParser } from 'prosemirror-markdown';
 import MyST from 'markdown-it-myst';
+import { DEFAULT_IMAGE_WIDTH } from '../utils';
 
 
 const rules = {
@@ -21,8 +22,9 @@ const rules = {
     node: 'image',
     getAttrs: (tok: Token) => ({
       src: tok.attrGet('src'),
+      alt: tok.children?.[0]?.content ?? tok.attrGet('alt') ?? null,
       title: tok.attrGet('title') || null,
-      alt: tok.children?.[0].content ?? null,
+      width: tok.attrGet('width') ?? DEFAULT_IMAGE_WIDTH,
     }),
   },
   hardbreak: { node: 'hard_break' },

@@ -10,3 +10,5 @@ export { fromMarkdown, toMarkdown } from './markdown';
 export { fromText, toText } from './text';
 
 export * as server from './server';
+
+export { DEFAULT_FORMAT, DEFAULT_IMAGE_WIDTH } from './utils';

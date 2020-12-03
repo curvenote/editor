@@ -2,6 +2,7 @@ import { NodeSpec } from 'prosemirror-model';
 import { addListNodes } from 'prosemirror-schema-list';
 import OrderedMap from 'orderedmap';
 import { NodeGroups } from './types';
+import { clamp, DEFAULT_IMAGE_WIDTH } from '../utils';
 
 export const doc: NodeSpec = {
   content: `(${NodeGroups.block} | ${NodeGroups.top})+`,
@@ -26,7 +27,7 @@ export const blockquote: NodeSpec = {
 export const horizontal_rule: NodeSpec = {
   group: NodeGroups.block,
   parseDOM: [{ tag: 'hr' }],
-  toDOM() { return ['hr']; },
+  toDOM() { return ['hr', { class: 'break' }]; },
 };
 
 export const heading: NodeSpec = {
@@ -59,13 +60,18 @@ export const text: NodeSpec = {
   group: NodeGroups.inline,
 };
 
+const getImageWidth = (width?: string) => {
+  const widthNum = Number.parseInt((width ?? String(DEFAULT_IMAGE_WIDTH)).replace('%', ''), 10);
+  return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
+};
+
 export const image: NodeSpec = {
   attrs: {
     src: {},
     alt: { default: null },
     title: { default: null },
     align: { default: 'center' },
-    width: { default: 50 },
+    width: { default: DEFAULT_IMAGE_WIDTH },
   },
   group: NodeGroups.block,
   draggable: true,
@@ -77,7 +83,7 @@ export const image: NodeSpec = {
         title: dom.getAttribute('title'),
         alt: dom.getAttribute('alt'),
         align: dom.getAttribute('align') ?? 'center',
-        width: Number.parseInt((dom.getAttribute('width') ?? '50').replace('%', ''), 10) || 50,
+        width: getImageWidth(dom.getAttribute('width')),
       };
     },
   }],
