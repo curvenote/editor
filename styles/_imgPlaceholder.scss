@@ -1,0 +1,13 @@
+img.placeholder {
+	margin-left: 15%;
+  width: 70%; // DEFAULT_IMAGE_WIDTH
+	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+  animation: pulsePlaceholder 2s infinite;
+  animation-timing-function: ease;
+}
+
+@keyframes pulsePlaceholder {
+	0% { opacity: 0.3; }
+	50% { opacity: 0.5; }
+	100% { opacity: 0.3; }
+}
