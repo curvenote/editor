@@ -5,8 +5,8 @@ import { State } from '../types';
 export function getEditor(state: State, stateKey: any | null) {
   if (stateKey == null) return { state: null, views: [] };
   const stateId = opts.transformKeyToId(stateKey);
-  const editor = state.editor.state.editors[stateId];
-  if (!editor) return { state: null, views: [] };
+  const editor = state.editor.state.editors[stateId ?? ''];
+  if (!editor || !stateId) return { state: null, views: [] };
   const views: EditorView[] = [];
   editor.viewIds.forEach((viewId) => {
     const { view } = state.editor.state.views[viewId];
@@ -26,8 +26,8 @@ export function getEditorView(state: State, viewId: string | null) {
 
 export function getEditorState(state: State, stateKey: any | null) {
   const blank = { state: null, viewIds: [] };
-  if (stateKey == null) return blank;
   const stateId = opts.transformKeyToId(stateKey);
+  if (!stateId) return blank;
   const editor = state.editor.state.editors[stateId];
   return editor ?? blank;
 }

@@ -5,7 +5,7 @@ import { Store } from './store/types';
 import setupComponents from './components';
 
 export type Options = {
-  transformKeyToId: (key: any) => string;
+  transformKeyToId: (key: any) => string | null;
   image: {
     upload: (file: File) => Promise<string | null>;
     downloadUrl: (src: string) => Promise<string>;

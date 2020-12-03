@@ -13,6 +13,7 @@ export function initEditorState(
   stateKey: any, editable: boolean, content: string, version: number,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
+  if (stateId == null) throw new Error('Must have a state ID');
   return {
     type: INIT_EDITOR_STATE,
     payload: {
@@ -25,6 +26,7 @@ export function updateEditorState(
   stateKey: any, viewId: string | null, editorState: EditorState,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
+  if (stateId == null) throw new Error('Must have a state ID');
   return {
     type: UPDATE_EDITOR_STATE,
     payload: { stateId, viewId, editorState },
@@ -47,6 +49,7 @@ export function subscribeView(
   stateKey: any, viewId: string, view: EditorView,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
+  if (stateId == null) throw new Error('Must have a state ID');
   return {
     type: SUBSCRIBE_EDITOR_VIEW,
     payload: { stateId, viewId, view },
@@ -57,6 +60,7 @@ export function unsubscribeView(
   stateKey: any, viewId: string,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
+  if (stateId == null) throw new Error('Must have a state ID');
   return {
     type: UNSUBSCRIBE_EDITOR_VIEW,
     payload: { stateId, viewId },
