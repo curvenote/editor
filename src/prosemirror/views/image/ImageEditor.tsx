@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
 import { ThemeProvider } from '@material-ui/core';
+import { DEFAULT_IMAGE_WIDTH } from '@iooxa/schema';
 import ImageToolbar, { AlignOptions } from './ImageToolbar';
 import { opts } from '../../../connect';
 
@@ -31,7 +32,7 @@ class ImageEditor extends Component<Props, State> {
       alt: '',
       title: '',
       align: 'center',
-      width: 50,
+      width: DEFAULT_IMAGE_WIDTH,
     };
   }
 
