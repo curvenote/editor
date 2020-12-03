@@ -1,15 +1,17 @@
 export const ATTRIBUTES_SHOW_EDITOR = 'ATTRIBUTES_SHOW_EDITOR';
 
 export type AttributesState = {
-  showAttributeEditor: boolean;
-  attributePos: {top: number; left: number};
+  show: boolean;
+  pos: number;
+  location: {top: number; left: number} | null;
 };
 
 interface AttributesSetEditing {
   type: typeof ATTRIBUTES_SHOW_EDITOR;
   payload: {
     show: boolean;
-    dom: Element | null;
+    location: AttributesState['location'];
+    pos: number;
   };
 }
 

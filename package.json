@@ -47,7 +47,7 @@
     "build": "yarn run compile; yarn run build-css; webpack --config webpack.prod.js",
     "prepublishOnly": "yarn run compile; yarn run build-css;",
     "test": "jest",
-    "copy-css": "mkdir -p dist; mkdir -p styles/article; cp node_modules/@iooxa/article/styles/_* styles/article",
+    "copy-css": "mkdir -p dist; mkdir -p styles/article; cp node_modules/@iooxa/article/dist/styles/_* styles/article",
     "watch-css": "yarn run copy-css; sass --watch styles/index.scss dist/editor.css",
     "build-css": "yarn run copy-css; sass styles/index.scss dist/editor.css",
     "test:watch": "jest --watchAll",

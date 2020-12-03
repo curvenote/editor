@@ -3,7 +3,7 @@ import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggl
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { MarkType, NodeType, Node } from 'prosemirror-model';
 import { Nodes } from '@iooxa/schema';
-import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
+import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { AppThunk } from '../types';
 import {
   getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf,
@@ -11,6 +11,25 @@ import {
 import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
+
+
+export function updateNodeAttrs(
+  stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: { [index: string]: any },
+): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const editorState = getEditorState(getState(), stateKey)?.state;
+    if (editorState == null) return false;
+    const tr = editorState.tr.setNodeMarkup(
+      node.pos,
+      undefined,
+      { ...node.node.attrs, ...attrs },
+    );
+    tr.setSelection(NodeSelection.create(tr.doc, node.pos));
+    const result = dispatch(applyProsemirrorTransaction(stateKey, tr));
+    if (result && viewId) dispatch(focusEditorView(viewId, true));
+    return result;
+  };
+}
 
 
 export function toggleMark(

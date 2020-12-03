@@ -5,8 +5,9 @@ import {
 } from './types';
 
 const initialState: AttributesState = {
-  showAttributeEditor: false,
-  attributePos: { top: 0, left: 0 },
+  show: false,
+  pos: 0,
+  location: { top: 0, left: 0 },
 };
 
 const AttributesReducer = (
@@ -16,19 +17,12 @@ const AttributesReducer = (
   switch (action.type) {
     case ATTRIBUTES_SHOW_EDITOR: {
       // TODO: Move this to the action
-      const { show, dom } = action.payload;
-      const pos = { top: 0, left: 0 };
-      if (dom) {
-        const rect = dom.getBoundingClientRect();
-        pos.top = (rect.top) < window.innerHeight - 300 - 50
-          ? rect.bottom + 10
-          : rect.top - 300 - 10;
-        pos.left = rect.left;
-      }
+      const { show, location, pos } = action.payload;
       return {
         ...state,
-        showAttributeEditor: show,
-        attributePos: pos,
+        show,
+        pos,
+        location,
       };
     }
     default:

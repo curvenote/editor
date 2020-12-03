@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core';
 import {
-  actions, Editor, EditorMenu, Store, setup, Suggestion,
+  actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -51,11 +51,14 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone stateKey={stateKey} />
-      <article className="content selected centered">
-        <Editor stateKey={stateKey} viewId="one" />
+      <article className="content centered">
+        <div className="selected">
+          <Editor stateKey={stateKey} viewId="one" />
+        </div>
       </article>
       {/* <Editor stateKey={stateKey} viewId="two" /> */}
       <Suggestion />
+      <Attributes />
     </React.StrictMode>
   </Provider>,
   document.getElementById('root'),

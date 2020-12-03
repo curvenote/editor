@@ -13,10 +13,7 @@ import suggestion from './plugins/suggestion';
 import { buildKeymap } from './keymap';
 import inputrules from './inputrules';
 import { store } from '../connect';
-import MathView from './views/math';
-import ImageView from './views/image';
-import LinkView from './views/link';
-import { getImagePlaceholderPlugin, uploadAndInsertImages } from './views/image/placeholder';
+import * as views from './views';
 import { editablePlugin, isEditable } from './plugins/editable';
 import { handleSuggestion } from '../store/suggestion/actions';
 import linkViewPlugin from './plugins/link';
@@ -33,7 +30,7 @@ export function getPlugins(version: number, startEditable: boolean) {
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
     linkViewPlugin,
-    getImagePlaceholderPlugin(),
+    views.image.getImagePlaceholderPlugin(),
     inputrules(schema),
     keymap(buildKeymap(schema)),
     keymap(baseKeymap),
@@ -71,38 +68,32 @@ export function createEditorView(
     dispatchTransaction: dispatch,
     nodeViews: {
       math(node, view, getPos) {
-        return new MathView(node, view, getPos as () => number, true);
+        return new views.MathView(node, view, getPos as () => number, true);
       },
       equation(node, view, getPos) {
-        return new MathView(node, view, getPos as () => number, false);
+        return new views.MathView(node, view, getPos as () => number, false);
       },
       image(node, view, getPos) {
-        return new ImageView(node, view, getPos as () => number);
+        return new views.ImageView(node, view, getPos as () => number);
       },
       link(node, view, getPos) {
-        return new LinkView(node, view, getPos as () => number);
+        return new views.LinkView(node, view, getPos as () => number);
       },
+      button: views.newWidgetView,
+      display: views.newWidgetView,
+      range: views.newWidgetView,
+      switch: views.newWidgetView,
+      variable: views.newWidgetView,
     },
-    // This is set in the middleware `tr.setMeta(editable, false)`
+    // This can be set in the middleware `tr.setMeta(editable, false)`
     editable: (s) => isEditable(s),
-    handleClickOn: (view, pos, node, nodePos, event, direct) => {
-      if (direct && event.button === 2) {
-        // TODO: Not awesome interaction with material components here...
-        // TODO: Better right click
-        console.log('RIGHT CLICK?!');
-        // event.preventDefault();
-        // event.stopPropagation();
-        // event.stopImmediatePropagation();
-        // store.dispatch(setAttributeEditor(true, view.nodeDOM(nodePos)));
-        return false;
-      }
-      return false;
-    },
+    // handleClickOn: (view, pos, node, nodePos, event, direct) => {
+    // },
     handlePaste: (view, event, slice) => (
-      uploadAndInsertImages(view, event.clipboardData)
+      views.image.uploadAndInsertImages(view, event.clipboardData)
     ),
     handleDrop: (view, event, slice, moved) => (
-      uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
+      views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),
   });
   return editorView;

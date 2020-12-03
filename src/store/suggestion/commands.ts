@@ -52,7 +52,7 @@ export const commands: CommandResult[] = [
   {
     name: CommandNames.equation,
     title: 'Equation',
-    description: 'Add a block equation',
+    description: 'Add a standalone math equation',
     shortcut: '$$',
   },
   {

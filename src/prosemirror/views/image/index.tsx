@@ -5,7 +5,7 @@ import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { opts } from '../../../connect';
 import ImageEditor from './ImageEditor';
-import { updateNodeAttrs } from '../../utils';
+import { updateNodeAttrsOnView } from '../../utils';
 import { AlignOptions } from './ImageToolbar';
 import { isEditable } from '../../plugins/editable';
 
@@ -35,14 +35,14 @@ class ImageView {
     this.currentSrc = src;
 
     const onAlign = (value: AlignOptions) => (
-      updateNodeAttrs(
+      updateNodeAttrsOnView(
         this.view,
         { node: this.node, pos: this.getPos() }, { align: value },
       )
     );
 
     const onWidth = (value: number) => (
-      updateNodeAttrs(
+      updateNodeAttrsOnView(
         this.view,
         { node: this.node, pos: this.getPos() }, { width: value },
       )
