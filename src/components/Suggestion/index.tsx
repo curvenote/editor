@@ -1,23 +1,20 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
+import isEqual from 'lodash.isequal';
 import { State } from '../../store/types';
 import EmojiSuggestions from './Emojis';
 import CommandSuggestions from './Commands';
 import VariableSuggestions from './Variables';
-import { SuggestionKind, Location } from '../../store/suggestion/types';
+import { SuggestionKind } from '../../store/suggestion/types';
 import { selectors } from '../../store';
 
-type Props = {
-  open: boolean;
-  kind: SuggestionKind | null;
-  location: Location | null;
-  results: any[];
-};
 
-const Suggestion: React.FC<Props> = (props) => {
+const Suggestion = () => {
   const {
-    kind, open, location, results,
-  } = props;
+    open, kind, location, results,
+  } = useSelector((state: State) => selectors.getSuggestion(state), isEqual);
   if (!open || results.length === 0) return null;
 
   return (
@@ -44,18 +41,5 @@ const Suggestion: React.FC<Props> = (props) => {
   );
 };
 
-const mapStateToProps = (state: State) => {
-  const {
-    open, kind, location, results,
-  } = selectors.getSuggestion(state);
-  return {
-    open,
-    kind,
-    location,
-    results,
-  };
-};
+export default Suggestion;
 
-export default connect(
-  mapStateToProps,
-)(Suggestion);
