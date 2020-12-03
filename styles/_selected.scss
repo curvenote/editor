@@ -1,21 +1,23 @@
 
-article.selected {
-  .ProseMirror-selectednode {
-    outline: 2px solid #8cf;
-  }
-  /* Make sure li selections wrap around markers */
-  li.ProseMirror-selectednode {
-    outline: none;
-  }
-  li.ProseMirror-selectednode:after {
-    content: '';
-    position: absolute;
-    left: -32px;
-    right: -2px;
-    top: -2px;
-    bottom: -2px;
-    border: 2px solid #8cf;
-    pointer-events: none;
+article {
+  .selected {
+    .ProseMirror-selectednode {
+      outline: 2px solid #8cf;
+    }
+    li.ProseMirror-selectednode {
+      /* Make sure li selections wrap around markers */
+      outline: none;
+    }
+    li.ProseMirror-selectednode:after {
+      content: '';
+      position: absolute;
+      left: -32px;
+      right: -2px;
+      top: -2px;
+      bottom: -2px;
+      border: 2px solid #8cf;
+      pointer-events: none;
+    }
   }
 }
 
