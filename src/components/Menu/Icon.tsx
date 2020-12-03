@@ -138,4 +138,4 @@ MenuIcon.defaultProps = {
   onClick: undefined,
 };
 
-export default MenuIcon;
+export default React.memo(MenuIcon);

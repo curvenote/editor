@@ -28,7 +28,13 @@ const theme = createMuiTheme({});
 const opts: Options = {
   transformKeyToId: (key) => key,
   image: {
-    upload: async (file) => { console.log(file); throw new Error('upload not setup'); },
+    upload: async (file) => {
+      // eslint-disable-next-line no-console
+      console.log(file);
+      return new Promise((resolve) => (
+        setTimeout(() => resolve('https://iooxa.dev/images/logo.png'), 3000)
+      ));
+    },
     downloadUrl: async (src) => src,
   },
   theme,

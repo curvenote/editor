@@ -1,5 +1,6 @@
 node_modules
 dist
-.yalc/
 emoji.json
 styles/article/_*
+.yalc/
+yalc.lock

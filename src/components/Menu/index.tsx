@@ -4,6 +4,8 @@ import { Menu, Theme } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarkType, NodeType } from 'prosemirror-model';
+import useInlineMemo from 'use-inline-memo';
+import isEqual from 'lodash.isequal';
 import { CommandNames } from '../../store/suggestion/commands';
 import { selectors, actions } from '../../store';
 import { Dispatch, State } from '../../store/types';
@@ -40,6 +42,7 @@ const EditorMenu = (props: Props) => {
   const classes = useStyles();
 
   const dispatch = useDispatch<Dispatch>();
+  const memo = useInlineMemo();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -49,7 +52,6 @@ const EditorMenu = (props: Props) => {
   const onClose = useCallback(() => setAnchorEl(null), []);
 
   const stateId = opts.transformKeyToId(stateKey);
-
 
   let off = useSelector((state: State) => (
     !isEditable(selectors.getEditorState(state, stateKey)?.state)
@@ -69,20 +71,20 @@ const EditorMenu = (props: Props) => {
     underline: schema.marks.underline,
     linked: schema.marks.link,
     code: schema.marks.code,
-  }));
+  }), isEqual);
 
   const parents = useSelector((state: State) => selectors.selectionIsChildOf(state, stateId, {
     ul: schema.nodes.bullet_list,
     ol: schema.nodes.ordered_list,
     math: schema.nodes.math,
-  }));
+  }), isEqual);
 
   // TODO: make this memoized and move to just commands
 
   // Helper functions
-  const toggleMark = (mark: MarkType) => () => dispatch(actions.toggleMark(stateId, viewId, mark));
-  const wrapInline = (node: NodeType) => () => dispatch(actions.insertInlineNode(node));
-  const command = (name: CommandNames) => () => dispatch(actions.executeCommand(name, viewId));
+  const toggleMark = (mark: MarkType) => memo[`mark${mark.name}`](() => dispatch(actions.toggleMark(stateId, viewId, mark)), [stateId, viewId]);
+  const wrapInline = (node: NodeType) => memo[`node${node.name}`](() => dispatch(actions.insertInlineNode(node)), [stateId, viewId]);
+  const command = (name: CommandNames) => memo[`command${name}`](() => dispatch(actions.executeCommand(name, viewId)), [stateId, viewId]);
 
   return (
     <Grid container alignItems="center" className={`${classes.root} ${standAlone ? classes.center : classes.pad}`} wrap="nowrap">
