@@ -28,6 +28,7 @@ class ImageView {
     this.view = view;
     this.getPos = getPos;
     this.dom = document.createElement('div');
+    const viewId = this.view.dom.id;
     const {
       src, alt, title, align, width,
     } = node.attrs;
@@ -58,15 +59,16 @@ class ImageView {
       async () => {
         const url = await opts.image.downloadUrl(src);
         this.editor?.setState({
-          src: url, alt, title, align, width,
+          viewId, src: url, alt, title, align, width,
         });
       },
     );
   }
 
   selectNode() {
+    const viewId = this.view.dom.id;
     const edit = isEditable(this.view.state);
-    this.editor?.setState({ open: this.view.hasFocus(), edit });
+    this.editor?.setState({ open: this.view.hasFocus(), edit, viewId });
   }
 
   deselectNode() {

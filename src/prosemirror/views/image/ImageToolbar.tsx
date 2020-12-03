@@ -1,11 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   makeStyles,
-  createStyles, Theme, Paper, Grid, Popover, Slider,
+  createStyles, Paper, Grid, Popover, Slider,
 } from '@material-ui/core';
 import MenuIcon from '../../../components/Menu/Icon';
+import { getEditorUI } from '../../../store/ui/selectors';
+import { State } from '../../../store/types';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
   root: {
     width: 'fit-content',
     fontSize: 20,
@@ -25,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export type AlignOptions = 'left' | 'center' | 'right';
 
 type Props = {
+  viewId: string;
   open: boolean;
   align: AlignOptions;
   width: number;
@@ -35,10 +39,13 @@ type Props = {
 
 const ImageToolbar = (props: Props) => {
   const {
+    viewId,
     open, width, align, onAlign, onWidth, onDelete,
   } = props;
 
   const classes = useStyles();
+  const selectedId = useSelector((state: State) => getEditorUI(state).viewId);
+  const selected = selectedId === viewId;
 
   const doAlign = (a: AlignOptions) => () => onAlign(a);
 
@@ -52,6 +59,7 @@ const ImageToolbar = (props: Props) => {
 
   const openWidth = Boolean(anchorEl);
 
+  if (!selected) return null;
   if (!open && !openWidth) return null;
 
   const margin = align === 'right' ? `0 min(calc(${100 - width / 2}% - 100px), calc(100% - 200px))` : `0 calc(${width / 2}% - 100px)`;

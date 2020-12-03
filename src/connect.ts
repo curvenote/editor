@@ -24,7 +24,7 @@ type Ref<T> = {
   _opts?: Options;
 };
 
-const ref: Ref<Store> = {
+export const ref: Ref<Store> = {
   store() {
     if (ref._store === undefined) throw new Error('Must init store.');
     return ref._store;

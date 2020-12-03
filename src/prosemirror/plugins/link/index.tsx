@@ -20,7 +20,7 @@ class LinkViewTooltip {
     this.dom.style.position = 'absolute';
     view.dom.parentNode?.appendChild(this.dom);
     render(
-      <LinkEditor {...{ onDelete: null, onOpen: null }} ref={(r) => { this.tooltip = r; }} />,
+      <LinkEditor ref={(r) => { this.tooltip = r; }} />,
       this.dom,
     );
     this.update(view, null);
@@ -48,6 +48,7 @@ class LinkViewTooltip {
     this.dom.style.top = `${top - box.top + 10}px`;
     this.dom.style.left = `${left - box.left}px`;
 
+    const viewId = view.dom.id;
     const { href } = linkBounds.link.attrs;
     const mark = schema.marks.link;
     const onDelete = () => (
@@ -64,7 +65,7 @@ class LinkViewTooltip {
       this.view.dispatch(tr);
     };
     this.tooltip?.setState({
-      open: true, edit: isEditable(state), href, onEdit, onDelete,
+      viewId, open: true, edit: isEditable(state), href, onEdit, onDelete,
     });
   }
 

@@ -75,6 +75,7 @@ const Editor = (props: Props) => {
         editorView.current?.updateState(next);
       },
     );
+    editorView.current.dom.id = viewId;
     (editorView.current.dom as HTMLElement).onfocus = () => {
       dispatch(actions.focusEditorView(viewId, true));
     };

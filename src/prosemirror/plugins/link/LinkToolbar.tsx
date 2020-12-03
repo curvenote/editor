@@ -1,11 +1,14 @@
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import {
   makeStyles,
-  createStyles, Theme, Paper, Grid, Button, Tooltip,
+  createStyles, Paper, Grid, Button, Tooltip,
 } from '@material-ui/core';
 import MenuIcon from '../../../components/Menu/Icon';
+import { getEditorUI } from '../../../store/selectors';
+import { State } from '../../../store/types';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
   paper: {
     overflow: 'hidden',
     height: 38,
@@ -22,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 
 type Props = {
+  viewId: string;
   open: boolean;
   edit: boolean;
   href: string;
@@ -31,14 +35,17 @@ type Props = {
 
 const LinkToolbar = (props: Props) => {
   const {
+    viewId,
     open, edit, href,
     onEdit, onDelete,
   } = props;
 
   const classes = useStyles();
+  const selectedId = useSelector((state: State) => getEditorUI(state).viewId);
+  const selected = selectedId === viewId;
   const onOpen = useCallback(() => window.open(href, '_blank'), [href]);
 
-  if (!open || !edit) return null;
+  if (!open || !edit || !selected) return null;
 
   return (
     <Paper

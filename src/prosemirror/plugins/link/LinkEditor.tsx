@@ -1,14 +1,15 @@
-/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import { ThemeProvider } from '@material-ui/core';
 import LinkToolbar from './LinkToolbar';
-import { opts } from '../../../connect';
+import { opts, ref } from '../../../connect';
 
 
 type Props = {
 };
 
 type State = {
+  viewId: string;
   open: boolean;
   edit: boolean;
   href: string;
@@ -20,6 +21,7 @@ class LinkEditor extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      viewId: '',
       open: false,
       edit: false,
       href: '',
@@ -30,16 +32,18 @@ class LinkEditor extends Component<Props, State> {
 
   render() {
     const {
-      open, edit, href,
+      viewId, open, edit, href,
       onEdit, onDelete,
     } = this.state;
     return (
       <ThemeProvider theme={opts.theme}>
-        <LinkToolbar
-          {...{ open, edit, href }}
-          onDelete={onDelete}
-          onEdit={onEdit}
-        />
+        <Provider store={ref.store()}>
+          <LinkToolbar
+            {...{
+              viewId, open, edit, href, onDelete, onEdit,
+            }}
+          />
+        </Provider>
       </ThemeProvider>
     );
   }
