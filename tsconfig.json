@@ -22,7 +22,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "removeComments": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "typeRoots": [
       "./node_modules/@types",
       "./types"

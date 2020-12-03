@@ -1,4 +1,5 @@
 node_modules
 dist
+.yalc/
 emoji.json
 styles/article/_*

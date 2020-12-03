@@ -1,0 +1,25 @@
+{
+  "version": "v1",
+  "packages": {
+    "@iooxa/schema": {
+      "signature": "8237804357e5dff74895d7a73b73ef5d",
+      "file": true,
+      "replaced": "file:../schema"
+    },
+    "@iooxa/article": {
+      "signature": "5a8060687c14bcfc4c1cfbd3ea72c494",
+      "file": true,
+      "replaced": "^0.2.7"
+    },
+    "@iooxa/runtime": {
+      "signature": "d0e9925a4268f4c2553abffdc973f8a7",
+      "file": true,
+      "replaced": "^0.2.5"
+    },
+    "@iooxa/components": {
+      "signature": "e66aebbad4179951a73b0ac5895d94e1",
+      "file": true,
+      "replaced": "^0.2.5"
+    }
+  }
+}
