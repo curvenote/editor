@@ -22,7 +22,7 @@
     "compile": "yarn run clean && tsc -p .",
     "build": "tsc",
     "build:watch": "tsc -w -p .",
-    "prepublishOnly": "yarn run compile",
+    "prepublishOnly": "yarn clean; yarn run compile; rm -rf dist/test; mv dist/src/* dist; rmdir dist/src",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
