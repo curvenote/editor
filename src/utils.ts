@@ -41,8 +41,6 @@ export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttr
         if (value && attr.func !== 'only') props[attr.name] = value;
         if (attr.func && valueFunction) props[`:${attr.name}`] = valueFunction;
       });
-      // TODO: This might need to be an option to turn off the context menu?
-      props.oncontextmenu = 'return false;';
       return [def.tag, domAttrs ? domAttrs(props) : props];
     },
     parseDOM: [{

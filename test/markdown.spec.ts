@@ -61,4 +61,8 @@ describe('Markdown', () => {
     },
     tdoc(callout('', p('This is ', em('directive'), ' content'))),
   ));
+  it.skip('parses images', () => same(
+    'This is an inline image: ![x](img.png)',
+    tdoc(p('This is an inline image: ', img(''))),
+  ));
 });

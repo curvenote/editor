@@ -17,7 +17,10 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": [
+      "./tsconfig.json"
+    ]
   },
   "plugins": [
     "@typescript-eslint",
@@ -30,7 +33,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/naming-convention": "off",
     "jsx-a11y/interactive-supports-focus": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
