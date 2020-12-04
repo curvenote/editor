@@ -1,11 +1,13 @@
 import { Schema, Node as ProsemirrorNode } from 'prosemirror-model';
 import Token from 'markdown-it/lib/token';
-import { MarkdownParser } from 'prosemirror-markdown';
+import { MarkdownParser, TokenConfig } from 'prosemirror-markdown';
 import MyST from 'markdown-it-myst';
 import { DEFAULT_IMAGE_WIDTH } from '../utils';
 
-
-const rules = {
+type Tokens = {
+  [key: string]: TokenConfig & { noCloseToken?: boolean };
+};
+const tokens: Tokens = {
   blockquote: { block: 'blockquote' },
   paragraph: { block: 'paragraph' },
   list_item: { block: 'list_item' },
@@ -32,6 +34,7 @@ const rules = {
   math_inline: { block: 'math', noCloseToken: true },
   math_inline_double: { block: 'math', noCloseToken: true },
   math_block: { block: 'equation', noCloseToken: true },
+  math_block_end: { ignore: true, noCloseToken: true },
 
   link: {
     mark: 'link',
@@ -55,7 +58,7 @@ const rules = {
     noCloseToken: true,
   },
 
-  container_admonitions: {
+  container_directives: {
     block: 'callout',
     getAttrs: (tok: Token) => {
       const kind = tok.attrGet('kind') ?? '';
@@ -70,6 +73,6 @@ const rules = {
 export function getMarkdownParser(schema: Schema) {
   const tokenizer = MyST();
   type Parser = { parse: (content: string) => ProsemirrorNode };
-  const parser: Parser = new MarkdownParser(schema, tokenizer, rules);
+  const parser: Parser = new MarkdownParser(schema, tokenizer, tokens);
   return parser;
 }
