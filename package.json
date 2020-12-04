@@ -42,8 +42,8 @@
   },
   "scripts": {
     "emoji": "node bin/createEmoji.js; mv bin/emoji.json src/store/suggestion/results/emoji.json",
-    "clean": "rm -rf dist",
-    "compile": "yarn run clean && tsc -p .",
+    "clean": "rm -rf dist; rm src/store/suggestion/results/emoji.json || true;",
+    "compile": "yarn run clean; yarn run emoji; tsc -p .",
     "build": "yarn run compile; yarn run build-css; webpack --config webpack.prod.js",
     "prepublishOnly": "yarn run compile; yarn run build-css;",
     "test": "jest",
