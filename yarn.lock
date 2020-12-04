@@ -3488,19 +3488,19 @@ markdown-it-container@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-it-container/-/markdown-it-container-3.0.0.tgz#1d19b06040a020f9a827577bb7dbf67aa5de9a5b"
   integrity sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==
 
-markdown-it-myst@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.5.tgz#252a7a2741314aa1f5c2975624af85eb2e045595"
-  integrity sha512-Gg3mOrL5vmNLWmnjy5nRjxAE3dix1jVh8UK/Ji829UZQ1kQ32YtVGAnGABACRW0LylWnHErtafNxMDA3LCJ34w==
+markdown-it-myst@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.6.tgz#d32c1c2d7ae72d3e7d46bd60fdd342364ba7498a"
+  integrity sha512-+OylMXsgYPFkD87U/hvp1iV0f3W5PzaJzLOCYmmauwAz6KjODtAs97yIz/q89+mz5jXjPjhba0tnKQYom6DNnQ==
   dependencies:
-    markdown-it "^11.0.0"
+    markdown-it "^12.0.2"
     markdown-it-container "^3.0.0"
-    markdown-it-texmath "^0.7.2"
+    markdown-it-texmath "^0.8.0"
 
-markdown-it-texmath@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/markdown-it-texmath/-/markdown-it-texmath-0.7.2.tgz#2f51f154483c522d2bfef47da31d0135e0771d21"
-  integrity sha512-DAxM3D73BlRfpO6cnR2x27uOwGeTqQ/Yz6pUHE2iL/AzctEYSk3UmGxZYZGdU5B43AZD7kpdcU4wPNMF5Zhuqw==
+markdown-it-texmath@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-texmath/-/markdown-it-texmath-0.8.0.tgz#2ef92db15227d151f9397ad0f36b4a5b0a6164df"
+  integrity sha512-/59D3rW/IG+tBoZv0Fuqg4XKhqGKYG+4us9JJ+9ZrERaN1XBMpU3U0wyOhynsJulKpGrZ0xa3+f9p35leuFc8w==
 
 markdown-it@^10.0.0:
   version "10.0.0"
@@ -3510,17 +3510,6 @@ markdown-it@^10.0.0:
     argparse "^1.0.7"
     entities "~2.0.0"
     linkify-it "^2.0.0"
-    mdurl "^1.0.1"
-    uc.micro "^1.0.5"
-
-markdown-it@^11.0.0:
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-11.0.1.tgz#b54f15ec2a2193efa66dda1eb4173baea08993d6"
-  integrity sha512-aU1TzmBKcWNNYvH9pjq6u92BML+Hz3h5S/QpfTFwiQF852pLT+9qHsrhM9JYipkOXZxGn+sGH8oyJE9FD9WezQ==
-  dependencies:
-    argparse "^1.0.7"
-    entities "~2.0.0"
-    linkify-it "^3.0.1"
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
