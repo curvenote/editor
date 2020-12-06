@@ -57,7 +57,7 @@ const EmojiSuggestions: React.FC<Props> = (props) => {
           selected={selected === index}
           className={classes.root}
         >
-          {item.current !== undefined && <div>{item.current}</div>}
+          {item.current !== undefined && <div>{String(item.current)}</div>}
           <Typography variant="subtitle1">
             {item.name}
           </Typography>
