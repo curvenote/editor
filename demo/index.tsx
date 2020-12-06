@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core';
+import { toMarkdown } from '@iooxa/schema';
 import {
   actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
 } from '../src';
@@ -47,15 +48,21 @@ const stateKey = 'myEditor';
 window.store = store;
 store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello editing!<a href="https://iooxa.dev/introduction">@iooxa/components</a></p><img src="https://iooxa.dev/images/logo.png">', 0));
 
+
+store.subscribe(() => {
+  const el = document.getElementById('myst');
+  if (!el) return;
+  const editorState = store.getState().editor.state.editors[stateKey].state;
+  el.innerText = toMarkdown(editorState.doc);
+});
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone stateKey={stateKey} />
-      <article className="content centered">
-        <div className="selected">
-          <Editor stateKey={stateKey} viewId="one" />
-        </div>
-      </article>
+      <div className="selected">
+        <Editor stateKey={stateKey} viewId="one" />
+      </div>
       {/* <Editor stateKey={stateKey} viewId="two" /> */}
       <Suggestion />
       <Attributes />
