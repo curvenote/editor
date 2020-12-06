@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 export const NODES_WITH_ATTRS = new Set([
   schema.nodes.button.name,
   schema.nodes.display.name,
+  schema.nodes.dynamic.name,
   schema.nodes.range.name,
   schema.nodes.switch.name,
   schema.nodes.variable.name,
