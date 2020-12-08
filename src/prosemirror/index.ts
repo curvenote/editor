@@ -81,6 +81,7 @@ export function createEditorView(
       },
       button: views.newWidgetView,
       display: views.newWidgetView,
+      dynamic: views.newWidgetView,
       range: views.newWidgetView,
       switch: views.newWidgetView,
       variable: views.newWidgetView,
