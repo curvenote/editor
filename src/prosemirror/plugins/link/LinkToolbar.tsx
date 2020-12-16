@@ -12,7 +12,6 @@ const useStyles = makeStyles(() => createStyles({
   paper: {
     overflow: 'hidden',
     height: 38,
-    zIndex: 1,
   },
   grid: {
     width: 'fit-content',

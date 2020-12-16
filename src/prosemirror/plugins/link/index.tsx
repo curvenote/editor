@@ -18,6 +18,7 @@ class LinkViewTooltip {
     this.view = view;
     this.dom = document.createElement('div');
     this.dom.style.position = 'absolute';
+    this.dom.style.zIndex = '2';
     view.dom.parentNode?.appendChild(this.dom);
     render(
       <LinkEditor ref={(r) => { this.tooltip = r; }} />,
