@@ -31,7 +31,7 @@ const comment3 = 'comment3';
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
-      <article doc={docId}>
+      <article data-doc={docId}>
         <h1>@iooxa/comments</h1>
         <button type="button" onClick={() => store.dispatch(deselectComment(docId))}>Deselect Comments</button>
         <comment-base anchor={baseAnchor}>

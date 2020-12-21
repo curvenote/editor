@@ -1,6 +1,3 @@
 export * from './store';
 export { setup, store } from './connect';
-export { default as CommentContainer } from './components/CommentContainer';
-export { default as CommentAnchor } from './components/CommentAnchor';
-export { default as CommentBase } from './components/comment-base';
-export { default as CommentAnchorElement } from './components/comment-anchor';
+export * from './components';
