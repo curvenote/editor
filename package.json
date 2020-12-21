@@ -12,8 +12,8 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.2.2",
-    "redux-thunk": "^2.3.0",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "uuid": "^8.3.2"
   },
   "scripts": {
@@ -28,6 +28,7 @@
     "watch": "tsc -w -p ."
   },
   "devDependencies": {
+    "redux-thunk": "^2.3.0",
     "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
