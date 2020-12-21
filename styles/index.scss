@@ -1,0 +1,30 @@
+article {
+  .comments {
+    position: absolute;
+    top: 0px;
+    width: 300px;
+    right: -300px;
+    .comment {
+      position: absolute;
+      transition: all 400ms cubic-bezier(0.655, 0.180, 0.300, 1.255);
+      left: 10px;
+      opacity: 0.3;
+    }
+    .comment:hover {
+      opacity: 1;
+    }
+    .comment.selected {
+      left: -10px;
+      opacity: 1;
+    }
+  }
+  .anchor {
+    background-color: var(--commentColor, #F8E4B1);
+  }
+  .anchor:hover {
+    background-color: var(--commentColorHover, #F7CF69B6);
+  }
+  .anchor.selected {
+    background-color: var(--commentColorSelected, #F5C955);
+  }
+}
