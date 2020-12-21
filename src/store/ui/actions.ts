@@ -1,15 +1,19 @@
 import { v4 as uuid } from 'uuid';
 import {
   UI_CONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_DISCONNECT_ANCHOR,
-  UI_CONNECT_COMMENT, UI_SELECT_ANCHOR, UI_SELECT_COMMENT, UI_DISCONNECT_COMMENT,
+  UI_CONNECT_COMMENT, UI_SELECT_ANCHOR, UI_SELECT_COMMENT,
+  UI_DISCONNECT_COMMENT, UI_CONNECT_ANCHOR_BASE,
 } from './types';
 import { AppThunk, CommentUIActions } from '../types';
 
-export function connectComment(docId?: string, commentId?: string): AppThunk<void> {
+export function connectComment(
+  docId?: string, commentId?: string, baseId?: string,
+): AppThunk<void> {
   return (dispatch) => {
+    if (docId == null || commentId == null) return;
     dispatch({
       type: UI_CONNECT_COMMENT,
-      payload: { docId, commentId },
+      payload: { docId, commentId, baseId },
     });
   };
 }
@@ -26,6 +30,22 @@ export function connectAnchor(
       type: UI_CONNECT_ANCHOR,
       payload: {
         docId, commentId, anchorId, element,
+      },
+    });
+  };
+}
+
+export function connectAnchorBase(
+  docId?: string, anchorId?: string, element?: HTMLElement,
+): AppThunk<void> {
+  return (dispatch) => {
+    if (docId == null || anchorId == null || element == null) return;
+    // eslint-disable-next-line no-param-reassign
+    (element as any).anchorId = anchorId;
+    dispatch({
+      type: UI_CONNECT_ANCHOR_BASE,
+      payload: {
+        docId, anchorId, element,
       },
     });
   };

@@ -4,7 +4,7 @@ import {
   UIState, UIActionTypes,
   UI_CONNECT_COMMENT, UI_SELECT_COMMENT,
   UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, DocCommentState, Anchor,
-  UI_DISCONNECT_ANCHOR, UI_DESELECT_COMMENT,
+  UI_DISCONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_CONNECT_ANCHOR_BASE,
 } from './types';
 
 export const initialState: UIState = {
@@ -26,7 +26,7 @@ function placeComments(state: DocCommentState, actionType: string): DocCommentSt
   let findMe: Loc | undefined;
   const sorted = Object.entries(state.comments).map(
     ([id, cmt]) => {
-      const anchor = state.anchors[cmt.inlineAnchors?.[0]];
+      const anchor = state.anchors[cmt.inlineAnchors?.[0]] ?? state.anchors[cmt.baseAnchors?.[0]];
       const loc: Loc = [id, { ...getTopLeft(anchor), height: getHeight(id) }];
       if (id === state.selectedComment) { findMe = loc; }
       return loc;
@@ -83,6 +83,7 @@ const uiReducer = (
     case UI_SELECT_ANCHOR:
     case UI_CONNECT_COMMENT:
     case UI_CONNECT_ANCHOR:
+    case UI_CONNECT_ANCHOR_BASE:
     case UI_DISCONNECT_ANCHOR:
     case UI_DESELECT_COMMENT:
     {

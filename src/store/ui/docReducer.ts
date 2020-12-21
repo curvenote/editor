@@ -1,7 +1,7 @@
 import {
   UIActionTypes, UI_SELECT_COMMENT, UI_CONNECT_COMMENT,
   DocCommentState, UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, UI_DISCONNECT_ANCHOR,
-  UI_DESELECT_COMMENT, UI_DISCONNECT_COMMENT,
+  UI_DESELECT_COMMENT, UI_DISCONNECT_COMMENT, UI_CONNECT_ANCHOR_BASE, COMMENT_ANCHOR_BASE,
 } from './types';
 
 
@@ -22,10 +22,9 @@ const docReducer = (
   }
   switch (action.type) {
     case UI_CONNECT_COMMENT: {
-      const { commentId } = action.payload;
-
+      const { commentId, baseId } = action.payload;
+      const baseIds = baseId ? [baseId] : [];
       const prevComment = state.comments[commentId];
-
       return {
         ...state,
         comments: {
@@ -33,7 +32,7 @@ const docReducer = (
           [commentId]: {
             ...prevComment,
             id: commentId,
-            baseAnchors: [...(prevComment?.baseAnchors ?? [])],
+            baseAnchors: [...baseIds, ...(prevComment?.baseAnchors ?? [])],
             inlineAnchors: [...(prevComment?.inlineAnchors ?? [])],
           },
         },
@@ -71,6 +70,20 @@ const docReducer = (
           [anchorId]: {
             id: anchorId,
             comment: commentId,
+            element,
+          },
+        },
+      };
+    }
+    case UI_CONNECT_ANCHOR_BASE: {
+      const { anchorId, element } = action.payload;
+      return {
+        ...state,
+        anchors: {
+          ...state.anchors,
+          [anchorId]: {
+            id: anchorId,
+            comment: COMMENT_ANCHOR_BASE,
             element,
           },
         },

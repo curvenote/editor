@@ -1,6 +1,10 @@
+// This is a placeholder for base-anchors to refer to a "comment"
+export const COMMENT_ANCHOR_BASE = 'COMMENT_ANCHOR_BASE';
+
 export const UI_CONNECT_COMMENT = 'UI_CONNECT_COMMENT';
 export const UI_DISCONNECT_COMMENT = 'UI_DISCONNECT_COMMENT';
 export const UI_CONNECT_ANCHOR = 'UI_CONNECT_ANCHOR';
+export const UI_CONNECT_ANCHOR_BASE = 'UI_CONNECT_ANCHOR_BASE';
 export const UI_DISCONNECT_ANCHOR = 'UI_DISCONNECT_ANCHOR';
 export const UI_SELECT_COMMENT = 'UI_SELECT_COMMENT';
 export const UI_DESELECT_COMMENT = 'UI_DESELECT_COMMENT';
@@ -18,7 +22,7 @@ export type Comment = {
 export type Anchor = {
   id: string;
   element: HTMLElement;
-  comment: string;
+  comment: typeof COMMENT_ANCHOR_BASE | string;
 };
 
 export type DocCommentState = {
@@ -38,6 +42,7 @@ export interface ConnectCommentAction {
   payload: {
     docId: string;
     commentId: string;
+    baseId?: string;
   };
 }
 
@@ -54,6 +59,15 @@ export interface ConnectAnchorAction {
   payload: {
     docId: string;
     commentId: string;
+    anchorId: string;
+    element: HTMLElement;
+  };
+}
+
+export interface ConnectAnchorBaseAction {
+  type: typeof UI_CONNECT_ANCHOR_BASE;
+  payload: {
+    docId: string;
     anchorId: string;
     element: HTMLElement;
   };
@@ -92,6 +106,7 @@ export type UIActionTypes = (
   ConnectCommentAction |
   DisconnectCommentAction |
   ConnectAnchorAction |
+  ConnectAnchorBaseAction |
   DisconnectAnchorAction |
   SelectCommentAction |
   SelectAnchorAction |

@@ -8,12 +8,13 @@ import { Dispatch, State } from '../store';
 import { getDoc } from './utils';
 
 type Props = {
+  base?: string;
   comment: string;
   children: React.ReactNode;
 };
 
 export const CommentContainer = (props: Props) => {
-  const { comment, children } = props;
+  const { base, comment, children } = props;
   const dispatch = useDispatch<Dispatch>();
   const [doc, setDoc] = useState<string>();
 
@@ -26,7 +27,7 @@ export const CommentContainer = (props: Props) => {
     const parentDoc = getDoc(el);
     if (parentDoc) {
       setDoc(parentDoc);
-      dispatch(connectComment(parentDoc, comment));
+      dispatch(connectComment(parentDoc, comment, base));
     }
   }, []);
   return (
@@ -40,6 +41,10 @@ export const CommentContainer = (props: Props) => {
       {children}
     </div>
   );
+};
+
+CommentContainer.defaultProps = {
+  base: undefined,
 };
 
 export default CommentContainer;

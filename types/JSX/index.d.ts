@@ -8,11 +8,16 @@ interface HasDoc {
 
 type CommentAnchor = {
   comment: string;
-} & HasDoc;
+};
+
+type CommentBase = {
+  anchor: string;
+};
 
 declare module JSX {
   interface IntrinsicElements {
     'article': React.DetailedHTMLProps<HasDoc & React.HTMLAttributes, HTMLElement>;
     'comment-anchor': React.DetailedHTMLProps<CommentAnchor & React.HTMLAttributes, HTMLElement>;
+    'comment-base': React.DetailedHTMLProps<CommentBase & React.HTMLAttributes, HTMLElement>;
   }
 }
