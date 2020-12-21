@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Theme } from '@material-ui/core';
+import { setup as setupComments, Store as CommentsStore } from '@iooxa/comments';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Store } from './store/types';
 import setupComponents from './components';
@@ -39,6 +40,7 @@ export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
   setupComponents(store);
+  setupComments(store as unknown as CommentsStore, { padding: 10 });
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {

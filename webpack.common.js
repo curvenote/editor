@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const CopyPlugin = require('copy-webpack-plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -18,7 +18,6 @@ module.exports = {
   plugins: [
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: '@iooxa/editor',
       template: 'demo/index.html',
     }),
     // new CopyPlugin({

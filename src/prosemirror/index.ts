@@ -17,6 +17,7 @@ import * as views from './views';
 import { editablePlugin, isEditable } from './plugins/editable';
 import { handleSuggestion } from '../store/suggestion/actions';
 import linkViewPlugin from './plugins/link';
+import commentsPlugin from './plugins/comments';
 
 export { schema };
 
@@ -29,6 +30,7 @@ export function getPlugins(version: number, startEditable: boolean) {
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
+    commentsPlugin,
     linkViewPlugin,
     views.image.getImagePlaceholderPlugin(),
     inputrules(schema),
