@@ -1,30 +1,37 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { connectComment, disconnectComment, selectComment } from '../store/ui/actions';
 import { commentTop, isCommentSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
+import { getDoc } from './utils';
 
 type Props = {
-  docId: string;
-  commentId: string;
+  comment: string;
   children: React.ReactNode;
 };
 
 export const CommentContainer = (props: Props) => {
-  const { docId, commentId, children } = props;
+  const { comment, children } = props;
   const dispatch = useDispatch<Dispatch>();
+  const [doc, setDoc] = useState<string>();
 
-  useEffect(() => () => { dispatch(disconnectComment(docId, commentId)); }, []);
+  useEffect(() => () => { dispatch(disconnectComment(doc, comment)); }, []);
 
-  const selected = useSelector((state: State) => isCommentSelected(state, docId, commentId));
-  const top = useSelector((state: State) => commentTop(state, docId, commentId));
-  const onClick = useCallback(() => { dispatch(selectComment(docId, commentId)); }, []);
-  const onRef = useCallback(() => { dispatch(connectComment(docId, commentId)); }, []);
+  const selected = useSelector((state: State) => isCommentSelected(state, doc, comment));
+  const top = useSelector((state: State) => commentTop(state, doc, comment));
+  const onClick = useCallback(() => { dispatch(selectComment(doc, comment)); }, [doc]);
+  const onRef = useCallback((el: HTMLDivElement) => {
+    const parentDoc = getDoc(el);
+    if (parentDoc) {
+      setDoc(parentDoc);
+      dispatch(connectComment(parentDoc, comment));
+    }
+  }, []);
   return (
     <div
-      id={commentId}
+      id={comment}
       className={classNames('comment', { selected })}
       onClickCapture={onClick}
       ref={onRef}

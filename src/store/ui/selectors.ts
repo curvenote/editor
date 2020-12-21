@@ -5,7 +5,7 @@ export function isCommentSelected(state: State, docId?: string | null, commentId
   return state.comments.ui.docs[docId]?.selectedComment === commentId;
 }
 
-export function commentTop(state: State, docId: string | null, commentId: string | null) {
+export function commentTop(state: State, docId?: string | null, commentId?: string | null) {
   if (docId == null || commentId == null) return 0;
   return state.comments.ui.docs[docId]?.comments[commentId]?.top ?? 0;
 }

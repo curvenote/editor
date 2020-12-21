@@ -7,30 +7,35 @@ import {
 } from '../store/ui/actions';
 import { isCommentSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
+import { getDoc } from './utils';
 
 type Props = {
-  docId: string;
-  commentId: string;
+  comment: string;
   children: React.ReactNode;
 };
 
 export const CommentAnchor = (props: Props) => {
   const {
-    docId, commentId, children,
+    comment, children,
   } = props;
   const dispatch = useDispatch<Dispatch>();
+  const [doc, setDoc] = useState<string>();
   const [ref, setRef] = useState<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    if (ref == null) return () => {};
-    return () => dispatch(disconnectAnchor(docId, ref));
-  }, [ref]);
+    if (ref == null || doc == null) return () => {};
+    return () => dispatch(disconnectAnchor(doc, ref));
+  }, [doc, ref]);
 
-  const selected = useSelector((state: State) => isCommentSelected(state, docId, commentId));
-  const onClick = useCallback(() => { dispatch(selectAnchor(docId, ref)); }, [ref]);
+  const selected = useSelector((state: State) => isCommentSelected(state, doc, comment));
+  const onClick = useCallback(() => { dispatch(selectAnchor(doc, ref)); }, [doc, ref]);
   const onRef = useCallback((el: HTMLSpanElement) => {
     setRef(el);
-    dispatch(connectAnchor(docId, commentId, el));
+    const parentDoc = getDoc(el);
+    if (parentDoc) {
+      setDoc(parentDoc);
+      dispatch(connectAnchor(parentDoc, comment, el));
+    }
   }, []);
   return (
     <span className={classNames('anchor', { selected })} onClickCapture={onClick} ref={onRef}>

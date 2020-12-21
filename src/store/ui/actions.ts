@@ -5,10 +5,12 @@ import {
 } from './types';
 import { AppThunk, CommentUIActions } from '../types';
 
-export function connectComment(docId: string, commentId: string): CommentUIActions {
-  return {
-    type: UI_CONNECT_COMMENT,
-    payload: { docId, commentId },
+export function connectComment(docId?: string, commentId?: string): AppThunk<void> {
+  return (dispatch) => {
+    dispatch({
+      type: UI_CONNECT_COMMENT,
+      payload: { docId, commentId },
+    });
   };
 }
 
@@ -36,10 +38,12 @@ export function updateComment(docId: string, commentId: string): CommentUIAction
   };
 }
 
-export function selectComment(docId: string, commentId: string): CommentUIActions {
-  return {
-    type: UI_SELECT_COMMENT,
-    payload: { docId, commentId },
+export function selectComment(docId?: string, commentId?: string): AppThunk<void> {
+  return (dispatch) => {
+    dispatch({
+      type: UI_SELECT_COMMENT,
+      payload: { docId, commentId },
+    });
   };
 }
 

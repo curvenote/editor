@@ -5,14 +5,14 @@ import classNames from 'classnames';
 import { store } from '../connect';
 import { connectAnchor, disconnectAnchor, selectAnchor } from '../store/ui/actions';
 import { isCommentSelected } from '../store/ui/selectors';
+import { getDoc } from './utils';
 
 @customElement('comment-anchor')
 export class CommentAnchor extends LitElement {
   @property({ type: String })
   comment = undefined;
 
-  @property({ type: String })
-  doc = undefined;
+  doc?: string;
 
   selected = false;
 
@@ -23,6 +23,7 @@ export class CommentAnchor extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this.doc = getDoc(this);
     store.dispatch(connectAnchor(this.doc, this.comment, this));
     this.unsubscribe = store.subscribe(() => {
       const next = isCommentSelected(store.getState(), this.doc, this.comment);

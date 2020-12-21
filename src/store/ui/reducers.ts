@@ -20,6 +20,7 @@ function getTopLeft(anchor?: Anchor) {
 }
 
 function placeComments(state: DocCommentState, actionType: string): DocCommentState {
+  // Do not place comments if it is a deselect call
   if (actionType === UI_DESELECT_COMMENT) return state;
   type Loc = [string, { top: number; left: number; height: number }];
   let findMe: Loc | undefined;
