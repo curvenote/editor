@@ -1,5 +1,10 @@
 import { State } from '../types';
 
+export function selectedComment(state: State, docId?: string | null) {
+  if (docId == null) return null;
+  return state.comments.ui.docs[docId]?.selectedComment;
+}
+
 export function isCommentSelected(state: State, docId?: string | null, commentId?: string | null) {
   if (docId == null || commentId == null) return false;
   return state.comments.ui.docs[docId]?.selectedComment === commentId;
