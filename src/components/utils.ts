@@ -1,6 +1,6 @@
-export const getDoc = (el: HTMLElement) => {
-  const doc = el.closest('article')?.getAttribute('data-doc');
+export const getDoc = (el: HTMLElement | null) => {
+  const doc = el?.closest('article')?.id;
   // eslint-disable-next-line no-console
-  if (!doc) console.warn('Parent doc for comment not found.');
+  if (el && !doc) console.warn('Parent doc for comment not found.');
   return doc || 'global';
 };
