@@ -4,7 +4,7 @@ import {
   UIState, UIActionTypes,
   UI_CONNECT_COMMENT, UI_SELECT_COMMENT,
   UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, DocCommentState, Anchor,
-  UI_DISCONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_CONNECT_ANCHOR_BASE,
+  UI_DISCONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_COMMENTS,
 } from './types';
 
 export const initialState: UIState = {
@@ -86,6 +86,7 @@ const uiReducer = (
     case UI_CONNECT_ANCHOR_BASE:
     case UI_DISCONNECT_ANCHOR:
     case UI_DESELECT_COMMENT:
+    case UI_REPOSITION_COMMENTS:
     {
       const { docId } = action.payload;
       const nextDoc = placeComments(docReducer(state.docs[docId], action), action.type);

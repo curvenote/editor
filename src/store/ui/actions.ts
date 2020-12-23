@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 import {
   UI_CONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_DISCONNECT_ANCHOR,
   UI_CONNECT_COMMENT, UI_SELECT_ANCHOR, UI_SELECT_COMMENT,
-  UI_DISCONNECT_COMMENT, UI_CONNECT_ANCHOR_BASE,
+  UI_DISCONNECT_COMMENT, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_COMMENTS,
 } from './types';
 import { AppThunk, CommentUIActions } from '../types';
 
@@ -107,6 +107,13 @@ export function disconnectAnchor(
 export function deselectComment(docId: string): CommentUIActions {
   return {
     type: UI_DESELECT_COMMENT,
+    payload: { docId },
+  };
+}
+
+export function repositionComments(docId: string): CommentUIActions {
+  return {
+    type: UI_REPOSITION_COMMENTS,
     payload: { docId },
   };
 }

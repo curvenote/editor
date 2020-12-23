@@ -10,6 +10,7 @@ export const UI_SELECT_COMMENT = 'UI_SELECT_COMMENT';
 export const UI_DESELECT_COMMENT = 'UI_DESELECT_COMMENT';
 export const UI_SELECT_ANCHOR = 'UI_SELECT_ANCHOR';
 export const UI_UPDATE_COMMENT = 'UI_UPDATE_COMMENT';
+export const UI_REPOSITION_COMMENTS = 'UI_REPOSITION_COMMENTS';
 
 export type Comment = {
   id: string;
@@ -101,6 +102,12 @@ export interface DeselectCommentAction {
     docId: string;
   };
 }
+export interface RepositionCommentsAction {
+  type: typeof UI_REPOSITION_COMMENTS;
+  payload: {
+    docId: string;
+  };
+}
 
 export type UIActionTypes = (
   ConnectCommentAction |
@@ -110,5 +117,6 @@ export type UIActionTypes = (
   DisconnectAnchorAction |
   SelectCommentAction |
   SelectAnchorAction |
-  DeselectCommentAction
+  DeselectCommentAction |
+  RepositionCommentsAction
 );
