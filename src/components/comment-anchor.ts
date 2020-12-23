@@ -1,5 +1,5 @@
 import {
-  LitElement, html, customElement, property, eventOptions, css,
+  LitElement, html, customElement, property, css,
 } from 'lit-element';
 import classNames from 'classnames';
 import { store } from '../connect';
@@ -16,8 +16,10 @@ export class CommentAnchor extends LitElement {
 
   selected = false;
 
-  @eventOptions({ capture: true })
-  handleClick() { store.dispatch(selectAnchor(this.doc, this)); }
+  handleClick(event: Event) {
+    event.stopPropagation();
+    store.dispatch(selectAnchor(this.doc, this));
+  }
 
   unsubscribe?: () => void;
 

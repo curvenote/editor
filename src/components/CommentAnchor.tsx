@@ -28,7 +28,10 @@ export const CommentAnchor = (props: Props) => {
   }, [doc, ref]);
 
   const selected = useSelector((state: State) => isCommentSelected(state, doc, comment));
-  const onClick = useCallback(() => { dispatch(selectAnchor(doc, ref)); }, [doc, ref]);
+  const onClick = useCallback((event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    event.stopPropagation();
+    dispatch(selectAnchor(doc, ref));
+  }, [doc, ref]);
   const onRef = useCallback((el: HTMLSpanElement) => {
     setRef(el);
     const parentDoc = getDoc(el);
@@ -38,7 +41,7 @@ export const CommentAnchor = (props: Props) => {
     }
   }, []);
   return (
-    <span className={classNames('anchor', { selected })} onClickCapture={onClick} ref={onRef}>
+    <span className={classNames('anchor', { selected })} onClick={onClick} ref={onRef}>
       {children}
     </span>
   );

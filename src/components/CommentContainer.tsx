@@ -22,7 +22,11 @@ export const CommentContainer = (props: Props) => {
 
   const selected = useSelector((state: State) => isCommentSelected(state, doc, comment));
   const top = useSelector((state: State) => commentTop(state, doc, comment));
-  const onClick = useCallback(() => { dispatch(selectComment(doc, comment)); }, [doc]);
+  const onClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    if (selected) return;
+    dispatch(selectComment(doc, comment));
+  }, [doc, selected]);
   const onRef = useCallback((el: HTMLDivElement) => {
     const parentDoc = getDoc(el);
     if (parentDoc) {
@@ -34,7 +38,7 @@ export const CommentContainer = (props: Props) => {
     <div
       id={comment}
       className={classNames('comment', { selected })}
-      onClickCapture={onClick}
+      onClick={onClick}
       ref={onRef}
       style={{ top }}
     >

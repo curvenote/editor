@@ -28,12 +28,14 @@ const comment1 = 'comment1';
 const comment2 = 'comment2';
 const comment3 = 'comment3';
 
+const deselect = () => store.dispatch(deselectComment(docId));
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
-      <article data-doc={docId}>
+      <article id={docId} onClick={deselect}>
         <h1>@iooxa/comments</h1>
-        <button type="button" onClick={() => store.dispatch(deselectComment(docId))}>Deselect Comments</button>
+        <button type="button" onClick={deselect}>Deselect Comments</button>
         <comment-base anchor={baseAnchor}>
           <p>
             <CommentAnchor comment={comment1}>
