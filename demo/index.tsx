@@ -13,7 +13,6 @@ import middleware from './middleware';
 import '../styles/index.scss';
 import '@iooxa/comments/dist/comments.css';
 import { Options } from '../src/connect';
-import { addComment } from '../src/prosemirror/plugins/comments';
 
 declare global {
   interface Window {
@@ -29,6 +28,16 @@ const store: Store = createStore(
 );
 const theme = createMuiTheme({});
 
+const stateKey = 'myEditor';
+const viewId1 = 'view1';
+const docId = 'docId';
+const newComment = () => {
+  store.dispatch(actions.addCommentToSelectedView('comment1'));
+};
+const removeComment = () => {
+  store.dispatch(actions.removeComment(viewId1, 'comment1'));
+};
+
 const opts: Options = {
   transformKeyToId: (key) => key,
   image: {
@@ -41,13 +50,16 @@ const opts: Options = {
     },
     downloadUrl: async (src) => src,
   },
+  addComment() {
+    newComment();
+    return true;
+  },
+  getDocId() { return docId; },
   theme,
   throttle: 0,
 };
 
 setup(store, opts);
-const stateKey = 'myEditor';
-const viewId1 = 'view1';
 
 window.store = store;
 store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello editing!<a href="https://iooxa.dev/introduction">@iooxa/components</a></p><img src="https://iooxa.dev/images/logo.png">', 0));
@@ -60,16 +72,11 @@ store.subscribe(() => {
   el.innerText = toMarkdown(editorState.doc);
 });
 
-const newComment = () => {
-  const { view } = store.getState().editor.state.views[viewId1];
-  addComment(view);
-};
-
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone stateKey={stateKey} />
-      <article className="content centered" data-doc="doc1">
+      <article id={docId} className="content centered">
         <comment-base anchor="anchor">
           <div className="selected">
             <Editor stateKey={stateKey} viewId={viewId1} />
@@ -86,6 +93,7 @@ ReactDOM.render(
         </div>
       </article>
       <Button onClick={newComment}>Comment</Button>
+      <Button onClick={removeComment}>Remove</Button>
       <Suggestion />
       <Attributes />
     </React.StrictMode>

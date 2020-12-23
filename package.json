@@ -65,7 +65,7 @@
     "@iooxa/article": "0.2.8",
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
-    "@iooxa/schema": "0.0.9",
+    "@iooxa/schema": "0.0.10",
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.9.1",
     "@types/jest": "^26.0.15",

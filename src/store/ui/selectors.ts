@@ -1,6 +1,6 @@
 import { State } from '../types';
 import { opts } from '../../connect';
-import { getEditor } from '../state/selectors';
+import { getEditor, getEditorView } from '../state/selectors';
 
 export function getEditorUI(state: State) {
   return state.editor.ui;
@@ -9,6 +9,11 @@ export function getEditorUI(state: State) {
 export function getSelectedEditorAndViews(state: State) {
   const { stateId } = getEditorUI(state);
   return getEditor(state, stateId);
+}
+
+export function getSelectedView(state: State) {
+  const { viewId } = getEditorUI(state);
+  return getEditorView(state, viewId);
 }
 
 export function isEditorViewFocused(state: State, stateKey: any | null, viewId: string) {

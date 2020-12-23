@@ -1,7 +1,10 @@
-import { Plugin, PluginKey, Selection } from 'prosemirror-state';
+import {
+  Plugin, PluginKey, Selection, Transaction,
+} from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { actions, selectors, store } from '@iooxa/comments';
+import { opts } from '../../connect';
 
 export interface CommentState {
   decorations: DecorationSet;
@@ -12,14 +15,22 @@ const emptyCommentState = {
 
 export const key = new PluginKey('comments');
 
-interface CommentAction {
-  type: 'add' | 'remove';
+
+interface CommentAddAction {
+  type: 'add';
+  commentId: string;
 }
 
-export function addComment(view: EditorView) {
+interface CommentRemoveAction {
+  type: 'remove';
+  commentId: string;
+}
+
+type CommentAction = CommentAddAction | CommentRemoveAction;
+
+export function dispatchCommentAction(view: EditorView, action: CommentAction) {
   const plugin = key.get(view.state) as Plugin;
-  const tr = view.state.tr
-    .setMeta(plugin, { type: 'add' } as CommentAction);
+  const tr = view.state.tr.setMeta(plugin, action);
   view.dispatch(tr);
 }
 
@@ -27,52 +38,72 @@ function inComment(selection: Selection, decorations: DecorationSet) {
   return decorations.find(selection.from, selection.to).length > 0;
 }
 
-const commentsPlugin: Plugin<CommentState> = new Plugin({
-  key,
-  state: {
-    init: () => ({ ...emptyCommentState } as CommentState),
-    apply(tr, state: CommentState): CommentState {
-      const meta = tr.getMeta(commentsPlugin) as CommentAction | undefined;
-
-      const docId = 'doc1';
-      const { decorations } = state;
-      let nextDecorations = decorations.map(tr.mapping, tr.doc);
-      if (meta?.type === 'add') {
-        console.log('adding comment');
-        const { from, to } = tr.selection;
-        let deco: Decoration;
-        const params = {
-          nodeName: 'comment-anchor',
-          comment: 'comment1',
-        };
-        if (isNodeSelection(tr.selection)) {
-          deco = Decoration.node(from, to, params);
-        } else {
-          deco = Decoration.inline(
-            from, to, params, { inclusiveStart: false, inclusiveEnd: false },
-          );
-        }
-        nextDecorations = nextDecorations.add(tr.doc, [deco]);
-      }
-      // Check if we are in a comment!
-      const around = nextDecorations.find(tr.selection.from, tr.selection.to);
-      if (around.length === 0) {
-        store.dispatch(actions.deselectComment(docId));
-      } else {
-        const commentId = (around[0] as any).type.attrs.comment;
-        const isSelected = selectors.isCommentSelected(store.getState(), docId, commentId);
-        if (!isSelected) {
-          store.dispatch(actions.selectComment(docId, (around[0] as any).type.attrs.comment));
-        }
-      }
-      return {
-        decorations: nextDecorations,
+const reducer = (state: CommentState, tr: Transaction, action?: CommentAction): CommentState['decorations'] => {
+  const { decorations } = state;
+  const nextDecorations = decorations.map(tr.mapping, tr.doc);
+  switch (action?.type) {
+    case 'add': {
+      const { from, to } = tr.selection;
+      let deco: Decoration;
+      const params = {
+        nodeName: 'span',
+        comment: action.commentId,
       };
-    },
-  },
-  props: {
-    decorations: (state) => commentsPlugin.getState(state).decorations,
-  },
-});
+      const spec = {
+        comment: action.commentId,
+        inclusiveStart: false,
+        inclusiveEnd: false,
+      };
+      if (isNodeSelection(tr.selection)) {
+        deco = Decoration.node(from, to, params, spec);
+      } else {
+        deco = Decoration.inline(
+          from, to, params, spec,
+        );
+      }
+      return nextDecorations.add(tr.doc, [deco]);
+    }
+    case 'remove': {
+      const { commentId } = action;
+      const deco = nextDecorations.find(undefined, undefined, (spec) => spec.comment === commentId);
+      return nextDecorations.remove(deco);
+    }
+    default:
+      return nextDecorations;
+  }
+};
 
-export default commentsPlugin;
+const getCommentsPlugin = (): Plugin<CommentState> => {
+  const commentsPlugin: Plugin<CommentState> = new Plugin({
+    key,
+    state: {
+      init: () => ({ ...emptyCommentState } as CommentState),
+      apply(tr, state: CommentState): CommentState {
+        const action = tr.getMeta(commentsPlugin) as CommentAction | undefined;
+        const docId = opts.getDocId();
+        const decorations = reducer(state, tr, action);
+        // Check if we are in a comment!
+        const around = decorations.find(tr.selection.from, tr.selection.to);
+        if (around.length === 0) {
+          const hasSelectedComment = selectors.selectedComment(store.getState(), docId);
+          if (hasSelectedComment) store.dispatch(actions.deselectComment(docId));
+        } else {
+          const commentId = around[0].spec.comment;
+          const isSelected = selectors.isCommentSelected(store.getState(), docId, commentId);
+          if (!isSelected) {
+            store.dispatch(actions.selectComment(docId, commentId));
+          }
+        }
+        return {
+          decorations,
+        };
+      },
+    },
+    props: {
+      decorations: (state) => commentsPlugin.getState(state).decorations,
+    },
+  });
+  return commentsPlugin;
+};
+
+export default getCommentsPlugin;

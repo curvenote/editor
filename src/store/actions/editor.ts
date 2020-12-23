@@ -4,9 +4,11 @@ import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-lis
 import { MarkType, NodeType, Node } from 'prosemirror-model';
 import { Nodes } from '@iooxa/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
+import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { AppThunk } from '../types';
 import {
-  getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf,
+  getEditorState, getSelectedEditorAndViews, getEditorUI,
+  selectionIsChildOf, getSelectedView, getEditorView,
 } from '../selectors';
 import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
@@ -180,3 +182,30 @@ export const insertVariable = (
 ) => (
   replaceSelection(schema.nodes.variable, attrs)
 );
+
+export function addComment(viewId: string, commentId: string): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const { view } = getEditorView(getState(), viewId);
+    if (!view) return false;
+    dispatchCommentAction(view, { type: 'add', commentId });
+    return true;
+  };
+}
+
+export function removeComment(viewId: string, commentId: string): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const { view } = getEditorView(getState(), viewId);
+    if (!view) return false;
+    dispatchCommentAction(view, { type: 'remove', commentId });
+    return true;
+  };
+}
+
+export function addCommentToSelectedView(commentId: string): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const { viewId } = getSelectedView(getState());
+    if (!viewId) return false;
+    dispatch(addComment(viewId, commentId));
+    return true;
+  };
+}

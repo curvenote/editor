@@ -96,13 +96,13 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@iooxa/schema@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@iooxa/schema/-/schema-0.0.9.tgz#bbae8d81bf58abdaeeeb814fa7b8b1b9a83af93b"
-  integrity sha512-XdZPfay1azZ3LBi9BnKXXvxfVx4t6CH9Km21PslXZY4TYgqET1zwnaMNxM/k3FWfs2O65EtT5ZzbJhWOYRJ+9A==
+"@iooxa/schema@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@iooxa/schema/-/schema-0.0.10.tgz#33d80e03facb20e8f3f6d4008f132adf328b7e64"
+  integrity sha512-yhXGEvAfgeTfbyHOqFMX7QXnDqYJ9NRAZbK3qFKui8M/OLhUqvPwHbMKnT5ATYH736RWRwqTm3UPKxQ9ODm1zw==
   dependencies:
     markdown-it "^12.0.2"
-    markdown-it-myst "^0.0.6"
+    markdown-it-myst "^0.0.7"
     orderedmap "^1.1.1"
     prosemirror-collab "^1.2.2"
     prosemirror-markdown "^1.5.0"
@@ -4653,10 +4653,10 @@ markdown-it-container@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-it-container/-/markdown-it-container-3.0.0.tgz#1d19b06040a020f9a827577bb7dbf67aa5de9a5b"
   integrity sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==
 
-markdown-it-myst@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.6.tgz#d32c1c2d7ae72d3e7d46bd60fdd342364ba7498a"
-  integrity sha512-+OylMXsgYPFkD87U/hvp1iV0f3W5PzaJzLOCYmmauwAz6KjODtAs97yIz/q89+mz5jXjPjhba0tnKQYom6DNnQ==
+markdown-it-myst@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.7.tgz#fba51a29ba4c3e4a8341a6bf61f43390213de6ad"
+  integrity sha512-aVsRH/u/PJmGgfzM2fCQtTAq+rcNQsLovcMwGrnQNFxtR0haiulzZlFbZWY8C1JsONywXfqvuGV/6WODCBx2Fg==
   dependencies:
     markdown-it "^12.0.2"
     markdown-it-container "^3.0.0"

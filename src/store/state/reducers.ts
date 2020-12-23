@@ -17,16 +17,16 @@ const editorReducer = (
   switch (action.type) {
     case INIT_EDITOR_STATE: {
       const {
-        stateId, content, editable, version,
+        stateKey, stateId, content, editable, version,
       } = action.payload;
       if (state.editors[stateId] !== undefined) return state;
-      const editorState = createEditorState(content, version, editable);
+      const editorState = createEditorState(stateKey, content, version, editable);
       return {
         ...state,
         editors: {
           ...state.editors,
           [stateId]: {
-            state: editorState, viewIds: [],
+            state: editorState, viewIds: [], key: stateKey,
           },
         },
       };

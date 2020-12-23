@@ -10,6 +10,7 @@ export const UPDATE_EDITOR_STATE = 'UPDATE_EDITOR_STATE';
 export type EditorsState = {
   editors: {
     [stateId: string]: {
+      key: any;
       state: EditorState;
       viewIds: string[];
     };
@@ -25,6 +26,7 @@ export type EditorsState = {
 export interface InitEditorState {
   type: typeof INIT_EDITOR_STATE;
   payload: {
+    stateKey: any;
     stateId: string;
     editable: boolean;
     content: string;
