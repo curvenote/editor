@@ -15,8 +15,16 @@ function getHeight(id: string) {
   return document.getElementById(id)?.offsetHeight ?? 0;
 }
 function getTopLeft(anchor?: Anchor) {
-  const el = anchor?.element as HTMLElement;
-  return { top: el?.offsetTop ?? 0, left: el?.offsetLeft ?? 0 };
+  // Recurse up the tree until you find the article (nested relative offsets)
+  let el = anchor?.element as HTMLElement | null;
+  let top = 0;
+  let left = 0;
+  do {
+    top += el?.offsetTop || 0;
+    left += el?.offsetLeft || 0;
+    el = (el?.offsetParent ?? null) as HTMLElement | null;
+  } while (el && el.tagName !== 'ARTICLE');
+  return { top, left };
 }
 
 function placeComments(state: DocCommentState, actionType: string): DocCommentState {
