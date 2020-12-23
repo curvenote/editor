@@ -17,10 +17,11 @@ import * as views from './views';
 import { editablePlugin, isEditable } from './plugins/editable';
 import { handleSuggestion } from '../store/suggestion/actions';
 import linkViewPlugin from './plugins/link';
+import commentsPlugin from './plugins/comments';
 
 export { schema };
 
-export function getPlugins(version: number, startEditable: boolean) {
+export function getPlugins(stateKey: any, version: number, startEditable: boolean) {
   return [
     editablePlugin(startEditable),
     ...suggestion(
@@ -29,10 +30,11 @@ export function getPlugins(version: number, startEditable: boolean) {
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
+    commentsPlugin(),
     linkViewPlugin,
     views.image.getImagePlaceholderPlugin(),
     inputrules(schema),
-    keymap(buildKeymap(schema)),
+    keymap(buildKeymap(stateKey, schema)),
     keymap(baseKeymap),
     dropCursor(),
     gapCursor(),
@@ -41,8 +43,10 @@ export function getPlugins(version: number, startEditable: boolean) {
   ];
 }
 
-export function createEditorState(content: string, version: number, startEditable: boolean) {
-  const plugins = getPlugins(version, startEditable);
+export function createEditorState(
+  stateKey: any, content: string, version: number, startEditable: boolean,
+) {
+  const plugins = getPlugins(stateKey, version, startEditable);
   let state: EditorState;
   try {
     const data = JSON.parse(content);

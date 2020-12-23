@@ -18,10 +18,10 @@ export function getEditor(state: State, stateKey: any | null) {
 }
 
 export function getEditorView(state: State, viewId: string | null) {
-  const blank = { stateId: [], view: null };
+  const blank = { viewId, stateId: [], view: null };
   if (viewId == null) return blank;
   const view = state.editor.state.views[viewId];
-  return view ?? blank;
+  return { viewId, ...(view ?? blank) };
 }
 
 export function getEditorState(state: State, stateKey: any | null) {

@@ -17,7 +17,7 @@ export function initEditorState(
   return {
     type: INIT_EDITOR_STATE,
     payload: {
-      stateId, editable, content, version,
+      stateKey, stateId, editable, content, version,
     },
   };
 }

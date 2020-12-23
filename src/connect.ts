@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Theme } from '@material-ui/core';
+import { setup as setupComments, Store as CommentsStore } from '@iooxa/comments';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Store } from './store/types';
 import setupComponents from './components';
@@ -13,6 +14,10 @@ export type Options = {
   modifyTransaction?: (
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction
   ) => Transaction;
+  // This is used in the comments plugin to know which doc to refer to.
+  // Should be the current selected doc.
+  getDocId: () => string;
+  addComment?: (stateKey: any, state: EditorState) => boolean;
   theme: Theme;
   throttle: number;
 };
@@ -39,6 +44,7 @@ export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
   setupComponents(store);
+  setupComments(store as unknown as CommentsStore, { padding: 10 });
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {
@@ -63,6 +69,10 @@ export const opts: Required<Options> = {
     }
     return transaction;
   },
+  addComment(stateKey: any, state: EditorState) {
+    return ref.opts().addComment?.(stateKey, state) ?? false;
+  },
+  getDocId() { return ref.opts().getDocId(); },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },
 };

@@ -9,7 +9,7 @@ import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { store } from '../connect';
+import { store, opts } from '../connect';
 import { focusSelectedEditorView } from '../store/ui/actions';
 
 type KeyMap = (
@@ -18,7 +18,7 @@ type KeyMap = (
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
-export function buildKeymap(schema: Schema) {
+export function buildKeymap(stateKey: any, schema: Schema) {
   const keys: {[index: string]: KeyMap} = {};
 
   const bind = (key: string, cmd: KeyMap) => { keys[key] = cmd; };
@@ -33,6 +33,11 @@ export function buildKeymap(schema: Schema) {
   bind('Alt-ArrowDown', joinDown);
   bind('Mod-BracketLeft', lift);
   bind('Escape', chainCommands(undoInputRule, selectParentNode, () => {
+    store.dispatch(focusSelectedEditorView(false));
+    return true;
+  }));
+  // Immediately select the parent
+  bind('Shift-Escape', chainCommands(undoInputRule, () => {
     store.dispatch(focusSelectedEditorView(false));
     return true;
   }));
@@ -89,5 +94,10 @@ export function buildKeymap(schema: Schema) {
       return true;
     });
   }
+
+  // Confluence and Google Docs comment shortcuts
+  bind('Mod-Alt-c', (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state));
+  bind('Mod-Alt-m', (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state));
+
   return keys;
 }
