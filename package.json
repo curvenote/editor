@@ -1,6 +1,6 @@
 {
   "name": "@iooxa/schema",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Schema and markdown parser for @iooxa/editor",
   "author": "Rowan Cockett <rowan@iooxa.com>",
   "homepage": "https://github.com/iooxa/schema",
