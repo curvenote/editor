@@ -3488,10 +3488,10 @@ markdown-it-container@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-it-container/-/markdown-it-container-3.0.0.tgz#1d19b06040a020f9a827577bb7dbf67aa5de9a5b"
   integrity sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==
 
-markdown-it-myst@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.6.tgz#d32c1c2d7ae72d3e7d46bd60fdd342364ba7498a"
-  integrity sha512-+OylMXsgYPFkD87U/hvp1iV0f3W5PzaJzLOCYmmauwAz6KjODtAs97yIz/q89+mz5jXjPjhba0tnKQYom6DNnQ==
+markdown-it-myst@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/markdown-it-myst/-/markdown-it-myst-0.0.7.tgz#fba51a29ba4c3e4a8341a6bf61f43390213de6ad"
+  integrity sha512-aVsRH/u/PJmGgfzM2fCQtTAq+rcNQsLovcMwGrnQNFxtR0haiulzZlFbZWY8C1JsONywXfqvuGV/6WODCBx2Fg==
   dependencies:
     markdown-it "^12.0.2"
     markdown-it-container "^3.0.0"
