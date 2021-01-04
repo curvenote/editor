@@ -18,7 +18,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist;",
-    "compile": "yarn run clean; yarn run emoji; tsc;",
+    "compile": "yarn run clean; tsc;",
     "build-css": "sass styles/index.scss dist/comments.css",
     "build": "yarn run clean; tsc; yarn run build-css; webpack --config webpack.prod.js",
     "prepublishOnly": "yarn run build;",
