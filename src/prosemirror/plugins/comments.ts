@@ -48,6 +48,7 @@ const reducer = (state: CommentState, tr: Transaction, action?: CommentAction): 
       const params = {
         nodeName: 'span',
         comment: action.commentId,
+        class: 'anchor',
       };
       const spec = {
         comment: action.commentId,
