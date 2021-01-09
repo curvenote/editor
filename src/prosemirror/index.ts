@@ -94,9 +94,10 @@ export function createEditorView(
     editable: (s) => isEditable(s),
     // handleClickOn: (view, pos, node, nodePos, event, direct) => {
     // },
-    handlePaste: (view, event, slice) => (
-      views.image.uploadAndInsertImages(view, event.clipboardData)
-    ),
+    handlePaste: (view, event, slice) => {
+      if (!view.hasFocus()) return true;
+      return views.image.uploadAndInsertImages(view, event.clipboardData);
+    },
     handleDrop: (view, event, slice, moved) => (
       views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),
