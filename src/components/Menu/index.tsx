@@ -4,14 +4,12 @@ import { Menu, Theme } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarkType, NodeType } from 'prosemirror-model';
-import useInlineMemo from 'use-inline-memo';
 import isEqual from 'lodash.isequal';
 import { CommandNames } from '../../store/suggestion/commands';
 import { selectors, actions } from '../../store';
 import { Dispatch, State } from '../../store/types';
 import schema from '../../prosemirror/schema';
 import MenuIcon from './Icon';
-import { opts } from '../../connect';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import MenuAction from './Action';
 
@@ -29,20 +27,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 interface Props{
-  stateKey: any;
   standAlone?: boolean;
   disabled?: boolean;
 }
 
 const EditorMenu = (props: Props) => {
-  const {
-    standAlone, disabled, stateKey,
-  } = props;
+  const { standAlone, disabled } = props;
 
   const classes = useStyles();
 
   const dispatch = useDispatch<Dispatch>();
-  const memo = useInlineMemo();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -51,16 +45,12 @@ const EditorMenu = (props: Props) => {
   );
   const onClose = useCallback(() => setAnchorEl(null), []);
 
-  const stateId = opts.transformKeyToId(stateKey);
-
+  const stateId = useSelector((state: State) => selectors.getEditorUI(state).stateId);
+  const viewId = useSelector((state: State) => selectors.getEditorUI(state).viewId);
   let off = useSelector((state: State) => (
-    !isEditable(selectors.getEditorState(state, stateKey)?.state)
+    !isEditable(selectors.getEditorState(state, stateId)?.state)
   ));
   off = off || (disabled as boolean);
-
-  const viewId = useSelector((state: State) => (
-    selectors.getEditorUI(state).viewId
-  ));
 
   const active = useSelector((state: State) => selectors.selectionIsMarkedWith(state, stateId, {
     strong: schema.marks.strong,
@@ -79,12 +69,12 @@ const EditorMenu = (props: Props) => {
     math: schema.nodes.math,
   }), isEqual);
 
-  // TODO: make this memoized and move to just commands
+  // TODO: make this memoized? Needs to be done carefully.
 
   // Helper functions
-  const toggleMark = (mark: MarkType) => memo[`mark${mark.name}`](() => dispatch(actions.toggleMark(stateId, viewId, mark)), [stateId, viewId]);
-  const wrapInline = (node: NodeType) => memo[`node${node.name}`](() => dispatch(actions.insertInlineNode(node)), [stateId, viewId]);
-  const command = (name: CommandNames) => memo[`command${name}`](() => dispatch(actions.executeCommand(name, viewId)), [stateId, viewId]);
+  const toggleMark = (mark: MarkType) => () => dispatch(actions.toggleMark(stateId, viewId, mark));
+  const wrapInline = (node: NodeType) => () => dispatch(actions.insertInlineNode(node));
+  const command = (name: CommandNames) => () => dispatch(actions.executeCommand(name, viewId));
 
   return (
     <Grid container alignItems="center" className={`${classes.root} ${standAlone ? classes.center : classes.pad}`} wrap="nowrap">

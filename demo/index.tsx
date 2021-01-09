@@ -75,7 +75,7 @@ store.subscribe(() => {
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
-      <EditorMenu standAlone stateKey={stateKey} />
+      <EditorMenu standAlone />
       <article id={docId} className="content centered">
         <comment-base anchor="anchor">
           <div className="selected">

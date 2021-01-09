@@ -11,6 +11,8 @@ import { Schema } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { store, opts } from '../connect';
 import { focusSelectedEditorView } from '../store/ui/actions';
+import { executeCommand } from '../store/actions';
+import { CommandNames } from '../store/suggestion/commands';
 
 type KeyMap = (
   state: EditorState<Schema>, dispatch?: ((p: Transaction<Schema>) => void)
@@ -55,6 +57,16 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     bind('Mod-U', toggleMark(schema.marks.underline));
   }
   if (schema.marks.code) bind('Mod-C', toggleMark(schema.marks.code));
+  if (schema.marks.link) {
+    const addLink = () => {
+      const { viewId } = store.getState().editor.ui;
+      store.dispatch(executeCommand(CommandNames.link, viewId));
+      return true;
+    };
+    bind('Mod-k', addLink);
+    bind('Mod-K', addLink);
+  }
+
   // if (schema.nodes.code_block) bind('Mod-M', setBlockType(schema.nodes.code_block));
 
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
