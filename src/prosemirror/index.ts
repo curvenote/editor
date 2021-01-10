@@ -98,6 +98,7 @@ export function createEditorView(
       if (!view.hasFocus()) return true;
       return views.image.uploadAndInsertImages(view, event.clipboardData);
     },
+    // clipboardTextSerializer: (slice) => {},
     handleDrop: (view, event, slice, moved) => (
       views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),

@@ -96,10 +96,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@iooxa/schema@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@iooxa/schema/-/schema-0.0.10.tgz#33d80e03facb20e8f3f6d4008f132adf328b7e64"
-  integrity sha512-yhXGEvAfgeTfbyHOqFMX7QXnDqYJ9NRAZbK3qFKui8M/OLhUqvPwHbMKnT5ATYH736RWRwqTm3UPKxQ9ODm1zw==
+"@iooxa/schema@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@iooxa/schema/-/schema-0.1.0.tgz#736a615da17f5cf29d3ffdd3455e8df42aaea0ab"
+  integrity sha512-MsIODLc8lI5ySJPkGAs08PMw9GOqp3nI6iZ5vx8rRn+Mu6ATj3tYI4Ggt126bBSaNcWkhe5s/k0hXCFzkXxwww==
   dependencies:
     markdown-it "^12.0.2"
     markdown-it-myst "^0.0.7"

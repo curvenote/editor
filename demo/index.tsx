@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
-import { toMarkdown } from '@iooxa/schema';
+import { toMarkdown, toTex } from '@iooxa/schema';
 import { CommentContainer } from '@iooxa/comments';
 import {
   actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
@@ -66,10 +66,16 @@ store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello editing!<a href
 
 
 store.subscribe(() => {
-  const el = document.getElementById('myst');
-  if (!el) return;
-  const editorState = store.getState().editor.state.editors[stateKey].state;
-  el.innerText = toMarkdown(editorState.doc);
+  const myst = document.getElementById('myst');
+  const tex = document.getElementById('tex');
+  if (myst) {
+    const editorState = store.getState().editor.state.editors[stateKey].state;
+    myst.innerText = toMarkdown(editorState.doc);
+  }
+  if (tex) {
+    const editorState = store.getState().editor.state.editors[stateKey].state;
+    tex.innerText = toTex(editorState.doc);
+  }
 });
 
 ReactDOM.render(
