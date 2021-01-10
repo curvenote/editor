@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatMarkdown } from './types';
+import { NodeGroups, FormatSerialize } from './types';
 
 export type EquationAttrs = {
 };
@@ -18,11 +18,19 @@ const equation: NodeSpec = {
   }],
 };
 
-export const toMarkdown: FormatMarkdown = (state, node) => {
+export const toMarkdown: FormatSerialize = (state, node) => {
   state.ensureNewLine();
   state.write('$$');
   state.text(node.textContent, false);
   state.write('$$');
+  state.closeBlock(node);
+};
+
+export const toTex: FormatSerialize = (state, node) => {
+  state.ensureNewLine();
+  state.write('\\begin{equation}');
+  state.text(node.textContent, false);
+  state.write('\\end{equation}');
   state.closeBlock(node);
 };
 

@@ -3,6 +3,7 @@ export * as Aside from './aside';
 export * as Callout from './callout';
 export * as Math from './math';
 export * as Equation from './equation';
+export * as Image from './image';
 
 // Reactive
 export * as Variable from './reactive/variable';

@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatMarkdown } from './types';
+import { NodeGroups, FormatSerialize } from './types';
 
 export enum CalloutKinds {
   'active' = 'active',
@@ -33,7 +33,7 @@ const callout: NodeSpec = {
   ],
 };
 
-export const toMarkdown: FormatMarkdown = (state, node) => {
+export const toMarkdown: FormatSerialize = (state, node) => {
   state.ensureNewLine();
   const { kind } = node.attrs;
   // TODO: Translate between callout/admonition

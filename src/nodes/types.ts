@@ -27,8 +27,8 @@ export type NodeDef = {
   group: NodeGroups;
 };
 
-export type FormatMarkdown<S extends Schema<any, any> = any> = (
-  state: MarkdownSerializerState<S>,
+export type FormatSerialize<S extends Schema<any, any> = any> = (
+  state: MarkdownSerializerState<S> & {delim?: string},
   node: Node<S>,
   parent: Node<S>,
   index: number

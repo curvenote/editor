@@ -31,10 +31,7 @@ export const markdownSerializer = new MarkdownSerializer({
     state.write('```');
     state.closeBlock(node);
   },
-  image(state, node) {
-    state.write(`![${state.esc(node.attrs.alt || '')}](${state.esc(node.attrs.src)
-    }${node.attrs.title ? ` ${state.quote(node.attrs.title)}` : ''})`);
-  },
+  image: nodes.Image.toMarkdown,
   horizontal_rule(state, node) {
     state.write(node.attrs.markup || '---');
     state.closeBlock(node);
@@ -97,5 +94,6 @@ export const markdownSerializer = new MarkdownSerializer({
   subscript: wrapMark('sub'),
   superscript: wrapMark('sup'),
   strikethrough: wrapMark('strike'),
+  underline: wrapMark('u'),
 });
 

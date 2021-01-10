@@ -11,7 +11,7 @@ export const nodes = {
   heading: basic.heading,
   blockquote: basic.blockquote,
   code_block: basic.code_block,
-  image: basic.image,
+  image: Nodes.Image.default,
   horizontal_rule: basic.horizontal_rule,
   hard_break: basic.hard_break,
   ordered_list: basic.ordered_list,

@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatMarkdown } from './types';
+import { NodeGroups, FormatSerialize } from './types';
 
 const aside: NodeSpec = {
   group: NodeGroups.top,
@@ -11,7 +11,7 @@ const aside: NodeSpec = {
   ],
 };
 
-export const toMarkdown: FormatMarkdown = (state, node) => {
+export const toMarkdown: FormatSerialize = (state, node) => {
   state.ensureNewLine();
   state.write('```{margin}');
   state.ensureNewLine();

@@ -1,4 +1,4 @@
-import { NodeDef, NodeGroups, FormatMarkdown } from '../types';
+import { NodeDef, NodeGroups, FormatSerialize } from '../types';
 import { createAttr as attr, nodeToMystRole, createSpec } from '../../utils';
 
 export type Attrs = {
@@ -21,5 +21,5 @@ export const def: NodeDef = {
 };
 
 export const spec = createSpec(def);
-export const toMarkdown: FormatMarkdown = (state, node) => nodeToMystRole(state, node, def);
+export const toMarkdown: FormatSerialize = (state, node) => nodeToMystRole(state, node, def);
 export default spec;

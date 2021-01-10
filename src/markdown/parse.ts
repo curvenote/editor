@@ -43,8 +43,16 @@ const tokens: Tokens = {
       title: tok.attrGet('title') || null,
     }),
   },
+
+  i: { mark: 'em' },
   em: { mark: 'em' },
+
+  b: { mark: 'strong' },
   strong: { mark: 'strong' },
+
+  u: { mark: 'underline', noCloseToken: true },
+  underline: { mark: 'underline', noCloseToken: true },
+
   code_inline: { mark: 'code' },
 
   sub: { mark: 'subscript', noCloseToken: true },

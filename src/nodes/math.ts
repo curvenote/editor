@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatMarkdown } from './types';
+import { NodeGroups, FormatSerialize } from './types';
 
 export type MathAttrs = {
 };
@@ -19,10 +19,12 @@ const math: NodeSpec = {
   }],
 };
 
-export const toMarkdown: FormatMarkdown = (state, node) => {
+export const toMarkdown: FormatSerialize = (state, node) => {
   state.write('$');
   state.renderInline(node);
   state.write('$');
 };
+
+export const toTex = toMarkdown;
 
 export default math;
