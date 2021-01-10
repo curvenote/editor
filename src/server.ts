@@ -3,7 +3,7 @@ import { Step as PMStep } from 'prosemirror-transform';
 import { EditorState } from 'prosemirror-state';
 import { collab, receiveTransaction } from 'prosemirror-collab';
 import { nodes, marks } from './schema';
-import { fromHTML } from './html';
+import { fromHTML } from './parse';
 
 import { Parser } from './types';
 

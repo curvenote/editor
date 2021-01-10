@@ -1,5 +1,7 @@
+import { Schema, DOMParser as DOMParserPM } from 'prosemirror-model';
 import { setInnerHTML } from './utils';
 import { Parser } from '../../types';
+
 
 function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parser): HTMLDivElement {
   // Bring all variables to the top of the document:
@@ -58,4 +60,12 @@ function migrateV1(element: HTMLDivElement): HTMLDivElement {
 export function migrateHTML(content: string, document: Document, DOMParser: Parser) {
   const element = setInnerHTML(document.createElement('div'), content, DOMParser) as HTMLDivElement;
   return migrateV1(migrateV0(element, document, DOMParser));
+}
+
+export function fromHTML(
+  content: string, schema: Schema, document: Document, DOMParser: Parser,
+) {
+  const element = migrateHTML(content, document, DOMParser);
+  const doc = DOMParserPM.fromSchema(schema).parse(element);
+  return doc;
 }

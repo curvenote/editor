@@ -1,10 +1,9 @@
-/* eslint-disable no-param-reassign */
+import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { isPlainURL } from './utils';
+import { latexStatement, TAB } from './utils';
 import * as nodes from '../../nodes';
 import { FormatSerialize } from '../../nodes/types';
-
-const TAB = '  ';
+import { isPlainURL } from '../markdown/utils';
 
 const heading: FormatSerialize = (state, node) => {
   const { level } = node.attrs;
@@ -20,18 +19,6 @@ const heading: FormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-const statement = (
-  command: string, f: FormatSerialize, inline = false,
-): FormatSerialize => (state, node, p, i) => {
-  state.write(inline ? `\\${command}{\n` : `\\begin{${command}}\n`);
-  const old = state.delim;
-  state.delim += TAB;
-  f(state, node, p, i);
-  state.delim = old;
-  (state as any).out += inline ? `\n${state.delim}}` : `\n${state.delim}\\end{${command}}`;
-  state.closeBlock(node);
-};
-
 export const texSerializer = new MarkdownSerializer({
   text(state, node) {
     state.text(node.text ?? '', false);
@@ -41,8 +28,8 @@ export const texSerializer = new MarkdownSerializer({
     state.closeBlock(node);
   },
   heading,
-  blockquote: statement('quote', (state, node) => { state.renderContent(node); }),
-  code_block: statement('verbatim', (state, node) => { state.text(node.textContent, false); }),
+  blockquote: latexStatement('quote', (state, node) => { state.renderContent(node); }),
+  code_block: latexStatement('verbatim', (state, node) => { state.text(node.textContent, false); }),
   image: nodes.Image.toTex,
   horizontal_rule(state, node) {
     state.write('\n\\bigskip\n\\centerline{\\rule{13cm}{0.4pt}}\n\\bigskip');
@@ -56,10 +43,10 @@ export const texSerializer = new MarkdownSerializer({
       }
     }
   },
-  ordered_list: statement('enumerate', (state, node) => {
+  ordered_list: latexStatement('enumerate', (state, node) => {
     state.renderList(node, TAB, () => '\\item ');
   }),
-  bullet_list: statement('itemize', (state, node) => {
+  bullet_list: latexStatement('itemize', (state, node) => {
     state.renderList(node, TAB, () => '\\item ');
   }),
   list_item(state, node) {
@@ -68,8 +55,8 @@ export const texSerializer = new MarkdownSerializer({
   math: nodes.Math.toTex,
   equation: nodes.Equation.toTex,
   // \usepackage{framed}
-  callout: statement('framed', (state, node) => { state.renderContent(node); }),
-  aside: statement('marginpar', (state, node) => { state.renderContent(node); }, true),
+  callout: latexStatement('framed', (state, node) => { state.renderContent(node); }),
+  aside: latexStatement('marginpar', (state, node) => { state.renderContent(node); }, true),
   // variable: nodes.Variable.toTex,
   // display: nodes.Display.toTex,
   // dynamic: nodes.Dynamic.toTex,
@@ -105,3 +92,7 @@ export const texSerializer = new MarkdownSerializer({
   strikethrough: { open: '\\sout{', close: '}' },
 });
 
+
+export function toTex(doc: ProsemirrorNode) {
+  return texSerializer.serialize(doc);
+}

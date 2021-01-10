@@ -5,10 +5,18 @@ export { Schema } from 'prosemirror-model';
 export { nodes, marks } from './schema';
 export * as Nodes from './nodes';
 
-export { fromHTML, toHTML, migrateHTML } from './html';
-export { fromMarkdown, toMarkdown } from './markdown';
-export { toTex } from './tex';
-export { fromText, toText } from './text';
+export {
+  fromHTML,
+  migrateHTML,
+  fromText,
+  fromMarkdown,
+} from './parse';
+export {
+  toHTML,
+  toMarkdown,
+  toTex,
+  toText,
+} from './serialize';
 
 export * as server from './server';
 

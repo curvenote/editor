@@ -1,6 +1,8 @@
 import { MarkdownSerializer } from 'prosemirror-markdown';
+import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { isPlainURL, backticksFor, wrapMark } from './utils';
 import * as nodes from '../../nodes';
+
 
 export function mdPostProcess(md: string): string {
   // Replace trailing newlines in code fences
@@ -97,3 +99,8 @@ export const markdownSerializer = new MarkdownSerializer({
   underline: wrapMark('u'),
 });
 
+export function toMarkdown(doc: ProsemirrorNode) {
+  const md = markdownSerializer.serialize(doc);
+  const post = mdPostProcess(md);
+  return post;
+}

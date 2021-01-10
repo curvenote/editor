@@ -1,5 +1,6 @@
 import { NodeSpec } from 'prosemirror-model';
 import { NodeGroups, FormatSerialize } from './types';
+import { latexStatement } from '../serialize/tex/utils';
 
 export type EquationAttrs = {
 };
@@ -26,12 +27,8 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex: FormatSerialize = (state, node) => {
-  state.ensureNewLine();
-  state.write('\\begin{equation}');
+export const toTex = latexStatement('equation', (state, node) => {
   state.text(node.textContent, false);
-  state.write('\\end{equation}');
-  state.closeBlock(node);
-};
+});
 
 export default equation;

@@ -1,6 +1,7 @@
 import { compare, tnodes, tdoc } from './build';
-import { fromMarkdown, toMarkdown } from '../src/markdown';
-import { nodes, marks, Schema } from '../src';
+import {
+  nodes, marks, Schema, fromMarkdown, toMarkdown,
+} from '../src';
 
 const {
   blockquote, h1, h2, p, hr, li, ol, ol3, ul, pre, em, strong, code, code_block, a, link, br, img,
