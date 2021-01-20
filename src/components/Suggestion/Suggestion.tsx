@@ -20,7 +20,7 @@ type Props = {
   className?: string;
 };
 
-const Comment: React.FC<Props> = (props) => {
+const Suggestion: React.FC<Props> = (props) => {
   const {
     selected, onClick, onHover, children, className,
   } = props;
@@ -43,4 +43,4 @@ const Comment: React.FC<Props> = (props) => {
   );
 };
 
-export default Comment;
+export default Suggestion;

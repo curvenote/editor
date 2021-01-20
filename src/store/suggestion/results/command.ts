@@ -8,6 +8,9 @@ import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import schema from '../../../prosemirror/schema';
 import { getLinkBoundsIfTheyExist } from '../../../prosemirror/utils';
 import { getEditorView } from '../../state/selectors';
+import {
+  getYouTubeId, getMiroId, getLoomId, getVimeoId,
+} from './utils';
 
 const options = {
   shouldSort: true,
@@ -95,6 +98,10 @@ export function executeCommand(
         removeText();
         dispatch(actions.wrapInHeading(Number.parseInt(command.slice(7), 10)));
         return true;
+      case CommandNames.quote:
+        removeText();
+        dispatch(actions.wrapIn(schema.nodes.blockquote));
+        return true;
       case CommandNames.bullet_list:
         removeText();
         dispatch(actions.wrapIn(schema.nodes.bullet_list));
@@ -152,6 +159,54 @@ export function executeCommand(
       case CommandNames.button: {
         removeText();
         dispatch(actions.insertInlineNode(schema.nodes.button, { clickFunction: '' }));
+        return true;
+      }
+      case CommandNames.youtube: {
+        removeText();
+        // eslint-disable-next-line no-alert
+        const url = prompt('Link to the YouTube video:');
+        if (!url) return true;
+        const id = getYouTubeId(url);
+        const src = `https://www.youtube-nocookie.com/embed/${id}`;
+        dispatch(actions.insertNode(schema.nodes.iframe, { src }));
+        return true;
+      }
+      case CommandNames.loom: {
+        removeText();
+        // eslint-disable-next-line no-alert
+        const url = prompt('Link to the Loom Video:');
+        if (!url) return true;
+        const id = getLoomId(url);
+        const src = `https://www.loom.com/embed/${id}`;
+        dispatch(actions.insertNode(schema.nodes.iframe, { src }));
+        return true;
+      }
+      case CommandNames.vimeo: {
+        removeText();
+        // eslint-disable-next-line no-alert
+        const url = prompt('Link to the Vimeo Video:');
+        if (!url) return true;
+        const id = getVimeoId(url);
+        const src = `https://player.vimeo.com/video/${id}`;
+        dispatch(actions.insertNode(schema.nodes.iframe, { src }));
+        return true;
+      }
+      case CommandNames.miro: {
+        removeText();
+        // eslint-disable-next-line no-alert
+        const url = prompt('Link to the Miro Board:');
+        if (!url) return true;
+        const id = getMiroId(url);
+        const src = `https://miro.com/app/live-embed/${id}`;
+        dispatch(actions.insertNode(schema.nodes.iframe, { src }));
+        return true;
+      }
+      case CommandNames.iframe: {
+        removeText();
+        // eslint-disable-next-line no-alert
+        const src = prompt('Link to the IFrame:');
+        if (!src) return true;
+        dispatch(actions.insertNode(schema.nodes.iframe, { src }));
         return true;
       }
       default: return removeText();
