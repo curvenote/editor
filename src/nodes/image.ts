@@ -1,11 +1,6 @@
 import { NodeSpec } from 'prosemirror-model';
 import { NodeGroups, FormatSerialize } from './types';
-import { DEFAULT_IMAGE_WIDTH, clamp } from '../utils';
-
-const getImageWidth = (width?: string) => {
-  const widthNum = Number.parseInt((width ?? String(DEFAULT_IMAGE_WIDTH)).replace('%', ''), 10);
-  return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
-};
+import { DEFAULT_IMAGE_WIDTH, getImageWidth } from '../utils';
 
 const image: NodeSpec = {
   attrs: {

@@ -17,6 +17,7 @@ export const nodes = {
   ordered_list: basic.ordered_list,
   bullet_list: basic.bullet_list,
   list_item: basic.list_item,
+  iframe: Nodes.IFrame.default,
   // Presentational components
   callout: Nodes.Callout.default,
   aside: Nodes.Aside.default,

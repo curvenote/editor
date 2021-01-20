@@ -31,6 +31,7 @@ export const texSerializer = new MarkdownSerializer({
   blockquote: latexStatement('quote', (state, node) => { state.renderContent(node); }),
   code_block: latexStatement('verbatim', (state, node) => { state.text(node.textContent, false); }),
   image: nodes.Image.toTex,
+  iframe: nodes.IFrame.toTex,
   horizontal_rule(state, node) {
     state.write('\n\\bigskip\n\\centerline{\\rule{13cm}{0.4pt}}\n\\bigskip');
     state.closeBlock(node);

@@ -7,6 +7,11 @@ export const DEFAULT_IMAGE_WIDTH = 70;
 
 export const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
 
+export const getImageWidth = (width?: string) => {
+  const widthNum = Number.parseInt((width ?? String(DEFAULT_IMAGE_WIDTH)).replace('%', ''), 10);
+  return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
+};
+
 export const createAttr = (name: string, func: boolean | 'only' = true, defaultValue: string | false = ''): Attr => {
   if (defaultValue === false) {
     return {

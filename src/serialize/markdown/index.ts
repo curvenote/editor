@@ -34,6 +34,7 @@ export const markdownSerializer = new MarkdownSerializer({
     state.closeBlock(node);
   },
   image: nodes.Image.toMarkdown,
+  iframe: nodes.IFrame.toMarkdown,
   horizontal_rule(state, node) {
     state.write(node.attrs.markup || '---');
     state.closeBlock(node);
