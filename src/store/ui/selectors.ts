@@ -16,6 +16,11 @@ export function getSelectedView(state: State) {
   return getEditorView(state, viewId);
 }
 
+export function getSelectedViewId(state: State) {
+  const { stateId, viewId } = getEditorUI(state);
+  return { stateId, viewId };
+}
+
 export function isEditorViewFocused(state: State, stateKey: any | null, viewId: string) {
   if (stateKey == null) return null;
   const stateId = opts.transformKeyToId(stateKey);

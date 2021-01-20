@@ -2,6 +2,7 @@
 import { Theme } from '@material-ui/core';
 import { setup as setupComments, Store as CommentsStore } from '@iooxa/comments';
 import { EditorState, Transaction } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import setupComponents from './components';
 
@@ -18,6 +19,9 @@ export type Options = {
   // Should be the current selected doc.
   getDocId: () => string;
   addComment?: (stateKey: any, state: EditorState) => boolean;
+  onDoubleClick?: (
+    stateKey: any, viewId: string | null, view: EditorView<any>, pos: number, event: MouseEvent,
+  ) => boolean;
   theme: Theme;
   throttle: number;
 };
@@ -71,6 +75,9 @@ export const opts: Required<Options> = {
   },
   addComment(stateKey: any, state: EditorState) {
     return ref.opts().addComment?.(stateKey, state) ?? false;
+  },
+  onDoubleClick(stateId, viewId, view, pos, event) {
+    return ref.opts().onDoubleClick?.(stateId, viewId, view, pos, event) ?? false;
   },
   getDocId() { return ref.opts().getDocId(); },
   get theme() { return ref.opts().theme; },

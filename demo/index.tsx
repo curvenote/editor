@@ -54,6 +54,11 @@ const opts: Options = {
     newComment();
     return true;
   },
+  onDoubleClick(stateId, viewId) {
+    // eslint-disable-next-line no-console
+    console.log('Double click', stateId, viewId);
+    return false;
+  },
   getDocId() { return docId; },
   theme,
   throttle: 0,

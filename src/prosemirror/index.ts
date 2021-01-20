@@ -8,11 +8,12 @@ import { gapCursor } from 'prosemirror-gapcursor';
 import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { collab } from 'prosemirror-collab';
+import { getSelectedViewId } from '../store/selectors';
 import schema from './schema';
 import suggestion from './plugins/suggestion';
 import { buildKeymap } from './keymap';
 import inputrules from './inputrules';
-import { store } from '../connect';
+import { store, opts } from '../connect';
 import * as views from './views';
 import { editablePlugin, isEditable } from './plugins/editable';
 import { handleSuggestion } from '../store/suggestion/actions';
@@ -109,6 +110,10 @@ export function createEditorView(
     handleDrop: (view, event, slice, moved) => (
       views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),
+    handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
+      const { viewId, stateId } = getSelectedViewId(store.getState());
+      return opts.onDoubleClick(stateId, viewId, view, pos, event);
+    },
   });
   return editorView;
 }
