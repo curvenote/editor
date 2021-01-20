@@ -106,6 +106,11 @@ const EditorMenu = (props: Props) => {
             <MenuAction kind="math" disabled={off} action={command(CommandNames.equation)} title="Equation Block" />
             <MenuAction kind="hr" disabled={off} action={command(CommandNames.horizontal_rule)} title="Divider" />
             <MenuAction kind="code" disabled={off} action={command(CommandNames.code)} title="Code" />
+            <MenuAction kind="youtube" disabled={off} action={command(CommandNames.youtube)} title="YouTube Video" />
+            <MenuAction kind="video" disabled={off} action={command(CommandNames.vimeo)} title="Vimeo Video" />
+            <MenuAction kind="video" disabled={off} action={command(CommandNames.loom)} title="Loom Video" />
+            <MenuAction kind="iframe" disabled={off} action={command(CommandNames.miro)} title="Miro Board" />
+            <MenuAction kind="iframe" disabled={off} action={command(CommandNames.iframe)} title="Embed an IFrame" />
           </div>
         </Menu>
       )}

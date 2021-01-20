@@ -59,7 +59,7 @@ class LinkViewTooltip {
       // eslint-disable-next-line no-alert
       const newHref = prompt('What is the new link?', href);
       if (!newHref) return;
-      const link = schema.marks.link.create({ href: newHref });
+      const link = mark.create({ href: newHref });
       const tr = state.tr
         .removeMark(linkBounds.from, linkBounds.to, mark)
         .addMark(linkBounds.from, linkBounds.to, link);

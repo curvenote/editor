@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 
-const EmojiSuggestions: React.FC<Props> = (props) => {
+const VariableSuggestions: React.FC<Props> = (props) => {
   const {
     results, selected, onClick, onHover,
   } = props;
@@ -86,4 +86,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EmojiSuggestions);
+)(VariableSuggestions);

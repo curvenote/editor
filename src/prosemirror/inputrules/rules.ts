@@ -5,6 +5,7 @@ import {
 } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { insertNodeRule, markInputRule } from './utils';
+import { TEST_LINK_SPACE } from '../utils';
 
 export const quotes = (schema: Schema) => smartQuotes;
 export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, '…')];
@@ -30,7 +31,7 @@ export const copyright = (schema: Schema) => [
 
 export const link = (schema: Schema) => [
   markInputRule(
-    /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/,
+    TEST_LINK_SPACE,
     schema.marks.link,
     (match: string[]) => ({ href: match[0].slice(0, -1) }),
   ),

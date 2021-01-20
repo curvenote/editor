@@ -18,6 +18,7 @@ import { editablePlugin, isEditable } from './plugins/editable';
 import { handleSuggestion } from '../store/suggestion/actions';
 import linkViewPlugin from './plugins/link';
 import commentsPlugin from './plugins/comments';
+import { addLink } from './utils';
 
 export { schema };
 
@@ -80,6 +81,9 @@ export function createEditorView(
       image(node, view, getPos) {
         return new views.ImageView(node, view, getPos as () => number);
       },
+      iframe(node, view, getPos) {
+        return new views.IFrameView(node, view, getPos as () => number);
+      },
       link(node, view, getPos) {
         return new views.LinkView(node, view, getPos as () => number);
       },
@@ -96,7 +100,10 @@ export function createEditorView(
     // },
     handlePaste: (view, event, slice) => {
       if (!view.hasFocus()) return true;
-      return views.image.uploadAndInsertImages(view, event.clipboardData);
+      return (
+        addLink(view, event.clipboardData)
+        || views.image.uploadAndInsertImages(view, event.clipboardData)
+      );
     },
     // clipboardTextSerializer: (slice) => {},
     handleDrop: (view, event, slice, moved) => (

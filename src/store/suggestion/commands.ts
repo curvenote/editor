@@ -16,12 +16,18 @@ export enum CommandNames {
   'heading5' = 'heading5',
   'heading6' = 'heading6',
   'code' = 'code',
+  'quote' = 'quote',
   'variable' = 'variable',
   'display' = 'display',
   'range' = 'range',
   'dynamic' = 'dynamic',
   'switch' = 'switch',
   'button' = 'button',
+  'youtube' = 'youtube',
+  'loom' = 'loom',
+  'vimeo' = 'vimeo',
+  'miro' = 'miro',
+  'iframe' = 'iframe',
 }
 
 export interface CommandResult {
@@ -84,6 +90,12 @@ export const commands: CommandResult[] = [
     title: 'Code Block',
     description: 'Add a block of code',
     shortcut: '```',
+  },
+  {
+    name: CommandNames.quote,
+    title: 'Quote',
+    description: 'Add a blockquote',
+    shortcut: '>',
   },
   {
     name: CommandNames.variable,
@@ -160,5 +172,30 @@ export const commands: CommandResult[] = [
     title: 'Heading 6',
     description: 'Insert a teensy-tiny header',
     shortcut: '⌘⌥6',
+  },
+  {
+    name: CommandNames.youtube,
+    title: 'YouTube',
+    description: 'Embed a video',
+  },
+  {
+    name: CommandNames.vimeo,
+    title: 'Vimeo',
+    description: 'Embed a video',
+  },
+  {
+    name: CommandNames.loom,
+    title: 'Loom',
+    description: 'Embed a video',
+  },
+  {
+    name: CommandNames.miro,
+    title: 'Miro',
+    description: 'Embed a Miro board',
+  },
+  {
+    name: CommandNames.iframe,
+    title: 'IFrame',
+    description: 'Embed an IFrame',
   },
 ];

@@ -2,6 +2,26 @@ import { EditorState, NodeSelection } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 
+export const TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
+export const TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+
+const testLink = (possibleLink: string) => {
+  const match = TEST_LINK.exec(possibleLink);
+  return Boolean(match);
+};
+
+export const addLink = (view: EditorView, data: DataTransfer | null) => {
+  const href = data?.getData('text/plain') ?? '';
+  if (!testLink(href)) return false;
+  const { schema } = view.state;
+  const node = schema.text(href, [schema.marks.link.create({ href })]);
+  const tr = view.state.tr
+    .replaceSelectionWith(node, false)
+    .scrollIntoView();
+  view.dispatch(tr);
+  return true;
+};
+
 export function updateNodeAttrsOnView(
   view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: { [index: string]: any },
 ) {

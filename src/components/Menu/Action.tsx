@@ -4,11 +4,17 @@ import { MenuItem, Typography } from '@material-ui/core';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import CodeIcon from '@material-ui/icons/Code';
 import RemoveIcon from '@material-ui/icons/Remove';
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
+import WebAssetIcon from '@material-ui/icons/WebAsset';
 
 const icons = {
   math: FunctionsIcon,
   code: CodeIcon,
   hr: RemoveIcon,
+  youtube: YouTubeIcon,
+  video: OndemandVideoIcon,
+  iframe: WebAssetIcon,
 };
 
 export type IconTypes = keyof typeof icons;
