@@ -3,7 +3,7 @@ import {
 } from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
-import { actions, selectors, store } from '@iooxa/comments';
+import { actions, selectors, store } from '@curvenote/comments';
 import { opts } from '../../connect';
 
 export interface CommentState {

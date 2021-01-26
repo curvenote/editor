@@ -58,7 +58,7 @@
     redux-thunk "^2.3.0"
     scroll-into-view-if-needed "^2.2.26"
 
-"@iooxa/comments@file:.yalc/@iooxa/comments":
+"@curvenote/comments@file:.yalc/@curvenote/comments":
   version "0.1.0"
 
 "@iooxa/components@0.2.7", "@iooxa/components@^0.2.7":

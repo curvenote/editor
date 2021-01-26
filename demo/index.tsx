@@ -4,14 +4,14 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
 import { toMarkdown, toTex } from '@iooxa/schema';
-import { CommentContainer } from '@iooxa/comments';
+import { CommentContainer } from '@curvenote/comments';
 import {
   actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
 import '../styles/index.scss';
-import '@iooxa/comments/dist/comments.css';
+import '@curvenote/comments/dist/comments.css';
 import { Options } from '../src/connect';
 
 declare global {

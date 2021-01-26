@@ -1,5 +1,5 @@
 import runtime from '@iooxa/runtime';
-import { reducer as comments } from '@iooxa/comments';
+import { reducer as comments } from '@curvenote/comments';
 import { combineReducers } from 'redux';
 import {
   State, EditorActions, Reducer, reducer,

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Theme } from '@material-ui/core';
-import { setup as setupComments, Store as CommentsStore } from '@iooxa/comments';
+import { setup as setupComments, Store as CommentsStore } from '@curvenote/comments';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
