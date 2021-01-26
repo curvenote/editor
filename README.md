@@ -1,5 +1,5 @@
-# @iooxa/comments
-[![@iooxa/comments on npm](https://img.shields.io/npm/v/@iooxa/comments.svg)](https://www.npmjs.com/package/@iooxa/comments)
+# @curvenote/comments
+[![@curvenote/comments on npm](https://img.shields.io/npm/v/@curvenote/comments.svg)](https://www.npmjs.com/package/@curvenote/comments)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/iooxa/comments/blob/master/LICENSE)
 ![CI](https://github.com/iooxa/comments/workflows/CI/badge.svg)
 

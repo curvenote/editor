@@ -34,7 +34,7 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <article id={docId} onClick={deselect}>
-        <h1>@iooxa/comments</h1>
+        <h1>@curvenote/comments</h1>
         <button type="button" onClick={deselect}>Deselect Comments</button>
         <comment-base anchor={baseAnchor}>
           <p>
