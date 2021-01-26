@@ -1,5 +1,5 @@
 {
-  "name": "@iooxa/editor",
+  "name": "@curvenote/editor",
   "version": "0.2.0",
   "private": true,
   "main": "dist/src/index.js",
@@ -31,7 +31,7 @@
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
     "@iooxa/schema": "0.0.9",
-    "@iooxa/comments": "file:.yalc/@iooxa/comments",
+    "@curvenote/comments": "file:.yalc/@curvenote/comments",
     "classnames": "^2.2.6",
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.9.1",
@@ -61,8 +61,7 @@
     "watch": "tsc -w -p ."
   },
   "devDependencies": {
-    "@iooxa/comments": "file:.yalc/@iooxa/comments",
-    "classnames": "^2.2.6",
+    "@curvenote/comments": "file:.yalc/@curvenote/comments",
     "@iooxa/article": "0.2.8",
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
@@ -91,6 +90,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.10.0",
+    "classnames": "^2.2.6",
     "copy-webpack-plugin": "^6.3.1",
     "css-loader": "^5.0.1",
     "dotenv": "^8.2.0",

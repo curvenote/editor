@@ -3,7 +3,7 @@ import {
   Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer,
 } from 'redux';
 import { types as runtimeTypes } from '@iooxa/runtime';
-import { State as CommentsState } from '@iooxa/comments';
+import { State as CommentsState } from '@curvenote/comments';
 import { EditorsState, EditorActionTypes } from './state/types';
 import { UIState, UIActionTypes } from './ui/types';
 import { SuggestionState, SuggestionActionTypes } from './suggestion/types';
