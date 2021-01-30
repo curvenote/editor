@@ -4,3 +4,8 @@
 @use 'components';
 @use 'equation';
 @use 'quote';
+
+// TODO: Remove me, as this should be in base
+article {
+  position: relative;
+}
