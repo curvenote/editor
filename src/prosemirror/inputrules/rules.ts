@@ -5,7 +5,7 @@ import {
 } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { insertNodeRule, markInputRule } from './utils';
-import { TEST_LINK_SPACE } from '../utils';
+import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../utils';
 
 export const quotes = (schema: Schema) => smartQuotes;
 export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, '…')];
@@ -33,7 +33,18 @@ export const link = (schema: Schema) => [
   markInputRule(
     TEST_LINK_SPACE,
     schema.marks.link,
-    (match: string[]) => ({ href: match[0].slice(0, -1) }),
+    {
+      getAttrs: (match: string[]) => ({ href: match[0].slice(0, -1) }),
+      addSpace: true,
+    },
+  ),
+  markInputRule(
+    TEST_LINK_COMMON_SPACE,
+    schema.marks.link,
+    {
+      getAttrs: (match: string[]) => ({ href: match[0].slice(0, -1) }),
+      addSpace: true,
+    },
   ),
 ];
 
@@ -55,6 +66,24 @@ export const codeBlock = (schema: Schema) => [
 // TODO: Should improve the quotes piece as well here
 export const codeInline = (schema: Schema) => [
   markInputRule(/`([\W\w]+)`$/, schema.marks.code),
+];
+
+export const strong = (schema: Schema) => [
+  markInputRule(/\*\*([\W\w]+)\*\*$/, schema.marks.strong),
+  markInputRule(/__([\W\w]+)__$/, schema.marks.strong),
+];
+
+export const strikethrough = (schema: Schema) => [
+  markInputRule(/~([\W\w]+)~$/, schema.marks.strikethrough),
+];
+
+export const em = (schema: Schema) => [
+  markInputRule(/(\s|^)\*(?!\*)([\W\w]+)\*$/, schema.marks.em, {
+    getText: (match) => (match[1] ? ` ${match[2]}` : match[2]),
+  }),
+  markInputRule(/(\s|^)_(?!_)([\W\w]+)_$/, schema.marks.em, {
+    getText: (match) => (match[1] ? ` ${match[2]}` : match[2]),
+  }),
 ];
 
 export const headings = (schema: Schema, maxLevel = 6) => [

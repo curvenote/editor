@@ -7,25 +7,29 @@ type GetAttrs = {
 } | ((p: string[]) => { content?: Node<any>;[key: string]: any });
 
 // https://discuss.prosemirror.net/t/input-rules-for-wrapping-marks/537/11
-export function markInputRule(regexp: RegExp, markType: MarkType, getAttrs?: GetAttrs) {
+export function markInputRule(
+  regexp: RegExp,
+  markType: MarkType,
+  options?: {
+    getAttrs?: GetAttrs;
+    getText?: (p: string[]) => string;
+    addSpace?: boolean;
+  },
+) {
   return new InputRule(regexp, (state, match, start, end) => {
+    const { getAttrs, getText, addSpace } = options ?? {};
     const attrs = getAttrs instanceof Function ? getAttrs(match) : getAttrs;
     const { tr } = state;
     if (state.doc.rangeHasMark(start, end, markType)) {
       return null;
     }
-    if (match[1]) {
-      const textStart = start + match[0].indexOf(match[1]);
-      const textEnd = textStart + match[1].length;
-      if (textEnd < end) tr.delete(textEnd, end);
-      if (textStart > start) tr.delete(start, textStart);
-      // eslint-disable-next-line no-param-reassign
-      end = start + match[1].length;
-    }
     const mark = markType.create(attrs);
-    tr.addMark(start, end, mark);
+    tr.delete(start, end);
+    const text = getText?.(match) ?? match[1];
+    tr.insertText(text);
+    tr.addMark(start, start + text.length, mark);
     tr.removeStoredMark(markType);
-    tr.insertText(' ');
+    if (addSpace) tr.insertText(' ');
     return tr;
   });
 }
