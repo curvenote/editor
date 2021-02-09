@@ -6,6 +6,7 @@ export enum NodeGroups {
   'block' = 'block',
   'inline' = 'inline',
   'text' = 'text',
+  'cite' = 'cite',
 }
 
 export enum MarkGroups {

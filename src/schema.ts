@@ -17,10 +17,13 @@ export const nodes = {
   ordered_list: basic.ordered_list,
   bullet_list: basic.bullet_list,
   list_item: basic.list_item,
+  // Presentational components
+  aside: Nodes.Aside.default,
+  callout: Nodes.Callout.default,
   iframe: Nodes.IFrame.default,
   // Presentational components
-  callout: Nodes.Callout.default,
-  aside: Nodes.Aside.default,
+  cite: Nodes.Cite.default,
+  cite_group: Nodes.CiteGroup.default,
   math: Nodes.Math.default,
   equation: Nodes.Equation.default,
   // Reactive components

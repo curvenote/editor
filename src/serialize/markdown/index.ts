@@ -33,8 +33,6 @@ export const markdownSerializer = new MarkdownSerializer({
     state.write('```');
     state.closeBlock(node);
   },
-  image: nodes.Image.toMarkdown,
-  iframe: nodes.IFrame.toMarkdown,
   horizontal_rule(state, node) {
     state.write(node.attrs.markup || '---');
     state.closeBlock(node);
@@ -62,10 +60,17 @@ export const markdownSerializer = new MarkdownSerializer({
   list_item(state, node) {
     state.renderContent(node);
   },
-  math: nodes.Math.toMarkdown,
-  equation: nodes.Equation.toMarkdown,
+  // Presentational
+  image: nodes.Image.toMarkdown,
+  iframe: nodes.IFrame.toMarkdown,
   callout: nodes.Callout.toMarkdown,
   aside: nodes.Aside.toMarkdown,
+  // Technical
+  math: nodes.Math.toMarkdown,
+  equation: nodes.Equation.toMarkdown,
+  cite: nodes.Cite.toMarkdown,
+  cite_group: nodes.CiteGroup.toMarkdown,
+  // Dynamic
   variable: nodes.Variable.toMarkdown,
   display: nodes.Display.toMarkdown,
   dynamic: nodes.Dynamic.toMarkdown,

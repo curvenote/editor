@@ -30,8 +30,6 @@ export const texSerializer = new MarkdownSerializer({
   heading,
   blockquote: latexStatement('quote', (state, node) => { state.renderContent(node); }),
   code_block: latexStatement('verbatim', (state, node) => { state.text(node.textContent, false); }),
-  image: nodes.Image.toTex,
-  iframe: nodes.IFrame.toTex,
   horizontal_rule(state, node) {
     state.write('\n\\bigskip\n\\centerline{\\rule{13cm}{0.4pt}}\n\\bigskip');
     state.closeBlock(node);
@@ -53,6 +51,10 @@ export const texSerializer = new MarkdownSerializer({
   list_item(state, node) {
     state.renderContent(node);
   },
+  image: nodes.Image.toTex,
+  iframe: nodes.IFrame.toTex,
+  cite: nodes.Cite.toTex,
+  cite_group: nodes.CiteGroup.toTex,
   math: nodes.Math.toTex,
   equation: nodes.Equation.toTex,
   // \usepackage{framed}
