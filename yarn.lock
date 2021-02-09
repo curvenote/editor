@@ -38,6 +38,9 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@curvenote/comments@file:.yalc/@curvenote/comments":
+  version "0.1.0"
+
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -57,9 +60,6 @@
     redux "^4.0.5"
     redux-thunk "^2.3.0"
     scroll-into-view-if-needed "^2.2.26"
-
-"@curvenote/comments@file:.yalc/@curvenote/comments":
-  version "0.1.0"
 
 "@iooxa/components@0.2.7", "@iooxa/components@^0.2.7":
   version "0.2.7"
@@ -96,10 +96,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@iooxa/schema@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@iooxa/schema/-/schema-0.1.1.tgz#deee1584026d6e0ae18cbd9b9cec807cb45a12d9"
-  integrity sha512-OSE9mns44OU3svff1s8D7bvMcCj6HsywPHQ565TyplvAxQrDkrwJblSnnBEi37fzZ4B4aOS1jL6n/cyzSbHqlA==
+"@iooxa/schema@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@iooxa/schema/-/schema-0.2.0.tgz#04580c76cac8d30a3ce93f2894bcdb3057d32df7"
+  integrity sha512-9G6STDfhVtirhmhCIvhYCuXM5fo5AqzPPbR0D9JYA9za29JhW9gUu5z6a3qGvs7Okcq+smBSP5yZ9huo9cfqag==
   dependencies:
     markdown-it "^12.0.2"
     markdown-it-myst "^0.0.7"
@@ -768,6 +768,11 @@
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@types/anymatch/-/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"
   integrity sha512-/+CRPXpBDpo2RK9C68N3b2cOvO0Cf5B9aPijHsoDQTHivnGSObdOF2BRQOYjojWTDy6nQvMjmqRXIxH55VjxxA==
+
+"@types/classnames@^2.2.11":
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
+  integrity sha512-2koNhpWm3DgWRp5tpkiJ8JGc1xTn2q0l+jUNUE7oMKXUf5NpI9AIdC4kbjGNFBdHtcxBD18LAksoudAVhFKCjw==
 
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
@@ -3510,10 +3515,10 @@ functional-red-black-tree@^1.0.1:
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
-fuse.js@^6.4.3:
-  version "6.4.3"
-  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.4.3.tgz#aadd6ac34aab5b1d6e6c60462fcb4d1c3f53bb01"
-  integrity sha512-JNgngolukIrqwayWnvy6NLH63hmwKPhm63o0uyBg51jPD0j09IvAzlV1rTXfAsgxpghI7khAo6Mv+EmvjDWXig==
+fuse.js@^6.4.6:
+  version "6.4.6"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.4.6.tgz#62f216c110e5aa22486aff20be7896d19a059b79"
+  integrity sha512-/gYxR/0VpXmWSfZOIPS3rWwU8SHgsRTwWuXhyb2O6s7aRuVtHtxCkR33bNYu3wyLyNx/Wpv0vU7FZy8Vj53VNw==
 
 get-caller-file@^2.0.1:
   version "2.0.5"

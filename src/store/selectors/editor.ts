@@ -3,6 +3,7 @@ import { NodeSelection } from 'prosemirror-state';
 import {
   findParentNode, ContentNodeWithPos, isNodeSelection, hasParentNode,
 } from 'prosemirror-utils';
+import { getNodeIfSelected } from '../../prosemirror/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditor } from '../state/selectors';
 import { State } from '../types';
@@ -91,6 +92,18 @@ export function selectionIsChildOf<T extends {}>(
   const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
     const node = type as NodeType;
     return [key, hasParentNode((test) => test.type === node)(editor.state.selection)];
+  }));
+  return active as Record<keyof T, boolean>;
+}
+
+export function selectionIsThisNodeType<T extends {}>(
+  state: State, stateKey: any | null, nodes: Record<keyof T, NodeType>,
+): Record<keyof T, boolean> {
+  const editor = getEditor(state, stateKey);
+  if (editor.state == null) return falseMap(nodes);
+  const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
+    const node = type as NodeType;
+    return [key, Boolean(getNodeIfSelected(editor.state, node))];
   }));
   return active as Record<keyof T, boolean>;
 }

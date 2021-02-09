@@ -1,49 +1,16 @@
 import { migrateHTML } from '@iooxa/schema';
-import { keymap } from 'prosemirror-keymap';
-import { history } from 'prosemirror-history';
-import { baseKeymap } from 'prosemirror-commands';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { dropCursor } from 'prosemirror-dropcursor';
-import { gapCursor } from 'prosemirror-gapcursor';
 import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import { collab } from 'prosemirror-collab';
 import { getSelectedViewId } from '../store/selectors';
 import schema from './schema';
-import suggestion from './plugins/suggestion';
-import { buildKeymap } from './keymap';
-import inputrules from './inputrules';
 import { store, opts } from '../connect';
 import * as views from './views';
-import { editablePlugin, isEditable } from './plugins/editable';
-import { handleSuggestion } from '../store/suggestion/actions';
-import linkViewPlugin from './plugins/link';
-import commentsPlugin from './plugins/comments';
+import { isEditable } from './plugins/editable';
 import { addLink } from './utils';
+import { getPlugins } from './plugins';
 
 export { schema };
-
-export function getPlugins(stateKey: any, version: number, startEditable: boolean) {
-  return [
-    editablePlugin(startEditable),
-    ...suggestion(
-      (action) => store.dispatch(handleSuggestion(action)),
-      /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{))$/,
-      // Cancel on space after some of the triggers
-      (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-    ),
-    commentsPlugin(),
-    linkViewPlugin,
-    views.image.getImagePlaceholderPlugin(),
-    inputrules(schema),
-    keymap(buildKeymap(stateKey, schema)),
-    keymap(baseKeymap),
-    dropCursor(),
-    gapCursor(),
-    collab({ version }),
-    history(),
-  ];
-}
 
 export function createEditorState(
   stateKey: any, content: string, version: number, startEditable: boolean,
@@ -88,6 +55,9 @@ export function createEditorView(
       link(node, view, getPos) {
         return new views.LinkView(node, view, getPos as () => number);
       },
+      cite(node, view, getPos) {
+        return new views.CiteView(node, view, getPos as () => number);
+      },
       button: views.newWidgetView,
       display: views.newWidgetView,
       dynamic: views.newWidgetView,
@@ -99,7 +69,7 @@ export function createEditorView(
     editable: (s) => isEditable(s),
     // handleClickOn: (view, pos, node, nodePos, event, direct) => {
     // },
-    handlePaste: (view, event, slice) => {
+    handlePaste: (view, event) => {
       if (!view.hasFocus()) return true;
       return (
         addLink(view, event.clipboardData)
@@ -107,7 +77,7 @@ export function createEditorView(
       );
     },
     // clipboardTextSerializer: (slice) => {},
-    handleDrop: (view, event, slice, moved) => (
+    handleDrop: (view, event) => (
       views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),
     handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {

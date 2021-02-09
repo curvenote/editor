@@ -6,7 +6,7 @@ import isEqual from 'lodash.isequal';
 import { State, Dispatch } from '../../store/types';
 import { selectors, actions } from '../../store';
 import Suggestion from './Suggestion';
-import { CommandResult } from '../../store/suggestion/commands';
+import { LinkResult } from '../../store/suggestion/types';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -34,13 +34,13 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 
-const CommandSuggestions = () => {
+const LinkSuggestions = () => {
   const dispatch = useDispatch<Dispatch>();
 
   const suggestions = useSelector(
     (state: State) => selectors.getSuggestion(state), isEqual,
   );
-  const { selected, results } = suggestions as {selected: number; results: CommandResult[]};
+  const { selected, results } = suggestions as { selected: number; results: LinkResult[] };
 
   const onClick = (index: number) => dispatch(actions.chooseSelection(index));
   const onHover = (index: number) => dispatch(actions.selectSuggestion(index));
@@ -48,20 +48,31 @@ const CommandSuggestions = () => {
   const classes = useStyles();
   return (
     <div>
+      {results.length === 0 && (
+        <Suggestion
+          onClick={() => null}
+          onHover={() => null}
+          selected={false}
+          className={classes.root}
+        >
+          <Typography variant="subtitle2">
+            Start typing to search through your links and citations.
+          </Typography>
+        </Suggestion>
+      )}
       {results.map(((item, index) => (
         <Suggestion
-          key={item.name}
+          key={item.uid}
           onClick={() => onClick(index)}
           onHover={() => onHover(index)}
           selected={selected === index}
           className={classes.root}
         >
-          {item.shortcut && <div>{item.shortcut}</div>}
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle2">
             {item.title}
           </Typography>
           <Typography variant="caption">
-            {item.description}
+            {item.authors?.join(', ')}
           </Typography>
         </Suggestion>
       )))}
@@ -69,4 +80,4 @@ const CommandSuggestions = () => {
   );
 };
 
-export default CommandSuggestions;
+export default LinkSuggestions;

@@ -38,6 +38,16 @@ const removeComment = () => {
   store.dispatch(actions.removeComment(viewId1, 'comment1'));
 };
 
+const citation = {
+  uid: 'simpeg2015',
+  internal: false,
+  title: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
+  authors: ['Cockett, Rowan', 'Kang, Seogi', 'Heagy, Lindsey J.', 'Pidlisecky, Adam', 'Oldenburg, Douglas W.'],
+  date: new Date(),
+  url: 'https://doi.org/10.1016/j.cageo.2015.09.015',
+  journal: 'Computers & Geosciences, 85, 142–154.',
+};
+
 const opts: Options = {
   transformKeyToId: (key) => key,
   image: {
@@ -62,12 +72,15 @@ const opts: Options = {
   getDocId() { return docId; },
   theme,
   throttle: 0,
+  citationPrompt: async () => ['simpeg2015'],
+  citationKeyToJson: async () => (citation),
+  createCitationSearch: async () => ({ search: () => ['simpeg2015'], ids: ['simpeg2015'] }),
 };
 
 setup(store, opts);
 
 window.store = store;
-store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello editing!<a href="https://iooxa.dev/introduction">@iooxa/components</a></p><img src="https://iooxa.dev/images/logo.png">', 0));
+store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello editing!<a href="https://iooxa.dev/introduction">@iooxa/components</a> <cite-group><cite key="simpeg2015"></cite></cite-group></p><img src="https://iooxa.dev/images/logo.png">', 0));
 
 
 store.subscribe(() => {

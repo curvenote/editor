@@ -28,6 +28,7 @@ export enum CommandNames {
   'vimeo' = 'vimeo',
   'miro' = 'miro',
   'iframe' = 'iframe',
+  'citation' = 'citation',
 }
 
 export interface CommandResult {
@@ -78,6 +79,11 @@ export const commands: CommandResult[] = [
     title: 'Numbered list',
     description: 'Insert an ordered list',
     shortcut: '⌘⇧7',
+  },
+  {
+    name: CommandNames.citation,
+    title: 'Reference',
+    description: 'Cite existing literature',
   },
   {
     name: CommandNames.emoji,

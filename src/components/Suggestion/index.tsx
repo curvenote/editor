@@ -8,6 +8,7 @@ import { State } from '../../store/types';
 import EmojiSuggestions from './Emojis';
 import CommandSuggestions from './Commands';
 import VariableSuggestions from './Variables';
+import LinkSuggestions from './Links';
 import { SuggestionKind } from '../../store/suggestion/types';
 import { selectors } from '../../store';
 
@@ -16,6 +17,7 @@ const useStyles = makeStyles(() => createStyles({
   root: {
     position: 'fixed',
     minWidth: 300,
+    maxWidth: 500,
     maxHeight: 350,
     overflowY: 'scroll',
     backgroundColor: 'rgba(250, 250, 250, 0.9)',
@@ -44,6 +46,7 @@ const Suggestion = () => {
     >
       {kind === SuggestionKind.emoji && <EmojiSuggestions />}
       {kind === SuggestionKind.command && <CommandSuggestions />}
+      {kind === SuggestionKind.link && <LinkSuggestions />}
       {
         (kind === SuggestionKind.variable || kind === SuggestionKind.display)
         && <VariableSuggestions />

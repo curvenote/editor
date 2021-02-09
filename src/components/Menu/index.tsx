@@ -12,6 +12,7 @@ import schema from '../../prosemirror/schema';
 import MenuIcon from './Icon';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import MenuAction from './Action';
+import { toggleCitationBrackets } from '../../store/actions/editor';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -67,6 +68,11 @@ const EditorMenu = (props: Props) => {
     ul: schema.nodes.bullet_list,
     ol: schema.nodes.ordered_list,
     math: schema.nodes.math,
+    cite_group: schema.nodes.cite_group,
+  }), isEqual);
+
+  const nodes = useSelector((state: State) => selectors.selectionIsThisNodeType(state, stateId, {
+    cite: schema.nodes.cite,
   }), isEqual);
 
   // TODO: make this memoized? Needs to be done carefully.
@@ -75,6 +81,7 @@ const EditorMenu = (props: Props) => {
   const toggleMark = (mark: MarkType) => () => dispatch(actions.toggleMark(stateId, viewId, mark));
   const wrapInline = (node: NodeType) => () => dispatch(actions.insertInlineNode(node));
   const command = (name: CommandNames) => () => dispatch(actions.executeCommand(name, viewId));
+  const toggleBrackets = useCallback(() => dispatch(toggleCitationBrackets()), []);
 
   return (
     <Grid container alignItems="center" className={`${classes.root} ${standAlone ? classes.center : classes.pad}`} wrap="nowrap">
@@ -91,6 +98,7 @@ const EditorMenu = (props: Props) => {
       <MenuIcon kind="ol" active={parents.ol} disabled={off} onClick={command(CommandNames.ordered_list)} />
       <MenuIcon kind="divider" />
       <MenuIcon kind="link" active={active.linked} disabled={off} onClick={command(CommandNames.link)} />
+      {nodes.cite && <MenuIcon kind="brackets" active={parents.cite_group} disabled={off} onClick={toggleBrackets} />}
       <MenuIcon kind="divider" />
       <MenuIcon kind="more" disabled={off} onClick={onOpen} aria-controls="insert-menu" />
       {Boolean(anchorEl) && (
@@ -104,6 +112,7 @@ const EditorMenu = (props: Props) => {
           <div onClick={() => onClose()}>
             <MenuAction kind="math" disabled={off} action={wrapInline(schema.nodes.math)} title="Inline Math" />
             <MenuAction kind="math" disabled={off} action={command(CommandNames.equation)} title="Equation Block" />
+            <MenuAction kind="link" disabled={off} action={command(CommandNames.citation)} title="Citation" />
             <MenuAction kind="hr" disabled={off} action={command(CommandNames.horizontal_rule)} title="Divider" />
             <MenuAction kind="code" disabled={off} action={command(CommandNames.code)} title="Code" />
             <MenuAction kind="youtube" disabled={off} action={command(CommandNames.youtube)} title="YouTube Video" />

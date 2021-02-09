@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
+import { Fragment } from 'prosemirror-model';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
@@ -11,6 +12,7 @@ import { getEditorView } from '../../state/selectors';
 import {
   getYouTubeId, getMiroId, getLoomId, getVimeoId,
 } from './utils';
+import { opts } from '../../../connect';
 
 const options = {
   shouldSort: true,
@@ -43,8 +45,8 @@ export function executeCommand(
   viewOrId: EditorView | string | null,
   removeText = () => true,
   replace = false,
-): AppThunk<boolean> {
-  return (dispatch, getState) => {
+): AppThunk<Promise<boolean>> {
+  return async (dispatch, getState) => {
     let view: EditorView;
     if (viewOrId == null) return false;
     if (typeof viewOrId === 'string') {
@@ -209,13 +211,24 @@ export function executeCommand(
         dispatch(actions.insertNode(schema.nodes.iframe, { src }));
         return true;
       }
+      case CommandNames.citation: {
+        removeText();
+        const keys = await opts.citationPrompt();
+        if (!keys || keys.length === 0) return true;
+        const nodes = keys.map((k) => schema.nodes.cite.create({ key: k }));
+        const wrapped = schema.nodes.cite_group.createAndFill({}, Fragment.from(nodes));
+        if (!wrapped) return false;
+        const tr = view.state.tr.replaceSelectionWith(wrapped).scrollIntoView();
+        view.dispatch(tr);
+        return true;
+      }
       default: return removeText();
     }
   };
 }
 
-export function chooseSelection(result: CommandResult): AppThunk<boolean> {
-  return (dispatch, getState) => {
+export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean>> {
+  return async (dispatch, getState) => {
     const { view, range: { from, to } } = getSuggestion(getState());
     if (view == null) return false;
     const removeText = () => {

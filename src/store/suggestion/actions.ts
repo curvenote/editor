@@ -3,16 +3,18 @@ import {
   SuggestionActionTypes, SuggestionKind,
   UPDATE_SUGGESTION, UPDATE_RESULTS, SELECT_SUGGESTION,
   Range,
-  EmojiResult, SuggestionResult, variableTrigger,
+  EmojiResult, variableTrigger,
   VariableResult,
+  LinkResult,
 } from './types';
 import { CommandResult } from './commands';
 import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
-import { AppThunk, State } from '../types';
+import { AppThunk } from '../types';
 import { getSuggestion } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';
 import * as variable from './results/variable';
+import * as link from './results/link';
 
 export { executeCommand } from './results/command';
 
@@ -92,7 +94,11 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
       case SuggestionKind.emoji:
         return dispatch(emoji.chooseSelection(result as EmojiResult));
       case SuggestionKind.command:
-        return dispatch(command.chooseSelection(result as CommandResult));
+        dispatch(command.chooseSelection(result as CommandResult));
+        return true;
+      case SuggestionKind.link:
+        dispatch(link.chooseSelection(result as LinkResult));
+        return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return dispatch(variable.chooseSelection(kind, result as VariableResult));
@@ -115,6 +121,11 @@ export function filterResults(search: string): AppThunk<void> {
           search,
           (results: CommandResult[]) => dispatch(updateResults(results)),
         );
+      case SuggestionKind.link:
+        return link.filterResults(
+          search,
+          (results: LinkResult[]) => dispatch(updateResults(results)),
+        );
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return variable.filterResults(
@@ -129,15 +140,31 @@ export function filterResults(search: string): AppThunk<void> {
   };
 }
 
-function getStartingSuggestions(kind: SuggestionKind, getState: () => State): SuggestionResult[] {
-  switch (kind) {
-    case SuggestionKind.emoji: return emoji.startingSuggestions;
-    case SuggestionKind.command: return command.startingSuggestions;
-    case SuggestionKind.variable:
-    case SuggestionKind.display:
-      return variable.startingSuggestions(kind, getState);
-    default: throw new Error('Unknown suggestion kind.');
-  }
+function setStartingSuggestions(kind: SuggestionKind): AppThunk<void> {
+  return async (dispatch, getState) => {
+    switch (kind) {
+      case SuggestionKind.emoji: {
+        dispatch(updateResults(emoji.startingSuggestions));
+        return;
+      }
+      case SuggestionKind.command: {
+        dispatch(updateResults(command.startingSuggestions));
+        return;
+      }
+      case SuggestionKind.link: {
+        const suggestions = await link.startingSuggestions();
+        dispatch(updateResults(suggestions));
+        return;
+      }
+      case SuggestionKind.variable:
+      case SuggestionKind.display: {
+        const suggestions = variable.startingSuggestions(kind, getState);
+        dispatch(updateResults(suggestions));
+        return;
+      }
+      default: throw new Error('Unknown suggestion kind.');
+    }
+  };
 }
 
 export function handleSuggestion(action: SuggestionAction):
@@ -153,7 +180,7 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
       action.trigger,
     ));
     if (action.kind === 'open') {
-      dispatch(updateResults(getStartingSuggestions(kind, getState)));
+      dispatch(setStartingSuggestions(kind));
       dispatch(selectSuggestion(0));
     }
     if (action.kind === 'previous' || action.kind === 'next') {
@@ -166,7 +193,7 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
     }
     if (action.kind === 'filter') {
       if (action.search === '' || action.search == null) {
-        dispatch(updateResults(getStartingSuggestions(kind, getState)));
+        dispatch(setStartingSuggestions(kind));
       } else {
         dispatch(filterResults(action.search));
       }
