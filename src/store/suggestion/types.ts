@@ -1,5 +1,6 @@
 import { types } from '@iooxa/runtime';
 import { EditorView } from 'prosemirror-view';
+import { CitationFormat } from '../../types';
 import { CommandResult } from './commands';
 
 export const UPDATE_SUGGESTION = 'UPDATE_SUGGESTION';
@@ -24,9 +25,11 @@ export interface EmojiResult {
   o: string; // Other Name
 }
 
+export type LinkResult = CitationFormat;
+
 export type VariableResult = Partial<types.Variable>;
 
-export type SuggestionResult = EmojiResult | CommandResult | VariableResult;
+export type SuggestionResult = EmojiResult | CommandResult | VariableResult | LinkResult;
 
 export type Location = {
   left: number;

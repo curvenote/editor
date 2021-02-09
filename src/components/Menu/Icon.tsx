@@ -38,6 +38,13 @@ function SuperscriptIcon(props: any) {
     </SvgIcon>
   );
 }
+function BracketsIcon(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M15 4v2h3v12h-3v2h5V4M4 4v16h5v-2H6V6h3V4H4z" />
+    </SvgIcon>
+  );
+}
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 const deMacify = (title: string | React.ReactElement) => (
@@ -64,6 +71,7 @@ const icons = {
   math: { help: 'Inline Math', Icon: FunctionsIcon },
   more: { help: 'Insert', Icon: AddIcon },
   open: { help: 'Open in New Tab', Icon: OpenInNewIcon },
+  brackets: { help: 'Toggle Brackets', Icon: BracketsIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';
@@ -72,6 +80,7 @@ export type IconTypes = keyof typeof icons | 'divider';
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     color: theme.palette.text.secondary,
+    display: 'inline-block',
     '& button:hover': {
       backgroundColor: 'transparent',
     },

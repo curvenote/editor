@@ -7,6 +7,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
+import LinkIcon from '@material-ui/icons/Link';
 
 const icons = {
   math: FunctionsIcon,
@@ -15,6 +16,7 @@ const icons = {
   youtube: YouTubeIcon,
   video: OndemandVideoIcon,
   iframe: WebAssetIcon,
+  link: LinkIcon,
 };
 
 export type IconTypes = keyof typeof icons;

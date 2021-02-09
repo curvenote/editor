@@ -1,5 +1,6 @@
+import { NodeSpec } from 'prosemirror-model';
 import { EditorState, NodeSelection } from 'prosemirror-state';
-import { ContentNodeWithPos } from 'prosemirror-utils';
+import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 
 export const TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
@@ -82,4 +83,14 @@ export function getLinkBoundsIfTheyExist(state: EditorState) {
 
   if (!hasLink || !linkBounds) return null;
   return linkBounds;
+}
+
+
+export function getNodeIfSelected(state: EditorState, spec: NodeSpec) {
+  const selected = isNodeSelection(state.selection);
+  const { node } = (state.selection as NodeSelection);
+  if (selected && node?.type.name === spec.name) {
+    return node;
+  }
+  return null;
 }

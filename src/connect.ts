@@ -5,6 +5,12 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import setupComponents from './components';
+import { CitationFormat } from './types';
+
+export type SearchContext = {
+  ids: string[];
+  search: (query: string) => string[];
+};
 
 export type Options = {
   transformKeyToId: (key: any) => string | null;
@@ -23,6 +29,9 @@ export type Options = {
     stateKey: any, viewId: string | null, view: EditorView<any>, pos: number, event: MouseEvent,
   ) => boolean;
   theme: Theme;
+  citationPrompt: () => Promise<string[] | null>;
+  citationKeyToJson: (key: string) => Promise<CitationFormat | null>;
+  createCitationSearch: () => Promise<SearchContext>;
   throttle: number;
 };
 
@@ -80,6 +89,9 @@ export const opts: Required<Options> = {
     return ref.opts().onDoubleClick?.(stateId, viewId, view, pos, event) ?? false;
   },
   getDocId() { return ref.opts().getDocId(); },
+  citationPrompt() { return ref.opts().citationPrompt(); },
+  citationKeyToJson(key) { return ref.opts().citationKeyToJson(key); },
+  createCitationSearch() { return ref.opts().createCitationSearch(); },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },
 };

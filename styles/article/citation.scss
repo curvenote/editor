@@ -1,0 +1,26 @@
+article {
+  cite-group {
+    .citation::after {
+      content: "\;\00a0";
+    }
+    .citation:last-of-type::after {
+      content: "";
+    }
+  }
+  cite-group::before {
+    content: "(";
+  }
+  cite-group::after {
+    content: ")";
+  }
+  .citation > span{
+    border-bottom: 1px dotted #363636;
+    color: #363636;
+    text-decoration: none;
+  }
+  .citation > span:hover {
+    cursor: zoom-in;
+    border-bottom-color: #1584d3;
+    color: #1584d3;
+  }
+}

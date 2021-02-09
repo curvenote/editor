@@ -1,7 +1,11 @@
 import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
-import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM } from 'prosemirror-commands';
+import {
+  wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode,
+} from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
-import { MarkType, NodeType, Node } from 'prosemirror-model';
+import {
+  MarkType, NodeType, Node, Fragment,
+} from 'prosemirror-model';
 import { Nodes } from '@iooxa/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
@@ -13,6 +17,7 @@ import {
 import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
+import { getNodeIfSelected } from '../../prosemirror/utils';
 
 
 export function updateNodeAttrs(
@@ -206,6 +211,35 @@ export function addCommentToSelectedView(commentId: string): AppThunk<boolean> {
     const { viewId } = getSelectedView(getState());
     if (!viewId) return false;
     dispatch(addComment(viewId, commentId));
+    return true;
+  };
+}
+
+export function toggleCitationBrackets(): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const editor = getSelectedEditorAndViews(getState());
+    if (editor.state == null) return false;
+    const node = getNodeIfSelected(editor.state, schema.nodes.cite);
+    if (!node) return false;
+    const { parent } = editor.state.selection.$from;
+    const hasParenthesis = parent.type.name === schema.nodes.cite_group.name;
+    if (hasParenthesis) {
+      const nodes: Node[] = [];
+      parent.forEach((n) => nodes.push(n));
+      const frag = Fragment.from(nodes);
+      selectParentNode(editor.state, (tr) => {
+        const tr2 = tr
+          .deleteSelection()
+          .insert(tr.selection.head, frag)
+          .scrollIntoView();
+        dispatch(applyProsemirrorTransaction(editor.stateId, tr2));
+      });
+      return true;
+    }
+    const wrapped = schema.nodes.cite_group.createAndFill({}, Fragment.from([node]));
+    if (!wrapped) return false;
+    const tr = editor.state.tr.replaceSelectionWith(wrapped).scrollIntoView();
+    dispatch(applyProsemirrorTransaction(editor.stateId, tr));
     return true;
   };
 }
