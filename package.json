@@ -1,9 +1,12 @@
 {
   "name": "@curvenote/editor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "katex": "^0.12.0",
     "lodash.isequal": "^4.5.0",
@@ -27,7 +30,6 @@
   },
   "peerDependencies": {
     "@curvenote/comments": "file:.yalc/@curvenote/comments",
-    "fuse.js": "^6.4.6",
     "@iooxa/article": "0.2.8",
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
@@ -35,6 +37,7 @@
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.9.1",
     "classnames": "^2.2.6",
+    "fuse.js": "^6.4.6",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.2.2",
@@ -61,15 +64,14 @@
     "watch": "tsc -w -p ."
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.11",
     "@curvenote/comments": "file:.yalc/@curvenote/comments",
-    "fuse.js": "^6.4.6",
     "@iooxa/article": "0.2.8",
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
     "@iooxa/schema": "0.2.0",
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.9.1",
+    "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.15",
     "@types/lodash.isequal": "^4.5.5",
     "@types/lodash.throttle": "^4.1.6",
@@ -115,6 +117,7 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "express": "^4.17.1",
+    "fuse.js": "^6.4.6",
     "html-webpack-plugin": "^4.0.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
