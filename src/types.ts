@@ -4,6 +4,7 @@ export type CitationFormat = {
   title: string;
   authors: string[];
   url: string;
+  doi: string;
   date: Date;
   thumbnail?: string;
   journal?: string;

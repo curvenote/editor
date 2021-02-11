@@ -19,9 +19,19 @@ export const useCitation = (uid: string) => {
 
   let inline = null;
   if (json) {
-    const author = json.authors?.[0]?.split(',')?.[0] ?? 'Unknown';
-    const year = json.date?.getFullYear();
-    inline = json.authors?.length > 1 ? `${author} et al., ${year}` : `${author}, ${year}`;
+    const author1 = json.authors?.[0]?.split(',')?.[0] ?? 'Unknown';
+    const author2 = json.authors?.[1]?.split(',')?.[0] ?? 'Unknown';
+    const year = json.date?.getUTCFullYear();
+    switch (json.authors?.length) {
+      case 1:
+        inline = `${author1}, ${year}`;
+        break;
+      case 2:
+        inline = `${author1} & ${author2}, ${year}`;
+        break;
+      default:
+        inline = `${author1} et al., ${year}`;
+    }
   }
 
   return {

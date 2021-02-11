@@ -45,6 +45,7 @@ const citation = {
   authors: ['Cockett, Rowan', 'Kang, Seogi', 'Heagy, Lindsey J.', 'Pidlisecky, Adam', 'Oldenburg, Douglas W.'],
   date: new Date(),
   url: 'https://doi.org/10.1016/j.cageo.2015.09.015',
+  doi: '10.1016/j.cageo.2015.09.015',
   journal: 'Computers & Geosciences, 85, 142–154.',
 };
 
