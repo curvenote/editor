@@ -4,7 +4,7 @@
 
 An interactive scientific editor built with [ProseMirror](https://prosemirror.net/), [React](http://reactjs.org/) and [Redux](https://redux.js.org/) - by [Curvenote](https://curevnote.com).
 
-![@curvenote/editor in curvenote.com](/images/editor.gif)
+![@curvenote/editor in curvenote.com](https://github.com/curvenote/editor/raw/main/images/editor.gif)
 
 ## Why
 We think that creating beautiful reactive documents and explorable explanations should be easy. Writing technical documents is hard enough already, and choosing to make that writing interactive is beyond the reach or time-commitment of most communicators.
@@ -35,8 +35,9 @@ A [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor for technical content 
 
 **Specifically:**
 * A stand alone scientific editor that can be integrated into other applications, [React](http://reactjs.org/) will be supported first-class.
-* Integration points for collaboration, citations,
-* Over time, and where appropriate, smaller tools will be broken off to standalone projects (e.g. see below).
+* Integration points for collaboration, citations, and interactivity/reactivity.
+* Over time, and where appropriate, smaller tools will be broken off to standalone projects (e.g. see below for the first ones).
+  * Likely some of the prosemirror plugins [see here](/src/prosemirror/plugins/README.md), comments, etc.
 
 ### Related Projects
 
@@ -64,7 +65,7 @@ A collaborative, rich text editor for interactive technical & scientific content
 
 ## Roadmap
 
-We have recently (Feb 2021) spun this out of internal development at curvenote.com where we have worked on it for the last year. Docs and testing aren't yet up to our open source standards 😬. We will improve these over time! In the mean time, star the repo, watch it, or send us an issue or [email](mailto:support@curvenote.com), or try out the editor on curvenote.com!
+We have recently (Feb 2021) spun this out of internal development at [Curvenote](https://curvenote.com) where we have worked on it for the last year. Docs and testing aren't yet up to our open source standards 😬. We will improve these over time! In the mean time, star the repo, watch it, or send us an [issue](https://github.com/curvenote/editor/issues/new) or [email](mailto:support@curvenote.com), or try out the editor on [Curvenote](https://curvenote.com)!
 
 ## Q1-Q2, 2021
 * Improve math editor (look at [prosemirror-math](https://github.com/benrbray/prosemirror-math)).
