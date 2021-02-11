@@ -7,6 +7,19 @@
   "publishConfig": {
     "access": "public"
   },
+  "keywords": [
+    "prosemirror",
+    "explorable explanations",
+    "writing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curvenote/editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/curvenote/editor/issues"
+  },
+  "homepage": "https://github.com/curvenote/editor",
   "dependencies": {
     "katex": "^0.12.0",
     "lodash.isequal": "^4.5.0",
