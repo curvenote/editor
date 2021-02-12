@@ -28,7 +28,7 @@ We think this is for two reasons:
 There are *many* Markdown syntax variants and extensions (e.g. [RMarkdown](https://rmarkdown.rstudio.com/), [MyST](https://myst-parser.readthedocs.io/en/latest/), [idyll-lang](https://idyll-lang.org/), [MDX](https://mdxjs.com/)) that add flavours (usually) on top of [CommonMark](https://commonmark.org/) to allow for more complex documents and various degrees of interactivity. These syntaxes or development environments are often beyond the reach of many contributors and collaborative editing and review is often not a priority.
 
 ### Interactivity
-We think the best explinations are [explorable](http://explorabl.es/) and promote [*active* reading](http://worrydream.com/ExplorableExplanations/), and would love to see this style of writing more widely adopted in scientific teaching, writing and education. To us, that means deep integrations with the Jupyter ecosystem and providing ways to support traditional export as well.
+We think the best explanations are [explorable](http://explorabl.es/) and promote [*active* reading](http://worrydream.com/ExplorableExplanations/), and would love to see this style of writing more widely adopted in scientific teaching, writing and education. To us, that means deep integrations with the Jupyter ecosystem and providing ways to support traditional export as well.
 
 ## Scope of Repository
 A [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor for technical content and documents (papers, reports, documentation, etc.), and support computational into the narrative (c.f. [explorable explanations](http://worrydream.com/ExplorableExplanations/)).
