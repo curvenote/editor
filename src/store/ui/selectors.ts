@@ -5,7 +5,9 @@ export function selectedSidenote(state: State, docId?: string | null) {
   return state.sidenotes.ui.docs[docId]?.selectedSidenote;
 }
 
-export function isSidenoteSelected(state: State, docId?: string | null, sidenoteId?: string | null) {
+export function isSidenoteSelected(
+  state: State, docId?: string | null, sidenoteId?: string | null,
+) {
   if (docId == null || sidenoteId == null) return false;
   return state.sidenotes.ui.docs[docId]?.selectedSidenote === sidenoteId;
 }
