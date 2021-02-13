@@ -8,6 +8,11 @@
 * When an inline reference is clicked, animate the relevant sidenote to be as close as possible and move non-relevant sidenotes out of the way without overlapping.
 * Do not provide UI or impose any styling, **only placement**.
 
+## Use cases
+
+* Comment streams next to a document. This is showing [Curvenote](https://curvenote.com), which is a scientific writing platform that connects to Jupyter.
+![Comments Using Sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/comments.gif)
+
 ## Chocies
 * Use React, Redux & Typescript
 * Used Redux rather than a hook approach (open to discussion if people are passionate!)
@@ -27,7 +32,9 @@ yarn install
 yarn start
 ```
 
-## Setup:
+![sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/sidenotes.gif)
+
+## Getting Started:
 ```
 yarn add sidenotes
 ```
