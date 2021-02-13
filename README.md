@@ -3,7 +3,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/sidenotes/main/LICENSE)
 ![CI](https://github.com/curvenote/sidenotes/workflows/CI/badge.svg)
 
-> Float sidenotes or comments next to a document with inline references.
+**Position floating sidenotes/comments next to a document with inline references.**
 
 ## Goals
 * Place notes/comments to the side of one or more documents with inline references.
