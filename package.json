@@ -1,5 +1,5 @@
 {
-  "name": "@curvenote/comments",
+  "name": "sidenotes",
   "version": "0.1.0",
   "private": true,
   "main": "dist/src/index.js",
@@ -8,7 +8,6 @@
   },
   "peerDependencies": {
     "classnames": "^2.2.6",
-    "lit-element": "^2.4.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.2.2",
@@ -19,7 +18,7 @@
   "scripts": {
     "clean": "rm -rf dist;",
     "compile": "yarn run clean; tsc;",
-    "build-css": "sass styles/index.scss dist/comments.css",
+    "build-css": "sass styles/index.scss dist/sidenotes.css",
     "build": "yarn run clean; tsc; yarn run build-css; webpack --config webpack.prod.js",
     "prepublishOnly": "yarn run build;",
     "start": "webpack-dev-server --open --config webpack.dev.js",
@@ -59,7 +58,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "express": "^4.17.1",
     "html-webpack-plugin": "^4.0.4",
-    "lit-element": "^2.4.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.2.2",

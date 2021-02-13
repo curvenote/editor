@@ -34,10 +34,10 @@ function subscribe(listener: () => void): Unsubscribe {
   return () => delete subscriptions[key];
 }
 
-let currentState: State['comments'];
+let currentState: State['sidenotes'];
 function notify(store: Store) {
   const previousState = currentState;
-  currentState = store.getState().comments;
+  currentState = store.getState().sidenotes;
   if (previousState === currentState) return;
   Object.keys(subscriptions).forEach((key: string) => {
     const { listener } = subscriptions[key];

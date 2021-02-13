@@ -5,17 +5,17 @@ import {
 import { UIState, UIActionTypes } from './ui/types';
 
 export interface State {
-  comments: {
+  sidenotes: {
     ui: UIState;
   };
 }
 
-export type CommentUIActions = (
+export type SidenotesUIActions = (
   UIActionTypes
 );
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, null, Action<string>>;
 export type Dispatch = ThunkDispatch<State, null, Action<string>>;
-export type Store = RStore<State, CommentUIActions> & { dispatch: Dispatch };
+export type Store = RStore<State, SidenotesUIActions> & { dispatch: Dispatch };
 export type Middleware = RMiddleware<any, State, Dispatch>;
-export type Reducer = RReducer<State, CommentUIActions>;
+export type Reducer = RReducer<State, SidenotesUIActions>;
