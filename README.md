@@ -43,11 +43,11 @@ A [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor for technical content 
 
 (These will rebrand to `curvenote` soon.)
 
-* `@iooxa/schema` - the schema for this editor, focused on interactive content, also deals with transaltion and export.
-* `@iooxa/article` - CSS and styling components and document layout
-* `@iooxa/components` - interactive widgets and web-components
-* `@iooxa/runtime` - client-side reactivity built on redux
-* `@curvenote/comments` - Reactive placement of comments, with hooks for multiple inline references.
+* [`@iooxa/schema`](https://github.com/iooxa/schema) - the schema for this editor, focused on interactive content, also deals with translation and export.
+* [`@iooxa/article`](https://github.com/iooxa/article) - CSS and styling components and document layout
+* [`@iooxa/components`](https://github.com/iooxa/components) - interactive widgets and web-components
+* [`@iooxa/runtime`](https://github.com/iooxa/runtime) - client-side reactivity built on redux
+* [`sidenotes`](https://github.com/curvenote/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
 
 A collaborative, rich text editor for interactive technical & scientific content., implementing the MyST standard, and integrating with JupyterLab, JupyterBook and Sphinx. The project will enable a larger audience to create publication-quality, standards-friendly documents through Jupyter, without having to learn a new syntax.
 
@@ -71,9 +71,10 @@ We have recently (Feb 2021) spun this out of internal development at [Curvenote]
 * Improve math editor (look at [prosemirror-math](https://github.com/benrbray/prosemirror-math)).
 * Improve MyST and LaTeX export
 * Improve collaboration experience (cursors and highlights)
+  * Possibly move to yjs as the collaboration backend
 * Improve/documentation integration demos
 
-## Q3-Q4, 2021
-* Integrate with JupyterLab (would love help!!)
+## Other ideas and plans
+* Integrate as a JupyterLab extension (would love help!!)
 * Integrate with ipywidgets (would love help!!)
 * Integrate with thebelab (would love help!!)
