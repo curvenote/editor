@@ -3,6 +3,8 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/sidenotes/main/LICENSE)
 ![CI](https://github.com/curvenote/sidenotes/workflows/CI/badge.svg)
 
+> Float sidenotes or comments next to a document with inline references.
+
 ## Goals
 * Place notes/comments to the side of one or more documents with inline references.
 * When an inline reference is clicked, animate the relevant sidenote to be as close as possible and move non-relevant sidenotes out of the way without overlapping.
@@ -11,7 +13,7 @@
 ## Use cases
 
 * Comment streams next to a document. This is showing [Curvenote](https://curvenote.com), which is a scientific writing platform that connects to Jupyter.
-![Comments Using Sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/comments.gif)
+[![Comments Using Sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/comments.gif)](https://curvenote.com)
 
 ## Chocies
 * Use React, Redux & Typescript
