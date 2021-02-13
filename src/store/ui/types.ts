@@ -1,18 +1,18 @@
-// This is a placeholder for base-anchors to refer to a "comment"
-export const COMMENT_ANCHOR_BASE = 'COMMENT_ANCHOR_BASE';
+// This is a placeholder for base-anchors
+export const ANCHOR_BASE = 'ANCHOR_BASE';
 
-export const UI_CONNECT_COMMENT = 'UI_CONNECT_COMMENT';
-export const UI_DISCONNECT_COMMENT = 'UI_DISCONNECT_COMMENT';
+export const UI_CONNECT_SIDENOTE = 'UI_CONNECT_SIDENOTE';
+export const UI_DISCONNECT_SIDENOTE = 'UI_DISCONNECT_SIDENOTE';
 export const UI_CONNECT_ANCHOR = 'UI_CONNECT_ANCHOR';
 export const UI_CONNECT_ANCHOR_BASE = 'UI_CONNECT_ANCHOR_BASE';
 export const UI_DISCONNECT_ANCHOR = 'UI_DISCONNECT_ANCHOR';
-export const UI_SELECT_COMMENT = 'UI_SELECT_COMMENT';
-export const UI_DESELECT_COMMENT = 'UI_DESELECT_COMMENT';
+export const UI_SELECT_SIDENOTE = 'UI_SELECT_SIDENOTE';
+export const UI_DESELECT_SIDENOTE = 'UI_DESELECT_SIDENOTE';
 export const UI_SELECT_ANCHOR = 'UI_SELECT_ANCHOR';
 export const UI_UPDATE_COMMENT = 'UI_UPDATE_COMMENT';
-export const UI_REPOSITION_COMMENTS = 'UI_REPOSITION_COMMENTS';
+export const UI_REPOSITION_SIDENOTES = 'UI_REPOSITION_SIDENOTES';
 
-export type Comment = {
+export type Sidenote = {
   id: string;
   baseAnchors: string[];
   inlineAnchors: string[];
@@ -23,26 +23,26 @@ export type Comment = {
 export type Anchor = {
   id: string;
   element: HTMLElement;
-  comment: typeof COMMENT_ANCHOR_BASE | string;
+  sidenote: typeof ANCHOR_BASE | string;
 };
 
-export type DocCommentState = {
+export type DocState = {
   id: string;
-  selectedComment: string | null;
+  selectedSidenote: string | null;
   selectedAnchor: string | null;
-  comments: Record<string, Comment>;
+  sidenotes: Record<string, Sidenote>;
   anchors: Record<string, Anchor>;
 };
 
 export type UIState = {
-  docs: Record<string, DocCommentState>;
+  docs: Record<string, DocState>;
 };
 
-export interface ConnectCommentAction {
-  type: typeof UI_CONNECT_COMMENT;
+export interface ConnectSidenoteAction {
+  type: typeof UI_CONNECT_SIDENOTE;
   payload: {
     docId: string;
-    commentId: string;
+    sidenoteId: string;
     baseId?: string;
   };
 }
@@ -59,7 +59,7 @@ export interface ConnectAnchorAction {
   type: typeof UI_CONNECT_ANCHOR;
   payload: {
     docId: string;
-    commentId: string;
+    sidenoteId: string;
     anchorId: string;
     element: HTMLElement;
   };
@@ -74,19 +74,19 @@ export interface ConnectAnchorBaseAction {
   };
 }
 
-export interface DisconnectCommentAction {
-  type: typeof UI_DISCONNECT_COMMENT;
+export interface DisconnectSidenoteAction {
+  type: typeof UI_DISCONNECT_SIDENOTE;
   payload: {
     docId: string;
-    commentId: string;
+    sidenoteId: string;
   };
 }
 
-export interface SelectCommentAction {
-  type: typeof UI_SELECT_COMMENT;
+export interface SelectSidenoteAction {
+  type: typeof UI_SELECT_SIDENOTE;
   payload: {
     docId: string;
-    commentId: string;
+    sidenoteId: string;
   };
 }
 export interface SelectAnchorAction {
@@ -96,27 +96,27 @@ export interface SelectAnchorAction {
     anchorId: string;
   };
 }
-export interface DeselectCommentAction {
-  type: typeof UI_DESELECT_COMMENT;
+export interface DeselectSidenoteAction {
+  type: typeof UI_DESELECT_SIDENOTE;
   payload: {
     docId: string;
   };
 }
-export interface RepositionCommentsAction {
-  type: typeof UI_REPOSITION_COMMENTS;
+export interface RepositionSidenotesAction {
+  type: typeof UI_REPOSITION_SIDENOTES;
   payload: {
     docId: string;
   };
 }
 
 export type UIActionTypes = (
-  ConnectCommentAction |
-  DisconnectCommentAction |
+  ConnectSidenoteAction |
+  DisconnectSidenoteAction |
   ConnectAnchorAction |
   ConnectAnchorBaseAction |
   DisconnectAnchorAction |
-  SelectCommentAction |
+  SelectSidenoteAction |
   SelectAnchorAction |
-  DeselectCommentAction |
-  RepositionCommentsAction
+  DeselectSidenoteAction |
+  RepositionSidenotesAction
 );

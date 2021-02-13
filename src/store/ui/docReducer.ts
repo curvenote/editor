@@ -1,77 +1,77 @@
 import {
-  UIActionTypes, UI_SELECT_COMMENT, UI_CONNECT_COMMENT,
-  DocCommentState, UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, UI_DISCONNECT_ANCHOR,
-  UI_DESELECT_COMMENT, UI_DISCONNECT_COMMENT,
-  UI_CONNECT_ANCHOR_BASE, COMMENT_ANCHOR_BASE, UI_REPOSITION_COMMENTS,
+  UIActionTypes, UI_SELECT_SIDENOTE, UI_CONNECT_SIDENOTE,
+  DocState, UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, UI_DISCONNECT_ANCHOR,
+  UI_DESELECT_SIDENOTE, UI_DISCONNECT_SIDENOTE,
+  UI_CONNECT_ANCHOR_BASE, ANCHOR_BASE, UI_REPOSITION_SIDENOTES,
 } from './types';
 
 
 const docReducer = (
-  state: DocCommentState,
+  state: DocState,
   action: UIActionTypes,
-): DocCommentState => {
+): DocState => {
   if (state == null) {
     const { docId } = action.payload;
     // eslint-disable-next-line no-param-reassign
     state = {
       id: docId,
-      selectedComment: null,
+      selectedSidenote: null,
       selectedAnchor: null,
-      comments: {},
+      sidenotes: {},
       anchors: {},
     };
   }
   switch (action.type) {
-    case UI_REPOSITION_COMMENTS: return state;
-    case UI_CONNECT_COMMENT: {
-      const { commentId, baseId } = action.payload;
+    case UI_REPOSITION_SIDENOTES: return state;
+    case UI_CONNECT_SIDENOTE: {
+      const { sidenoteId, baseId } = action.payload;
       const baseIds = baseId ? [baseId] : [];
-      const prevComment = state.comments[commentId];
+      const prevSidenote = state.sidenotes[sidenoteId];
       return {
         ...state,
-        comments: {
-          ...state.comments,
-          [commentId]: {
-            ...prevComment,
-            id: commentId,
-            baseAnchors: [...baseIds, ...(prevComment?.baseAnchors ?? [])],
-            inlineAnchors: [...(prevComment?.inlineAnchors ?? [])],
+        sidenotes: {
+          ...state.sidenotes,
+          [sidenoteId]: {
+            ...prevSidenote,
+            id: sidenoteId,
+            baseAnchors: [...baseIds, ...(prevSidenote?.baseAnchors ?? [])],
+            inlineAnchors: [...(prevSidenote?.inlineAnchors ?? [])],
           },
         },
       };
     }
-    case UI_DISCONNECT_COMMENT: {
-      const { commentId } = action.payload;
-      const comment = state.comments[commentId];
-      if (!comment) return state;
+    case UI_DISCONNECT_SIDENOTE: {
+      const { sidenoteId } = action.payload;
+      const sidenote = state.sidenotes[sidenoteId];
+      if (!sidenote) return state;
 
-      const comments = { ...state.comments };
-      delete comments[comment.id];
+      const sidenotes = { ...state.sidenotes };
+      delete sidenotes[sidenote.id];
 
       return {
         ...state,
-        comments,
+        sidenotes,
       };
     }
     case UI_CONNECT_ANCHOR: {
-      const { commentId, anchorId, element } = action.payload;
+      const { sidenoteId, anchorId, element } = action.payload;
 
-      const prevComment = state.comments[commentId];
+      const prevSidenote = state.sidenotes[sidenoteId];
 
       return {
         ...state,
-        comments: {
-          ...state.comments,
-          [commentId]: {
-            ...prevComment,
-            inlineAnchors: [anchorId, ...(prevComment?.inlineAnchors ?? [])],
+        sidenotes: {
+          ...state.sidenotes,
+          [sidenoteId]: {
+            ...prevSidenote,
+            inlineAnchors: [anchorId, ...(prevSidenote?.inlineAnchors ?? [])],
           },
         },
         anchors: {
           ...state.anchors,
           [anchorId]: {
             id: anchorId,
-            comment: commentId,
+            sidenote: sidenoteId,
             element,
           },
         },
@@ -85,7 +85,7 @@ const docReducer = (
           ...state.anchors,
           [anchorId]: {
             id: anchorId,
-            comment: COMMENT_ANCHOR_BASE,
+            sidenote: ANCHOR_BASE,
             element,
           },
         },
@@ -99,35 +99,35 @@ const docReducer = (
       const anchors = { ...state.anchors };
       delete anchors[anchor.id];
 
-      const comment = state.comments[anchor.comment];
+      const sidenote = state.sidenotes[anchor.sidenote];
 
       return {
         ...state,
-        comments: {
-          ...state.comments,
-          [anchor.comment]: {
-            ...comment,
-            inlineAnchors: [...(comment?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
+        sidenotes: {
+          ...state.sidenotes,
+          [anchor.sidenote]: {
+            ...sidenote,
+            inlineAnchors: [...(sidenote?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
           },
         },
         anchors,
       };
     }
-    case UI_SELECT_COMMENT: {
-      const { commentId } = action.payload;
+    case UI_SELECT_SIDENOTE: {
+      const { sidenoteId } = action.payload;
 
-      const prevComment = state.comments[commentId];
+      const prevSidenote = state.sidenotes[sidenoteId];
       return {
         ...state,
-        selectedComment: commentId,
-        selectedAnchor: prevComment?.inlineAnchors?.[0] ?? prevComment?.baseAnchors?.[0] ?? null,
-        comments: {
-          ...state.comments,
-          [commentId]: {
-            ...prevComment,
-            id: commentId,
-            baseAnchors: [...(prevComment?.baseAnchors ?? [])],
-            inlineAnchors: [...(prevComment?.inlineAnchors ?? [])],
+        selectedSidenote: sidenoteId,
+        selectedAnchor: prevSidenote?.inlineAnchors?.[0] ?? prevSidenote?.baseAnchors?.[0] ?? null,
+        sidenotes: {
+          ...state.sidenotes,
+          [sidenoteId]: {
+            ...prevSidenote,
+            id: sidenoteId,
+            baseAnchors: [...(prevSidenote?.baseAnchors ?? [])],
+            inlineAnchors: [...(prevSidenote?.inlineAnchors ?? [])],
           },
         },
       };
@@ -136,29 +136,29 @@ const docReducer = (
       const { anchorId } = action.payload;
       const anchor = state.anchors[anchorId];
       if (!anchor) return state;
-      const comment = state.comments[anchor.comment];
+      const sidenote = state.sidenotes[anchor.sidenote];
       // Bring the selected anchor to the front
       const anchors = [
-        anchorId, ...[...(comment?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
+        anchorId, ...[...(sidenote?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
       ];
       return {
         ...state,
-        comments: {
-          ...state.comments,
-          [anchor.comment]: {
-            ...comment,
+        sidenotes: {
+          ...state.sidenotes,
+          [anchor.sidenote]: {
+            ...sidenote,
             inlineAnchors: anchors,
           },
         },
         selectedAnchor: anchorId,
-        selectedComment: anchor.comment,
+        selectedSidenote: anchor.sidenote,
       };
     }
-    case UI_DESELECT_COMMENT: {
+    case UI_DESELECT_SIDENOTE: {
       return {
         ...state,
         selectedAnchor: null,
-        selectedComment: null,
+        selectedSidenote: null,
       };
     }
     default:

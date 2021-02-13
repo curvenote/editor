@@ -2,9 +2,9 @@ import { opts } from '../../connect';
 import docReducer from './docReducer';
 import {
   UIState, UIActionTypes,
-  UI_CONNECT_COMMENT, UI_SELECT_COMMENT,
-  UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, DocCommentState, Anchor,
-  UI_DISCONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_COMMENTS,
+  UI_CONNECT_SIDENOTE, UI_SELECT_SIDENOTE,
+  UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, DocState, Anchor,
+  UI_DISCONNECT_ANCHOR, UI_DESELECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_SIDENOTES,
 } from './types';
 
 export const initialState: UIState = {
@@ -27,16 +27,16 @@ function getTopLeft(anchor?: Anchor) {
   return { top, left };
 }
 
-function placeComments(state: DocCommentState, actionType: string): DocCommentState {
+function placeSidenotes(state: DocState, actionType: string): DocState {
   // Do not place comments if it is a deselect call
-  if (actionType === UI_DESELECT_COMMENT) return state;
+  if (actionType === UI_DESELECT_SIDENOTE) return state;
   type Loc = [string, { top: number; left: number; height: number }];
   let findMe: Loc | undefined;
-  const sorted = Object.entries(state.comments).map(
+  const sorted = Object.entries(state.sidenotes).map(
     ([id, cmt]) => {
       const anchor = state.anchors[cmt.inlineAnchors?.[0]] ?? state.anchors[cmt.baseAnchors?.[0]];
       const loc: Loc = [id, { ...getTopLeft(anchor), height: getHeight(id) }];
-      if (id === state.selectedComment) { findMe = loc; }
+      if (id === state.selectedSidenote) { findMe = loc; }
       return loc;
     },
   ).sort((a, b) => {
@@ -64,7 +64,7 @@ function placeComments(state: DocCommentState, actionType: string): DocCommentSt
   const idealPlacement = Object.fromEntries([...before, ...after]);
 
   let hasChanges = false;
-  const comments = Object.fromEntries(Object.entries(state.comments).map(
+  const sidenotes = Object.fromEntries(Object.entries(state.sidenotes).map(
     ([id, comment]) => {
       const { top } = idealPlacement[id];
       if (comment.top !== top) {
@@ -77,7 +77,7 @@ function placeComments(state: DocCommentState, actionType: string): DocCommentSt
   if (!hasChanges) return state;
   return {
     ...state,
-    comments,
+    sidenotes,
   };
 }
 
@@ -87,17 +87,17 @@ const uiReducer = (
   action: UIActionTypes,
 ): UIState => {
   switch (action.type) {
-    case UI_SELECT_COMMENT:
+    case UI_SELECT_SIDENOTE:
     case UI_SELECT_ANCHOR:
-    case UI_CONNECT_COMMENT:
+    case UI_CONNECT_SIDENOTE:
     case UI_CONNECT_ANCHOR:
     case UI_CONNECT_ANCHOR_BASE:
     case UI_DISCONNECT_ANCHOR:
-    case UI_DESELECT_COMMENT:
-    case UI_REPOSITION_COMMENTS:
+    case UI_DESELECT_SIDENOTE:
+    case UI_REPOSITION_SIDENOTES:
     {
       const { docId } = action.payload;
-      const nextDoc = placeComments(docReducer(state.docs[docId], action), action.type);
+      const nextDoc = placeSidenotes(docReducer(state.docs[docId], action), action.type);
       return {
         ...state,
         docs: {

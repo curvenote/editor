@@ -1,37 +1,37 @@
 import { v4 as uuid } from 'uuid';
 import {
-  UI_CONNECT_ANCHOR, UI_DESELECT_COMMENT, UI_DISCONNECT_ANCHOR,
-  UI_CONNECT_COMMENT, UI_SELECT_ANCHOR, UI_SELECT_COMMENT,
-  UI_DISCONNECT_COMMENT, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_COMMENTS,
+  UI_CONNECT_ANCHOR, UI_DESELECT_SIDENOTE, UI_DISCONNECT_ANCHOR,
+  UI_CONNECT_SIDENOTE, UI_SELECT_ANCHOR, UI_SELECT_SIDENOTE,
+  UI_DISCONNECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_SIDENOTES,
 } from './types';
-import { AppThunk, CommentUIActions } from '../types';
+import { AppThunk, SidenotesUIActions } from '../types';
 
-export function connectComment(
-  docId?: string, commentId?: string, baseId?: string,
+export function connectSidenote(
+  docId?: string, sidenoteId?: string, baseId?: string,
 ): AppThunk<void> {
   return (dispatch) => {
-    if (docId == null || commentId == null) return;
+    if (docId == null || sidenoteId == null) return;
     dispatch({
-      type: UI_CONNECT_COMMENT,
-      payload: { docId, commentId, baseId },
-    });
+      type: UI_CONNECT_SIDENOTE,
+      payload: { docId, sidenoteId, baseId },
+    } as SidenotesUIActions);
   };
 }
 
 export function connectAnchor(
-  docId?: string, commentId?: string, element?: HTMLElement,
+  docId?: string, sidenoteId?: string, element?: HTMLElement,
 ): AppThunk<void> {
   return (dispatch) => {
-    if (docId == null || commentId == null || element == null) return;
+    if (docId == null || sidenoteId == null || element == null) return;
     const anchorId = uuid();
     // eslint-disable-next-line no-param-reassign
     (element as any).anchorId = anchorId;
     dispatch({
       type: UI_CONNECT_ANCHOR,
       payload: {
-        docId, commentId, anchorId, element,
+        docId, sidenoteId, anchorId, element,
       },
-    });
+    } as SidenotesUIActions);
   };
 }
 
@@ -47,23 +47,23 @@ export function connectAnchorBase(
       payload: {
         docId, anchorId, element,
       },
-    });
+    } as SidenotesUIActions);
   };
 }
 
-export function updateComment(docId: string, commentId: string): CommentUIActions {
+export function updateSidenote(docId: string, sidenoteId: string): SidenotesUIActions {
   return {
-    type: UI_SELECT_COMMENT,
-    payload: { docId, commentId },
+    type: UI_SELECT_SIDENOTE,
+    payload: { docId, sidenoteId },
   };
 }
 
-export function selectComment(docId?: string, commentId?: string): AppThunk<void> {
+export function selectSidenote(docId?: string, sidenoteId?: string): AppThunk<void> {
   return (dispatch) => {
     dispatch({
-      type: UI_SELECT_COMMENT,
-      payload: { docId, commentId },
-    });
+      type: UI_SELECT_SIDENOTE,
+      payload: { docId, sidenoteId },
+    } as SidenotesUIActions);
   };
 }
 
@@ -75,19 +75,19 @@ export function selectAnchor(docId?: string, anchor?: HTMLElement | null): AppTh
     dispatch({
       type: UI_SELECT_ANCHOR,
       payload: { docId, anchorId },
-    });
+    } as SidenotesUIActions);
   };
 }
 
-export function disconnectComment(
-  docId?: string, commentId?: string,
+export function disconnectSidenote(
+  docId?: string, sidenoteId?: string,
 ): AppThunk<void> {
   return (dispatch) => {
-    if (docId == null || commentId == null) return;
+    if (docId == null || sidenoteId == null) return;
     dispatch({
-      type: UI_DISCONNECT_COMMENT,
-      payload: { docId, commentId },
-    });
+      type: UI_DISCONNECT_SIDENOTE,
+      payload: { docId, sidenoteId },
+    } as SidenotesUIActions);
   };
 }
 export function disconnectAnchor(
@@ -100,20 +100,20 @@ export function disconnectAnchor(
     dispatch({
       type: UI_DISCONNECT_ANCHOR,
       payload: { docId, anchorId },
-    });
+    } as SidenotesUIActions);
   };
 }
 
-export function deselectComment(docId: string): CommentUIActions {
+export function deselectSidenote(docId: string): SidenotesUIActions {
   return {
-    type: UI_DESELECT_COMMENT,
+    type: UI_DESELECT_SIDENOTE,
     payload: { docId },
   };
 }
 
-export function repositionComments(docId: string): CommentUIActions {
+export function repositionSidenotes(docId: string): SidenotesUIActions {
   return {
-    type: UI_REPOSITION_COMMENTS,
+    type: UI_REPOSITION_SIDENOTES,
     payload: { docId },
   };
 }

@@ -1,31 +1,31 @@
 article {
-  .comments {
+  .sidenotes {
     position: absolute;
     top: 0px;
     width: 300px;
     right: -320px;
-    .comment {
+    .sidenote {
       position: absolute;
       width: 280px;
       transition: all 300ms cubic-bezier(0.655, 0.180, 0.300, 1.255);
       left: 10px;
     }
-    .comment p {
+    .sidenote p {
       text-align: left;
     }
-    .comment.selected {
+    .sidenote.selected {
       left: -10px;
       opacity: 1;
       z-index: 1;
     }
   }
   .anchor {
-    background-color: var(--commentColor, #F8E4B1);
+    background-color: var(--sidenoteAnchorColor, #F8E4B1);
   }
   .anchor:hover {
-    background-color: var(--commentColorHover, #F7CF69B6);
+    background-color: var(--sidenoteAnchorColorHover, #F7CF69B6);
   }
   .anchor.selected {
-    background-color: var(--commentColorSelected, #F5C955);
+    background-color: var(--sidenoteAnchorColorSelected, #F5C955);
   }
 }

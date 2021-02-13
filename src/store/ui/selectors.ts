@@ -1,21 +1,23 @@
 import { State } from '../types';
 
-export function selectedComment(state: State, docId?: string | null) {
+export function selectedSidenote(state: State, docId?: string | null) {
   if (docId == null) return null;
-  return state.comments.ui.docs[docId]?.selectedComment;
+  return state.sidenotes.ui.docs[docId]?.selectedSidenote;
 }
 
-export function isCommentSelected(state: State, docId?: string | null, commentId?: string | null) {
-  if (docId == null || commentId == null) return false;
-  return state.comments.ui.docs[docId]?.selectedComment === commentId;
+export function isSidenoteSelected(
+  state: State, docId?: string | null, sidenoteId?: string | null,
+) {
+  if (docId == null || sidenoteId == null) return false;
+  return state.sidenotes.ui.docs[docId]?.selectedSidenote === sidenoteId;
 }
 
-export function commentTop(state: State, docId?: string | null, commentId?: string | null) {
-  if (docId == null || commentId == null) return 0;
-  return state.comments.ui.docs[docId]?.comments[commentId]?.top ?? 0;
+export function sidenoteTop(state: State, docId?: string | null, sidenoteId?: string | null) {
+  if (docId == null || sidenoteId == null) return 0;
+  return state.sidenotes.ui.docs[docId]?.sidenotes[sidenoteId]?.top ?? 0;
 }
 
 export function isAnchorSelected(state: State, docId: string | null, anchorId: string | null) {
   if (docId == null || anchorId == null) return false;
-  return state.comments.ui.docs[docId]?.selectedAnchor === anchorId;
+  return state.sidenotes.ui.docs[docId]?.selectedAnchor === anchorId;
 }
