@@ -3,7 +3,7 @@ import {
   Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer,
 } from 'redux';
 import { types as runtimeTypes } from '@iooxa/runtime';
-import { State as CommentsState } from '@curvenote/comments';
+import { State as SidenotesState } from 'sidenotes';
 import { EditorsState, EditorActionTypes } from './state/types';
 import { UIState, UIActionTypes } from './ui/types';
 import { SuggestionState, SuggestionActionTypes } from './suggestion/types';
@@ -17,7 +17,7 @@ export interface State {
     attrs: AttributesState;
   };
   runtime: runtimeTypes.State['runtime'];
-  comments: CommentsState['comments'];
+  sidenotes: SidenotesState['sidenotes'];
 }
 
 export type EditorActions = (

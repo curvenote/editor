@@ -38,9 +38,6 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@curvenote/comments@file:.yalc/@curvenote/comments":
-  version "0.1.0"
-
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -6401,6 +6398,11 @@ side-channel@^1.0.2, side-channel@^1.0.3:
   dependencies:
     es-abstract "^1.18.0-next.0"
     object-inspect "^1.8.0"
+
+sidenotes@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/sidenotes/-/sidenotes-1.0.0.tgz#846861bceec26727e7ed6b52f3e3787855d88547"
+  integrity sha512-KABkwYncELtQYM1ZJASsoZyWZCZC94XIuP6eFaEXx8o1frOiCp8Qno3/ViWkxcBdKd8yxjr76Tna/azXWYl41Q==
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"

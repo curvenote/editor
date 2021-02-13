@@ -4,14 +4,14 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
 import { toMarkdown, toTex } from '@iooxa/schema';
-import { CommentContainer } from '@curvenote/comments';
+import { Sidenote, AnchorBase } from 'sidenotes';
 import {
   actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
 import '../styles/index.scss';
-import '@curvenote/comments/dist/comments.css';
+import 'sidenotes/dist/sidenotes.css';
 import { Options } from '../src/connect';
 
 declare global {
@@ -32,10 +32,10 @@ const stateKey = 'myEditor';
 const viewId1 = 'view1';
 const docId = 'docId';
 const newComment = () => {
-  store.dispatch(actions.addCommentToSelectedView('comment1'));
+  store.dispatch(actions.addCommentToSelectedView('sidenote1'));
 };
 const removeComment = () => {
-  store.dispatch(actions.removeComment(viewId1, 'comment1'));
+  store.dispatch(actions.removeComment(viewId1, 'sidenote1'));
 };
 
 const citation = {
@@ -102,19 +102,19 @@ ReactDOM.render(
     <React.StrictMode>
       <EditorMenu standAlone />
       <article id={docId} className="content centered">
-        <comment-base anchor="anchor">
+        <AnchorBase anchor="anchor">
           <div className="selected">
             <Editor stateKey={stateKey} viewId={viewId1} />
           </div>
-        </comment-base>
+        </AnchorBase>
         {/* <Editor stateKey={stateKey} viewId="two" /> */}
-        <div className="comments">
-          <CommentContainer comment="comment1" base="anchor">
+        <div className="sidenotes">
+          <Sidenote sidenote="sidenote1" base="anchor">
             <div style={{ width: 280, height: 100, backgroundColor: 'green' }} />
-          </CommentContainer>
-          <CommentContainer comment="comment2" base="anchor">
+          </Sidenote>
+          <Sidenote sidenote="sidenote2" base="anchor">
             <div style={{ width: 280, height: 100, backgroundColor: 'red' }} />
-          </CommentContainer>
+          </Sidenote>
         </div>
       </article>
       <Button onClick={newComment}>Comment</Button>

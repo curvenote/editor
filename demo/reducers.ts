@@ -1,5 +1,5 @@
 import runtime from '@iooxa/runtime';
-import { reducer as comments } from '@curvenote/comments';
+import * as sidenotes from 'sidenotes';
 import { combineReducers } from 'redux';
 import {
   State, EditorActions, Reducer, reducer,
@@ -8,7 +8,7 @@ import {
 const combinedReducers: Reducer = combineReducers({
   editor: reducer,
   runtime: runtime.reducer,
-  comments,
+  sidenotes: sidenotes.reducer,
 }) as Reducer;
 
 function rootReducer(state: State | undefined, action: EditorActions): State {

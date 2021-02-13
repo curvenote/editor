@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Theme } from '@material-ui/core';
-import { setup as setupComments, Store as CommentsStore } from '@curvenote/comments';
+import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
@@ -57,7 +57,7 @@ export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
   setupComponents(store);
-  setupComments(store as unknown as CommentsStore, { padding: 10 });
+  sidenotes.setup(store as unknown as sidenotes.Store, { padding: 10 });
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {
