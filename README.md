@@ -59,7 +59,7 @@ yarn add sidenotes
 The `sidenotes` class is the only CSS that is recommended. You can import it directly, or [look at it](/styles/index.scss) and change it (~30 lines of `scss`). To import from javascript (assuming your bundler works with CSS):
 
 ```javascript
-import 'sidenotes/dist/placement.css';
+import 'sidenotes/dist/sidenotes.css';
 ```
 
 ## Redux state
