@@ -3,14 +3,18 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/schema/blob/master/LICENSE)
 ![CI](https://github.com/curvenote/schema/workflows/CI/badge.svg)
 
+Schema for interactive scientific writing, with translations to [MyST flavoured markdown](https://myst-parser.readthedocs.io/en/latest/), LaTeX, and HTML.
+
+![@curvenote/schema in curvenote.com](https://github.com/curvenote/schema/raw/main/images/schema.gif)
+
 **Overview & Goals**
-* Provide a typed schema for writing reactive scientific documents using [iooxa components](https://iooxa.dev)
+* Provide a typed schema for writing reactive scientific documents using [curvenote components](https://iooxa.dev)
   * Uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in the rendered HTML output for non-standard components
   * Uses standard html for all other compnents, with no styling enforced
 * Interoperability with CommonMark markdown and [MyST](https://github.com/executablebooks/markdown-it-myst)
   * Through `fromMarkdown` and `toMarkdown` methods
 * Provide components for [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editing of reactive documents
-  * Initial library won't have a drop-in UI for the editor, although there will probably be a simple demo
+  * See [`@curvenote/editor`](https://github.com/curvenote/editor) or [curvenote.com](Curvenote.com) for the editor!
 
 **Choices**
 * The internal representation for the library is a [ProseMirror Document](https://prosemirror.net/docs/guide/#doc) structure (that can be rendered as JSON)
