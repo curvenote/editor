@@ -1,7 +1,7 @@
-# @iooxa/schema
-[![@iooxa/schema on npm](https://img.shields.io/npm/v/@iooxa/schema.svg)](https://www.npmjs.com/package/@iooxa/schema)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/iooxa/schema/blob/master/LICENSE)
-![CI](https://github.com/iooxa/schema/workflows/CI/badge.svg)
+# @curvenote/schema
+[![@curvenote/schema on npm](https://img.shields.io/npm/v/@curvenote/schema.svg)](https://www.npmjs.com/package/@curvenote/schema)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/schema/blob/master/LICENSE)
+![CI](https://github.com/curvenote/schema/workflows/CI/badge.svg)
 
 **Overview & Goals**
 * Provide a typed schema for writing reactive scientific documents using [iooxa components](https://iooxa.dev)
@@ -61,7 +61,7 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 
 ## Simple Example
 
-This moves from markdown --> JSON --> HTML. The JSON is the intermediate representation for `@iooxa/editor`.
+This moves from markdown --> JSON --> HTML. The JSON is the intermediate representation for `@curvenote/editor`.
 
 ```javascript
 import { Schema, nodes, marks, fromMarkdown, toHTML } from '@iooxa/editor';
@@ -69,7 +69,7 @@ import { JSDOM } from 'jsdom';
 
 const schema = new Schema({ nodes, marks });
 
-const content = '# Hello `@iooxa/editor`!';
+const content = '# Hello `@curvenote/editor`!';
 const doc = fromMarkdown(content, schema);
 
 console.log(doc.toJSON());
@@ -84,7 +84,7 @@ console.log(doc.toJSON());
           {
             "type": "text",
             "marks": [ { "type": "code" } ],
-            "text": "@iooxa/editor"
+            "text": "@curvenote/editor"
           },
           { "type": "text", "text": "!" }
         ]
@@ -99,12 +99,12 @@ const { document } = new JSDOM('').window;
 const html = toHTML(doc, schema, document);
 
 console.log(html);
->> "<h1>Hello <code>@iooxa/editor</code>!</h1>"
+>> "<h1>Hello <code>@curvenote/editor</code>!</h1>"
 ```
 
 ### Roadmap
 
-* Integrate other `@iooxa/components` as nodes
+* Integrate other `@curvenote/components` as nodes
 * Improve equation and start to go to/from various MyST syntax for this
 * Add figure properties (name, width, caption etc.)
 * Provide citations, probably bring in a bibtex parser
