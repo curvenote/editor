@@ -43,11 +43,11 @@ A [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor for technical content 
 
 (These will rebrand to `curvenote` soon.)
 
-* [`@iooxa/schema`](https://github.com/iooxa/schema) - the schema for this editor, focused on interactive content, also deals with translation and export.
+* [`@curvenote/schema`](https://github.com/curvenote/schema) - the schema for this editor, focused on interactive content, also deals with translation and export.
+* [`sidenotes`](https://github.com/curvenote/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
 * [`@iooxa/article`](https://github.com/iooxa/article) - CSS and styling components and document layout
 * [`@iooxa/components`](https://github.com/iooxa/components) - interactive widgets and web-components
 * [`@iooxa/runtime`](https://github.com/iooxa/runtime) - client-side reactivity built on redux
-* [`sidenotes`](https://github.com/curvenote/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
 
 A collaborative, rich text editor for interactive technical & scientific content., implementing the MyST standard, and integrating with JupyterLab, JupyterBook and Sphinx. The project will enable a larger audience to create publication-quality, standards-friendly documents through Jupyter, without having to learn a new syntax.
 
