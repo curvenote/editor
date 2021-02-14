@@ -58,7 +58,7 @@ export const markdownSerializer = new MarkdownSerializer({
     state.renderList(node, '  ', () => `${node.attrs.bullet || '*'} `);
   },
   list_item(state, node) {
-    state.renderContent(node);
+    state.renderInline(node);
   },
   // Presentational
   image: nodes.Image.toMarkdown,

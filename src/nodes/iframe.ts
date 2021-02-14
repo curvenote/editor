@@ -2,7 +2,7 @@ import { NodeSpec } from 'prosemirror-model';
 import { NodeGroups, FormatSerialize } from './types';
 import { DEFAULT_IMAGE_WIDTH, getImageWidth } from '../utils';
 
-const image: NodeSpec = {
+const iframe: NodeSpec = {
   attrs: {
     src: {},
     align: { default: 'center' },
@@ -37,10 +37,4 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex: FormatSerialize = (state, node) => {
-  state.ensureNewLine();
-  state.closeBlock(node);
-};
-
-
-export default image;
+export default iframe;

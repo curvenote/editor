@@ -1,6 +1,8 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { latexStatement, TAB } from './utils';
+import {
+  blankTex, blankTexLines, latexStatement, TAB,
+} from './utils';
 import * as nodes from '../../nodes';
 import { FormatSerialize } from '../../nodes/types';
 import { isPlainURL } from '../markdown/utils';
@@ -49,10 +51,10 @@ export const texSerializer = new MarkdownSerializer({
     state.renderList(node, TAB, () => '\\item ');
   }),
   list_item(state, node) {
-    state.renderContent(node);
+    state.renderInline(node);
   },
   image: nodes.Image.toTex,
-  iframe: nodes.IFrame.toTex,
+  iframe: blankTexLines,
   cite: nodes.Cite.toTex,
   cite_group: nodes.CiteGroup.toTex,
   math: nodes.Math.toTex,
@@ -60,12 +62,12 @@ export const texSerializer = new MarkdownSerializer({
   // \usepackage{framed}
   callout: latexStatement('framed', (state, node) => { state.renderContent(node); }),
   aside: latexStatement('marginpar', (state, node) => { state.renderContent(node); }, true),
-  // variable: nodes.Variable.toTex,
-  // display: nodes.Display.toTex,
-  // dynamic: nodes.Dynamic.toTex,
-  // range: nodes.Range.toTex,
-  // switch: nodes.Switch.toTex,
-  // button: nodes.Button.toTex,
+  variable: blankTexLines,
+  display: blankTex,
+  dynamic: blankTex,
+  range: blankTex,
+  switch: blankTex,
+  button: blankTex,
 }, {
   em: {
     open: '\\textit{', close: '}', mixable: true, expelEnclosingWhitespace: true,
