@@ -1,9 +1,9 @@
 {
-  "name": "@iooxa/schema",
+  "name": "@curvenote/schema",
   "version": "0.2.0",
-  "description": "Schema and markdown parser for @iooxa/editor",
-  "author": "Rowan Cockett <rowan@iooxa.com>",
-  "homepage": "https://github.com/iooxa/schema",
+  "description": "Schema and markdown parser for @curvenote/editor",
+  "author": "Rowan Cockett <rowan@curvenote.com>",
+  "homepage": "https://github.com/curvenote/schema",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iooxa/schema.git"
+    "url": "git+https://github.com/curvenote/schema.git"
+  },
+  "bugs": {
+    "url": "https://github.com/curvenote/schema/issues"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -26,9 +29,6 @@
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json"
-  },
-  "bugs": {
-    "url": "https://github.com/iooxa/schema/issues"
   },
   "dependencies": {
     "markdown-it": "^12.0.2",
