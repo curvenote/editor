@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@material-ui/core';
-import { DEFAULT_IMAGE_WIDTH } from '@iooxa/schema';
+import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
 import ImageToolbar, { AlignOptions } from './IFrameToolbar';
 import { opts, ref } from '../../../connect';
 

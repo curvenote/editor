@@ -6,7 +6,7 @@ import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-lis
 import {
   MarkType, NodeType, Node, Fragment,
 } from 'prosemirror-model';
-import { Nodes } from '@iooxa/schema';
+import { Nodes } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { AppThunk } from '../types';

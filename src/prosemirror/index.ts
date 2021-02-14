@@ -1,4 +1,4 @@
-import { migrateHTML } from '@iooxa/schema';
+import { migrateHTML } from '@curvenote/schema';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';

@@ -78,3 +78,16 @@ We have recently (Feb 2021) spun this out of internal development at [Curvenote]
 * Integrate as a JupyterLab extension (would love help!!)
 * Integrate with ipywidgets (would love help!!)
 * Integrate with thebelab (would love help!!)
+
+
+## Getting Started
+
+```
+git clone git@github.com:curvenote/editor.git
+cd editor
+yarn install
+yarn build
+yarn start
+```
+
+See the [demo folder](/demo/index.tsx) from more details on how to get started.

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
-import { toMarkdown, toTex } from '@iooxa/schema';
+import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
   actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
@@ -13,6 +13,7 @@ import middleware from './middleware';
 import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
 import { Options } from '../src/connect';
+import snippet from './snippet';
 
 declare global {
   interface Window {
@@ -56,7 +57,7 @@ const opts: Options = {
       // eslint-disable-next-line no-console
       console.log(file);
       return new Promise((resolve) => (
-        setTimeout(() => resolve('https://iooxa.dev/images/logo.png'), 3000)
+        setTimeout(() => resolve('/images/logo.png'), 3000)
       ));
     },
     downloadUrl: async (src) => src,
@@ -81,19 +82,28 @@ const opts: Options = {
 setup(store, opts);
 
 window.store = store;
-store.dispatch(actions.initEditorState(stateKey, true, '<p>Hello editing!<a href="https://iooxa.dev/introduction">@iooxa/components</a> <cite-group><cite key="simpeg2015"></cite></cite-group></p><img src="https://iooxa.dev/images/logo.png">', 0));
+store.dispatch(actions.initEditorState(stateKey, true, snippet, 0));
 
 
 store.subscribe(() => {
   const myst = document.getElementById('myst');
   const tex = document.getElementById('tex');
+  const html = document.getElementById('html');
   if (myst) {
     const editorState = store.getState().editor.state.editors[stateKey].state;
     myst.innerText = toMarkdown(editorState.doc);
   }
   if (tex) {
     const editorState = store.getState().editor.state.editors[stateKey].state;
-    tex.innerText = toTex(editorState.doc);
+    try {
+      tex.innerText = toTex(editorState.doc);
+    } catch (error) {
+      tex.innerText = 'There was an error :(';
+    }
+  }
+  if (html) {
+    const editorState = store.getState().editor.state.editors[stateKey].state;
+    html.innerText = toHTML(editorState.doc, editorState.schema, document);
   }
 });
 

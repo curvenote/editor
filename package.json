@@ -39,15 +39,14 @@
     "prosemirror-utils": "^0.9.6",
     "prosemirror-view": "^1.16.4",
     "scroll-into-view-if-needed": "^2.2.26",
-
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.2"
   },
   "peerDependencies": {
     "sidenotes": "^1.0.0",
     "@iooxa/article": "0.2.8",
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
-    "@iooxa/schema": "0.0.9",
+    "@curvenote/schema": "0.2.1",
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.9.1",
     "classnames": "^2.2.6",
@@ -78,11 +77,10 @@
     "watch": "tsc -w -p ."
   },
   "devDependencies": {
-    "sidenotes": "^1.0.0",
     "@iooxa/article": "0.2.8",
     "@iooxa/components": "0.2.7",
     "@iooxa/runtime": "0.2.7",
-    "@iooxa/schema": "0.2.0",
+    "@curvenote/schema": "0.2.1",
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.9.1",
     "@types/classnames": "^2.2.11",
@@ -140,6 +138,7 @@
     "redux-thunk": "^2.3.0",
     "sass": "^1.29.0",
     "sass-loader": "^10.1.0",
+    "sidenotes": "^1.0.0",
     "style-loader": "^2.0.0",
     "ts-loader": "^8.0.11",
     "typescript": "^3.9.3",
