@@ -62,13 +62,15 @@ export function menuActive(state: State, stateId: any | null) {
   return isEditable(editor.state);
 }
 
-function falseMap<T extends {}>(obj: Record<keyof T, any>): Record<keyof T, boolean> {
+function falseMap<T extends Record<string, any>>(
+  obj: Record<keyof T, any>,
+): Record<keyof T, boolean> {
   return Object.fromEntries(
     Object.entries(obj).map(([key]) => [key, false]),
   ) as Record<keyof T, boolean>;
 }
 
-export function selectionIsMarkedWith<T extends {}>(
+export function selectionIsMarkedWith<T extends Record<string, any>>(
   state: State, stateKey: any | null, types: Record<keyof T, MarkType>,
 ): Record<keyof T, boolean> {
   const editor = getEditor(state, stateKey);
@@ -84,7 +86,7 @@ export function selectionIsMarkedWith<T extends {}>(
   return active as Record<keyof T, boolean>;
 }
 
-export function selectionIsChildOf<T extends {}>(
+export function selectionIsChildOf<T extends Record<string, any>>(
   state: State, stateKey: any | null, nodes: Record<keyof T, NodeType>,
 ): Record<keyof T, boolean> {
   const editor = getEditor(state, stateKey);
@@ -96,7 +98,7 @@ export function selectionIsChildOf<T extends {}>(
   return active as Record<keyof T, boolean>;
 }
 
-export function selectionIsThisNodeType<T extends {}>(
+export function selectionIsThisNodeType<T extends Record<string, any>>(
   state: State, stateKey: any | null, nodes: Record<keyof T, NodeType>,
 ): Record<keyof T, boolean> {
   const editor = getEditor(state, stateKey);

@@ -40,7 +40,7 @@ export function updateNodeAttrs(
 
 
 export function toggleMark(
-  stateKey: any, viewId: string | null, mark: MarkType, attrs?: {[key: string]: any},
+  stateKey: any, viewId: string | null, mark: MarkType, attrs?: { [key: string]: any },
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -132,7 +132,7 @@ export function replaceSelection(
   };
 }
 
-function setBlockType(node: NodeType, attrs?: {[index: string]: any}): AppThunk<boolean> {
+function setBlockType(node: NodeType, attrs?: { [index: string]: any }): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;

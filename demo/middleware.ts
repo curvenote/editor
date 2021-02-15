@@ -1,4 +1,4 @@
-import runtime from '@iooxa/runtime';
+import runtime from '@curvenote/runtime';
 import thunkMiddleware from 'redux-thunk';
 import { middleware } from '../src';
 

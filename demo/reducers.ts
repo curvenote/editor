@@ -1,4 +1,4 @@
-import runtime from '@iooxa/runtime';
+import runtime from '@curvenote/runtime';
 import * as sidenotes from 'sidenotes';
 import { combineReducers } from 'redux';
 import {
@@ -12,6 +12,7 @@ const combinedReducers: Reducer = combineReducers({
 }) as Reducer;
 
 function rootReducer(state: State | undefined, action: EditorActions): State {
+  // eslint-disable-next-line no-console
   console.log('New Action: ', action);
   return combinedReducers(state, action);
 }

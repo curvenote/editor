@@ -1,4 +1,4 @@
-import * as runtime from '@iooxa/runtime';
+import * as runtime from '@curvenote/runtime';
 import * as collab from './collab';
 
 export * from './store';

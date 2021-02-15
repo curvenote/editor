@@ -1,4 +1,4 @@
-import { types } from '@iooxa/runtime';
+import { types } from '@curvenote/runtime';
 import { EditorView } from 'prosemirror-view';
 import { CitationFormat } from '../../types';
 import { CommandResult } from './commands';

@@ -3,7 +3,7 @@ export const ATTRIBUTES_SHOW_EDITOR = 'ATTRIBUTES_SHOW_EDITOR';
 export type AttributesState = {
   show: boolean;
   pos: number;
-  location: {top: number; left: number} | null;
+  location: { top: number; left: number } | null;
 };
 
 interface AttributesSetEditing {

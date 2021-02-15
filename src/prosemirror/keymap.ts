@@ -21,7 +21,7 @@ type KeyMap = (
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
 export function buildKeymap(stateKey: any, schema: Schema) {
-  const keys: {[index: string]: KeyMap} = {};
+  const keys: { [index: string]: KeyMap } = {};
 
   const bind = (key: string, cmd: KeyMap) => { keys[key] = cmd; };
 

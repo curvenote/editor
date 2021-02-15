@@ -34,12 +34,12 @@ export function triggerSuggestion(view: EditorView, trigger: string) {
 }
 
 export enum SuggestionActionKind {
-  'open'='open',
-  'close'='close',
-  'filter'='filter',
-  'previous'='previous',
-  'next'='next',
-  'select'='select',
+  'open' = 'open',
+  'close' = 'close',
+  'filter' = 'filter',
+  'previous' = 'previous',
+  'next' = 'next',
+  'select' = 'select',
 }
 
 export interface SuggestionAction {
