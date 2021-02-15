@@ -8,7 +8,7 @@ Schema for interactive scientific writing, with translations to [MyST flavoured 
 ![@curvenote/schema in curvenote.com](https://github.com/curvenote/schema/raw/main/images/schema.gif)
 
 **Overview & Goals**
-* Provide a typed schema for writing reactive scientific documents using [curvenote components](https://iooxa.dev)
+* Provide a typed schema for writing reactive scientific documents using [@curvenote/components](https://curvenote.dev)
   * Uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in the rendered HTML output for non-standard components
   * Uses standard html for all other compnents, with no styling enforced
 * Interoperability with CommonMark markdown and [MyST](https://github.com/executablebooks/markdown-it-myst)
@@ -39,16 +39,16 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
   * bullet_list
   * list_item
 * Presentational Components
-  * [callout](https://iooxa.dev/article/callout)
-  * [aside](https://iooxa.dev/article/aside)
-  * [math](https://iooxa.dev/article/math)
-  * [equation](https://iooxa.dev/article/equation)
+  * [callout](https://curvenote.dev/article/callout)
+  * [aside](https://curvenote.dev/article/aside)
+  * [math](https://curvenote.dev/article/math)
+  * [equation](https://curvenote.dev/article/equation)
 * Reactive Components
-  * [variable](https://iooxa.dev/components/variable)
-  * [display](https://iooxa.dev/components/display)
-  * [dynamic](https://iooxa.dev/components/dynamic)
-  * [range](https://iooxa.dev/components/range)
-  * [switch](https://iooxa.dev/components/switch)
+  * [variable](https://curvenote.dev/components/variable)
+  * [display](https://curvenote.dev/components/display)
+  * [dynamic](https://curvenote.dev/components/dynamic)
+  * [range](https://curvenote.dev/components/range)
+  * [switch](https://curvenote.dev/components/switch)
 
 **Overview of `Marks`**
 
@@ -68,7 +68,7 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 This moves from markdown --> JSON --> HTML. The JSON is the intermediate representation for `@curvenote/editor`.
 
 ```javascript
-import { Schema, nodes, marks, fromMarkdown, toHTML } from '@iooxa/editor';
+import { Schema, nodes, marks, fromMarkdown, toHTML } from '@curvenote/editor';
 import { JSDOM } from 'jsdom';
 
 const schema = new Schema({ nodes, marks });
@@ -112,11 +112,11 @@ console.log(html);
 * Improve equation and start to go to/from various MyST syntax for this
 * Add figure properties (name, width, caption etc.)
 * Provide citations, probably bring in a bibtex parser
-  * Introduce citation and reference component to iooxa/components or article
+  * Introduce citation and reference component to curvenote/components or article
 * Add overlaping roles/directives with MyST (e.g. see [executablebooks/meta#70](https://github.com/executablebooks/meta/issues/70)) for pointers
-  * Add the necessary pieces to iooxa/components that are not basic html (MyST uses sphinx for the heavy lifting, cross-refs etc.)
-* Provide other sereializers from the document strucutre (e.g. latex or simple html without iooxa/components, possibly idyll)
+  * Add the necessary pieces to curvenote/components that are not basic html (MyST uses sphinx for the heavy lifting, cross-refs etc.)
+* Provide other sereializers from the document strucutre (e.g. latex or simple html without curvenote/components, possibly idyll)
 
 
 ## See also:
-* [Idyll Lang](https://idyll-lang.org/) has a different markdown-like serialization with very similar base components to iooxa - see [iooxa/article#8](https://github.com/iooxa/article/issues/8) for a comparison.
+* [Idyll Lang](https://idyll-lang.org/) has a different markdown-like serialization with very similar base components to curvenote - see [curvenote/article#8](https://github.com/curvenote/article/issues/8) for a comparison.
