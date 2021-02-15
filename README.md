@@ -41,13 +41,11 @@ A [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor for technical content 
 
 ### Related Projects
 
-(These will rebrand to `curvenote` soon.)
-
 * [`@curvenote/schema`](https://github.com/curvenote/schema) - the schema for this editor, focused on interactive content, also deals with translation and export.
 * [`sidenotes`](https://github.com/curvenote/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
-* [`@iooxa/article`](https://github.com/iooxa/article) - CSS and styling components and document layout
-* [`@iooxa/components`](https://github.com/iooxa/components) - interactive widgets and web-components
-* [`@iooxa/runtime`](https://github.com/iooxa/runtime) - client-side reactivity built on redux
+* [`@curvenote/article`](https://github.com/curvenote/article) - CSS and styling components and document layout
+* [`@curvenote/components`](https://github.com/curvenote/components) - interactive widgets and web-components
+* [`@curvenote/runtime`](https://github.com/curvenote/runtime) - client-side reactivity built on redux
 
 A collaborative, rich text editor for interactive technical & scientific content., implementing the MyST standard, and integrating with JupyterLab, JupyterBook and Sphinx. The project will enable a larger audience to create publication-quality, standards-friendly documents through Jupyter, without having to learn a new syntax.
 
@@ -57,7 +55,7 @@ A collaborative, rich text editor for interactive technical & scientific content
   * If you only need one editor on the page, the weird part will be integrating with Redux, and some unnecessary indexing. However, this is probably important anyways if you have comments or other places in the DOM that are instances of the editor.
 * Typescript and fully typed.
 * Styling of editor components with [material-ui](https://material-ui.com)
-* Reactivity powered by `@iooxa/components` and `@iooxa/runtime`, which are [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
+* Reactivity powered by `@curvenote/components` and `@curvenote/runtime`, which are [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
 * Real-time collaboration is possible through middleware integrations. See [prosemirror-collab](https://github.com/ProseMirror/prosemirror-collab).
   * We will (eventually) improve support for cursors and highlights. See Roadmap.
 * See [demo/index.tsx](/demo/index.tsx) for an example setup.

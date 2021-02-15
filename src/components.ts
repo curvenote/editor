@@ -1,6 +1,6 @@
-import { types } from '@iooxa/runtime';
-import { register as articleRegister } from '@iooxa/article';
-import { register as basicRegister } from '@iooxa/components';
+import { types } from '@curvenote/runtime';
+import { register as articleRegister } from '@curvenote/article';
+import { register as basicRegister } from '@curvenote/components';
 import { Store } from './store/types';
 
 export default function setup(store: Store) {
