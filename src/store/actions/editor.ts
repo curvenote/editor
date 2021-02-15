@@ -1,4 +1,6 @@
-import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
+import {
+  EditorState, NodeSelection, Selection, Transaction,
+} from 'prosemirror-state';
 import {
   wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode,
 } from 'prosemirror-commands';
@@ -127,7 +129,12 @@ export function replaceSelection(
     const nodeContent = getContent(editor.state, content);
     const selectParagraph = selectParentNodeOfType(schema.nodes.paragraph);
     const replaceWithNode = replaceSelectedNode(node.create(attrs, nodeContent));
-    const tr = replaceWithNode(selectParagraph(editor.state.tr));
+    let tr = replaceWithNode(selectParagraph(editor.state.tr));
+    if (node.name === schema.nodes.code_block.name) {
+      const pos = tr.doc.resolve(tr.selection.from + 1);
+      const sel = new Selection(pos, pos);
+      tr = tr.setSelection(sel);
+    }
     return dispatch(applyProsemirrorTransaction(editor.stateId, tr));
   };
 }

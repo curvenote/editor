@@ -127,7 +127,6 @@ export function executeCommand(
       case CommandNames.code:
         removeText();
         dispatch(replaceOrInsert(schema.nodes.code_block));
-        // TODO: Put cursor inside of code
         return true;
       case CommandNames.variable:
         removeText();
