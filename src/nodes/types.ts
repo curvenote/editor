@@ -29,7 +29,7 @@ export type NodeDef = {
 };
 
 export type FormatSerialize<S extends Schema<any, any> = any> = (
-  state: MarkdownSerializerState<S> & {delim?: string},
+  state: MarkdownSerializerState<S> & { delim?: string },
   node: Node<S>,
   parent: Node<S>,
   index: number
