@@ -16,7 +16,7 @@
 * Comment streams next to a document. This is showing [Curvenote](https://curvenote.com), which is a scientific writing platform that connects to Jupyter.
 [![Comments Using Sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/comments.gif)](https://curvenote.com)
 
-## Chocies
+## Choices
 * Use React, Redux & Typescript
 * Used Redux rather than a hook approach (open to discussion if people are passionate!)
 
