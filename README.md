@@ -2,6 +2,7 @@
 [![sidenotes on npm](https://img.shields.io/npm/v/sidenotes.svg)](https://www.npmjs.com/package/sidenotes)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/sidenotes/main/LICENSE)
 ![CI](https://github.com/curvenote/sidenotes/workflows/CI/badge.svg)
+[![demo](https://img.shields.io/badge/live-demo-blue)](https://curvenote.github.io/sidenotes/)
 
 **Position floating sidenotes/comments next to a document with inline references.**
 

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
@@ -36,6 +38,11 @@ ReactDOM.render(
     <React.StrictMode>
       <article id={docId} onClick={deselect}>
         <h1>sidenotes</h1>
+        <div>
+          <a href="https://www.npmjs.com/package/sidenotes" title="sidenotes on npm"><img src="https://img.shields.io/npm/v/sidenotes.svg" /></a>
+          <a href="https://github.com/curvenote/sidenotes/blob/main/LICENSE" title="MIT License"><img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+          <a href="https://github.com/curvenote/sidenotes" title="CI"><img src="https://github.com/curvenote/sidenotes/workflows/CI/badge.svg" /></a>
+        </div>
         <button type="button" onClick={deselect}>Deselect Sidenotes</button>
         <AnchorBase anchor={baseAnchor} className="greenBase">
           <p>
@@ -51,11 +58,15 @@ ReactDOM.render(
           </p>
           <ul>
             <li>Must see all the <InlineAnchor sidenote={red} className="red">sidenotes</InlineAnchor> at once, so they should be in the margins!</li>
-            <li>Must be associated with a block (a small bit of content), that is versioned and must point to content inside of that block.</li>
+            <li>
+              Must be associated with a block (a small bit of content),
+              that is versioned and must point to content inside of that block.
+            </li>
           </ul>
           <p>
             The sidenotes location <InlineAnchor sidenote={blue} className="blue">information</InlineAnchor> is a stand alone package.
-            For example, the reducer should be based on the ID of the sidenote that can get triggered (or not).
+            For example, the reducer should be based on the
+            ID of the sidenote that can get triggered (or not).
           </p>
           <p>
             Has a mini reducer in there to keep internal state
@@ -64,7 +75,8 @@ ReactDOM.render(
             Visible
             Selected
             The sidenotes dont have to reposition unless one is selected.
-            Each time do a sweep of the doc and reposition the elements. The animation can be handled by CSS.
+            Each time do a sweep of the doc and reposition the elements.
+            The animation can be handled by CSS.
           </p>
           <p>
             <InlineAnchor sidenote={red} className="red">Next sidenote!</InlineAnchor>
