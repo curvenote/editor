@@ -8,7 +8,7 @@ on:
 
 # This job installs dependencies, build the demo, and pushes it to `gh-pages`
 jobs:
-  deploy-book:
+  gh-pages:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
