@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/curvenote/sidenotes/issues"
   },
-  "homepage": "https://github.com/curvenote/sidenotes",
+  "homepage": "https://curvenote.dev/sidenotes",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "dependencies": {},
