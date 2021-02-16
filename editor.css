@@ -1,0 +1,441 @@
+@charset "UTF-8";
+.ProseMirror {
+  position: relative;
+}
+
+.ProseMirror {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0;
+  /* the above doesn't seem to work in Edge */
+}
+
+.ProseMirror pre {
+  white-space: pre-wrap;
+}
+
+.ProseMirror li {
+  position: relative;
+}
+
+.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+
+.ProseMirror-hideselection *::-moz-selection {
+  background: transparent;
+}
+
+.ProseMirror-hideselection {
+  caret-color: transparent;
+}
+
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror-selectednode {
+  cursor: move;
+}
+
+.ProseMirror-hideselection .equation-tooltip *::selection {
+  background-color: transparent;
+}
+
+.ProseMirror-hideselection .equation-tooltip *::-moz-selection {
+  background-color: transparent;
+}
+
+.equation-tooltip {
+  cursor: auto;
+  left: 0px;
+  padding: 10px;
+  position: absolute;
+  width: calc(100% - 20px);
+  background-color: rgba(250, 250, 250, 0.9);
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
+  border: 1px solid silver;
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+.equation-tooltip.inline {
+  top: calc(100% + 10px);
+  width: 300px;
+}
+
+.equation-tooltip::before {
+  border: 5px solid silver;
+  border-top-width: 0px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  content: " ";
+  height: 0;
+  width: 0;
+}
+
+.equation-tooltip.inline::before {
+  left: 2px;
+}
+
+article {
+  position: relative;
+}
+article a strong, article a {
+  color: #1E88E5;
+  text-decoration: none;
+  font-weight: 500;
+}
+article a strong {
+  font-weight: 700;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  font-family: var(--curvenote-font-headers, serif);
+}
+article p code {
+  border-radius: 5px;
+  border: 1px solid #E4E4E4;
+  background-color: #FAFAFA;
+  padding: 0 3px;
+}
+article pre {
+  border: 1px solid #E4E4E4;
+  background-color: #FAFAFA;
+  padding: 10px;
+}
+article dl {
+  color: #4D4D4D;
+  font-family: var(--curvenote-font, sans-serif);
+  line-height: 1.4;
+}
+article dl dt {
+  float: left;
+  width: 160px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+article dl dd {
+  margin-left: 180px;
+}
+@media screen and (max-width: 800px) {
+  article dl dt {
+    float: unset;
+    width: unset;
+    overflow: unset;
+    clear: unset;
+    text-align: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+  article dl dd {
+    margin-left: 15px;
+  }
+}
+article p {
+  display: block;
+  text-align: justify;
+  overflow-wrap: break-word;
+  font-size: 17px;
+  line-height: 1.8;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #4D4D4D;
+  font-family: var(--curvenote-font, sans-serif);
+  font-weight: 300;
+}
+@media screen and (max-width: 800px) {
+  article p {
+    text-align: left;
+  }
+}
+article ol p, article ul p {
+  margin: 0;
+  text-align: left;
+}
+article em {
+  font-style: italic;
+}
+article strong {
+  color: black;
+}
+article table {
+  width: 100%;
+  border-collapse: collapse;
+}
+article thead {
+  font-size: 105%;
+  border-bottom: 1px solid #333;
+  color: black;
+}
+article tbody {
+  border-left: 1px solid #333;
+}
+article td {
+  padding-left: 8px;
+}
+article hr {
+  width: 200px;
+  margin: 30px 0;
+  margin-left: calc(50% - 100px);
+  border-top: 1px solid #B2B2B2;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  clear: both;
+}
+article img {
+  max-width: 100%;
+}
+
+article aside.margin {
+  position: relative;
+  float: right;
+  z-index: 1;
+  width: 210px;
+  padding-left: 20px;
+  margin-top: -30px;
+  margin-right: -232px;
+  background-color: #FFF;
+}
+
+article aside.margin, article aside.margin p {
+  font-size: 12px;
+  color: #aaa;
+  font-family: var(--curvenote-font, sans-serif);
+  text-align: left;
+}
+
+article.centered aside.margin {
+  float: right;
+  width: 33%;
+  margin: unset;
+  margin-left: 20px;
+}
+
+article.centered aside.callout {
+  clear: both;
+}
+
+@media screen and (max-width: 800px) {
+  article aside.margin, article.centered aside.margin {
+    float: unset;
+    width: unset;
+    margin: unset;
+    border-left: 5px solid #eee;
+  }
+}
+article aside.callout {
+  display: block;
+  padding: 5px 20px;
+  margin: 20px 0;
+  border: 1px solid #AAAAAA;
+  border-left-width: 5px;
+  border-radius: 1px;
+  border-left-color: #4285F4;
+}
+
+article aside.callout, article aside.callout p {
+  margin: 0;
+  text-align: left;
+  display: block;
+  font-size: inherit;
+  color: #4D4D4D;
+}
+
+article aside.callout.active {
+  border-left-color: #AAAAAA;
+}
+
+article aside.callout.success {
+  border-left-color: #9EC667;
+}
+
+article aside.callout.info {
+  border-left-color: #4285F4;
+}
+
+article aside.callout.warning {
+  border-left-color: #F3B300;
+}
+
+article aside.callout.danger {
+  border-left-color: #CA4F44;
+}
+
+r-var {
+  display: block;
+  color: #D46485;
+  border: 1px solid #D4D4D4;
+  border-radius: 2px;
+  background-color: #EFEFEF;
+  width: fit-content;
+  padding: 5px;
+  user-select: none;
+}
+
+r-dynamic {
+  color: var(--mdc-theme-secondary, #46F);
+  border-bottom: 1px dashed var(--mdc-theme-secondary, #46F);
+}
+
+r-action {
+  cursor: pointer;
+  color: var(--mdc-theme-secondary, #46F);
+  border-bottom: 1px solid var(--mdc-theme-secondary, #46F);
+}
+
+r-action.noclick {
+  cursor: unset;
+  border-bottom: unset;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.cursor-col-resize {
+  cursor: col-resize;
+}
+
+r-equation {
+  display: block;
+}
+
+r-equation[inline=""] {
+  display: inline-block;
+}
+
+article blockquote {
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-left: 5px solid var(--mdc-theme-primary, #eee);
+}
+article blockquote p {
+  color: #646464;
+  font-size: 1.5em;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+article blockquote footer {
+  font-family: var(--curvenote-font, sans-serif);
+  color: #a7a7a7;
+  font-size: 1em;
+}
+article blockquote footer cite {
+  text-transform: uppercase;
+  color: var(--mdc-theme-primary, #eee);
+  font-style: normal;
+  font-weight: 700;
+}
+article blockquote footer time {
+  font-style: italic;
+  font-size: 0.9em;
+}
+article blockquote footer time::before {
+  content: " - ";
+}
+
+article cite-group .citation::after {
+  content: "; ";
+}
+article cite-group .citation:last-of-type::after {
+  content: "";
+}
+article cite-group::before {
+  content: "(";
+}
+article cite-group::after {
+  content: ")";
+}
+article .citation > span {
+  border-bottom: 1px dotted #363636;
+  color: #363636;
+  text-decoration: none;
+}
+article .citation > span:hover {
+  cursor: zoom-in;
+  border-bottom-color: #1584d3;
+  color: #1584d3;
+}
+
+article {
+  position: relative;
+}
+
+article .selected .ProseMirror-selectednode {
+  outline: 2px solid #8cf;
+}
+article .selected li.ProseMirror-selectednode {
+  /* Make sure li selections wrap around markers */
+  outline: none;
+}
+article .selected li.ProseMirror-selectednode:after {
+  content: "";
+  position: absolute;
+  left: -32px;
+  right: -2px;
+  top: -2px;
+  bottom: -2px;
+  border: 2px solid #8cf;
+  pointer-events: none;
+}
+
+/* Make sure that you can see the asides!! */
+article aside.margin {
+  border: 1px solid transparent;
+}
+
+.ProseMirror-focused aside.margin {
+  background-color: #fdfdfd;
+  border: 1px solid #ddd;
+}
+.ProseMirror-focused r-display {
+  border: 1px solid #ddd;
+  border-bottom-color: #8cf;
+}
+
+.widget {
+  display: inline-block;
+}
+
+.widget.widget-variable {
+  display: block;
+}
+
+img.placeholder {
+  margin-left: 15%;
+  width: 70%;
+  box-shadow: 0 0 0 0 black;
+  animation: pulsePlaceholder 2s infinite;
+  animation-timing-function: ease;
+}
+
+@keyframes pulsePlaceholder {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+.hidden {
+  display: none;
+}
+
+/*# sourceMappingURL=editor.css.map */
