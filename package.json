@@ -1,6 +1,6 @@
 {
   "name": "@curvenote/editor",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "MIT",
@@ -41,10 +41,10 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@curvenote/schema": "0.2.1",
     "@curvenote/article": "0.2.9",
     "@curvenote/components": "0.2.9",
     "@curvenote/runtime": "0.2.7",
+    "@curvenote/schema": "0.2.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "classnames": "^2.2.6",
@@ -76,10 +76,10 @@
     "watch": "tsc -w -p ."
   },
   "devDependencies": {
-    "@curvenote/runtime": "^0.2.7",
-    "@curvenote/schema": "0.2.1",
     "@curvenote/article": "0.2.9",
     "@curvenote/components": "0.2.9",
+    "@curvenote/runtime": "^0.2.7",
+    "@curvenote/schema": "0.2.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@types/classnames": "^2.2.11",
