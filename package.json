@@ -3,7 +3,6 @@
   "version": "0.2.3",
   "description": "Schema and markdown parser for @curvenote/editor",
   "author": "Rowan Cockett <rowan@curvenote.com>",
-  "homepage": "https://github.com/curvenote/schema",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,6 +19,7 @@
   "bugs": {
     "url": "https://github.com/curvenote/schema/issues"
   },
+  "homepage": "https://curvenote.dev/schema",
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn run clean && tsc -p .;rm -rf dist/test; mv dist/src/* dist; rmdir dist/src;",
