@@ -76,6 +76,7 @@
     "eslint-plugin-no-skip-tests": "^1.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
+    "prosemirror-test-builder": "^1.0.3",
     "jest": "^26.6.3",
     "jsdom": "^16.4.0",
     "ts-jest": "^26.5.1",
