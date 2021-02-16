@@ -127,8 +127,15 @@ ReactDOM.render(
           </Sidenote>
         </div>
       </article>
-      <Button onClick={newComment}>Comment</Button>
-      <Button onClick={removeComment}>Remove</Button>
+      <div className="centered">
+        <p>
+          Select some text to create an inline comment (cmd-opt-m). See
+          <a href="https://curvenote.com">curvenote.com</a>
+          for full demo.
+        </p>
+        <Button onClick={newComment}>Comment</Button>
+        <Button onClick={removeComment}>Remove</Button>
+      </div>
       <Suggestion />
       <Attributes />
     </React.StrictMode>
