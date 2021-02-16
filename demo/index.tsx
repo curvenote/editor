@@ -130,7 +130,7 @@ ReactDOM.render(
       <div className="centered">
         <p>
           Select some text to create an inline comment (cmd-opt-m). See
-          <a href="https://curvenote.com">curvenote.com</a>
+          <a href="https://curvenote.com"> curvenote.com </a>
           for full demo.
         </p>
         <Button onClick={newComment}>Comment</Button>
