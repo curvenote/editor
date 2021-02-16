@@ -7,7 +7,7 @@ Schema for interactive scientific writing, with translations to [MyST flavoured 
 
 ![@curvenote/schema in curvenote.com](https://github.com/curvenote/schema/raw/main/images/schema.gif)
 
-**Overview & Goals**
+## Overview & Goals
 * Provide a typed schema for writing reactive scientific documents using [@curvenote/components](https://curvenote.dev)
   * Uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in the rendered HTML output for non-standard components
   * Uses standard html for all other compnents, with no styling enforced
@@ -16,7 +16,7 @@ Schema for interactive scientific writing, with translations to [MyST flavoured 
 * Provide components for [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editing of reactive documents
   * See [`@curvenote/editor`](https://github.com/curvenote/editor) or [curvenote.com](Curvenote.com) for the editor!
 
-**Choices**
+## Choices
 * The internal representation for the library is a [ProseMirror Document](https://prosemirror.net/docs/guide/#doc) structure (that can be rendered as JSON)
 * [markdown-it](https://github.com/markdown-it/markdown-it) is used parse and tokenize markdown content
 
@@ -68,12 +68,12 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 This moves from markdown --> JSON --> HTML. The JSON is the intermediate representation for `@curvenote/editor`.
 
 ```javascript
-import { Schema, nodes, marks, fromMarkdown, toHTML } from '@curvenote/editor';
+import { Schema, nodes, marks, fromMarkdown, toHTML } from '@curvenote/schema';
 import { JSDOM } from 'jsdom';
 
 const schema = new Schema({ nodes, marks });
 
-const content = '# Hello `@curvenote/editor`!';
+const content = '# Hello `@curvenote/schema`!';
 const doc = fromMarkdown(content, schema);
 
 console.log(doc.toJSON());
@@ -88,7 +88,7 @@ console.log(doc.toJSON());
           {
             "type": "text",
             "marks": [ { "type": "code" } ],
-            "text": "@curvenote/editor"
+            "text": "@curvenote/schema"
           },
           { "type": "text", "text": "!" }
         ]
@@ -103,7 +103,7 @@ const { document } = new JSDOM('').window;
 const html = toHTML(doc, schema, document);
 
 console.log(html);
->> "<h1>Hello <code>@curvenote/editor</code>!</h1>"
+>> "<h1>Hello <code>@curvenote/schema</code>!</h1>"
 ```
 
 ### Roadmap
