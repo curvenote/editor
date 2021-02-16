@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/curvenote/editor/issues"
   },
-  "homepage": "https://github.com/curvenote/editor",
+  "homepage": "https://curvenote.dev/editor",
   "scripts": {
     "emoji": "node bin/createEmoji.js; mv bin/emoji.json src/store/suggestion/results/emoji.json",
     "clean": "rm -rf dist; rm src/store/suggestion/results/emoji.json || true;",
