@@ -4,7 +4,7 @@
 ![CI](https://github.com/curvenote/editor/workflows/CI/badge.svg)
 [![demo](https://img.shields.io/badge/live-demo-blue)](https://curvenote.github.io/editor/)
 
-An interactive scientific editor built with [ProseMirror](https://prosemirror.net/), [React](http://reactjs.org/) and [Redux](https://redux.js.org/) - by [Curvenote](https://curevnote.com).
+An interactive scientific editor built with [ProseMirror](https://prosemirror.net/), [React](http://reactjs.org/) and [Redux](https://redux.js.org/) - by [Curvenote](https://curvenote.com).
 
 ![@curvenote/editor in curvenote.com](https://github.com/curvenote/editor/raw/main/images/editor.gif)
 
@@ -53,7 +53,7 @@ A collaborative, rich text editor for interactive technical & scientific content
 
 ## Architecture
 * Basic prosemirror, wrapped in a React component with some middleware in Redux.
-* Chosen to have many "blocks" of the editor on a page at once. See the UI in [Curvenote](https://curevnote.com) as to what we are supporting - inspired in part by [Jupyter](https://jupyter.org/).
+* Chosen to have many "blocks" of the editor on a page at once. See the UI in [Curvenote](https://curvenote.com) as to what we are supporting - inspired in part by [Jupyter](https://jupyter.org/).
   * If you only need one editor on the page, the weird part will be integrating with Redux, and some unnecessary indexing. However, this is probably important anyways if you have comments or other places in the DOM that are instances of the editor.
 * Typescript and fully typed.
 * Styling of editor components with [material-ui](https://material-ui.com)
