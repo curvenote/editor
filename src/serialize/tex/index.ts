@@ -76,7 +76,7 @@ export const texSerializer = new MarkdownSerializer({
     open: '\\textbf{', close: '}', mixable: true, expelEnclosingWhitespace: true,
   },
   underline: {
-    open: '\\underline{', close: '}', mixable: true, expelEnclosingWhitespace: true,
+    open: '\\uline{', close: '}', mixable: true, expelEnclosingWhitespace: true,
   },
   link: {
     open(_state, mark, parent, index) {
