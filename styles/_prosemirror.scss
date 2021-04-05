@@ -8,6 +8,7 @@
   font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
   outline: none;
   overflow: auto;
+  padding: 2px;
 }
 .ProseMirror pre {
   white-space: pre-wrap;
