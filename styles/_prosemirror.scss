@@ -1,13 +1,12 @@
 .ProseMirror {
   position: relative;
-}
-.ProseMirror {
   word-wrap: break-word;
   white-space: pre-wrap;
   white-space: break-spaces;
   -webkit-font-variant-ligatures: none;
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
+  outline: none;
 }
 .ProseMirror pre {
   white-space: pre-wrap;
@@ -19,10 +18,6 @@
 .ProseMirror-hideselection *::-moz-selection { background: transparent; }
 .ProseMirror-hideselection { caret-color: transparent; }
 
-
-.ProseMirror {
-  outline: none;
-};
 .ProseMirror-selectednode {
   cursor: move;
 };
