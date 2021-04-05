@@ -47,7 +47,9 @@ class ImageEditor extends Component<Props, State> {
       <ThemeProvider theme={opts.theme}>
         <Provider store={ref.store()}>
           <div style={{ textAlign: align, margin: '1.5em 0' }}>
-            <img src={src} alt={alt} title={title} width={`${width}%`} style={{ outline: open ? '2px solid #8cf' : 'none' }} />
+            {!src?.startsWith('block:') && (
+              <img src={src} alt={alt} title={title} width={`${width}%`} style={{ outline: open ? '2px solid #8cf' : 'none' }} />
+            )}
             <ImageToolbar
               open={open && edit}
               {...{
