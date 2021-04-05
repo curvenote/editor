@@ -50,7 +50,7 @@ var ImageEditor = (function (_super) {
         return (React.createElement(ThemeProvider, { theme: opts.theme },
             React.createElement(Provider, { store: ref.store() },
                 React.createElement("div", { style: { textAlign: align, margin: '1.5em 0' } },
-                    React.createElement("img", { src: src, alt: alt, title: title, width: width + "%", style: { outline: open ? '2px solid #8cf' : 'none' } }),
+                    !(src === null || src === void 0 ? void 0 : src.startsWith('block:')) && (React.createElement("img", { src: src, alt: alt, title: title, width: width + "%", style: { outline: open ? '2px solid #8cf' : 'none' } })),
                     React.createElement(ImageToolbar, __assign({ open: open && edit }, {
                         viewId: viewId, align: align, width: width, onAlign: onAlign, onWidth: onWidth, onDelete: onDelete,
                     }))))));
