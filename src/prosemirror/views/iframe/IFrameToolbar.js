@@ -9,7 +9,6 @@ var useStyles = makeStyles(function () { return createStyles({
         fontSize: 20,
     },
     paper: {
-        position: 'absolute',
         width: 215,
         overflow: 'hidden',
         height: 38,
