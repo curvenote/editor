@@ -58,7 +58,6 @@ export interface DisconnectAnchorAction {
 
 export interface DisconnectAllAnchors {
   type: typeof UI_DISCONNECT_ALL_ANCHORS;
-  payload: {}
 }
 
 export interface ConnectAnchorAction {
