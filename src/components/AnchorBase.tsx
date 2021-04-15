@@ -7,24 +7,34 @@ import { isSidenoteSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
 import { getDoc } from './utils';
 
+
+/**
+ * AnchorBase Props
+ */
 type Props = {
   anchor: string;
   className?: string;
   children: React.ReactNode;
+  /** when true (default) the component will disconnect from the store on unmount*/
+  autoDisconnect?: boolean;
 };
+
 
 export const AnchorBase = (props: Props) => {
   const {
-    anchor, children, className,
+    anchor, children, className, autoDisconnect,
   } = props;
   const dispatch = useDispatch<Dispatch>();
   const [doc, setDoc] = useState<string>();
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (ref == null || doc == null) return () => {};
-    return () => dispatch(disconnectAnchor(doc, ref));
-  }, [doc, ref]);
+    if (!ref || !autoDisconnect) return () => null;
+    return () => {
+      const parentDoc = doc ?? getDoc(ref);
+      return dispatch(disconnectAnchor(parentDoc, ref));
+    };
+  }, [doc, ref, autoDisconnect]);
 
   const selected = useSelector((state: State) => isSidenoteSelected(state, doc, anchor));
   const onRef = useCallback((el: HTMLDivElement) => {
@@ -35,13 +45,6 @@ export const AnchorBase = (props: Props) => {
       dispatch(connectAnchorBase(parentDoc, anchor, el));
     }
   }, []);
-  useEffect(() => {
-    if (!ref) return () => null;
-    return () => {
-      const parentDoc = getDoc(ref);
-      return dispatch(disconnectAnchor(parentDoc, ref));
-    };
-  }, [ref]);
   const classes = classNames({ selected, [className ?? '']: Boolean(className) });
   return (
     <div className={classes} ref={onRef}>
@@ -52,6 +55,8 @@ export const AnchorBase = (props: Props) => {
 
 AnchorBase.defaultProps = {
   className: undefined,
+  autoDisconnect: true,
+  refs: undefined,
 };
 
 export default AnchorBase;

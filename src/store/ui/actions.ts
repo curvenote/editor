@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 import {
   UI_CONNECT_ANCHOR, UI_DESELECT_SIDENOTE, UI_DISCONNECT_ANCHOR,
   UI_CONNECT_SIDENOTE, UI_SELECT_ANCHOR, UI_SELECT_SIDENOTE,
-  UI_DISCONNECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_SIDENOTES,
+  UI_DISCONNECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE, UI_REPOSITION_SIDENOTES, UI_DISCONNECT_ALL_ANCHORS,
 } from './types';
 import { AppThunk, SidenotesUIActions } from '../types';
 
@@ -100,6 +100,15 @@ export function disconnectAnchor(
     dispatch({
       type: UI_DISCONNECT_ANCHOR,
       payload: { docId, anchorId },
+    } as SidenotesUIActions);
+  };
+}
+
+export function disconnectAllAnchors(): AppThunk<void> {
+  return (dispatch) => {
+    dispatch({
+      type: UI_DISCONNECT_ALL_ANCHORS,
+      payload: {},
     } as SidenotesUIActions);
   };
 }
