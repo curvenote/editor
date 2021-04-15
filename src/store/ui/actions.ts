@@ -106,7 +106,7 @@ export function disconnectAnchor(
   };
 }
 
-export function resetAll(): AppThunk<void> {
+export function resetAllSidenotes(): AppThunk<void> {
   return (dispatch) => {
     dispatch({
       type: UI_RESET_ALL_SIDENOTES,
