@@ -3,7 +3,7 @@ import {
   UI_CONNECT_ANCHOR, UI_DESELECT_SIDENOTE, UI_DISCONNECT_ANCHOR,
   UI_CONNECT_SIDENOTE, UI_SELECT_ANCHOR, UI_SELECT_SIDENOTE,
   UI_DISCONNECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE,
-  UI_REPOSITION_SIDENOTES, UI_RESET_ALL,
+  UI_REPOSITION_SIDENOTES, UI_RESET_ALL_SIDENOTES,
 } from './types';
 import { AppThunk, SidenotesUIActions } from '../types';
 
@@ -109,7 +109,7 @@ export function disconnectAnchor(
 export function resetAll(): AppThunk<void> {
   return (dispatch) => {
     dispatch({
-      type: UI_RESET_ALL,
+      type: UI_RESET_ALL_SIDENOTES,
       payload: {},
     } as SidenotesUIActions);
   };

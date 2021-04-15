@@ -5,7 +5,7 @@ import {
   UI_CONNECT_SIDENOTE, UI_SELECT_SIDENOTE,
   UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, DocState, Anchor,
   UI_DISCONNECT_ANCHOR, UI_DESELECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE,
-  UI_REPOSITION_SIDENOTES, UI_RESET_ALL,
+  UI_REPOSITION_SIDENOTES, UI_RESET_ALL_SIDENOTES,
 } from './types';
 
 export const initialState: UIState = {
@@ -107,7 +107,7 @@ const uiReducer = (
         },
       };
     }
-    case UI_RESET_ALL: {
+    case UI_RESET_ALL_SIDENOTES: {
       return {
         ...state,
         docs: {},
