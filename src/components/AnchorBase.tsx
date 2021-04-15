@@ -43,7 +43,6 @@ export const AnchorBase = (props: Props) => {
 
 AnchorBase.defaultProps = {
   className: undefined,
-  refs: undefined,
 };
 
 export default AnchorBase;
