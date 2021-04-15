@@ -4,6 +4,7 @@ import {
   EditorActionTypes,
   UPDATE_EDITOR_STATE, INIT_EDITOR_STATE,
   SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW,
+  RESET_ALL_EDITORS_AND_VIEWS,
 } from './types';
 import { AppThunk } from '../types';
 import { getEditor } from './selectors';
@@ -64,5 +65,11 @@ export function unsubscribeView(
   return {
     type: UNSUBSCRIBE_EDITOR_VIEW,
     payload: { stateId, viewId },
+  };
+}
+
+export function resetAllEditorsAndViews(): EditorActionTypes {
+  return {
+    type: RESET_ALL_EDITORS_AND_VIEWS,
   };
 }

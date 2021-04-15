@@ -1,6 +1,7 @@
 import {
   INIT_EDITOR_STATE, UPDATE_EDITOR_STATE,
   SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW,
+  RESET_ALL_EDITORS_AND_VIEWS,
   EditorActionTypes, EditorsState,
 } from './types';
 import { createEditorState } from '../../prosemirror';
@@ -47,6 +48,13 @@ const editorReducer = (
           ...state.views,
           [viewId]: { stateId, view },
         },
+      };
+    }
+    case RESET_ALL_EDITORS_AND_VIEWS: {
+      return {
+        ...state,
+        editors: {},
+        views: {},
       };
     }
     case UNSUBSCRIBE_EDITOR_VIEW: {
