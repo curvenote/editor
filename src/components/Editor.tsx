@@ -32,7 +32,7 @@ const promptStyle: CSSProperties = {
 type Props = {
   stateKey: any;
   viewId: string;
-  autoUnsubscribe?: true;
+  autoUnsubscribe?: boolean;
 };
 
 const Editor = (props: Props) => {
