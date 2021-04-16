@@ -7,6 +7,7 @@ import { sidenoteTop, isSidenoteSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
 import { getDoc } from './utils';
 
+
 type Props = {
   base?: string;
   sidenote: string;
@@ -17,8 +18,6 @@ export const Sidenote = (props: Props) => {
   const { base, sidenote, children } = props;
   const dispatch = useDispatch<Dispatch>();
   const [doc, setDoc] = useState<string>();
-
-  useEffect(() => () => { dispatch(disconnectSidenote(doc, sidenote)); }, []);
 
   const selected = useSelector((state: State) => isSidenoteSelected(state, doc, sidenote));
   const top = useSelector((state: State) => sidenoteTop(state, doc, sidenote));

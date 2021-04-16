@@ -2,7 +2,7 @@ import {
   UIActionTypes, UI_SELECT_SIDENOTE, UI_CONNECT_SIDENOTE,
   DocState, UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, UI_DISCONNECT_ANCHOR,
   UI_DESELECT_SIDENOTE, UI_DISCONNECT_SIDENOTE,
-  UI_CONNECT_ANCHOR_BASE, ANCHOR_BASE, UI_REPOSITION_SIDENOTES,
+  UI_CONNECT_ANCHOR_BASE, ANCHOR_BASE, UI_REPOSITION_SIDENOTES, UI_RESET_ALL_SIDENOTES,
 } from './types';
 
 
@@ -10,7 +10,7 @@ const docReducer = (
   state: DocState,
   action: UIActionTypes,
 ): DocState => {
-  if (state == null) {
+  if (state == null && action.type !== UI_RESET_ALL_SIDENOTES) {
     const { docId } = action.payload;
     // eslint-disable-next-line no-param-reassign
     state = {

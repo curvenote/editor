@@ -2,11 +2,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { connectAnchorBase, disconnectAnchor } from '../store/ui/actions';
+import { connectAnchorBase } from '../store/ui/actions';
 import { isSidenoteSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
 import { getDoc } from './utils';
 
+/**
+ * AnchorBase Props
+ */
 type Props = {
   anchor: string;
   className?: string;
@@ -21,11 +24,6 @@ export const AnchorBase = (props: Props) => {
   const [doc, setDoc] = useState<string>();
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (ref == null || doc == null) return () => {};
-    return () => dispatch(disconnectAnchor(doc, ref));
-  }, [doc, ref]);
-
   const selected = useSelector((state: State) => isSidenoteSelected(state, doc, anchor));
   const onRef = useCallback((el: HTMLDivElement) => {
     setRef(el);
@@ -35,13 +33,6 @@ export const AnchorBase = (props: Props) => {
       dispatch(connectAnchorBase(parentDoc, anchor, el));
     }
   }, []);
-  useEffect(() => {
-    if (!ref) return () => null;
-    return () => {
-      const parentDoc = getDoc(ref);
-      return dispatch(disconnectAnchor(parentDoc, ref));
-    };
-  }, [ref]);
   const classes = classNames({ selected, [className ?? '']: Boolean(className) });
   return (
     <div className={classes} ref={onRef}>
