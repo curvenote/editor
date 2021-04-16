@@ -32,10 +32,11 @@ const promptStyle: CSSProperties = {
 type Props = {
   stateKey: any;
   viewId: string;
+  autoUnsubscribe?: boolean;
 };
 
 const Editor = (props: Props) => {
-  const { stateKey, viewId } = props;
+  const { stateKey, viewId, autoUnsubscribe } = props;
 
   const dispatch = useDispatch<Dispatch>();
 
@@ -88,7 +89,7 @@ const Editor = (props: Props) => {
 
   // Unsubscribe when it goes away
   useEffect(() => () => {
-    if (editorView.current) {
+    if (autoUnsubscribe && editorView.current) {
       dispatch(actions.unsubscribeView(stateKey, viewId));
     }
   }, []);
@@ -112,5 +113,9 @@ const Editor = (props: Props) => {
     </div>
   );
 };
+
+Editor.defaultProps = {
+  autoUnsubscribe: true,
+}
 
 export default Editor;
