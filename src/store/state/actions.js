@@ -1,4 +1,4 @@
-import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, } from './types';
+import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, } from './types';
 import { getEditor } from './selectors';
 import { opts } from '../../connect';
 export function initEditorState(stateKey, editable, content, version) {
@@ -47,6 +47,11 @@ export function unsubscribeView(stateKey, viewId) {
     return {
         type: UNSUBSCRIBE_EDITOR_VIEW,
         payload: { stateId: stateId, viewId: viewId },
+    };
+}
+export function resetAllEditorsAndViews() {
+    return {
+        type: RESET_ALL_EDITORS_AND_VIEWS,
     };
 }
 //# sourceMappingURL=actions.js.map

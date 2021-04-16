@@ -22,7 +22,7 @@ var promptStyle = {
     margin: 0, position: 'absolute', opacity: 0.4, left: 40, userSelect: 'none',
 };
 var Editor = function (props) {
-    var stateKey = props.stateKey, viewId = props.viewId;
+    var stateKey = props.stateKey, viewId = props.viewId, autoUnsubscribe = props.autoUnsubscribe;
     var dispatch = useDispatch();
     var editorEl = useRef(null);
     var editorView = useRef();
@@ -55,7 +55,7 @@ var Editor = function (props) {
         setPrompt(prompts[0]);
     }, [editorView.current == null, editorEl.current == null, editorState == null]);
     useEffect(function () { return function () {
-        if (editorView.current) {
+        if (autoUnsubscribe && editorView.current) {
             dispatch(actions.unsubscribeView(stateKey, viewId));
         }
     }; }, []);
@@ -75,6 +75,9 @@ var Editor = function (props) {
     return (React.createElement("div", null,
         !hasContent && (React.createElement("p", { style: promptStyle }, prompt)),
         React.createElement("div", { ref: editorEl })));
+};
+Editor.defaultProps = {
+    autoUnsubscribe: true,
 };
 export default Editor;
 //# sourceMappingURL=Editor.js.map
