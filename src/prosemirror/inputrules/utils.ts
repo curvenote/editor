@@ -52,3 +52,21 @@ export function insertNodeRule(
     return selected;
   });
 }
+
+export function replaceNodeRule(
+  regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs,
+  select: boolean | ((p: string[]) => boolean) = false,
+) {
+  // return textblockTypeInputRule(/^\$\$\s$/, nodeType);
+  return new InputRule(regExp, (state, match, start, end) => {
+    const { content, ...attrs } = (getAttrs instanceof Function ? getAttrs(match) : getAttrs) ?? {};
+    const tr = state.tr.delete(start, end).replaceSelectionWith(
+      nodeType.create(attrs, content), false,
+    ).scrollIntoView();
+    const doSelect = select instanceof Function ? select(match) : select;
+    if (!doSelect) return tr;
+    const resolvedPos = tr.doc.resolve(start - 1);
+    const selected = tr.setSelection(new NodeSelection(resolvedPos));
+    return selected;
+  });
+}

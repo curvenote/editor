@@ -6,13 +6,13 @@ export type AttributesState = {
   location: { top: number; left: number } | null;
 };
 
-interface AttributesSetEditing {
+export type AttributesSetEditing = {
   type: typeof ATTRIBUTES_SHOW_EDITOR;
   payload: {
     show: boolean;
     location: AttributesState['location'];
     pos: number;
   };
-}
+};
 
 export type AttributesActionTypes = AttributesSetEditing;

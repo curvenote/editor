@@ -116,6 +116,6 @@ const Editor = (props: Props) => {
 
 Editor.defaultProps = {
   autoUnsubscribe: true,
-}
+};
 
 export default Editor;

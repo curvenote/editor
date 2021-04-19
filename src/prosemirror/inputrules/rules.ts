@@ -4,7 +4,7 @@ import {
   smartQuotes,
 } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
-import { insertNodeRule, markInputRule } from './utils';
+import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../utils';
 
 export const quotes = (schema: Schema) => smartQuotes;
@@ -96,7 +96,7 @@ export const headings = (schema: Schema, maxLevel = 6) => [
 
 
 export const equation = (schema: Schema) => [
-  insertNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
+  replaceNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
 ];
 
 export const mathInline = (schema: Schema) => [
