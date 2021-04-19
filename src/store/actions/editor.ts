@@ -162,7 +162,7 @@ export function insertNode(
     const tr = editor.state.tr.insert(
       editor.state.tr.selection.$from.pos, node.create(attrs, content),
     ).scrollIntoView();
-    dispatch(applyProsemirrorTransaction(editor.stateId, tr));
+    dispatch(applyProsemirrorTransaction(editor.stateId, selectNode(tr)));
     return true;
   };
 }
