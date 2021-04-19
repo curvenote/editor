@@ -12,6 +12,7 @@ const equation: NodeSpec = {
   draggable: false,
   // The view treat the node as a leaf, even though it technically has content
   atom: true,
+  code: true,
   attrs: {},
   toDOM: () => ['r-equation', 0],
   parseDOM: [{
