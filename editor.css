@@ -37,47 +37,48 @@
   cursor: move;
 }
 
-.ProseMirror-hideselection .equation-tooltip *::selection {
+.ProseMirror-hideselection .eqn-editor *::selection {
   background-color: transparent;
 }
 
-.ProseMirror-hideselection .equation-tooltip *::-moz-selection {
+.ProseMirror-hideselection .eqn-editor *::-moz-selection {
   background-color: transparent;
 }
 
-.equation-tooltip {
+.eqn.editing .eqn-math {
+  display: none;
+}
+
+.eqn .eqn-editor {
+  display: none;
+}
+
+.eqn.editing .eqn-editor {
+  display: block;
+}
+
+.eqn.inline, .eqn.editing .eqn-editor.inline {
+  display: inline-block;
+}
+
+.eqn-editor .ProseMirror {
   cursor: auto;
-  left: 0px;
-  padding: 10px;
-  position: absolute;
-  width: calc(100% - 20px);
-  background-color: rgba(250, 250, 250, 0.9);
-  box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
-  border: 1px solid silver;
-  backdrop-filter: blur(2px);
-  z-index: 1;
+  font-family: monospace;
+  color: purple;
 }
 
-.equation-tooltip.inline {
-  top: calc(100% + 10px);
-  width: 300px;
+.eqn-editor.inline .ProseMirror {
+  display: inline;
 }
 
-.equation-tooltip::before {
-  border: 5px solid silver;
-  border-top-width: 0px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  content: " ";
-  height: 0;
-  width: 0;
+.eqn-editor::before, .eqn-editor::after {
+  content: "$$";
+  color: #aaa;
+  cursor: move;
 }
 
-.equation-tooltip.inline::before {
-  left: 2px;
+.eqn-editor.inline::before, .eqn-editor.inline::after {
+  content: "$";
 }
 
 article {

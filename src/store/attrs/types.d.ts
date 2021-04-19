@@ -7,13 +7,12 @@ export declare type AttributesState = {
         left: number;
     } | null;
 };
-interface AttributesSetEditing {
+export declare type AttributesSetEditing = {
     type: typeof ATTRIBUTES_SHOW_EDITOR;
     payload: {
         show: boolean;
         location: AttributesState['location'];
         pos: number;
     };
-}
+};
 export declare type AttributesActionTypes = AttributesSetEditing;
-export {};

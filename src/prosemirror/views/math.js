@@ -1,8 +1,21 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import { StepMap } from 'prosemirror-transform';
 import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import katex from 'katex';
+import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../plugins/editable';
 var MathView = (function () {
     function MathView(node, view, getPos, inline) {
@@ -10,32 +23,45 @@ var MathView = (function () {
         this.node = node;
         this.outerView = view;
         this.getPos = getPos;
-        this.dom = document.createElement('r-equation');
-        this.tooltip = document.createElement('div');
-        this.dom.appendChild(this.tooltip);
-        this.tooltip.classList.add('equation-tooltip');
-        if (inline) {
-            this.dom.setAttribute('inline', '');
-            this.tooltip.classList.add('inline');
+        this.dom = document.createElement('div');
+        this.dom.classList.add('eqn');
+        this.editor = document.createElement('div');
+        this.editor.classList.add('eqn-editor');
+        this.math = document.createElement('div');
+        this.math.classList.add('eqn-math');
+        this.dom.appendChild(this.editor);
+        this.dom.appendChild(this.math);
+        this.inline = inline;
+        if (this.inline) {
+            this.dom.classList.add('inline');
+            this.editor.classList.add('inline');
         }
-        this.dom.editing = false;
-        this.innerView = new EditorView(this.tooltip, {
+        this.dom.classList.remove('editing');
+        this.renderMath();
+        var unfocus = function () {
+            _this.dom.classList.remove('editing');
+            _this.outerView.focus();
+            return true;
+        };
+        var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
+        this.innerView = new EditorView(this.editor, {
             state: EditorState.create({
                 doc: this.node,
-                plugins: [keymap({
-                        'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); },
-                        'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); },
-                        Escape: function () {
-                            _this.dom.editing = false;
+                plugins: [keymap(__assign(__assign({ 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } }, (mac ? {} : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: function () {
+                            _this.dom.classList.remove('editing');
                             _this.outerView.focus();
                             return true;
-                        },
-                        Enter: function () {
-                            _this.dom.editing = false;
+                        }, Enter: unfocus, 'Ctrl-Enter': chainCommands(newlineInCode, unfocus), 'Shift-Enter': chainCommands(newlineInCode, unfocus), Backspace: chainCommands(deleteSelection, function (state) {
+                            if (!state.selection.empty) {
+                                return false;
+                            }
+                            if (_this.node.textContent.length > 0) {
+                                return false;
+                            }
+                            _this.outerView.dispatch(_this.outerView.state.tr.insertText(''));
                             _this.outerView.focus();
                             return true;
-                        },
-                    })],
+                        }) }))],
             }),
             dispatchTransaction: this.dispatchInner.bind(this),
             handleDOMEvents: {
@@ -53,18 +79,16 @@ var MathView = (function () {
         this.dom.classList.add('ProseMirror-selectednode');
         if (!edit)
             return;
-        this.dom.editing = true;
+        this.dom.classList.add('editing');
         setTimeout(function () { return _this.innerView.focus(); }, 1);
     };
     MathView.prototype.deselectNode = function () {
         this.dom.classList.remove('ProseMirror-selectednode');
-        this.dom.editing = false;
+        this.dom.classList.remove('editing');
     };
     MathView.prototype.dispatchInner = function (tr) {
         var _a = this.innerView.state.applyTransaction(tr), state = _a.state, transactions = _a.transactions;
         this.innerView.updateState(state);
-        this.dom.setAttribute('math', state.doc.textContent);
-        this.dom.requestUpdate();
         if (!tr.getMeta('fromOutside')) {
             var outerTr = this.outerView.state.tr;
             var offsetMap = StepMap.offset(this.getPos() + 1);
@@ -97,7 +121,24 @@ var MathView = (function () {
                     .setMeta('fromOutside', true));
             }
         }
+        this.renderMath();
         return true;
+    };
+    MathView.prototype.renderMath = function () {
+        var math = this.node.textContent;
+        var render = (math === null || math === void 0 ? void 0 : math.trim()) || '...';
+        try {
+            katex.render(render, this.math, {
+                displayMode: !this.inline,
+                throwOnError: false,
+                macros: {
+                    '\\boldsymbol': '\\mathbf',
+                },
+            });
+        }
+        catch (error) {
+            this.math.innerText = error;
+        }
     };
     MathView.prototype.destroy = function () {
         this.innerView.destroy();

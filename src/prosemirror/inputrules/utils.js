@@ -46,4 +46,18 @@ export function insertNodeRule(regExp, nodeType, getAttrs, select) {
         return selected;
     });
 }
+export function replaceNodeRule(regExp, nodeType, getAttrs, select) {
+    if (select === void 0) { select = false; }
+    return new InputRule(regExp, function (state, match, start, end) {
+        var _a;
+        var _b = (_a = (getAttrs instanceof Function ? getAttrs(match) : getAttrs)) !== null && _a !== void 0 ? _a : {}, content = _b.content, attrs = __rest(_b, ["content"]);
+        var tr = state.tr.delete(start, end).replaceSelectionWith(nodeType.create(attrs, content), false).scrollIntoView();
+        var doSelect = select instanceof Function ? select(match) : select;
+        if (!doSelect)
+            return tr;
+        var resolvedPos = tr.doc.resolve(start - 1);
+        var selected = tr.setSelection(new NodeSelection(resolvedPos));
+        return selected;
+    });
+}
 //# sourceMappingURL=utils.js.map

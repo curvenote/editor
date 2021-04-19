@@ -1,5 +1,5 @@
 import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } from 'prosemirror-inputrules';
-import { insertNodeRule, markInputRule } from './utils';
+import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../utils';
 export var quotes = function (schema) { return smartQuotes; };
 export var ellipsis = function (schema) { return [new InputRule(/\.\.\.$/, '…')]; };
@@ -60,7 +60,7 @@ export var headings = function (schema, maxLevel) {
     ];
 };
 export var equation = function (schema) { return [
-    insertNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
+    replaceNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
 ]; };
 export var mathInline = function (schema) { return [
     insertNodeRule(/(\$([\W\w]*)\$)$/, schema.nodes.math, function (match) {
