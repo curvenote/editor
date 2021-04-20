@@ -4,6 +4,7 @@ import { Node, Schema } from 'prosemirror-model';
 export enum NodeGroups {
   'top' = 'topblock',
   'block' = 'block',
+  'blockOrEquation' = '(block | equation)+',
   'inline' = 'inline',
   'text' = 'text',
   'cite' = 'cite',

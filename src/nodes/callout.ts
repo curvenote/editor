@@ -11,7 +11,7 @@ export enum CalloutKinds {
 
 const callout: NodeSpec = {
   group: NodeGroups.top,
-  content: `${NodeGroups.block}+`,
+  content: NodeGroups.blockOrEquation,
   attrs: {
     kind: { default: CalloutKinds.info },
   },
