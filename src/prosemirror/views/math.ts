@@ -151,6 +151,9 @@ class MathView {
 
   renderMath() {
     const math = this.node.textContent;
+    // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
+    // const txt = toText(this.node, this.outerView.state.schema, document);
+    // console.log({ math, txt });
     // const render = math.replace(/−/g, '-');
     const render = math?.trim() || '...';
     try {
