@@ -29,6 +29,7 @@ var MathView = (function () {
         this.editor.classList.add('eqn-editor');
         this.math = document.createElement('div');
         this.math.classList.add('eqn-math');
+        this.math.addEventListener('click', function () { return _this.selectNode(); });
         this.dom.appendChild(this.editor);
         this.dom.appendChild(this.math);
         this.inline = inline;
