@@ -16,7 +16,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, } from './types';
+import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
 import { createEditorState } from '../../prosemirror';
 export var initialState = {
     editors: {},
@@ -44,6 +44,12 @@ var editorReducer = function (state, action) {
         }
         case RESET_ALL_EDITORS_AND_VIEWS: {
             return __assign(__assign({}, state), { editors: {}, views: {} });
+        }
+        case RESET_ALL_VIEWS: {
+            return __assign(__assign({}, state), { editors: Object.fromEntries(Object.entries(state.editors).map(function (_a) {
+                    var k = _a[0], editor = _a[1];
+                    return [k, __assign(__assign({}, editor), { viewIds: [] })];
+                })), views: {} });
         }
         case UNSUBSCRIBE_EDITOR_VIEW: {
             var _g = action.payload, stateId = _g.stateId, viewId_1 = _g.viewId;

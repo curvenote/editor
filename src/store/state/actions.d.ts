@@ -8,3 +8,4 @@ export declare function applyProsemirrorTransaction(stateKey: any, tr: Transacti
 export declare function subscribeView(stateKey: any, viewId: string, view: EditorView): EditorActionTypes;
 export declare function unsubscribeView(stateKey: any, viewId: string): EditorActionTypes;
 export declare function resetAllEditorsAndViews(): EditorActionTypes;
+export declare function resetAllViews(): EditorActionTypes;
