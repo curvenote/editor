@@ -88,10 +88,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@curvenote/schema@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.2.4.tgz#5ca51645da90767a75f3fcd29ce073fa9841980b"
-  integrity sha512-FaTuqeaGmwW4pC8HPsV8g7Jvq5MD/Ak0dOOFJ3zx9+bPcM2WdnHcIOLsW1SBbc6f6GPWisyEb+SgwAmgvTNeZQ==
+"@curvenote/schema@^0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.2.7.tgz#dc2409ea54b0dad6997455636132e3c1cd0b3fb1"
+  integrity sha512-QO7i3VJzl6m09ZdajNrjPigjlXbrl7tFKOV6qokuBs1ExurgnorhoRkNx6ouS3xC4J0za7gr0TR5zSBA0kV+Ag==
   dependencies:
     markdown-it "^12.0.4"
     markdown-it-myst "^0.0.7"
@@ -858,6 +858,11 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+
+"@types/katex@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.11.0.tgz#b16c54ee670925ffef0616beae9e90c557e17334"
+  integrity sha512-27BfE8zASRLYfSBNMk5/+KIjr2CBBrH0i5lhsO04fca4TGirIIMay73v3zNkzqmsaeIa/Mi5kejWDcxPLAmkvA==
 
 "@types/lodash.isequal@^4.5.5":
   version "4.5.5"
@@ -1869,6 +1874,11 @@ commander@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+
+commander@^6.0.0:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
+  integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
 
 commander@^7.0.0:
   version "7.1.0"
@@ -3965,6 +3975,13 @@ katex@^0.12.0:
   integrity sha512-y+8btoc/CK70XqcHqjxiGWBOeIL8upbS0peTPXTvgrh21n1RiWWcIpSWM+4uXq+IAgNh9YYQWdc7LVDPDAEEAg==
   dependencies:
     commander "^2.19.0"
+
+katex@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.13.2.tgz#4075b9144e6af992ec9a4b772fa3754763be5f26"
+  integrity sha512-u/KhjFDhyPr+70aiBn9SL/9w/QlLagIXBi2NZSbNnBUp2tR8dCjQplyEMkEzniem5gOeSCBjlBUg4VaiWs1JJg==
+  dependencies:
+    commander "^6.0.0"
 
 killable@^1.0.1:
   version "1.0.1"

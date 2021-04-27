@@ -1,6 +1,6 @@
 {
   "name": "@curvenote/editor",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "MIT",
@@ -39,6 +39,7 @@
     "watch": "tsc -w -p ."
   },
   "dependencies": {
+    "katex": "^0.13.2",
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",
     "prosemirror-commands": "^1.1.6",
@@ -79,11 +80,12 @@
     "@curvenote/article": "0.2.9",
     "@curvenote/components": "0.2.9",
     "@curvenote/runtime": "^0.2.7",
-    "@curvenote/schema": "^0.2.4",
+    "@curvenote/schema": "^0.2.7",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.20",
+    "@types/katex": "^0.11.0",
     "@types/lodash.isequal": "^4.5.5",
     "@types/lodash.throttle": "^4.1.6",
     "@types/node": "^14.14.28",

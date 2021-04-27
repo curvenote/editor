@@ -4,13 +4,19 @@ import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
 import { Transaction, EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import katex from 'katex';
+import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../plugins/editable';
 
 class MathView {
   // The node's representation in the editor (empty, for now)
-  dom: HTMLElement & { editing: boolean; requestUpdate: () => void };
+  dom: HTMLElement;
 
-  tooltip: HTMLElement;
+  editor: HTMLElement;
+
+  math: HTMLElement;
+
+  inline: boolean;
 
   // These are used when the footnote is selected
   innerView: EditorView;
@@ -25,35 +31,57 @@ class MathView {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;
-    this.dom = document.createElement('r-equation') as any;
+    this.dom = document.createElement('div');
+    this.dom.classList.add('eqn');
 
-    this.tooltip = document.createElement('div');
-    this.dom.appendChild(this.tooltip);
-    this.tooltip.classList.add('equation-tooltip');
-    if (inline) {
-      this.dom.setAttribute('inline', '');
-      this.tooltip.classList.add('inline');
+    this.editor = document.createElement('div');
+    this.editor.classList.add('eqn-editor');
+    this.math = document.createElement('div');
+    this.math.classList.add('eqn-math');
+    this.math.addEventListener('click', () => this.selectNode());
+    this.dom.appendChild(this.editor);
+    this.dom.appendChild(this.math);
+    this.inline = inline;
+    if (this.inline) {
+      this.dom.classList.add('inline');
+      this.editor.classList.add('inline');
     }
-    this.dom.editing = false;
+    this.dom.classList.remove('editing');
+    this.renderMath();
+
+    const unfocus = () => {
+      this.dom.classList.remove('editing');
+      this.outerView.focus();
+      return true;
+    };
+    const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
     // And put a sub-ProseMirror into that
-    this.innerView = new EditorView(this.tooltip, {
+    this.innerView = new EditorView(this.editor, {
       // You can use any node as an editor document
       state: EditorState.create({
         doc: this.node,
         plugins: [keymap({
           'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
           'Mod-Z': () => redo(this.outerView.state, this.outerView.dispatch),
+          ...(mac ? {} : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
           Escape: () => {
-            this.dom.editing = false;
+            this.dom.classList.remove('editing');
             this.outerView.focus();
             return true;
           },
-          Enter: () => {
-            this.dom.editing = false;
+          Enter: unfocus,
+          'Ctrl-Enter': chainCommands(newlineInCode, unfocus),
+          'Shift-Enter': chainCommands(newlineInCode, unfocus),
+          Backspace: chainCommands(deleteSelection, (state) => {
+            // default backspace behavior for non-empty selections
+            if (!state.selection.empty) { return false; }
+            // default backspace behavior when math node is non-empty
+            if (this.node.textContent.length > 0) { return false; }
+            // otherwise, we want to delete the empty math node and focus the outer view
+            this.outerView.dispatch(this.outerView.state.tr.insertText(''));
             this.outerView.focus();
             return true;
-          },
-          // TODO: non-mac key-bindings.
+          }),
         })],
       }),
       // This is the magic part
@@ -74,23 +102,19 @@ class MathView {
     const edit = isEditable(this.outerView.state);
     this.dom.classList.add('ProseMirror-selectednode');
     if (!edit) return;
-    this.dom.editing = true;
+    this.dom.classList.add('editing');
     // This is necessary on first insert.
     setTimeout(() => this.innerView.focus(), 1);
   }
 
   deselectNode() {
     this.dom.classList.remove('ProseMirror-selectednode');
-    this.dom.editing = false;
+    this.dom.classList.remove('editing');
   }
 
   dispatchInner(tr: Transaction) {
     const { state, transactions } = this.innerView.state.applyTransaction(tr);
     this.innerView.updateState(state);
-
-    // Update the <r-equation> component
-    this.dom.setAttribute('math', state.doc.textContent);
-    this.dom.requestUpdate();
 
     if (!tr.getMeta('fromOutside')) {
       const outerTr = this.outerView.state.tr;
@@ -121,7 +145,32 @@ class MathView {
         );
       }
     }
+    this.renderMath();
     return true;
+  }
+
+  renderMath() {
+    const math = this.node.textContent;
+    // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
+    // const txt = toText(this.node, this.outerView.state.schema, document);
+    // console.log({ math, txt });
+    // const render = math.replace(/−/g, '-');
+    const render = math?.trim() || '...';
+    try {
+      katex.render(
+        render,
+        this.math,
+        {
+          displayMode: !this.inline,
+          throwOnError: false,
+          macros: {
+            '\\boldsymbol': '\\mathbf',
+          },
+        },
+      );
+    } catch (error) {
+      this.math.innerText = error;
+    }
   }
 
   destroy() {
