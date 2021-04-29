@@ -103,8 +103,8 @@ export const texSerializer = new MarkdownSerializer({
   // https://www.overleaf.com/learn/latex/glossaries
   // \newacronym{gcd}{GCD}{Greatest Common Divisor}
   abbr: { open: '', close: '' },
-  subscript: { open: '{\\raise-.5ex\\hbox{\\tiny ', close: '}}' },
-  superscript: { open: '{\\raise1ex\\hbox{\\tiny ', close: '}}' },
+  subscript: { open: '{\\raisebox{-.5ex}{\\tiny ', close: '}}' },
+  superscript: { open: '{\\raisebox{1ex}{\\tiny ', close: '}}' },
   // \usepackage[normalem]{ulem}
   strikethrough: { open: '\\sout{', close: '}' },
 });
