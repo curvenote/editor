@@ -23,9 +23,15 @@ const heading: FormatSerialize = (state, node) => {
 
 export const texSerializer = new MarkdownSerializer({
   text(state, node) {
+    // Funky placeholders (unlikely to be written ...?!)
+    const backslashSpace = '💥🎯BACKSLASHSPACE🎯💥';
+    const backslash = '💥🎯BACKSLASH🎯💥';
+    const tilde = '💥🎯TILDE🎯💥';
     // Latex escaped characters are: \ & % $ # _ { } ~ ^
     const escaped = (node.text ?? '')
-      .replace(/\\/g, '\\textbackslash')
+      .replace(/\\ /g, backslashSpace)
+      .replace(/\\/g, backslash)
+      .replace(/~/g, tilde)
       .replace(/&/g, '\\&')
       .replace(/%/g, '\\%')
       .replace(/\$/g, '\\$')
@@ -33,8 +39,10 @@ export const texSerializer = new MarkdownSerializer({
       .replace(/_/g, '\\_')
       .replace(/\{/g, '\\{')
       .replace(/\}/g, '\\}')
-      .replace(/~/g, '\\textasciitilde')
-      .replace(/\^/g, '\\^');
+      .replace(/\^/g, '\\^')
+      .replace(new RegExp(backslashSpace, 'g'), '{\\textbackslash}~')
+      .replace(new RegExp(backslash, 'g'), '{\\textbackslash}')
+      .replace(new RegExp(tilde, 'g'), '{\\textasciitilde}');
     state.text(escaped, false);
   },
   paragraph(state, node) {
@@ -103,8 +111,8 @@ export const texSerializer = new MarkdownSerializer({
   // https://www.overleaf.com/learn/latex/glossaries
   // \newacronym{gcd}{GCD}{Greatest Common Divisor}
   abbr: { open: '', close: '' },
-  subscript: { open: '{\\raisebox{-.5ex}{\\tiny ', close: '}}' },
-  superscript: { open: '{\\raisebox{1ex}{\\tiny ', close: '}}' },
+  subscript: { open: '\\textsubscript{', close: '}' },
+  superscript: { open: '\\textsuperscript{', close: '}' },
   // \usepackage[normalem]{ulem}
   strikethrough: { open: '\\sout{', close: '}' },
 });
