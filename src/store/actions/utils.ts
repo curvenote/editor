@@ -1,7 +1,8 @@
-import { NodeSpec } from 'prosemirror-model';
+import { Node, NodeSpec } from 'prosemirror-model';
 import { EditorState, NodeSelection } from 'prosemirror-state';
 import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
+import { AlignOptions } from '../../types';
 
 export const TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export const TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
@@ -94,3 +95,26 @@ export function getNodeIfSelected(state: EditorState, spec: NodeSpec) {
   }
   return null;
 }
+
+export const setNodeViewAlign = (
+  node: Node, view: EditorView, getPos: (() => number),
+) => (value: AlignOptions) => (
+  updateNodeAttrsOnView(
+    view, { node, pos: getPos() }, { align: value },
+  )
+);
+
+export const setNodeViewWidth = (
+  node: Node, view: EditorView, getPos: (() => number),
+) => (value: number) => (
+  updateNodeAttrsOnView(
+    view, { node, pos: getPos() }, { width: value },
+  )
+);
+
+export const setNodeViewDelete = (
+  node: Node, view: EditorView, getPos: (() => number),
+) => () => {
+  const tr = view.state.tr.delete(getPos(), getPos() + 1);
+  view.dispatch(tr);
+};

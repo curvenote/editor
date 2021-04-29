@@ -2,7 +2,7 @@
 import { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
+import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import setupComponents from './components';
 import { CitationFormat } from './types';
@@ -33,6 +33,8 @@ export type Options = {
   citationKeyToJson: (key: string) => Promise<CitationFormat | null>;
   createCitationSearch: () => Promise<SearchContext>;
   throttle: number;
+  // nodeViews override any of the default nodeviews
+  nodeViews?: DirectEditorProps['nodeViews'];
 };
 
 type Ref<T> = {
@@ -94,4 +96,5 @@ export const opts: Required<Options> = {
   createCitationSearch() { return ref.opts().createCitationSearch(); },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },
+  get nodeViews() { return ref.opts().nodeViews ?? {}; },
 };

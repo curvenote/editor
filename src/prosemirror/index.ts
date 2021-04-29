@@ -7,10 +7,12 @@ import schema from './schema';
 import { store, opts } from '../connect';
 import * as views from './views';
 import { isEditable } from './plugins/editable';
-import { addLink } from './utils';
+import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
+import createNodeView from './views/NodeView';
 
 export { schema };
+export * as utils from '../store/actions/utils';
 
 export function createEditorState(
   stateKey: any, content: string, version: number, startEditable: boolean,
@@ -46,12 +48,8 @@ export function createEditorView(
       equation(node, view, getPos) {
         return new views.MathView(node, view, getPos as () => number, false);
       },
-      image(node, view, getPos) {
-        return new views.ImageView(node, view, getPos as () => number);
-      },
-      iframe(node, view, getPos) {
-        return new views.IFrameView(node, view, getPos as () => number);
-      },
+      image: createNodeView(views.ImageView),
+      iframe: createNodeView(views.IFrameView),
       link(node, view, getPos) {
         return new views.LinkView(node, view, getPos as () => number);
       },
@@ -64,6 +62,7 @@ export function createEditorView(
       range: views.newWidgetView,
       switch: views.newWidgetView,
       variable: views.newWidgetView,
+      ...opts.nodeViews,
     },
     // This can be set in the middleware `tr.setMeta(editable, false)`
     editable: (s) => isEditable(s),

@@ -4,9 +4,10 @@ import {
   makeStyles,
   createStyles, Paper, Grid, Popover, Slider,
 } from '@material-ui/core';
-import MenuIcon from '../../../components/Menu/Icon';
-import { getEditorUI } from '../../../store/ui/selectors';
-import { State } from '../../../store/types';
+import MenuIcon from '../../components/Menu/Icon';
+import { getEditorUI } from '../../store/ui/selectors';
+import { State } from '../../store/types';
+import { AlignOptions } from '../../types';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -24,10 +25,8 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-export type AlignOptions = 'left' | 'center' | 'right';
-
 type Props = {
-  viewId: string;
+  viewId: string; // This is found on view.dom.id for the EditorView
   open: boolean;
   align: AlignOptions;
   width: number;

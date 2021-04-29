@@ -5,7 +5,7 @@ import {
 } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
-import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../utils';
+import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 
 export const quotes = (schema: Schema) => smartQuotes;
 export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, '…')];

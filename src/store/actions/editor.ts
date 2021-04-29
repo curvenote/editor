@@ -19,7 +19,7 @@ import {
 import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
-import { getNodeIfSelected } from '../../prosemirror/utils';
+import { getNodeIfSelected } from './utils';
 
 
 export function updateNodeAttrs(

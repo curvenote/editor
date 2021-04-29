@@ -9,3 +9,5 @@ export type CitationFormat = {
   thumbnail?: string;
   journal?: string;
 };
+
+export type AlignOptions = 'left' | 'center' | 'right';

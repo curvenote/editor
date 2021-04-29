@@ -5,7 +5,7 @@ import { EditorView } from 'prosemirror-view';
 import schema from '../../schema';
 import PreviewEditor from './PreviewEditor';
 import { isEditable } from '../editable';
-import { getNodeIfSelected } from '../../utils';
+import { getNodeIfSelected } from '../../../store/actions/utils';
 
 class PreviewTooltip {
   view: EditorView;

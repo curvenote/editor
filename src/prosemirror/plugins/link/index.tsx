@@ -5,7 +5,7 @@ import { EditorView } from 'prosemirror-view';
 import schema from '../../schema';
 import LinkEditor from './LinkEditor';
 import { isEditable } from '../editable';
-import { getLinkBoundsIfTheyExist } from '../../utils';
+import { getLinkBoundsIfTheyExist } from '../../../store/actions/utils';
 
 class LinkViewTooltip {
   view: EditorView;

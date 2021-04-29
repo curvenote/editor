@@ -77,6 +77,7 @@ const opts: Options = {
   citationPrompt: async () => ['simpeg2015'],
   citationKeyToJson: async () => (citation),
   createCitationSearch: async () => ({ search: () => ['simpeg2015'], ids: ['simpeg2015'] }),
+  nodeViews: {},
 };
 
 setup(store, opts);
