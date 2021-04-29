@@ -23,9 +23,9 @@ const heading: FormatSerialize = (state, node) => {
 
 export const texSerializer = new MarkdownSerializer({
   text(state, node) {
-    // \ & % $ # _ { } ~ ^
-    const escaped = node.text ?? ''
-      .replace(/\\/g, '\\\\')
+    // Latex escaped characters are: \ & % $ # _ { } ~ ^
+    const escaped = (node.text ?? '')
+      .replace(/\\/g, '\\textbackslash')
       .replace(/&/g, '\\&')
       .replace(/%/g, '\\%')
       .replace(/\$/g, '\\$')
@@ -33,7 +33,7 @@ export const texSerializer = new MarkdownSerializer({
       .replace(/_/g, '\\_')
       .replace(/\{/g, '\\{')
       .replace(/\}/g, '\\}')
-      .replace(/~/g, '\\~')
+      .replace(/~/g, '\\textasciitilde')
       .replace(/\^/g, '\\^');
     state.text(escaped, false);
   },
