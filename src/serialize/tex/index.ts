@@ -23,7 +23,19 @@ const heading: FormatSerialize = (state, node) => {
 
 export const texSerializer = new MarkdownSerializer({
   text(state, node) {
-    state.text(node.text ?? '', false);
+    // \ & % $ # _ { } ~ ^
+    const escaped = node.text ?? ''
+      .replace(/\\/g, '\\\\')
+      .replace(/&/g, '\\&')
+      .replace(/%/g, '\\%')
+      .replace(/\$/g, '\\$')
+      .replace(/#/g, '\\#')
+      .replace(/_/g, '\\_')
+      .replace(/\{/g, '\\{')
+      .replace(/\}/g, '\\}')
+      .replace(/~/g, '\\~')
+      .replace(/\^/g, '\\^');
+    state.text(escaped, false);
   },
   paragraph(state, node) {
     state.renderInline(node);
