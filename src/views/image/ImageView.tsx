@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
-import { NodeViewProps } from './types';
-import DivToolbar from './DivToolbar';
+import { NodeViewProps } from '../types';
+import DivToolbar from '../DivToolbar';
 import {
   setNodeViewAlign, setNodeViewDelete, setNodeViewWidth,
 } from '../../store/actions';
@@ -12,26 +12,30 @@ type State = {
   open: boolean;
   edit: boolean;
   src: string;
+  alt: string;
+  title: string;
   width: number;
   align: AlignOptions;
 };
 
-class IFrameView extends Component<NodeViewProps, State> {
+class ImageEditor extends Component<NodeViewProps, State> {
   constructor(props: NodeViewProps) {
     super(props);
     this.state = {
       open: false,
       edit: false,
       src: '',
+      alt: '',
+      title: '',
       align: 'center',
       width: DEFAULT_IMAGE_WIDTH,
     };
   }
 
   render() {
-    const { node, view, getPos } = this.props;
+    const { view, node, getPos } = this.props;
     const {
-      open, edit, src, align, width,
+      open, edit, src, alt, title, align, width,
     } = this.state;
 
     const onAlign = setNodeViewAlign(node, view, getPos);
@@ -39,28 +43,10 @@ class IFrameView extends Component<NodeViewProps, State> {
     const onDelete = setNodeViewDelete(node, view, getPos);
 
     return (
-      <div style={{ margin: '1.5em 0' }}>
-        <div style={{
-          position: 'relative',
-          paddingBottom: `${Math.round((9 / 16) * width)}%`,
-          width: `${width}%`,
-          marginLeft: align === 'left' ? '' : 'auto',
-          marginRight: align === 'right' ? '' : 'auto',
-        }}
-        >
-          <iframe
-            title={src}
-            style={{
-              width: '100%', height: '100%', position: 'absolute', left: 0, top: 0,
-            }}
-            frameBorder="0"
-            width="100%"
-            height="100%"
-            src={src}
-            allowFullScreen
-            allow="autoplay"
-          />
-        </div>
+      <div style={{ textAlign: align, margin: '1.5em 0' }}>
+        {!src?.startsWith('block:') && (
+          <img src={src} alt={alt} title={title} width={`${width}%`} style={{ outline: open ? '2px solid #8cf' : 'none' }} />
+        )}
         <DivToolbar
           open={open && edit}
           {...{
@@ -72,4 +58,4 @@ class IFrameView extends Component<NodeViewProps, State> {
   }
 }
 
-export default IFrameView;
+export default ImageEditor;

@@ -5,11 +5,10 @@ import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import schema from './schema';
 import { store, opts } from '../connect';
-import * as views from './views';
+import * as views from '../views';
 import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
-import createNodeView from './views/NodeView';
 
 export { schema };
 export * as utils from '../store/actions/utils';
@@ -48,14 +47,16 @@ export function createEditorView(
       equation(node, view, getPos) {
         return new views.MathView(node, view, getPos as () => number, false);
       },
-      image: createNodeView(views.ImageView),
-      iframe: createNodeView(views.IFrameView),
+      image(node, view, getPos) {
+        return new views.ImageView(node, view, getPos as () => number);
+      },
+      iframe(node, view, getPos) {
+        return new views.IFrameView(node, view, getPos as () => number);
+      },
       link(node, view, getPos) {
         return new views.LinkView(node, view, getPos as () => number);
       },
-      cite(node, view, getPos) {
-        return new views.CiteView(node, view, getPos as () => number);
-      },
+      cite: views.CiteView,
       button: views.newWidgetView,
       display: views.newWidgetView,
       dynamic: views.newWidgetView,

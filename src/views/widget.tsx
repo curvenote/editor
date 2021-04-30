@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { Node, DOMOutputSpecArray } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import schema from '../schema';
-import { openAttributeEditor } from '../../store/attrs/actions';
-import { store } from '../../connect';
+import schema from '../prosemirror/schema';
+import { openAttributeEditor } from '../store/attrs/actions';
+import { store } from '../connect';
 
 class WidgetView {
   // The node's representation in the editor (empty, for now)

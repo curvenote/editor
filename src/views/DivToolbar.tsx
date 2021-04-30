@@ -4,10 +4,10 @@ import {
   makeStyles,
   createStyles, Paper, Grid, Popover, Slider,
 } from '@material-ui/core';
-import MenuIcon from '../../components/Menu/Icon';
-import { getEditorUI } from '../../store/ui/selectors';
-import { State } from '../../store/types';
-import { AlignOptions } from '../../types';
+import MenuIcon from '../components/Menu/Icon';
+import { getEditorUI } from '../store/ui/selectors';
+import { State } from '../store/types';
+import { AlignOptions } from '../types';
 
 const useStyles = makeStyles(() => createStyles({
   root: {

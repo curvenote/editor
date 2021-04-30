@@ -20,6 +20,12 @@ import LinkOffIcon from '@material-ui/icons/LinkOff';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import AddIcon from '@material-ui/icons/Add';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import InfoIcon from '@material-ui/icons/Info';
+import WarningIcon from '@material-ui/icons/Warning';
+import ErrorIcon from '@material-ui/icons/Error';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
 
@@ -72,6 +78,12 @@ const icons = {
   more: { help: 'Insert', Icon: AddIcon },
   open: { help: 'Open in New Tab', Icon: OpenInNewIcon },
   brackets: { help: 'Toggle Brackets', Icon: BracketsIcon },
+  active: { help: 'Attention', Icon: NewReleasesIcon },
+  success: { help: 'Success', Icon: CheckCircleIcon },
+  info: { help: 'Information', Icon: InfoIcon },
+  warning: { help: 'Warning', Icon: WarningIcon },
+  danger: { help: 'Danger', Icon: ErrorIcon },
+  lift: { help: 'Remove from Container', Icon: SettingsOverscanIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';

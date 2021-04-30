@@ -9,11 +9,10 @@ import suggestion from './suggestion';
 import { buildKeymap } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
-import * as views from '../views';
+import * as views from '../../views';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import linkViewPlugin from './link';
-import previewPlugin from './preview';
+import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 
 export function getPlugins(stateKey: any, version: number, startEditable: boolean) {
@@ -26,8 +25,7 @@ export function getPlugins(stateKey: any, version: number, startEditable: boolea
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
     commentsPlugin(),
-    linkViewPlugin,
-    previewPlugin,
+    inlineActionsPlugin,
     views.image.getImagePlaceholderPlugin(),
     inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),

@@ -1,7 +1,7 @@
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
-import { opts } from '../../../connect';
+import { opts } from '../../connect';
 
 export const key = new PluginKey('placeholder');
 

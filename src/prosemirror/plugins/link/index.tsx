@@ -50,7 +50,7 @@ class LinkViewTooltip {
     this.dom.style.left = `${left - box.left}px`;
 
     const viewId = view.dom.id;
-    const { href } = linkBounds.link.attrs;
+    const { href } = linkBounds.mark.attrs;
     const mark = schema.marks.link;
     const onDelete = () => (
       this.view.dispatch(state.tr.removeMark(linkBounds.from, linkBounds.to, mark))

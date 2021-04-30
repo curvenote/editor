@@ -5,11 +5,16 @@ import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { ThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
-import { isEditable } from '../plugins/editable';
-import { opts, ref } from '../../connect';
+import { isEditable } from '../prosemirror/plugins/editable';
+import { opts, ref } from '../connect';
 import { NodeViewProps } from './types';
 
-class ReactWrapper {
+export type Options = {
+  wrapper: 'span' | 'div';
+  className?: string;
+};
+
+export class ReactWrapper {
   dom: HTMLElement;
 
   node: Node;
@@ -22,14 +27,15 @@ class ReactWrapper {
 
   constructor(
     NodeView: React.ComponentClass<NodeViewProps, any>,
-    node: Node,
-    view: EditorView,
-    getPos: (() => number),
+    nodeViewPos: NodeViewProps,
+    options: Options,
   ) {
+    const { node, view, getPos } = nodeViewPos;
     this.node = node;
     this.view = view;
     this.getPos = getPos;
-    this.dom = document.createElement('div');
+    this.dom = document.createElement(options.wrapper);
+    if (options.className) this.dom.classList.add(options.className);
 
     render(
       <ThemeProvider theme={opts.theme}>
@@ -59,7 +65,7 @@ class ReactWrapper {
     this.editor?.setState({ open: false, edit });
   }
 
-  update(node: Node) {
+  update(node: Node) { // TODO: this has decorations in the args!
     if (!node.sameMarkup(this.node)) return false;
     this.node = node;
     const edit = isEditable(this.view.state);
@@ -73,9 +79,12 @@ class ReactWrapper {
   }
 }
 
-function createNodeView(Editor: React.ComponentClass<NodeViewProps, any>) {
+function createNodeView(
+  Editor: React.ComponentClass<NodeViewProps, any>,
+  options: Options = { wrapper: 'div' },
+) {
   return (node: Node, view: EditorView, getPos: boolean | (() => number)) => (
-    new ReactWrapper(Editor, node, view, getPos as (() => number))
+    new ReactWrapper(Editor, { node, view, getPos: getPos as (() => number) }, options)
   );
 }
 

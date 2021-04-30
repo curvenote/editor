@@ -1,5 +1,6 @@
-import { Node, NodeSpec } from 'prosemirror-model';
+import { Node, NodeRange, NodeSpec } from 'prosemirror-model';
 import { EditorState, NodeSelection } from 'prosemirror-state';
+import { liftTarget } from 'prosemirror-transform';
 import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 import { AlignOptions } from '../../types';
@@ -26,7 +27,8 @@ export const addLink = (view: EditorView, data: DataTransfer | null) => {
 };
 
 export function updateNodeAttrsOnView(
-  view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: { [index: string]: any },
+  view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
+  attrs: { [index: string]: any }, select = true,
 ) {
   if (view == null) return;
   const tr = view.state.tr.setNodeMarkup(
@@ -34,8 +36,9 @@ export function updateNodeAttrsOnView(
     undefined,
     { ...node.node.attrs, ...attrs },
   );
-  tr.setSelection(NodeSelection.create(tr.doc, node.pos));
+  if (select) tr.setSelection(NodeSelection.create(tr.doc, node.pos));
   view.dispatch(tr);
+  if (!select) view.focus();
 }
 
 
@@ -62,7 +65,7 @@ function getLinkBounds(state: EditorState, pos: number) {
     endPos += parent.child(endIndex).nodeSize;
     endIndex += 1;
   }
-  return { from: startPos, to: endPos, link };
+  return { from: startPos, to: endPos, mark: link };
 }
 
 
@@ -82,6 +85,9 @@ export function getLinkBoundsIfTheyExist(state: EditorState) {
     && (mark.isInSet($to.marks()) || to === linkBounds?.to),
   );
 
+  // TODO: this fails if you are selecting between TWO different links. :(
+  // TODO: this fails if the link is only one character long.
+
   if (!hasLink || !linkBounds) return null;
   return linkBounds;
 }
@@ -99,22 +105,37 @@ export function getNodeIfSelected(state: EditorState, spec: NodeSpec) {
 export const setNodeViewAlign = (
   node: Node, view: EditorView, getPos: (() => number),
 ) => (value: AlignOptions) => (
-  updateNodeAttrsOnView(
-    view, { node, pos: getPos() }, { align: value },
-  )
+  updateNodeAttrsOnView(view, { node, pos: getPos() }, { align: value })
 );
 
 export const setNodeViewWidth = (
   node: Node, view: EditorView, getPos: (() => number),
 ) => (value: number) => (
-  updateNodeAttrsOnView(
-    view, { node, pos: getPos() }, { width: value },
-  )
+  updateNodeAttrsOnView(view, { node, pos: getPos() }, { width: value })
+);
+
+export const setNodeViewKind = (
+  node: Node, view: EditorView, getPos: (() => number), select = true,
+) => (value: string) => (
+  updateNodeAttrsOnView(view, { node, pos: getPos() }, { kind: value }, select)
 );
 
 export const setNodeViewDelete = (
   node: Node, view: EditorView, getPos: (() => number),
 ) => () => {
-  const tr = view.state.tr.delete(getPos(), getPos() + 1);
+  const tr = view.state.tr.delete(getPos(), getPos() + node.nodeSize);
   view.dispatch(tr);
+};
+
+export const liftContentOutOfNode = (
+  node: Node, view: EditorView, getPos: (() => number),
+) => () => {
+  const $from = view.state.doc.resolve(getPos() + 1);
+  const $to = view.state.doc.resolve(getPos() + node.nodeSize - 1);
+  const range = new NodeRange($from, $to, 1);
+  const target = liftTarget(range);
+  if (target == null) return;
+  const tr = view.state.tr.lift(range, target);
+  view.dispatch(tr);
+  view.focus();
 };

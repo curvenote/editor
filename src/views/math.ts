@@ -6,7 +6,7 @@ import { Transaction, EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import katex from 'katex';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
-import { isEditable } from '../plugins/editable';
+import { isEditable } from '../prosemirror/plugins/editable';
 
 class MathView {
   // The node's representation in the editor (empty, for now)
