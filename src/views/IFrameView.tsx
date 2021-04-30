@@ -1,75 +1,64 @@
-import React, { Component } from 'react';
-import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
-import { NodeViewProps } from './types';
-import DivToolbar from './DivToolbar';
-import {
-  setNodeViewAlign, setNodeViewDelete, setNodeViewWidth,
-} from '../store/actions';
-import { AlignOptions } from '../types';
+/* eslint-disable max-classes-per-file */
+import { Node } from 'prosemirror-model';
+import { EditorView } from 'prosemirror-view';
+import { isEditable } from '../prosemirror/plugins/editable';
 
+class ImageView {
+  // The node's representation in the editor (empty, for now)
+  dom: HTMLDivElement;
 
-type State = {
-  open: boolean;
-  edit: boolean;
-  src: string;
-  width: number;
-  align: AlignOptions;
-};
+  div: HTMLDivElement;
 
-class IFrameView extends Component<NodeViewProps, State> {
-  constructor(props: NodeViewProps) {
-    super(props);
-    this.state = {
-      open: false,
-      edit: false,
-      src: '',
-      align: 'center',
-      width: DEFAULT_IMAGE_WIDTH,
-    };
+  iframe: HTMLIFrameElement;
+
+  node: Node;
+
+  view: EditorView;
+
+  getPos?: () => number;
+
+  constructor(node: Node, view: EditorView, getPos: () => number) {
+    this.node = node;
+    this.view = view;
+    this.getPos = getPos;
+    this.dom = document.createElement('div');
+    const {
+      align, src, title, alt, width,
+    } = node.attrs;
+    this.dom.style.textAlign = align;
+    this.dom.style.margin = '1.5em 0';
+    this.div = document.createElement('div');
+    this.div.style.position = 'relative';
+    this.div.style.paddingBottom = `${Math.round((9 / 16) * width)}%`;
+    this.div.style.width = `${width}%`;
+    this.div.style.marginLeft = align === 'left' ? '' : 'auto';
+    this.div.style.marginRight = align === 'right' ? '' : 'auto';
+    this.iframe = document.createElement('iframe');
+    this.iframe.title = src ?? '';
+    this.iframe.style.width = '100%';
+    this.iframe.style.height = '100%';
+    this.iframe.style.position = 'absolute';
+    this.iframe.style.top = '0';
+    this.iframe.style.left = '0';
+    this.iframe.style.border = 'none';
+    this.iframe.width = '100%';
+    this.iframe.height = '100%';
+    this.iframe.src = src;
+    this.iframe.allowFullscreen = true;
+    this.iframe.allow = 'autoplay';
+    this.iframe.src = src;
+    this.dom.appendChild(this.div);
+    this.div.appendChild(this.iframe);
   }
 
-  render() {
-    const { node, view, getPos } = this.props;
-    const {
-      open, edit, src, align, width,
-    } = this.state;
+  selectNode() {
+    if (!isEditable(this.view.state)) return;
+    this.div.classList.add('ProseMirror-selectednode');
+  }
 
-    const onAlign = setNodeViewAlign(node, view, getPos);
-    const onWidth = setNodeViewWidth(node, view, getPos);
-    const onDelete = setNodeViewDelete(node, view, getPos);
-
-    return (
-      <div style={{ margin: '1.5em 0' }}>
-        <div style={{
-          position: 'relative',
-          paddingBottom: `${Math.round((9 / 16) * width)}%`,
-          width: `${width}%`,
-          marginLeft: align === 'left' ? '' : 'auto',
-          marginRight: align === 'right' ? '' : 'auto',
-        }}
-        >
-          <iframe
-            title={src}
-            style={{
-              width: '100%', height: '100%', position: 'absolute', left: 0, top: 0,
-            }}
-            frameBorder="0"
-            width="100%"
-            height="100%"
-            src={src}
-            allowFullScreen
-            allow="autoplay"
-          />
-        </div>
-        <DivToolbar
-          open={open && edit}
-          {...{
-            viewId: view.dom.id, align, width, onAlign, onWidth, onDelete,
-          }}
-        />
-      </div>
-    );
+  deselectNode() {
+    this.div.classList.remove('ProseMirror-selectednode');
   }
 }
 
-export default IFrameView;
+export default ImageView;

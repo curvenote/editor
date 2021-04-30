@@ -1,61 +1,46 @@
-import React, { Component } from 'react';
-import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
-import { NodeViewProps } from '../types';
-import DivToolbar from '../DivToolbar';
-import {
-  setNodeViewAlign, setNodeViewDelete, setNodeViewWidth,
-} from '../../store/actions';
-import { AlignOptions } from '../../types';
+/* eslint-disable max-classes-per-file */
+import { Node } from 'prosemirror-model';
+import { EditorView } from 'prosemirror-view';
+import { isEditable } from '../../prosemirror/plugins/editable';
 
+class ImageView {
+  // The node's representation in the editor (empty, for now)
+  dom: HTMLDivElement;
 
-type State = {
-  open: boolean;
-  edit: boolean;
-  src: string;
-  alt: string;
-  title: string;
-  width: number;
-  align: AlignOptions;
-};
+  img: HTMLImageElement;
 
-class ImageEditor extends Component<NodeViewProps, State> {
-  constructor(props: NodeViewProps) {
-    super(props);
-    this.state = {
-      open: false,
-      edit: false,
-      src: '',
-      alt: '',
-      title: '',
-      align: 'center',
-      width: DEFAULT_IMAGE_WIDTH,
-    };
+  node: Node;
+
+  view: EditorView;
+
+  getPos?: () => number;
+
+  constructor(node: Node, view: EditorView, getPos: () => number) {
+    this.node = node;
+    this.view = view;
+    this.getPos = getPos;
+    this.dom = document.createElement('div');
+    const {
+      align, src, title, alt, width,
+    } = node.attrs;
+    this.dom.style.textAlign = align;
+    this.dom.style.margin = '1.5em 0';
+    this.img = document.createElement('img');
+    this.img.src = src;
+    this.img.alt = alt ?? '';
+    this.img.title = title ?? '';
+    this.img.style.width = `${width}%`;
+    this.dom.appendChild(this.img);
   }
 
-  render() {
-    const { view, node, getPos } = this.props;
-    const {
-      open, edit, src, alt, title, align, width,
-    } = this.state;
+  selectNode() {
+    if (!isEditable(this.view.state)) return;
+    this.img.classList.add('ProseMirror-selectednode');
+  }
 
-    const onAlign = setNodeViewAlign(node, view, getPos);
-    const onWidth = setNodeViewWidth(node, view, getPos);
-    const onDelete = setNodeViewDelete(node, view, getPos);
-
-    return (
-      <div style={{ textAlign: align, margin: '1.5em 0' }}>
-        {!src?.startsWith('block:') && (
-          <img src={src} alt={alt} title={title} width={`${width}%`} style={{ outline: open ? '2px solid #8cf' : 'none' }} />
-        )}
-        <DivToolbar
-          open={open && edit}
-          {...{
-            viewId: view.dom.id, align, width, onAlign, onWidth, onDelete,
-          }}
-        />
-      </div>
-    );
+  deselectNode() {
+    this.img.classList.remove('ProseMirror-selectednode');
   }
 }
 
-export default ImageEditor;
+export default ImageView;
