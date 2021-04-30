@@ -1,6 +1,6 @@
 {
   "name": "@curvenote/schema",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Schema and markdown parser for @curvenote/editor",
   "author": "Rowan Cockett <rowan@curvenote.com>",
   "license": "MIT",
