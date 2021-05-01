@@ -37,9 +37,11 @@ export function markInputRule(
 export function insertNodeRule(
   regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs,
   select: boolean | ((p: string[]) => boolean) = false,
+  test?: (p: string[]) => boolean,
 ) {
   // return textblockTypeInputRule(/^\$\$\s$/, nodeType);
   return new InputRule(regExp, (state, match, start, end) => {
+    if (test && !test(match)) return null;
     const { content, ...attrs } = (getAttrs instanceof Function ? getAttrs(match) : getAttrs) ?? {};
     const tr = state.tr.delete(start, end).replaceSelectionWith(
       nodeType.create(attrs, content), false,
