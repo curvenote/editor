@@ -4,5 +4,7 @@ import { EditorView } from 'prosemirror-view';
 export type NodeViewProps = {
   node: Node;
   view: EditorView;
-  getPos: (() => number)
+  getPos: (() => number);
+  open: boolean;
+  edit: boolean;
 };

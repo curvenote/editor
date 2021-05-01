@@ -9,6 +9,7 @@ import * as views from '../views';
 import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
+import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 
 export { schema };
 export * as utils from '../store/actions/utils';
@@ -73,12 +74,12 @@ export function createEditorView(
       if (!view.hasFocus()) return true;
       return (
         addLink(view, event.clipboardData)
-        || views.image.uploadAndInsertImages(view, event.clipboardData)
+        || uploadAndInsertImages(view, event.clipboardData)
       );
     },
     // clipboardTextSerializer: (slice) => {},
     handleDrop: (view, event) => (
-      views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
+      uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),
     handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
       const { viewId, stateId } = getSelectedViewId(store.getState());

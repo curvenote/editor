@@ -14,10 +14,7 @@ export type SearchContext = {
 
 export type Options = {
   transformKeyToId: (key: any) => string | null;
-  image: {
-    upload: (file: File) => Promise<string | null>;
-    downloadUrl: (src: string) => Promise<string>;
-  };
+  uploadImage: (file: File) => Promise<string | null>;
   modifyTransaction?: (
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction
   ) => Transaction;
@@ -69,12 +66,7 @@ export const store: Pick<Store, 'getState' | 'dispatch'> = {
 
 export const opts: Required<Options> = {
   transformKeyToId: (key: any) => ref.opts().transformKeyToId(key),
-  get image() {
-    return {
-      upload: (file: File) => ref.opts().image.upload(file),
-      downloadUrl: (src: string) => ref.opts().image.downloadUrl(src),
-    };
-  },
+  uploadImage(file: File) { return ref.opts().uploadImage(file); },
   modifyTransaction(
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction,
   ) {

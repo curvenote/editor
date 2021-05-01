@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import { useCitation } from '../../components/Citation';
-import { State } from '../../store/types';
-import { getEditorUI } from '../../store/selectors';
+import { useCitation } from '../components/Citation';
+import { State } from '../store/types';
+import { getEditorUI } from '../store/selectors';
+import createNodeView from './NodeView';
 
 
 type Props = {
@@ -40,4 +41,9 @@ const CiteInline = (props: Props) => {
   );
 };
 
-export default CiteInline;
+const CiteView = createNodeView(
+  CiteInline,
+  { wrapper: 'span', className: 'citation' },
+);
+
+export default CiteView;

@@ -52,15 +52,12 @@ const citation = {
 
 const opts: Options = {
   transformKeyToId: (key) => key,
-  image: {
-    upload: async (file) => {
-      // eslint-disable-next-line no-console
-      console.log(file);
-      return new Promise((resolve) => (
-        setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000)
-      ));
-    },
-    downloadUrl: async (src) => src,
+  uploadImage: async (file) => {
+    // eslint-disable-next-line no-console
+    console.log(file);
+    return new Promise((resolve) => (
+      setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000)
+    ));
   },
   addComment() {
     newComment();

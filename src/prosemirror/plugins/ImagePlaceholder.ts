@@ -99,7 +99,7 @@ export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | nul
     const finish = addImagePlaceholder(view, uri);
     let s: string | null;
     try {
-      s = await opts.image.upload(images[0]);
+      s = await opts.uploadImage(images[0]);
     } catch (error) {
       s = null;
     }

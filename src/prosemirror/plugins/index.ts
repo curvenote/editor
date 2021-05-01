@@ -9,11 +9,11 @@ import suggestion from './suggestion';
 import { buildKeymap } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
-import * as views from '../../views';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
 import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
+import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 
 export function getPlugins(stateKey: any, version: number, startEditable: boolean) {
   return [
@@ -26,7 +26,7 @@ export function getPlugins(stateKey: any, version: number, startEditable: boolea
     ),
     commentsPlugin(),
     inlineActionsPlugin,
-    views.image.getImagePlaceholderPlugin(),
+    getImagePlaceholderPlugin(),
     inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),
     keymap(baseKeymap),
