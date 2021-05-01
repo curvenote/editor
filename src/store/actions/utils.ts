@@ -38,7 +38,7 @@ export function updateNodeAttrsOnView(
   );
   if (select) tr.setSelection(NodeSelection.create(tr.doc, node.pos));
   view.dispatch(tr);
-  if (!select) view.focus();
+  view.focus();
 }
 
 

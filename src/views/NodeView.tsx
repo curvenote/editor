@@ -86,7 +86,8 @@ export class ReactWrapper {
       </ThemeProvider>,
       this.dom,
       async () => {
-        this.editor?.setState({ ...node.attrs });
+        const edit = isEditable(this.view.state);
+        this.editor?.setState({ open: this.view.hasFocus(), edit });
       },
     );
   }
@@ -105,7 +106,7 @@ export class ReactWrapper {
     if (!node.sameMarkup(this.node)) return false;
     this.node = node;
     const edit = isEditable(this.view.state);
-    this.editor?.setState({ edit, ...node.attrs });
+    this.editor?.setState({ open: this.view.hasFocus(), edit });
     return true;
   }
 }

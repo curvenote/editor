@@ -8,7 +8,7 @@ export { default as EditorMenu } from './components/Menu';
 export { default as Suggestion } from './components/Suggestion';
 export { default as Attributes } from './components/Attributes';
 
-export * as views from './views';
+export { default as views } from './views';
 
 export { setup, opts } from './connect';
 export type { Options } from './connect';

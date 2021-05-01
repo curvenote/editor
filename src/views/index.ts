@@ -1,10 +1,20 @@
-export { default as createReactNodeView } from './NodeView';
+import MathView from './MathView';
+import ImageView from './ImageView';
+import IFrameView from './IFrameView';
+import LinkView from './LinkView';
+import CiteView from './CiteView';
+import createNodeView from './NodeView';
+import WidgetView, { newWidgetView } from './WidgetView';
+
 export type { NodeViewProps } from './types';
 
-export { default as MathView } from './MathView';
-export { default as ImageView } from './ImageView';
-export { default as IFrameView } from './IFrameView';
-export { default as LinkView } from './LinkView';
-export { default as CiteView } from './CiteView';
-
-export { default as WidgetView, newWidgetView } from './WidgetView';
+export default {
+  createNodeView,
+  MathView,
+  ImageView,
+  IFrameView,
+  LinkView,
+  CiteView,
+  WidgetView,
+  newWidgetView,
+};

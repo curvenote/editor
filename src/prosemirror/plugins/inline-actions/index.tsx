@@ -34,7 +34,11 @@ class InlineActions {
   update(view: EditorView, lastState: EditorState | null) {
     const { state } = view;
     // Don't do anything if the document/selection didn't change
-    if (lastState && lastState.doc.eq(state.doc) && lastState.selection.eq(state.selection)) return;
+    // if (
+    //   lastState
+    //   && lastState.doc.eq(state.doc)
+    //   && lastState.selection.eq(state.selection)
+    // ) return;
 
     const edit = isEditable(state);
 
@@ -52,14 +56,16 @@ class InlineActions {
 
     switch (node?.type.name) {
       case schema.nodes.image.name: {
-        const anchorEl = view.nodeDOM(state.selection.from)?.firstChild;
+        const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
+        const anchorEl = wrapper?.getElementsByTagName('img')[0] ?? wrapper;
         this.tooltip?.setState({
           open: true, edit, kind: SelectionKinds.image, placement: 'bottom', anchorEl,
         });
         return;
       }
       case schema.nodes.iframe.name: {
-        const anchorEl = view.nodeDOM(state.selection.from)?.firstChild;
+        const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
+        const anchorEl = wrapper?.getElementsByTagName('iframe')[0] ?? wrapper;
         this.tooltip?.setState({
           open: true, edit, kind: SelectionKinds.iframe, placement: 'bottom', anchorEl,
         });

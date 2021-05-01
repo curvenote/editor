@@ -5,14 +5,13 @@ import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import schema from './schema';
 import { store, opts } from '../connect';
-import * as views from '../views';
+import views from '../views';
 import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 
 export { schema };
-export * as utils from '../store/actions/utils';
 
 export function createEditorState(
   stateKey: any, content: string, version: number, startEditable: boolean,
