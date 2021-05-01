@@ -7,32 +7,21 @@ import { State, Dispatch } from '../../store/types';
 import { selectors, actions } from '../../store';
 import Suggestion from './Suggestion';
 import { CommandResult } from '../../store/suggestion/commands';
+import Keyboard from './Keyboard';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
     position: 'relative',
     '& div': {
       position: 'absolute',
-      padding: '0 3px',
-      border: '1px solid #FFF',
-      fontFamily: 'system-ui, "Noto Sans"',
-      fontSize: 12,
-      color: '#5f5f5f',
       top: 3,
       right: 3,
-      backgroundColor: '#D4D4D4',
-      borderRadius: 3,
     },
     '& h6': {
       marginRight: 50,
     },
-    '& span': {
-      margin: 5,
-      marginRight: 50,
-    },
   },
 }));
-
 
 const CommandSuggestions = () => {
   const dispatch = useDispatch<Dispatch>();
@@ -40,7 +29,7 @@ const CommandSuggestions = () => {
   const suggestions = useSelector(
     (state: State) => selectors.getSuggestion(state), isEqual,
   );
-  const { selected, results } = suggestions as {selected: number; results: CommandResult[]};
+  const { selected, results } = suggestions as { selected: number; results: CommandResult[] };
 
   const onClick = (index: number) => dispatch(actions.chooseSelection(index));
   const onHover = (index: number) => dispatch(actions.selectSuggestion(index));
@@ -56,7 +45,7 @@ const CommandSuggestions = () => {
           selected={selected === index}
           className={classes.root}
         >
-          {item.shortcut && <div>{item.shortcut}</div>}
+          {item.shortcut && <div><Keyboard shortcut={item.shortcut} /></div>}
           <Typography variant="subtitle1">
             {item.title}
           </Typography>

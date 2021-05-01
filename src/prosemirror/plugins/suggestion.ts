@@ -2,6 +2,7 @@ import { Plugin, PluginKey, Selection } from 'prosemirror-state';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 
+export const SUGGESTION_ID = 'suggestion';
 export const KEEP_SELECTION_ALIVE = 'KEEP_SELECTION_ALIVE';
 
 interface Range { from: number; to: number }
@@ -87,7 +88,6 @@ export default function getPlugins(
   suggestionTrigger = /(?:^|\W)(@|#)$/,
   cancelOnFirstSpace: ((trigger: string | null) => boolean) | boolean = true,
   suggestionClass = 'suggestion',
-  suggestionStyle = 'background: rgba(0, 0, 255, 0.05); color: blue; padding: 5px; border-radius: 5px 5px 0 0;',
 ) {
   const plugin: Plugin<SuggestionState> = new Plugin({
     key,
@@ -121,8 +121,8 @@ export default function getPlugins(
           const from = tr.selection.from - meta.trigger.length;
           const to = tr.selection.from;
           const deco = Decoration.inline(from, to, {
+            id: SUGGESTION_ID,
             class: suggestionClass,
-            style: suggestionStyle,
           }, { inclusiveStart: false, inclusiveEnd: true });
           return {
             active: true,

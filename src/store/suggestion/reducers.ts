@@ -7,7 +7,6 @@ const initialState: SuggestionState = {
   view: null,
   trigger: '',
   range: { from: 0, to: 0 },
-  location: null,
   open: false,
   kind: null,
   selected: 0,
@@ -22,11 +21,10 @@ const suggestionReducer = (
   switch (action.type) {
     case UPDATE_SUGGESTION: {
       const {
-        location, open, kind, search, range, view, trigger,
+        open, kind, search, range, view, trigger,
       } = action.payload;
       return {
         ...state,
-        location,
         open,
         kind,
         search,

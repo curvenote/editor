@@ -36,22 +36,12 @@ function triggerToKind(trigger: string): SuggestionKind {
 }
 
 export function updateSuggestion(
-  setOpen: boolean, kind: SuggestionKind,
+  open: boolean, kind: SuggestionKind,
   search: string | null,
   view: EditorView,
   range: Range,
   trigger: string,
 ): SuggestionActionTypes {
-  let location;
-  let open;
-  // This catches a delete past the start of the location.
-  try {
-    location = view.coordsAtPos(range.from);
-    open = setOpen;
-  } catch (error) {
-    open = false;
-    location = null;
-  }
   return {
     type: UPDATE_SUGGESTION,
     payload: {
@@ -60,7 +50,6 @@ export function updateSuggestion(
       search,
       view,
       range,
-      location,
       trigger,
     },
   };
