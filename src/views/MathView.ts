@@ -2,7 +2,7 @@ import { Node } from 'prosemirror-model';
 import { StepMap } from 'prosemirror-transform';
 import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
-import { Transaction, EditorState } from 'prosemirror-state';
+import { Transaction, EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import katex from 'katex';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
@@ -62,6 +62,12 @@ class MathView {
         doc: this.node,
         plugins: [keymap({
           'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
+          'Mod-a': () => {
+            const { doc, tr } = this.innerView.state;
+            const sel = TextSelection.create(doc, 0, this.node.nodeSize - 2);
+            this.innerView.dispatch(tr.setSelection(sel));
+            return true;
+          },
           'Mod-Z': () => redo(this.outerView.state, this.outerView.dispatch),
           ...(mac ? {} : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
           Escape: () => {
