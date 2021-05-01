@@ -31,6 +31,8 @@ const suggestionReducer = (
         range,
         view,
         trigger,
+        // Get rid of the previous results if closing!
+        results: !open ? [] : state.results,
       };
     }
     case UPDATE_RESULTS: {

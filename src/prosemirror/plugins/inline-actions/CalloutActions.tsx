@@ -26,6 +26,7 @@ type Props = {
 
 const CalloutActions = (props: Props) => {
   const { view } = props;
+  const classes = useStyles();
 
   let p = findParentNode(
     (n) => n.type === schema.nodes.callout,
@@ -38,11 +39,10 @@ const CalloutActions = (props: Props) => {
 
   if (!p) return null;
 
-  const onKind = setNodeViewKind(p.node, view, () => (p?.pos as number), false);
+  const onKind = setNodeViewKind(p.node, view, p?.pos as number, false);
   const doKind = (a: string) => () => onKind(a);
-  const onDelete = setNodeViewDelete(p.node, view, () => (p?.pos as number));
-  const onLift = liftContentOutOfNode(p.node, view, () => (p?.pos as number));
-  const classes = useStyles();
+  const onDelete = setNodeViewDelete(p.node, view, p?.pos as number);
+  const onLift = liftContentOutOfNode(p.node, view, p?.pos as number);
 
   const { kind } = p.node.attrs;
   return (

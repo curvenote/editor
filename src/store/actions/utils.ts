@@ -103,35 +103,35 @@ export function getNodeIfSelected(state: EditorState, spec: NodeSpec) {
 }
 
 export const setNodeViewAlign = (
-  node: Node, view: EditorView, getPos: (() => number),
+  node: Node, view: EditorView, pos: number,
 ) => (value: AlignOptions) => (
-  updateNodeAttrsOnView(view, { node, pos: getPos() }, { align: value })
+  updateNodeAttrsOnView(view, { node, pos }, { align: value })
 );
 
 export const setNodeViewWidth = (
-  node: Node, view: EditorView, getPos: (() => number),
+  node: Node, view: EditorView, pos: number,
 ) => (value: number) => (
-  updateNodeAttrsOnView(view, { node, pos: getPos() }, { width: value })
+  updateNodeAttrsOnView(view, { node, pos }, { width: value })
 );
 
 export const setNodeViewKind = (
-  node: Node, view: EditorView, getPos: (() => number), select = true,
+  node: Node, view: EditorView, pos: number, select = true,
 ) => (value: string) => (
-  updateNodeAttrsOnView(view, { node, pos: getPos() }, { kind: value }, select)
+  updateNodeAttrsOnView(view, { node, pos }, { kind: value }, select)
 );
 
 export const setNodeViewDelete = (
-  node: Node, view: EditorView, getPos: (() => number),
+  node: Node, view: EditorView, pos: number,
 ) => () => {
-  const tr = view.state.tr.delete(getPos(), getPos() + node.nodeSize);
+  const tr = view.state.tr.delete(pos, pos + node.nodeSize);
   view.dispatch(tr);
 };
 
 export const liftContentOutOfNode = (
-  node: Node, view: EditorView, getPos: (() => number),
+  node: Node, view: EditorView, pos: number,
 ) => () => {
-  const $from = view.state.doc.resolve(getPos() + 1);
-  const $to = view.state.doc.resolve(getPos() + node.nodeSize - 1);
+  const $from = view.state.doc.resolve(pos + 1);
+  const $to = view.state.doc.resolve(pos + node.nodeSize - 1);
   const range = new NodeRange($from, $to, 1);
   const target = liftTarget(range);
   if (target == null) return;
