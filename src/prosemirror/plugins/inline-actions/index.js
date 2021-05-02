@@ -14,8 +14,6 @@ var InlineActions = (function () {
         this.wrapper = null;
         this.view = view;
         this.dom = document.createElement('div');
-        this.dom.style.position = 'absolute';
-        this.dom.style.zIndex = '2';
         (_a = view.dom.parentNode) === null || _a === void 0 ? void 0 : _a.appendChild(this.dom);
         render(React.createElement(Wrapper, { view: view, ref: function (r) { _this.wrapper = r; } }), this.dom);
         this.update(view);
