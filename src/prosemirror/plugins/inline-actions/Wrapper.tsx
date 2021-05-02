@@ -22,7 +22,7 @@ type State = {
   placement: PopperPlacementType;
 };
 
-class LinkEditor extends Component<Props, State> {
+class Wrapper extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -54,4 +54,4 @@ class LinkEditor extends Component<Props, State> {
   }
 }
 
-export default LinkEditor;
+export default Wrapper;
