@@ -7,12 +7,17 @@ var useStyles = makeStyles(function () { return createStyles({
 }); });
 export var useCitation = function (uid) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    var _l = useState(null), json = _l[0], setJson = _l[1];
+    var _l = useState(false), loading = _l[0], setLoading = _l[1];
+    var _m = useState(null), json = _m[0], setJson = _m[1];
     var noJson = json == null;
     useEffect(function () {
         if (!uid)
             return;
-        opts.citationKeyToJson(uid).then(function (data) { return setJson(data); });
+        setLoading(true);
+        opts.citationKeyToJson(uid).then(function (data) {
+            setJson(data);
+            setLoading(false);
+        });
     }, [uid]);
     var inline = null;
     if (json) {
@@ -31,6 +36,7 @@ export var useCitation = function (uid) {
         }
     }
     return {
+        loading: loading,
         json: json,
         inline: inline,
         error: noJson,

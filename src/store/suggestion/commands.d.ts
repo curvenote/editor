@@ -35,6 +35,6 @@ export interface CommandResult {
     title: string;
     description: string;
     image?: string;
-    shortcut?: string;
+    shortcut?: string | string[];
 }
 export declare const commands: CommandResult[];

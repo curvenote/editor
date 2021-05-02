@@ -1,6 +1,6 @@
 import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } from 'prosemirror-inputrules';
 import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
-import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../utils';
+import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 export var quotes = function (schema) { return smartQuotes; };
 export var ellipsis = function (schema) { return [new InputRule(/\.\.\.$/, '…')]; };
 export var blockquote = function (schema) { return [wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote)]; };
@@ -63,11 +63,15 @@ export var equation = function (schema) { return [
     replaceNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
 ]; };
 export var mathInline = function (schema) { return [
-    insertNodeRule(/(\$([\W\w]*)\$)$/, schema.nodes.math, function (match) {
+    insertNodeRule(/(\$([^$]*)\$)$/, schema.nodes.math, function (match) {
         if (match[2] === '')
             return {};
         return { content: schema.text(match[2]) };
-    }, function (match) { return match[2] === ''; }),
+    }, function (match) { return match[2] === ''; }, function (match) {
+        if (match[2].match(/^\d/) && match[2].match(/\s$/))
+            return false;
+        return true;
+    }),
 ]; };
 export var hr = function (schema) { return [
     insertNodeRule(/^(~~~|---|\*\*\*)$/, schema.nodes.horizontal_rule),

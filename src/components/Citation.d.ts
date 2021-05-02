@@ -1,6 +1,7 @@
 /// <reference types="react" />
 import { CitationFormat } from '../types';
 export declare const useCitation: (uid: string) => {
+    loading: boolean;
     json: CitationFormat | null;
     inline: string | null;
     error: boolean;

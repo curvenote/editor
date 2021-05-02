@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import { migrateHTML } from '@curvenote/schema';
 import { EditorState } from 'prosemirror-state';
 import { DOMParser as Parser } from 'prosemirror-model';
@@ -5,10 +16,11 @@ import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import schema from './schema';
 import { store, opts } from '../connect';
-import * as views from './views';
+import views from '../views';
 import { isEditable } from './plugins/editable';
-import { addLink } from './utils';
+import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
+import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 export { schema };
 export function createEditorState(stateKey, content, version, startEditable) {
     var plugins = getPlugins(stateKey, version, startEditable);
@@ -28,8 +40,7 @@ export function createEditorView(dom, state, dispatch) {
     var editorView = new EditorView(dom, {
         state: state,
         dispatchTransaction: dispatch,
-        nodeViews: {
-            math: function (node, view, getPos) {
+        nodeViews: __assign({ math: function (node, view, getPos) {
                 return new views.MathView(node, view, getPos, true);
             },
             equation: function (node, view, getPos) {
@@ -43,25 +54,15 @@ export function createEditorView(dom, state, dispatch) {
             },
             link: function (node, view, getPos) {
                 return new views.LinkView(node, view, getPos);
-            },
-            cite: function (node, view, getPos) {
-                return new views.CiteView(node, view, getPos);
-            },
-            button: views.newWidgetView,
-            display: views.newWidgetView,
-            dynamic: views.newWidgetView,
-            range: views.newWidgetView,
-            switch: views.newWidgetView,
-            variable: views.newWidgetView,
-        },
+            }, cite: views.CiteView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
         handlePaste: function (view, event) {
             if (!view.hasFocus())
                 return true;
             return (addLink(view, event.clipboardData)
-                || views.image.uploadAndInsertImages(view, event.clipboardData));
+                || uploadAndInsertImages(view, event.clipboardData));
         },
-        handleDrop: function (view, event) { return (views.image.uploadAndInsertImages(view, event.dataTransfer)); },
+        handleDrop: function (view, event) { return (uploadAndInsertImages(view, event.dataTransfer)); },
         handleDoubleClick: function (view, pos, event) {
             var _a = getSelectedViewId(store.getState()), viewId = _a.viewId, stateId = _a.stateId;
             return opts.onDoubleClick(stateId, viewId, view, pos, event);

@@ -12,6 +12,7 @@ var __assign = (this && this.__assign) || function () {
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { Decoration, DecorationSet } from 'prosemirror-view';
+export var SUGGESTION_ID = 'suggestion';
 export var KEEP_SELECTION_ALIVE = 'KEEP_SELECTION_ALIVE';
 var inactiveSuggestionState = {
     active: false, trigger: null, decorations: DecorationSet.empty, text: null, range: null,
@@ -62,12 +63,11 @@ function cancelIfInsideAndPass(view) {
     }
     return false;
 }
-export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpace, suggestionClass, suggestionStyle) {
+export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpace, suggestionClass) {
     if (onAction === void 0) { onAction = function () { return false; }; }
     if (suggestionTrigger === void 0) { suggestionTrigger = /(?:^|\W)(@|#)$/; }
     if (cancelOnFirstSpace === void 0) { cancelOnFirstSpace = true; }
     if (suggestionClass === void 0) { suggestionClass = 'suggestion'; }
-    if (suggestionStyle === void 0) { suggestionStyle = 'background: rgba(0, 0, 255, 0.05); color: blue; padding: 5px; border-radius: 5px 5px 0 0;'; }
     var plugin = new Plugin({
         key: key,
         view: function () {
@@ -103,8 +103,8 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
                     var from_1 = tr.selection.from - meta.trigger.length;
                     var to_1 = tr.selection.from;
                     var deco = Decoration.inline(from_1, to_1, {
+                        id: SUGGESTION_ID,
                         class: suggestionClass,
-                        style: suggestionStyle,
                     }, { inclusiveStart: false, inclusiveEnd: true });
                     return {
                         active: true,

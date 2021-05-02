@@ -9,3 +9,4 @@ export declare type CitationFormat = {
     thumbnail?: string;
     journal?: string;
 };
+export declare type AlignOptions = 'left' | 'center' | 'right';

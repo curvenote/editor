@@ -56,17 +56,7 @@ function triggerToKind(trigger) {
         default: throw new Error('Unknown trigger.');
     }
 }
-export function updateSuggestion(setOpen, kind, search, view, range, trigger) {
-    var location;
-    var open;
-    try {
-        location = view.coordsAtPos(range.from);
-        open = setOpen;
-    }
-    catch (error) {
-        open = false;
-        location = null;
-    }
+export function updateSuggestion(open, kind, search, view, range, trigger) {
     return {
         type: UPDATE_SUGGESTION,
         payload: {
@@ -75,7 +65,6 @@ export function updateSuggestion(setOpen, kind, search, view, range, trigger) {
             search: search,
             view: view,
             range: range,
-            location: location,
             trigger: trigger,
         },
     };

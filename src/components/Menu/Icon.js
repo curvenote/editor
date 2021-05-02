@@ -28,6 +28,12 @@ import LinkOffIcon from '@material-ui/icons/LinkOff';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import AddIcon from '@material-ui/icons/Add';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import InfoIcon from '@material-ui/icons/Info';
+import WarningIcon from '@material-ui/icons/Warning';
+import ErrorIcon from '@material-ui/icons/Error';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 function SubscriptIcon(props) {
     return (React.createElement(SvgIcon, __assign({}, props),
         React.createElement("path", { d: "M16 7.41L11.41 12L16 16.59L14.59 18L10 13.41L5.41 18L4 16.59L8.59 12L4 7.41L5.41 6L10 10.59L14.59 6L16 7.41m5.85 13.62h-4.88v-1l.89-.8c.76-.65 1.32-1.19 1.7-1.63c.37-.44.56-.85.57-1.24a.898.898 0 0 0-.27-.7c-.18-.16-.47-.28-.86-.28c-.31 0-.58.06-.84.18l-.66.38l-.45-1.17c.27-.21.59-.39.98-.53s.82-.24 1.29-.24c.78.04 1.38.25 1.78.66c.4.41.62.93.62 1.57c-.01.56-.19 1.08-.54 1.55c-.34.47-.76.92-1.27 1.36l-.64.52v.02h2.58v1.35z" })));
@@ -63,6 +69,12 @@ var icons = {
     more: { help: 'Insert', Icon: AddIcon },
     open: { help: 'Open in New Tab', Icon: OpenInNewIcon },
     brackets: { help: 'Toggle Brackets', Icon: BracketsIcon },
+    active: { help: 'Attention', Icon: NewReleasesIcon },
+    success: { help: 'Success', Icon: CheckCircleIcon },
+    info: { help: 'Information', Icon: InfoIcon },
+    warning: { help: 'Warning', Icon: WarningIcon },
+    danger: { help: 'Danger', Icon: ErrorIcon },
+    lift: { help: 'Remove from Container', Icon: SettingsOverscanIcon },
 };
 var useStyles = makeStyles(function (theme) { return createStyles({
     root: {

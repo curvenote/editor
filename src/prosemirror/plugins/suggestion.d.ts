@@ -1,5 +1,6 @@
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+export declare const SUGGESTION_ID = "suggestion";
 export declare const KEEP_SELECTION_ALIVE = "KEEP_SELECTION_ALIVE";
 interface Range {
     from: number;
@@ -23,5 +24,5 @@ export interface SuggestionAction {
     range: Range;
 }
 export declare function cancelSuggestion(view: EditorView): boolean;
-export default function getPlugins(onAction?: (action: SuggestionAction) => boolean | typeof KEEP_SELECTION_ALIVE, suggestionTrigger?: RegExp, cancelOnFirstSpace?: ((trigger: string | null) => boolean) | boolean, suggestionClass?: string, suggestionStyle?: string): Plugin<any, any>[];
+export default function getPlugins(onAction?: (action: SuggestionAction) => boolean | typeof KEEP_SELECTION_ALIVE, suggestionTrigger?: RegExp, cancelOnFirstSpace?: ((trigger: string | null) => boolean) | boolean, suggestionClass?: string): Plugin<any, any>[];
 export {};

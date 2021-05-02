@@ -1,6 +1,6 @@
 import { NodeSelection } from 'prosemirror-state';
 import { findParentNode, isNodeSelection, hasParentNode, } from 'prosemirror-utils';
-import { getNodeIfSelected } from '../../prosemirror/utils';
+import { getNodeIfSelected } from '../actions/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditor } from '../state/selectors';
 export function getParentsOfSelection(state, stateKey) {

@@ -83,6 +83,30 @@ declare const icons: {
         help: string;
         Icon: typeof BracketsIcon;
     };
+    active: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    success: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    info: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    warning: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    danger: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    lift: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
 };
 export declare type IconTypes = keyof typeof icons | 'divider';
 declare type Props = {

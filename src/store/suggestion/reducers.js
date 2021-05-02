@@ -14,7 +14,6 @@ var initialState = {
     view: null,
     trigger: '',
     range: { from: 0, to: 0 },
-    location: null,
     open: false,
     kind: null,
     selected: 0,
@@ -25,14 +24,13 @@ var suggestionReducer = function (state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case UPDATE_SUGGESTION: {
-            var _a = action.payload, location_1 = _a.location, open_1 = _a.open, kind = _a.kind, search = _a.search, range = _a.range, view = _a.view, trigger = _a.trigger;
-            return __assign(__assign({}, state), { location: location_1,
-                open: open_1,
+            var _a = action.payload, open_1 = _a.open, kind = _a.kind, search = _a.search, range = _a.range, view = _a.view, trigger = _a.trigger;
+            return __assign(__assign({}, state), { open: open_1,
                 kind: kind,
                 search: search,
                 range: range,
                 view: view,
-                trigger: trigger });
+                trigger: trigger, results: !open_1 ? [] : state.results });
         }
         case UPDATE_RESULTS: {
             var results = action.payload.results;

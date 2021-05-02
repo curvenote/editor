@@ -19,7 +19,7 @@ import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChil
 import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
-import { getNodeIfSelected } from '../../prosemirror/utils';
+import { getNodeIfSelected } from './utils';
 export function updateNodeAttrs(stateKey, viewId, node, attrs) {
     return function (dispatch, getState) {
         var _a;

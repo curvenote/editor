@@ -37,6 +37,10 @@
   cursor: move;
 }
 
+.suggestion {
+  color: blue;
+}
+
 .ProseMirror-hideselection .eqn-editor *::selection {
   background-color: transparent;
 }

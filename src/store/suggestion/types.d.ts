@@ -35,7 +35,6 @@ export declare type Range = {
 };
 export declare type SuggestionState = {
     view: EditorView | null;
-    location: Location | null;
     open: boolean;
     trigger: string;
     kind: SuggestionKind | null;
@@ -52,7 +51,6 @@ export interface UpdateSuggestionAction {
         kind: SuggestionKind | null;
         range: Range;
         search: string | null;
-        location: Location | null;
         trigger: string;
     };
 }

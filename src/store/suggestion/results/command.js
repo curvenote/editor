@@ -41,7 +41,7 @@ import * as actions from '../../actions/editor';
 import { commands, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import schema from '../../../prosemirror/schema';
-import { getLinkBoundsIfTheyExist } from '../../../prosemirror/utils';
+import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId, } from './utils';
 import { opts } from '../../../connect';

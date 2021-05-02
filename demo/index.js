@@ -70,17 +70,12 @@ var citation = {
 };
 var opts = {
     transformKeyToId: function (key) { return key; },
-    image: {
-        upload: function (file) { return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                console.log(file);
-                return [2, new Promise(function (resolve) { return (setTimeout(function () { return resolve('/images/logo.png'); }, 3000)); })];
-            });
-        }); },
-        downloadUrl: function (src) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-            return [2, src];
-        }); }); },
-    },
+    uploadImage: function (file) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            console.log(file);
+            return [2, new Promise(function (resolve) { return (setTimeout(function () { return resolve('https://curvenote.dev/images/logo.png'); }, 2000)); })];
+        });
+    }); },
     addComment: function () {
         newComment();
         return true;
@@ -95,12 +90,15 @@ var opts = {
     citationPrompt: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2, ['simpeg2015']];
     }); }); },
-    citationKeyToJson: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2, (citation)];
-    }); }); },
+    citationKeyToJson: function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2, new Promise(function (resolve) { return (setTimeout(function () { return resolve(citation); }, 250)); })];
+        });
+    }); },
     createCitationSearch: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2, ({ search: function () { return ['simpeg2015']; }, ids: ['simpeg2015'] })];
     }); }); },
+    nodeViews: {},
 };
 setup(store, opts);
 window.store = store;

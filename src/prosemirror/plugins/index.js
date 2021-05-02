@@ -16,20 +16,18 @@ import suggestion from './suggestion';
 import { buildKeymap } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
-import * as views from '../views';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import linkViewPlugin from './link';
-import previewPlugin from './preview';
+import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
+import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 export function getPlugins(stateKey, version, startEditable) {
     return __spreadArrays([
         editablePlugin(startEditable)
     ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), [
         commentsPlugin(),
-        linkViewPlugin,
-        previewPlugin,
-        views.image.getImagePlaceholderPlugin(),
+        inlineActionsPlugin,
+        getImagePlaceholderPlugin(),
         inputrules(schema),
         keymap(buildKeymap(stateKey, schema)),
         keymap(baseKeymap),

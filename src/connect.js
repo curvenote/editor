@@ -24,12 +24,7 @@ export var store = {
 };
 export var opts = {
     transformKeyToId: function (key) { return ref.opts().transformKeyToId(key); },
-    get image() {
-        return {
-            upload: function (file) { return ref.opts().image.upload(file); },
-            downloadUrl: function (src) { return ref.opts().image.downloadUrl(src); },
-        };
-    },
+    uploadImage: function (file) { return ref.opts().uploadImage(file); },
     modifyTransaction: function (stateKey, viewId, state, transaction) {
         var modifyTransaction = ref.opts().modifyTransaction;
         if (modifyTransaction) {
@@ -51,5 +46,6 @@ export var opts = {
     createCitationSearch: function () { return ref.opts().createCitationSearch(); },
     get theme() { return ref.opts().theme; },
     get throttle() { return ref.opts().throttle; },
+    get nodeViews() { var _a; return (_a = ref.opts().nodeViews) !== null && _a !== void 0 ? _a : {}; },
 };
 //# sourceMappingURL=connect.js.map
