@@ -42,7 +42,13 @@ class Wrapper extends Component<Props, State> {
     return (
       <ThemeProvider theme={opts.theme}>
         <Provider store={ref.store()}>
-          <Popper open={open} anchorEl={anchorEl} transition placement={placement}>
+          <Popper
+            style={{ zIndex: 2 }} // This allows it to be overtop of the asides
+            open={open}
+            anchorEl={anchorEl}
+            transition
+            placement={placement}
+          >
             <Toolbar {...{
               view, open, edit, kind,
             }}
