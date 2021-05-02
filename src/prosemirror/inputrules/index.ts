@@ -18,11 +18,11 @@ const inputrules = (schema: Schema) => inputRules({
     ...rules.codeInline(schema),
     ...rules.strong(schema),
     ...rules.em(schema),
+    ...rules.hr(schema), // Comes above strikethrough!
     ...rules.strikethrough(schema),
     ...rules.headings(schema),
     ...rules.equation(schema),
     ...rules.mathInline(schema),
-    ...rules.hr(schema),
     ...rules.slider(schema),
     ...rules.dynamic(schema),
   ],

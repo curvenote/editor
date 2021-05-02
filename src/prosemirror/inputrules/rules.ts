@@ -5,7 +5,7 @@ import {
 } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
-import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../utils';
+import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 
 export const quotes = (schema: Schema) => smartQuotes;
 export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, '…')];
@@ -102,13 +102,17 @@ export const equation = (schema: Schema) => [
 export const mathInline = (schema: Schema) => [
   insertNodeRule(
     // $Ax=b$ or $$, only select if there is not content.
-    /(\$([\W\w]*)\$)$/,
+    /(\$([^$]*)\$)$/,
     schema.nodes.math,
     (match: string[]) => {
       if (match[2] === '') return {};
       return { content: schema.text(match[2]) };
     },
     (match: string[]) => match[2] === '',
+    (match: string[]) => {
+      if (match[2].match(/^\d/) && match[2].match(/\s$/)) return false;
+      return true;
+    },
   ),
 ];
 

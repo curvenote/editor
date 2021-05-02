@@ -5,10 +5,11 @@ import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import schema from './schema';
 import { store, opts } from '../connect';
-import * as views from './views';
+import views from '../views';
 import { isEditable } from './plugins/editable';
-import { addLink } from './utils';
+import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
+import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 
 export { schema };
 
@@ -55,15 +56,14 @@ export function createEditorView(
       link(node, view, getPos) {
         return new views.LinkView(node, view, getPos as () => number);
       },
-      cite(node, view, getPos) {
-        return new views.CiteView(node, view, getPos as () => number);
-      },
+      cite: views.CiteView,
       button: views.newWidgetView,
       display: views.newWidgetView,
       dynamic: views.newWidgetView,
       range: views.newWidgetView,
       switch: views.newWidgetView,
       variable: views.newWidgetView,
+      ...opts.nodeViews,
     },
     // This can be set in the middleware `tr.setMeta(editable, false)`
     editable: (s) => isEditable(s),
@@ -73,12 +73,12 @@ export function createEditorView(
       if (!view.hasFocus()) return true;
       return (
         addLink(view, event.clipboardData)
-        || views.image.uploadAndInsertImages(view, event.clipboardData)
+        || uploadAndInsertImages(view, event.clipboardData)
       );
     },
     // clipboardTextSerializer: (slice) => {},
     handleDrop: (view, event) => (
-      views.image.uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
+      uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
     ),
     handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
       const { viewId, stateId } = getSelectedViewId(store.getState());

@@ -10,11 +10,16 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 export const useCitation = (uid: string) => {
+  const [loading, setLoading] = useState(false);
   const [json, setJson] = useState<CitationFormat | null>(null);
   const noJson = json == null;
   useEffect(() => {
     if (!uid) return;
-    opts.citationKeyToJson(uid).then((data) => setJson(data));
+    setLoading(true);
+    opts.citationKeyToJson(uid).then((data) => {
+      setJson(data);
+      setLoading(false);
+    });
   }, [uid]);
 
   let inline = null;
@@ -35,6 +40,7 @@ export const useCitation = (uid: string) => {
   }
 
   return {
+    loading,
     json,
     inline,
     error: noJson,

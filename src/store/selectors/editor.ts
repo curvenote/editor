@@ -3,7 +3,7 @@ import { NodeSelection } from 'prosemirror-state';
 import {
   findParentNode, ContentNodeWithPos, isNodeSelection, hasParentNode,
 } from 'prosemirror-utils';
-import { getNodeIfSelected } from '../../prosemirror/utils';
+import { getNodeIfSelected } from '../actions/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditor } from '../state/selectors';
 import { State } from '../types';

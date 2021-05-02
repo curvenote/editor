@@ -2,7 +2,7 @@
 import { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
+import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import setupComponents from './components';
 import { CitationFormat } from './types';
@@ -14,10 +14,7 @@ export type SearchContext = {
 
 export type Options = {
   transformKeyToId: (key: any) => string | null;
-  image: {
-    upload: (file: File) => Promise<string | null>;
-    downloadUrl: (src: string) => Promise<string>;
-  };
+  uploadImage: (file: File) => Promise<string | null>;
   modifyTransaction?: (
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction
   ) => Transaction;
@@ -33,6 +30,8 @@ export type Options = {
   citationKeyToJson: (key: string) => Promise<CitationFormat | null>;
   createCitationSearch: () => Promise<SearchContext>;
   throttle: number;
+  // nodeViews override any of the default nodeviews
+  nodeViews?: DirectEditorProps['nodeViews'];
 };
 
 type Ref<T> = {
@@ -67,12 +66,7 @@ export const store: Pick<Store, 'getState' | 'dispatch'> = {
 
 export const opts: Required<Options> = {
   transformKeyToId: (key: any) => ref.opts().transformKeyToId(key),
-  get image() {
-    return {
-      upload: (file: File) => ref.opts().image.upload(file),
-      downloadUrl: (src: string) => ref.opts().image.downloadUrl(src),
-    };
-  },
+  uploadImage(file: File) { return ref.opts().uploadImage(file); },
   modifyTransaction(
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction,
   ) {
@@ -94,4 +88,5 @@ export const opts: Required<Options> = {
   createCitationSearch() { return ref.opts().createCitationSearch(); },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },
+  get nodeViews() { return ref.opts().nodeViews ?? {}; },
 };

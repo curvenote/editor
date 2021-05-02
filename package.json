@@ -33,7 +33,7 @@
     "build-css": "yarn run copy-css; sass styles/index.scss dist/editor.css",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
-    "start": "webpack serve --open --config webpack.dev.js",
+    "start": "webpack serve --liveReload --open --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
     "watch": "tsc -w -p ."

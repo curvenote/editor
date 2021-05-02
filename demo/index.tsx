@@ -52,15 +52,12 @@ const citation = {
 
 const opts: Options = {
   transformKeyToId: (key) => key,
-  image: {
-    upload: async (file) => {
-      // eslint-disable-next-line no-console
-      console.log(file);
-      return new Promise((resolve) => (
-        setTimeout(() => resolve('/images/logo.png'), 3000)
-      ));
-    },
-    downloadUrl: async (src) => src,
+  uploadImage: async (file) => {
+    // eslint-disable-next-line no-console
+    console.log(file);
+    return new Promise((resolve) => (
+      setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000)
+    ));
   },
   addComment() {
     newComment();
@@ -75,8 +72,11 @@ const opts: Options = {
   theme,
   throttle: 0,
   citationPrompt: async () => ['simpeg2015'],
-  citationKeyToJson: async () => (citation),
+  citationKeyToJson: async () => new Promise((resolve) => (
+    setTimeout(() => resolve(citation), 250)
+  )),
   createCitationSearch: async () => ({ search: () => ['simpeg2015'], ids: ['simpeg2015'] }),
+  nodeViews: {},
 };
 
 setup(store, opts);
