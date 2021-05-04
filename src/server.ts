@@ -1,15 +1,10 @@
-import { Schema } from 'prosemirror-model';
 import { Step as PMStep } from 'prosemirror-transform';
 import { EditorState } from 'prosemirror-state';
 import { collab, receiveTransaction } from 'prosemirror-collab';
-import { nodes, marks } from './schema';
 import { fromHTML } from './parse';
 
 import { Parser } from './types';
-
-export function getSchema() {
-  return new Schema({ nodes, marks });
-}
+import { getSchema, UseSchema } from './schemas';
 
 export { EditorState };
 
@@ -18,9 +13,9 @@ function serverPlugins(version: number) {
 }
 
 export function getEditorState(
-  content: string, version: number, document: Document, DOMParser: Parser,
+  useSchema: UseSchema, content: string, version: number, document: Document, DOMParser: Parser,
 ) {
-  const schema = getSchema();
+  const schema = getSchema(useSchema);
   try {
     const data = JSON.parse(content);
     return EditorState.fromJSON(

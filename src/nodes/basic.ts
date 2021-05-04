@@ -7,6 +7,10 @@ export const doc: NodeSpec = {
   content: `(${NodeGroups.block} | ${NodeGroups.top})+`,
 };
 
+export const docParagraph: NodeSpec = {
+  content: 'paragraph',
+};
+
 export const paragraph: NodeSpec = {
   content: `${NodeGroups.inline}*`,
   group: NodeGroups.block,

@@ -3,7 +3,7 @@ import { Node as ProsemirrorNode, Schema } from 'prosemirror-model';
 import { builders } from 'prosemirror-test-builder';
 import * as src from '../src';
 
-const schema = new Schema({ nodes: src.nodes, marks: src.marks });
+const schema = new Schema(src.schemas.presets.full);
 
 export const tnodes = builders(schema, {
   p: { nodeType: 'paragraph' },
@@ -50,7 +50,7 @@ export function compare(
     expect(to(doc).replace(ctx, '')).toEqual(text);
   }
 
-  function same(text: string | {before: string; after: string}, doc: ProsemirrorNode) {
+  function same(text: string | { before: string; after: string }, doc: ProsemirrorNode) {
     const { before, after } = typeof text === 'string' ? { before: text, after: text } : text;
     parse(before, doc);
     serialize(doc, after);
