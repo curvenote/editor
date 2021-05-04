@@ -88,10 +88,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@curvenote/schema@^0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.2.7.tgz#dc2409ea54b0dad6997455636132e3c1cd0b3fb1"
-  integrity sha512-QO7i3VJzl6m09ZdajNrjPigjlXbrl7tFKOV6qokuBs1ExurgnorhoRkNx6ouS3xC4J0za7gr0TR5zSBA0kV+Ag==
+"@curvenote/schema@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.3.0.tgz#ce5294db190b29292678bc389f12f622c414685f"
+  integrity sha512-K9SgNRxIP2dzH7K+dH7lJq3Zq/7yQYq+cJI+OkpjdyRyVH1uZW9VhXZGC8KxI4iGc7gXMJ1E1ZzF4YoHXfzY3w==
   dependencies:
     markdown-it "^12.0.4"
     markdown-it-myst "^0.0.7"
