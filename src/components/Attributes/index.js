@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import isEqual from 'lodash.isequal';
 import { TextField, makeStyles, createStyles, Popover, Paper, Typography, } from '@material-ui/core';
+import { schemas } from '@curvenote/schema';
 import { closeAttributeEditor, updateNodeAttrs } from '../../store/actions';
 import { getEditorUI, getAttributeEditorLocation, showAttributeEditor, getNodeAttrs, getEditorState, getAttributeEditorPos, } from '../../store/selectors';
-import { schema } from '../../prosemirror';
 import { isEditable } from '../../prosemirror/plugins/editable';
 var HEIGHT = 300;
 var useStyles = makeStyles(function (theme) { return createStyles({
@@ -21,14 +21,7 @@ var useStyles = makeStyles(function (theme) { return createStyles({
         },
     },
 }); });
-export var NODES_WITH_ATTRS = new Set([
-    schema.nodes.button.name,
-    schema.nodes.display.name,
-    schema.nodes.dynamic.name,
-    schema.nodes.range.name,
-    schema.nodes.switch.name,
-    schema.nodes.variable.name,
-]);
+export var NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 var Attributes = function () {
     var classes = useStyles();
     var dispatch = useDispatch();

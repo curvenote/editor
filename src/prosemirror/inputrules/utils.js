@@ -12,11 +12,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeSelection, Selection } from 'prosemirror-state';
 import { findParentNode } from 'prosemirror-utils';
-import schema from '../schema';
 export function markInputRule(regexp, markType, options) {
     return new InputRule(regexp, function (state, match, start, end) {
         var _a;
-        var parent = findParentNode(function (n) { return n.type === schema.nodes.math; })(new Selection(state.doc.resolve(start), state.doc.resolve(end)));
+        var parent = findParentNode(function (n) { return n.type === state.schema.nodes.math; })(new Selection(state.doc.resolve(start), state.doc.resolve(end)));
         if (parent === null || parent === void 0 ? void 0 : parent.node)
             return null;
         var _b = options !== null && options !== void 0 ? options : {}, getAttrs = _b.getAttrs, getText = _b.getText, addSpace = _b.addSpace;

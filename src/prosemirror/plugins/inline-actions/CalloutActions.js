@@ -3,7 +3,6 @@ import { makeStyles, createStyles, Grid, } from '@material-ui/core';
 import { findParentNode } from 'prosemirror-utils';
 import MenuIcon from '../../../components/Menu/Icon';
 import { liftContentOutOfNode, setNodeViewDelete, setNodeViewKind } from '../../../store/actions';
-import schema from '../../schema';
 var useStyles = makeStyles(function () { return createStyles({
     root: {
         width: 'fit-content',
@@ -17,6 +16,7 @@ var useStyles = makeStyles(function () { return createStyles({
 var CalloutActions = function (props) {
     var view = props.view;
     var classes = useStyles();
+    var schema = view.state.schema;
     var p = findParentNode(function (n) { return n.type === schema.nodes.callout; })(view.state.selection);
     var _a = view.state.selection, node = _a.node, from = _a.from;
     if (node && node.type === schema.nodes.callout) {

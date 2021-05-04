@@ -9,21 +9,20 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { migrateHTML } from '@curvenote/schema';
+import { migrateHTML, schemas } from '@curvenote/schema';
 import { EditorState } from 'prosemirror-state';
 import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
-import schema from './schema';
 import { store, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
-export { schema };
-export function createEditorState(stateKey, content, version, startEditable) {
-    var plugins = getPlugins(stateKey, version, startEditable);
+export function createEditorState(useSchema, stateKey, content, version, startEditable) {
+    var schema = schemas.getSchema(useSchema);
+    var plugins = getPlugins(schema, stateKey, version, startEditable);
     var state;
     try {
         var data = JSON.parse(content);

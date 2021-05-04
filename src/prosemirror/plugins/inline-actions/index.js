@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Plugin } from 'prosemirror-state';
 import { findParentNode, isNodeSelection } from 'prosemirror-utils';
-import schema from '../../schema';
+import { schemas } from '@curvenote/schema';
 import Wrapper from './Wrapper';
 import { isEditable } from '../editable';
 import { getLinkBoundsIfTheyExist } from '../../../store/actions/utils';
@@ -19,7 +19,7 @@ var InlineActions = (function () {
         this.update(view);
     }
     InlineActions.prototype.update = function (view) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
         var state = view.state;
         var edit = isEditable(state);
         var linkBounds = getLinkBoundsIfTheyExist(state);
@@ -36,10 +36,10 @@ var InlineActions = (function () {
         var node = (isNodeSelection(state.selection)
             ? state.selection : { node: null }).node;
         switch (node === null || node === void 0 ? void 0 : node.type.name) {
-            case schema.nodes.image.name: {
+            case schemas.nodes.image.name: {
                 var wrapper = view.nodeDOM(state.selection.from);
-                var anchorEl = (_c = wrapper === null || wrapper === void 0 ? void 0 : wrapper.getElementsByTagName('img')[0]) !== null && _c !== void 0 ? _c : wrapper;
-                (_d = this.wrapper) === null || _d === void 0 ? void 0 : _d.setState({
+                var anchorEl = (_d = (_c = wrapper === null || wrapper === void 0 ? void 0 : wrapper.getElementsByTagName) === null || _c === void 0 ? void 0 : _c.call(wrapper, 'img')[0]) !== null && _d !== void 0 ? _d : wrapper;
+                (_e = this.wrapper) === null || _e === void 0 ? void 0 : _e.setState({
                     open: true,
                     edit: edit,
                     kind: SelectionKinds.image, placement: 'bottom',
@@ -47,10 +47,10 @@ var InlineActions = (function () {
                 });
                 return;
             }
-            case schema.nodes.iframe.name: {
+            case schemas.nodes.iframe.name: {
                 var wrapper = view.nodeDOM(state.selection.from);
-                var anchorEl = (_e = wrapper === null || wrapper === void 0 ? void 0 : wrapper.getElementsByTagName('iframe')[0]) !== null && _e !== void 0 ? _e : wrapper;
-                (_f = this.wrapper) === null || _f === void 0 ? void 0 : _f.setState({
+                var anchorEl = (_g = (_f = wrapper === null || wrapper === void 0 ? void 0 : wrapper.getElementsByTagName) === null || _f === void 0 ? void 0 : _f.call(wrapper, 'iframe')[0]) !== null && _g !== void 0 ? _g : wrapper;
+                (_h = this.wrapper) === null || _h === void 0 ? void 0 : _h.setState({
                     open: true,
                     edit: edit,
                     kind: SelectionKinds.iframe, placement: 'bottom',
@@ -58,9 +58,9 @@ var InlineActions = (function () {
                 });
                 return;
             }
-            case schema.nodes.math.name: {
+            case schemas.nodes.math.name: {
                 var anchorEl = view.nodeDOM(state.selection.from);
-                (_g = this.wrapper) === null || _g === void 0 ? void 0 : _g.setState({
+                (_j = this.wrapper) === null || _j === void 0 ? void 0 : _j.setState({
                     open: true,
                     edit: edit,
                     kind: SelectionKinds.math, placement: 'bottom-start',
@@ -68,9 +68,9 @@ var InlineActions = (function () {
                 });
                 return;
             }
-            case schema.nodes.equation.name: {
+            case schemas.nodes.equation.name: {
                 var anchorEl = view.nodeDOM(state.selection.from);
-                (_h = this.wrapper) === null || _h === void 0 ? void 0 : _h.setState({
+                (_k = this.wrapper) === null || _k === void 0 ? void 0 : _k.setState({
                     open: true,
                     edit: edit,
                     kind: SelectionKinds.equation, placement: 'bottom',
@@ -78,9 +78,9 @@ var InlineActions = (function () {
                 });
                 return;
             }
-            case schema.nodes.cite.name: {
+            case schemas.nodes.cite.name: {
                 var anchorEl = view.nodeDOM(state.selection.from);
-                (_j = this.wrapper) === null || _j === void 0 ? void 0 : _j.setState({
+                (_l = this.wrapper) === null || _l === void 0 ? void 0 : _l.setState({
                     open: true,
                     edit: edit,
                     kind: SelectionKinds.cite, placement: 'bottom-start',
@@ -91,10 +91,10 @@ var InlineActions = (function () {
             default:
                 break;
         }
-        var parent = findParentNode(function (n) { return n.type === schema.nodes.callout; })(state.selection);
-        if (parent || (node === null || node === void 0 ? void 0 : node.type) === schema.nodes.callout) {
-            var anchorEl = view.nodeDOM((_k = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _k !== void 0 ? _k : state.selection.from);
-            (_l = this.wrapper) === null || _l === void 0 ? void 0 : _l.setState({
+        var parent = findParentNode(function (n) { return n.type === schemas.nodes.callout; })(state.selection);
+        if (parent || (node === null || node === void 0 ? void 0 : node.type) === schemas.nodes.callout) {
+            var anchorEl = view.nodeDOM((_m = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _m !== void 0 ? _m : state.selection.from);
+            (_o = this.wrapper) === null || _o === void 0 ? void 0 : _o.setState({
                 open: true,
                 edit: edit,
                 kind: SelectionKinds.callout, placement: 'bottom',
@@ -102,7 +102,7 @@ var InlineActions = (function () {
             });
             return;
         }
-        (_m = this.wrapper) === null || _m === void 0 ? void 0 : _m.setState({ open: false, edit: edit });
+        (_p = this.wrapper) === null || _p === void 0 ? void 0 : _p.setState({ open: false, edit: edit });
     };
     InlineActions.prototype.destroy = function () { this.dom.remove(); };
     return InlineActions;

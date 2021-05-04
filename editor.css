@@ -376,6 +376,12 @@ article {
   position: relative;
 }
 
+article.compact p {
+  font-size: 15px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
 article .selected .ProseMirror-selectednode {
   outline: 2px solid #8cf;
 }

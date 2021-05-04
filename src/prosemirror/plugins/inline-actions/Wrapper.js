@@ -45,7 +45,7 @@ var Wrapper = (function (_super) {
         var _a = this.state, open = _a.open, edit = _a.edit, kind = _a.kind, anchorEl = _a.anchorEl, placement = _a.placement;
         return (React.createElement(ThemeProvider, { theme: opts.theme },
             React.createElement(Provider, { store: ref.store() },
-                React.createElement(Popper, { style: { zIndex: 2 }, open: open, anchorEl: anchorEl, transition: true, placement: placement },
+                React.createElement(Popper, { style: { zIndex: 1301 }, open: open, anchorEl: anchorEl, transition: true, placement: placement },
                     React.createElement(Toolbar, __assign({}, {
                         view: view, open: open, edit: edit, kind: kind,
                     }))))));

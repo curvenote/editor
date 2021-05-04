@@ -1,5 +1,7 @@
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import { Schema } from 'prosemirror-model';
+import { schemas } from '@curvenote/schema';
 export declare const INIT_EDITOR_STATE = "INIT_EDITOR_STATE";
 export declare const SUBSCRIBE_EDITOR_VIEW = "SUBSCRIBE_EDITOR_VIEW";
 export declare const UNSUBSCRIBE_EDITOR_VIEW = "UNSUBSCRIBE_EDITOR_VIEW";
@@ -10,7 +12,7 @@ export declare type EditorsState = {
     editors: {
         [stateId: string]: {
             key: any;
-            state: EditorState;
+            state: EditorState<Schema<keyof typeof schemas.nodes, keyof typeof schemas.marks>>;
             viewIds: string[];
         };
     };
@@ -24,6 +26,7 @@ export declare type EditorsState = {
 export interface InitEditorState {
     type: typeof INIT_EDITOR_STATE;
     payload: {
+        useSchema: schemas.UseSchema;
         stateKey: any;
         stateId: string;
         editable: boolean;

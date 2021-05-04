@@ -107,27 +107,27 @@ export function chooseSelection(selected) {
         }
     };
 }
-export function filterResults(search) {
+export function filterResults(schema, search) {
     return function (dispatch, getState) {
         var kind = getSuggestion(getState()).kind;
         switch (kind) {
             case SuggestionKind.emoji:
-                return emoji.filterResults(search, function (results) { return dispatch(updateResults(results)); });
+                return emoji.filterResults(schema, search, function (results) { return dispatch(updateResults(results)); });
             case SuggestionKind.command:
-                return command.filterResults(search, function (results) { return dispatch(updateResults(results)); });
+                return command.filterResults(schema, search, function (results) { return dispatch(updateResults(results)); });
             case SuggestionKind.link:
-                return link.filterResults(search, function (results) { return dispatch(updateResults(results)); });
+                return link.filterResults(schema, search, function (results) { return dispatch(updateResults(results)); });
             case SuggestionKind.variable:
             case SuggestionKind.display:
-                return variable.filterResults(kind, search, dispatch, getState, function (results) { return dispatch(updateResults(results)); });
+                return variable.filterResults(kind, schema, search, dispatch, getState, function (results) { return dispatch(updateResults(results)); });
             default: throw new Error('Unknown suggestion kind.');
         }
     };
 }
-function setStartingSuggestions(kind) {
+function setStartingSuggestions(schema, kind) {
     var _this = this;
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, suggestions, suggestions;
+        var _a, starting, suggestions, suggestions;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -148,7 +148,8 @@ function setStartingSuggestions(kind) {
                     _b.label = 2;
                 case 2:
                     {
-                        dispatch(updateResults(command.startingSuggestions));
+                        starting = command.startingSuggestions(schema);
+                        dispatch(updateResults(starting));
                         return [2];
                     }
                     _b.label = 3;
@@ -173,8 +174,9 @@ export function handleSuggestion(action) {
     return function (dispatch, getState) {
         var kind = triggerToKind(action.trigger);
         dispatch(updateSuggestion(action.kind !== 'close', kind, action.search, action.view, action.range, action.trigger));
+        var schema = action.view.state.schema;
         if (action.kind === 'open') {
-            dispatch(setStartingSuggestions(kind));
+            dispatch(setStartingSuggestions(schema, kind));
             dispatch(selectSuggestion(0));
         }
         if (action.kind === 'previous' || action.kind === 'next') {
@@ -184,10 +186,10 @@ export function handleSuggestion(action) {
         }
         if (action.kind === 'filter') {
             if (action.search === '' || action.search == null) {
-                dispatch(setStartingSuggestions(kind));
+                dispatch(setStartingSuggestions(schema, kind));
             }
             else {
-                dispatch(filterResults(action.search));
+                dispatch(filterResults(action.view.state.schema, action.search));
             }
         }
         if (action.kind === 'select') {

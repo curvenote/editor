@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { getSuggestion } from '../selectors';
 import { opts } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
-import schema from '../../../prosemirror/schema';
 var context = null;
 var keysToresults = function (keys) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -70,11 +69,11 @@ export function chooseSelection(result) {
             return false;
         var tr = view.state.tr;
         view.dispatch(tr.insertText('', from, to));
-        dispatch(insertInlineNode(schema.nodes.cite, { key: result.uid }));
+        dispatch(insertInlineNode(view.state.schema.nodes.cite, { key: result.uid }));
         return true;
     };
 }
-export function filterResults(search, callback) {
+export function filterResults(schema, search, callback) {
     var _this = this;
     if (!search) {
         setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {

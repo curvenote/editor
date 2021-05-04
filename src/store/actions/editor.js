@@ -16,7 +16,6 @@ import { Fragment, } from 'prosemirror-model';
 import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf, getSelectedView, getEditorView, } from '../selectors';
-import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
 import { getNodeIfSelected } from './utils';
@@ -38,7 +37,7 @@ export function toggleMark(stateKey, viewId, mark, attrs) {
     return function (dispatch, getState) {
         var _a;
         var editorState = (_a = getEditorState(getState(), stateKey)) === null || _a === void 0 ? void 0 : _a.state;
-        if (editorState == null)
+        if (editorState == null || !mark)
             return false;
         var action = toggleMarkPM(mark, attrs);
         var result = action(editorState, function (tr) { return dispatch(applyProsemirrorTransaction(stateKey, tr)); });
@@ -55,7 +54,7 @@ export function wrapInList(stateKey, viewId, node, test) {
         if (editorState == null)
             return false;
         var action = selectionIsChildOf(getState(), stateKey, { node: node }).node
-            ? liftListItem(schema.nodes.list_item)
+            ? liftListItem(editorState.schema.nodes.list_item)
             : wrapInListPM(node);
         if (test)
             return action(editorState);
@@ -70,8 +69,8 @@ export function wrapIn(node) {
         var editor = getSelectedEditorAndViews(getState());
         if (editor.state == null)
             return false;
-        var isList = (node === schema.nodes.ordered_list
-            || node === schema.nodes.bullet_list);
+        var isList = (node === editor.state.schema.nodes.ordered_list
+            || node === editor.state.schema.nodes.bullet_list);
         if (isList) {
             var viewId = getEditorUI(getState()).viewId;
             return dispatch(wrapInList(editor.stateId, viewId, node));
@@ -88,7 +87,7 @@ function getContent(state, content) {
     if (!nodeContent && !state.selection.empty) {
         var _a = state.selection, from = _a.from, to = _a.to;
         var text = state.doc.textBetween(from, to);
-        nodeContent = schema.text(text);
+        nodeContent = state.schema.text(text);
     }
     return nodeContent;
 }
@@ -109,10 +108,11 @@ export function replaceSelection(node, attrs, content) {
         if (editor.state == null)
             return false;
         var nodeContent = getContent(editor.state, content);
-        var selectParagraph = selectParentNodeOfType(schema.nodes.paragraph);
+        var nodes = editor.state.schema.nodes;
+        var selectParagraph = selectParentNodeOfType(nodes.paragraph);
         var replaceWithNode = replaceSelectedNode(node.create(attrs, nodeContent));
         var tr = replaceWithNode(selectParagraph(editor.state.tr));
-        if (node.name === schema.nodes.code_block.name) {
+        if (node.name === nodes.code_block.name) {
             var pos = tr.doc.resolve(tr.selection.from + 1);
             var sel = new Selection(pos, pos);
             tr = tr.setSelection(sel);
@@ -145,7 +145,7 @@ export function insertNode(node, attrs, content) {
 export function insertInlineNode(node, attrs, content) {
     return function (dispatch, getState) {
         var editor = getSelectedEditorAndViews(getState());
-        if (editor.state == null)
+        if (editor.state == null || !node)
             return false;
         var nodeContent = getContent(editor.state, content);
         var tr = editor.state.tr.replaceSelectionWith(node.create(attrs, nodeContent), false).scrollIntoView();
@@ -153,12 +153,12 @@ export function insertInlineNode(node, attrs, content) {
         return true;
     };
 }
-export var wrapInHeading = function (level) {
+export var wrapInHeading = function (schema, level) {
     if (level === 0)
         return setBlockType(schema.nodes.paragraph);
     return setBlockType(schema.nodes.heading, { level: level });
 };
-export var insertVariable = function (attrs) {
+export var insertVariable = function (schema, attrs) {
     if (attrs === void 0) { attrs = { name: 'myVar', value: '0', valueFunction: '' }; }
     return (replaceSelection(schema.nodes.variable, attrs));
 };
@@ -194,6 +194,7 @@ export function toggleCitationBrackets() {
         var editor = getSelectedEditorAndViews(getState());
         if (editor.state == null)
             return false;
+        var schema = editor.state.schema;
         var node = getNodeIfSelected(editor.state, schema.nodes.cite);
         if (!node)
             return false;

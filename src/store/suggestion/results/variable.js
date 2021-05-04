@@ -9,7 +9,6 @@ import { getSuggestion } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, SuggestionKind } from '../types';
 import { KEEP_SELECTION_ALIVE, cancelSuggestion } from '../../../prosemirror/plugins/suggestion';
-import schema from '../../../prosemirror/schema';
 var getFirstSuggestion = function (kind) {
     var _a;
     var title = (_a = {},
@@ -28,22 +27,22 @@ export var startingSuggestions = function (kind, getState) { return (__spreadArr
     var variable = _a[1];
     return variable;
 }))); };
-function createVariable(dispatch, trigger, search) {
+function createVariable(schema, dispatch, trigger, search) {
     var _a, _b;
     var name = (_b = (_a = trigger.match(variableTrigger)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : 'myVar';
     var match = search.match(/^\s?(\$?\d+.?[\d]*)$/);
     if (!match) {
-        dispatch(insertVariable({ name: name, valueFunction: search.trim() }));
+        dispatch(insertVariable(schema, { name: name, valueFunction: search.trim() }));
         return true;
     }
     var dollars = match[1].indexOf('$') !== -1 ? '$,' : '';
     var number = match[1].replace('$', '');
     var decimals = number.split('.');
     var numDecimals = decimals.length === 1 ? 0 : decimals[1].length;
-    dispatch(insertVariable({ name: name, value: number, format: dollars + "." + numDecimals + "f" }));
+    dispatch(insertVariable(schema, { name: name, value: number, format: dollars + "." + numDecimals + "f" }));
     return true;
 }
-function createDisplay(dispatch, search) {
+function createDisplay(schema, dispatch, search) {
     var valueFunction = (search.endsWith('}}') ? search.slice(0, -2) : search).trim();
     dispatch(insertInlineNode(schema.nodes.display, { valueFunction: valueFunction }));
     return true;
@@ -66,18 +65,19 @@ export function chooseSelection(kind, result) {
             view.dispatch(tr);
             return true;
         };
+        var schema = view.state.schema;
         removeText();
         switch (kind) {
             case SuggestionKind.variable:
-                return createVariable(dispatch, trigger, search);
+                return createVariable(schema, dispatch, trigger, search);
             case SuggestionKind.display:
-                return createDisplay(dispatch, search);
+                return createDisplay(schema, dispatch, search);
             default:
                 throw new Error('Unknown suggestion kind.');
         }
     };
 }
-export function filterResults(kind, search, dispatch, getState, callback) {
+export function filterResults(kind, schema, search, dispatch, getState, callback) {
     if (kind === SuggestionKind.display && search.endsWith('}}')) {
         cancelSuggestion(getState().editor.suggestion.view);
         setTimeout(function () { return dispatch(chooseSelection(kind, getFirstSuggestion(kind))); }, 5);

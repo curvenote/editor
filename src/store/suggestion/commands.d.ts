@@ -1,3 +1,4 @@
+import { schemas } from '@curvenote/schema';
 export declare enum CommandNames {
     'link' = "link",
     'callout' = "callout",
@@ -36,5 +37,6 @@ export interface CommandResult {
     description: string;
     image?: string;
     shortcut?: string | string[];
+    node?: keyof typeof schemas.nodes;
 }
 export declare const commands: CommandResult[];

@@ -40,7 +40,6 @@ import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
 import { commands, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
-import schema from '../../../prosemirror/schema';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId, } from './utils';
@@ -67,13 +66,22 @@ var options = {
     ],
 };
 var fuse = new Fuse(commands, options);
-export var startingSuggestions = commands;
+var filterCommands = function (schema, results) {
+    var allowedNodes = new Set(Object.keys(schema.nodes));
+    var filtered = results.filter(function (r) {
+        if (r.node == null)
+            return true;
+        return allowedNodes.has(r.node);
+    });
+    return filtered;
+};
+export var startingSuggestions = function (schema) { return filterCommands(schema, commands); };
 export function executeCommand(command, viewOrId, removeText, replace) {
     var _this = this;
     if (removeText === void 0) { removeText = function () { return true; }; }
     if (replace === void 0) { replace = false; }
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-        var view, ev, replaceOrInsert, _a, linkBounds, from_1, to_1, href, _b, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, keys, nodes, wrapped, tr;
+        var view, ev, schema, replaceOrInsert, _a, linkBounds, from_1, to_1, href, _b, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, keys, nodes, wrapped, tr;
         var _c, _d, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
@@ -89,6 +97,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     else {
                         view = viewOrId;
                     }
+                    schema = view.state.schema;
                     replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
                     _a = command;
                     switch (_a) {
@@ -155,11 +164,11 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     return [2, true];
                 case 5:
                     removeText();
-                    dispatch(actions.wrapInHeading(0));
+                    dispatch(actions.wrapInHeading(schema, 0));
                     return [2, true];
                 case 6:
                     removeText();
-                    dispatch(actions.wrapInHeading(Number.parseInt(command.slice(7), 10)));
+                    dispatch(actions.wrapInHeading(schema, Number.parseInt(command.slice(7), 10)));
                     return [2, true];
                 case 7:
                     removeText();
@@ -191,7 +200,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     return [2, true];
                 case 14:
                     removeText();
-                    dispatch(actions.insertVariable({ name: 'myVar', value: '0', valueFunction: '' }));
+                    dispatch(actions.insertVariable(schema, { name: 'myVar', value: '0', valueFunction: '' }));
                     return [2, true];
                 case 15:
                     removeText();
@@ -323,10 +332,10 @@ export function chooseSelection(result) {
         });
     }); };
 }
-export function filterResults(search, callback) {
+export function filterResults(schema, search, callback) {
     setTimeout(function () {
         var results = fuse.search(search);
-        callback(results.map(function (result) { return result.item; }));
+        callback(filterCommands(schema, results.map(function (result) { return result.item; })));
     }, 1);
 }
 //# sourceMappingURL=command.js.map

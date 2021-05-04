@@ -11,7 +11,6 @@ import { baseKeymap } from 'prosemirror-commands';
 import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
-import schema from '../schema';
 import suggestion from './suggestion';
 import { buildKeymap } from '../keymap';
 import inputrules from '../inputrules';
@@ -21,7 +20,7 @@ import { handleSuggestion } from '../../store/suggestion/actions';
 import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
-export function getPlugins(stateKey, version, startEditable) {
+export function getPlugins(schema, stateKey, version, startEditable) {
     return __spreadArrays([
         editablePlugin(startEditable)
     ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), [

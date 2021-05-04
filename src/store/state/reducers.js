@@ -27,10 +27,10 @@ var editorReducer = function (state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case INIT_EDITOR_STATE: {
-            var _e = action.payload, stateKey = _e.stateKey, stateId = _e.stateId, content = _e.content, editable = _e.editable, version = _e.version;
+            var _e = action.payload, useSchema = _e.useSchema, stateKey = _e.stateKey, stateId = _e.stateId, content = _e.content, editable = _e.editable, version = _e.version;
             if (state.editors[stateId] !== undefined)
                 return state;
-            var editorState = createEditorState(stateKey, content, version, editable);
+            var editorState = createEditorState(useSchema, stateKey, content, version, editable);
             return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_a = {}, _a[stateId] = {
                     state: editorState, viewIds: [], key: stateKey,
                 }, _a)) });

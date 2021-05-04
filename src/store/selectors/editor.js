@@ -59,6 +59,8 @@ export function selectionIsMarkedWith(state, stateKey, types) {
     var active = Object.fromEntries(Object.entries(types).map(function (_a) {
         var key = _a[0], type = _a[1];
         var mark = type;
+        if (!mark)
+            return [key, false];
         if (empty)
             return [key, Boolean(mark.isInSet(editor.state.storedMarks || $from.marks()))];
         return [key, editor.state.doc.rangeHasMark(from, to, mark)];
@@ -72,6 +74,8 @@ export function selectionIsChildOf(state, stateKey, nodes) {
     var active = Object.fromEntries(Object.entries(nodes).map(function (_a) {
         var key = _a[0], type = _a[1];
         var node = type;
+        if (!node)
+            return [key, false];
         return [key, hasParentNode(function (test) { return test.type === node; })(editor.state.selection)];
     }));
     return active;
@@ -83,6 +87,8 @@ export function selectionIsThisNodeType(state, stateKey, nodes) {
     var active = Object.fromEntries(Object.entries(nodes).map(function (_a) {
         var key = _a[0], type = _a[1];
         var node = type;
+        if (!node)
+            return [key, false];
         return [key, Boolean(getNodeIfSelected(editor.state, node))];
     }));
     return active;

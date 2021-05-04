@@ -1,14 +1,14 @@
 import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
 import { getEditor } from './selectors';
 import { opts } from '../../connect';
-export function initEditorState(stateKey, editable, content, version) {
+export function initEditorState(useSchema, stateKey, editable, content, version) {
     var stateId = opts.transformKeyToId(stateKey);
     if (stateId == null)
         throw new Error('Must have a state ID');
     return {
         type: INIT_EDITOR_STATE,
         payload: {
-            stateKey: stateKey, stateId: stateId, editable: editable, content: content, version: version,
+            useSchema: useSchema, stateKey: stateKey, stateId: stateId, editable: editable, content: content, version: version,
         },
     };
 }

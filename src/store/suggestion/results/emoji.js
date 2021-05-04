@@ -103,7 +103,7 @@ export function chooseSelection(result) {
         return true;
     };
 }
-export function filterResults(search, callback) {
+export function filterResults(schema, search, callback) {
     var _this = this;
     if (search === 'D') {
         callback(startingSuggestions.filter(function (e) { return e.n === 'Grinning Face'; }));

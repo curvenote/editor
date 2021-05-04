@@ -1,4 +1,5 @@
 import { EditorView } from 'prosemirror-view';
+import { Schema } from 'prosemirror-model';
 import { SuggestionActionTypes, SuggestionKind, Range } from './types';
 import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
 import { AppThunk } from '../types';
@@ -7,5 +8,5 @@ export declare function updateSuggestion(open: boolean, kind: SuggestionKind, se
 export declare function updateResults(results: any[]): SuggestionActionTypes;
 export declare function selectSuggestion(selection: number): SuggestionActionTypes;
 export declare function chooseSelection(selected: number): AppThunk<boolean | typeof KEEP_SELECTION_ALIVE>;
-export declare function filterResults(search: string): AppThunk<void>;
+export declare function filterResults(schema: Schema, search: string): AppThunk<void>;
 export declare function handleSuggestion(action: SuggestionAction): AppThunk<boolean | typeof KEEP_SELECTION_ALIVE>;

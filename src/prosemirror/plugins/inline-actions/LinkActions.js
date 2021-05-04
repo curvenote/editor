@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { makeStyles, createStyles, Grid, Button, Tooltip, } from '@material-ui/core';
 import MenuIcon from '../../../components/Menu/Icon';
 import { getLinkBoundsIfTheyExist } from '../../../store/actions';
-import schema from '../../schema';
 var useStyles = makeStyles(function () { return createStyles({
     grid: {
         width: 'fit-content',
@@ -19,7 +18,7 @@ var LinkActions = function (props) {
     if (!linkBounds)
         return null;
     var href = linkBounds.mark.attrs.href;
-    var mark = schema.marks.link;
+    var mark = state.schema.marks.link;
     var onDelete = function () { return (view.dispatch(state.tr.removeMark(linkBounds.from, linkBounds.to, mark))); };
     var onEdit = function () {
         var newHref = prompt('What is the new link?', href);

@@ -1,3 +1,4 @@
+import { Schema } from 'prosemirror-model';
 import { AppThunk } from '../../types';
 import { EmojiResult } from '../types';
 export declare const startingSuggestions: {
@@ -7,4 +8,4 @@ export declare const startingSuggestions: {
     o: string;
 }[];
 export declare function chooseSelection(result: EmojiResult): AppThunk<boolean>;
-export declare function filterResults(search: string, callback: (results: EmojiResult[]) => void): void;
+export declare function filterResults(schema: Schema, search: string, callback: (results: EmojiResult[]) => void): void;

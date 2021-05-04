@@ -1,4 +1,3 @@
-import schema from '../prosemirror/schema';
 import { openAttributeEditor } from '../store/attrs/actions';
 import { store } from '../connect';
 var WidgetView = (function () {
@@ -29,8 +28,6 @@ var WidgetView = (function () {
         this.widget.classList.remove('ProseMirror-selectednode');
     };
     WidgetView.prototype.update = function (node) {
-        if (node.type !== schema.nodes.range)
-            return false;
         this.setAttrs(node);
         return true;
     };
