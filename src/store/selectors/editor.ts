@@ -71,7 +71,7 @@ function falseMap<T extends Record<string, any>>(
 }
 
 export function selectionIsMarkedWith<T extends Record<string, any>>(
-  state: State, stateKey: any | null, types: Record<keyof T, MarkType>,
+  state: State, stateKey: any | null, types: Record<keyof T, MarkType | undefined>,
 ): Record<keyof T, boolean> {
   const editor = getEditor(state, stateKey);
   if (editor.state == null) return falseMap(types);
@@ -79,7 +79,8 @@ export function selectionIsMarkedWith<T extends Record<string, any>>(
     from, $from, to, empty,
   } = editor.state.selection;
   const active = Object.fromEntries(Object.entries(types).map(([key, type]) => {
-    const mark = type as MarkType;
+    const mark = type as MarkType | undefined;
+    if (!mark) return [key, false];
     if (empty) return [key, Boolean(mark.isInSet(editor.state.storedMarks || $from.marks()))];
     return [key, editor.state.doc.rangeHasMark(from, to, mark)];
   }));
@@ -87,24 +88,26 @@ export function selectionIsMarkedWith<T extends Record<string, any>>(
 }
 
 export function selectionIsChildOf<T extends Record<string, any>>(
-  state: State, stateKey: any | null, nodes: Record<keyof T, NodeType>,
+  state: State, stateKey: any | null, nodes: Record<keyof T, NodeType | undefined>,
 ): Record<keyof T, boolean> {
   const editor = getEditor(state, stateKey);
   if (editor.state == null) return falseMap(nodes);
   const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
-    const node = type as NodeType;
+    const node = type as NodeType | undefined;
+    if (!node) return [key, false];
     return [key, hasParentNode((test) => test.type === node)(editor.state.selection)];
   }));
   return active as Record<keyof T, boolean>;
 }
 
 export function selectionIsThisNodeType<T extends Record<string, any>>(
-  state: State, stateKey: any | null, nodes: Record<keyof T, NodeType>,
+  state: State, stateKey: any | null, nodes: Record<keyof T, NodeType | undefined>,
 ): Record<keyof T, boolean> {
   const editor = getEditor(state, stateKey);
   if (editor.state == null) return falseMap(nodes);
   const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
-    const node = type as NodeType;
+    const node = type as NodeType | undefined;
+    if (!node) return [key, false];
     return [key, Boolean(getNodeIfSelected(editor.state, node))];
   }));
   return active as Record<keyof T, boolean>;

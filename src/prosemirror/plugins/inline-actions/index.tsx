@@ -4,7 +4,7 @@ import { Plugin, NodeSelection } from 'prosemirror-state';
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { findParentNode, isNodeSelection } from 'prosemirror-utils';
-import schema from '../../schema';
+import { schemas } from '@curvenote/schema';
 import Wrapper from './Wrapper';
 import { isEditable } from '../editable';
 import { getLinkBoundsIfTheyExist } from '../../../store/actions/utils';
@@ -54,37 +54,37 @@ class InlineActions {
       ? (state.selection as NodeSelection) : { node: null };
 
     switch (node?.type.name) {
-      case schema.nodes.image.name: {
+      case schemas.nodes.image.name: {
         const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
-        const anchorEl = wrapper?.getElementsByTagName('img')[0] ?? wrapper;
+        const anchorEl = wrapper?.getElementsByTagName?.('img')[0] ?? wrapper;
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.image, placement: 'bottom', anchorEl,
         });
         return;
       }
-      case schema.nodes.iframe.name: {
+      case schemas.nodes.iframe.name: {
         const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
-        const anchorEl = wrapper?.getElementsByTagName('iframe')[0] ?? wrapper;
+        const anchorEl = wrapper?.getElementsByTagName?.('iframe')[0] ?? wrapper;
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.iframe, placement: 'bottom', anchorEl,
         });
         return;
       }
-      case schema.nodes.math.name: {
+      case schemas.nodes.math.name: {
         const anchorEl = view.nodeDOM(state.selection.from);
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.math, placement: 'bottom-start', anchorEl,
         });
         return;
       }
-      case schema.nodes.equation.name: {
+      case schemas.nodes.equation.name: {
         const anchorEl = view.nodeDOM(state.selection.from);
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.equation, placement: 'bottom', anchorEl,
         });
         return;
       }
-      case schema.nodes.cite.name: {
+      case schemas.nodes.cite.name: {
         const anchorEl = view.nodeDOM(state.selection.from);
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.cite, placement: 'bottom-start', anchorEl,
@@ -95,8 +95,8 @@ class InlineActions {
         break;
     }
 
-    const parent = findParentNode((n: Node) => n.type === schema.nodes.callout)(state.selection);
-    if (parent || node?.type === schema.nodes.callout) {
+    const parent = findParentNode((n: Node) => n.type === schemas.nodes.callout)(state.selection);
+    if (parent || node?.type === schemas.nodes.callout) {
       const anchorEl = view.nodeDOM(parent?.pos ?? state.selection.from);
       this.wrapper?.setState({
         open: true, edit, kind: SelectionKinds.callout, placement: 'bottom', anchorEl,

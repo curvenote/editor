@@ -18,10 +18,10 @@ const editorReducer = (
   switch (action.type) {
     case INIT_EDITOR_STATE: {
       const {
-        stateKey, stateId, content, editable, version,
+        useSchema, stateKey, stateId, content, editable, version,
       } = action.payload;
       if (state.editors[stateId] !== undefined) return state;
-      const editorState = createEditorState(stateKey, content, version, editable);
+      const editorState = createEditorState(useSchema, stateKey, content, version, editable);
       return {
         ...state,
         editors: {

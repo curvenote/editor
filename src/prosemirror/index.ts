@@ -1,9 +1,8 @@
-import { migrateHTML } from '@curvenote/schema';
+import { migrateHTML, schemas } from '@curvenote/schema';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
-import schema from './schema';
 import { store, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
@@ -11,12 +10,12 @@ import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 
-export { schema };
-
 export function createEditorState(
+  useSchema: schemas.UseSchema,
   stateKey: any, content: string, version: number, startEditable: boolean,
 ) {
-  const plugins = getPlugins(stateKey, version, startEditable);
+  const schema = schemas.getSchema(useSchema);
+  const plugins = getPlugins(schema, stateKey, version, startEditable);
   let state: EditorState;
   try {
     const data = JSON.parse(content);

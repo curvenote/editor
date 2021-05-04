@@ -1,5 +1,6 @@
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import { schemas } from '@curvenote/schema';
 import {
   EditorActionTypes,
   UPDATE_EDITOR_STATE, INIT_EDITOR_STATE,
@@ -11,14 +12,14 @@ import { getEditor } from './selectors';
 import { opts } from '../../connect';
 
 export function initEditorState(
-  stateKey: any, editable: boolean, content: string, version: number,
+  useSchema: schemas.UseSchema, stateKey: any, editable: boolean, content: string, version: number,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
   return {
     type: INIT_EDITOR_STATE,
     payload: {
-      stateKey, stateId, editable, content, version,
+      useSchema, stateKey, stateId, editable, content, version,
     },
   };
 }

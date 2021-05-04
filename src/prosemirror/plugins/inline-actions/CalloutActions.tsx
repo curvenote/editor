@@ -7,7 +7,6 @@ import { ContentNodeWithPos, findParentNode } from 'prosemirror-utils';
 import { NodeSelection } from 'prosemirror-state';
 import MenuIcon from '../../../components/Menu/Icon';
 import { liftContentOutOfNode, setNodeViewDelete, setNodeViewKind } from '../../../store/actions';
-import schema from '../../schema';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -27,6 +26,7 @@ type Props = {
 const CalloutActions = (props: Props) => {
   const { view } = props;
   const classes = useStyles();
+  const { schema } = view.state;
 
   let p = findParentNode(
     (n) => n.type === schema.nodes.callout,

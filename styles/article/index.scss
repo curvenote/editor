@@ -10,3 +10,11 @@
 article {
   position: relative;
 }
+
+article.compact {
+  p {
+    font-size: 15px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+}

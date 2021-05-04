@@ -4,7 +4,7 @@ import { baseKeymap } from 'prosemirror-commands';
 import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
-import schema from '../schema';
+import { Schema } from 'prosemirror-model';
 import suggestion from './suggestion';
 import { buildKeymap } from '../keymap';
 import inputrules from '../inputrules';
@@ -15,7 +15,7 @@ import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 
-export function getPlugins(stateKey: any, version: number, startEditable: boolean) {
+export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [
     editablePlugin(startEditable),
     ...suggestion(

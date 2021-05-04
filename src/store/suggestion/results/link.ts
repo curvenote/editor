@@ -1,10 +1,9 @@
+import { Schema } from 'prosemirror-model';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import { LinkResult } from '../types';
 import { opts, SearchContext } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
-import schema from '../../../prosemirror/schema';
-
 
 let context: SearchContext | null = null;
 
@@ -25,12 +24,14 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
     if (view == null) return false;
     const { tr } = view.state;
     view.dispatch(tr.insertText('', from, to));
-    dispatch(insertInlineNode(schema.nodes.cite, { key: result.uid }));
+    dispatch(insertInlineNode(view.state.schema.nodes.cite, { key: result.uid }));
     return true;
   };
 }
 
-export function filterResults(search: string, callback: (results: LinkResult[]) => void): void {
+export function filterResults(
+  schema: Schema, search: string, callback: (results: LinkResult[]) => void,
+): void {
   if (!search) {
     setTimeout(async () => {
       callback(await keysToresults(context?.ids ?? []));

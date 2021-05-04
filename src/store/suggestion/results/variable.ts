@@ -1,10 +1,10 @@
 import { EditorView } from 'prosemirror-view';
+import { Schema } from 'prosemirror-model';
 import { AppThunk, State, Dispatch } from '../../types';
 import { getSuggestion } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, VariableResult, SuggestionKind } from '../types';
 import { KEEP_SELECTION_ALIVE, cancelSuggestion } from '../../../prosemirror/plugins/suggestion';
-import schema from '../../../prosemirror/schema';
 
 type VarSuggestionKinds = SuggestionKind.variable | SuggestionKind.display;
 
@@ -25,23 +25,23 @@ export const startingSuggestions = (kind: VarSuggestionKinds, getState: () => St
   ...Object.entries(getState().runtime.variables).map(([, variable]) => variable),
 ]);
 
-function createVariable(dispatch: Dispatch, trigger: string, search: string) {
+function createVariable(schema: Schema, dispatch: Dispatch, trigger: string, search: string) {
   const name = trigger.match(variableTrigger)?.[1] ?? 'myVar';
   const match = search.match(/^\s?(\$?\d+.?[\d]*)$/);
   if (!match) {
     // This is an expression, put it in the value function:
-    dispatch(insertVariable({ name, valueFunction: search.trim() }));
+    dispatch(insertVariable(schema, { name, valueFunction: search.trim() }));
     return true;
   }
   const dollars = match[1].indexOf('$') !== -1 ? '$,' : '';
   const number = match[1].replace('$', '');
   const decimals = number.split('.');
   const numDecimals = decimals.length === 1 ? 0 : decimals[1].length;
-  dispatch(insertVariable({ name, value: number, format: `${dollars}.${numDecimals}f` }));
+  dispatch(insertVariable(schema, { name, value: number, format: `${dollars}.${numDecimals}f` }));
   return true;
 }
 
-function createDisplay(dispatch: Dispatch, search: string) {
+function createDisplay(schema: Schema, dispatch: Dispatch, search: string) {
   const valueFunction = (search.endsWith('}}') ? search.slice(0, -2) : search).trim();
   dispatch(insertInlineNode(schema.nodes.display, { valueFunction }));
   return true;
@@ -68,12 +68,13 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
       view.dispatch(tr);
       return true;
     };
+    const { schema } = view.state;
     removeText();
     switch (kind) {
       case SuggestionKind.variable:
-        return createVariable(dispatch, trigger, search);
+        return createVariable(schema, dispatch, trigger, search);
       case SuggestionKind.display:
-        return createDisplay(dispatch, search);
+        return createDisplay(schema, dispatch, search);
       default:
         throw new Error('Unknown suggestion kind.');
     }
@@ -82,6 +83,7 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
 
 export function filterResults(
   kind: VarSuggestionKinds,
+  schema: Schema,
   search: string,
   dispatch: Dispatch,
   getState: () => State,

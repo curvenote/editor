@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Node, DOMOutputSpecArray } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import schema from '../prosemirror/schema';
 import { openAttributeEditor } from '../store/attrs/actions';
 import { store } from '../connect';
 
@@ -45,7 +44,6 @@ class WidgetView {
   }
 
   update(node: Node) {
-    if (node.type !== schema.nodes.range) return false;
     this.setAttrs(node);
     return true;
   }

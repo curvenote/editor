@@ -6,7 +6,6 @@ import {
 import { EditorView } from 'prosemirror-view';
 import MenuIcon from '../../../components/Menu/Icon';
 import { getLinkBoundsIfTheyExist } from '../../../store/actions';
-import schema from '../../schema';
 
 const useStyles = makeStyles(() => createStyles({
   grid: {
@@ -29,7 +28,7 @@ const LinkActions = (props: Props) => {
   const linkBounds = getLinkBoundsIfTheyExist(state);
   if (!linkBounds) return null;
   const { href } = linkBounds.mark.attrs;
-  const mark = schema.marks.link;
+  const mark = state.schema.marks.link;
   const onDelete = () => (
     view.dispatch(state.tr.removeMark(linkBounds.from, linkBounds.to, mark))
   );

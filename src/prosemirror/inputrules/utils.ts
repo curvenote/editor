@@ -2,7 +2,6 @@ import { InputRule } from 'prosemirror-inputrules';
 import { NodeType, MarkType, Node } from 'prosemirror-model';
 import { NodeSelection, Selection } from 'prosemirror-state';
 import { findParentNode } from 'prosemirror-utils';
-import schema from '../schema';
 
 type GetAttrs = {
   content?: Node<any>;[key: string]: any;
@@ -20,7 +19,7 @@ export function markInputRule(
 ) {
   return new InputRule(regexp, (state, match, start, end) => {
     // Always give up on the input rules that go into math text...
-    const parent = findParentNode((n: Node) => n.type === schema.nodes.math)(
+    const parent = findParentNode((n: Node) => n.type === state.schema.nodes.math)(
       new Selection(state.doc.resolve(start), state.doc.resolve(end)),
     );
     if (parent?.node) return null;

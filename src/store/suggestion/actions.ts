@@ -1,4 +1,5 @@
 import { EditorView } from 'prosemirror-view';
+import { Schema } from 'prosemirror-model';
 import {
   SuggestionActionTypes, SuggestionKind,
   UPDATE_SUGGESTION, UPDATE_RESULTS, SELECT_SUGGESTION,
@@ -96,29 +97,30 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
   };
 }
 
-export function filterResults(search: string): AppThunk<void> {
+export function filterResults(schema: Schema, search: string): AppThunk<void> {
   return (dispatch, getState) => {
     const { kind } = getSuggestion(getState());
     switch (kind) {
       case SuggestionKind.emoji:
         return emoji.filterResults(
-          search,
+          schema, search,
           (results: EmojiResult[]) => dispatch(updateResults(results)),
         );
       case SuggestionKind.command:
         return command.filterResults(
-          search,
+          schema, search,
           (results: CommandResult[]) => dispatch(updateResults(results)),
         );
       case SuggestionKind.link:
         return link.filterResults(
-          search,
+          schema, search,
           (results: LinkResult[]) => dispatch(updateResults(results)),
         );
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return variable.filterResults(
           kind,
+          schema,
           search,
           dispatch,
           getState,
@@ -129,7 +131,7 @@ export function filterResults(search: string): AppThunk<void> {
   };
 }
 
-function setStartingSuggestions(kind: SuggestionKind): AppThunk<void> {
+function setStartingSuggestions(schema: Schema, kind: SuggestionKind): AppThunk<void> {
   return async (dispatch, getState) => {
     switch (kind) {
       case SuggestionKind.emoji: {
@@ -137,7 +139,8 @@ function setStartingSuggestions(kind: SuggestionKind): AppThunk<void> {
         return;
       }
       case SuggestionKind.command: {
-        dispatch(updateResults(command.startingSuggestions));
+        const starting = command.startingSuggestions(schema);
+        dispatch(updateResults(starting));
         return;
       }
       case SuggestionKind.link: {
@@ -168,8 +171,9 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
       action.range,
       action.trigger,
     ));
+    const { schema } = action.view.state;
     if (action.kind === 'open') {
-      dispatch(setStartingSuggestions(kind));
+      dispatch(setStartingSuggestions(schema, kind));
       dispatch(selectSuggestion(0));
     }
     if (action.kind === 'previous' || action.kind === 'next') {
@@ -182,9 +186,9 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
     }
     if (action.kind === 'filter') {
       if (action.search === '' || action.search == null) {
-        dispatch(setStartingSuggestions(kind));
+        dispatch(setStartingSuggestions(schema, kind));
       } else {
-        dispatch(filterResults(action.search));
+        dispatch(filterResults(action.view.state.schema, action.search));
       }
     }
     if (action.kind === 'select') {

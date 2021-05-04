@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js';
+import { Schema } from 'prosemirror-model';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import { EmojiResult } from '../types';
@@ -65,7 +66,9 @@ export function chooseSelection(result: EmojiResult): AppThunk<boolean> {
   };
 }
 
-export function filterResults(search: string, callback: (results: EmojiResult[]) => void): void {
+export function filterResults(
+  schema: Schema, search: string, callback: (results: EmojiResult[]) => void,
+): void {
   if (search === 'D') {
     callback(startingSuggestions.filter((e) => e.n === 'Grinning Face') as EmojiResult[]);
     return;

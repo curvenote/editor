@@ -6,7 +6,7 @@ import {
 } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import {
-  MarkType, NodeType, Node, Fragment,
+  MarkType, NodeType, Node, Fragment, Schema,
 } from 'prosemirror-model';
 import { Nodes } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
@@ -16,7 +16,6 @@ import {
   getEditorState, getSelectedEditorAndViews, getEditorUI,
   selectionIsChildOf, getSelectedView, getEditorView,
 } from '../selectors';
-import schema from '../../prosemirror/schema';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
 import { getNodeIfSelected } from './utils';
@@ -42,11 +41,11 @@ export function updateNodeAttrs(
 
 
 export function toggleMark(
-  stateKey: any, viewId: string | null, mark: MarkType, attrs?: { [key: string]: any },
+  stateKey: any, viewId: string | null, mark?: MarkType, attrs?: { [key: string]: any },
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
-    if (editorState == null) return false;
+    if (editorState == null || !mark) return false;
     const action = toggleMarkPM(mark, attrs);
     const result = action(
       editorState,
@@ -64,7 +63,7 @@ export function wrapInList(
     const editorState = getEditorState(getState(), stateKey)?.state;
     if (editorState == null) return false;
     const action = selectionIsChildOf(getState(), stateKey, { node }).node
-      ? liftListItem(schema.nodes.list_item)
+      ? liftListItem(editorState.schema.nodes.list_item)
       : wrapInListPM(node);
     if (test) return action(editorState);
     const result = action(
@@ -81,8 +80,8 @@ export function wrapIn(node: NodeType): AppThunk<boolean> {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
     const isList = (
-      node === schema.nodes.ordered_list
-      || node === schema.nodes.bullet_list
+      node === editor.state.schema.nodes.ordered_list
+      || node === editor.state.schema.nodes.bullet_list
     );
     if (isList) {
       const { viewId } = getEditorUI(getState());
@@ -104,7 +103,7 @@ function getContent(state: EditorState, content?: Node) {
   if (!nodeContent && !state.selection.empty) {
     const { from, to } = state.selection;
     const text = state.doc.textBetween(from, to);
-    nodeContent = schema.text(text);
+    nodeContent = state.schema.text(text);
   }
   return nodeContent;
 }
@@ -127,10 +126,11 @@ export function replaceSelection(
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
     const nodeContent = getContent(editor.state, content);
-    const selectParagraph = selectParentNodeOfType(schema.nodes.paragraph);
+    const { nodes } = editor.state.schema;
+    const selectParagraph = selectParentNodeOfType(nodes.paragraph);
     const replaceWithNode = replaceSelectedNode(node.create(attrs, nodeContent));
     let tr = replaceWithNode(selectParagraph(editor.state.tr));
-    if (node.name === schema.nodes.code_block.name) {
+    if (node.name === nodes.code_block.name) {
       const pos = tr.doc.resolve(tr.selection.from + 1);
       const sel = new Selection(pos, pos);
       tr = tr.setSelection(sel);
@@ -168,11 +168,11 @@ export function insertNode(
 }
 
 export function insertInlineNode(
-  node: NodeType, attrs?: { [index: string]: any }, content?: Node,
+  node?: NodeType, attrs?: { [index: string]: any }, content?: Node,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
-    if (editor.state == null) return false;
+    if (editor.state == null || !node) return false;
     const nodeContent = getContent(editor.state, content);
     const tr = editor.state.tr.replaceSelectionWith(
       node.create(attrs, nodeContent), false,
@@ -184,13 +184,13 @@ export function insertInlineNode(
   };
 }
 
-export const wrapInHeading = (level: number) => {
+export const wrapInHeading = (schema: Schema, level: number) => {
   if (level === 0) return setBlockType(schema.nodes.paragraph);
   return setBlockType(schema.nodes.heading, { level });
 };
 
 export const insertVariable = (
-  attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },
+  schema: Schema, attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },
 ) => (
   replaceSelection(schema.nodes.variable, attrs)
 );
@@ -226,6 +226,7 @@ export function toggleCitationBrackets(): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
+    const { schema } = editor.state;
     const node = getNodeIfSelected(editor.state, schema.nodes.cite);
     if (!node) return false;
     const { parent } = editor.state.selection.$from;

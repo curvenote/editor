@@ -1,12 +1,11 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
-import { Fragment } from 'prosemirror-model';
+import { Fragment, Schema } from 'prosemirror-model';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
 import { commands, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
-import schema from '../../../prosemirror/schema';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import {
@@ -37,7 +36,16 @@ const options = {
 };
 const fuse = new Fuse(commands, options);
 
-export const startingSuggestions = commands;
+const filterCommands = (schema: Schema, results: CommandResult[]) => {
+  const allowedNodes = new Set(Object.keys(schema.nodes));
+  const filtered = results.filter((r) => {
+    if (r.node == null) return true;
+    return allowedNodes.has(r.node);
+  });
+  return filtered;
+};
+
+export const startingSuggestions = (schema: Schema) => filterCommands(schema, commands);
 
 
 export function executeCommand(
@@ -56,6 +64,7 @@ export function executeCommand(
     } else {
       view = viewOrId;
     }
+    const { schema } = view.state;
 
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
@@ -89,7 +98,7 @@ export function executeCommand(
         return true;
       case CommandNames.paragraph:
         removeText();
-        dispatch(actions.wrapInHeading(0));
+        dispatch(actions.wrapInHeading(schema, 0));
         return true;
       case CommandNames.heading1:
       case CommandNames.heading2:
@@ -98,7 +107,7 @@ export function executeCommand(
       case CommandNames.heading5:
       case CommandNames.heading6:
         removeText();
-        dispatch(actions.wrapInHeading(Number.parseInt(command.slice(7), 10)));
+        dispatch(actions.wrapInHeading(schema, Number.parseInt(command.slice(7), 10)));
         return true;
       case CommandNames.quote:
         removeText();
@@ -130,7 +139,7 @@ export function executeCommand(
         return true;
       case CommandNames.variable:
         removeText();
-        dispatch(actions.insertVariable({ name: 'myVar', value: '0', valueFunction: '' }));
+        dispatch(actions.insertVariable(schema, { name: 'myVar', value: '0', valueFunction: '' }));
         return true;
       case CommandNames.display:
         removeText();
@@ -240,10 +249,12 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
   };
 }
 
-export function filterResults(search: string, callback: (results: CommandResult[]) => void): void {
+export function filterResults(
+  schema: Schema, search: string, callback: (results: CommandResult[]) => void,
+): void {
   // This lets the keystroke go through:
   setTimeout(() => {
     const results = fuse.search(search as string);
-    callback(results.map((result) => result.item) as CommandResult[]);
+    callback(filterCommands(schema, results.map((result) => result.item) as CommandResult[]));
   }, 1);
 }

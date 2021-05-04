@@ -82,7 +82,7 @@ const opts: Options = {
 setup(store, opts);
 
 window.store = store;
-store.dispatch(actions.initEditorState(stateKey, true, snippet, 0));
+store.dispatch(actions.initEditorState('full', stateKey, true, snippet, 0));
 
 
 store.subscribe(() => {

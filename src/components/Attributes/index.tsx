@@ -4,6 +4,7 @@ import isEqual from 'lodash.isequal';
 import {
   TextField, makeStyles, Theme, createStyles, Popover, Paper, Typography,
 } from '@material-ui/core';
+import { schemas } from '@curvenote/schema';
 import { State, Dispatch } from '../../store/types';
 import { closeAttributeEditor, updateNodeAttrs } from '../../store/actions';
 import {
@@ -13,7 +14,6 @@ import {
   getEditorState,
   getAttributeEditorPos,
 } from '../../store/selectors';
-import { schema } from '../../prosemirror';
 import { isEditable } from '../../prosemirror/plugins/editable';
 
 
@@ -34,14 +34,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export const NODES_WITH_ATTRS = new Set([
-  schema.nodes.button.name,
-  schema.nodes.display.name,
-  schema.nodes.dynamic.name,
-  schema.nodes.range.name,
-  schema.nodes.switch.name,
-  schema.nodes.variable.name,
-]);
+export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 
 const Attributes = () => {
   const classes = useStyles();
