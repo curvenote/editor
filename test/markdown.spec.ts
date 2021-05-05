@@ -1,7 +1,6 @@
-import { Schema } from 'prosemirror-model';
 import { compare, tnodes, tdoc } from './build';
 import {
-  schemas, fromMarkdown, toMarkdown,
+  fromMarkdown, toMarkdown,
 } from '../src';
 
 const {
@@ -9,9 +8,8 @@ const {
   abbr, subscript, superscript,
   math, equation, callout,
 } = tnodes;
-const schema = new Schema(schemas.presets.full);
 
-const same = compare((c) => fromMarkdown(c, schema), toMarkdown);
+const same = compare((c) => fromMarkdown(c, 'full'), toMarkdown);
 
 describe('Markdown', () => {
   it('parses a paragraph', () => same('hello!', tdoc(p('hello!'))));

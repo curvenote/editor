@@ -1,16 +1,14 @@
 import { JSDOM } from 'jsdom';
-import { Schema } from 'prosemirror-model';
 import {
-  schemas, fromHTML, toHTML, migrateHTML,
+  fromHTML, toHTML, migrateHTML,
 } from '../src';
 import { compare, tnodes, tdoc } from './build';
 
 const { document, DOMParser } = new JSDOM('').window;
-const schema = new Schema(schemas.presets.full);
 
 const same = compare(
-  (c) => fromHTML(c, schema, document, DOMParser),
-  (doc) => toHTML(doc, schema, document),
+  (c) => fromHTML(c, 'full', document, DOMParser),
+  (doc) => toHTML(doc, 'full', document),
 );
 
 const {

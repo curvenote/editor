@@ -1,8 +1,9 @@
-import { Schema, Node as ProsemirrorNode } from 'prosemirror-model';
+import { Node as ProsemirrorNode } from 'prosemirror-model';
 import Token from 'markdown-it/lib/token';
 import { MarkdownParser, TokenConfig } from 'prosemirror-markdown';
 import MyST from 'markdown-it-myst';
 import { DEFAULT_IMAGE_WIDTH } from '../../utils';
+import { getSchema, UseSchema } from '../../schemas';
 
 type Tokens = {
   [key: string]: TokenConfig & { noCloseToken?: boolean };
@@ -78,14 +79,15 @@ const tokens: Tokens = {
   // myst_role: { mark: 'code', noCloseToken: true },
 };
 
-export function getMarkdownParser(schema: Schema) {
+export function getMarkdownParser(useSchema: UseSchema) {
   const tokenizer = MyST();
   type Parser = { parse: (content: string) => ProsemirrorNode };
+  const schema = getSchema(useSchema);
   const parser: Parser = new MarkdownParser(schema, tokenizer, tokens);
   return parser;
 }
 
-export function fromMarkdown(content: string, schema: Schema) {
-  const doc = getMarkdownParser(schema).parse(content);
+export function fromMarkdown(content: string, useSchema: UseSchema) {
+  const doc = getMarkdownParser(useSchema).parse(content);
   return doc;
 }

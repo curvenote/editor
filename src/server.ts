@@ -23,7 +23,7 @@ export function getEditorState(
       { doc: data, selection: { type: 'text', anchor: 0, head: 0 } },
     );
   } catch (error) {
-    const doc = fromHTML(content, schema, document, DOMParser);
+    const doc = fromHTML(content, useSchema, document, DOMParser);
     return EditorState.create({
       doc,
       plugins: serverPlugins(version),

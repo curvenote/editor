@@ -25,8 +25,8 @@ export const mathNodes = {
   equation: Nodes.Equation.default,
 };
 
-export const reactiveNodes = {
-  variable: Nodes.Variable.default,
+export const reactiveDisplayNodes = {
+  // Does NOT include variable definitions
   display: Nodes.Display.default,
   dynamic: Nodes.Dynamic.default,
   range: Nodes.Range.default,
@@ -50,8 +50,36 @@ export const nodes = {
   ...presentationalNodes,
   ...citationNodes,
   ...mathNodes,
-  ...reactiveNodes,
+  variable: Nodes.Variable.default,
+  ...reactiveDisplayNodes,
 };
+
+export enum nodeNames {
+  text = 'text',
+  paragraph = 'paragraph',
+  heading = 'heading',
+  blockquote = 'blockquote',
+  code_block = 'code_block',
+  image = 'image',
+  horizontal_rule = 'horizontal_rule',
+  hard_break = 'hard_break',
+  ordered_list = 'ordered_list',
+  bullet_list = 'bullet_list',
+  list_item = 'list_item',
+  aside = 'aside',
+  callout = 'callout',
+  iframe = 'iframe',
+  cite = 'cite',
+  cite_group = 'cite_group',
+  math = 'math',
+  equation = 'equation',
+  variable = 'variable',
+  display = 'display',
+  dynamic = 'dynamic',
+  range = 'range',
+  switch = 'switch',
+  button = 'button',
+}
 
 export const marks = {
   link: basicMarks.link,
@@ -78,14 +106,14 @@ export const presets = {
       hard_break: basic.hard_break,
       ...citationNodes,
       math: mathNodes.math,
-      ...reactiveNodes,
+      ...reactiveDisplayNodes,
     },
     marks,
   },
 };
 
 export type PresetSchemas = keyof typeof presets;
-export type UseSchema = PresetSchemas | { nodes: Record<string, Node>; };
+export type UseSchema = PresetSchemas | { nodes: Record<string, Node>; } | Schema;
 
 export function getSchema(useSchema: UseSchema) {
   if (typeof useSchema === 'string') {
@@ -98,5 +126,6 @@ export function getSchema(useSchema: UseSchema) {
         throw new Error(`Schema '${useSchema}' is not defined.`);
     }
   }
+  if ('spec' in useSchema) return useSchema;
   return new Schema(useSchema);
 }
