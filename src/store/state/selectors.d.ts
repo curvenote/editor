@@ -6,7 +6,7 @@ export declare function getEditor(state: State, stateKey: any | null): {
     stateId?: undefined;
     viewIds?: undefined;
 } | {
-    state: import("prosemirror-state").EditorState<import("prosemirror-model").Schema<"paragraph" | "variable" | "display" | "dynamic" | "range" | "switch" | "button" | "math" | "equation" | "cite" | "cite_group" | "aside" | "callout" | "iframe" | "ordered_list" | "bullet_list" | "list_item" | "doc" | "text" | "heading" | "blockquote" | "code_block" | "image" | "horizontal_rule" | "hard_break", "link" | "code" | "em" | "strong" | "superscript" | "subscript" | "strikethrough" | "underline" | "abbr">>;
+    state: import("prosemirror-state").EditorState<import("prosemirror-model").Schema<"paragraph" | "display" | "dynamic" | "range" | "switch" | "button" | "variable" | "math" | "equation" | "cite" | "cite_group" | "aside" | "callout" | "iframe" | "ordered_list" | "bullet_list" | "list_item" | "doc" | "text" | "heading" | "blockquote" | "code_block" | "image" | "horizontal_rule" | "hard_break", "link" | "code" | "em" | "strong" | "superscript" | "subscript" | "strikethrough" | "underline" | "abbr">>;
     views: EditorView<any>[];
     stateId: string;
     viewIds: string[];
@@ -22,7 +22,7 @@ export declare function getEditorView(state: State, viewId: string | null): {
 };
 export declare function getEditorState(state: State, stateKey: any | null): {
     key: any;
-    state: import("prosemirror-state").EditorState<import("prosemirror-model").Schema<"paragraph" | "variable" | "display" | "dynamic" | "range" | "switch" | "button" | "math" | "equation" | "cite" | "cite_group" | "aside" | "callout" | "iframe" | "ordered_list" | "bullet_list" | "list_item" | "doc" | "text" | "heading" | "blockquote" | "code_block" | "image" | "horizontal_rule" | "hard_break", "link" | "code" | "em" | "strong" | "superscript" | "subscript" | "strikethrough" | "underline" | "abbr">>;
+    state: import("prosemirror-state").EditorState<import("prosemirror-model").Schema<"paragraph" | "display" | "dynamic" | "range" | "switch" | "button" | "variable" | "math" | "equation" | "cite" | "cite_group" | "aside" | "callout" | "iframe" | "ordered_list" | "bullet_list" | "list_item" | "doc" | "text" | "heading" | "blockquote" | "code_block" | "image" | "horizontal_rule" | "hard_break", "link" | "code" | "em" | "strong" | "superscript" | "subscript" | "strikethrough" | "underline" | "abbr">>;
     viewIds: string[];
 } | {
     state: null;

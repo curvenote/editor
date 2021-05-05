@@ -20,10 +20,12 @@ import { handleSuggestion } from '../../store/suggestion/actions';
 import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
+var ALL_TRIGGERS = /(?:^|\s|\n)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
+var NO_VARIABLE = /(?:^|\s|\n)(:|\/|(?:\{\{)|(?:\[\[))$/;
 export function getPlugins(schema, stateKey, version, startEditable) {
     return __spreadArrays([
         editablePlugin(startEditable)
-    ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), [
+    ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), [
         commentsPlugin(),
         inlineActionsPlugin,
         getImagePlaceholderPlugin(),
