@@ -15,12 +15,15 @@ import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 
+const ALL_TRIGGERS = /(?:^|\s|\n)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
+const NO_VARIABLE = /(?:^|\s|\n)(:|\/|(?:\{\{)|(?:\[\[))$/;
+
 export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [
     editablePlugin(startEditable),
     ...suggestion(
       (action) => store.dispatch(handleSuggestion(action)),
-      /(?:^|\s)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/,
+      schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE,
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),

@@ -53,8 +53,8 @@ class InlineActions {
     const { node } = isNodeSelection(state.selection)
       ? (state.selection as NodeSelection) : { node: null };
 
-    switch (node?.type.name) {
-      case schemas.nodes.image.name: {
+    switch (node?.type.name as schemas.nodeNames | undefined) {
+      case schemas.nodeNames.image: {
         const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
         const anchorEl = wrapper?.getElementsByTagName?.('img')[0] ?? wrapper;
         this.wrapper?.setState({
@@ -62,7 +62,7 @@ class InlineActions {
         });
         return;
       }
-      case schemas.nodes.iframe.name: {
+      case schemas.nodeNames.iframe: {
         const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
         const anchorEl = wrapper?.getElementsByTagName?.('iframe')[0] ?? wrapper;
         this.wrapper?.setState({
@@ -70,21 +70,21 @@ class InlineActions {
         });
         return;
       }
-      case schemas.nodes.math.name: {
+      case schemas.nodeNames.math: {
         const anchorEl = view.nodeDOM(state.selection.from);
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.math, placement: 'bottom-start', anchorEl,
         });
         return;
       }
-      case schemas.nodes.equation.name: {
+      case schemas.nodeNames.equation: {
         const anchorEl = view.nodeDOM(state.selection.from);
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.equation, placement: 'bottom', anchorEl,
         });
         return;
       }
-      case schemas.nodes.cite.name: {
+      case schemas.nodeNames.cite: {
         const anchorEl = view.nodeDOM(state.selection.from);
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.cite, placement: 'bottom-start', anchorEl,
@@ -95,8 +95,10 @@ class InlineActions {
         break;
     }
 
-    const parent = findParentNode((n: Node) => n.type === schemas.nodes.callout)(state.selection);
-    if (parent || node?.type === schemas.nodes.callout) {
+    const parent = findParentNode(
+      (n: Node) => n.type.name === schemas.nodeNames.callout,
+    )(state.selection);
+    if (parent || node?.type.name === schemas.nodeNames.callout) {
       const anchorEl = view.nodeDOM(parent?.pos ?? state.selection.from);
       this.wrapper?.setState({
         open: true, edit, kind: SelectionKinds.callout, placement: 'bottom', anchorEl,
