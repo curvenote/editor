@@ -1,6 +1,7 @@
-import { Schema, DOMParser as DOMParserPM } from 'prosemirror-model';
+import { DOMParser as DOMParserPM } from 'prosemirror-model';
 import { setInnerHTML } from './utils';
 import { Parser } from '../../types';
+import { getSchema, UseSchema } from '../../schemas';
 
 
 function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parser): HTMLDivElement {
@@ -63,8 +64,9 @@ export function migrateHTML(content: string, document: Document, DOMParser: Pars
 }
 
 export function fromHTML(
-  content: string, schema: Schema, document: Document, DOMParser: Parser,
+  content: string, useSchema: UseSchema, document: Document, DOMParser: Parser,
 ) {
+  const schema = getSchema(useSchema);
   const element = migrateHTML(content, document, DOMParser);
   const doc = DOMParserPM.fromSchema(schema).parse(element);
   return doc;

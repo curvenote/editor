@@ -1,6 +1,8 @@
-import { Node as ProsemirrorNode, DOMSerializer, Schema } from 'prosemirror-model';
+import { Node as ProsemirrorNode, DOMSerializer } from 'prosemirror-model';
+import { getSchema, UseSchema } from '../../schemas';
 
-export function toHTML(doc: ProsemirrorNode, schema: Schema, document: Document) {
+export function toHTML(doc: ProsemirrorNode, useSchema: UseSchema, document: Document) {
+  const schema = getSchema(useSchema);
   const div = document.createElement('div');
   const frag = DOMSerializer
     .fromSchema(schema)
