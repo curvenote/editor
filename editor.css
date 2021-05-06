@@ -48,6 +48,14 @@
   background-color: transparent;
 }
 
+.katex-display {
+  margin: 0;
+}
+
+.eqn-math {
+  overflow: hidden;
+}
+
 .eqn.editing .eqn-math {
   display: none;
 }
@@ -57,31 +65,29 @@
 }
 
 .eqn.editing .eqn-editor {
-  display: block;
-}
-
-.eqn.inline, .eqn.editing .eqn-editor.inline {
   display: inline-block;
 }
 
-.eqn-editor .ProseMirror {
+.eqn.inline.editing .eqn-editor {
+  display: inline;
+}
+
+.eqn-editor.ProseMirror {
   cursor: auto;
   font-family: monospace;
   color: purple;
-}
-
-.eqn-editor.inline .ProseMirror {
-  display: inline;
 }
 
 .eqn-editor::before, .eqn-editor::after {
   content: "$$";
   color: #aaa;
   cursor: move;
+  display: block;
 }
 
 .eqn-editor.inline::before, .eqn-editor.inline::after {
   content: "$";
+  display: inline;
 }
 
 article {
@@ -250,7 +256,7 @@ article aside.callout {
   border-left-color: #4285F4;
 }
 
-article aside.callout, article aside.callout p {
+article aside.callout p {
   margin: 0;
   text-align: left;
   display: block;

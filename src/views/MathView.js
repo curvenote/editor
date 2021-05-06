@@ -23,11 +23,11 @@ var MathView = (function () {
         this.node = node;
         this.outerView = view;
         this.getPos = getPos;
-        this.dom = document.createElement('div');
+        this.dom = document.createElement(inline ? 'span' : 'div');
         this.dom.classList.add('eqn');
-        this.editor = document.createElement('div');
+        this.editor = document.createElement(inline ? 'span' : 'div');
         this.editor.classList.add('eqn-editor');
-        this.math = document.createElement('div');
+        this.math = document.createElement(inline ? 'span' : 'div');
         this.math.classList.add('eqn-math');
         this.math.addEventListener('click', function () { return _this.selectNode(); });
         this.dom.appendChild(this.editor);
@@ -45,7 +45,7 @@ var MathView = (function () {
             return true;
         };
         var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
-        this.innerView = new EditorView(this.editor, {
+        this.innerView = new EditorView({ mount: this.editor }, {
             state: EditorState.create({
                 doc: this.node,
                 plugins: [keymap(__assign(__assign({ 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-a': function () {
