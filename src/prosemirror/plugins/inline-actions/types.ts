@@ -7,4 +7,5 @@ export enum SelectionKinds {
   callout = 'callout',
   cite = 'cite',
   citegroup = 'citegroup',
+  time = 'time',
 }

@@ -1,5 +1,5 @@
 import { Node, NodeRange, NodeSpec } from 'prosemirror-model';
-import { EditorState, NodeSelection } from 'prosemirror-state';
+import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
 import { liftTarget } from 'prosemirror-transform';
 import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
@@ -28,7 +28,7 @@ export const addLink = (view: EditorView, data: DataTransfer | null) => {
 
 export function updateNodeAttrsOnView(
   view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
-  attrs: { [index: string]: any }, select = true,
+  attrs: { [index: string]: any }, select: boolean | 'after' = true,
 ) {
   if (view == null) return;
   const tr = view.state.tr.setNodeMarkup(
@@ -36,7 +36,11 @@ export function updateNodeAttrsOnView(
     undefined,
     { ...node.node.attrs, ...attrs },
   );
-  if (select) tr.setSelection(NodeSelection.create(tr.doc, node.pos));
+  if (select === true) tr.setSelection(NodeSelection.create(tr.doc, node.pos));
+  if (select === 'after') {
+    const sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
+    tr.setSelection(sel);
+  }
   view.dispatch(tr);
   view.focus();
 }

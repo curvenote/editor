@@ -113,6 +113,13 @@ export function executeCommand(
         removeText();
         dispatch(actions.wrapIn(schema.nodes.blockquote));
         return true;
+      case CommandNames.time:
+        removeText();
+        dispatch(actions.insertInlineNode(
+          schema.nodes.time, { datetime: new Date() }, undefined, false,
+        ));
+        dispatch(actions.insertText(' '));
+        return true;
       case CommandNames.bullet_list:
         removeText();
         dispatch(actions.wrapIn(schema.nodes.bullet_list));

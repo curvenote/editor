@@ -108,7 +108,8 @@ function getContent(state: EditorState, content?: Node) {
   return nodeContent;
 }
 
-const selectNode = (tr: Transaction) => {
+const selectNode = (tr: Transaction, select: boolean | 'after' = true) => {
+  if (!select) return tr;
   const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
   const resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
   try {
@@ -169,6 +170,7 @@ export function insertNode(
 
 export function insertInlineNode(
   node?: NodeType, attrs?: { [index: string]: any }, content?: Node,
+  select: boolean | 'after' = true,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
@@ -177,9 +179,19 @@ export function insertInlineNode(
     const tr = editor.state.tr.replaceSelectionWith(
       node.create(attrs, nodeContent), false,
     ).scrollIntoView();
-    dispatch(applyProsemirrorTransaction(editor.stateId, selectNode(tr)));
+    dispatch(applyProsemirrorTransaction(editor.stateId, selectNode(tr, select)));
     // TODO: This should go in a better place, not passing the dom here, should be a better action
     // dispatch(setAttributeEditor(true));
+    return true;
+  };
+}
+
+export function insertText(text: string): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const editor = getSelectedEditorAndViews(getState());
+    if (editor.state == null) return false;
+    const tr = editor.state.tr.insertText(text);
+    dispatch(applyProsemirrorTransaction(editor.stateId, tr));
     return true;
   };
 }
