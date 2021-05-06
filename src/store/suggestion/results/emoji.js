@@ -91,6 +91,8 @@ export var startingSuggestions = [{
         c: '👀', n: 'Eyes', s: 'eyes', o: '',
     }, {
         c: '😕', n: 'Confused Face', s: 'confused', o: '',
+    }, {
+        c: '😛', n: 'Face With Tongue', s: 'stuck_out_tongue', o: ' :p',
     }];
 export function chooseSelection(result) {
     return function (dispatch, getState) {
@@ -107,6 +109,14 @@ export function filterResults(schema, search, callback) {
     var _this = this;
     if (search === 'D') {
         callback(startingSuggestions.filter(function (e) { return e.n === 'Grinning Face'; }));
+        return;
+    }
+    if (search.toUpperCase() === 'P') {
+        callback(startingSuggestions.filter(function (e) { return e.n === 'Face With Tongue'; }));
+        return;
+    }
+    if (search.toUpperCase() === '?') {
+        callback(startingSuggestions.filter(function (e) { return e.n === 'Confused Face'; }));
         return;
     }
     setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
