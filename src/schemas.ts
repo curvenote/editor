@@ -45,6 +45,7 @@ export const nodes = {
   image: Nodes.Image.default,
   horizontal_rule: basic.horizontal_rule,
   hard_break: basic.hard_break,
+  time: Nodes.Time.default,
   ...listNodes,
   // Presentational components
   ...presentationalNodes,
@@ -63,6 +64,7 @@ export enum nodeNames {
   image = 'image',
   horizontal_rule = 'horizontal_rule',
   hard_break = 'hard_break',
+  time = 'time',
   ordered_list = 'ordered_list',
   bullet_list = 'bullet_list',
   list_item = 'list_item',
@@ -104,6 +106,7 @@ export const presets = {
       paragraph: basic.paragraph,
       text: basic.text,
       hard_break: basic.hard_break,
+      time: Nodes.Time.default,
       ...citationNodes,
       math: mathNodes.math,
       ...reactiveDisplayNodes,

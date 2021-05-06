@@ -63,6 +63,7 @@ export const markdownSerializer = new MarkdownSerializer({
   // Presentational
   image: nodes.Image.toMarkdown,
   iframe: nodes.IFrame.toMarkdown,
+  time: nodes.Time.toMarkdown,
   callout: nodes.Callout.toMarkdown,
   aside: nodes.Aside.toMarkdown,
   // Technical

@@ -3,6 +3,7 @@ export * as Aside from './aside';
 export * as Callout from './callout';
 export * as Image from './image';
 export * as IFrame from './iframe';
+export * as Time from './time';
 
 // Technical
 export * as Cite from './cite';
