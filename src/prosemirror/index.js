@@ -36,7 +36,7 @@ export function createEditorState(useSchema, stateKey, content, version, startEd
     return state;
 }
 export function createEditorView(dom, state, dispatch) {
-    var editorView = new EditorView(dom, {
+    var editorView = new EditorView({ mount: dom }, {
         state: state,
         dispatchTransaction: dispatch,
         nodeViews: __assign({ math: function (node, view, getPos) {
