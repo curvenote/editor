@@ -53,6 +53,9 @@ export function createEditorView(dom, state, dispatch) {
             },
             link: function (node, view, getPos) {
                 return new views.LinkView(node, view, getPos);
+            },
+            time: function (node, view, getPos) {
+                return new views.TimeView(node, view, getPos);
             }, cite: views.CiteView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
         handlePaste: function (view, event) {

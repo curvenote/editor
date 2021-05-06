@@ -18,7 +18,8 @@ export declare function insertNode(node: NodeType, attrs?: {
 }, content?: Node): AppThunk<boolean>;
 export declare function insertInlineNode(node?: NodeType, attrs?: {
     [index: string]: any;
-}, content?: Node): AppThunk<boolean>;
+}, content?: Node, select?: boolean | 'after'): AppThunk<boolean>;
+export declare function insertText(text: string): AppThunk<boolean>;
 export declare const wrapInHeading: (schema: Schema, level: number) => import("redux-thunk").ThunkAction<boolean, import("../types").State, null, import("redux").Action<string>>;
 export declare const insertVariable: (schema: Schema, attrs?: Nodes.Variable.Attrs) => import("redux-thunk").ThunkAction<boolean, import("../types").State, null, import("redux").Action<string>>;
 export declare function addComment(viewId: string, commentId: string): AppThunk<boolean>;

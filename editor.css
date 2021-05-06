@@ -112,6 +112,10 @@ article pre {
   background-color: #FAFAFA;
   padding: 10px;
 }
+article time {
+  border: 1px solid #ddd;
+  border-bottom-color: #8cf;
+}
 article dl {
   color: #4D4D4D;
   font-family: var(--curvenote-font, sans-serif);

@@ -91,8 +91,11 @@ function getContent(state, content) {
     }
     return nodeContent;
 }
-var selectNode = function (tr) {
+var selectNode = function (tr, select) {
     var _a, _b;
+    if (select === void 0) { select = true; }
+    if (!select)
+        return tr;
     var nodeSize = (_b = (_a = tr.selection.$anchor.nodeBefore) === null || _a === void 0 ? void 0 : _a.nodeSize) !== null && _b !== void 0 ? _b : 0;
     var resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
     try {
@@ -142,14 +145,25 @@ export function insertNode(node, attrs, content) {
         return true;
     };
 }
-export function insertInlineNode(node, attrs, content) {
+export function insertInlineNode(node, attrs, content, select) {
+    if (select === void 0) { select = true; }
     return function (dispatch, getState) {
         var editor = getSelectedEditorAndViews(getState());
         if (editor.state == null || !node)
             return false;
         var nodeContent = getContent(editor.state, content);
         var tr = editor.state.tr.replaceSelectionWith(node.create(attrs, nodeContent), false).scrollIntoView();
-        dispatch(applyProsemirrorTransaction(editor.stateId, selectNode(tr)));
+        dispatch(applyProsemirrorTransaction(editor.stateId, selectNode(tr, select)));
+        return true;
+    };
+}
+export function insertText(text) {
+    return function (dispatch, getState) {
+        var editor = getSelectedEditorAndViews(getState());
+        if (editor.state == null)
+            return false;
+        var tr = editor.state.tr.insertText(text);
+        dispatch(applyProsemirrorTransaction(editor.stateId, tr));
         return true;
     };
 }

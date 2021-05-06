@@ -19,7 +19,7 @@ var InlineActions = (function () {
         this.update(view);
     }
     InlineActions.prototype.update = function (view) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
         var state = view.state;
         var edit = isEditable(state);
         var linkBounds = getLinkBoundsIfTheyExist(state);
@@ -88,13 +88,23 @@ var InlineActions = (function () {
                 });
                 return;
             }
+            case schemas.nodeNames.time: {
+                var anchorEl = view.nodeDOM(state.selection.from);
+                (_m = this.wrapper) === null || _m === void 0 ? void 0 : _m.setState({
+                    open: true,
+                    edit: edit,
+                    kind: SelectionKinds.time, placement: 'bottom-start',
+                    anchorEl: anchorEl,
+                });
+                return;
+            }
             default:
                 break;
         }
         var parent = findParentNode(function (n) { return n.type.name === schemas.nodeNames.callout; })(state.selection);
         if (parent || (node === null || node === void 0 ? void 0 : node.type.name) === schemas.nodeNames.callout) {
-            var anchorEl = view.nodeDOM((_m = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _m !== void 0 ? _m : state.selection.from);
-            (_o = this.wrapper) === null || _o === void 0 ? void 0 : _o.setState({
+            var anchorEl = view.nodeDOM((_o = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _o !== void 0 ? _o : state.selection.from);
+            (_p = this.wrapper) === null || _p === void 0 ? void 0 : _p.setState({
                 open: true,
                 edit: edit,
                 kind: SelectionKinds.callout, placement: 'bottom',
@@ -102,7 +112,7 @@ var InlineActions = (function () {
             });
             return;
         }
-        (_p = this.wrapper) === null || _p === void 0 ? void 0 : _p.setState({ open: false, edit: edit });
+        (_q = this.wrapper) === null || _q === void 0 ? void 0 : _q.setState({ open: false, edit: edit });
     };
     InlineActions.prototype.destroy = function () { this.dom.remove(); };
     return InlineActions;

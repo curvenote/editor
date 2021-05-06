@@ -6,5 +6,6 @@ export declare enum SelectionKinds {
     equation = "equation",
     callout = "callout",
     cite = "cite",
-    citegroup = "citegroup"
+    citegroup = "citegroup",
+    time = "time"
 }

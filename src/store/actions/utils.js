@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { NodeRange } from 'prosemirror-model';
-import { NodeSelection } from 'prosemirror-state';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { liftTarget } from 'prosemirror-transform';
 import { isNodeSelection } from 'prosemirror-utils';
 export var TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
@@ -38,8 +38,12 @@ export function updateNodeAttrsOnView(view, node, attrs, select) {
     if (view == null)
         return;
     var tr = view.state.tr.setNodeMarkup(node.pos, undefined, __assign(__assign({}, node.node.attrs), attrs));
-    if (select)
+    if (select === true)
         tr.setSelection(NodeSelection.create(tr.doc, node.pos));
+    if (select === 'after') {
+        var sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
+        tr.setSelection(sel);
+    }
     view.dispatch(tr);
     view.focus();
 }

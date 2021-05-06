@@ -18,6 +18,7 @@ export var CommandNames;
     CommandNames["heading6"] = "heading6";
     CommandNames["code"] = "code";
     CommandNames["quote"] = "quote";
+    CommandNames["time"] = "time";
     CommandNames["variable"] = "variable";
     CommandNames["display"] = "display";
     CommandNames["range"] = "range";
@@ -105,6 +106,13 @@ export var commands = [
         description: 'Add a blockquote',
         shortcut: ['>'],
         node: 'blockquote',
+    },
+    {
+        name: CommandNames.time,
+        title: 'Date',
+        description: 'Add a calendar date 📅',
+        shortcut: ['//'],
+        node: 'time',
     },
     {
         name: CommandNames.variable,

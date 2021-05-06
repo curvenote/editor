@@ -7,6 +7,7 @@ import AlignActions from './AlignActions';
 import { SelectionKinds } from './types';
 import CitationPreview from './CitationPreview';
 import CalloutActions from './CalloutActions';
+import TimeActions from './TimeActions';
 var useStyles = makeStyles(function () { return createStyles({
     paper: {
         marginTop: 5,
@@ -36,7 +37,8 @@ var LinkToolbar = function (props) {
             kind === SelectionKinds.image && React.createElement(AlignActions, { view: view }),
             kind === SelectionKinds.iframe && React.createElement(AlignActions, { view: view }),
             kind === SelectionKinds.callout && React.createElement(CalloutActions, { view: view }),
-            kind === SelectionKinds.cite && React.createElement(CitationPreview, { view: view }))));
+            kind === SelectionKinds.cite && React.createElement(CitationPreview, { view: view }),
+            kind === SelectionKinds.time && React.createElement(TimeActions, { view: view }))));
 };
 export default LinkToolbar;
 //# sourceMappingURL=Toolbar.js.map

@@ -18,6 +18,7 @@ export declare enum CommandNames {
     'heading6' = "heading6",
     'code' = "code",
     'quote' = "quote",
+    'time' = "time",
     'variable' = "variable",
     'display' = "display",
     'range' = "range",
