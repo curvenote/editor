@@ -10,6 +10,8 @@ const inputrules = (schema: Schema) => inputRules({
     ...rules.ellipsis(schema),
     ...rules.blockquote(schema),
     ...rules.arrows(schema),
+    ...rules.emojis(schema),
+    ...rules.fractions(schema),
     ...rules.emdash(schema),
     ...rules.copyright(schema),
     ...rules.link(schema),

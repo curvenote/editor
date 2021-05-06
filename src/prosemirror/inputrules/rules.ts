@@ -19,6 +19,34 @@ export const arrows = (schema: Schema) => [
   new InputRule(/=?=>\s$/, '⇒ '),
   new InputRule(/<--?\s$/, '← '),
   new InputRule(/<==?\s$/, '⇐ '),
+  new InputRule(/>>\s$/, '» '),
+  new InputRule(/<<\s$/, '« '),
+];
+
+export const emojis = (schema: Schema) => [
+  new InputRule(/(?:^|\s)<3\s$/, '❤️ '),
+  new InputRule(/(?:^|\s)<\/3\s$/, '💔 '),
+  new InputRule(/(?:^|\s)\+1\s$/, '👍 '),
+];
+
+export const fractions = (schema: Schema) => [
+  new InputRule(/1\/2$/, '½'),
+  new InputRule(/1\/3$/, '⅓'),
+  new InputRule(/2\/3$/, '⅔'),
+  new InputRule(/1\/4$/, '¼'),
+  new InputRule(/1\/5$/, '⅕'),
+  new InputRule(/2\/5$/, '⅖'),
+  new InputRule(/3\/5$/, '⅗'),
+  new InputRule(/4\/5$/, '⅘'),
+  new InputRule(/1\/6$/, '⅙'),
+  new InputRule(/5\/6$/, '⅚'),
+  new InputRule(/1\/7$/, '⅐'),
+  new InputRule(/1\/8$/, '⅛'),
+  new InputRule(/3\/8$/, '⅜'),
+  new InputRule(/5\/8$/, '⅝'),
+  new InputRule(/7\/8$/, '⅞'),
+  new InputRule(/1\/9$/, '⅑'),
+  new InputRule(/1\/10$/, '⅒'),
 ];
 
 export const emdash = (schema: Schema) => [
@@ -27,6 +55,7 @@ export const emdash = (schema: Schema) => [
 
 export const copyright = (schema: Schema) => [
   new InputRule(/\s?\(c\)\s$/, ' © '),
+  new InputRule(/\s?\(r\)\s$/, ' ® '),
 ];
 
 export const link = (schema: Schema) => [

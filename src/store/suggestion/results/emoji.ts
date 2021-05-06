@@ -53,6 +53,8 @@ export const startingSuggestions = [{
   c: '👀', n: 'Eyes', s: 'eyes', o: '',
 }, {
   c: '😕', n: 'Confused Face', s: 'confused', o: '',
+}, {
+  c: '😛', n: 'Face With Tongue', s: 'stuck_out_tongue', o: ' :p',
 }];
 
 export function chooseSelection(result: EmojiResult): AppThunk<boolean> {
@@ -71,6 +73,14 @@ export function filterResults(
 ): void {
   if (search === 'D') {
     callback(startingSuggestions.filter((e) => e.n === 'Grinning Face') as EmojiResult[]);
+    return;
+  }
+  if (search.toUpperCase() === 'P') {
+    callback(startingSuggestions.filter((e) => e.n === 'Face With Tongue') as EmojiResult[]);
+    return;
+  }
+  if (search.toUpperCase() === '?') {
+    callback(startingSuggestions.filter((e) => e.n === 'Confused Face') as EmojiResult[]);
     return;
   }
   // This lets the keystroke go through:
