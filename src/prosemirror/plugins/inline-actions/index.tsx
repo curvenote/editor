@@ -91,6 +91,13 @@ class InlineActions {
         });
         return;
       }
+      case schemas.nodeNames.time: {
+        const anchorEl = view.nodeDOM(state.selection.from);
+        this.wrapper?.setState({
+          open: true, edit, kind: SelectionKinds.time, placement: 'bottom-start', anchorEl,
+        });
+        return;
+      }
       default:
         break;
     }

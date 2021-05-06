@@ -9,6 +9,7 @@ import AlignActions from './AlignActions';
 import { SelectionKinds } from './types';
 import CitationPreview from './CitationPreview';
 import CalloutActions from './CalloutActions';
+import TimeActions from './TimeActions';
 
 const useStyles = makeStyles(() => createStyles({
   paper: {
@@ -61,6 +62,7 @@ const LinkToolbar = (props: Props) => {
         {/* {kind === SelectionKinds.math && <AlignActions view={view} />} */}
         {/* {kind === SelectionKinds.equation && <AlignActions view={view} />} */}
         {kind === SelectionKinds.cite && <CitationPreview view={view} />}
+        {kind === SelectionKinds.time && <TimeActions view={view} />}
       </div>
     </Paper>
   );

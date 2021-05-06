@@ -19,6 +19,7 @@ export enum CommandNames {
   'heading6' = 'heading6',
   'code' = 'code',
   'quote' = 'quote',
+  'time' = 'time',
   'variable' = 'variable',
   'display' = 'display',
   'range' = 'range',
@@ -117,6 +118,13 @@ export const commands: CommandResult[] = [
     description: 'Add a blockquote',
     shortcut: ['>'],
     node: 'blockquote',
+  },
+  {
+    name: CommandNames.time,
+    title: 'Date',
+    description: 'Add a calendar date 📅',
+    shortcut: ['//'],
+    node: 'time',
   },
   {
     name: CommandNames.variable,
