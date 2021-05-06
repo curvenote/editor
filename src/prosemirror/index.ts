@@ -36,7 +36,7 @@ export function createEditorView(
   state: EditorState,
   dispatch: (tr: Transaction) => void,
 ): EditorView {
-  const editorView = new EditorView(dom, {
+  const editorView = new EditorView({ mount: dom }, {
     state,
     dispatchTransaction: dispatch,
     nodeViews: {

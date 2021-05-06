@@ -1,6 +1,4 @@
-import React, {
-  useEffect, useRef, useState, CSSProperties,
-} from 'react';
+import React, { useEffect, useRef } from 'react';
 import { EditorView } from 'prosemirror-view';
 import { useDispatch, useSelector } from 'react-redux';
 import throttle from 'lodash.throttle';
@@ -10,24 +8,6 @@ import { createEditorView } from '../prosemirror';
 import {
   Dispatch, State, actions, selectors,
 } from '../store';
-
-const prompts = [
-  'Type \'/\' for commands, or just start writing!',
-  'Type \':\' for emotion',
-  'Type \'$$\' to create an equation',
-  'Type \'> \' to create a quote',
-  'Type \'* \' for a list',
-  'Type \'1. \' for a numbered list',
-  'Type \'{{ 1 + 1 }}\' to display 2',
-  'Type \'# \' for a header',
-  'Type \'### \' for a smaller header',
-  'Type \'`code`\' to insert code',
-  'Type \'```\' to create a code block',
-  'Type \'---\' to create a divider',
-];
-const promptStyle: CSSProperties = {
-  margin: 0, position: 'absolute', opacity: 0.4, left: 40, userSelect: 'none',
-};
 
 type Props = {
   stateKey: any;
@@ -43,17 +23,12 @@ const Editor = (props: Props) => {
   const editorEl = useRef<HTMLDivElement>(null);
   const editorView = useRef<EditorView>();
 
-  const hasContent = true;
-
   const editorState = useSelector(
     (state: State) => selectors.getEditorState(state, stateKey)?.state,
   );
   const focused = useSelector(
     (state: State) => (selectors.isEditorViewFocused(state, stateKey, viewId)),
   );
-
-  const [prompt, setPrompt] = useState(prompts[0]);
-  useEffect(() => setPrompt(prompts[Math.floor(Math.random() * prompts.length)]), [hasContent]);
 
   // Create editorView
   useEffect(() => {
@@ -84,7 +59,6 @@ const Editor = (props: Props) => {
       dispatch(actions.focusEditorView(viewId, false));
     };
     dispatch(actions.subscribeView(stateKey, viewId, editorView.current));
-    setPrompt(prompts[0]);
   }, [editorView.current == null, editorEl.current == null, editorState == null]);
 
   // Unsubscribe when it goes away
@@ -106,12 +80,7 @@ const Editor = (props: Props) => {
     editorView.current?.focus();
   }, [focused]);
 
-  return (
-    <div>
-      {!hasContent && (<p style={promptStyle}>{prompt}</p>)}
-      <div ref={editorEl} />
-    </div>
-  );
+  return <div ref={editorEl} />;
 };
 
 Editor.defaultProps = {
