@@ -42,7 +42,11 @@
     "prosemirror-transform": "^1.2.11",
     "prosemirror-view": "^1.17.6"
   },
+  "peerDependencies": {
+    "date-fns": "^2.21.2"
+  },
   "devDependencies": {
+    "date-fns": "^2.21.2",
     "@babel/plugin-proposal-optional-chaining": "^7.12.16",
     "@sinonjs/fake-timers": "^7.0.2",
     "@types/jest": "^26.0.20",
