@@ -1,31 +1,25 @@
 .ProseMirror-hideselection .eqn-editor *::selection { background-color: transparent; }
 .ProseMirror-hideselection .eqn-editor *::-moz-selection { background-color: transparent; }
+.katex-display { margin: 0; }
 
-.eqn.editing .eqn-math {
-  display: none;
-}
-.eqn .eqn-editor {
-  display: none;
-}
-.eqn.editing .eqn-editor {
-  display: block;
-}
-.eqn.inline, .eqn.editing .eqn-editor.inline {
-  display: inline-block;
-}
-.eqn-editor .ProseMirror {
+.eqn-math { overflow: hidden; }
+.eqn.editing .eqn-math { display: none; }
+.eqn .eqn-editor { display: none; }
+.eqn.editing .eqn-editor { display: inline-block; }
+.eqn.inline.editing .eqn-editor { display: inline; }
+
+.eqn-editor.ProseMirror {
   cursor: auto;
   font-family: monospace;
   color: purple;
-}
-.eqn-editor.inline .ProseMirror {
-  display: inline;
 }
 .eqn-editor::before, .eqn-editor::after {
   content: "$$";
   color: #aaa;
   cursor: move;
+  display: block;
 }
 .eqn-editor.inline::before, .eqn-editor.inline::after  {
   content: "$";
+  display: inline;
 }

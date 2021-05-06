@@ -31,12 +31,12 @@ class MathView {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;
-    this.dom = document.createElement('div');
+    this.dom = document.createElement(inline ? 'span' : 'div');
     this.dom.classList.add('eqn');
 
-    this.editor = document.createElement('div');
+    this.editor = document.createElement(inline ? 'span' : 'div');
     this.editor.classList.add('eqn-editor');
-    this.math = document.createElement('div');
+    this.math = document.createElement(inline ? 'span' : 'div');
     this.math.classList.add('eqn-math');
     this.math.addEventListener('click', () => this.selectNode());
     this.dom.appendChild(this.editor);
@@ -56,7 +56,7 @@ class MathView {
     };
     const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
     // And put a sub-ProseMirror into that
-    this.innerView = new EditorView(this.editor, {
+    this.innerView = new EditorView({ mount: this.editor }, {
       // You can use any node as an editor document
       state: EditorState.create({
         doc: this.node,
