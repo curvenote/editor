@@ -1,6 +1,6 @@
 {
   "name": "@curvenote/schema",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Schema and markdown parser for @curvenote/editor",
   "author": "Rowan Cockett <rowan@curvenote.com>",
   "license": "MIT",
@@ -46,7 +46,6 @@
     "date-fns": "^2.21.2"
   },
   "devDependencies": {
-    "date-fns": "^2.21.2",
     "@babel/plugin-proposal-optional-chaining": "^7.12.16",
     "@sinonjs/fake-timers": "^7.0.2",
     "@types/jest": "^26.0.20",
@@ -64,6 +63,7 @@
     "@types/prosemirror-view": "^1.17.1",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
+    "date-fns": "^2.21.2",
     "eslint": "^7.20.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-base": "^14.2.1",
