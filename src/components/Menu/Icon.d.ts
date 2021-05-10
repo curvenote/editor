@@ -3,6 +3,14 @@ declare function SubscriptIcon(props: any): JSX.Element;
 declare function SuperscriptIcon(props: any): JSX.Element;
 declare function BracketsIcon(props: any): JSX.Element;
 declare const icons: {
+    cancel: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    enterSave: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
     bold: {
         help: string;
         Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
@@ -107,6 +115,18 @@ declare const icons: {
         help: string;
         Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
     };
+    numbered: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    caption: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    label: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
 };
 export declare type IconTypes = keyof typeof icons | 'divider';
 declare type Props = {
@@ -114,6 +134,8 @@ declare type Props = {
     disabled?: boolean;
     active?: boolean;
     dangerous?: boolean;
+    error?: boolean;
+    title?: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 declare const _default: React.MemoExoticComponent<{
@@ -122,7 +144,9 @@ declare const _default: React.MemoExoticComponent<{
         disabled: boolean;
         active: boolean;
         dangerous: boolean;
+        error: boolean;
         onClick: undefined;
+        title: undefined;
     };
 }>;
 export default _default;

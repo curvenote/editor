@@ -1,4 +1,5 @@
-import { Node, NodeSpec } from 'prosemirror-model';
+import { schemas } from '@curvenote/schema';
+import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
@@ -15,7 +16,7 @@ export declare function getLinkBoundsIfTheyExist(state: EditorState): {
     to: number;
     mark: import("prosemirror-model").Mark<any>;
 } | null;
-export declare function getNodeIfSelected(state: EditorState, spec: NodeSpec): Node<any> | null;
+export declare function getNodeIfSelected(state: EditorState | null, nodeName?: schemas.nodeNames): Node<any> | null;
 export declare const setNodeViewAlign: (node: Node, view: EditorView, pos: number) => (value: AlignOptions) => void;
 export declare const setNodeViewWidth: (node: Node, view: EditorView, pos: number) => (value: number) => void;
 export declare const setNodeViewKind: (node: Node, view: EditorView, pos: number, select?: boolean) => (value: string) => void;

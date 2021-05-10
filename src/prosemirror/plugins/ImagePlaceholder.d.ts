@@ -1,3 +1,4 @@
+import { Node } from 'prosemirror-model';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { DecorationSet, EditorView } from 'prosemirror-view';
 export declare const key: PluginKey<any, any>;
@@ -14,7 +15,7 @@ export declare type Action = ({
     };
 });
 export declare const getImagePlaceholderPlugin: () => ImagePlaceholderPlugin;
-export declare const addImagePlaceholder: (view: EditorView, dataUrl: string) => {
+export declare const addImagePlaceholder: (view: EditorView, dataUrl: string, node: Node | null) => {
     success: (url: string) => void;
     fail: () => void;
 };

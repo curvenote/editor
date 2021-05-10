@@ -13,6 +13,7 @@ import { NodeSelection, Selection, } from 'prosemirror-state';
 import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode, } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { Fragment, } from 'prosemirror-model';
+import { schemas } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf, getSelectedView, getEditorView, } from '../selectors';
@@ -209,7 +210,7 @@ export function toggleCitationBrackets() {
         if (editor.state == null)
             return false;
         var schema = editor.state.schema;
-        var node = getNodeIfSelected(editor.state, schema.nodes.cite);
+        var node = getNodeIfSelected(editor.state, schemas.nodeNames.cite);
         if (!node)
             return false;
         var parent = editor.state.selection.$from.parent;

@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,10 +45,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import { nodeNames } from '@curvenote/schema/dist/schemas';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
+import { getNodeIfSelected } from '../../store/actions/utils';
 export var key = new PluginKey('placeholder');
 export var getImagePlaceholderPlugin = function () { return new Plugin({
     key: key,
@@ -69,7 +82,7 @@ var findImagePlaceholder = function (state, id) {
     var found = decos.find(undefined, undefined, function (spec) { return spec.id === id; });
     return found.length ? found[0].from : null;
 };
-export var addImagePlaceholder = function (view, dataUrl) {
+export var addImagePlaceholder = function (view, dataUrl, node) {
     var id = uuid();
     var tr = view.state.tr;
     if (!tr.selection.empty)
@@ -86,7 +99,7 @@ export var addImagePlaceholder = function (view, dataUrl) {
         if (pos == null)
             return;
         view.dispatch(view.state.tr
-            .replaceWith(pos, pos, view.state.schema.nodes.image.create({ src: url }))
+            .replaceWith(pos, pos, view.state.schema.nodes.image.create(__assign(__assign({}, node === null || node === void 0 ? void 0 : node.attrs), { src: url })))
             .setMeta(plugin, { remove: { id: id } }));
     };
     return { success: success, fail: fail };
@@ -119,17 +132,18 @@ export var uploadAndInsertImages = function (view, data) {
     var images = getImages(data);
     if (images.length === 0)
         return false;
+    var node = getNodeIfSelected(view.state, nodeNames.image);
     fileToDataUrl(images[0], function (canvas) { return __awaiter(void 0, void 0, void 0, function () {
         var uri, finish, s, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     uri = canvas.toDataURL('image/png');
-                    finish = addImagePlaceholder(view, uri);
+                    finish = addImagePlaceholder(view, uri, node);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4, opts.uploadImage(images[0])];
+                    return [4, opts.uploadImage(images[0], node)];
                 case 2:
                     s = _a.sent();
                     return [3, 4];

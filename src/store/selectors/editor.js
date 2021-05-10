@@ -89,7 +89,7 @@ export function selectionIsThisNodeType(state, stateKey, nodes) {
         var node = type;
         if (!node)
             return [key, false];
-        return [key, Boolean(getNodeIfSelected(editor.state, node))];
+        return [key, Boolean(getNodeIfSelected(editor.state, node.name))];
     }));
     return active;
 }

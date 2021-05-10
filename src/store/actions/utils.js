@@ -83,10 +83,12 @@ export function getLinkBoundsIfTheyExist(state) {
         return null;
     return linkBounds;
 }
-export function getNodeIfSelected(state, spec) {
+export function getNodeIfSelected(state, nodeName) {
+    if (state == null)
+        return null;
     var selected = isNodeSelection(state.selection);
     var node = state.selection.node;
-    if (selected && (node === null || node === void 0 ? void 0 : node.type.name) === spec.name) {
+    if (selected && (!nodeName || (node === null || node === void 0 ? void 0 : node.type.name) === nodeName)) {
         return node;
     }
     return null;

@@ -1,5 +1,6 @@
 import { Theme } from '@material-ui/core';
 import { EditorState, Transaction } from 'prosemirror-state';
+import { Node } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import { CitationFormat } from './types';
@@ -9,7 +10,7 @@ export declare type SearchContext = {
 };
 export declare type Options = {
     transformKeyToId: (key: any) => string | null;
-    uploadImage: (file: File) => Promise<string | null>;
+    uploadImage: (file: File, node: Node | null) => Promise<string | null>;
     modifyTransaction?: (stateKey: any, viewId: string, state: EditorState, transaction: Transaction) => Transaction;
     getDocId: () => string;
     addComment?: (stateKey: any, state: EditorState) => boolean;

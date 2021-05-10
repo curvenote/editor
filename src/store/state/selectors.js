@@ -19,30 +19,30 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 import { opts } from '../../connect';
 export function getEditor(state, stateKey) {
     if (stateKey == null)
-        return { state: null, views: [] };
+        return { state: null, counts: null, views: [] };
     var stateId = opts.transformKeyToId(stateKey);
     var editor = state.editor.state.editors[stateId !== null && stateId !== void 0 ? stateId : ''];
     if (!editor || !stateId)
-        return { state: null, views: [] };
+        return { state: null, counts: null, views: [] };
     var views = [];
     editor.viewIds.forEach(function (viewId) {
         var view = state.editor.state.views[viewId].view;
         views.push(view);
     });
     return {
-        state: editor.state,
+        state: editor.state, counts: editor.counts,
         views: views, stateId: stateId, viewIds: __spreadArrays(editor.viewIds),
     };
 }
 export function getEditorView(state, viewId) {
-    var blank = { viewId: viewId, stateId: [], view: null };
+    var blank = { viewId: viewId, stateId: null, view: null };
     if (viewId == null)
         return blank;
     var view = state.editor.state.views[viewId];
     return __assign({ viewId: viewId }, (view !== null && view !== void 0 ? view : blank));
 }
 export function getEditorState(state, stateKey) {
-    var blank = { state: null, viewIds: [] };
+    var blank = { state: null, viewIds: [], counts: null };
     var stateId = opts.transformKeyToId(stateKey);
     if (!stateId)
         return blank;

@@ -385,7 +385,7 @@ article {
   position: relative;
 }
 
-article.compact p {
+.compact p {
   font-size: 15px;
   margin-top: 3px;
   margin-bottom: 3px;
@@ -452,6 +452,12 @@ img.placeholder {
 }
 .hidden {
   display: none;
+}
+
+@media print {
+  .noprint {
+    display: none !important;
+  }
 }
 
 /*# sourceMappingURL=editor.css.map */

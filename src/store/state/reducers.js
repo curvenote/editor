@@ -18,6 +18,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
 import { createEditorState } from '../../prosemirror';
+import { countState } from './utils';
 export var initialState = {
     editors: {},
     views: {},
@@ -31,8 +32,10 @@ var editorReducer = function (state, action) {
             if (state.editors[stateId] !== undefined)
                 return state;
             var editorState = createEditorState(useSchema, stateKey, content, version, editable);
+            var counts = countState(editorState);
             return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_a = {}, _a[stateId] = {
                     state: editorState, viewIds: [], key: stateKey,
+                    counts: counts,
                 }, _a)) });
         }
         case SUBSCRIBE_EDITOR_VIEW: {
@@ -74,7 +77,8 @@ var editorReducer = function (state, action) {
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
-            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_d = {}, _d[stateId] = __assign(__assign({}, editor), { state: editorState }), _d)) });
+            var counts = countState(editorState);
+            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_d = {}, _d[stateId] = __assign(__assign({}, editor), { state: editorState, counts: counts }), _d)) });
         }
         default:
             return state;

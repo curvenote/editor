@@ -23,7 +23,7 @@ var useStyles = makeStyles(function () { return createStyles({
     },
 }); });
 var alwaysShow = new Set([SelectionKinds.cite]);
-var LinkToolbar = function (props) {
+var Toolbar = function (props) {
     var view = props.view, open = props.open, edit = props.edit, kind = props.kind;
     var classes = useStyles();
     var selectedId = useSelector(function (state) { return getEditorUI(state).viewId; });
@@ -34,11 +34,11 @@ var LinkToolbar = function (props) {
     return (React.createElement(Paper, { className: classes.paper, elevation: 10 },
         React.createElement("div", { className: classes.div },
             kind === SelectionKinds.link && React.createElement(LinkActions, { view: view }),
-            kind === SelectionKinds.image && React.createElement(AlignActions, { view: view }),
+            kind === SelectionKinds.image && React.createElement(AlignActions, { showCaption: true, view: view }),
             kind === SelectionKinds.iframe && React.createElement(AlignActions, { view: view }),
             kind === SelectionKinds.callout && React.createElement(CalloutActions, { view: view }),
             kind === SelectionKinds.cite && React.createElement(CitationPreview, { view: view }),
             kind === SelectionKinds.time && React.createElement(TimeActions, { view: view }))));
 };
-export default LinkToolbar;
+export default Toolbar;
 //# sourceMappingURL=Toolbar.js.map

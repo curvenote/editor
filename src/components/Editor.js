@@ -5,13 +5,14 @@ import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
 import { actions, selectors, } from '../store';
 var Editor = function (props) {
-    var stateKey = props.stateKey, viewId = props.viewId, autoUnsubscribe = props.autoUnsubscribe;
+    var stateKey = props.stateKey, viewId = props.viewId, className = props.className, autoUnsubscribe = props.autoUnsubscribe;
     var dispatch = useDispatch();
     var editorEl = useRef(null);
     var editorView = useRef();
     var editorState = useSelector(function (state) { var _a; return (_a = selectors.getEditorState(state, stateKey)) === null || _a === void 0 ? void 0 : _a.state; });
     var focused = useSelector(function (state) { return (selectors.isEditorViewFocused(state, stateKey, viewId)); });
     useEffect(function () {
+        var _a;
         if (editorView.current || !editorEl.current || !editorState)
             return;
         var doUpdateState = function (next) { return (dispatch(actions.updateEditorState(stateKey, viewId, next))); };
@@ -25,6 +26,8 @@ var Editor = function (props) {
             (_a = editorView.current) === null || _a === void 0 ? void 0 : _a.updateState(next);
         });
         editorView.current.dom.id = viewId;
+        if (className)
+            (_a = editorView.current.dom.classList).add.apply(_a, className.split(' '));
         editorView.current.dom.onfocus = function () {
             dispatch(actions.focusEditorView(viewId, true));
         };
@@ -55,6 +58,7 @@ var Editor = function (props) {
 };
 Editor.defaultProps = {
     autoUnsubscribe: true,
+    className: '',
 };
 export default Editor;
 //# sourceMappingURL=Editor.js.map

@@ -34,6 +34,12 @@ import WarningIcon from '@material-ui/icons/Warning';
 import ErrorIcon from '@material-ui/icons/Error';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
+import LooksOneIcon from '@material-ui/icons/LooksOne';
+import ShortTextIcon from '@material-ui/icons/ShortText';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import CancelIcon from '@material-ui/icons/Cancel';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import classNames from 'classnames';
 function SubscriptIcon(props) {
     return (React.createElement(SvgIcon, __assign({}, props),
         React.createElement("path", { d: "M16 7.41L11.41 12L16 16.59L14.59 18L10 13.41L5.41 18L4 16.59L8.59 12L4 7.41L5.41 6L10 10.59L14.59 6L16 7.41m5.85 13.62h-4.88v-1l.89-.8c.76-.65 1.32-1.19 1.7-1.63c.37-.44.56-.85.57-1.24a.898.898 0 0 0-.27-.7c-.18-.16-.47-.28-.86-.28c-.31 0-.58.06-.84.18l-.66.38l-.45-1.17c.27-.21.59-.39.98-.53s.82-.24 1.29-.24c.78.04 1.38.25 1.78.66c.4.41.62.93.62 1.57c-.01.56-.19 1.08-.54 1.55c-.34.47-.76.92-1.27 1.36l-.64.52v.02h2.58v1.35z" })));
@@ -49,6 +55,8 @@ function BracketsIcon(props) {
 var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 var deMacify = function (title) { return (mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-')); };
 var icons = {
+    cancel: { help: 'Cancel', Icon: CancelIcon },
+    enterSave: { help: 'Save', Icon: KeyboardReturnIcon },
     bold: { help: 'Bold ⌘B', Icon: FormatBoldIcon },
     italic: { help: 'Italic ⌘I', Icon: FormatItalicIcon },
     code: { help: 'Code ⌘⇧C', Icon: CodeIcon },
@@ -75,6 +83,9 @@ var icons = {
     warning: { help: 'Warning', Icon: WarningIcon },
     danger: { help: 'Danger', Icon: ErrorIcon },
     lift: { help: 'Remove from Container', Icon: SettingsOverscanIcon },
+    numbered: { help: 'Toggle Numbering', Icon: LooksOneIcon },
+    caption: { help: 'Show/Hide Caption', Icon: ShortTextIcon },
+    label: { help: 'Reference ID', Icon: LocalOfferIcon },
 };
 var useStyles = makeStyles(function (theme) { return createStyles({
     root: {
@@ -87,7 +98,7 @@ var useStyles = makeStyles(function (theme) { return createStyles({
             backgroundColor: theme.palette.text.secondary,
             color: 'white',
         },
-        '& button:hover svg.dangerous': {
+        '& button:hover svg.dangerous, svg.error': {
             backgroundColor: 'transparent',
             color: theme.palette.error.main,
         },
@@ -103,21 +114,23 @@ var useStyles = makeStyles(function (theme) { return createStyles({
     },
 }); });
 var MenuIcon = function (props) {
-    var kind = props.kind, active = props.active, dangerous = props.dangerous, disabled = props.disabled, onClick = props.onClick;
+    var kind = props.kind, active = props.active, dangerous = props.dangerous, error = props.error, disabled = props.disabled, onClick = props.onClick, title = props.title;
     var classes = useStyles();
     if (kind === 'divider')
         return React.createElement(Divider, { className: classes.hr, orientation: "vertical" });
     var _a = icons[kind], help = _a.help, Icon = _a.Icon;
-    return (React.createElement(Tooltip, { title: deMacify(help) },
+    return (React.createElement(Tooltip, { title: title || deMacify(help) },
         React.createElement("div", { className: classes.root },
             React.createElement(IconButton, { disabled: disabled, className: active ? 'active' : '', size: "small", onClickCapture: function (e) { e.stopPropagation(); e.preventDefault(); onClick === null || onClick === void 0 ? void 0 : onClick(e); }, disableRipple: true },
-                React.createElement(Icon, { fontSize: "small", className: dangerous ? 'dangerous' : '' })))));
+                React.createElement(Icon, { fontSize: "small", className: classNames({ dangerous: dangerous, error: error }) })))));
 };
 MenuIcon.defaultProps = {
     disabled: false,
     active: false,
     dangerous: false,
+    error: false,
     onClick: undefined,
+    title: undefined,
 };
 export default React.memo(MenuIcon);
 //# sourceMappingURL=Icon.js.map

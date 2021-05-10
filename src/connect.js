@@ -24,7 +24,7 @@ export var store = {
 };
 export var opts = {
     transformKeyToId: function (key) { return ref.opts().transformKeyToId(key); },
-    uploadImage: function (file) { return ref.opts().uploadImage(file); },
+    uploadImage: function (file, node) { return ref.opts().uploadImage(file, node); },
     modifyTransaction: function (stateKey, viewId, state, transaction) {
         var modifyTransaction = ref.opts().modifyTransaction;
         if (modifyTransaction) {

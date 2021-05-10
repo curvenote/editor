@@ -7,5 +7,5 @@ declare type Props = {
     edit: boolean;
     kind: SelectionKinds | null;
 };
-declare const LinkToolbar: (props: Props) => JSX.Element | null;
-export default LinkToolbar;
+declare const Toolbar: (props: Props) => JSX.Element | null;
+export default Toolbar;

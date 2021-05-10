@@ -107,23 +107,22 @@ store.subscribe(function () {
     var myst = document.getElementById('myst');
     var tex = document.getElementById('tex');
     var html = document.getElementById('html');
+    var editor = store.getState().editor.state.editors[stateKey];
     if (myst) {
-        var editorState = store.getState().editor.state.editors[stateKey].state;
-        myst.innerText = toMarkdown(editorState.doc);
+        myst.innerText = toMarkdown(editor.state.doc);
     }
     if (tex) {
-        var editorState = store.getState().editor.state.editors[stateKey].state;
         try {
-            tex.innerText = toTex(editorState.doc);
+            tex.innerText = toTex(editor.state.doc);
         }
         catch (error) {
             tex.innerText = 'There was an error :(';
         }
     }
     if (html) {
-        var editorState = store.getState().editor.state.editors[stateKey].state;
-        html.innerText = toHTML(editorState.doc, editorState.schema, document);
+        html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
     }
+    console.log(editor.counts);
 });
 ReactDOM.render(React.createElement(Provider, { store: store },
     React.createElement(React.StrictMode, null,
