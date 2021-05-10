@@ -48,6 +48,8 @@ class Wrapper extends Component<Props, State> {
             anchorEl={anchorEl}
             transition
             placement={placement}
+            className="noprint"
+            disablePortal
           >
             <Toolbar {...{
               view, open, edit, kind,

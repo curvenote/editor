@@ -5,6 +5,9 @@ import {
   EditorActionTypes, EditorsState,
 } from './types';
 import { createEditorState } from '../../prosemirror';
+import { countState } from './utils';
+
+
 
 export const initialState: EditorsState = {
   editors: {},
@@ -22,12 +25,13 @@ const editorReducer = (
       } = action.payload;
       if (state.editors[stateId] !== undefined) return state;
       const editorState = createEditorState(useSchema, stateKey, content, version, editable);
+      const counts = countState(editorState);
       return {
         ...state,
         editors: {
           ...state.editors,
           [stateId]: {
-            state: editorState, viewIds: [], key: stateKey,
+            state: editorState, viewIds: [], key: stateKey, counts,
           },
         },
       };
@@ -98,6 +102,7 @@ const editorReducer = (
       const { stateId, editorState } = action.payload;
       const editor = state.editors[stateId];
       if (editor === undefined) throw new Error('Editor state has not been setup.');
+      const counts = countState(editorState);
       return {
         ...state,
         editors: {
@@ -105,6 +110,7 @@ const editorReducer = (
           [stateId]: {
             ...editor,
             state: editorState,
+            counts,
           },
         },
       };

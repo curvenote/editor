@@ -1,4 +1,5 @@
-import { Node, NodeRange, NodeSpec } from 'prosemirror-model';
+import { schemas } from '@curvenote/schema';
+import { Node, NodeRange } from 'prosemirror-model';
 import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
 import { liftTarget } from 'prosemirror-transform';
 import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
@@ -97,10 +98,11 @@ export function getLinkBoundsIfTheyExist(state: EditorState) {
 }
 
 
-export function getNodeIfSelected(state: EditorState, spec: NodeSpec) {
+export function getNodeIfSelected(state: EditorState | null, nodeName?: schemas.nodeNames) {
+  if (state == null) return null;
   const selected = isNodeSelection(state.selection);
   const { node } = (state.selection as NodeSelection);
-  if (selected && node?.type.name === spec.name) {
+  if (selected && (!nodeName || node?.type.name === nodeName)) {
     return node;
   }
   return null;

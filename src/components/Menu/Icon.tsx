@@ -26,6 +26,12 @@ import WarningIcon from '@material-ui/icons/Warning';
 import ErrorIcon from '@material-ui/icons/Error';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
+import LooksOneIcon from '@material-ui/icons/LooksOne';
+import ShortTextIcon from '@material-ui/icons/ShortText';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import CancelIcon from '@material-ui/icons/Cancel';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import classNames from 'classnames';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
 
@@ -58,6 +64,8 @@ const deMacify = (title: string | React.ReactElement) => (
 );
 
 const icons = {
+  cancel: { help: 'Cancel', Icon: CancelIcon },
+  enterSave: { help: 'Save', Icon: KeyboardReturnIcon },
   bold: { help: 'Bold ⌘B', Icon: FormatBoldIcon },
   italic: { help: 'Italic ⌘I', Icon: FormatItalicIcon },
   code: { help: 'Code ⌘⇧C', Icon: CodeIcon },
@@ -84,6 +92,9 @@ const icons = {
   warning: { help: 'Warning', Icon: WarningIcon },
   danger: { help: 'Danger', Icon: ErrorIcon },
   lift: { help: 'Remove from Container', Icon: SettingsOverscanIcon },
+  numbered: { help: 'Toggle Numbering', Icon: LooksOneIcon },
+  caption: { help: 'Show/Hide Caption', Icon: ShortTextIcon },
+  label: { help: 'Reference ID', Icon: LocalOfferIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';
@@ -100,7 +111,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       backgroundColor: theme.palette.text.secondary,
       color: 'white',
     },
-    '& button:hover svg.dangerous': {
+    '& button:hover svg.dangerous, svg.error': {
       backgroundColor: 'transparent',
       color: theme.palette.error.main,
     },
@@ -121,12 +132,14 @@ type Props = {
   disabled?: boolean;
   active?: boolean;
   dangerous?: boolean;
+  error?: boolean;
+  title?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 const MenuIcon = (props: Props) => {
   const {
-    kind, active, dangerous, disabled, onClick,
+    kind, active, dangerous, error, disabled, onClick, title,
   } = props;
 
   const classes = useStyles();
@@ -136,7 +149,7 @@ const MenuIcon = (props: Props) => {
   const { help, Icon } = icons[kind];
 
   return (
-    <Tooltip title={deMacify(help)}>
+    <Tooltip title={title || deMacify(help)}>
       <div className={classes.root}>
         <IconButton
           disabled={disabled}
@@ -145,7 +158,7 @@ const MenuIcon = (props: Props) => {
           onClickCapture={(e) => { e.stopPropagation(); e.preventDefault(); onClick?.(e); }}
           disableRipple
         >
-          <Icon fontSize="small" className={dangerous ? 'dangerous' : ''} />
+          <Icon fontSize="small" className={classNames({ dangerous, error })} />
         </IconButton>
       </div>
     </Tooltip>
@@ -156,7 +169,9 @@ MenuIcon.defaultProps = {
   disabled: false,
   active: false,
   dangerous: false,
+  error: false,
   onClick: undefined,
+  title: undefined,
 };
 
 export default React.memo(MenuIcon);
