@@ -9,6 +9,9 @@ const image: NodeSpec = {
     title: { default: null },
     align: { default: 'center' },
     width: { default: DEFAULT_IMAGE_WIDTH },
+    numbered: { default: true },
+    caption: { default: false },
+    label: { default: '' },
   },
   group: NodeGroups.block,
   draggable: true,
@@ -21,14 +24,17 @@ const image: NodeSpec = {
         alt: dom.getAttribute('alt'),
         align: dom.getAttribute('align') ?? 'center',
         width: getImageWidth(dom.getAttribute('width')),
+        numbered: dom.hasAttribute('numbered'),
+        caption: dom.hasAttribute('caption'),
+        label: dom.getAttribute('label') ?? '',
       };
     },
   }],
   toDOM(node) {
     const {
-      src, alt, title, align, width,
+      src, alt, title, align, width, numbered, caption, label,
     } = node.attrs; return ['img', {
-      src, alt, title, align, width: `${width}%`,
+      src, alt, title, align, width: `${width}%`, numbered, caption, label,
     }];
   },
 };
@@ -37,12 +43,18 @@ const image: NodeSpec = {
 export const toMarkdown: FormatSerialize = (state, node) => {
   state.write(`![${state.esc(node.attrs.alt || '')}](${state.esc(node.attrs.src)
   }${node.attrs.title ? ` ${state.quote(node.attrs.title)}` : ''})`);
+  state.closeBlock(node);
 };
 
 export const toTex: FormatSerialize = (state, node) => {
-  const width = Math.round(node.attrs.width ?? DEFAULT_IMAGE_WIDTH);
+  const {
+    src, caption, numbered, label,
+    width: nodeWidth,
+    align: nodeAlign,
+  } = node.attrs;
+  const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
   let align = 'center';
-  switch (node.attrs.align?.toLowerCase()) {
+  switch (nodeAlign?.toLowerCase()) {
     case 'left':
       align = 'flushleft';
       break;
@@ -52,8 +64,17 @@ export const toTex: FormatSerialize = (state, node) => {
     default:
       break;
   }
-  const template = `\n\\begin{${align}}
-  \\includegraphics[width=${width / 100}\\linewidth]{${node.attrs.src}}
+  if (!caption) {
+    const template = `\n\\begin{${align}}
+  \\includegraphics[width=${width / 100}\\linewidth]{${src}}
+\\end{${align}}\n`;
+    state.write(template);
+    return;
+  }
+  const template = `\n\\begin{figure}[h]
+  \\centering
+  \\includegraphics[width=${width / 100}\\linewidth]{${src}}
+  \\caption{${src}.caption}${numbered ? `\n  \\label{${label}}` : ''}
 \\end{${align}}\n`;
   state.write(template);
 };
