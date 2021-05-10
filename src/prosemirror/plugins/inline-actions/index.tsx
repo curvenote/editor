@@ -56,7 +56,7 @@ class InlineActions {
     switch (node?.type.name as schemas.nodeNames | undefined) {
       case schemas.nodeNames.image: {
         const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
-        const anchorEl = wrapper?.getElementsByTagName?.('img')[0] ?? wrapper;
+        const anchorEl = wrapper?.getElementsByClassName('ProseMirror-node')[0] ?? wrapper?.getElementsByTagName?.('img')[0] ?? wrapper;
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.image, placement: 'bottom', anchorEl,
         });
@@ -64,7 +64,7 @@ class InlineActions {
       }
       case schemas.nodeNames.iframe: {
         const wrapper = view.nodeDOM(state.selection.from) as HTMLDivElement | undefined;
-        const anchorEl = wrapper?.getElementsByTagName?.('iframe')[0] ?? wrapper;
+        const anchorEl = wrapper?.getElementsByClassName('ProseMirror-node')[0] ?? wrapper?.getElementsByTagName?.('iframe')[0] ?? wrapper;
         this.wrapper?.setState({
           open: true, edit, kind: SelectionKinds.iframe, placement: 'bottom', anchorEl,
         });

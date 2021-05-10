@@ -36,7 +36,7 @@ type Props = {
 
 const alwaysShow = new Set([SelectionKinds.cite]);
 
-const LinkToolbar = (props: Props) => {
+const Toolbar = (props: Props) => {
   const {
     view, open, edit, kind,
   } = props;
@@ -56,7 +56,7 @@ const LinkToolbar = (props: Props) => {
     >
       <div className={classes.div}>
         {kind === SelectionKinds.link && <LinkActions view={view} />}
-        {kind === SelectionKinds.image && <AlignActions view={view} />}
+        {kind === SelectionKinds.image && <AlignActions showCaption view={view} />}
         {kind === SelectionKinds.iframe && <AlignActions view={view} />}
         {kind === SelectionKinds.callout && <CalloutActions view={view} />}
         {/* {kind === SelectionKinds.math && <AlignActions view={view} />} */}
@@ -68,4 +68,4 @@ const LinkToolbar = (props: Props) => {
   );
 };
 
-export default LinkToolbar;
+export default Toolbar;

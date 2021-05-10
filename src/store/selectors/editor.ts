@@ -3,6 +3,7 @@ import { NodeSelection } from 'prosemirror-state';
 import {
   findParentNode, ContentNodeWithPos, isNodeSelection, hasParentNode,
 } from 'prosemirror-utils';
+import { schemas } from '@curvenote/schema';
 import { getNodeIfSelected } from '../actions/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditor } from '../state/selectors';
@@ -108,7 +109,7 @@ export function selectionIsThisNodeType<T extends Record<string, any>>(
   const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
     const node = type as NodeType | undefined;
     if (!node) return [key, false];
-    return [key, Boolean(getNodeIfSelected(editor.state, node))];
+    return [key, Boolean(getNodeIfSelected(editor.state, node.name as schemas.nodeNames))];
   }));
   return active as Record<keyof T, boolean>;
 }

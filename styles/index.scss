@@ -8,3 +8,9 @@
 @use 'imgPlaceholder';
 
 .hidden { display: none; }
+
+@media print{
+  .noprint{
+    display: none !important;
+  }
+}

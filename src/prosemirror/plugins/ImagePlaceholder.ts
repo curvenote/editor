@@ -1,7 +1,10 @@
+import { nodeNames } from '@curvenote/schema/dist/schemas';
+import { Node } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
+import { getNodeIfSelected } from '../../store/actions/utils';
 
 export const key = new PluginKey('placeholder');
 
@@ -45,7 +48,7 @@ const findImagePlaceholder = (state: EditorState, id: string) => {
   return found.length ? found[0].from : null;
 };
 
-export const addImagePlaceholder = (view: EditorView, dataUrl: string) => {
+export const addImagePlaceholder = (view: EditorView, dataUrl: string, node: Node | null) => {
   const id = uuid();
   const { tr } = view.state;
   if (!tr.selection.empty) tr.deleteSelection();
@@ -60,7 +63,7 @@ export const addImagePlaceholder = (view: EditorView, dataUrl: string) => {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
     view.dispatch(view.state.tr
-      .replaceWith(pos, pos, view.state.schema.nodes.image.create({ src: url }))
+      .replaceWith(pos, pos, view.state.schema.nodes.image.create({ ...node?.attrs, src: url }))
       .setMeta(plugin, { remove: { id } }));
   };
   return { success, fail };
@@ -94,12 +97,13 @@ const fileToDataUrl = (
 export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | null): boolean => {
   const images = getImages(data);
   if (images.length === 0) return false;
+  const node = getNodeIfSelected(view.state, nodeNames.image);
   fileToDataUrl(images[0], async (canvas) => {
     const uri = canvas.toDataURL('image/png');
-    const finish = addImagePlaceholder(view, uri);
+    const finish = addImagePlaceholder(view, uri, node);
     let s: string | null;
     try {
-      s = await opts.uploadImage(images[0]);
+      s = await opts.uploadImage(images[0], node);
     } catch (error) {
       s = null;
     }

@@ -12,11 +12,14 @@ import {
 type Props = {
   stateKey: any;
   viewId: string;
+  className?: string;
   autoUnsubscribe?: boolean;
 };
 
 const Editor = (props: Props) => {
-  const { stateKey, viewId, autoUnsubscribe } = props;
+  const {
+    stateKey, viewId, className, autoUnsubscribe,
+  } = props;
 
   const dispatch = useDispatch<Dispatch>();
 
@@ -52,6 +55,8 @@ const Editor = (props: Props) => {
       },
     );
     editorView.current.dom.id = viewId;
+    if (className) editorView.current.dom.classList.add(...className.split(' '));
+
     (editorView.current.dom as HTMLElement).onfocus = () => {
       dispatch(actions.focusEditorView(viewId, true));
     };
@@ -85,6 +90,7 @@ const Editor = (props: Props) => {
 
 Editor.defaultProps = {
   autoUnsubscribe: true,
+  className: '',
 };
 
 export default Editor;
