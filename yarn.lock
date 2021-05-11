@@ -45,10 +45,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@curvenote/article@0.2.11":
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@curvenote/article/-/article-0.2.11.tgz#e7e8489337b065fd4c9dd647296682fd636e90d9"
-  integrity sha512-0qJIbtbKQwKQ/m7yPJAYNlrjFEQvPvcKJKMVk5zMkZBLJViu+NQvmz80JBRq9PfY9qesLInO3cbKNha6juf5uA==
+"@curvenote/article@0.2.12":
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/@curvenote/article/-/article-0.2.12.tgz#5b3886fad1da57e5feb33a127c168fe54ac29728"
+  integrity sha512-IXidgwjQWrLb24ednCzEeolPvcawwtGEU2tR3xFuh70efZNpPyZNA+hq+s6ciDZSGm43r3fpXqGU6mdSwgKNow==
   dependencies:
     "@curvenote/components" "^0.2.8"
     "@curvenote/runtime" "^0.2.7"
@@ -95,10 +95,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@curvenote/schema@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.3.3.tgz#f37532bfd4b46a92146d8c540801950bd7a83f30"
-  integrity sha512-c3Ip3Ax+ESAOLsltl6vmLrsuF0ap/yTvy2yiZ9NVX58+XX9kwQyqq8S+hz8Fs+9HWUPcZFKN368qo+/IwyKdvw==
+"@curvenote/schema@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.3.4.tgz#019ba586ab60c518884ba8c61e36f64b55fdb702"
+  integrity sha512-2XFtmxpBdVFuA+rRv8NgTKhfUG09bpbbDU+AZVk23yen7dx6wIaIf30EJfXF/ubKayJ2L2uFpns168MaDVBObg==
   dependencies:
     markdown-it "^12.0.4"
     markdown-it-myst "^0.0.7"
@@ -5708,10 +5708,10 @@ side-channel@^1.0.3, side-channel@^1.0.4:
     get-intrinsic "^1.0.2"
     object-inspect "^1.9.0"
 
-sidenotes@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/sidenotes/-/sidenotes-1.0.2.tgz#4674d9ce38d8cc812d4e77d3cfe00632703b3ef3"
-  integrity sha512-T6Yd9X5p5WTugB2lpomhGJtzawjyStJD4xDuB7/4P7PWuOT2APbU2kOo7oxHOlVTMt8Lhbv/BKQyuHK/ytn2hg==
+sidenotes@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/sidenotes/-/sidenotes-1.0.4.tgz#007519bfbfba803219bfc3ce3981b2f5260873a9"
+  integrity sha512-8vmBCN8jsjpNNTAJakWxrUoWGT4Nsft6aUWmn/Q74BTVj7GasO4Iwuhjl3bMcN9nRK7EDIshvR+KVldBzN/SgQ==
 
 signal-exit@^3.0.0, signal-exit@^3.0.3:
   version "3.0.3"
