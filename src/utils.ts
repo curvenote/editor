@@ -12,6 +12,13 @@ export const getImageWidth = (width?: string) => {
   return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
 };
 
+export const readBooleanDomAttr = (dom: HTMLElement, attr: string): boolean => {
+  if (!dom.hasAttribute(attr)) return false;
+  const val = dom.getAttribute(attr);
+  if (val?.toLowerCase() === 'false') return false;
+  return true;
+};
+
 export const createAttr = (name: string, func: boolean | 'only' = true, defaultValue: string | false = ''): Attr => {
   if (defaultValue === false) {
     return {

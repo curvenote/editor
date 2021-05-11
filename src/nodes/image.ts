@@ -1,6 +1,6 @@
 import { NodeSpec } from 'prosemirror-model';
 import { NodeGroups, FormatSerialize } from './types';
-import { DEFAULT_IMAGE_WIDTH, getImageWidth } from '../utils';
+import { DEFAULT_IMAGE_WIDTH, getImageWidth, readBooleanDomAttr } from '../utils';
 
 const image: NodeSpec = {
   attrs: {
@@ -24,8 +24,8 @@ const image: NodeSpec = {
         alt: dom.getAttribute('alt'),
         align: dom.getAttribute('align') ?? 'center',
         width: getImageWidth(dom.getAttribute('width')),
-        numbered: dom.hasAttribute('numbered'),
-        caption: dom.hasAttribute('caption'),
+        numbered: readBooleanDomAttr(dom, 'numbered'),
+        caption: readBooleanDomAttr(dom, 'caption'),
         label: dom.getAttribute('label') ?? '',
       };
     },
