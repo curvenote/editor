@@ -32,7 +32,7 @@
   caret-color: transparent;
 }
 
-.ProseMirror-selectednode {
+.ProseMirror-focused .ProseMirror-selectednode {
   cursor: move;
 }
 
@@ -117,10 +117,6 @@ article pre {
   border: 1px solid #E4E4E4;
   background-color: #FAFAFA;
   padding: 10px;
-}
-article time {
-  border: 1px solid #ddd;
-  border-bottom-color: #8cf;
 }
 article dl {
   color: #4D4D4D;
@@ -418,7 +414,7 @@ article aside.margin {
   background-color: #fdfdfd;
   border: 1px solid #ddd;
 }
-.ProseMirror-focused r-display {
+.ProseMirror-focused time, .ProseMirror-focused r-display {
   border: 1px solid #ddd;
   border-bottom-color: #8cf;
 }
