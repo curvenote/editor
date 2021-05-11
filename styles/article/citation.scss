@@ -17,6 +17,7 @@ article {
     border-bottom: 1px dotted #363636;
     color: #363636;
     text-decoration: none;
+    user-select: all;
   }
   .citation > span:hover {
     cursor: zoom-in;

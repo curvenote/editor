@@ -26,6 +26,9 @@ article {
   aside.margin {
     border: 1px solid transparent;
   }
+  time {
+    user-select: all;
+  }
 }
 .ProseMirror-focused {
   aside.margin {
