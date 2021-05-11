@@ -370,6 +370,7 @@ article .citation > span {
   border-bottom: 1px dotted #363636;
   color: #363636;
   text-decoration: none;
+  user-select: all;
 }
 article .citation > span:hover {
   cursor: zoom-in;
@@ -408,6 +409,9 @@ article .selected li.ProseMirror-selectednode:after {
 /* Make sure that you can see the asides!! */
 article aside.margin {
   border: 1px solid transparent;
+}
+article time {
+  user-select: all;
 }
 
 .ProseMirror-focused aside.margin {
