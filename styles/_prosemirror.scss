@@ -19,6 +19,6 @@
 .ProseMirror-hideselection *::-moz-selection { background: transparent; }
 .ProseMirror-hideselection { caret-color: transparent; }
 
-.ProseMirror-selectednode {
+.ProseMirror-focused .ProseMirror-selectednode {
   cursor: move;
 };
