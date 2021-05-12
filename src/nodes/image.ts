@@ -75,7 +75,7 @@ export const toTex: FormatSerialize = (state, node) => {
   \\centering
   \\includegraphics[width=${width / 100}\\linewidth]{${src}}
   \\caption{${src}.caption}${numbered ? `\n  \\label{${label}}` : ''}
-\\end{${align}}\n`;
+\\end{figure}\n`;
   state.write(template);
 };
 
