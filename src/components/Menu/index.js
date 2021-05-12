@@ -63,35 +63,55 @@ var EditorMenu = function (props) {
     var wrapInline = function (node) { return function () { return dispatch(actions.insertInlineNode(node)); }; };
     var command = function (name) { return function () { return dispatch(actions.executeCommand(name, viewId)); }; };
     var toggleBrackets = useCallback(function () { return dispatch(toggleCitationBrackets()); }, []);
+    var clickBold = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strong); }, [stateId, viewId]);
+    var clickItalic = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.em); }, [stateId, viewId]);
+    var clickUnderline = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.underline); }, [stateId, viewId]);
+    var clickStrike = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strikethrough); }, [stateId, viewId]);
+    var clickCode = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.code); }, [stateId, viewId]);
+    var clickSub = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.subscript); }, [stateId, viewId]);
+    var clickSuper = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.superscript); }, [stateId, viewId]);
+    var clickUl = useCallback(function () { return command(CommandNames.bullet_list); }, [stateId, viewId]);
+    var clickOl = useCallback(function () { return command(CommandNames.ordered_list); }, [stateId, viewId]);
+    var clickLink = useCallback(function () { return command(CommandNames.link); }, [stateId, viewId]);
+    var clickMath = useCallback(function () { return wrapInline(schema === null || schema === void 0 ? void 0 : schema.nodes.math); }, [stateId, viewId]);
+    var clickEquation = useCallback(function () { return command(CommandNames.equation); }, [stateId, viewId]);
+    var clickCite = useCallback(function () { return command(CommandNames.citation); }, [stateId, viewId]);
+    var clickHr = useCallback(function () { return command(CommandNames.horizontal_rule); }, [stateId, viewId]);
+    var clickCodeBlk = useCallback(function () { return command(CommandNames.code); }, [stateId, viewId]);
+    var clickYoutube = useCallback(function () { return command(CommandNames.youtube); }, [stateId, viewId]);
+    var clickVimeo = useCallback(function () { return command(CommandNames.vimeo); }, [stateId, viewId]);
+    var clickLoom = useCallback(function () { return command(CommandNames.loom); }, [stateId, viewId]);
+    var clickMiro = useCallback(function () { return command(CommandNames.miro); }, [stateId, viewId]);
+    var clickIframe = useCallback(function () { return command(CommandNames.iframe); }, [stateId, viewId]);
     return (React.createElement(Grid, { container: true, alignItems: "center", className: classes.root + " " + (standAlone ? classes.center : classes.pad), wrap: "nowrap" },
         !standAlone && React.createElement(MenuIcon, { kind: "divider" }),
-        React.createElement(MenuIcon, { kind: "bold", active: active.strong, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strong) }),
-        React.createElement(MenuIcon, { kind: "italic", active: active.em, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.em) }),
-        React.createElement(MenuIcon, { kind: "underline", active: active.underline, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.underline) }),
-        React.createElement(MenuIcon, { kind: "strikethrough", active: active.strike, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strikethrough) }),
-        React.createElement(MenuIcon, { kind: "code", active: active.code, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.code) }),
-        React.createElement(MenuIcon, { kind: "subscript", active: active.sub, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.subscript) }),
-        React.createElement(MenuIcon, { kind: "superscript", active: active.sup, disabled: off, onClick: toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.superscript) }),
+        React.createElement(MenuIcon, { kind: "bold", active: active.strong, disabled: off, onClick: clickBold }),
+        React.createElement(MenuIcon, { kind: "italic", active: active.em, disabled: off, onClick: clickItalic }),
+        React.createElement(MenuIcon, { kind: "underline", active: active.underline, disabled: off, onClick: clickUnderline }),
+        React.createElement(MenuIcon, { kind: "strikethrough", active: active.strike, disabled: off, onClick: clickStrike }),
+        React.createElement(MenuIcon, { kind: "code", active: active.code, disabled: off, onClick: clickCode }),
+        React.createElement(MenuIcon, { kind: "subscript", active: active.sub, disabled: off, onClick: clickSub }),
+        React.createElement(MenuIcon, { kind: "superscript", active: active.sup, disabled: off, onClick: clickSuper }),
         React.createElement(MenuIcon, { kind: "divider" }),
-        React.createElement(MenuIcon, { kind: "ul", active: parents.ul, disabled: off || !(schema === null || schema === void 0 ? void 0 : schema.nodes.bullet_list), onClick: command(CommandNames.bullet_list) }),
-        React.createElement(MenuIcon, { kind: "ol", active: parents.ol, disabled: off || !(schema === null || schema === void 0 ? void 0 : schema.nodes.ordered_list), onClick: command(CommandNames.ordered_list) }),
+        React.createElement(MenuIcon, { kind: "ul", active: parents.ul, disabled: off || !(schema === null || schema === void 0 ? void 0 : schema.nodes.bullet_list), onClick: clickUl }),
+        React.createElement(MenuIcon, { kind: "ol", active: parents.ol, disabled: off || !(schema === null || schema === void 0 ? void 0 : schema.nodes.ordered_list), onClick: clickOl }),
         React.createElement(MenuIcon, { kind: "divider" }),
-        React.createElement(MenuIcon, { kind: "link", active: active.linked, disabled: off, onClick: command(CommandNames.link) }),
+        React.createElement(MenuIcon, { kind: "link", active: active.linked, disabled: off, onClick: clickLink }),
         nodes.cite && React.createElement(MenuIcon, { kind: "brackets", active: parents.cite_group, disabled: off, onClick: toggleBrackets }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "more", disabled: off, onClick: onOpen, "aria-controls": "insert-menu" }),
         Boolean(anchorEl) && (React.createElement(Menu, { id: "insert-menu", anchorEl: anchorEl, keepMounted: true, open: Boolean(anchorEl), onClose: onClose },
             React.createElement("div", { onClick: function () { return onClose(); } },
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.math) && React.createElement(MenuAction, { kind: "math", disabled: off, action: wrapInline(schema === null || schema === void 0 ? void 0 : schema.nodes.math), title: "Inline Math" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.equation) && React.createElement(MenuAction, { kind: "math", disabled: off, action: command(CommandNames.equation), title: "Equation Block" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.cite) && React.createElement(MenuAction, { kind: "link", disabled: off, action: command(CommandNames.citation), title: "Citation" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.horizontal_rule) && React.createElement(MenuAction, { kind: "hr", disabled: off, action: command(CommandNames.horizontal_rule), title: "Divider" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.code_block) && React.createElement(MenuAction, { kind: "code", disabled: off, action: command(CommandNames.code), title: "Code" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "youtube", disabled: off, action: command(CommandNames.youtube), title: "YouTube Video" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "video", disabled: off, action: command(CommandNames.vimeo), title: "Vimeo Video" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "video", disabled: off, action: command(CommandNames.loom), title: "Loom Video" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "iframe", disabled: off, action: command(CommandNames.miro), title: "Miro Board" }),
-                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "iframe", disabled: off, action: command(CommandNames.iframe), title: "Embed an IFrame" }))))));
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.math) && React.createElement(MenuAction, { kind: "math", disabled: off, action: clickMath, title: "Inline Math" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.equation) && React.createElement(MenuAction, { kind: "math", disabled: off, action: clickEquation, title: "Equation Block" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.cite) && React.createElement(MenuAction, { kind: "link", disabled: off, action: clickCite, title: "Citation" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.horizontal_rule) && React.createElement(MenuAction, { kind: "hr", disabled: off, action: clickHr, title: "Divider" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.code_block) && React.createElement(MenuAction, { kind: "code", disabled: off, action: clickCodeBlk, title: "Code" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "youtube", disabled: off, action: clickYoutube, title: "YouTube Video" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "video", disabled: off, action: clickVimeo, title: "Vimeo Video" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "video", disabled: off, action: clickLoom, title: "Loom Video" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "iframe", disabled: off, action: clickMiro, title: "Miro Board" }),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && React.createElement(MenuAction, { kind: "iframe", disabled: off, action: clickIframe, title: "Embed an IFrame" }))))));
 };
 EditorMenu.defaultProps = {
     standAlone: false,
