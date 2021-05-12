@@ -15,6 +15,10 @@ const uiReducer = (
   switch (action.type) {
     case SELECT_EDITOR_VIEW: {
       const { stateId, viewId } = action.payload;
+      if (state.stateId === stateId && state.viewId === viewId) {
+        // No change
+        return state;
+      }
       return {
         ...state,
         stateId,
