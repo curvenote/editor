@@ -20,6 +20,9 @@ var uiReducer = function (state, action) {
     switch (action.type) {
         case SELECT_EDITOR_VIEW: {
             var _a = action.payload, stateId = _a.stateId, viewId = _a.viewId;
+            if (state.stateId === stateId && state.viewId === viewId) {
+                return state;
+            }
             return __assign(__assign({}, state), { stateId: stateId,
                 viewId: viewId });
         }
