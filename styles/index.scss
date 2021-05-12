@@ -8,6 +8,8 @@
 @use 'imgPlaceholder';
 
 .hidden { display: none; }
+// This allows it to be overtop of the asides and modals
+.above-modals { z-index: 1301; }
 
 @media print{
   .noprint{

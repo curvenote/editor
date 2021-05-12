@@ -2,7 +2,7 @@
 import { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { Node } from 'prosemirror-model';
+import { Node, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import setupComponents from './components';
@@ -15,6 +15,7 @@ export type SearchContext = {
 
 export type Options = {
   transformKeyToId: (key: any) => string | null;
+  handlePaste?: (view: EditorView, event: ClipboardEvent, slice: Slice) => boolean;
   uploadImage: (file: File, node: Node | null) => Promise<string | null>;
   modifyTransaction?: (
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction
@@ -68,6 +69,9 @@ export const store: Pick<Store, 'getState' | 'dispatch'> = {
 export const opts: Required<Options> = {
   transformKeyToId: (key: any) => ref.opts().transformKeyToId(key),
   uploadImage(file: File, node: Node | null) { return ref.opts().uploadImage(file, node); },
+  handlePaste(view: EditorView, event: ClipboardEvent, slice: Slice) {
+    return ref.opts().handlePaste?.(view, event, slice) ?? false;
+  },
   modifyTransaction(
     stateKey: any, viewId: string, state: EditorState, transaction: Transaction,
   ) {

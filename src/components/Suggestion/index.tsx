@@ -24,9 +24,6 @@ const useStyles = makeStyles(() => createStyles({
     overflowY: 'scroll',
     margin: '10px 0',
   },
-  aboveModals: {
-    zIndex: 1301,
-  },
 }));
 
 
@@ -41,7 +38,7 @@ const Suggestion = () => {
   if (!anchorEl) return null;
 
   return (
-    <Popper className={classes.aboveModals} open={open} anchorEl={anchorEl} placement="bottom-start">
+    <Popper className="above-modals" open={open} anchorEl={anchorEl} placement="bottom-start">
       <Paper
         className={classes.root}
         elevation={10}

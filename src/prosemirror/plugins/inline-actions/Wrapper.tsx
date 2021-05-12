@@ -43,12 +43,11 @@ class Wrapper extends Component<Props, State> {
       <ThemeProvider theme={opts.theme}>
         <Provider store={ref.store()}>
           <Popper
-            style={{ zIndex: 1301 }} // This allows it to be overtop of the asides and modals
             open={open}
             anchorEl={anchorEl}
             transition
             placement={placement}
-            className="noprint"
+            className="noprint above-modals"
             disablePortal
           >
             <Toolbar {...{

@@ -16,6 +16,7 @@ const testLink = (possibleLink: string) => {
 };
 
 export const addLink = (view: EditorView, data: DataTransfer | null) => {
+  // TODO: This should allow html if it exists. And not match mutliple URLs.
   const href = data?.getData('text/plain') ?? '';
   if (!testLink(href)) return false;
   const { schema } = view.state;

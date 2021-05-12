@@ -36,6 +36,7 @@ export function createEditorView(
   state: EditorState,
   dispatch: (tr: Transaction) => void,
 ): EditorView {
+  let shiftKey = false; // https://discuss.prosemirror.net/t/change-transformpasted-behaviour-when-shift-key-is-pressed/949/3
   const editorView = new EditorView({ mount: dom }, {
     state,
     dispatchTransaction: dispatch,
@@ -71,10 +72,16 @@ export function createEditorView(
     editable: (s) => isEditable(s),
     // handleClickOn: (view, pos, node, nodePos, event, direct) => {
     // },
-    handlePaste: (view, event) => {
+    handleKeyDown(_, event) {
+      shiftKey = event.shiftKey;
+      return false;
+    },
+    handlePaste: (view, event, slice) => {
+      if (shiftKey) return false;
       if (!view.hasFocus()) return true;
       return (
-        addLink(view, event.clipboardData)
+        opts.handlePaste(view, event, slice)
+        || addLink(view, event.clipboardData)
         || uploadAndInsertImages(view, event.clipboardData)
       );
     },
