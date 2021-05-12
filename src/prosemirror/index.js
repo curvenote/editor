@@ -36,6 +36,7 @@ export function createEditorState(useSchema, stateKey, content, version, startEd
     return state;
 }
 export function createEditorView(dom, state, dispatch) {
+    var shiftKey = false;
     var editorView = new EditorView({ mount: dom }, {
         state: state,
         dispatchTransaction: dispatch,
@@ -58,10 +59,17 @@ export function createEditorView(dom, state, dispatch) {
                 return new views.TimeView(node, view, getPos);
             }, cite: views.CiteView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
-        handlePaste: function (view, event) {
+        handleKeyDown: function (_, event) {
+            shiftKey = event.shiftKey;
+            return false;
+        },
+        handlePaste: function (view, event, slice) {
+            if (shiftKey)
+                return false;
             if (!view.hasFocus())
                 return true;
-            return (addLink(view, event.clipboardData)
+            return (opts.handlePaste(view, event, slice)
+                || addLink(view, event.clipboardData)
                 || uploadAndInsertImages(view, event.clipboardData));
         },
         handleDrop: function (view, event) { return (uploadAndInsertImages(view, event.dataTransfer)); },

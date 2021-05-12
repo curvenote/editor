@@ -437,6 +437,7 @@ img.placeholder {
   box-shadow: 0 0 0 0 black;
   animation: pulsePlaceholder 2s infinite;
   animation-timing-function: ease;
+  display: block;
 }
 
 @keyframes pulsePlaceholder {
@@ -452,6 +453,10 @@ img.placeholder {
 }
 .hidden {
   display: none;
+}
+
+.above-modals {
+  z-index: 1301;
 }
 
 @media print {

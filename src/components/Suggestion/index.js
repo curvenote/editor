@@ -17,9 +17,6 @@ var useStyles = makeStyles(function () { return createStyles({
         overflowY: 'scroll',
         margin: '10px 0',
     },
-    aboveModals: {
-        zIndex: 1301,
-    },
 }); });
 var Suggestion = function () {
     var _a = useSelector(function (state) { return selectors.getSuggestion(state); }, isEqual), open = _a.open, kind = _a.kind, results = _a.results;
@@ -29,7 +26,7 @@ var Suggestion = function () {
     var anchorEl = document.getElementById(SUGGESTION_ID);
     if (!anchorEl)
         return null;
-    return (React.createElement(Popper, { className: classes.aboveModals, open: open, anchorEl: anchorEl, placement: "bottom-start" },
+    return (React.createElement(Popper, { className: "above-modals", open: open, anchorEl: anchorEl, placement: "bottom-start" },
         React.createElement(Paper, { className: classes.root, elevation: 10 },
             kind === SuggestionKind.emoji && React.createElement(EmojiSuggestions, null),
             kind === SuggestionKind.command && React.createElement(CommandSuggestions, null),

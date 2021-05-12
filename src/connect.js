@@ -25,6 +25,10 @@ export var store = {
 export var opts = {
     transformKeyToId: function (key) { return ref.opts().transformKeyToId(key); },
     uploadImage: function (file, node) { return ref.opts().uploadImage(file, node); },
+    handlePaste: function (view, event, slice) {
+        var _a, _b, _c;
+        return (_c = (_b = (_a = ref.opts()).handlePaste) === null || _b === void 0 ? void 0 : _b.call(_a, view, event, slice)) !== null && _c !== void 0 ? _c : false;
+    },
     modifyTransaction: function (stateKey, viewId, state, transaction) {
         var modifyTransaction = ref.opts().modifyTransaction;
         if (modifyTransaction) {
