@@ -85,21 +85,42 @@ const EditorMenu = (props: Props) => {
   const command = (name: CommandNames) => () => dispatch(actions.executeCommand(name, viewId));
   const toggleBrackets = useCallback(() => dispatch(toggleCitationBrackets()), []);
 
+  const clickBold = useCallback(() => toggleMark(schema?.marks.strong), [stateId, viewId]);
+  const clickItalic = useCallback(() => toggleMark(schema?.marks.em), [stateId, viewId]);
+  const clickUnderline = useCallback(() => toggleMark(schema?.marks.underline), [stateId, viewId]);
+  const clickStrike = useCallback(() => toggleMark(schema?.marks.strikethrough), [stateId, viewId]);
+  const clickCode = useCallback(() => toggleMark(schema?.marks.code), [stateId, viewId]);
+  const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [stateId, viewId]);
+  const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [stateId, viewId]);
+  const clickUl = useCallback(() => command(CommandNames.bullet_list), [stateId, viewId]);
+  const clickOl = useCallback(() => command(CommandNames.ordered_list), [stateId, viewId]);
+  const clickLink = useCallback(() => command(CommandNames.link), [stateId, viewId]);
+  const clickMath = useCallback(() => wrapInline(schema?.nodes.math), [stateId, viewId]);
+  const clickEquation = useCallback(() => command(CommandNames.equation), [stateId, viewId]);
+  const clickCite = useCallback(() => command(CommandNames.citation), [stateId, viewId]);
+  const clickHr = useCallback(() => command(CommandNames.horizontal_rule), [stateId, viewId]);
+  const clickCodeBlk = useCallback(() => command(CommandNames.code), [stateId, viewId]);
+  const clickYoutube = useCallback(() => command(CommandNames.youtube), [stateId, viewId]);
+  const clickVimeo = useCallback(() => command(CommandNames.vimeo), [stateId, viewId]);
+  const clickLoom = useCallback(() => command(CommandNames.loom), [stateId, viewId]);
+  const clickMiro = useCallback(() => command(CommandNames.miro), [stateId, viewId]);
+  const clickIframe = useCallback(() => command(CommandNames.iframe), [stateId, viewId]);
+
   return (
     <Grid container alignItems="center" className={`${classes.root} ${standAlone ? classes.center : classes.pad}`} wrap="nowrap">
       {!standAlone && <MenuIcon kind="divider" />}
-      <MenuIcon kind="bold" active={active.strong} disabled={off} onClick={toggleMark(schema?.marks.strong)} />
-      <MenuIcon kind="italic" active={active.em} disabled={off} onClick={toggleMark(schema?.marks.em)} />
-      <MenuIcon kind="underline" active={active.underline} disabled={off} onClick={toggleMark(schema?.marks.underline)} />
-      <MenuIcon kind="strikethrough" active={active.strike} disabled={off} onClick={toggleMark(schema?.marks.strikethrough)} />
-      <MenuIcon kind="code" active={active.code} disabled={off} onClick={toggleMark(schema?.marks.code)} />
-      <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={toggleMark(schema?.marks.subscript)} />
-      <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={toggleMark(schema?.marks.superscript)} />
+      <MenuIcon kind="bold" active={active.strong} disabled={off} onClick={clickBold} />
+      <MenuIcon kind="italic" active={active.em} disabled={off} onClick={clickItalic} />
+      <MenuIcon kind="underline" active={active.underline} disabled={off} onClick={clickUnderline} />
+      <MenuIcon kind="strikethrough" active={active.strike} disabled={off} onClick={clickStrike} />
+      <MenuIcon kind="code" active={active.code} disabled={off} onClick={clickCode} />
+      <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
+      <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSuper} />
       <MenuIcon kind="divider" />
-      <MenuIcon kind="ul" active={parents.ul} disabled={off || !schema?.nodes.bullet_list} onClick={command(CommandNames.bullet_list)} />
-      <MenuIcon kind="ol" active={parents.ol} disabled={off || !schema?.nodes.ordered_list} onClick={command(CommandNames.ordered_list)} />
+      <MenuIcon kind="ul" active={parents.ul} disabled={off || !schema?.nodes.bullet_list} onClick={clickUl} />
+      <MenuIcon kind="ol" active={parents.ol} disabled={off || !schema?.nodes.ordered_list} onClick={clickOl} />
       <MenuIcon kind="divider" />
-      <MenuIcon kind="link" active={active.linked} disabled={off} onClick={command(CommandNames.link)} />
+      <MenuIcon kind="link" active={active.linked} disabled={off} onClick={clickLink} />
       {nodes.cite && <MenuIcon kind="brackets" active={parents.cite_group} disabled={off} onClick={toggleBrackets} />}
       <MenuIcon kind="divider" />
       <MenuIcon kind="more" disabled={off} onClick={onOpen} aria-controls="insert-menu" />
@@ -112,16 +133,16 @@ const EditorMenu = (props: Props) => {
           onClose={onClose}
         >
           <div onClick={() => onClose()}>
-            {schema?.nodes.math && <MenuAction kind="math" disabled={off} action={wrapInline(schema?.nodes.math)} title="Inline Math" />}
-            {schema?.nodes.equation && <MenuAction kind="math" disabled={off} action={command(CommandNames.equation)} title="Equation Block" />}
-            {schema?.nodes.cite && <MenuAction kind="link" disabled={off} action={command(CommandNames.citation)} title="Citation" />}
-            {schema?.nodes.horizontal_rule && <MenuAction kind="hr" disabled={off} action={command(CommandNames.horizontal_rule)} title="Divider" />}
-            {schema?.nodes.code_block && <MenuAction kind="code" disabled={off} action={command(CommandNames.code)} title="Code" />}
-            {schema?.nodes.iframe && <MenuAction kind="youtube" disabled={off} action={command(CommandNames.youtube)} title="YouTube Video" />}
-            {schema?.nodes.iframe && <MenuAction kind="video" disabled={off} action={command(CommandNames.vimeo)} title="Vimeo Video" />}
-            {schema?.nodes.iframe && <MenuAction kind="video" disabled={off} action={command(CommandNames.loom)} title="Loom Video" />}
-            {schema?.nodes.iframe && <MenuAction kind="iframe" disabled={off} action={command(CommandNames.miro)} title="Miro Board" />}
-            {schema?.nodes.iframe && <MenuAction kind="iframe" disabled={off} action={command(CommandNames.iframe)} title="Embed an IFrame" />}
+            {schema?.nodes.math && <MenuAction kind="math" disabled={off} action={clickMath} title="Inline Math" />}
+            {schema?.nodes.equation && <MenuAction kind="math" disabled={off} action={clickEquation} title="Equation Block" />}
+            {schema?.nodes.cite && <MenuAction kind="link" disabled={off} action={clickCite} title="Citation" />}
+            {schema?.nodes.horizontal_rule && <MenuAction kind="hr" disabled={off} action={clickHr} title="Divider" />}
+            {schema?.nodes.code_block && <MenuAction kind="code" disabled={off} action={clickCodeBlk} title="Code" />}
+            {schema?.nodes.iframe && <MenuAction kind="youtube" disabled={off} action={clickYoutube} title="YouTube Video" />}
+            {schema?.nodes.iframe && <MenuAction kind="video" disabled={off} action={clickVimeo} title="Vimeo Video" />}
+            {schema?.nodes.iframe && <MenuAction kind="video" disabled={off} action={clickLoom} title="Loom Video" />}
+            {schema?.nodes.iframe && <MenuAction kind="iframe" disabled={off} action={clickMiro} title="Miro Board" />}
+            {schema?.nodes.iframe && <MenuAction kind="iframe" disabled={off} action={clickIframe} title="Embed an IFrame" />}
           </div>
         </Menu>
       )}
