@@ -59,9 +59,9 @@ var EditorMenu = function (props) {
     var nodes = useSelector(function (state) { return selectors.selectionIsThisNodeType(state, stateId, {
         cite: schema === null || schema === void 0 ? void 0 : schema.nodes.cite,
     }); }, isEqual);
-    var toggleMark = function (mark) { return function () { return dispatch(actions.toggleMark(stateId, viewId, mark)); }; };
-    var wrapInline = function (node) { return function () { return dispatch(actions.insertInlineNode(node)); }; };
-    var command = function (name) { return function () { return dispatch(actions.executeCommand(name, viewId)); }; };
+    var toggleMark = function (mark) { return dispatch(actions.toggleMark(stateId, viewId, mark)); };
+    var wrapInline = function (node) { return dispatch(actions.insertInlineNode(node)); };
+    var command = function (name) { return dispatch(actions.executeCommand(name, viewId)); };
     var toggleBrackets = useCallback(function () { return dispatch(toggleCitationBrackets()); }, []);
     var clickBold = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strong); }, [stateId, viewId]);
     var clickItalic = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.em); }, [stateId, viewId]);
