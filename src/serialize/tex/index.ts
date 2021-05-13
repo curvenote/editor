@@ -6,6 +6,7 @@ import {
 import * as nodes from '../../nodes';
 import { FormatSerialize } from '../../nodes/types';
 import { isPlainURL } from '../markdown/utils';
+import { nodeNames } from '../../schemas';
 
 const heading: FormatSerialize = (state, node) => {
   const { level } = node.attrs;
@@ -22,7 +23,14 @@ const heading: FormatSerialize = (state, node) => {
 };
 
 export const texSerializer = new MarkdownSerializer({
-  text(state, node) {
+  text(state, node, parent) {
+    if (
+      parent.type.name === nodeNames.equation
+      || parent.type.name === nodeNames.math
+    ) {
+      state.text(node.text ?? '', false);
+      return;
+    }
     // Funky placeholders (unlikely to be written ...?!)
     const backslashSpace = '💥🎯BACKSLASHSPACE🎯💥';
     const backslash = '💥🎯BACKSLASH🎯💥';
@@ -120,5 +128,5 @@ export const texSerializer = new MarkdownSerializer({
 
 
 export function toTex(doc: ProsemirrorNode) {
-  return texSerializer.serialize(doc);
+  return texSerializer.serialize(doc, { tightLists: true });
 }

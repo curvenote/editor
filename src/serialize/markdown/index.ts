@@ -107,7 +107,7 @@ export const markdownSerializer = new MarkdownSerializer({
 });
 
 export function toMarkdown(doc: ProsemirrorNode) {
-  const md = markdownSerializer.serialize(doc);
+  const md = markdownSerializer.serialize(doc, { tightLists: true });
   const post = mdPostProcess(md);
   return post;
 }
