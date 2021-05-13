@@ -80,9 +80,9 @@ const EditorMenu = (props: Props) => {
   // TODO: make this memoized? Needs to be done carefully.
 
   // Helper functions
-  const toggleMark = (mark?: MarkType) => () => dispatch(actions.toggleMark(stateId, viewId, mark));
-  const wrapInline = (node?: NodeType) => () => dispatch(actions.insertInlineNode(node));
-  const command = (name: CommandNames) => () => dispatch(actions.executeCommand(name, viewId));
+  const toggleMark = (mark?: MarkType) => dispatch(actions.toggleMark(stateId, viewId, mark));
+  const wrapInline = (node?: NodeType) => dispatch(actions.insertInlineNode(node));
+  const command = (name: CommandNames) => dispatch(actions.executeCommand(name, viewId));
   const toggleBrackets = useCallback(() => dispatch(toggleCitationBrackets()), []);
 
   const clickBold = useCallback(() => toggleMark(schema?.marks.strong), [stateId, viewId]);
