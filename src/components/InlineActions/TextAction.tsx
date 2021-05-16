@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
   makeStyles, createStyles, Grid, Input, CircularProgress,
 } from '@material-ui/core';
-import MenuIcon from '../../../components/Menu/Icon';
+import MenuIcon from '../Menu/Icon';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => createStyles({
 type Props = {
   text: string;
   help: string;
-  validate: (text: string) => Promise<boolean>;
+  validate: (text: string) => boolean | Promise<boolean>;
   onSubmit: (text: string) => void;
   onCancel: () => void;
 };
@@ -34,7 +34,7 @@ const TextAction = (props: Props) => {
     const t = e.currentTarget.value;
     setLoading(true);
     setCurrent(t);
-    validate(t).then((b) => {
+    Promise.all([validate(t)]).then(([b]) => {
       setLoading(false);
       if (b) {
         setValid(true);

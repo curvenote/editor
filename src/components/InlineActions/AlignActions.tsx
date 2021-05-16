@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { EditorView } from 'prosemirror-view';
 import { isNodeSelection } from 'prosemirror-utils';
 import { NodeSelection } from 'prosemirror-state';
 import { v4 as uuid } from 'uuid';
-import MenuIcon from '../../../components/Menu/Icon';
-import { AlignOptions } from '../../../types';
-import {
-  setNodeViewAlign, setNodeViewDelete, setNodeViewWidth, updateNodeAttrsOnView,
-} from '../../../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import MenuIcon from '../Menu/Icon';
+import { AlignOptions } from '../../types';
+import { deleteNode, updateNodeAttrs } from '../../store/actions';
 import SelectWidth from './SelectWidth';
 import TextAction from './TextAction';
+import { ActionProps, positionPopper } from './utils';
+import { Dispatch, State } from '../../store';
+import { getEditorState } from '../../store/selectors';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -20,35 +21,48 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-type Props = {
-  view: EditorView;
+type Props = ActionProps & {
   showCaption?: boolean;
 };
 
 const AlignActions = (props: Props) => {
-  const { view, showCaption } = props;
+  const {
+    stateId, viewId, anchorEl, showCaption,
+  } = props;
+  const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
   const [labelOpen, setLabelOpen] = useState(false);
-  const { node, from } = view.state.selection as NodeSelection;
+  const selection = useSelector(
+    (state: State) => getEditorState(state, stateId)?.state?.selection,
+  );
+  const { node, from: pos } = (selection as NodeSelection) ?? {};
   // If the node changes, set open label to false
   useEffect(() => setLabelOpen(false), [node]);
+  if (!node || !selection || !isNodeSelection(selection)) return null;
   const {
     align, width, numbered, caption, label,
-  } = node.attrs;
+  } = node?.attrs;
 
-  const onAlign = setNodeViewAlign(node, view, from);
-  const doAlign = (a: AlignOptions) => () => onAlign(a);
-  const onWidth = setNodeViewWidth(node, view, from);
-  const onNumbered = () => updateNodeAttrsOnView(
-    view, { node, pos: from }, (label === '' ? { numbered: !numbered, label: uuid().split('-')[0] } : { numbered: !numbered }),
-  );
-  const onCaption = () => updateNodeAttrsOnView(
-    view, { node, pos: from }, (label === '' && !caption ? { caption: !caption, label: uuid().split('-')[0] } : { caption: !caption }),
-  );
-  const onLabel = (t: string) => updateNodeAttrsOnView(
-    view, { node, pos: from }, (t === '' ? { label: uuid().split('-')[0] } : { label: t }),
-  );
-  const onDelete = setNodeViewDelete(node, view, from);
+  const onAlign = (a: AlignOptions) => () => {
+    dispatch(updateNodeAttrs(
+      stateId, viewId, { node, pos }, { align: a },
+    ));
+  };
+  const onWidth = (value: number) => {
+    dispatch(updateNodeAttrs(
+      stateId, viewId, { node, pos }, { width: value },
+    ));
+  };
+  const onNumbered = () => dispatch(updateNodeAttrs(
+    stateId, viewId, { node, pos }, (label === '' ? { numbered: !numbered, label: uuid().split('-')[0] } : { numbered: !numbered }),
+  ));
+  const onCaption = () => dispatch(updateNodeAttrs(
+    stateId, viewId, { node, pos }, (label === '' && !caption ? { caption: !caption, label: uuid().split('-')[0] } : { caption: !caption }),
+  ));
+  const onLabel = (t: string) => dispatch(updateNodeAttrs(
+    stateId, viewId, { node, pos }, (t === '' ? { label: uuid().split('-')[0] } : { label: t }),
+  ));
+  const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 
   const validateId = async (t: string) => {
     if (t === '') return true;
@@ -56,10 +70,7 @@ const AlignActions = (props: Props) => {
     return r.test(t);
   };
 
-  if (!isNodeSelection(view.state.selection)) return null;
-
-  // Reposition the popper
-  window.scrollBy(0, 1); window.scrollBy(0, -1);
+  positionPopper(anchorEl);
 
   if (labelOpen) {
     return (
@@ -75,9 +86,9 @@ const AlignActions = (props: Props) => {
 
   return (
     <Grid container alignItems="center" justify="center" className={classes.root}>
-      <MenuIcon kind="left" active={align === 'left'} onClick={doAlign('left')} />
-      <MenuIcon kind="center" active={align === 'center'} onClick={doAlign('center')} />
-      <MenuIcon kind="right" active={align === 'right'} onClick={doAlign('right')} />
+      <MenuIcon kind="left" active={align === 'left'} onClick={onAlign('left')} />
+      <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
+      <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
       <MenuIcon kind="divider" />
       <SelectWidth width={width} onWidth={onWidth} />
       {showCaption && (

@@ -1,17 +1,19 @@
 import { schemas } from '@curvenote/schema';
-import { Node, NodeRange } from 'prosemirror-model';
 import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
-import { liftTarget } from 'prosemirror-transform';
 import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
-import { AlignOptions } from '../../types';
 
 export const TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
+export const TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export const TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 export const TEST_LINK_COMMON_SPACE = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 
-const testLink = (possibleLink: string) => {
+export const testLink = (possibleLink: string) => {
   const match = TEST_LINK.exec(possibleLink);
+  return Boolean(match);
+};
+export const testLinkWeak = (possibleLink: string) => {
+  const match = TEST_LINK_WEAK.exec(possibleLink);
   return Boolean(match);
 };
 
@@ -108,41 +110,3 @@ export function getNodeIfSelected(state: EditorState | null, nodeName?: schemas.
   }
   return null;
 }
-
-export const setNodeViewAlign = (
-  node: Node, view: EditorView, pos: number,
-) => (value: AlignOptions) => (
-  updateNodeAttrsOnView(view, { node, pos }, { align: value })
-);
-
-export const setNodeViewWidth = (
-  node: Node, view: EditorView, pos: number,
-) => (value: number) => (
-  updateNodeAttrsOnView(view, { node, pos }, { width: value })
-);
-
-export const setNodeViewKind = (
-  node: Node, view: EditorView, pos: number, select = true,
-) => (value: string) => (
-  updateNodeAttrsOnView(view, { node, pos }, { kind: value }, select)
-);
-
-export const setNodeViewDelete = (
-  node: Node, view: EditorView, pos: number,
-) => () => {
-  const tr = view.state.tr.delete(pos, pos + node.nodeSize);
-  view.dispatch(tr);
-};
-
-export const liftContentOutOfNode = (
-  node: Node, view: EditorView, pos: number,
-) => () => {
-  const $from = view.state.doc.resolve(pos + 1);
-  const $to = view.state.doc.resolve(pos + node.nodeSize - 1);
-  const range = new NodeRange($from, $to, 1);
-  const target = liftTarget(range);
-  if (target == null) return;
-  const tr = view.state.tr.lift(range, target);
-  view.dispatch(tr);
-  view.focus();
-};

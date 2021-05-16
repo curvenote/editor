@@ -8,7 +8,7 @@ import {
   RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS,
 } from './types';
 import { AppThunk } from '../types';
-import { getEditor } from './selectors';
+import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
 
 export function initEditorState(
@@ -36,10 +36,15 @@ export function updateEditorState(
 }
 
 export function applyProsemirrorTransaction(
-  stateKey: any, tr: Transaction,
+  stateKey: any, viewId: string | null, tr: Transaction,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const editor = getEditor(getState(), stateKey);
+    const { view } = getEditorView(getState(), viewId);
+    if (view) {
+      view.dispatch(tr);
+      return true;
+    }
+    const editor = getEditorState(getState(), stateKey);
     if (editor.state == null) return true;
     const next = editor.state.apply(tr);
     dispatch(updateEditorState(stateKey, null, next));

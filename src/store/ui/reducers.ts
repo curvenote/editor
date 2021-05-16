@@ -1,11 +1,12 @@
 import {
-  SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW, UIState, UIActionTypes,
+  SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW, UIState, UIActionTypes, INLINE_SELECTION,
 } from './types';
 
 export const initialState: UIState = {
   stateId: null,
   viewId: null,
   focused: false,
+  selection: null,
 };
 
 const uiReducer = (
@@ -36,6 +37,11 @@ const uiReducer = (
         stateId,
         viewId,
         focused: focused && viewId != null && stateId != null,
+      };
+    }
+    case INLINE_SELECTION: {
+      return {
+        ...state, selection: action.payload,
       };
     }
     default:

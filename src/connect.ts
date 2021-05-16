@@ -5,7 +5,7 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { Node, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
-import setupComponents from './components';
+import setupComponents from './r-components';
 import { CitationFormat } from './types';
 
 export type SearchContext = {

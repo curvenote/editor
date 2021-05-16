@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popover, Slider } from '@material-ui/core';
-import MenuIcon from '../../../components/Menu/Icon';
+import MenuIcon from '../Menu/Icon';
 
 type Props = {
   width: number;
