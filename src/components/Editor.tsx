@@ -61,6 +61,7 @@ const Editor = (props: Props) => {
       dispatch(actions.focusEditorView(viewId, true));
     };
     (editorView.current.dom as HTMLElement).onblur = () => {
+      // TODO: The blur here may have sub-editors that *are* focused.
       dispatch(actions.focusEditorView(viewId, false));
     };
     dispatch(actions.subscribeView(stateKey, viewId, editorView.current));
@@ -76,6 +77,7 @@ const Editor = (props: Props) => {
   // Handle an external focus event:
   useEffect(() => {
     if (editorEl.current == null) return;
+    if (editorView.current?.hasFocus() === focused) return;
     if (!focused) {
       (editorView.current?.dom as HTMLElement)?.blur();
       return;
