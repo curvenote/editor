@@ -1,6 +1,9 @@
 .ProseMirror-hideselection .eqn-editor *::selection { background-color: transparent; }
 .ProseMirror-hideselection .eqn-editor *::-moz-selection { background-color: transparent; }
-.katex-display { margin: 0; }
+.katex-display {
+  margin: 0.5em;
+  padding: 5px;
+}
 
 .eqn-math { overflow: hidden; }
 .eqn.editing .eqn-math { display: none; }
