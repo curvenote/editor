@@ -1,4 +1,5 @@
 // Presentational
+export * as Heading from './heading';
 export * as Aside from './aside';
 export * as Callout from './callout';
 export * as Image from './image';

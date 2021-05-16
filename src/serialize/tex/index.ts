@@ -4,23 +4,9 @@ import {
   blankTex, blankTexLines, latexStatement, TAB,
 } from './utils';
 import * as nodes from '../../nodes';
-import { FormatSerialize } from '../../nodes/types';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../schemas';
 
-const heading: FormatSerialize = (state, node) => {
-  const { level } = node.attrs;
-  if (level === 1) state.write('\\chapter*{');
-  if (level === 2) state.write('\\section*{');
-  if (level === 3) state.write('\\subsection*{');
-  if (level === 4) state.write('\\subsubsection*{');
-  if (level === 5) state.write('\\paragraph*{');
-  if (level === 6) state.write('\\subparagraph*{');
-  state.renderInline(node);
-  state.write('}');
-  // TODO \label{sec:x}
-  state.closeBlock(node);
-};
 
 export const texSerializer = new MarkdownSerializer({
   text(state, node, parent) {
@@ -57,7 +43,7 @@ export const texSerializer = new MarkdownSerializer({
     state.renderInline(node);
     state.closeBlock(node);
   },
-  heading,
+  heading: nodes.Heading.toTex,
   blockquote: latexStatement('quote', (state, node) => { state.renderContent(node); }),
   code_block: latexStatement('verbatim', (state, node) => { state.text(node.textContent, false); }),
   horizontal_rule(state, node) {

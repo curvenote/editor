@@ -33,7 +33,8 @@ const image: NodeSpec = {
   toDOM(node) {
     const {
       src, alt, title, align, width, numbered, caption, label,
-    } = node.attrs; return ['img', {
+    } = node.attrs;
+    return ['img', {
       src, alt, title, align, width: `${width}%`, numbered, caption, label,
     }];
   },
