@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { Node } from 'prosemirror-model';
-import { v4 as uuid } from 'uuid';
 import { schemas } from '@curvenote/schema';
 import { findParentNode } from 'prosemirror-utils';
 import { NodeSelection } from 'prosemirror-state';
@@ -11,7 +10,7 @@ import { deleteNode, updateNodeAttrs } from '../../store/actions';
 import TextAction from './TextAction';
 import { getEditorState } from '../../store/selectors';
 import { Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, positionPopper, newLabel } from './utils';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -41,10 +40,10 @@ const HeadingActions = (props: ActionProps) => {
   positionPopper(anchorEl);
 
   const onNumbered = () => dispatch(updateNodeAttrs(
-    stateId, viewId, { node, pos }, (label === '' ? { numbered: !numbered, label: uuid().split('-')[0] } : { numbered: !numbered }),
+    stateId, viewId, { node, pos }, (label === '' ? { numbered: !numbered, label: newLabel('sec') } : { numbered: !numbered }),
   ));
   const onLabel = (t: string) => dispatch(updateNodeAttrs(
-    stateId, viewId, { node, pos }, (t === '' ? { label: uuid().split('-')[0] } : { label: t }),
+    stateId, viewId, { node, pos }, (t === '' ? { label: newLabel('sec') } : { label: t }),
   ));
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 

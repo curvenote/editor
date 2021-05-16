@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { isNodeSelection } from 'prosemirror-utils';
 import { NodeSelection } from 'prosemirror-state';
-import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { AlignOptions } from '../../types';
 import { deleteNode, updateNodeAttrs } from '../../store/actions';
 import SelectWidth from './SelectWidth';
 import TextAction from './TextAction';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, newLabel, positionPopper } from './utils';
 import { Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 
@@ -54,13 +53,13 @@ const AlignActions = (props: Props) => {
     ));
   };
   const onNumbered = () => dispatch(updateNodeAttrs(
-    stateId, viewId, { node, pos }, (label === '' ? { numbered: !numbered, label: uuid().split('-')[0] } : { numbered: !numbered }),
+    stateId, viewId, { node, pos }, (label === '' ? { numbered: !numbered, label: newLabel('fig') } : { numbered: !numbered }),
   ));
   const onCaption = () => dispatch(updateNodeAttrs(
-    stateId, viewId, { node, pos }, (label === '' && !caption ? { caption: !caption, label: uuid().split('-')[0] } : { caption: !caption }),
+    stateId, viewId, { node, pos }, (label === '' && !caption ? { caption: !caption, label: newLabel('fig') } : { caption: !caption }),
   ));
   const onLabel = (t: string) => dispatch(updateNodeAttrs(
-    stateId, viewId, { node, pos }, (t === '' ? { label: uuid().split('-')[0] } : { label: t }),
+    stateId, viewId, { node, pos }, (t === '' ? { label: newLabel('fig') } : { label: t }),
   ));
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 
