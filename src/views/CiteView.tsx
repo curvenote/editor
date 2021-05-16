@@ -25,8 +25,7 @@ const CiteInline = (props: Props) => {
     loading, inline, json, error,
   } = useCitation(uid);
 
-  const selectedId = useSelector((state: State) => getEditorUI(state).viewId);
-  const selected = selectedId === view.dom.id;
+  const selected = useSelector((state: State) => getEditorUI(state).viewId === view.dom.id);
 
   const filler = loading ? 'Loading Citation, 0000' : 'Citation Not Found';
 
