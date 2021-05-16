@@ -39,7 +39,7 @@ export const nodes = {
   doc: basic.doc,
   text: basic.text,
   paragraph: basic.paragraph,
-  heading: basic.heading,
+  heading: Nodes.Heading.default,
   blockquote: basic.blockquote,
   code_block: basic.code_block,
   image: Nodes.Image.default,

@@ -18,11 +18,7 @@ export const markdownSerializer = new MarkdownSerializer({
     state.renderInline(node);
     state.closeBlock(node);
   },
-  heading(state, node) {
-    state.write(`${state.repeat('#', node.attrs.level)} `);
-    state.renderInline(node);
-    state.closeBlock(node);
-  },
+  heading: nodes.Heading.toMarkdown,
   blockquote(state, node) {
     state.wrapBlock('> ', undefined, node, () => state.renderContent(node));
   },
