@@ -32,6 +32,8 @@ export const getSelectionKind = (
     (n: Node) => {
       switch (n?.type.name as schemas.nodeNames | undefined) {
         case schemas.nodeNames.heading:
+          // Only if the selectio is NOT empty
+          return !state.selection.empty;
         case schemas.nodeNames.callout:
           return true;
         default:

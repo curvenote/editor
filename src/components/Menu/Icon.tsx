@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import {
+  Button,
   createStyles, Divider, IconButton, makeStyles, SvgIcon, Theme, Tooltip,
 } from '@material-ui/core';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
@@ -31,6 +32,7 @@ import ShortTextIcon from '@material-ui/icons/ShortText';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import CancelIcon from '@material-ui/icons/Cancel';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import classNames from 'classnames';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
@@ -84,6 +86,7 @@ const icons = {
   unlink: { help: 'Unlink', Icon: LinkOffIcon },
   math: { help: 'Inline Math', Icon: FunctionsIcon },
   more: { help: 'Insert', Icon: AddIcon },
+  expand: { help: 'More Options', Icon: ExpandMoreIcon },
   open: { help: 'Open in New Tab', Icon: OpenInNewIcon },
   brackets: { help: 'Toggle Brackets', Icon: BracketsIcon },
   active: { help: 'Attention', Icon: NewReleasesIcon },
@@ -125,6 +128,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     margin: theme.spacing(0, 0.5),
     height: 20,
   },
+  button: {
+    margin: theme.spacing(0, 0.5),
+    textTransform: 'none',
+  },
 }));
 
 type Props = {
@@ -134,12 +141,13 @@ type Props = {
   dangerous?: boolean;
   error?: boolean;
   title?: string;
+  text?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 const MenuIcon = (props: Props) => {
   const {
-    kind, active, dangerous, error, disabled, onClick, title,
+    kind, active, dangerous, error, disabled, onClick, title, text,
   } = props;
 
   const classes = useStyles();
@@ -147,6 +155,21 @@ const MenuIcon = (props: Props) => {
   if (kind === 'divider') return <Divider className={classes.hr} orientation="vertical" />;
 
   const { help, Icon } = icons[kind];
+
+  if (text) {
+    return (
+      <Button
+        disabled={disabled}
+        className={classes.button}
+        size="small"
+        onClickCapture={(e) => { e.stopPropagation(); e.preventDefault(); onClick?.(e); }}
+        disableRipple
+      >
+        {text}
+        <Icon fontSize="small" className={classNames({ dangerous, error })} />
+      </Button>
+    );
+  }
 
   return (
     <Tooltip title={title || deMacify(help)}>
@@ -172,6 +195,7 @@ MenuIcon.defaultProps = {
   error: false,
   onClick: undefined,
   title: undefined,
+  text: undefined,
 };
 
 export default React.memo(MenuIcon);
