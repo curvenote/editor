@@ -56,7 +56,12 @@ const HeadingActions = (props: ActionProps) => {
   const onLevel = (l: number) => () => {
     onClose();
     if (!state?.schema) return;
-    dispatch(wrapInHeading(state?.schema, l));
+    if (l === 0) {
+      dispatch(wrapInHeading(state?.schema, 0));
+      return;
+    }
+    // This maintains the section label/number info
+    dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { level: l }, false));
   };
   const onLabel = (t: string) => dispatch(updateNodeAttrs(
     stateId, viewId, { node, pos }, (t === '' ? { label: newLabel('sec') } : { label: t }), false,
