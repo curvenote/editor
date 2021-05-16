@@ -10,6 +10,7 @@ import {
 import { AppThunk } from '../types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
+import { countState } from './utils';
 
 export function initEditorState(
   useSchema: schemas.UseSchema, stateKey: any, editable: boolean, content: string, version: number,
@@ -25,13 +26,16 @@ export function initEditorState(
 }
 
 export function updateEditorState(
-  stateKey: any, viewId: string | null, editorState: EditorState,
+  stateKey: any, viewId: string | null, editorState: EditorState, tr: Transaction,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
+  const counts = tr.docChanged ? countState(editorState) : null;
   return {
     type: UPDATE_EDITOR_STATE,
-    payload: { stateId, viewId, editorState },
+    payload: {
+      stateId, viewId, editorState, counts,
+    },
   };
 }
 
@@ -47,7 +51,7 @@ export function applyProsemirrorTransaction(
     const editor = getEditorState(getState(), stateKey);
     if (editor.state == null) return true;
     const next = editor.state.apply(tr);
-    dispatch(updateEditorState(stateKey, null, next));
+    dispatch(updateEditorState(stateKey, null, next, tr));
     return true;
   };
 }

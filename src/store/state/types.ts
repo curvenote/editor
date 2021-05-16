@@ -47,6 +47,7 @@ export interface UpdateEditorState {
     stateId: string;
     viewId: string | null;
     editorState: EditorState;
+    counts: StateCounter | null;
   };
 }
 

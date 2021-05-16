@@ -39,7 +39,8 @@ export function countState(state: EditorState) {
         return false;
       }
       case schemas.nodeNames.heading: {
-        const { label } = node.attrs;
+        const { label, numbered } = node.attrs;
+        if (!numbered) return false;
         counts.headings.push({ label, number: counts.headings.length + 1 });
         return false;
       }
