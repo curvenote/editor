@@ -29,7 +29,7 @@ export const heading: NodeSpec = {
     const {
       level, numbered, label,
     } = node.attrs;
-    return [`h${level}`, { numbered, label }, 0];
+    return [`h${level}`, { numbered: numbered ? '' : undefined, label: label || undefined }, 0];
   },
 };
 

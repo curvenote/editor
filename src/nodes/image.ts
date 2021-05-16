@@ -35,7 +35,14 @@ const image: NodeSpec = {
       src, alt, title, align, width, numbered, caption, label,
     } = node.attrs;
     return ['img', {
-      src, alt, title, align, width: `${width}%`, numbered, caption, label,
+      src,
+      alt: alt || undefined,
+      title: title || undefined,
+      align,
+      width: `${width}%`,
+      numbered: numbered ? '' : undefined,
+      caption: caption ? '' : undefined,
+      label: label || undefined,
     }];
   },
 };
