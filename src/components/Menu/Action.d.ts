@@ -10,17 +10,21 @@ declare const icons: {
 };
 export declare type IconTypes = keyof typeof icons;
 export declare type MenuActionProps = {
-    kind: IconTypes;
+    kind?: IconTypes;
     title?: string | React.ReactNode;
-    action?: (() => void) | null;
+    children?: React.ReactNode;
+    action?: (() => void);
     disabled?: boolean;
+    selected?: boolean;
 };
-export declare const Action: {
+declare const MenuAction: {
     (props: MenuActionProps): JSX.Element;
     defaultProps: {
+        kind: undefined;
         title: string;
-        action: () => null;
+        action: undefined;
         disabled: boolean;
+        selected: boolean;
     };
 };
-export default Action;
+export default MenuAction;

@@ -1,5 +1,5 @@
 import * as sidenotes from 'sidenotes';
-import setupComponents from './components';
+import setupComponents from './r-components';
 export var ref = {
     store: function () {
         if (ref._store === undefined)

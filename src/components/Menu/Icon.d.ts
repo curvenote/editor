@@ -83,6 +83,10 @@ declare const icons: {
         help: string;
         Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
     };
+    expand: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
     open: {
         help: string;
         Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
@@ -136,6 +140,7 @@ declare type Props = {
     dangerous?: boolean;
     error?: boolean;
     title?: string;
+    text?: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 declare const _default: React.MemoExoticComponent<{
@@ -147,6 +152,7 @@ declare const _default: React.MemoExoticComponent<{
         error: boolean;
         onClick: undefined;
         title: undefined;
+        text: undefined;
     };
 }>;
 export default _default;

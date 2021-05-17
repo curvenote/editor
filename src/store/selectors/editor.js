@@ -2,11 +2,11 @@ import { NodeSelection } from 'prosemirror-state';
 import { findParentNode, isNodeSelection, hasParentNode, } from 'prosemirror-utils';
 import { getNodeIfSelected } from '../actions/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
-import { getEditor } from '../state/selectors';
+import { getEditorState } from '../state/selectors';
 export function getParentsOfSelection(state, stateKey) {
     if (stateKey == null)
         return [];
-    var editor = getEditor(state, stateKey);
+    var editor = getEditorState(state, stateKey);
     if (editor.state == null)
         return [];
     var predicate = function () { return true; };
@@ -32,7 +32,7 @@ export function getNodeAttrs(state, stateId, pos) {
     var _a;
     if (stateId == null)
         return null;
-    var editor = getEditor(state, stateId);
+    var editor = getEditorState(state, stateId);
     if (editor.state == null)
         return null;
     var out = editor.state.doc.resolve(pos);
@@ -40,7 +40,7 @@ export function getNodeAttrs(state, stateId, pos) {
     return node.attrs;
 }
 export function menuActive(state, stateId) {
-    var editor = getEditor(state, stateId);
+    var editor = getEditorState(state, stateId);
     if (editor.state == null)
         return false;
     return isEditable(editor.state);
@@ -52,7 +52,7 @@ function falseMap(obj) {
     }));
 }
 export function selectionIsMarkedWith(state, stateKey, types) {
-    var editor = getEditor(state, stateKey);
+    var editor = getEditorState(state, stateKey);
     if (editor.state == null)
         return falseMap(types);
     var _a = editor.state.selection, from = _a.from, $from = _a.$from, to = _a.to, empty = _a.empty;
@@ -68,7 +68,7 @@ export function selectionIsMarkedWith(state, stateKey, types) {
     return active;
 }
 export function selectionIsChildOf(state, stateKey, nodes) {
-    var editor = getEditor(state, stateKey);
+    var editor = getEditorState(state, stateKey);
     if (editor.state == null)
         return falseMap(nodes);
     var active = Object.fromEntries(Object.entries(nodes).map(function (_a) {
@@ -81,7 +81,7 @@ export function selectionIsChildOf(state, stateKey, nodes) {
     return active;
 }
 export function selectionIsThisNodeType(state, stateKey, nodes) {
-    var editor = getEditor(state, stateKey);
+    var editor = getEditorState(state, stateKey);
     if (editor.state == null)
         return falseMap(nodes);
     var active = Object.fromEntries(Object.entries(nodes).map(function (_a) {

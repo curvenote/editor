@@ -4,7 +4,7 @@ import { Typography, makeStyles, createStyles } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
 import { selectors, actions } from '../../store';
 import Suggestion from './Suggestion';
-import Keyboard from './Keyboard';
+import Keyboard from '../Keyboard';
 var useStyles = makeStyles(function () { return createStyles({
     root: {
         position: 'relative',

@@ -9,11 +9,12 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW, } from './types';
+import { SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW, INLINE_SELECTION, } from './types';
 export var initialState = {
     stateId: null,
     viewId: null,
     focused: false,
+    selection: null,
 };
 var uiReducer = function (state, action) {
     if (state === void 0) { state = initialState; }
@@ -33,6 +34,9 @@ var uiReducer = function (state, action) {
             }
             return __assign(__assign({}, state), { stateId: stateId,
                 viewId: viewId, focused: focused && viewId != null && stateId != null });
+        }
+        case INLINE_SELECTION: {
+            return __assign(__assign({}, state), { selection: action.payload });
         }
         default:
             return state;

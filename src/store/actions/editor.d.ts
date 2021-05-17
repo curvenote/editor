@@ -4,10 +4,13 @@ import { ContentNodeWithPos } from 'prosemirror-utils';
 import { AppThunk } from '../types';
 export declare function updateNodeAttrs(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;
-}): AppThunk<boolean>;
+}, select?: boolean | 'after'): AppThunk<boolean>;
+export declare function deleteNode(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>): AppThunk<boolean>;
+export declare function liftContentOutOfNode(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>): AppThunk<boolean>;
 export declare function toggleMark(stateKey: any, viewId: string | null, mark?: MarkType, attrs?: {
     [key: string]: any;
 }): AppThunk<boolean>;
+export declare function removeMark(stateKey: any, viewId: string | null, mark: MarkType, from: number, to: number): AppThunk<boolean>;
 export declare function wrapInList(stateKey: string, viewId: string | null, node: NodeType, test?: boolean): AppThunk<boolean>;
 export declare function wrapIn(node: NodeType): AppThunk<boolean>;
 export declare function replaceSelection(node: NodeType, attrs?: {

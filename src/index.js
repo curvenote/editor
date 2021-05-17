@@ -1,10 +1,7 @@
 import * as runtime from '@curvenote/runtime';
 import * as collab from './collab';
 export * from './store';
-export { default as Editor } from './components/Editor';
-export { default as EditorMenu } from './components/Menu';
-export { default as Suggestion } from './components/Suggestion';
-export { default as Attributes } from './components/Attributes';
+export * from './components';
 export { default as views } from './views';
 export { setup, opts } from './connect';
 export { runtime, collab };

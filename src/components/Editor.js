@@ -15,14 +15,14 @@ var Editor = function (props) {
         var _a;
         if (editorView.current || !editorEl.current || !editorState)
             return;
-        var doUpdateState = function (next) { return (dispatch(actions.updateEditorState(stateKey, viewId, next))); };
+        var doUpdateState = function (next, tr) { return (dispatch(actions.updateEditorState(stateKey, viewId, next, tr))); };
         var updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
         editorView.current = createEditorView(editorEl.current, editorState, function (tr) {
             var _a;
             var view = editorView.current;
             var mtr = opts.modifyTransaction(stateKey, viewId, view.state, tr);
             var next = view.state.apply(mtr);
-            updateState(next);
+            updateState(next, mtr);
             (_a = editorView.current) === null || _a === void 0 ? void 0 : _a.updateState(next);
         });
         editorView.current.dom.id = viewId;
@@ -42,17 +42,19 @@ var Editor = function (props) {
         }
     }; }, []);
     useEffect(function () {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         if (editorEl.current == null)
             return;
+        if (((_a = editorView.current) === null || _a === void 0 ? void 0 : _a.hasFocus()) === focused)
+            return;
         if (!focused) {
-            (_b = (_a = editorView.current) === null || _a === void 0 ? void 0 : _a.dom) === null || _b === void 0 ? void 0 : _b.blur();
+            (_c = (_b = editorView.current) === null || _b === void 0 ? void 0 : _b.dom) === null || _c === void 0 ? void 0 : _c.blur();
             return;
         }
         var subEditors = editorEl.current.getElementsByClassName('ProseMirror-focused');
         if (subEditors.length > 0)
             return;
-        (_c = editorView.current) === null || _c === void 0 ? void 0 : _c.focus();
+        (_d = editorView.current) === null || _d === void 0 ? void 0 : _d.focus();
     }, [focused]);
     return React.createElement("div", { ref: editorEl });
 };

@@ -14,6 +14,7 @@ declare class MathView {
     selectNode(): void;
     deselectNode(): void;
     dispatchInner(tr: Transaction): void;
+    addFakeCursor(): void;
     update(node: Node): boolean;
     renderMath(): void;
     destroy(): void;

@@ -1,6 +1,7 @@
 import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
-import { getEditor } from './selectors';
+import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
+import { countState } from './utils';
 export function initEditorState(useSchema, stateKey, editable, content, version) {
     var stateId = opts.transformKeyToId(stateKey);
     if (stateId == null)
@@ -12,22 +13,30 @@ export function initEditorState(useSchema, stateKey, editable, content, version)
         },
     };
 }
-export function updateEditorState(stateKey, viewId, editorState) {
+export function updateEditorState(stateKey, viewId, editorState, tr) {
     var stateId = opts.transformKeyToId(stateKey);
     if (stateId == null)
         throw new Error('Must have a state ID');
+    var counts = tr.docChanged ? countState(editorState) : null;
     return {
         type: UPDATE_EDITOR_STATE,
-        payload: { stateId: stateId, viewId: viewId, editorState: editorState },
+        payload: {
+            stateId: stateId, viewId: viewId, editorState: editorState, counts: counts,
+        },
     };
 }
-export function applyProsemirrorTransaction(stateKey, tr) {
+export function applyProsemirrorTransaction(stateKey, viewId, tr) {
     return function (dispatch, getState) {
-        var editor = getEditor(getState(), stateKey);
+        var view = getEditorView(getState(), viewId).view;
+        if (view) {
+            view.dispatch(tr);
+            return true;
+        }
+        var editor = getEditorState(getState(), stateKey);
         if (editor.state == null)
             return true;
         var next = editor.state.apply(tr);
-        dispatch(updateEditorState(stateKey, null, next));
+        dispatch(updateEditorState(stateKey, null, next, tr));
         return true;
     };
 }

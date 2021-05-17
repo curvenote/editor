@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import React from 'react';
-import { createStyles, Divider, IconButton, makeStyles, SvgIcon, Tooltip, } from '@material-ui/core';
+import { Button, createStyles, Divider, IconButton, makeStyles, SvgIcon, Tooltip, } from '@material-ui/core';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import StrikethroughSIcon from '@material-ui/icons/StrikethroughS';
@@ -39,6 +39,7 @@ import ShortTextIcon from '@material-ui/icons/ShortText';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import CancelIcon from '@material-ui/icons/Cancel';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import classNames from 'classnames';
 function SubscriptIcon(props) {
     return (React.createElement(SvgIcon, __assign({}, props),
@@ -75,6 +76,7 @@ var icons = {
     unlink: { help: 'Unlink', Icon: LinkOffIcon },
     math: { help: 'Inline Math', Icon: FunctionsIcon },
     more: { help: 'Insert', Icon: AddIcon },
+    expand: { help: 'More Options', Icon: ExpandMoreIcon },
     open: { help: 'Open in New Tab', Icon: OpenInNewIcon },
     brackets: { help: 'Toggle Brackets', Icon: BracketsIcon },
     active: { help: 'Attention', Icon: NewReleasesIcon },
@@ -112,13 +114,22 @@ var useStyles = makeStyles(function (theme) { return createStyles({
         margin: theme.spacing(0, 0.5),
         height: 20,
     },
+    button: {
+        margin: theme.spacing(0, 0.5),
+        textTransform: 'none',
+    },
 }); });
 var MenuIcon = function (props) {
-    var kind = props.kind, active = props.active, dangerous = props.dangerous, error = props.error, disabled = props.disabled, onClick = props.onClick, title = props.title;
+    var kind = props.kind, active = props.active, dangerous = props.dangerous, error = props.error, disabled = props.disabled, onClick = props.onClick, title = props.title, text = props.text;
     var classes = useStyles();
     if (kind === 'divider')
         return React.createElement(Divider, { className: classes.hr, orientation: "vertical" });
     var _a = icons[kind], help = _a.help, Icon = _a.Icon;
+    if (text) {
+        return (React.createElement(Button, { disabled: disabled, className: classes.button, size: "small", onClickCapture: function (e) { e.stopPropagation(); e.preventDefault(); onClick === null || onClick === void 0 ? void 0 : onClick(e); }, disableRipple: true },
+            text,
+            React.createElement(Icon, { fontSize: "small", className: classNames({ dangerous: dangerous, error: error }) })));
+    }
     return (React.createElement(Tooltip, { title: title || deMacify(help) },
         React.createElement("div", { className: classes.root },
             React.createElement(IconButton, { disabled: disabled, className: active ? 'active' : '', size: "small", onClickCapture: function (e) { e.stopPropagation(); e.preventDefault(); onClick === null || onClick === void 0 ? void 0 : onClick(e); }, disableRipple: true },
@@ -131,6 +142,7 @@ MenuIcon.defaultProps = {
     error: false,
     onClick: undefined,
     title: undefined,
+    text: undefined,
 };
 export default React.memo(MenuIcon);
 //# sourceMappingURL=Icon.js.map

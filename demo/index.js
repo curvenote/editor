@@ -41,7 +41,7 @@ import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
-import { actions, Editor, EditorMenu, setup, Suggestion, Attributes, } from '../src';
+import { actions, Editor, EditorMenu, setup, Suggestion, Attributes, InlineActions, } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
 import '../styles/index.scss';
@@ -127,6 +127,7 @@ store.subscribe(function () {
 ReactDOM.render(React.createElement(Provider, { store: store },
     React.createElement(React.StrictMode, null,
         React.createElement(EditorMenu, { standAlone: true }),
+        React.createElement(InlineActions, null),
         React.createElement("article", { id: docId, className: "content centered" },
             React.createElement(AnchorBase, { anchor: "anchor" },
                 React.createElement("div", { className: "selected" },

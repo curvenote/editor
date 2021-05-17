@@ -9,15 +9,18 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { NodeRange } from 'prosemirror-model';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { liftTarget } from 'prosemirror-transform';
 import { isNodeSelection } from 'prosemirror-utils';
 export var TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
+export var TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 export var TEST_LINK_COMMON_SPACE = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
-var testLink = function (possibleLink) {
+export var testLink = function (possibleLink) {
     var match = TEST_LINK.exec(possibleLink);
+    return Boolean(match);
+};
+export var testLinkWeak = function (possibleLink) {
+    var match = TEST_LINK_WEAK.exec(possibleLink);
     return Boolean(match);
 };
 export var addLink = function (view, data) {
@@ -93,25 +96,4 @@ export function getNodeIfSelected(state, nodeName) {
     }
     return null;
 }
-export var setNodeViewAlign = function (node, view, pos) { return function (value) { return (updateNodeAttrsOnView(view, { node: node, pos: pos }, { align: value })); }; };
-export var setNodeViewWidth = function (node, view, pos) { return function (value) { return (updateNodeAttrsOnView(view, { node: node, pos: pos }, { width: value })); }; };
-export var setNodeViewKind = function (node, view, pos, select) {
-    if (select === void 0) { select = true; }
-    return function (value) { return (updateNodeAttrsOnView(view, { node: node, pos: pos }, { kind: value }, select)); };
-};
-export var setNodeViewDelete = function (node, view, pos) { return function () {
-    var tr = view.state.tr.delete(pos, pos + node.nodeSize);
-    view.dispatch(tr);
-}; };
-export var liftContentOutOfNode = function (node, view, pos) { return function () {
-    var $from = view.state.doc.resolve(pos + 1);
-    var $to = view.state.doc.resolve(pos + node.nodeSize - 1);
-    var range = new NodeRange($from, $to, 1);
-    var target = liftTarget(range);
-    if (target == null)
-        return;
-    var tr = view.state.tr.lift(range, target);
-    view.dispatch(tr);
-    view.focus();
-}; };
 //# sourceMappingURL=utils.js.map

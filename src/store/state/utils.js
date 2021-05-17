@@ -26,7 +26,9 @@ export function countState(state) {
                 return false;
             }
             case schemas.nodeNames.heading: {
-                var label = node.attrs.label;
+                var _b = node.attrs, label = _b.label, numbered = _b.numbered;
+                if (!numbered)
+                    return false;
                 counts.headings.push({ label: label, number: counts.headings.length + 1 });
                 return false;
             }

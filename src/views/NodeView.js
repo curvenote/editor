@@ -104,7 +104,7 @@ var ReactWrapper = (function () {
             var _a;
             return __generator(this, function (_b) {
                 edit = isEditable(this.view.state);
-                (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: this.view.hasFocus(), edit: edit });
+                (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: false, edit: edit });
                 return [2];
             });
         }); });
@@ -112,7 +112,7 @@ var ReactWrapper = (function () {
     ReactWrapper.prototype.selectNode = function () {
         var _a;
         var edit = isEditable(this.view.state);
-        (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: this.view.hasFocus(), edit: edit });
+        (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: true, edit: edit });
     };
     ReactWrapper.prototype.deselectNode = function () {
         var _a;
@@ -125,7 +125,7 @@ var ReactWrapper = (function () {
             return false;
         this.node = node;
         var edit = isEditable(this.view.state);
-        (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: this.view.hasFocus(), edit: edit });
+        (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ edit: edit });
         return true;
     };
     return ReactWrapper;

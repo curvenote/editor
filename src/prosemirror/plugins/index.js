@@ -17,7 +17,6 @@ import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 var ALL_TRIGGERS = /(?:^|\s|\n)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
@@ -27,7 +26,6 @@ export function getPlugins(schema, stateKey, version, startEditable) {
         editablePlugin(startEditable)
     ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), [
         commentsPlugin(),
-        inlineActionsPlugin,
         getImagePlaceholderPlugin(),
         inputrules(schema),
         keymap(buildKeymap(stateKey, schema)),

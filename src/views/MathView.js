@@ -37,6 +37,7 @@ var MathView = (function () {
             this.dom.classList.add('inline');
             this.editor.classList.add('inline');
         }
+        this.addFakeCursor();
         this.dom.classList.remove('editing');
         this.renderMath();
         var unfocus = function () {
@@ -48,12 +49,12 @@ var MathView = (function () {
         this.innerView = new EditorView({ mount: this.editor }, {
             state: EditorState.create({
                 doc: this.node,
-                plugins: [keymap(__assign(__assign({ 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-a': function () {
+                plugins: [keymap(__assign(__assign({ 'Mod-a': function () {
                             var _a = _this.innerView.state, doc = _a.doc, tr = _a.tr;
                             var sel = TextSelection.create(doc, 0, _this.node.nodeSize - 2);
                             _this.innerView.dispatch(tr.setSelection(sel));
                             return true;
-                        }, 'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } }, (mac ? {} : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: function () {
+                        }, 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } }, (mac ? {} : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: function () {
                             _this.dom.classList.remove('editing');
                             _this.outerView.focus();
                             return true;
@@ -107,10 +108,17 @@ var MathView = (function () {
                 this.outerView.dispatch(outerTr);
         }
     };
+    MathView.prototype.addFakeCursor = function () {
+        if (!this.inline)
+            return;
+        var hasContent = this.node.textContent.length > 0;
+        this.editor.classList[hasContent ? 'remove' : 'add']('empty');
+    };
     MathView.prototype.update = function (node) {
         if (!node.sameMarkup(this.node))
             return false;
         this.node = node;
+        this.addFakeCursor();
         if (this.innerView) {
             var state = this.innerView.state;
             var start = node.content.findDiffStart(state.doc.content);

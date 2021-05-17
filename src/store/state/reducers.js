@@ -25,10 +25,11 @@ export var initialState = {
 };
 var editorReducer = function (state, action) {
     var _a, _b, _c, _d;
+    var _e;
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case INIT_EDITOR_STATE: {
-            var _e = action.payload, useSchema = _e.useSchema, stateKey = _e.stateKey, stateId = _e.stateId, content = _e.content, editable = _e.editable, version = _e.version;
+            var _f = action.payload, useSchema = _f.useSchema, stateKey = _f.stateKey, stateId = _f.stateId, content = _f.content, editable = _f.editable, version = _f.version;
             if (state.editors[stateId] !== undefined)
                 return state;
             var editorState = createEditorState(useSchema, stateKey, content, version, editable);
@@ -39,7 +40,7 @@ var editorReducer = function (state, action) {
                 }, _a)) });
         }
         case SUBSCRIBE_EDITOR_VIEW: {
-            var _f = action.payload, stateId = _f.stateId, viewId = _f.viewId, view = _f.view;
+            var _g = action.payload, stateId = _g.stateId, viewId = _g.viewId, view = _g.view;
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
@@ -55,7 +56,7 @@ var editorReducer = function (state, action) {
                 })), views: {} });
         }
         case UNSUBSCRIBE_EDITOR_VIEW: {
-            var _g = action.payload, stateId = _g.stateId, viewId_1 = _g.viewId;
+            var _h = action.payload, stateId = _h.stateId, viewId_1 = _h.viewId;
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
@@ -73,12 +74,11 @@ var editorReducer = function (state, action) {
             return newState_1;
         }
         case UPDATE_EDITOR_STATE: {
-            var _h = action.payload, stateId = _h.stateId, editorState = _h.editorState;
+            var _j = action.payload, stateId = _j.stateId, editorState = _j.editorState, counts = _j.counts;
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
-            var counts = countState(editorState);
-            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_d = {}, _d[stateId] = __assign(__assign({}, editor), { state: editorState, counts: counts }), _d)) });
+            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_d = {}, _d[stateId] = __assign(__assign({}, editor), { state: editorState, counts: counts || ((_e = state.editors[stateId]) === null || _e === void 0 ? void 0 : _e.counts) || null }), _d)) });
         }
         default:
             return state;

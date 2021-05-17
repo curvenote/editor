@@ -1,7 +1,7 @@
 import * as actions from './actions';
 import * as selectors from './selectors';
 import reducer from './reducers';
-export { default as middleware } from './state/middleware';
+import middleware from './middleware';
 export * from './types';
 export * from './state/types';
-export { reducer, actions, selectors };
+export { reducer, actions, selectors, middleware, };
