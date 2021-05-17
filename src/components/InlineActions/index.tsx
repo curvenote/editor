@@ -56,7 +56,7 @@ const Toolbar = () => {
       anchorEl={anchorEl}
       transition
       placement={placement}
-      className="noprint"
+      className="noprint above-modals"
     >
       <Paper
         className={classes.paper}

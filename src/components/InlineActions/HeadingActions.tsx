@@ -24,6 +24,8 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
+const ABOVE_MODALS = { zIndex: 1301 };
+
 const HeadingActions = (props: ActionProps) => {
   const { stateId, viewId } = props;
   const classes = useStyles();
@@ -96,6 +98,7 @@ const HeadingActions = (props: ActionProps) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
+        style={ABOVE_MODALS}
       >
         <MenuAction action={onLevel(0)} selected={level === 0} title="Paragraph"><Keyboard shortcut="Mod-Alt-0" /></MenuAction>
         <MenuAction action={onLevel(1)} selected={level === 1} title="Heading 1"><Keyboard shortcut="Mod-Alt-1" /></MenuAction>
@@ -105,7 +108,7 @@ const HeadingActions = (props: ActionProps) => {
         <MenuAction action={onLevel(5)} selected={level === 5} title="Heading 5"><Keyboard shortcut="Mod-Alt-5" /></MenuAction>
         <MenuAction action={onLevel(6)} selected={level === 6} title="Heading 6"><Keyboard shortcut="Mod-Alt-6" /></MenuAction>
       </Menu>
-      <MenuIcon kind="label" active onClick={() => setLabelOpen(true)} />
+      <MenuIcon kind="label" active={Boolean(label)} onClick={() => setLabelOpen(true)} />
       <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />
     </Grid>
   );

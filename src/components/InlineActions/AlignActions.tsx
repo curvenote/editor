@@ -96,7 +96,7 @@ const AlignActions = (props: Props) => {
           <MenuIcon kind="caption" active={caption} onClick={onCaption} />
           {caption && (
             <>
-              <MenuIcon kind="label" active onClick={() => setLabelOpen(true)} />
+              <MenuIcon kind="label" active={Boolean(label)} onClick={() => setLabelOpen(true)} />
               <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />
             </>
           )}
