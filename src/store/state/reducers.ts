@@ -99,10 +99,9 @@ const editorReducer = (
       return newState;
     }
     case UPDATE_EDITOR_STATE: {
-      const { stateId, editorState } = action.payload;
+      const { stateId, editorState, counts } = action.payload;
       const editor = state.editors[stateId];
       if (editor === undefined) throw new Error('Editor state has not been setup.');
-      const counts = countState(editorState);
       return {
         ...state,
         editors: {
@@ -110,7 +109,7 @@ const editorReducer = (
           [stateId]: {
             ...editor,
             state: editorState,
-            counts,
+            counts: counts || state.editors[stateId]?.counts || null,
           },
         },
       };

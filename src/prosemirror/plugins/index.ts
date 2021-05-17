@@ -11,7 +11,6 @@ import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import inlineActionsPlugin from './inline-actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 
@@ -28,7 +27,6 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
     commentsPlugin(),
-    inlineActionsPlugin,
     getImagePlaceholderPlugin(),
     inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),

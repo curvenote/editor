@@ -6,7 +6,7 @@ import { Button, createMuiTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
-  actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes,
+  actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes, InlineActions,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -110,6 +110,7 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone />
+      <InlineActions />
       <article id={docId} className="content centered">
         <AnchorBase anchor="anchor">
           <div className="selected">

@@ -6,7 +6,7 @@ import {
 import { schemas } from '@curvenote/schema';
 import { getNodeIfSelected } from '../actions/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
-import { getEditor } from '../state/selectors';
+import { getEditorState } from '../state/selectors';
 import { State } from '../types';
 
 export function getParentsOfSelection(state: State, stateKey: any | null) {
@@ -23,7 +23,7 @@ export function getParentsOfSelection(state: State, stateKey: any | null) {
       dispatch(selectNode(props.srcId, parent.pos))
   */
   if (stateKey == null) return [];
-  const editor = getEditor(state, stateKey);
+  const editor = getEditorState(state, stateKey);
   if (editor.state == null) return [];
   const predicate = () => true;
   const getParent = findParentNode(predicate);
@@ -50,7 +50,7 @@ export function getParentsOfSelection(state: State, stateKey: any | null) {
 
 export function getNodeAttrs(state: State, stateId: any | null, pos: number) {
   if (stateId == null) return null;
-  const editor = getEditor(state, stateId);
+  const editor = getEditorState(state, stateId);
   if (editor.state == null) return null;
   const out = editor.state.doc.resolve(pos);
   const node = out.nodeAfter ?? out.parent;
@@ -58,7 +58,7 @@ export function getNodeAttrs(state: State, stateId: any | null, pos: number) {
 }
 
 export function menuActive(state: State, stateId: any | null) {
-  const editor = getEditor(state, stateId);
+  const editor = getEditorState(state, stateId);
   if (editor.state == null) return false;
   return isEditable(editor.state);
 }
@@ -74,7 +74,7 @@ function falseMap<T extends Record<string, any>>(
 export function selectionIsMarkedWith<T extends Record<string, any>>(
   state: State, stateKey: any | null, types: Record<keyof T, MarkType | undefined>,
 ): Record<keyof T, boolean> {
-  const editor = getEditor(state, stateKey);
+  const editor = getEditorState(state, stateKey);
   if (editor.state == null) return falseMap(types);
   const {
     from, $from, to, empty,
@@ -91,7 +91,7 @@ export function selectionIsMarkedWith<T extends Record<string, any>>(
 export function selectionIsChildOf<T extends Record<string, any>>(
   state: State, stateKey: any | null, nodes: Record<keyof T, NodeType | undefined>,
 ): Record<keyof T, boolean> {
-  const editor = getEditor(state, stateKey);
+  const editor = getEditorState(state, stateKey);
   if (editor.state == null) return falseMap(nodes);
   const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
     const node = type as NodeType | undefined;
@@ -104,7 +104,7 @@ export function selectionIsChildOf<T extends Record<string, any>>(
 export function selectionIsThisNodeType<T extends Record<string, any>>(
   state: State, stateKey: any | null, nodes: Record<keyof T, NodeType | undefined>,
 ): Record<keyof T, boolean> {
-  const editor = getEditor(state, stateKey);
+  const editor = getEditorState(state, stateKey);
   if (editor.state == null) return falseMap(nodes);
   const active = Object.fromEntries(Object.entries(nodes).map(([key, type]) => {
     const node = type as NodeType | undefined;

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { EditorView } from 'prosemirror-view';
 import { useDispatch, useSelector } from 'react-redux';
 import throttle from 'lodash.throttle';
-import { EditorState } from 'prosemirror-state';
+import { EditorState, Transaction } from 'prosemirror-state';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
 import {
@@ -36,8 +36,8 @@ const Editor = (props: Props) => {
   // Create editorView
   useEffect(() => {
     if (editorView.current || !editorEl.current || !editorState) return;
-    const doUpdateState = (next: EditorState) => (
-      dispatch(actions.updateEditorState(stateKey, viewId, next))
+    const doUpdateState = (next: EditorState, tr: Transaction) => (
+      dispatch(actions.updateEditorState(stateKey, viewId, next, tr))
     );
     const updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
     editorView.current = createEditorView(
@@ -47,7 +47,7 @@ const Editor = (props: Props) => {
         const view = editorView.current as EditorView;
         const mtr = opts.modifyTransaction(stateKey, viewId, view.state, tr);
         const next = view.state.apply(mtr);
-        updateState(next);
+        updateState(next, mtr);
         // Immidiately update the view.
         // This is important for properly handling selections.
         // Cannot use react event loop here.
@@ -61,6 +61,7 @@ const Editor = (props: Props) => {
       dispatch(actions.focusEditorView(viewId, true));
     };
     (editorView.current.dom as HTMLElement).onblur = () => {
+      // TODO: The blur here may have sub-editors that *are* focused.
       dispatch(actions.focusEditorView(viewId, false));
     };
     dispatch(actions.subscribeView(stateKey, viewId, editorView.current));
@@ -76,6 +77,7 @@ const Editor = (props: Props) => {
   // Handle an external focus event:
   useEffect(() => {
     if (editorEl.current == null) return;
+    if (editorView.current?.hasFocus() === focused) return;
     if (!focused) {
       (editorView.current?.dom as HTMLElement)?.blur();
       return;

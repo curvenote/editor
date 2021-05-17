@@ -1,11 +1,17 @@
 .ProseMirror-hideselection .eqn-editor *::selection { background-color: transparent; }
 .ProseMirror-hideselection .eqn-editor *::-moz-selection { background-color: transparent; }
-.katex-display { margin: 0; }
+.katex-display {
+  margin: 0.5em;
+  padding: 5px;
+}
 
 .eqn-math { overflow: hidden; }
 .eqn.editing .eqn-math { display: none; }
 .eqn .eqn-editor { display: none; }
-.eqn.editing .eqn-editor { display: inline-block; }
+.eqn.editing .eqn-editor {
+  width: 100%;
+  display: inline-block;
+}
 .eqn.inline.editing .eqn-editor { display: inline; }
 
 .eqn-editor.ProseMirror {
@@ -16,10 +22,16 @@
 .eqn-editor::before, .eqn-editor::after {
   content: "$$";
   color: #aaa;
-  cursor: move;
   display: block;
 }
 .eqn-editor.inline::before, .eqn-editor.inline::after  {
   content: "$";
   display: inline;
 }
+// There is no span width, so the cursor gets lost :(
+.eqn-editor.inline.empty::before {
+  border-right: 1px #000 solid;
+  animation: blink 1.2s;
+  animation-iteration-count: infinite;
+}
+@keyframes blink { 50% { border-color:#fff ; }  }

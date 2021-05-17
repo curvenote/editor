@@ -87,14 +87,14 @@ export class ReactWrapper {
       this.dom,
       async () => {
         const edit = isEditable(this.view.state);
-        this.editor?.setState({ open: this.view.hasFocus(), edit });
+        this.editor?.setState({ open: false, edit });
       },
     );
   }
 
   selectNode() {
     const edit = isEditable(this.view.state);
-    this.editor?.setState({ open: this.view.hasFocus(), edit });
+    this.editor?.setState({ open: true, edit });
   }
 
   deselectNode() {
@@ -106,7 +106,7 @@ export class ReactWrapper {
     if (!node.sameMarkup(this.node)) return false;
     this.node = node;
     const edit = isEditable(this.view.state);
-    this.editor?.setState({ open: this.view.hasFocus(), edit });
+    this.editor?.setState({ edit });
     return true;
   }
 }

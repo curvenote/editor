@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { MenuItem, Typography } from '@material-ui/core';
+import {
+  createStyles, makeStyles, MenuItem, Typography,
+} from '@material-ui/core';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import CodeIcon from '@material-ui/icons/Code';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -19,43 +21,58 @@ const icons = {
   link: LinkIcon,
 };
 
+const useStyles = makeStyles(() => createStyles({
+  root: {
+    minWidth: 115,
+  },
+  icon: {
+    position: 'relative',
+    top: 3,
+    marginRight: 10,
+    color: '#aaa',
+  },
+}));
+
 export type IconTypes = keyof typeof icons;
 
 export type MenuActionProps = {
-  kind: IconTypes;
+  kind?: IconTypes;
   title?: string | React.ReactNode;
-  action?: (() => void) | null;
+  children?: React.ReactNode;
+  action?: (() => void);
   disabled?: boolean;
+  selected?: boolean;
 };
 
-export const Action = (props: MenuActionProps) => {
+const MenuAction = (props: MenuActionProps) => {
   const {
-    kind, title, action, disabled,
+    kind, title, action, disabled, children, selected,
   } = props;
-  const click = action ?? (() => null); // Do we need to close/stop prop?
-  const Icon = icons[kind];
+  const classes = useStyles();
+  const Icon = kind && icons[kind];
   return (
-    <MenuItem onClick={click} disabled={disabled}>
-      <Typography>
+    <MenuItem onClick={action} disabled={disabled} selected={selected}>
+      <Typography className={classes.root}>
         {Icon && (
           <Icon
             fontSize="small"
-            style={{
-              position: 'relative', top: 3, marginRight: 10, color: '#aaa',
-            }}
+            className={classes.icon}
             color="inherit"
           />
         )}
         {` ${title}`}
       </Typography>
+      {children}
     </MenuItem>
   );
 };
 
-Action.defaultProps = {
+MenuAction.defaultProps = {
+  kind: undefined,
   title: '',
-  action: () => null,
+  action: undefined,
   disabled: false,
+  selected: false,
 };
 
-export default Action;
+export default MenuAction;

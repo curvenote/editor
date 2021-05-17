@@ -46,6 +46,7 @@ class MathView {
       this.dom.classList.add('inline');
       this.editor.classList.add('inline');
     }
+    this.addFakeCursor();
     this.dom.classList.remove('editing');
     this.renderMath();
 
@@ -61,13 +62,13 @@ class MathView {
       state: EditorState.create({
         doc: this.node,
         plugins: [keymap({
-          'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
           'Mod-a': () => {
             const { doc, tr } = this.innerView.state;
             const sel = TextSelection.create(doc, 0, this.node.nodeSize - 2);
             this.innerView.dispatch(tr.setSelection(sel));
             return true;
           },
+          'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
           'Mod-Z': () => redo(this.outerView.state, this.outerView.dispatch),
           ...(mac ? {} : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
           Escape: () => {
@@ -133,9 +134,18 @@ class MathView {
     }
   }
 
+  addFakeCursor() {
+    // Inline cursor as a border when the content is empty
+    // Inline spans do not have width
+    if (!this.inline) return;
+    const hasContent = this.node.textContent.length > 0;
+    this.editor.classList[hasContent ? 'remove' : 'add']('empty');
+  }
+
   update(node: Node) {
     if (!node.sameMarkup(this.node)) return false;
     this.node = node;
+    this.addFakeCursor();
     if (this.innerView) {
       const { state } = this.innerView;
       const start = node.content.findDiffStart(state.doc.content);

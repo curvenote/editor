@@ -7,7 +7,7 @@ import { State, Dispatch } from '../../store/types';
 import { selectors, actions } from '../../store';
 import Suggestion from './Suggestion';
 import { CommandResult } from '../../store/suggestion/commands';
-import Keyboard from './Keyboard';
+import Keyboard from '../Keyboard';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
