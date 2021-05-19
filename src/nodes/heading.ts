@@ -41,11 +41,11 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 
 export const toTex: FormatSerialize = (state, node) => {
   const { level } = node.attrs;
-  if (level === 1) state.write('\\chapter*{');
-  if (level === 2) state.write('\\section*{');
-  if (level === 3) state.write('\\subsection*{');
-  if (level === 4) state.write('\\subsubsection*{');
-  if (level === 5) state.write('\\paragraph*{');
+  if (level === 1) state.write('\\section*{');
+  if (level === 2) state.write('\\subsection*{');
+  if (level === 3) state.write('\\subsubsection*{');
+  if (level === 4) state.write('\\paragraph*{');
+  if (level === 5) state.write('\\subparagraph*{');
   if (level === 6) state.write('\\subparagraph*{');
   state.renderInline(node);
   state.write('}');
