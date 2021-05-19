@@ -75,7 +75,7 @@ export const texSerializer = new MarkdownSerializer({
   math: nodes.Math.toTex,
   equation: nodes.Equation.toTex,
   // \usepackage{framed}
-  callout: latexStatement('framed', (state, node) => { state.renderContent(node); }),
+  callout: nodes.Callout.toTex,
   aside: latexStatement('marginpar', (state, node) => { state.renderContent(node); }, true),
   variable: blankTexLines,
   display: blankTex,

@@ -1,4 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
+import { latexStatement } from '../serialize/tex/utils';
 import { NodeGroups, FormatSerialize } from './types';
 
 export enum CalloutKinds {
@@ -43,5 +44,9 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   state.write('```');
   state.closeBlock(node);
 };
+
+export const toTex = latexStatement('callout', (state, node) => {
+  state.renderContent(node);
+});
 
 export default callout;
