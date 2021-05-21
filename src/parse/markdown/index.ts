@@ -1,7 +1,7 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import Token from 'markdown-it/lib/token';
 import { MarkdownParser, TokenConfig } from 'prosemirror-markdown';
-import MyST from 'markdown-it-myst';
+import { MyST } from 'markdown-it-myst';
 import { DEFAULT_IMAGE_WIDTH } from '../../utils';
 import { getSchema, UseSchema } from '../../schemas';
 
@@ -36,6 +36,7 @@ const tokens: Tokens = {
   math_inline_double: { block: 'math', noCloseToken: true },
   math_block: { block: 'equation', noCloseToken: true },
   math_block_end: { ignore: true, noCloseToken: true },
+  amsmath: { block: 'equation', noCloseToken: true },
 
   link: {
     mark: 'link',

@@ -18,6 +18,7 @@ describe('Markdown', () => {
   // https://github.com/ProseMirror/prosemirror-markdown/blob/master/test/test-parse.js
   it('parses inline equations', () => same('A line is $y = mx + b$!', tdoc(p('A line is ', math('y = mx + b'), '!'))));
   it('parses equations', () => same('A line is:\n\n$$y = mx + b$$', tdoc(p('A line is:'), equation('y = mx + b'))));
+  it('parses amsmath', () => same('\\begin{equation}y = mx + b\\end{equation}', tdoc(equation('\\begin{equation}y = mx + b\\end{equation}'))));
   it('parses myst inline equations', () => same(
     // Simplify known math roles to wrapping with dollars
     { before: 'A role {math}`Ax = b` in a paragraph.', after: 'A role $Ax = b$ in a paragraph.' },
