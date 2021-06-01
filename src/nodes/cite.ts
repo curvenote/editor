@@ -4,6 +4,7 @@ import { NodeGroups, FormatSerialize } from './types';
 const cite: NodeSpec = {
   attrs: {
     key: { default: null },
+    inline: { default: '' },
   },
   inline: true,
   marks: '',
@@ -14,12 +15,13 @@ const cite: NodeSpec = {
     getAttrs(dom: any) {
       return {
         key: dom.getAttribute('key') ?? dom.getAttribute('data-key') ?? dom.getAttribute('data-cite'),
+        inline: dom.getAttribute('inline') ?? '',
       };
     },
   }],
   toDOM(node) {
-    const { key } = node.attrs;
-    return ['cite', { key }];
+    const { key, inline } = node.attrs;
+    return ['cite', { key, inline }];
   },
 };
 
