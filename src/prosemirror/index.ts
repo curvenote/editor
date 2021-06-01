@@ -59,7 +59,9 @@ export function createEditorView(
       time(node, view, getPos) {
         return new views.TimeView(node, view, getPos as () => number);
       },
-      cite: views.CiteView,
+      cite(node, view, getPos) {
+        return new views.CiteView(node, view, getPos as () => number);
+      },
       button: views.newWidgetView,
       display: views.newWidgetView,
       dynamic: views.newWidgetView,

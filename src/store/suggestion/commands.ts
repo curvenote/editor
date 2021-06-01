@@ -31,7 +31,10 @@ export enum CommandNames {
   'vimeo' = 'vimeo',
   'miro' = 'miro',
   'iframe' = 'iframe',
+  'add_citation' = 'add_citation',
   'citation' = 'citation',
+  'link_article' = 'link_article',
+  'link_notebook' = 'link_notebook',
 }
 
 export interface CommandResult {
@@ -94,9 +97,27 @@ export const commands: CommandResult[] = [
   },
   {
     name: CommandNames.citation,
-    title: 'Reference',
+    title: 'Cite',
+    description: 'Quickly reference a citation',
+    shortcut: ['[[cite: To access existing ciations'],
+    node: 'cite',
+  },
+  {
+    name: CommandNames.link_article,
+    title: 'Link to Article',
+    description: 'Add a link to an article',
+    shortcut: ['[[article: Lookup an article'],
+  },
+  {
+    name: CommandNames.link_notebook,
+    title: 'Link to Notebook',
+    description: 'Add a link to an notebook',
+    shortcut: ['[[nb: Lookup a notebook'],
+  },
+  {
+    name: CommandNames.add_citation,
+    title: 'Add Reference',
     description: 'Cite existing literature',
-    shortcut: ['[[ To access existing ciations'],
     node: 'cite',
   },
   {

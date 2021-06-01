@@ -4,8 +4,6 @@ import reducer from './reducers';
 import middleware from './middleware';
 
 export * from './types';
-export * from './state/types';
-
 export {
   reducer, actions, selectors, middleware,
 };

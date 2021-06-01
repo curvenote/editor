@@ -1,42 +1,55 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import scrollIntoView from 'scroll-into-view-if-needed';
-
-const HIGHLIGHT_COLOR = '#e8e8e8';
-
+import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
+import { isSuggestionSelected } from '../../store/selectors';
+import { Dispatch, State } from '../../store';
+import { chooseSelection, selectSuggestion } from '../../store/actions';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
     padding: 10,
     cursor: 'pointer',
+    clear: 'both',
+  },
+  selected: {
+    backgroundColor: '#e8e8e8',
   },
 }));
 
 type Props = {
-  selected: boolean;
-  onClick: () => void;
-  onHover: () => void;
+  index: number;
   className?: string;
 };
 
 const Suggestion: React.FC<Props> = (props) => {
-  const {
-    selected, onClick, onHover, children, className,
-  } = props;
+  const { index, children, className } = props;
 
   const classes = useStyles();
+  const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch<Dispatch>();
+  const selected = useSelector((state: State) => isSuggestionSelected(state, index));
+
+  const onClick = useCallback(() => dispatch(chooseSelection(index)), [index]);
+  const onHover = useCallback(() => dispatch(selectSuggestion(index)), [index]);
+
+  useEffect(() => {
+    if (ref.current == null || !selected) return;
+    scrollIntoView(ref.current, {
+      behavior: 'smooth',
+      scrollMode: 'if-needed',
+      boundary: ref.current.parentElement?.parentElement,
+    });
+  }, [selected]);
 
   return (
     <div
-      className={`${classes.root} ${className ?? ''}`}
+      className={classNames(classes.root, { [className ?? '']: className, [classes.selected]: selected })}
       onClick={onClick}
       onMouseEnter={onHover}
-      style={selected ? { backgroundColor: HIGHLIGHT_COLOR } : {}}
-      ref={selected ? (el) => {
-        if (el == null) return;
-        scrollIntoView(el, { behavior: 'smooth', scrollMode: 'if-needed', boundary: el.parentElement?.parentElement });
-      } : null}
+      ref={ref}
     >
       {children}
     </div>

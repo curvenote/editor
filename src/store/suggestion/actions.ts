@@ -131,7 +131,9 @@ export function filterResults(schema: Schema, search: string): AppThunk<void> {
   };
 }
 
-function setStartingSuggestions(schema: Schema, kind: SuggestionKind): AppThunk<void> {
+function setStartingSuggestions(
+  schema: Schema, kind: SuggestionKind, search: string, create = true,
+): AppThunk<void> {
   return async (dispatch, getState) => {
     switch (kind) {
       case SuggestionKind.emoji: {
@@ -144,7 +146,8 @@ function setStartingSuggestions(schema: Schema, kind: SuggestionKind): AppThunk<
         return;
       }
       case SuggestionKind.link: {
-        const suggestions = await link.startingSuggestions();
+        dispatch(updateResults([]));
+        const suggestions = await link.startingSuggestions(search, create);
         dispatch(updateResults(suggestions));
         return;
       }
@@ -173,7 +176,7 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
     ));
     const { schema } = action.view.state;
     if (action.kind === 'open') {
-      dispatch(setStartingSuggestions(schema, kind));
+      dispatch(setStartingSuggestions(schema, kind, action.search ?? '', true));
       dispatch(selectSuggestion(0));
     }
     if (action.kind === 'previous' || action.kind === 'next') {
@@ -186,7 +189,7 @@ AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
     }
     if (action.kind === 'filter') {
       if (action.search === '' || action.search == null) {
-        dispatch(setStartingSuggestions(schema, kind));
+        dispatch(setStartingSuggestions(schema, kind, '', false));
       } else {
         dispatch(filterResults(action.view.state.schema, action.search));
       }
