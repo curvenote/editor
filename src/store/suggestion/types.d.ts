@@ -1,6 +1,5 @@
 import { types } from '@curvenote/runtime';
 import { EditorView } from 'prosemirror-view';
-import { CitationFormat } from '../../types';
 import { CommandResult } from './commands';
 export declare const UPDATE_SUGGESTION = "UPDATE_SUGGESTION";
 export declare const UPDATE_RESULTS = "UPDATE_RESULTS";
@@ -20,8 +19,20 @@ export interface EmojiResult {
     s: string;
     o: string;
 }
-export declare type LinkResult = CitationFormat;
+export declare enum LinkKind {
+    'link' = 0,
+    'cite' = 1,
+    'ref' = 2
+}
+export declare type LinkResult = {
+    kind: LinkKind;
+    uid: string;
+    content: string;
+    linkKind?: string;
+    alt?: string;
+};
 export declare type VariableResult = Partial<types.Variable>;
+export type { CommandResult };
 export declare type SuggestionResult = EmojiResult | CommandResult | VariableResult | LinkResult;
 export declare type Location = {
     left: number;

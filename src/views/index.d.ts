@@ -3,6 +3,7 @@ import MathView from './MathView';
 import ImageView from './ImageView';
 import IFrameView from './IFrameView';
 import LinkView from './LinkView';
+import CiteView from './CiteView';
 import TimeView from './TimeView';
 import createNodeView from './NodeView';
 import WidgetView from './WidgetView';
@@ -14,7 +15,7 @@ declare const _default: {
     IFrameView: typeof IFrameView;
     LinkView: typeof LinkView;
     TimeView: typeof TimeView;
-    CiteView: (node: import("prosemirror-model").Node<any>, view: import("prosemirror-view").EditorView<any>, getPos: boolean | (() => number)) => import("./NodeView").ReactWrapper;
+    CiteView: typeof CiteView;
     WidgetView: typeof WidgetView;
     newWidgetView: (node: import("prosemirror-model").Node<any>, view: import("prosemirror-view").EditorView<any>, getPos: boolean | (() => number)) => WidgetView;
 };

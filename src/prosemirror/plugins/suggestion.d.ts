@@ -7,7 +7,7 @@ interface Range {
     to: number;
 }
 export declare const key: PluginKey<any, any>;
-export declare function triggerSuggestion(view: EditorView, trigger: string): void;
+export declare function triggerSuggestion(view: EditorView, trigger: string, search?: string): void;
 export declare enum SuggestionActionKind {
     'open' = "open",
     'close' = "close",

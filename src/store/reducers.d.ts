@@ -1,5 +1,5 @@
 declare const reducer: import("redux").Reducer<import("redux").CombinedState<{
-    state: import(".").EditorsState;
+    state: import("./types").EditorsState;
     ui: import("./ui/types").UIState;
     suggestion: import("./suggestion/types").SuggestionState;
     attrs: import("./attrs/types").AttributesState;

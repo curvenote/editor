@@ -57,7 +57,10 @@ export function createEditorView(dom, state, dispatch) {
             },
             time: function (node, view, getPos) {
                 return new views.TimeView(node, view, getPos);
-            }, cite: views.CiteView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
+            },
+            cite: function (node, view, getPos) {
+                return new views.CiteView(node, view, getPos);
+            }, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
         handleKeyDown: function (_, event) {
             shiftKey = event.shiftKey;

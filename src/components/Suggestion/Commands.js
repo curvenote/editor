@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Typography, makeStyles, createStyles } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
-import { selectors, actions } from '../../store';
+import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import Keyboard from '../Keyboard';
 var useStyles = makeStyles(function () { return createStyles({
@@ -17,15 +17,17 @@ var useStyles = makeStyles(function () { return createStyles({
             marginRight: 50,
         },
     },
+    none: {
+        margin: 10,
+    },
 }); });
 var CommandSuggestions = function () {
-    var dispatch = useDispatch();
-    var suggestions = useSelector(function (state) { return selectors.getSuggestion(state); }, isEqual);
-    var _a = suggestions, selected = _a.selected, results = _a.results;
-    var onClick = function (index) { return dispatch(actions.chooseSelection(index)); };
-    var onHover = function (index) { return dispatch(actions.selectSuggestion(index)); };
+    var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
     var classes = useStyles();
-    return (React.createElement("div", null, results.map((function (item, index) { return (React.createElement(Suggestion, { key: item.name, onClick: function () { return onClick(index); }, onHover: function () { return onHover(index); }, selected: selected === index, className: classes.root },
+    if (results.length === 0) {
+        return (React.createElement(Typography, { variant: "subtitle2", className: classes.none }, "No command found, try a different search!"));
+    }
+    return (React.createElement("div", null, results.map((function (item, index) { return (React.createElement(Suggestion, { key: item.name, index: index, className: classes.root },
         item.shortcut && React.createElement("div", null,
             React.createElement(Keyboard, { shortcut: item.shortcut })),
         React.createElement(Typography, { variant: "subtitle1" }, item.title),

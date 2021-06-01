@@ -1,8 +1,6 @@
 import React from 'react';
 declare type Props = {
-    selected: boolean;
-    onClick: () => void;
-    onHover: () => void;
+    index: number;
     className?: string;
 };
 declare const Suggestion: React.FC<Props>;

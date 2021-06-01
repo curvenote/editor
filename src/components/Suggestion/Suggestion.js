@@ -1,22 +1,40 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import scrollIntoView from 'scroll-into-view-if-needed';
-var HIGHLIGHT_COLOR = '#e8e8e8';
+import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
+import { isSuggestionSelected } from '../../store/selectors';
+import { chooseSelection, selectSuggestion } from '../../store/actions';
 var useStyles = makeStyles(function () { return createStyles({
     root: {
         padding: 10,
         cursor: 'pointer',
+        clear: 'both',
+    },
+    selected: {
+        backgroundColor: '#e8e8e8',
     },
 }); });
 var Suggestion = function (props) {
-    var selected = props.selected, onClick = props.onClick, onHover = props.onHover, children = props.children, className = props.className;
+    var _a;
+    var index = props.index, children = props.children, className = props.className;
     var classes = useStyles();
-    return (React.createElement("div", { className: classes.root + " " + (className !== null && className !== void 0 ? className : ''), onClick: onClick, onMouseEnter: onHover, style: selected ? { backgroundColor: HIGHLIGHT_COLOR } : {}, ref: selected ? function (el) {
-            var _a;
-            if (el == null)
-                return;
-            scrollIntoView(el, { behavior: 'smooth', scrollMode: 'if-needed', boundary: (_a = el.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement });
-        } : null }, children));
+    var ref = useRef(null);
+    var dispatch = useDispatch();
+    var selected = useSelector(function (state) { return isSuggestionSelected(state, index); });
+    var onClick = useCallback(function () { return dispatch(chooseSelection(index)); }, [index]);
+    var onHover = useCallback(function () { return dispatch(selectSuggestion(index)); }, [index]);
+    useEffect(function () {
+        var _a;
+        if (ref.current == null || !selected)
+            return;
+        scrollIntoView(ref.current, {
+            behavior: 'smooth',
+            scrollMode: 'if-needed',
+            boundary: (_a = ref.current.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement,
+        });
+    }, [selected]);
+    return (React.createElement("div", { className: classNames(classes.root, (_a = {}, _a[className !== null && className !== void 0 ? className : ''] = className, _a[classes.selected] = selected, _a)), onClick: onClick, onMouseEnter: onHover, ref: ref }, children));
 };
 export default Suggestion;
 //# sourceMappingURL=Suggestion.js.map

@@ -18,12 +18,12 @@ var inactiveSuggestionState = {
     active: false, trigger: null, decorations: DecorationSet.empty, text: null, range: null,
 };
 export var key = new PluginKey('suggestion');
-export function triggerSuggestion(view, trigger) {
+export function triggerSuggestion(view, trigger, search) {
     var plugin = key.get(view.state);
     var tr = view.state.tr
-        .insertText(trigger)
+        .insertText("" + trigger + (search !== null && search !== void 0 ? search : ''))
         .scrollIntoView()
-        .setMeta(plugin, { action: 'add', trigger: trigger });
+        .setMeta(plugin, { action: 'add', trigger: trigger, search: search });
     view.dispatch(tr);
 }
 export var SuggestionActionKind;
@@ -97,10 +97,11 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
         state: {
             init: function () { return (__assign({}, inactiveSuggestionState)); },
             apply: function (tr, state) {
-                var _a;
+                var _a, _b;
                 var meta = tr.getMeta(plugin);
                 if ((meta === null || meta === void 0 ? void 0 : meta.action) === 'add') {
-                    var from_1 = tr.selection.from - meta.trigger.length;
+                    var trigger_1 = meta.trigger, search = meta.search;
+                    var from_1 = tr.selection.from - trigger_1.length - ((_a = search === null || search === void 0 ? void 0 : search.length) !== null && _a !== void 0 ? _a : 0);
                     var to_1 = tr.selection.from;
                     var deco = Decoration.inline(from_1, to_1, {
                         id: SUGGESTION_ID,
@@ -110,7 +111,7 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
                         active: true,
                         trigger: meta.trigger,
                         decorations: DecorationSet.create(tr.doc, [deco]),
-                        text: '',
+                        text: search,
                         range: { from: from_1, to: to_1 },
                     };
                 }
@@ -121,7 +122,7 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
                     || !inSuggestion(tr.selection, nextDecorations)
                     || !hasDecoration)
                     return __assign({}, inactiveSuggestionState);
-                var _b = nextDecorations.find()[0], from = _b.from, to = _b.to;
+                var _c = nextDecorations.find()[0], from = _c.from, to = _c.to;
                 var text = tr.doc.textBetween(from, to);
                 if (!text.startsWith(trigger))
                     return __assign({}, inactiveSuggestionState);
@@ -129,7 +130,7 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
                     active: active,
                     trigger: trigger,
                     decorations: nextDecorations,
-                    text: text.slice((_a = trigger === null || trigger === void 0 ? void 0 : trigger.length) !== null && _a !== void 0 ? _a : 1),
+                    text: text.slice((_b = trigger === null || trigger === void 0 ? void 0 : trigger.length) !== null && _b !== void 0 ? _b : 1),
                     range: { from: from, to: to },
                 };
             },

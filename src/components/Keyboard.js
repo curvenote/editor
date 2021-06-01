@@ -32,7 +32,7 @@ var Keyboard = function (props) {
     var array = typeof shortcut === 'string' ? createShortcut(shortcut) : shortcut;
     var text = array.join(' + ');
     return (React.createElement(Tooltip, { title: text },
-        React.createElement("span", { className: classes.root }, array.map(function (s) { return React.createElement("kbd", null, s.split(' ')[0]); }))));
+        React.createElement("span", { className: classes.root }, array.map(function (s) { return React.createElement("kbd", { key: s }, s.split(' ')[0]); }))));
 };
 export default Keyboard;
 //# sourceMappingURL=Keyboard.js.map

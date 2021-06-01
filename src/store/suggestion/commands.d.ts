@@ -30,7 +30,10 @@ export declare enum CommandNames {
     'vimeo' = "vimeo",
     'miro' = "miro",
     'iframe' = "iframe",
-    'citation' = "citation"
+    'add_citation' = "add_citation",
+    'citation' = "citation",
+    'link_article' = "link_article",
+    'link_notebook' = "link_notebook"
 }
 export interface CommandResult {
     name: CommandNames;

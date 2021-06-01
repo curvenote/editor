@@ -3,10 +3,9 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { Node, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
-import { CitationFormat } from './types';
+import { LinkResult } from './store/suggestion/types';
 export declare type SearchContext = {
-    ids: string[];
-    search: (query: string) => string[];
+    search: (query?: string) => LinkResult[];
 };
 export declare type Options = {
     transformKeyToId: (key: any) => string | null;
@@ -18,8 +17,7 @@ export declare type Options = {
     onDoubleClick?: (stateKey: any, viewId: string | null, view: EditorView<any>, pos: number, event: MouseEvent) => boolean;
     theme: Theme;
     citationPrompt: () => Promise<string[] | null>;
-    citationKeyToJson: (key: string) => Promise<CitationFormat | null>;
-    createCitationSearch: () => Promise<SearchContext>;
+    createLinkSearch: () => Promise<SearchContext>;
     throttle: number;
     nodeViews?: DirectEditorProps['nodeViews'];
 };

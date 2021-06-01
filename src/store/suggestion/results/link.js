@@ -35,76 +35,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { getSuggestion } from '../selectors';
+import { LinkKind } from '../types';
 import { opts } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
 var context = null;
-var keysToresults = function (keys) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4, Promise.all(keys === null || keys === void 0 ? void 0 : keys.map(function (k) { return opts.citationKeyToJson(k); }))];
-            case 1: return [2, (_a.sent())
-                    .filter(function (r) { return r != null; })];
-        }
-    });
-}); };
-export var startingSuggestions = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var results;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0: return [4, opts.createCitationSearch()];
-            case 1:
-                context = _b.sent();
-                return [4, keysToresults((_a = context === null || context === void 0 ? void 0 : context.ids) !== null && _a !== void 0 ? _a : [])];
-            case 2:
-                results = _b.sent();
-                return [2, results];
-        }
-    });
-}); };
-export function chooseSelection(result) {
-    return function (dispatch, getState) {
-        var _a = getSuggestion(getState()), view = _a.view, _b = _a.range, from = _b.from, to = _b.to;
-        if (view == null)
-            return false;
-        var tr = view.state.tr;
-        view.dispatch(tr.insertText('', from, to));
-        dispatch(insertInlineNode(view.state.schema.nodes.cite, { key: result.uid }));
-        return true;
-    };
-}
-export function filterResults(schema, search, callback) {
-    var _this = this;
-    if (!search) {
-        setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-            var _a;
-            var _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _a = callback;
-                        return [4, keysToresults((_b = context === null || context === void 0 ? void 0 : context.ids) !== null && _b !== void 0 ? _b : [])];
-                    case 1:
-                        _a.apply(void 0, [_c.sent()]);
-                        return [2];
-                }
-            });
-        }); }, 1);
-        return;
-    }
-    setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-        var results, links;
+export var startingSuggestions = function (search, create) {
+    if (create === void 0) { create = true; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var results;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    results = (_a = context === null || context === void 0 ? void 0 : context.search(search)) !== null && _a !== void 0 ? _a : [];
-                    return [4, keysToresults(results)];
+                    if (!create) return [3, 2];
+                    return [4, opts.createLinkSearch()];
                 case 1:
-                    links = _b.sent();
-                    callback(links);
-                    return [2];
+                    context = _b.sent();
+                    _b.label = 2;
+                case 2:
+                    results = (_a = context === null || context === void 0 ? void 0 : context.search(search)) !== null && _a !== void 0 ? _a : [];
+                    return [2, results];
             }
+        });
+    });
+};
+export function chooseSelection(result) {
+    return function (dispatch, getState) {
+        var _a, _b;
+        var _c = getSuggestion(getState()), view = _c.view, _d = _c.range, from = _d.from, to = _d.to;
+        if (view == null)
+            return false;
+        view.dispatch(view.state.tr.insertText('', from, to));
+        switch (result.kind) {
+            case LinkKind.cite: {
+                var citeAttrs = { key: result.uid, inline: result.content };
+                return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
+            }
+            case LinkKind.link: {
+                var tr = view.state.tr;
+                var text = result.content;
+                tr.insertText(text + " ", from);
+                var mark = view.state.schema.marks.link.create({
+                    href: result.uid,
+                    title: (_a = result.alt) !== null && _a !== void 0 ? _a : '',
+                    kind: (_b = result.linkKind) !== null && _b !== void 0 ? _b : '',
+                });
+                view.dispatch(tr.addMark(from, from + text.length, mark));
+                return true;
+            }
+            case LinkKind.ref:
+                return dispatch(insertInlineNode(view.state.schema.nodes.ref, { key: result.uid }));
+            default:
+                return false;
+        }
+    };
+}
+export function filterResults(schema, search, callback) {
+    var _this = this;
+    setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+        var results;
+        var _a;
+        return __generator(this, function (_b) {
+            results = (_a = context === null || context === void 0 ? void 0 : context.search(search)) !== null && _a !== void 0 ? _a : [];
+            callback(results);
+            return [2];
         });
     }); }, 1);
 }

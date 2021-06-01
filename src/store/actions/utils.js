@@ -74,6 +74,8 @@ function getLinkBounds(state, pos) {
     return { from: startPos, to: endPos, mark: link };
 }
 export function getLinkBoundsIfTheyExist(state) {
+    if (!state)
+        return null;
     var _a = state.selection, from = _a.from, $from = _a.$from, to = _a.to, $to = _a.$to, empty = _a.empty;
     var mark = state.schema.marks.link;
     var searchForLink = empty

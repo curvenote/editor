@@ -14,36 +14,52 @@ var useStyles = makeStyles(function () { return createStyles({
         marginLeft: 5,
     },
 }); });
-var LinkActions = function (props) {
-    var _a, _b;
-    var stateId = props.stateId, viewId = props.viewId;
+export function useLinkActions(stateId, viewId) {
+    var _a;
     var dispatch = useDispatch();
-    var _c = useState(false), labelOpen = _c[0], setLabelOpen = _c[1];
-    var classes = useStyles();
     var state = useSelector(function (s) { var _a; return (_a = getEditorState(s, stateId)) === null || _a === void 0 ? void 0 : _a.state; });
-    if (!state)
-        return null;
     var linkBounds = getLinkBoundsIfTheyExist(state);
-    var href = (_b = (_a = linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.mark) === null || _a === void 0 ? void 0 : _a.attrs) === null || _b === void 0 ? void 0 : _b.href;
-    var onOpen = useCallback(function () { return window.open(href, '_blank'); }, [href]);
-    if (!linkBounds)
-        return null;
-    var mark = state.schema.marks.link;
-    var onDelete = function () { return (dispatch(removeMark(stateId, viewId, mark, linkBounds.from, linkBounds.to))); };
-    var onEdit = function (newHref) {
-        if (!newHref)
+    var attrs = (_a = linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.mark.attrs) !== null && _a !== void 0 ? _a : null;
+    var onOpen = useCallback(function () { return window.open(attrs === null || attrs === void 0 ? void 0 : attrs.href, '_blank'); }, [attrs === null || attrs === void 0 ? void 0 : attrs.href]);
+    var mark = state === null || state === void 0 ? void 0 : state.schema.marks.link;
+    var onDelete = useCallback(function () {
+        if (!linkBounds || !mark)
+            return;
+        dispatch(removeMark(stateId, viewId, mark, linkBounds.from, linkBounds.to));
+    }, [stateId, viewId, linkBounds, mark]);
+    var onEdit = useCallback(function (newHref) {
+        if (!newHref || !linkBounds || !state || !mark)
             return;
         var link = mark.create({ href: testLink(newHref) ? newHref : "http://" + newHref });
         var tr = state.tr
             .removeMark(linkBounds.from, linkBounds.to, mark)
             .addMark(linkBounds.from, linkBounds.to, link);
         dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
+    }, [stateId, viewId, linkBounds, mark]);
+    var tooltip = (attrs === null || attrs === void 0 ? void 0 : attrs.title) ? attrs.title + " <" + (attrs === null || attrs === void 0 ? void 0 : attrs.href) + ">" : attrs === null || attrs === void 0 ? void 0 : attrs.href;
+    return {
+        attrs: attrs !== null && attrs !== void 0 ? attrs : null,
+        tooltip: tooltip !== null && tooltip !== void 0 ? tooltip : '',
+        bounds: linkBounds,
+        onOpen: onOpen,
+        onDelete: onDelete,
+        onEdit: onEdit,
     };
+}
+var LinkActions = function (props) {
+    var _a;
+    var stateId = props.stateId, viewId = props.viewId;
+    var _b = useState(false), labelOpen = _b[0], setLabelOpen = _b[1];
+    var classes = useStyles();
+    var link = useLinkActions(stateId, viewId);
+    if (!link)
+        return null;
+    var attrs = link.attrs, onEdit = link.onEdit, onOpen = link.onOpen, onDelete = link.onDelete;
     if (labelOpen) {
-        return (React.createElement(TextAction, { text: href, onCancel: function () { return setLabelOpen(false); }, onSubmit: function (t) { onEdit(t); setLabelOpen(false); }, validate: testLinkWeak, help: "Please provide a valid URL" }));
+        return (React.createElement(TextAction, { text: (_a = attrs === null || attrs === void 0 ? void 0 : attrs.href) !== null && _a !== void 0 ? _a : '', onCancel: function () { return setLabelOpen(false); }, onSubmit: function (t) { onEdit(t); setLabelOpen(false); }, validate: testLinkWeak, help: "Please provide a valid URL" }));
     }
     return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.grid },
-        React.createElement(Tooltip, { title: href },
+        React.createElement(Tooltip, { title: link.tooltip },
             React.createElement(Button, { className: classes.button, onClick: function () { return setLabelOpen(true); }, size: "small", disableElevation: true }, "Edit Link")),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "open", onClick: onOpen }),

@@ -41,12 +41,14 @@ import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
-import { actions, Editor, EditorMenu, setup, Suggestion, Attributes, InlineActions, } from '../src';
+import { actions, Editor, EditorMenu, setup, Suggestions, Attributes, InlineActions, LinkKind, } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
 import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
 import snippet from './snippet';
+import SuggestionSwitch from '../src/components/Suggestion/Switch';
+import InlineActionSwitch from '../src/components/InlineActions/Switch';
 var store = createStore(rootReducer, applyMiddleware.apply(void 0, middleware));
 var theme = createMuiTheme({});
 var stateKey = 'myEditor';
@@ -58,16 +60,10 @@ var newComment = function () {
 var removeComment = function () {
     store.dispatch(actions.removeComment(viewId1, 'sidenote1'));
 };
-var citation = {
-    uid: 'simpeg2015',
-    internal: false,
-    title: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
-    authors: ['Cockett, Rowan', 'Kang, Seogi', 'Heagy, Lindsey J.', 'Pidlisecky, Adam', 'Oldenburg, Douglas W.'],
-    date: new Date(),
-    url: 'https://doi.org/10.1016/j.cageo.2015.09.015',
-    doi: '10.1016/j.cageo.2015.09.015',
-    journal: 'Computers & Geosciences, 85, 142–154.',
-};
+var someLinks = [
+    { kind: LinkKind.cite, uid: 'simpeg2015', content: 'Cockett et al., 2015', alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.' },
+    { kind: LinkKind.link, uid: 'https://curvenote.com', content: 'Curvenote', alt: 'Move ideas forward' },
+];
 var opts = {
     transformKeyToId: function (key) { return key; },
     uploadImage: function (file) { return __awaiter(void 0, void 0, void 0, function () {
@@ -90,13 +86,8 @@ var opts = {
     citationPrompt: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2, ['simpeg2015']];
     }); }); },
-    citationKeyToJson: function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2, new Promise(function (resolve) { return (setTimeout(function () { return resolve(citation); }, 250)); })];
-        });
-    }); },
-    createCitationSearch: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2, ({ search: function () { return ['simpeg2015']; }, ids: ['simpeg2015'] })];
+    createLinkSearch: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2, ({ search: function () { return someLinks; } })];
     }); }); },
     nodeViews: {},
 };
@@ -127,7 +118,8 @@ store.subscribe(function () {
 ReactDOM.render(React.createElement(Provider, { store: store },
     React.createElement(React.StrictMode, null,
         React.createElement(EditorMenu, { standAlone: true }),
-        React.createElement(InlineActions, null),
+        React.createElement(InlineActions, null,
+            React.createElement(InlineActionSwitch, null)),
         React.createElement("article", { id: docId, className: "content centered" },
             React.createElement(AnchorBase, { anchor: "anchor" },
                 React.createElement("div", { className: "selected" },
@@ -144,6 +136,7 @@ ReactDOM.render(React.createElement(Provider, { store: store },
                 "for full demo."),
             React.createElement(Button, { onClick: newComment }, "Comment"),
             React.createElement(Button, { onClick: removeComment }, "Remove")),
-        React.createElement(Suggestion, null),
+        React.createElement(Suggestions, null,
+            React.createElement(SuggestionSwitch, null)),
         React.createElement(Attributes, null))), document.getElementById('root'));
 //# sourceMappingURL=index.js.map

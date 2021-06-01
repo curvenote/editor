@@ -124,8 +124,9 @@ export function filterResults(schema, search) {
         }
     };
 }
-function setStartingSuggestions(schema, kind) {
+function setStartingSuggestions(schema, kind, search, create) {
     var _this = this;
+    if (create === void 0) { create = true; }
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
         var _a, starting, suggestions, suggestions;
         return __generator(this, function (_b) {
@@ -153,7 +154,9 @@ function setStartingSuggestions(schema, kind) {
                         return [2];
                     }
                     _b.label = 3;
-                case 3: return [4, link.startingSuggestions()];
+                case 3:
+                    dispatch(updateResults([]));
+                    return [4, link.startingSuggestions(search, create)];
                 case 4:
                     suggestions = _b.sent();
                     dispatch(updateResults(suggestions));
@@ -172,21 +175,22 @@ function setStartingSuggestions(schema, kind) {
 }
 export function handleSuggestion(action) {
     return function (dispatch, getState) {
+        var _a;
         var kind = triggerToKind(action.trigger);
         dispatch(updateSuggestion(action.kind !== 'close', kind, action.search, action.view, action.range, action.trigger));
         var schema = action.view.state.schema;
         if (action.kind === 'open') {
-            dispatch(setStartingSuggestions(schema, kind));
+            dispatch(setStartingSuggestions(schema, kind, (_a = action.search) !== null && _a !== void 0 ? _a : '', true));
             dispatch(selectSuggestion(0));
         }
         if (action.kind === 'previous' || action.kind === 'next') {
-            var _a = getSuggestion(getState()), results = _a.results, selected = _a.selected;
+            var _b = getSuggestion(getState()), results = _b.results, selected = _b.selected;
             dispatch(selectSuggestion(positiveModulus((selected + (action.kind === 'previous' ? -1 : +1)), results.length)));
             return true;
         }
         if (action.kind === 'filter') {
             if (action.search === '' || action.search == null) {
-                dispatch(setStartingSuggestions(schema, kind));
+                dispatch(setStartingSuggestions(schema, kind, '', false));
             }
             else {
                 dispatch(filterResults(action.view.state.schema, action.search));

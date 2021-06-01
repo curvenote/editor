@@ -21,7 +21,7 @@ var useStyles = makeStyles(function (theme) { return createStyles({
         },
     },
 }); });
-export var NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveDisplayNodes));
+export var NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 var Attributes = function () {
     var classes = useStyles();
     var dispatch = useDispatch();

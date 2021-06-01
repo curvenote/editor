@@ -11,4 +11,10 @@ export var SuggestionKind;
     SuggestionKind[SuggestionKind["variable"] = 4] = "variable";
     SuggestionKind[SuggestionKind["display"] = 5] = "display";
 })(SuggestionKind || (SuggestionKind = {}));
+export var LinkKind;
+(function (LinkKind) {
+    LinkKind[LinkKind["link"] = 0] = "link";
+    LinkKind[LinkKind["cite"] = 1] = "cite";
+    LinkKind[LinkKind["ref"] = 2] = "ref";
+})(LinkKind || (LinkKind = {}));
 //# sourceMappingURL=types.js.map

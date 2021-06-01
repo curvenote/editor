@@ -1,7 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Typography, makeStyles, createStyles } from '@material-ui/core';
-import { selectors, actions } from '../../store';
+import isEqual from 'lodash.isequal';
+import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 var useStyles = makeStyles(function () { return createStyles({
     root: {
@@ -27,24 +28,13 @@ var useStyles = makeStyles(function () { return createStyles({
         },
     },
 }); });
-var VariableSuggestions = function (props) {
-    var results = props.results, selected = props.selected, onClick = props.onClick, onHover = props.onHover;
+var VariableSuggestions = function () {
+    var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
     var classes = useStyles();
-    return (React.createElement("div", null, results.map((function (item, index) { return (React.createElement(Suggestion, { key: item.id, onClick: function () { return onClick(index); }, onHover: function () { return onHover(index); }, selected: selected === index, className: classes.root },
+    return (React.createElement("div", null, results.map((function (item, index) { return (React.createElement(Suggestion, { key: item.id, index: index, className: classes.root },
         item.current !== undefined && React.createElement("div", null, String(item.current)),
         React.createElement(Typography, { variant: "subtitle1" }, item.name),
         React.createElement(Typography, { variant: "caption" }, item.description))); }))));
 };
-var mapStateToProps = function (state) {
-    var _a = selectors.getSuggestion(state), results = _a.results, selected = _a.selected;
-    return {
-        selected: selected,
-        results: results,
-    };
-};
-var mapDispatchToProps = function (dispatch) { return ({
-    onClick: function (index) { return dispatch(actions.chooseSelection(index)); },
-    onHover: function (index) { return dispatch(actions.selectSuggestion(index)); },
-}); };
-export default connect(mapStateToProps, mapDispatchToProps)(VariableSuggestions);
+export default VariableSuggestions;
 //# sourceMappingURL=Variables.js.map

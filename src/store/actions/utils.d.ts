@@ -13,7 +13,7 @@ export declare const addLink: (view: EditorView, data: DataTransfer | null) => b
 export declare function updateNodeAttrsOnView(view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;
 }, select?: boolean | 'after'): void;
-export declare function getLinkBoundsIfTheyExist(state: EditorState): {
+export declare function getLinkBoundsIfTheyExist(state?: EditorState | null): {
     from: number;
     to: number;
     mark: import("prosemirror-model").Mark<any>;

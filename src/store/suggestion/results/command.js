@@ -131,9 +131,12 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         case CommandNames.vimeo: return [3, 23];
                         case CommandNames.miro: return [3, 24];
                         case CommandNames.iframe: return [3, 25];
-                        case CommandNames.citation: return [3, 26];
+                        case CommandNames.link_article: return [3, 26];
+                        case CommandNames.link_notebook: return [3, 27];
+                        case CommandNames.citation: return [3, 28];
+                        case CommandNames.add_citation: return [3, 29];
                     }
-                    return [3, 28];
+                    return [3, 31];
                 case 1:
                     {
                         removeText();
@@ -303,8 +306,20 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     _f.label = 26;
                 case 26:
                     removeText();
-                    return [4, opts.citationPrompt()];
+                    triggerSuggestion(view, '[[', 'article: ');
+                    return [2, true];
                 case 27:
+                    removeText();
+                    triggerSuggestion(view, '[[', 'notebook: ');
+                    return [2, true];
+                case 28:
+                    removeText();
+                    triggerSuggestion(view, '[[', 'cite: ');
+                    return [2, true];
+                case 29:
+                    removeText();
+                    return [4, opts.citationPrompt()];
+                case 30:
                     keys = _f.sent();
                     if (!keys || keys.length === 0)
                         return [2, true];
@@ -315,7 +330,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     tr = view.state.tr.replaceSelectionWith(wrapped).scrollIntoView();
                     view.dispatch(tr);
                     return [2, true];
-                case 28: return [2, removeText()];
+                case 31: return [2, removeText()];
             }
         });
     }); };
