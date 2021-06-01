@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveDisplayNodes));
+export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 
 const Attributes = () => {
   const classes = useStyles();
