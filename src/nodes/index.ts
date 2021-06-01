@@ -9,6 +9,7 @@ export * as Time from './time';
 // Technical
 export * as Cite from './cite';
 export * as CiteGroup from './cite-group';
+export * as Ref from './ref';
 export * as Math from './math';
 export * as Equation from './equation';
 
