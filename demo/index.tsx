@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
@@ -6,7 +7,8 @@ import { Button, createMuiTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
-  actions, Editor, EditorMenu, Store, setup, Suggestion, Attributes, InlineActions,
+  actions, Editor, EditorMenu, Store, setup, Suggestions,
+  Attributes, InlineActions, LinkKind, LinkResult,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -14,6 +16,8 @@ import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
 import { Options } from '../src/connect';
 import snippet from './snippet';
+import SuggestionSwitch from '../src/components/Suggestion/Switch';
+import InlineActionSwitch from '../src/components/InlineActions/Switch';
 
 declare global {
   interface Window {
@@ -39,16 +43,10 @@ const removeComment = () => {
   store.dispatch(actions.removeComment(viewId1, 'sidenote1'));
 };
 
-const citation = {
-  uid: 'simpeg2015',
-  internal: false,
-  title: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
-  authors: ['Cockett, Rowan', 'Kang, Seogi', 'Heagy, Lindsey J.', 'Pidlisecky, Adam', 'Oldenburg, Douglas W.'],
-  date: new Date(),
-  url: 'https://doi.org/10.1016/j.cageo.2015.09.015',
-  doi: '10.1016/j.cageo.2015.09.015',
-  journal: 'Computers & Geosciences, 85, 142–154.',
-};
+const someLinks: LinkResult[] = [
+  { kind: LinkKind.cite, uid: 'simpeg2015', content: 'Cockett et al., 2015', alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.' },
+  { kind: LinkKind.link, uid: 'https://curvenote.com', content: 'Curvenote', alt: 'Move ideas forward' },
+];
 
 const opts: Options = {
   transformKeyToId: (key) => key,
@@ -72,10 +70,7 @@ const opts: Options = {
   theme,
   throttle: 0,
   citationPrompt: async () => ['simpeg2015'],
-  citationKeyToJson: async () => new Promise((resolve) => (
-    setTimeout(() => resolve(citation), 250)
-  )),
-  createCitationSearch: async () => ({ search: () => ['simpeg2015'], ids: ['simpeg2015'] }),
+  createLinkSearch: async () => ({ search: () => someLinks }),
   nodeViews: {},
 };
 
@@ -110,7 +105,7 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone />
-      <InlineActions />
+      <InlineActions><InlineActionSwitch /></InlineActions>
       <article id={docId} className="content centered">
         <AnchorBase anchor="anchor">
           <div className="selected">
@@ -136,7 +131,7 @@ ReactDOM.render(
         <Button onClick={newComment}>Comment</Button>
         <Button onClick={removeComment}>Remove</Button>
       </div>
-      <Suggestion />
+      <Suggestions><SuggestionSwitch /></Suggestions>
       <Attributes />
     </React.StrictMode>
   </Provider>,

@@ -25,12 +25,12 @@ interface SuggestionMeta {
   trigger: string | null;
 }
 
-export function triggerSuggestion(view: EditorView, trigger: string) {
+export function triggerSuggestion(view: EditorView, trigger: string, search?: string) {
   const plugin = key.get(view.state) as Plugin;
   const tr = view.state.tr
-    .insertText(trigger)
+    .insertText(`${trigger}${search ?? ''}`)
     .scrollIntoView()
-    .setMeta(plugin, { action: 'add', trigger } as SuggestionMeta);
+    .setMeta(plugin, { action: 'add', trigger, search } as SuggestionMeta);
   view.dispatch(tr);
 }
 
@@ -118,7 +118,8 @@ export default function getPlugins(
       apply(tr, state) {
         const meta = tr.getMeta(plugin);
         if (meta?.action === 'add') {
-          const from = tr.selection.from - meta.trigger.length;
+          const { trigger, search } = meta;
+          const from = tr.selection.from - trigger.length - (search?.length ?? 0);
           const to = tr.selection.from;
           const deco = Decoration.inline(from, to, {
             id: SUGGESTION_ID,
@@ -128,7 +129,7 @@ export default function getPlugins(
             active: true,
             trigger: meta.trigger,
             decorations: DecorationSet.create(tr.doc, [deco]),
-            text: '',
+            text: search,
             range: { from, to },
           };
         }

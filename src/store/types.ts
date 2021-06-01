@@ -5,8 +5,11 @@ import {
 import { types as runtimeTypes } from '@curvenote/runtime';
 import { State as SidenotesState } from 'sidenotes';
 import { EditorsState, EditorActionTypes } from './state/types';
-import { UIState, UIActionTypes } from './ui/types';
-import { SuggestionState, SuggestionActionTypes } from './suggestion/types';
+import { UIState, UIActionTypes, SelectionKinds } from './ui/types';
+import {
+  SuggestionState, SuggestionActionTypes, SuggestionKind, LinkKind,
+  SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult,
+} from './suggestion/types';
 import { AttributesState, AttributesActionTypes } from './attrs/types';
 
 export interface State {
@@ -32,3 +35,15 @@ export type Dispatch = ThunkDispatch<State, null, Action<string>>;
 export type Store = RStore<State, EditorActions> & { dispatch: Dispatch };
 export type Middleware = RMiddleware<Record<string, any>, State, Dispatch>;
 export type Reducer = RReducer<State, EditorActions>;
+
+export { SuggestionKind, LinkKind, SelectionKinds };
+
+export * from './state/types';
+
+export type {
+  SuggestionResult,
+  EmojiResult,
+  CommandResult,
+  VariableResult,
+  LinkResult,
+};

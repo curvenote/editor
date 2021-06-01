@@ -1,19 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Typography, makeStyles, createStyles } from '@material-ui/core';
-import { State, Dispatch } from '../../store/types';
-import { selectors, actions } from '../../store';
+import isEqual from 'lodash.isequal';
+import { State } from '../../store/types';
+import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { VariableResult } from '../../store/suggestion/types';
-
-type Props = {
-  selected: number;
-  results: VariableResult[];
-  onClick: (index: number) => void;
-  onHover: (index: number) => void;
-};
-
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -41,22 +34,16 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 
-const VariableSuggestions: React.FC<Props> = (props) => {
-  const {
-    results, selected, onClick, onHover,
-  } = props;
+const VariableSuggestions: React.FC = () => {
+  const results = useSelector(
+    (state: State) => selectors.getSuggestionResults<VariableResult>(state), isEqual,
+  );
 
   const classes = useStyles();
   return (
     <div>
       {results.map(((item, index) => (
-        <Suggestion
-          key={item.id}
-          onClick={() => onClick(index)}
-          onHover={() => onHover(index)}
-          selected={selected === index}
-          className={classes.root}
-        >
+        <Suggestion key={item.id} index={index} className={classes.root}>
           {item.current !== undefined && <div>{String(item.current)}</div>}
           <Typography variant="subtitle1">
             {item.name}
@@ -70,20 +57,4 @@ const VariableSuggestions: React.FC<Props> = (props) => {
   );
 };
 
-const mapStateToProps = (state: State) => {
-  const { results, selected } = selectors.getSuggestion(state);
-  return {
-    selected,
-    results: results as VariableResult[],
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  onClick: (index: number) => dispatch(actions.chooseSelection(index)),
-  onHover: (index: number) => dispatch(actions.selectSuggestion(index)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(VariableSuggestions);
+export default VariableSuggestions;

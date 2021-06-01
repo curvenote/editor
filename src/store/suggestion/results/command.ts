@@ -226,7 +226,19 @@ export function executeCommand(
         dispatch(actions.insertNode(schema.nodes.iframe, { src }));
         return true;
       }
-      case CommandNames.citation: {
+      case CommandNames.link_article:
+        removeText();
+        triggerSuggestion(view, '[[', 'article: ');
+        return true;
+      case CommandNames.link_notebook:
+        removeText();
+        triggerSuggestion(view, '[[', 'notebook: ');
+        return true;
+      case CommandNames.citation:
+        removeText();
+        triggerSuggestion(view, '[[', 'cite: ');
+        return true;
+      case CommandNames.add_citation: {
         removeText();
         const keys = await opts.citationPrompt();
         if (!keys || keys.length === 0) return true;
