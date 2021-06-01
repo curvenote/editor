@@ -1,6 +1,12 @@
 import { MarkSpec } from 'prosemirror-model';
 import { MarkGroups } from './nodes/types';
 
+export type LinkAttrs = {
+  href: string;
+  title: string | null;
+  kind: string;
+};
+
 export const link: MarkSpec = {
   attrs: {
     href: {},

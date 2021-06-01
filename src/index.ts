@@ -3,6 +3,7 @@
 export { Schema } from 'prosemirror-model';
 export * as schemas from './schemas';
 export * as Nodes from './nodes';
+export * as types from './types';
 
 export {
   fromHTML,
