@@ -13,7 +13,7 @@ import {
 } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
-import { positionPopper } from './utils';
+import { ActionProps, positionPopper } from './utils';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -26,13 +26,7 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-type Props = {
-  stateId: any;
-  viewId: string | null;
-  anchorEl: HTMLElement | Element | null | undefined;
-};
-
-const CalloutActions = (props: Props) => {
+const CalloutActions = (props: ActionProps) => {
   const { stateId, viewId, anchorEl } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();

@@ -6,11 +6,10 @@ import { Node, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Store } from './store/types';
 import setupComponents from './r-components';
-import { CitationFormat } from './types';
+import { LinkResult } from './store/suggestion/types';
 
 export type SearchContext = {
-  ids: string[];
-  search: (query: string) => string[];
+  search: (query?: string) => LinkResult[];
 };
 
 export type Options = {
@@ -29,8 +28,7 @@ export type Options = {
   ) => boolean;
   theme: Theme;
   citationPrompt: () => Promise<string[] | null>;
-  citationKeyToJson: (key: string) => Promise<CitationFormat | null>;
-  createCitationSearch: () => Promise<SearchContext>;
+  createLinkSearch: () => Promise<SearchContext>;
   throttle: number;
   // nodeViews override any of the default nodeviews
   nodeViews?: DirectEditorProps['nodeViews'];
@@ -89,8 +87,7 @@ export const opts: Required<Options> = {
   },
   getDocId() { return ref.opts().getDocId(); },
   citationPrompt() { return ref.opts().citationPrompt(); },
-  citationKeyToJson(key) { return ref.opts().citationKeyToJson(key); },
-  createCitationSearch() { return ref.opts().createCitationSearch(); },
+  createLinkSearch() { return ref.opts().createLinkSearch(); },
   get theme() { return ref.opts().theme; },
   get throttle() { return ref.opts().throttle; },
   get nodeViews() { return ref.opts().nodeViews ?? {}; },

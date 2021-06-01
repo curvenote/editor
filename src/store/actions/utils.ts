@@ -77,7 +77,8 @@ function getLinkBounds(state: EditorState, pos: number) {
 }
 
 
-export function getLinkBoundsIfTheyExist(state: EditorState) {
+export function getLinkBoundsIfTheyExist(state?: EditorState | null) {
+  if (!state) return null;
   const {
     from, $from, to, $to, empty,
   } = state.selection;

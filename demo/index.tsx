@@ -44,8 +44,8 @@ const removeComment = () => {
 };
 
 const someLinks: LinkResult[] = [
-  { kind: LinkKind.cite, uid: 'simpeg2015', content: 'Cockett et al., 2015', title: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.' },
-  { kind: LinkKind.link, uid: 'https://curvenote.com', content: 'Curvenote', title: 'Move ideas forward' },
+  { kind: LinkKind.cite, uid: 'simpeg2015', content: 'Cockett et al., 2015', alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.' },
+  { kind: LinkKind.link, uid: 'https://curvenote.com', content: 'Curvenote', alt: 'Move ideas forward' },
 ];
 
 const opts: Options = {

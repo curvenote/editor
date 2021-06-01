@@ -45,7 +45,7 @@ const Keyboard = (props: Props) => {
   return (
     <Tooltip title={text}>
       <span className={classes.root}>
-        {array.map((s) => <kbd>{s.split(' ')[0]}</kbd>)}
+        {array.map((s) => <kbd key={s}>{s.split(' ')[0]}</kbd>)}
       </span>
     </Tooltip>
   );

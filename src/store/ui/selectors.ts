@@ -1,3 +1,4 @@
+import { PopperPlacementType } from '@material-ui/core';
 import { State } from '../types';
 import { opts } from '../../connect';
 import { getEditorState, getEditorView } from '../state/selectors';
@@ -5,6 +6,25 @@ import { getEditorState, getEditorView } from '../state/selectors';
 export function getEditorUI(state: State) {
   return state.editor.ui;
 }
+
+export function getEditorUIStateAndViewIds(state: State) {
+  const { stateId, viewId } = state.editor.ui;
+  return { stateId, viewId };
+}
+
+export function isInlineActionOpen(state: State) {
+  return state.editor.ui.selection != null;
+}
+export function getInlineActionAnchorEl(state: State) {
+  return state.editor.ui.selection?.anchorEl ?? null;
+}
+export function getInlineActionKind(state: State) {
+  return state.editor.ui.selection?.kind ?? null;
+}
+export function getInlineActionPlacement(state: State) {
+  return state.editor.ui.selection?.placement ?? 'bottom-start' as PopperPlacementType;
+}
+
 
 export function getSelectedView(state: State) {
   const { viewId } = getEditorUI(state);
