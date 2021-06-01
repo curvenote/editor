@@ -1,19 +1,33 @@
 import { MarkSpec } from 'prosemirror-model';
 import { MarkGroups } from './nodes/types';
 
+export type LinkAttrs = {
+  href: string;
+  title: string | null;
+  kind: string;
+};
+
 export const link: MarkSpec = {
   attrs: {
     href: {},
     title: { default: null },
+    kind: { default: 'external' },
   },
   inclusive: false,
   parseDOM: [{
     tag: 'a[href]',
     getAttrs(dom: any) {
-      return { href: dom.getAttribute('href'), title: dom.getAttribute('title') };
+      return {
+        href: dom.getAttribute('href'),
+        title: dom.getAttribute('title'),
+        kind: dom.getAttribute('kind') || 'external',
+      };
     },
   }],
-  toDOM(node) { const { href, title } = node.attrs; return ['a', { href, title }, 0]; },
+  toDOM(node) {
+    const { href, title, kind } = node.attrs;
+    return ['a', { href, title, kind }, 0];
+  },
 };
 
 export const code: MarkSpec = {
