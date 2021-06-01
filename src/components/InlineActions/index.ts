@@ -1,6 +1,6 @@
 export { default as InlineActions } from './Popper';
 export { default as InlineActionsSwitch, useInlineActionProps } from './Switch';
-export { default as LinkActions } from './LinkActions';
+export { default as LinkActions, useLinkActions } from './LinkActions';
 export { default as CalloutActions } from './CalloutActions';
 export { default as HeadingActions } from './HeadingActions';
 export { default as AlignActions } from './AlignActions';
