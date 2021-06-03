@@ -60,6 +60,11 @@ export const texSerializer = new MarkdownSerializer({
   },
   ordered_list: latexStatement('enumerate', (state, node) => {
     state.renderList(node, TAB, () => '\\item ');
+  }, {
+    bracketOpts: (node) => {
+      if (node.attrs.order !== 1) return 'resume';
+      return null;
+    },
   }),
   bullet_list: latexStatement('itemize', (state, node) => {
     state.renderList(node, TAB, () => '\\item ');
@@ -76,7 +81,7 @@ export const texSerializer = new MarkdownSerializer({
   equation: nodes.Equation.toTex,
   // \usepackage{framed}
   callout: nodes.Callout.toTex,
-  aside: latexStatement('marginpar', (state, node) => { state.renderContent(node); }, true),
+  aside: latexStatement('marginpar', (state, node) => { state.renderContent(node); }, { inline: true }),
   variable: blankTexLines,
   display: blankTex,
   dynamic: blankTex,
