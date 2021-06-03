@@ -22,9 +22,13 @@ const equation: NodeSpec = {
 
 export const toMarkdown: FormatSerialize = (state, node) => {
   state.ensureNewLine();
-  state.write('$$');
+  const ams = (
+    node.textContent.startsWith('\\begin{')
+    && node.textContent.match(/\\end{([a-z*]+)}$/)
+  );
+  if (!ams) state.write('$$');
   state.text(node.textContent, false);
-  state.write('$$');
+  if (!ams) state.write('$$');
   state.closeBlock(node);
 };
 

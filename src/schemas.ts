@@ -18,6 +18,7 @@ export const presentationalNodes = {
 export const citationNodes = {
   cite: Nodes.Cite.default,
   cite_group: Nodes.CiteGroup.default,
+  ref: Nodes.Ref.default,
 };
 
 export const mathNodes = {
@@ -32,6 +33,11 @@ export const reactiveDisplayNodes = {
   range: Nodes.Range.default,
   switch: Nodes.Switch.default,
   button: Nodes.Button.default,
+};
+
+export const reactiveNodes = {
+  variable: Nodes.Variable.default,
+  ...reactiveDisplayNodes,
 };
 
 export const nodes = {
@@ -51,8 +57,7 @@ export const nodes = {
   ...presentationalNodes,
   ...citationNodes,
   ...mathNodes,
-  variable: Nodes.Variable.default,
-  ...reactiveDisplayNodes,
+  ...reactiveNodes,
 };
 
 export enum nodeNames {
