@@ -31,9 +31,6 @@
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json"
   },
   "dependencies": {
-    "@types/prosemirror-markdown": "^1.5.1",
-    "@types/prosemirror-model": "^1.11.3",
-    "@types/prosemirror-state": "^1.2.6",
     "markdown-it": "^12.0.4",
     "markdown-it-myst": "^0.0.8",
     "orderedmap": "^1.1.1",
@@ -57,6 +54,9 @@
     "@types/mocha": "^8.2.0",
     "@types/orderedmap": "^1.0.0",
     "@types/prosemirror-collab": "^1.1.1",
+    "@types/prosemirror-markdown": "^1.5.1",
+    "@types/prosemirror-model": "^1.11.3",
+    "@types/prosemirror-state": "^1.2.6",
     "@types/prosemirror-schema-list": "^1.0.2",
     "@types/prosemirror-test-builder": "^1.0.2",
     "@types/prosemirror-transform": "^1.1.2",
