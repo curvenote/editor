@@ -10,4 +10,4 @@ export type CitationFormat = {
   journal?: string;
 };
 
-export type AlignOptions = 'left' | 'center' | 'right';
+

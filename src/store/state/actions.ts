@@ -1,6 +1,6 @@
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { schemas } from '@curvenote/schema';
+import { schemas, process } from '@curvenote/schema';
 import {
   EditorActionTypes,
   UPDATE_EDITOR_STATE, INIT_EDITOR_STATE,
@@ -10,7 +10,6 @@ import {
 import { AppThunk } from '../types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
-import { countState } from './utils';
 
 export function initEditorState(
   useSchema: schemas.UseSchema, stateKey: any, editable: boolean, content: string, version: number,
@@ -30,7 +29,7 @@ export function updateEditorState(
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
-  const counts = tr.docChanged ? countState(editorState) : null;
+  const counts = tr.docChanged ? process.countState(editorState) : null;
   return {
     type: UPDATE_EDITOR_STATE,
     payload: {

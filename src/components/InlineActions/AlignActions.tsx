@@ -3,8 +3,8 @@ import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { isNodeSelection } from 'prosemirror-utils';
 import { NodeSelection } from 'prosemirror-state';
 import { useDispatch, useSelector } from 'react-redux';
+import { types } from '@curvenote/schema';
 import MenuIcon from '../Menu/Icon';
-import { AlignOptions } from '../../types';
 import { deleteNode, updateNodeAttrs } from '../../store/actions';
 import SelectWidth from './SelectWidth';
 import TextAction from './TextAction';
@@ -42,7 +42,7 @@ const AlignActions = (props: Props) => {
     align, width, numbered, caption, label,
   } = node?.attrs;
 
-  const onAlign = (a: AlignOptions) => () => {
+  const onAlign = (a: types.AlignOptions) => () => {
     dispatch(updateNodeAttrs(
       stateId, viewId, { node, pos }, { align: a },
     ));

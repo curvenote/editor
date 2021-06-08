@@ -1,3 +1,4 @@
+import { process } from '@curvenote/schema';
 import {
   INIT_EDITOR_STATE, UPDATE_EDITOR_STATE,
   SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW,
@@ -5,7 +6,6 @@ import {
   EditorActionTypes, EditorsState,
 } from './types';
 import { createEditorState } from '../../prosemirror';
-import { countState } from './utils';
 
 
 
@@ -25,7 +25,7 @@ const editorReducer = (
       } = action.payload;
       if (state.editors[stateId] !== undefined) return state;
       const editorState = createEditorState(useSchema, stateKey, content, version, editable);
-      const counts = countState(editorState);
+      const counts = process.countState(editorState);
       return {
         ...state,
         editors: {
