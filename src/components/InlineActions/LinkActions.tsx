@@ -29,12 +29,15 @@ export function useLinkActions(stateId: any, viewId: string | null) {
   const state = useSelector((s: State) => getEditorState(s, stateId)?.state);
   const linkBounds = getLinkBoundsIfTheyExist(state);
   const attrs = linkBounds?.mark.attrs as types.LinkAttrs | null ?? null;
-  const onOpen = useCallback(() => window.open(attrs?.href, '_blank'), [attrs?.href]);
   const mark = state?.schema.marks.link;
+
+  const onOpen = useCallback(() => window.open(attrs?.href, '_blank'), [attrs?.href]);
+
   const onDelete = useCallback(() => {
     if (!linkBounds || !mark) return;
     dispatch(removeMark(stateId, viewId, mark, linkBounds.from, linkBounds.to));
   }, [stateId, viewId, linkBounds, mark]);
+
   const onEdit = useCallback((newHref: string) => {
     if (!newHref || !linkBounds || !state || !mark) return;
     const link = mark.create({ href: testLink(newHref) ? newHref : `http://${newHref}` });

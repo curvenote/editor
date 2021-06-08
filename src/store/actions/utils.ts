@@ -77,11 +77,18 @@ function getLinkBounds(state: EditorState, pos: number) {
 }
 
 
-export function getLinkBoundsIfTheyExist(state?: EditorState | null) {
+export function getLinkBoundsIfTheyExist(state?: EditorState | null, pos?: number) {
   if (!state) return null;
-  const {
+  let {
     from, $from, to, $to, empty,
   } = state.selection;
+  if (pos != null) {
+    from = pos;
+    $from = state.doc.resolve(pos);
+    $to = $from;
+    to = pos;
+    empty = true;
+  }
   const mark = state.schema.marks.link;
   const searchForLink = empty
     ? Boolean(mark.isInSet(state.storedMarks || $from.marks()))
