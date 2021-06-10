@@ -8,6 +8,30 @@ import katex from 'katex';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 
+export function renderMath(math: string, element: HTMLElement, inline: boolean) {
+  // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
+  // const txt = toText(this.node, this.outerView.state.schema, document);
+  // console.log({ math, txt });
+  // const render = math.replace(/−/g, '-');
+  const render = math?.trim() || '...';
+  try {
+    katex.render(
+      render,
+      element,
+      {
+        displayMode: !inline,
+        throwOnError: false,
+        macros: {
+          '\\boldsymbol': '\\mathbf',
+        },
+      },
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-param-reassign
+    element.innerText = error;
+  }
+}
+
 class MathView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
@@ -166,27 +190,7 @@ class MathView {
   }
 
   renderMath() {
-    const math = this.node.textContent;
-    // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
-    // const txt = toText(this.node, this.outerView.state.schema, document);
-    // console.log({ math, txt });
-    // const render = math.replace(/−/g, '-');
-    const render = math?.trim() || '...';
-    try {
-      katex.render(
-        render,
-        this.math,
-        {
-          displayMode: !this.inline,
-          throwOnError: false,
-          macros: {
-            '\\boldsymbol': '\\mathbf',
-          },
-        },
-      );
-    } catch (error) {
-      this.math.innerText = error;
-    }
+    renderMath(this.node.textContent, this.math, this.inline);
   }
 
   destroy() {
