@@ -1,6 +1,6 @@
 import { latexStatement } from '../serialize/tex/utils';
 import { NodeGroups, NumberedNode, MyNodeSpec, FormatSerialize } from './types';
-import { getNumberedAttrs, numberedAttrs, setNumberedAttrs } from './utils';
+import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
 export type Attrs = NumberedNode & {
   language: string;
@@ -9,7 +9,7 @@ export type Attrs = NumberedNode & {
 
 const code: MyNodeSpec<Attrs> = {
   attrs: {
-    ...numberedAttrs(false),
+    ...getNumberedDefaultAttrs(),
     language: { default: '' },
     title: { default: '' },
   },

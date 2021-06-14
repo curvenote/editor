@@ -1,5 +1,5 @@
 import { NodeGroups, FormatSerialize, MyNodeSpec, NumberedNode } from './types';
-import { getNumberedAttrs, numberedAttrs, setNumberedAttrs } from './utils';
+import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
 const getAttrs = (level: number) => (dom: HTMLElement) => ({
   ...getNumberedAttrs(dom),
@@ -12,7 +12,7 @@ export type Attrs = NumberedNode & {
 
 const heading: MyNodeSpec<Attrs> = {
   attrs: {
-    ...numberedAttrs(false),
+    ...getNumberedDefaultAttrs(),
     level: { default: 1 },
   },
   content: `${NodeGroups.inline}*`,

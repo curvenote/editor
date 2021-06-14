@@ -1,6 +1,6 @@
 import { NodeGroups, FormatSerialize, MyNodeSpec, NumberedNode } from './types';
 import { latexStatement } from '../serialize/tex/utils';
-import { getAttr, getNumberedAttrs, numberedAttrs, setNumberedAttrs } from './utils';
+import { getAttr, getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
 export type Attrs = NumberedNode & {
   title: string;
@@ -15,12 +15,12 @@ const equation: MyNodeSpec<Attrs> = {
   atom: true,
   code: true,
   attrs: {
-    ...numberedAttrs(true),
+    ...getNumberedDefaultAttrs(),
     title: { default: '' },
   },
   toDOM: (node) => {
     const { title } = node.attrs;
-    return ['r-equation', { ...setNumberedAttrs(node), title }, 0];
+    return ['r-equation', { ...setNumberedAttrs(node), title: title || undefined }, 0];
   },
   parseDOM: [
     {

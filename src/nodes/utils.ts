@@ -14,10 +14,10 @@ export function readBooleanDomAttr(dom: HTMLElement, attr: string): boolean {
   return true;
 }
 
-export const numberedAttrs = (numbered: boolean): NodeSpecAttrs<NumberedNode> => ({
+export const getNumberedDefaultAttrs = (): NodeSpecAttrs<NumberedNode> => ({
   id: { default: null },
   label: { default: null },
-  numbered: { default: numbered },
+  numbered: { default: false },
 });
 
 export function getAttr(dom: HTMLElement, name: string, defaultValue: any = '') {

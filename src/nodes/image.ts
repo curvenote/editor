@@ -3,7 +3,7 @@ import { NodeGroups, FormatSerialize, NumberedNode, MyNodeSpec, AlignOptions } f
 import {
   getImageWidth,
   readBooleanDomAttr,
-  numberedAttrs,
+  getNumberedDefaultAttrs,
   getNumberedAttrs,
   setNumberedAttrs,
 } from './utils';
@@ -19,7 +19,7 @@ export type Attrs = NumberedNode & {
 
 const image: MyNodeSpec<Attrs> = {
   attrs: {
-    ...numberedAttrs(true),
+    ...getNumberedDefaultAttrs(),
     src: {},
     alt: { default: null },
     title: { default: null },
