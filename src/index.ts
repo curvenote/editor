@@ -4,6 +4,7 @@ export { Schema } from 'prosemirror-model';
 export * as schemas from './schemas';
 export * as Nodes from './nodes';
 export * as types from './types';
+export { RefKind } from './nodes/types';
 
 export {
   fromHTML,
@@ -20,4 +21,4 @@ export {
 
 export * as server from './server';
 
-export { DEFAULT_FORMAT, DEFAULT_IMAGE_WIDTH } from './utils';
+export { DEFAULT_FORMAT, DEFAULT_IMAGE_WIDTH } from './defaults';

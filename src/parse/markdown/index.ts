@@ -2,7 +2,7 @@ import { Node as ProsemirrorNode } from 'prosemirror-model';
 import Token from 'markdown-it/lib/token';
 import { MarkdownParser, TokenConfig } from 'prosemirror-markdown';
 import { MyST } from 'markdown-it-myst';
-import { DEFAULT_IMAGE_WIDTH } from '../../utils';
+import { DEFAULT_IMAGE_WIDTH } from '../../defaults';
 import { getSchema, UseSchema } from '../../schemas';
 
 type Tokens = {
