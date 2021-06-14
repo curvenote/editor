@@ -4,11 +4,12 @@ export type Attrs = {
   key: string | null;
   title: string | null;
   kind: RefKind;
-  inline: null; // This has been replaced with text!
   text: string | null;
 };
 
-const cite: MyNodeSpec<Attrs> = {
+type Legacy = { inline: undefined };
+
+const cite: MyNodeSpec<Attrs & Legacy> = {
   attrs: {
     key: { default: null },
     title: { default: '' },
@@ -33,7 +34,7 @@ const cite: MyNodeSpec<Attrs> = {
           title: dom.getAttribute('title') ?? '',
           kind: dom.getAttribute('kind') ?? 'cite',
           // inline is for legacy
-          inline: null,
+          inline: undefined,
           text: dom.getAttribute('inline') ?? dom.textContent ?? '',
         };
       },
