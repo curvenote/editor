@@ -18,7 +18,6 @@ export const presentationalNodes = {
 export const citationNodes = {
   cite: Nodes.Cite.default,
   cite_group: Nodes.CiteGroup.default,
-  ref: Nodes.Ref.default,
 };
 
 export const mathNodes = {
@@ -47,7 +46,7 @@ export const nodes = {
   paragraph: basic.paragraph,
   heading: Nodes.Heading.default,
   blockquote: basic.blockquote,
-  code_block: basic.code_block,
+  code_block: Nodes.Code.default,
   image: Nodes.Image.default,
   horizontal_rule: basic.horizontal_rule,
   hard_break: basic.hard_break,

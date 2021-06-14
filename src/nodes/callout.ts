@@ -16,7 +16,9 @@ const callout: NodeSpec = {
   attrs: {
     kind: { default: CalloutKinds.info },
   },
-  toDOM(node) { return ['aside', { class: `callout ${node.attrs.kind}` }, 0]; },
+  toDOM(node) {
+    return ['aside', { class: `callout ${node.attrs.kind}` }, 0];
+  },
   parseDOM: [
     {
       tag: 'aside.callout',

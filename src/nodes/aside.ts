@@ -4,7 +4,9 @@ import { NodeGroups, FormatSerialize } from './types';
 const aside: NodeSpec = {
   group: NodeGroups.top,
   content: `${NodeGroups.block}+`,
-  toDOM() { return ['aside', { class: 'margin' }, 0]; },
+  toDOM() {
+    return ['aside', { class: 'margin' }, 0];
+  },
   parseDOM: [
     { tag: 'aside' }, // This is legacy and should be removed!
     { tag: 'aside.margin' },

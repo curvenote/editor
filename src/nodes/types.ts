@@ -1,7 +1,5 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
-import {
-  Node, NodeSpec, AttributeSpec, Schema, ParseRule,
-} from 'prosemirror-model';
+import { Node, NodeSpec, AttributeSpec, Schema, ParseRule } from 'prosemirror-model';
 
 export enum RefKind {
   cite = 'cite',
@@ -39,7 +37,7 @@ export interface MyNodeSpec<T extends O> extends NodeSpec {
 }
 
 export type NumberedNode = {
-  id: string | null,
+  id: string | null;
   label: string | null;
   numbered: boolean;
 };
@@ -65,5 +63,5 @@ export type FormatSerialize<S extends Schema<any, any> = any> = (
   state: MarkdownSerializerState<S> & { delim?: string },
   node: Node<S>,
   parent: Node<S>,
-  index: number
+  index: number,
 ) => void;

@@ -12,11 +12,7 @@ export type Attrs = {
 export const def: NodeDef = {
   tag: 'r-button',
   name: 'button',
-  attrs: [
-    attr('label', true, 'Click Here'),
-    attr('click', 'only'),
-    attr('disabled'),
-  ],
+  attrs: [attr('label', true, 'Click Here'), attr('click', 'only'), attr('disabled')],
   inline: true,
   group: NodeGroups.inline,
 };

@@ -1,10 +1,8 @@
-import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatSerialize } from './types';
+import { NodeGroups, FormatSerialize, MyNodeSpec } from './types';
 
-export type MathAttrs = {
-};
+export type Attrs = Record<string, never>;
 
-const math: NodeSpec = {
+const math: MyNodeSpec<Attrs> = {
   group: NodeGroups.inline,
   // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
@@ -14,9 +12,11 @@ const math: NodeSpec = {
   atom: true,
   attrs: {},
   toDOM: () => ['r-equation', { inline: '' }, 0],
-  parseDOM: [{
-    tag: 'r-equation[inline]',
-  }],
+  parseDOM: [
+    {
+      tag: 'r-equation[inline]',
+    },
+  ],
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {

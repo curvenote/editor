@@ -1,18 +1,19 @@
-import { NodeSpec } from 'prosemirror-model';
-import { readBooleanDomAttr } from '../utils';
-import { NodeGroups, FormatSerialize } from './types';
+import { NodeGroups, FormatSerialize, MyNodeSpec, NumberedNode } from './types';
+import { getNumberedAttrs, numberedAttrs, setNumberedAttrs } from './utils';
 
-const getAttrs = (level: number) => (dom: any) => ({
+const getAttrs = (level: number) => (dom: HTMLElement) => ({
+  ...getNumberedAttrs(dom),
   level,
-  numbered: readBooleanDomAttr(dom, 'numbered'),
-  label: dom.getAttribute('label') ?? '',
 });
 
-export const heading: NodeSpec = {
+export type Attrs = NumberedNode & {
+  level: number;
+};
+
+const heading: MyNodeSpec<Attrs> = {
   attrs: {
+    ...numberedAttrs(false),
     level: { default: 1 },
-    numbered: { default: false },
-    label: { default: '' },
   },
   content: `${NodeGroups.inline}*`,
   group: NodeGroups.block,
@@ -26,14 +27,12 @@ export const heading: NodeSpec = {
     { tag: 'h6', getAttrs: getAttrs(6) },
   ],
   toDOM(node) {
-    const {
-      level, numbered, label,
-    } = node.attrs;
-    return [`h${level}`, { numbered: numbered ? '' : undefined, label: label || undefined }, 0];
+    return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
   },
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {
+  // TODO: Put the id in:
   state.write(`${state.repeat('#', node.attrs.level)} `);
   state.renderInline(node);
   state.closeBlock(node);

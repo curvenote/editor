@@ -1,65 +1,77 @@
-import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatSerialize } from './types';
-import { DEFAULT_IMAGE_WIDTH, getImageWidth, readBooleanDomAttr } from '../utils';
+import { DEFAULT_IMAGE_WIDTH } from '../defaults';
+import { NodeGroups, FormatSerialize, NumberedNode, MyNodeSpec, AlignOptions } from './types';
+import {
+  getImageWidth,
+  readBooleanDomAttr,
+  numberedAttrs,
+  getNumberedAttrs,
+  setNumberedAttrs,
+} from './utils';
 
-const image: NodeSpec = {
+export type Attrs = NumberedNode & {
+  src: string;
+  alt: string;
+  title: string;
+  align: AlignOptions;
+  width: number | null;
+  caption: boolean;
+};
+
+const image: MyNodeSpec<Attrs> = {
   attrs: {
+    ...numberedAttrs(true),
     src: {},
     alt: { default: null },
     title: { default: null },
     align: { default: 'center' },
     width: { default: DEFAULT_IMAGE_WIDTH },
-    numbered: { default: true },
     caption: { default: false },
-    label: { default: '' },
   },
   group: NodeGroups.block,
   draggable: true,
-  parseDOM: [{
-    tag: 'img[src]',
-    getAttrs(dom: any) {
-      return {
-        src: dom.getAttribute('src'),
-        title: dom.getAttribute('title'),
-        alt: dom.getAttribute('alt'),
-        align: dom.getAttribute('align') ?? 'center',
-        width: getImageWidth(dom.getAttribute('width')),
-        numbered: readBooleanDomAttr(dom, 'numbered'),
-        caption: readBooleanDomAttr(dom, 'caption'),
-        label: dom.getAttribute('label') ?? '',
-      };
+  parseDOM: [
+    {
+      tag: 'img[src]',
+      getAttrs(dom) {
+        return {
+          ...getNumberedAttrs(dom),
+          src: dom.getAttribute('src'),
+          title: dom.getAttribute('title'),
+          alt: dom.getAttribute('alt'),
+          align: dom.getAttribute('align') ?? 'center',
+          width: getImageWidth(dom.getAttribute('width')),
+          caption: readBooleanDomAttr(dom, 'caption'),
+        };
+      },
     },
-  }],
+  ],
   toDOM(node) {
-    const {
-      src, alt, title, align, width, numbered, caption, label,
-    } = node.attrs;
-    return ['img', {
-      src,
-      alt: alt || undefined,
-      title: title || undefined,
-      align,
-      width: `${width}%`,
-      numbered: numbered ? '' : undefined,
-      caption: caption ? '' : undefined,
-      label: label || undefined,
-    }];
+    const { src, alt, title, align, width, caption } = node.attrs;
+    return [
+      'img',
+      {
+        ...setNumberedAttrs(node.attrs),
+        src,
+        alt: alt || undefined,
+        title: title || undefined,
+        align,
+        width: `${width}%`,
+        caption: caption ? '' : undefined,
+      },
+    ];
   },
 };
 
-
 export const toMarkdown: FormatSerialize = (state, node) => {
-  state.write(`![${state.esc(node.attrs.alt || '')}](${state.esc(node.attrs.src)
-  }${node.attrs.title ? ` ${state.quote(node.attrs.title)}` : ''})`);
+  const md = `![${state.esc(node.attrs.alt || '')}](${state.esc(node.attrs.src)}${
+    node.attrs.title ? ` ${state.quote(node.attrs.title)}` : ''
+  })`;
+  state.write(md);
   state.closeBlock(node);
 };
 
 export const toTex: FormatSerialize = (state, node) => {
-  const {
-    src, caption, numbered, label,
-    width: nodeWidth,
-    align: nodeAlign,
-  } = node.attrs;
+  const { src, caption, numbered, label, width: nodeWidth, align: nodeAlign } = node.attrs;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
   let align = 'center';
   switch (nodeAlign?.toLowerCase()) {

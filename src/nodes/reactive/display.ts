@@ -11,11 +11,7 @@ export type Attrs = {
 export const def: NodeDef = {
   tag: 'r-display',
   name: 'display',
-  attrs: [
-    attr('value'),
-    attr('format', false),
-    attr('transform', 'only'),
-  ],
+  attrs: [attr('value'), attr('format', false), attr('transform', 'only')],
   inline: true,
   group: NodeGroups.inline,
 };

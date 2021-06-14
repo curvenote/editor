@@ -1,9 +1,6 @@
 import { latexStatement } from '../serialize/tex/utils';
-import {
-  NodeGroups, NumberedNode, MyNodeSpec, FormatSerialize,
-} from './types';
+import { NodeGroups, NumberedNode, MyNodeSpec, FormatSerialize } from './types';
 import { getNumberedAttrs, numberedAttrs, setNumberedAttrs } from './utils';
-
 
 export type Attrs = NumberedNode & {
   language: string;
@@ -21,27 +18,32 @@ const code: MyNodeSpec<Attrs> = {
   group: NodeGroups.block,
   code: true,
   defining: true,
-  parseDOM: [{
-    tag: 'pre',
-    preserveWhitespace: 'full',
-    getAttrs(dom) {
-      return {
-        ...getNumberedAttrs(dom),
-        language: dom.getAttribute('language') ?? '',
-        title: dom.getAttribute('title') ?? '',
-      };
+  parseDOM: [
+    {
+      tag: 'pre',
+      preserveWhitespace: 'full',
+      getAttrs(dom) {
+        return {
+          ...getNumberedAttrs(dom),
+          language: dom.getAttribute('language') ?? '',
+          title: dom.getAttribute('title') ?? '',
+        };
+      },
     },
-  }],
+  ],
   toDOM(node) {
     const { language, title } = node.attrs;
-    return ['pre', {
-      ...setNumberedAttrs(node.attrs),
-      language,
-      title,
-    }, ['code', 0]];
+    return [
+      'pre',
+      {
+        ...setNumberedAttrs(node.attrs),
+        language,
+        title,
+      },
+      ['code', 0],
+    ];
   },
 };
-
 
 export const toMarkdown: FormatSerialize = (state, node) => {
   const { language } = node.attrs;
@@ -52,10 +54,9 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex: FormatSerialize = latexStatement(
-  'verbatim',
-  (state, node) => { state.text(node.textContent, false); },
-  // TODO: language
-);
+// TODO: language
+export const toTex: FormatSerialize = latexStatement('verbatim', (state, node) => {
+  state.text(node.textContent, false);
+});
 
 export default code;

@@ -1,6 +1,5 @@
-import { NodeSpec } from 'prosemirror-model';
 import { format } from 'date-fns';
-import { NodeGroups, FormatSerialize } from './types';
+import { NodeGroups, FormatSerialize, MyNodeSpec } from './types';
 
 export function getDatetime(object?: Date | string | null): Date {
   if (object == null) {
@@ -17,7 +16,7 @@ export function getDatetime(object?: Date | string | null): Date {
   return new Date();
 }
 
-export const formatDatetime = (datetime: string | Date | null): { d: Date, f: string } => {
+export const formatDatetime = (datetime: string | Date | null): { d: Date; f: string } => {
   try {
     const d = getDatetime(datetime);
     const f = format(d, 'LLL d, yyyy');
@@ -27,7 +26,11 @@ export const formatDatetime = (datetime: string | Date | null): { d: Date, f: st
   }
 };
 
-const time: NodeSpec = {
+export type Attrs = {
+  datetime: Date | null;
+};
+
+const time: MyNodeSpec<Attrs> = {
   group: NodeGroups.inline,
   inline: true,
   marks: '',
@@ -55,7 +58,6 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   const { f } = formatDatetime(node.attrs.datetime);
   state.write(f);
 };
-
 
 export const toTex: FormatSerialize = (state, node) => {
   const { f } = formatDatetime(node.attrs.datetime);

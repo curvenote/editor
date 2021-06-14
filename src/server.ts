@@ -13,7 +13,11 @@ function serverPlugins(version: number) {
 }
 
 export function getEditorState(
-  useSchema: UseSchema, content: string, version: number, document: Document, DOMParser: Parser,
+  useSchema: UseSchema,
+  content: string,
+  version: number,
+  document: Document,
+  DOMParser: Parser,
 ) {
   const schema = getSchema(useSchema);
   try {

@@ -1,8 +1,14 @@
-import { NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatSerialize } from './types';
-import { DEFAULT_IMAGE_WIDTH, getImageWidth } from '../utils';
+import { DEFAULT_IMAGE_WIDTH } from '../defaults';
+import { NodeGroups, FormatSerialize, MyNodeSpec, AlignOptions } from './types';
+import { getImageWidth } from './utils';
 
-const iframe: NodeSpec = {
+export type Attrs = {
+  src: string;
+  align: AlignOptions;
+  width: number | null;
+};
+
+const iframe: MyNodeSpec<Attrs> = {
   attrs: {
     src: {},
     align: { default: 'center' },
@@ -10,22 +16,28 @@ const iframe: NodeSpec = {
   },
   group: NodeGroups.block,
   draggable: true,
-  parseDOM: [{
-    tag: 'iframe[src]',
-    getAttrs(dom: any) {
-      return {
-        src: dom.getAttribute('src'),
-        align: dom.getAttribute('align') ?? 'center',
-        width: getImageWidth(dom.getAttribute('width')),
-      };
+  parseDOM: [
+    {
+      tag: 'iframe[src]',
+      getAttrs(dom: any) {
+        return {
+          src: dom.getAttribute('src'),
+          align: dom.getAttribute('align') ?? 'center',
+          width: getImageWidth(dom.getAttribute('width')),
+        };
+      },
     },
-  }],
+  ],
   toDOM(node) {
-    const {
-      src, align, width,
-    } = node.attrs; return ['iframe', {
-      src, align, width: `${width}%`,
-    }];
+    const { src, align, width } = node.attrs;
+    return [
+      'iframe',
+      {
+        src,
+        align,
+        width: `${width}%`,
+      },
+    ];
   },
 };
 

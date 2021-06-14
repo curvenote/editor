@@ -1,21 +1,24 @@
-import { Node, NodeSpec } from 'prosemirror-model';
-import { NodeGroups, FormatSerialize } from './types';
+import { Node } from 'prosemirror-model';
+import { NodeGroups, FormatSerialize, MyNodeSpec } from './types';
 
-const citeGroup: NodeSpec = {
-  attrs: {
-  },
+export type Attrs = Record<string, never>;
+
+const citeGroup: MyNodeSpec<Attrs> = {
+  attrs: {},
   inline: true,
   atom: true,
   group: NodeGroups.inline,
   marks: '',
   content: `${NodeGroups.cite}+`,
   draggable: true,
-  parseDOM: [{
-    tag: 'cite-group',
-    getAttrs() {
-      return {};
+  parseDOM: [
+    {
+      tag: 'cite-group',
+      getAttrs() {
+        return {};
+      },
     },
-  }],
+  ],
   toDOM() {
     return ['cite-group', 0];
   },
