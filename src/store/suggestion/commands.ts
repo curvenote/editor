@@ -35,6 +35,10 @@ export enum CommandNames {
   'citation' = 'citation',
   'link_article' = 'link_article',
   'link_notebook' = 'link_notebook',
+  'link_section' = 'link_section',
+  'link_figure' = 'link_figure',
+  'link_equation' = 'link_equation',
+  'link_code' = 'link_code',
 }
 
 export interface CommandResult {
@@ -106,14 +110,38 @@ export const commands: CommandResult[] = [
     name: CommandNames.link_article,
     title: 'Link to Article',
     description: 'Add a link to an article',
-    shortcut: ['[[article: Lookup an article'],
+    shortcut: ['[[article: Link to an article'],
   },
   {
     name: CommandNames.link_notebook,
     title: 'Link to Notebook',
     description: 'Add a link to an notebook',
-    shortcut: ['[[nb: Lookup a notebook'],
+    shortcut: ['[[nb: Link to a notebook'],
   },
+  {
+    name: CommandNames.link_section,
+    title: 'Link to an internal Section',
+    description: 'Add a link to title',
+    shortcut: ['[[sec: Link to a section'],
+  },
+  {
+    name: CommandNames.link_figure,
+    title: 'Link to an internal Section',
+    description: 'Add a link to figure',
+    shortcut: ['[[fig: Link to a figure'],
+  },
+  {
+    name: CommandNames.link_equation,
+    title: 'Link to an internal equation',
+    description: 'Add a link to equation',
+    shortcut: ['[[eq: Link to an equation'],
+  },
+  // {
+  //   name: CommandNames.link_code,
+  //   title: 'Link to an internal code',
+  //   description: 'Add a link to code block',
+  //   shortcut: ['[[code: Link to a section'],
+  // },
   {
     name: CommandNames.add_citation,
     title: 'Add Reference',

@@ -5,41 +5,46 @@ import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
 import { getNodeIfSelected } from '../../store/actions/utils';
+import { createId } from '../../utils';
 
 export const key = new PluginKey('placeholder');
 
 export type ImagePlaceholderPlugin = Plugin<DecorationSet>;
 
-export type Action = (
-  { add: { id: string; pos: number; dataUrl: string } } |
-  { remove: { id: string } }
-);
+export type Action =
+  | { add: { id: string; pos: number; dataUrl: string } }
+  | { remove: { id: string } };
 
-export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin => new Plugin({
-  key,
-  state: {
-    init() { return DecorationSet.empty; },
-    apply(tr, setIn) {
-      // Adjust decoration positions to changes made by the transaction
-      let set: DecorationSet = setIn.map(tr.mapping, tr.doc);
-      // See if the transaction adds or removes any placeholders
-      const action: Action = tr.getMeta(this);
-      if (action && 'add' in action) {
-        const widget = document.createElement('img');
-        widget.src = action.add.dataUrl;
-        widget.classList.add('placeholder');
-        const deco = Decoration.widget(action.add.pos, widget, { id: action.add.id });
-        set = set.add(tr.doc, [deco]);
-      } else if (action && 'remove' in action) {
-        set = set.remove(set.find(undefined, undefined, (spec) => spec.id === action.remove.id));
-      }
-      return set;
+export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
+  new Plugin({
+    key,
+    state: {
+      init() {
+        return DecorationSet.empty;
+      },
+      apply(tr, setIn) {
+        // Adjust decoration positions to changes made by the transaction
+        let set: DecorationSet = setIn.map(tr.mapping, tr.doc);
+        // See if the transaction adds or removes any placeholders
+        const action: Action = tr.getMeta(this);
+        if (action && 'add' in action) {
+          const widget = document.createElement('img');
+          widget.src = action.add.dataUrl;
+          widget.classList.add('placeholder');
+          const deco = Decoration.widget(action.add.pos, widget, { id: action.add.id });
+          set = set.add(tr.doc, [deco]);
+        } else if (action && 'remove' in action) {
+          set = set.remove(set.find(undefined, undefined, (spec) => spec.id === action.remove.id));
+        }
+        return set;
+      },
     },
-  },
-  props: {
-    decorations(state) { return this.getState(state); },
-  },
-});
+    props: {
+      decorations(state) {
+        return this.getState(state);
+      },
+    },
+  });
 
 const findImagePlaceholder = (state: EditorState, id: string) => {
   const plugin = key.get(state) as ImagePlaceholderPlugin;
@@ -62,25 +67,29 @@ export const addImagePlaceholder = (view: EditorView, dataUrl: string, node: Nod
   const success = (url: string) => {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
-    view.dispatch(view.state.tr
-      .replaceWith(pos, pos, view.state.schema.nodes.image.create({ ...node?.attrs, src: url }))
-      .setMeta(plugin, { remove: { id } }));
+    const attrs = { id: createId(), ...node?.attrs, src: url };
+    view.dispatch(
+      view.state.tr
+        .replaceWith(pos, pos, view.state.schema.nodes.image.create(attrs))
+        .setMeta(plugin, { remove: { id } }),
+    );
   };
   return { success, fail };
 };
 
 const getImages = (data: DataTransfer | null) => {
   const items = data?.items ?? [];
-  const images = Array(items.length).fill('').map((v, i) => {
-    if (items[i].type.indexOf('image') === -1) return null;
-    return items[i].getAsFile();
-  }).filter((b) => b != null) as File[];
+  const images = Array(items.length)
+    .fill('')
+    .map((v, i) => {
+      if (items[i].type.indexOf('image') === -1) return null;
+      return items[i].getAsFile();
+    })
+    .filter((b) => b != null) as File[];
   return images;
 };
 
-const fileToDataUrl = (
-  blob: File, callback: (canvas: HTMLCanvasElement) => void,
-) => {
+const fileToDataUrl = (blob: File, callback: (canvas: HTMLCanvasElement) => void) => {
   const URLObj = window.URL ?? window.webkitURL;
   const mycanvas = document.createElement('canvas');
   const ctx = mycanvas.getContext('2d');
@@ -107,7 +116,10 @@ export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | nul
     } catch (error) {
       s = null;
     }
-    if (s == null) { finish.fail(); return; }
+    if (s == null) {
+      finish.fail();
+      return;
+    }
     finish.success(s);
   });
   return true;

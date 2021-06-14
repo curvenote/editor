@@ -6,6 +6,7 @@
 @use 'selected';
 @use 'widget';
 @use 'imgPlaceholder';
+@use 'numbered';
 
 .hidden { display: none; }
 // This allows it to be overtop of the asides and modals

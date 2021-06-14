@@ -1,39 +1,47 @@
 import {
-  EditorState, NodeSelection, Selection, TextSelection, Transaction,
+  EditorState,
+  NodeSelection,
+  Selection,
+  TextSelection,
+  Transaction,
 } from 'prosemirror-state';
 import {
-  wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode,
+  wrapIn as wrapInPM,
+  setBlockType as setBlockTypePM,
+  toggleMark as toggleMarkPM,
+  selectParentNode,
 } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
-import {
-  MarkType, NodeType, Node, Fragment, Schema, NodeRange,
-} from 'prosemirror-model';
+import { MarkType, NodeType, Node, Fragment, Schema, NodeRange } from 'prosemirror-model';
 import { Nodes, schemas } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { AppThunk } from '../types';
 import {
-  getEditorState, getSelectedEditorAndViews, getEditorUI,
-  selectionIsChildOf, getSelectedView, getEditorView,
+  getEditorState,
+  getSelectedEditorAndViews,
+  getEditorUI,
+  selectionIsChildOf,
+  getSelectedView,
+  getEditorView,
 } from '../selectors';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
 import { getNodeIfSelected } from './utils';
-
+import { createId } from '../../utils';
 
 export function updateNodeAttrs(
-  stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: { [index: string]: any },
+  stateKey: any,
+  viewId: string | null,
+  node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
+  attrs: { [index: string]: any },
   select: boolean | 'after' = true,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
     if (editorState == null) return false;
-    const tr = editorState.tr.setNodeMarkup(
-      node.pos,
-      undefined,
-      { ...node.node.attrs, ...attrs },
-    );
+    const tr = editorState.tr.setNodeMarkup(node.pos, undefined, { ...node.node.attrs, ...attrs });
     if (select === true) tr.setSelection(NodeSelection.create(tr.doc, node.pos));
     if (select === 'after') {
       const sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
@@ -46,7 +54,9 @@ export function updateNodeAttrs(
 }
 
 export function deleteNode(
-  stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
+  stateKey: any,
+  viewId: string | null,
+  node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -59,7 +69,9 @@ export function deleteNode(
 }
 
 export function liftContentOutOfNode(
-  stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
+  stateKey: any,
+  viewId: string | null,
+  node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -76,17 +88,18 @@ export function liftContentOutOfNode(
   };
 }
 
-
 export function toggleMark(
-  stateKey: any, viewId: string | null, mark?: MarkType, attrs?: { [key: string]: any },
+  stateKey: any,
+  viewId: string | null,
+  mark?: MarkType,
+  attrs?: { [key: string]: any },
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
     if (editorState == null || !mark) return false;
     const action = toggleMarkPM(mark, attrs);
-    const result = action(
-      editorState,
-      (tr: Transaction) => dispatch(applyProsemirrorTransaction(stateKey, viewId, tr)),
+    const result = action(editorState, (tr: Transaction) =>
+      dispatch(applyProsemirrorTransaction(stateKey, viewId, tr)),
     );
     if (result) dispatch(focusEditorView(viewId, true));
     return result;
@@ -94,7 +107,11 @@ export function toggleMark(
 }
 
 export function removeMark(
-  stateKey: any, viewId: string | null, mark: MarkType, from: number, to: number,
+  stateKey: any,
+  viewId: string | null,
+  mark: MarkType,
+  from: number,
+  to: number,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -107,7 +124,10 @@ export function removeMark(
 }
 
 export function wrapInList(
-  stateKey: string, viewId: string | null, node: NodeType, test = false,
+  stateKey: string,
+  viewId: string | null,
+  node: NodeType,
+  test = false,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -116,9 +136,8 @@ export function wrapInList(
       ? liftListItem(editorState.schema.nodes.list_item)
       : wrapInListPM(node);
     if (test) return action(editorState);
-    const result = action(
-      editorState,
-      (tr: Transaction) => dispatch(applyProsemirrorTransaction(stateKey, viewId, tr)),
+    const result = action(editorState, (tr: Transaction) =>
+      dispatch(applyProsemirrorTransaction(stateKey, viewId, tr)),
     );
     if (result) dispatch(focusEditorView(viewId, true));
     return result;
@@ -129,24 +148,21 @@ export function wrapIn(node: NodeType): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null || !editor.key) return false;
-    const isList = (
-      node === editor.state.schema.nodes.ordered_list
-      || node === editor.state.schema.nodes.bullet_list
-    );
+    const isList =
+      node === editor.state.schema.nodes.ordered_list ||
+      node === editor.state.schema.nodes.bullet_list;
     if (isList) {
       const { viewId } = getEditorUI(getState());
       return dispatch(wrapInList(editor.key, viewId, node));
     }
     const action = wrapInPM(node);
-    const result = action(
-      editor.state,
-      (tr: Transaction) => dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr)),
+    const result = action(editor.state, (tr: Transaction) =>
+      dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr)),
     );
     if (result) dispatch(focusSelectedEditorView(true));
     return result;
   };
 }
-
 
 function getContent(state: EditorState, content?: Node) {
   let nodeContent = content;
@@ -169,9 +185,10 @@ const selectNode = (tr: Transaction, select: boolean | 'after' = true) => {
   }
 };
 
-
 export function replaceSelection(
-  node: NodeType, attrs?: { [index: string]: any }, content?: Node,
+  node: NodeType,
+  attrs?: { [index: string]: any },
+  content?: Node,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
@@ -195,9 +212,8 @@ function setBlockType(node: NodeType, attrs?: { [index: string]: any }): AppThun
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
     const action = setBlockTypePM(node, attrs);
-    const result = action(
-      editor.state,
-      (tr: Transaction) => dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr)),
+    const result = action(editor.state, (tr: Transaction) =>
+      dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr)),
     );
     if (result) dispatch(focusSelectedEditorView(true));
     return result;
@@ -205,30 +221,34 @@ function setBlockType(node: NodeType, attrs?: { [index: string]: any }): AppThun
 }
 
 export function insertNode(
-  node: NodeType, attrs?: { [index: string]: any }, content?: Node,
+  node: NodeType,
+  attrs?: { [index: string]: any },
+  content?: Node,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
-    const tr = editor.state.tr.insert(
-      editor.state.tr.selection.$from.pos, node.create(attrs, content),
-    ).scrollIntoView();
+    const tr = editor.state.tr
+      .insert(editor.state.tr.selection.$from.pos, node.create(attrs, content))
+      .scrollIntoView();
     dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, selectNode(tr)));
     return true;
   };
 }
 
 export function insertInlineNode(
-  node?: NodeType, attrs?: { [index: string]: any }, content?: Node,
+  node?: NodeType,
+  attrs?: { [index: string]: any },
+  content?: Node,
   select: boolean | 'after' = true,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null || !node) return false;
     const nodeContent = getContent(editor.state, content);
-    const tr = editor.state.tr.replaceSelectionWith(
-      node.create(attrs, nodeContent), false,
-    ).scrollIntoView();
+    const tr = editor.state.tr
+      .replaceSelectionWith(node.create(attrs, nodeContent), false)
+      .scrollIntoView();
     dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, selectNode(tr, select)));
     // TODO: This should go in a better place, not passing the dom here, should be a better action
     // dispatch(setAttributeEditor(true));
@@ -248,14 +268,13 @@ export function insertText(text: string): AppThunk<boolean> {
 
 export const wrapInHeading = (schema: Schema, level: number) => {
   if (level === 0) return setBlockType(schema.nodes.paragraph);
-  return setBlockType(schema.nodes.heading, { level });
+  return setBlockType(schema.nodes.heading, { level, id: createId() });
 };
 
 export const insertVariable = (
-  schema: Schema, attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },
-) => (
-  replaceSelection(schema.nodes.variable, attrs)
-);
+  schema: Schema,
+  attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },
+) => replaceSelection(schema.nodes.variable, attrs);
 
 export function addComment(viewId: string, commentId: string): AppThunk<boolean> {
   return (dispatch, getState) => {
@@ -298,10 +317,7 @@ export function toggleCitationBrackets(): AppThunk<boolean> {
       parent.forEach((n) => nodes.push(n));
       const frag = Fragment.from(nodes);
       selectParentNode(editor.state, (tr) => {
-        const tr2 = tr
-          .deleteSelection()
-          .insert(tr.selection.head, frag)
-          .scrollIntoView();
+        const tr2 = tr.deleteSelection().insert(tr.selection.head, frag).scrollIntoView();
         dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr2));
       });
       return true;

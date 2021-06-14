@@ -8,28 +8,33 @@ import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { CommandResult } from '../../store/suggestion/commands';
 import Keyboard from '../Keyboard';
+import { positionPopper } from '../InlineActions/utils';
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    position: 'relative',
-    '& div': {
-      position: 'absolute',
-      top: 3,
-      right: 3,
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      position: 'relative',
+      '& div': {
+        position: 'absolute',
+        top: 3,
+        right: 3,
+      },
+      '& h6': {
+        marginRight: 50,
+      },
     },
-    '& h6': {
-      marginRight: 50,
+    none: {
+      margin: 10,
     },
-  },
-  none: {
-    margin: 10,
-  },
-}));
+  }),
+);
 
 const CommandSuggestions = () => {
   const results = useSelector(
-    (state: State) => selectors.getSuggestionResults<CommandResult>(state), isEqual,
+    (state: State) => selectors.getSuggestionResults<CommandResult>(state),
+    isEqual,
   );
+  positionPopper();
   const classes = useStyles();
   if (results.length === 0) {
     return (
@@ -40,17 +45,17 @@ const CommandSuggestions = () => {
   }
   return (
     <div>
-      {results.map(((item, index) => (
+      {results.map((item, index) => (
         <Suggestion key={item.name} index={index} className={classes.root}>
-          {item.shortcut && <div><Keyboard shortcut={item.shortcut} /></div>}
-          <Typography variant="subtitle1">
-            {item.title}
-          </Typography>
-          <Typography variant="caption">
-            {item.description}
-          </Typography>
+          {item.shortcut && (
+            <div>
+              <Keyboard shortcut={item.shortcut} />
+            </div>
+          )}
+          <Typography variant="subtitle1">{item.title}</Typography>
+          <Typography variant="caption">{item.description}</Typography>
         </Suggestion>
-      )))}
+      ))}
     </div>
   );
 };

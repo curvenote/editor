@@ -1,4 +1,5 @@
 import { types } from '@curvenote/runtime';
+import { RefKind } from '@curvenote/schema';
 import { EditorView } from 'prosemirror-view';
 import { CommandResult } from './commands';
 
@@ -24,14 +25,8 @@ export interface EmojiResult {
   o: string; // Other Name
 }
 
-export enum LinkKind {
-  'link',
-  'cite',
-  'ref',
-}
-
 export type LinkResult = {
-  kind: LinkKind;
+  kind: RefKind;
   uid: string;
   content: string;
   linkKind?: string;
@@ -44,12 +39,14 @@ export type { CommandResult };
 
 export type SuggestionResult = EmojiResult | CommandResult | VariableResult | LinkResult;
 
-export type Location = {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-} | DOMRect;
+export type Location =
+  | {
+      left: number;
+      right: number;
+      top: number;
+      bottom: number;
+    }
+  | DOMRect;
 
 export type Range = { from: number; to: number };
 
@@ -90,8 +87,7 @@ export interface UpdateSuggestionSelectionAction {
   };
 }
 
-export type SuggestionActionTypes = (
-  UpdateSuggestionAction |
-  UpdateSuggestionResultsAction |
-  UpdateSuggestionSelectionAction
-);
+export type SuggestionActionTypes =
+  | UpdateSuggestionAction
+  | UpdateSuggestionResultsAction
+  | UpdateSuggestionSelectionAction;

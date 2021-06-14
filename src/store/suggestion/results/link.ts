@@ -1,7 +1,8 @@
 import { Schema } from 'prosemirror-model';
+import { Nodes, RefKind } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
-import { LinkKind, LinkResult } from '../types';
+import { LinkResult } from '../types';
 import { opts, SearchContext } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
 
@@ -17,15 +18,24 @@ export const startingSuggestions = async (search: string, create = true) => {
 
 export function chooseSelection(result: LinkResult): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const { view, range: { from, to } } = getSuggestion(getState());
+    const {
+      view,
+      range: { from, to },
+    } = getSuggestion(getState());
     if (view == null) return false;
     view.dispatch(view.state.tr.insertText('', from, to));
     switch (result.kind) {
-      case LinkKind.cite: {
-        const citeAttrs = { key: result.uid, inline: result.content };
+      case RefKind.cite: {
+        const citeAttrs: Nodes.Cite.Attrs = {
+          key: result.uid,
+          title: result.alt ?? '',
+          kind: RefKind.cite,
+          inline: null,
+          text: result.content,
+        };
         return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
       }
-      case LinkKind.link: {
+      case RefKind.link: {
         const { tr } = view.state;
         const text = result.content;
         tr.insertText(`${text} `, from);
@@ -37,16 +47,24 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
         view.dispatch(tr.addMark(from, from + text.length, mark));
         return true;
       }
-      case LinkKind.ref:
-        return dispatch(insertInlineNode(view.state.schema.nodes.ref, { key: result.uid }));
-      default:
-        return false;
+      default: {
+        const citeAttrs: Nodes.Cite.Attrs = {
+          key: result.uid,
+          title: result.alt ?? '',
+          kind: result.kind,
+          inline: null,
+          text: result.content,
+        };
+        return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
+      }
     }
   };
 }
 
 export function filterResults(
-  schema: Schema, search: string, callback: (results: LinkResult[]) => void,
+  schema: Schema,
+  search: string,
+  callback: (results: LinkResult[]) => void,
 ): void {
   // This lets the keystroke go through:
   setTimeout(async () => {
