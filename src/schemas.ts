@@ -120,7 +120,7 @@ export const presets = {
 };
 
 export type PresetSchemas = keyof typeof presets;
-export type UseSchema = PresetSchemas | { nodes: Record<string, Node>; } | Schema;
+export type UseSchema = PresetSchemas | { nodes: Record<string, Node> } | Schema;
 
 export function getSchema(useSchema: UseSchema) {
   if (typeof useSchema === 'string') {
