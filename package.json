@@ -26,7 +26,6 @@
     "compile": "yarn run clean; yarn run emoji; tsc;",
     "build": "yarn run compile; yarn run build-css; webpack --config webpack.prod.js",
     "prepublishOnly": "yarn run build; yarn run build-css;",
-    "dev:schema": "cd ../schema; yalc publish; cd ../editor; yalc add @curvenote/schema",
     "test": "jest",
     "copy-css": "mkdir -p dist; mkdir -p styles/article; cp node_modules/@curvenote/article/dist/styles/_* styles/article",
     "watch-css": "yarn run copy-css; sass --watch styles/index.scss dist/editor.css",
@@ -35,6 +34,7 @@
     "test:clear": "jest --clearCache",
     "start": "webpack serve --liveReload --open --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
+    "dev:schema": "cd ../schema; yalc publish; cd ../editor; yalc link @curvenote/schema",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
     "watch": "tsc -w -p ."
   },
