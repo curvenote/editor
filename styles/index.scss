@@ -8,12 +8,16 @@
 @use 'imgPlaceholder';
 @use 'numbered';
 
-.hidden { display: none; }
+.hidden {
+  display: none;
+}
 // This allows it to be overtop of the asides and modals
-.above-modals { z-index: 1301; }
+.above-modals {
+  z-index: 1301;
+}
 
-@media print{
-  .noprint{
+@media print {
+  .noprint {
     display: none !important;
   }
 }

@@ -1,19 +1,19 @@
 article {
   cite-group {
     .citation::after {
-      content: "\;\00a0";
+      content: '\;\00a0';
     }
     .citation:last-of-type::after {
-      content: "";
+      content: '';
     }
   }
   cite-group::before {
-    content: "(";
+    content: '(';
   }
   cite-group::after {
-    content: ")";
+    content: ')';
   }
-  .citation > span{
+  .citation > span {
     border-bottom: 1px dotted #363636;
     color: #363636;
     text-decoration: none;

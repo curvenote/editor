@@ -4,7 +4,7 @@
   white-space: pre-wrap;
   -webkit-font-variant-ligatures: none;
   font-variant-ligatures: none;
-  font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
+  font-feature-settings: 'liga' 0; /* the above doesn't seem to work in Edge */
   outline: none;
   overflow: auto;
   padding: 2px;
@@ -15,10 +15,16 @@
 .ProseMirror li {
   position: relative;
 }
-.ProseMirror-hideselection *::selection { background: transparent; }
-.ProseMirror-hideselection *::-moz-selection { background: transparent; }
-.ProseMirror-hideselection { caret-color: transparent; }
+.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+.ProseMirror-hideselection *::-moz-selection {
+  background: transparent;
+}
+.ProseMirror-hideselection {
+  caret-color: transparent;
+}
 
 .ProseMirror-focused .ProseMirror-selectednode {
   cursor: move;
-};
+}
