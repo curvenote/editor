@@ -33,16 +33,6 @@ export const horizontal_rule: NodeSpec = {
   toDOM() { return ['hr', { class: 'break' }]; },
 };
 
-export const code_block: NodeSpec = {
-  content: `${NodeGroups.text}*`,
-  marks: '',
-  group: NodeGroups.block,
-  code: true,
-  defining: true,
-  parseDOM: [{ tag: 'pre', preserveWhitespace: 'full' }],
-  toDOM() { return ['pre', ['code', 0]]; },
-};
-
 export const text: NodeSpec = {
   group: NodeGroups.inline,
 };

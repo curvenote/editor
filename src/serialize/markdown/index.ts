@@ -22,13 +22,7 @@ export const markdownSerializer = new MarkdownSerializer({
   blockquote(state, node) {
     state.wrapBlock('> ', undefined, node, () => state.renderContent(node));
   },
-  code_block(state, node) {
-    state.write(`\`\`\`${node.attrs.params || ''}\n`);
-    state.text(node.textContent, false);
-    state.ensureNewLine();
-    state.write('```');
-    state.closeBlock(node);
-  },
+  code_block: nodes.Code.toMarkdown,
   horizontal_rule(state, node) {
     state.write(node.attrs.markup || '---');
     state.closeBlock(node);
@@ -67,7 +61,6 @@ export const markdownSerializer = new MarkdownSerializer({
   equation: nodes.Equation.toMarkdown,
   cite: nodes.Cite.toMarkdown,
   cite_group: nodes.CiteGroup.toMarkdown,
-  ref: nodes.Ref.toMarkdown,
   // Dynamic
   variable: nodes.Variable.toMarkdown,
   display: nodes.Display.toMarkdown,
