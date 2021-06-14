@@ -34,7 +34,7 @@
     "test:clear": "jest --clearCache",
     "start": "webpack serve --liveReload --open --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
-    "dev:schema": "cd ../schema; yalc publish; cd ../editor; yalc link @curvenote/schema",
+    "dev:schema": "cd ../schema; yalc publish; cd ../editor; yalc add @curvenote/schema",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
     "watch": "tsc -w -p ."
   },

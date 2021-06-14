@@ -269,9 +269,9 @@ export function executeCommand(
         return true;
       case CommandNames.add_citation: {
         removeText();
-        const keys = await opts.citationPrompt();
-        if (!keys || keys.length === 0) return true;
-        const nodes = keys.map((k) => schema.nodes.cite.create({ key: k }));
+        const cites = await opts.citationPrompt();
+        if (!cites || cites.length === 0) return true;
+        const nodes = cites.map((attrs) => schema.nodes.cite.create({ ...attrs }));
         const wrapped = schema.nodes.cite_group.createAndFill({}, Fragment.from(nodes));
         if (!wrapped) return false;
         const tr = view.state.tr.replaceSelectionWith(wrapped).scrollIntoView();

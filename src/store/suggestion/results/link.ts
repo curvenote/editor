@@ -30,7 +30,6 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
           key: result.uid,
           title: result.alt ?? '',
           kind: RefKind.cite,
-          inline: null,
           text: result.content,
         };
         return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
@@ -52,7 +51,6 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
           key: result.uid,
           title: result.alt ?? '',
           kind: result.kind,
-          inline: null,
           text: result.content,
         };
         return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));

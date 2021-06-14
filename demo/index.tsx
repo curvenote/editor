@@ -83,7 +83,9 @@ const opts: Options = {
   },
   theme,
   throttle: 0,
-  citationPrompt: async () => ['simpeg2015'],
+  citationPrompt: async () => [
+    { key: 'simpeg2015', kind: RefKind.cite, text: 'Cockett et al, 2015', title: '' },
+  ],
   createLinkSearch: async () => ({ search: () => someLinks }),
   nodeViews: {},
 };

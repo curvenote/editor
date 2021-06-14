@@ -67,7 +67,7 @@ export const addImagePlaceholder = (view: EditorView, dataUrl: string, node: Nod
   const success = (url: string) => {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
-    const attrs = { id: createId(), ...node?.attrs, src: url };
+    const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
     view.dispatch(
       view.state.tr
         .replaceWith(pos, pos, view.state.schema.nodes.image.create(attrs))
