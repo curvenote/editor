@@ -18,7 +18,10 @@ const equation: MyNodeSpec<Attrs> = {
     ...numberedAttrs(true),
     title: { default: '' },
   },
-  toDOM: (node) => ['r-equation', setNumberedAttrs(node), 0],
+  toDOM: (node) => {
+    const { title } = node.attrs;
+    return ['r-equation', { ...setNumberedAttrs(node), title }, 0];
+  },
   parseDOM: [
     {
       tag: 'r-equation:not([inline])',
