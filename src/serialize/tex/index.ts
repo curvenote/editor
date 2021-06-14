@@ -124,7 +124,7 @@ export const texSerializer = new MarkdownSerializer(
         return '}';
       },
     },
-    code: { open: '\\texttt{', close: '}', escape: false },
+    code: { open: '\\texttt{', close: '}' },
     // https://www.overleaf.com/learn/latex/glossaries
     // \newacronym{gcd}{GCD}{Greatest Common Divisor}
     abbr: { open: '', close: '' },
