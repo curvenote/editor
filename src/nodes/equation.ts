@@ -20,7 +20,7 @@ const equation: MyNodeSpec<Attrs> = {
   },
   toDOM: (node) => {
     const { title } = node.attrs;
-    return ['r-equation', { ...setNumberedAttrs(node), title: title || undefined }, 0];
+    return ['r-equation', { ...setNumberedAttrs(node.attrs), title: title || undefined }, 0];
   },
   parseDOM: [
     {
