@@ -3,14 +3,14 @@ import { NodeGroups, NumberedNode, MyNodeSpec, FormatSerialize } from './types';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
 export type Attrs = NumberedNode & {
-  language: string;
+  language: string | null;
   title: string;
 };
 
 const code: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
-    language: { default: '' },
+    language: { default: null },
     title: { default: '' },
   },
   content: `${NodeGroups.text}*`,
@@ -25,7 +25,7 @@ const code: MyNodeSpec<Attrs> = {
       getAttrs(dom) {
         return {
           ...getNumberedAttrs(dom),
-          language: dom.getAttribute('language') ?? '',
+          language: dom.getAttribute('language') || null,
           title: dom.getAttribute('title') ?? '',
         };
       },

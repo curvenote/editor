@@ -1,10 +1,11 @@
-import { NodeGroups, FormatSerialize, MyNodeSpec, RefKind } from './types';
+import { NodeGroups, FormatSerialize, MyNodeSpec, ReferenceKind } from './types';
 
 export type Attrs = {
   key: string | null;
-  title: string | null;
-  kind: RefKind;
+  kind: ReferenceKind;
+  label: string | null;
   text: string | null;
+  title: string | null;
 };
 
 type Legacy = { inline: undefined };
@@ -14,6 +15,7 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
     key: { default: null },
     title: { default: '' },
     kind: { default: null },
+    label: { default: null },
     // TODO: This has been renamed to text - need to deprecate
     inline: { default: null },
     text: { default: '' },
@@ -32,7 +34,8 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
             dom.getAttribute('data-key') ??
             dom.getAttribute('data-cite'),
           title: dom.getAttribute('title') ?? '',
-          kind: dom.getAttribute('kind') ?? 'cite',
+          kind: dom.getAttribute('kind') || 'cite',
+          label: dom.getAttribute('label') || null,
           // inline is for legacy
           inline: undefined,
           text: dom.getAttribute('inline') ?? dom.textContent ?? '',
@@ -41,15 +44,19 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
     },
   ],
   toDOM(node) {
-    const { key, kind, text } = node.attrs;
-    return ['cite', { key, kind }, text];
+    const { key, kind, text, label, title } = node.attrs as Attrs;
+    return [
+      'cite',
+      { key: key || undefined, kind: kind ?? 'cite', title: title || '', label: label || '' },
+      text || '',
+    ];
   },
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {
   const { kind } = node.attrs;
   switch (kind) {
-    case RefKind.cite:
+    case ReferenceKind.cite:
       state.write(`{cite}\`${node.attrs.key}\``);
       return;
     default:
@@ -60,7 +67,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 export const toTex: FormatSerialize = (state, node) => {
   const { kind } = node.attrs;
   switch (kind) {
-    case RefKind.cite:
+    case ReferenceKind.cite:
       state.write(`\\cite{${node.attrs.key}}`);
       return;
     default:

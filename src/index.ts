@@ -4,7 +4,7 @@ export { Schema } from 'prosemirror-model';
 export * as schemas from './schemas';
 export * as Nodes from './nodes';
 export * as types from './types';
-export { RefKind } from './nodes/types';
+export { ReferenceKind } from './nodes/types';
 
 export { fromHTML, migrateHTML, fromText, fromMarkdown } from './parse';
 export { toHTML, toMarkdown, toTex, toText } from './serialize';

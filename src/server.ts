@@ -3,7 +3,7 @@ import { EditorState } from 'prosemirror-state';
 import { collab, receiveTransaction } from 'prosemirror-collab';
 import { fromHTML } from './parse';
 
-import { Parser } from './types';
+import { Parser } from './parse/types';
 import { getSchema, UseSchema } from './schemas';
 
 export { EditorState };

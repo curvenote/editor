@@ -1,9 +1,6 @@
 import { LinkAttrs } from './marks';
 import { AlignOptions } from './nodes/types';
 
-export type Parser = {
-  new (): DOMParser;
-  prototype: DOMParser;
-};
-
+export * from './process/types';
+export * from './parse/types';
 export type { LinkAttrs, AlignOptions };

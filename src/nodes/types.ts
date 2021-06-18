@@ -1,7 +1,7 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { Node, NodeSpec, AttributeSpec, Schema, ParseRule } from 'prosemirror-model';
 
-export enum RefKind {
+export enum ReferenceKind {
   cite = 'cite',
   link = 'link',
   sec = 'sec',
