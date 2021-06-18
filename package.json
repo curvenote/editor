@@ -29,8 +29,8 @@
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
-    "lint:format": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\"",
-    "lint:format:fix": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\""
+    "lint:format": "prettier --check \"src/**/*.ts\"",
+    "lint:format:fix": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
     "markdown-it": "^12.0.4",
