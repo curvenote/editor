@@ -1,4 +1,4 @@
-import { Plugin, PluginKey, Selection, Transaction } from 'prosemirror-state';
+import { Plugin, PluginKey, Transaction } from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
@@ -31,9 +31,9 @@ export function dispatchCommentAction(view: EditorView, action: CommentAction) {
   view.dispatch(tr);
 }
 
-function inComment(selection: Selection, decorations: DecorationSet) {
-  return decorations.find(selection.from, selection.to).length > 0;
-}
+// function inComment(selection: Selection, decorations: DecorationSet) {
+//   return decorations.find(selection.from, selection.to).length > 0;
+// }
 
 const reducer = (
   state: CommentState,

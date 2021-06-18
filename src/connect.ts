@@ -4,10 +4,10 @@ import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Node, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
+import { Nodes } from '@curvenote/schema';
 import { Store } from './store/types';
 import setupComponents from './r-components';
 import { LinkResult } from './store/suggestion/types';
-import { Nodes } from '../.yalc/@curvenote/schema/dist';
 
 export type SearchContext = {
   search: (query?: string) => LinkResult[];
