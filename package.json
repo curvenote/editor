@@ -28,7 +28,8 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
-    "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json"
+    "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
+    "lint:format": "prettier --check ."
   },
   "dependencies": {
     "markdown-it": "^12.0.4",
