@@ -1,5 +1,5 @@
 import { Schema } from 'prosemirror-model';
-import { Nodes, RefKind } from '@curvenote/schema';
+import { Nodes, ReferenceKind } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import { LinkResult } from '../types';
@@ -25,16 +25,17 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
     if (view == null) return false;
     view.dispatch(view.state.tr.insertText('', from, to));
     switch (result.kind) {
-      case RefKind.cite: {
+      case ReferenceKind.cite: {
         const citeAttrs: Nodes.Cite.Attrs = {
           key: result.uid,
           title: result.alt ?? '',
-          kind: RefKind.cite,
+          label: result.label ?? null,
+          kind: ReferenceKind.cite,
           text: result.content,
         };
         return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
       }
-      case RefKind.link: {
+      case ReferenceKind.link: {
         const { tr } = view.state;
         const text = result.content;
         tr.insertText(`${text} `, from);
@@ -50,6 +51,7 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
         const citeAttrs: Nodes.Cite.Attrs = {
           key: result.uid,
           title: result.alt ?? '',
+          label: result.label ?? null,
           kind: result.kind,
           text: result.content,
         };

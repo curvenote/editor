@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
-import { toHTML, toMarkdown, toTex, RefKind } from '@curvenote/schema';
+import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
   actions,
@@ -47,14 +47,16 @@ const removeComment = () => {
 
 const someLinks: LinkResult[] = [
   {
-    kind: RefKind.cite,
+    kind: ReferenceKind.cite,
     uid: 'simpeg2015',
+    label: 'simpeg',
     content: 'Cockett et al., 2015',
     alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
   },
   {
-    kind: RefKind.link,
+    kind: ReferenceKind.link,
     uid: 'https://curvenote.com',
+    label: null,
     content: 'Curvenote',
     alt: 'Move ideas forward',
   },
@@ -84,7 +86,13 @@ const opts: Options = {
   theme,
   throttle: 0,
   citationPrompt: async () => [
-    { key: 'simpeg2015', kind: RefKind.cite, text: 'Cockett et al, 2015', title: '' },
+    {
+      key: 'simpeg2015',
+      kind: ReferenceKind.cite,
+      text: 'Cockett et al, 2015',
+      label: 'simpeg',
+      title: '',
+    },
   ],
   createLinkSearch: async () => ({ search: () => someLinks }),
   nodeViews: {},

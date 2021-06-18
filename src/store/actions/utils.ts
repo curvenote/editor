@@ -3,10 +3,14 @@ import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
 import { ContentNodeWithPos, isNodeSelection } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 
-export const TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
-export const TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
-export const TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
-export const TEST_LINK_COMMON_SPACE = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+export const TEST_LINK =
+  /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
+export const TEST_LINK_WEAK =
+  /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
+export const TEST_LINK_SPACE =
+  /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+export const TEST_LINK_COMMON_SPACE =
+  /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 
 export const testLink = (possibleLink: string) => {
   const match = TEST_LINK.exec(possibleLink);
@@ -23,23 +27,19 @@ export const addLink = (view: EditorView, data: DataTransfer | null) => {
   if (!testLink(href)) return false;
   const { schema } = view.state;
   const node = schema.text(href, [schema.marks.link.create({ href })]);
-  const tr = view.state.tr
-    .replaceSelectionWith(node, false)
-    .scrollIntoView();
+  const tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
   view.dispatch(tr);
   return true;
 };
 
 export function updateNodeAttrsOnView(
-  view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
-  attrs: { [index: string]: any }, select: boolean | 'after' = true,
+  view: EditorView | null,
+  node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
+  attrs: { [index: string]: any },
+  select: boolean | 'after' = true,
 ) {
   if (view == null) return;
-  const tr = view.state.tr.setNodeMarkup(
-    node.pos,
-    undefined,
-    { ...node.node.attrs, ...attrs },
-  );
+  const tr = view.state.tr.setNodeMarkup(node.pos, undefined, { ...node.node.attrs, ...attrs });
   if (select === true) tr.setSelection(NodeSelection.create(tr.doc, node.pos));
   if (select === 'after') {
     const sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
@@ -48,7 +48,6 @@ export function updateNodeAttrsOnView(
   view.dispatch(tr);
   view.focus();
 }
-
 
 // https://discuss.prosemirror.net/t/expanding-the-selection-to-the-active-mark/478
 function getLinkBounds(state: EditorState, pos: number) {
@@ -76,12 +75,9 @@ function getLinkBounds(state: EditorState, pos: number) {
   return { from: startPos, to: endPos, mark: link };
 }
 
-
 export function getLinkBoundsIfTheyExist(state?: EditorState | null, pos?: number) {
   if (!state) return null;
-  let {
-    from, $from, to, $to, empty,
-  } = state.selection;
+  let { from, $from, to, $to, empty } = state.selection;
   if (pos != null) {
     from = pos;
     $from = state.doc.resolve(pos);
@@ -97,8 +93,8 @@ export function getLinkBoundsIfTheyExist(state?: EditorState | null, pos?: numbe
   const linkBounds = searchForLink ? getLinkBounds(state, from) : null;
 
   const hasLink = Boolean(
-    (mark.isInSet($from.marks()) || from === linkBounds?.from)
-    && (mark.isInSet($to.marks()) || to === linkBounds?.to),
+    (mark.isInSet($from.marks()) || from === linkBounds?.from) &&
+      (mark.isInSet($to.marks()) || to === linkBounds?.to),
   );
 
   // TODO: this fails if you are selecting between TWO different links. :(
@@ -108,11 +104,10 @@ export function getLinkBoundsIfTheyExist(state?: EditorState | null, pos?: numbe
   return linkBounds;
 }
 
-
 export function getNodeIfSelected(state: EditorState | null, nodeName?: schemas.nodeNames) {
   if (state == null) return null;
   const selected = isNodeSelection(state.selection);
-  const { node } = (state.selection as NodeSelection);
+  const { node } = state.selection as NodeSelection;
   if (selected && (!nodeName || node?.type.name === nodeName)) {
     return node;
   }

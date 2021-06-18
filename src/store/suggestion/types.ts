@@ -1,5 +1,5 @@
 import { types } from '@curvenote/runtime';
-import { RefKind } from '@curvenote/schema';
+import { ReferenceKind } from '@curvenote/schema';
 import { EditorView } from 'prosemirror-view';
 import { CommandResult } from './commands';
 
@@ -26,8 +26,9 @@ export interface EmojiResult {
 }
 
 export type LinkResult = {
-  kind: RefKind;
+  kind: ReferenceKind;
   uid: string;
+  label: string | null;
   content: string;
   linkKind?: string;
   alt?: string;
