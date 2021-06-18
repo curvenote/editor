@@ -28,10 +28,10 @@ export interface EmojiResult {
 export type LinkResult = {
   kind: ReferenceKind;
   uid: string;
+  title: string | null;
   label: string | null;
   content: string;
   linkKind?: string;
-  alt?: string;
 };
 
 export type VariableResult = Partial<types.Variable>;

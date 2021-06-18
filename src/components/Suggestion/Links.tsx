@@ -30,7 +30,7 @@ const LinkSuggestions = () => {
       {results.map((item, index) => (
         <Suggestion key={item.uid} index={index}>
           <Typography variant="subtitle2">{item?.content}</Typography>
-          <Typography variant="caption">{item?.alt || item.uid}</Typography>
+          <Typography variant="caption">{item?.title || item.uid}</Typography>
         </Suggestion>
       ))}
     </div>

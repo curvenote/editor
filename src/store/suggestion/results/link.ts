@@ -25,23 +25,13 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
     if (view == null) return false;
     view.dispatch(view.state.tr.insertText('', from, to));
     switch (result.kind) {
-      case ReferenceKind.cite: {
-        const citeAttrs: Nodes.Cite.Attrs = {
-          key: result.uid,
-          title: result.alt ?? '',
-          label: result.label ?? null,
-          kind: ReferenceKind.cite,
-          text: result.content,
-        };
-        return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
-      }
       case ReferenceKind.link: {
         const { tr } = view.state;
         const text = result.content;
         tr.insertText(`${text} `, from);
         const mark = view.state.schema.marks.link.create({
           href: result.uid,
-          title: result.alt ?? '',
+          title: result.title ?? '',
           kind: result.linkKind ?? '',
         });
         view.dispatch(tr.addMark(from, from + text.length, mark));
@@ -50,7 +40,7 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
       default: {
         const citeAttrs: Nodes.Cite.Attrs = {
           key: result.uid,
-          title: result.alt ?? '',
+          title: result.title ?? '',
           label: result.label ?? null,
           kind: result.kind,
           text: result.content,

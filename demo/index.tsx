@@ -51,14 +51,15 @@ const someLinks: LinkResult[] = [
     uid: 'simpeg2015',
     label: 'simpeg',
     content: 'Cockett et al., 2015',
-    alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
+    title:
+      'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
   },
   {
     kind: ReferenceKind.link,
     uid: 'https://curvenote.com',
     label: null,
     content: 'Curvenote',
-    alt: 'Move ideas forward',
+    title: 'Move ideas forward',
   },
 ];
 
