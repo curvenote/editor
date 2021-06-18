@@ -42,7 +42,10 @@ const SelectWidth = (props: Props) => {
             marks
             min={10}
             max={100}
-            onChangeCommitted={(e, v) => { handleClose(); onWidth(v as number); }}
+            onChangeCommitted={(e, v) => {
+              handleClose();
+              onWidth(v as number);
+            }}
           />
         </div>
       </Popover>

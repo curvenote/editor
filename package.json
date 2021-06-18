@@ -36,6 +36,8 @@
     "dev": "webpack --config webpack.dev.js",
     "dev:schema": "cd ../schema; yalc publish; cd ../editor; yalc add @curvenote/schema",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
+    "lint:format": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\"",
+    "lint:format:fix": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
     "watch": "tsc -w -p ."
   },
   "dependencies": {

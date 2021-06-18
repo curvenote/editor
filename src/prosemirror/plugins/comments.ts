@@ -1,6 +1,4 @@
-import {
-  Plugin, PluginKey, Selection, Transaction,
-} from 'prosemirror-state';
+import { Plugin, PluginKey, Selection, Transaction } from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
@@ -14,7 +12,6 @@ const emptyCommentState = {
 };
 
 export const key = new PluginKey('comments');
-
 
 interface CommentAddAction {
   type: 'add';
@@ -38,7 +35,11 @@ function inComment(selection: Selection, decorations: DecorationSet) {
   return decorations.find(selection.from, selection.to).length > 0;
 }
 
-const reducer = (state: CommentState, tr: Transaction, action?: CommentAction): CommentState['decorations'] => {
+const reducer = (
+  state: CommentState,
+  tr: Transaction,
+  action?: CommentAction,
+): CommentState['decorations'] => {
   const { decorations } = state;
   const nextDecorations = decorations.map(tr.mapping, tr.doc);
   switch (action?.type) {
@@ -58,9 +59,7 @@ const reducer = (state: CommentState, tr: Transaction, action?: CommentAction): 
       if (isNodeSelection(tr.selection)) {
         deco = Decoration.node(from, to, params, spec);
       } else {
-        deco = Decoration.inline(
-          from, to, params, spec,
-        );
+        deco = Decoration.inline(from, to, params, spec);
       }
       return nextDecorations.add(tr.doc, [deco]);
     }

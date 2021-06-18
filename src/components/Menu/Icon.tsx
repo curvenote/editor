@@ -2,7 +2,13 @@
 import React from 'react';
 import {
   Button,
-  createStyles, Divider, IconButton, makeStyles, SvgIcon, Theme, Tooltip,
+  createStyles,
+  Divider,
+  IconButton,
+  makeStyles,
+  SvgIcon,
+  Theme,
+  Tooltip,
 } from '@material-ui/core';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
@@ -61,9 +67,8 @@ function BracketsIcon(props: any) {
 }
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
-const deMacify = (title: string | React.ReactElement) => (
-  mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-')
-);
+const deMacify = (title: string | React.ReactElement) =>
+  mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-');
 
 const icons = {
   cancel: { help: 'Cancel', Icon: CancelIcon },
@@ -102,37 +107,38 @@ const icons = {
 
 export type IconTypes = keyof typeof icons | 'divider';
 
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    color: theme.palette.text.secondary,
-    display: 'inline-block',
-    '& button:hover': {
-      backgroundColor: 'transparent',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      color: theme.palette.text.secondary,
+      display: 'inline-block',
+      '& button:hover': {
+        backgroundColor: 'transparent',
+      },
+      '& button.active svg, button:hover svg': {
+        backgroundColor: theme.palette.text.secondary,
+        color: 'white',
+      },
+      '& button:hover svg.dangerous, svg.error': {
+        backgroundColor: 'transparent',
+        color: theme.palette.error.main,
+      },
+      '& svg': {
+        margin: 4,
+        padding: 2,
+        borderRadius: 4,
+      },
     },
-    '& button.active svg, button:hover svg': {
-      backgroundColor: theme.palette.text.secondary,
-      color: 'white',
+    hr: {
+      margin: theme.spacing(0, 0.5),
+      height: 20,
     },
-    '& button:hover svg.dangerous, svg.error': {
-      backgroundColor: 'transparent',
-      color: theme.palette.error.main,
+    button: {
+      margin: theme.spacing(0, 0.5),
+      textTransform: 'none',
     },
-    '& svg': {
-      margin: 4,
-      padding: 2,
-      borderRadius: 4,
-    },
-  },
-  hr: {
-    margin: theme.spacing(0, 0.5),
-    height: 20,
-  },
-  button: {
-    margin: theme.spacing(0, 0.5),
-    textTransform: 'none',
-  },
-}));
+  }),
+);
 
 type Props = {
   kind: IconTypes;
@@ -146,9 +152,7 @@ type Props = {
 };
 
 const MenuIcon = (props: Props) => {
-  const {
-    kind, active, dangerous, error, disabled, onClick, title, text,
-  } = props;
+  const { kind, active, dangerous, error, disabled, onClick, title, text } = props;
 
   const classes = useStyles();
 
@@ -162,7 +166,11 @@ const MenuIcon = (props: Props) => {
         disabled={disabled}
         className={classes.button}
         size="small"
-        onClickCapture={(e) => { e.stopPropagation(); e.preventDefault(); onClick?.(e); }}
+        onClickCapture={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          onClick?.(e);
+        }}
         disableRipple
       >
         {text}
@@ -178,7 +186,11 @@ const MenuIcon = (props: Props) => {
           disabled={disabled}
           className={active ? 'active' : ''}
           size="small"
-          onClickCapture={(e) => { e.stopPropagation(); e.preventDefault(); onClick?.(e); }}
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClick?.(e);
+          }}
           disableRipple
         >
           <Icon fontSize="small" className={classNames({ dangerous, error })} />

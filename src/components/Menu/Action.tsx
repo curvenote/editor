@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import {
-  createStyles, makeStyles, MenuItem, Typography,
-} from '@material-ui/core';
+import { createStyles, makeStyles, MenuItem, Typography } from '@material-ui/core';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import CodeIcon from '@material-ui/icons/Code';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -21,17 +19,19 @@ const icons = {
   link: LinkIcon,
 };
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    minWidth: 115,
-  },
-  icon: {
-    position: 'relative',
-    top: 3,
-    marginRight: 10,
-    color: '#aaa',
-  },
-}));
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      minWidth: 115,
+    },
+    icon: {
+      position: 'relative',
+      top: 3,
+      marginRight: 10,
+      color: '#aaa',
+    },
+  }),
+);
 
 export type IconTypes = keyof typeof icons;
 
@@ -39,27 +39,19 @@ export type MenuActionProps = {
   kind?: IconTypes;
   title?: string | React.ReactNode;
   children?: React.ReactNode;
-  action?: (() => void);
+  action?: () => void;
   disabled?: boolean;
   selected?: boolean;
 };
 
 const MenuAction = (props: MenuActionProps) => {
-  const {
-    kind, title, action, disabled, children, selected,
-  } = props;
+  const { kind, title, action, disabled, children, selected } = props;
   const classes = useStyles();
   const Icon = kind && icons[kind];
   return (
     <MenuItem onClick={action} disabled={disabled} selected={selected}>
       <Typography className={classes.root}>
-        {Icon && (
-          <Icon
-            fontSize="small"
-            className={classes.icon}
-            color="inherit"
-          />
-        )}
+        {Icon && <Icon fontSize="small" className={classes.icon} color="inherit" />}
         {` ${title}`}
       </Typography>
       {children}

@@ -1,6 +1,4 @@
-import {
-  Plugin, EditorState, PluginKey, Transaction,
-} from 'prosemirror-state';
+import { Plugin, EditorState, PluginKey, Transaction } from 'prosemirror-state';
 
 const key = new PluginKey('editable');
 
@@ -10,11 +8,8 @@ export const isEditable = (state?: EditorState | null): boolean => {
   return plugin?.getState(state) ?? false;
 };
 
-export const setEditable = (
-  state: EditorState, tr: Transaction, editable: boolean,
-): Transaction => (
-  tr.setMeta(key.get(state) as Plugin, editable)
-);
+export const setEditable = (state: EditorState, tr: Transaction, editable: boolean): Transaction =>
+  tr.setMeta(key.get(state) as Plugin, editable);
 
 export const editablePlugin = (startEditable: boolean): Plugin => {
   const plugin: Plugin = new Plugin({

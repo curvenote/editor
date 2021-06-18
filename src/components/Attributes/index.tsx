@@ -2,37 +2,45 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import isEqual from 'lodash.isequal';
 import {
-  TextField, makeStyles, Theme, createStyles, Popover, Paper, Typography,
+  TextField,
+  makeStyles,
+  Theme,
+  createStyles,
+  Popover,
+  Paper,
+  Typography,
 } from '@material-ui/core';
 import { schemas } from '@curvenote/schema';
 import { State, Dispatch } from '../../store/types';
 import { closeAttributeEditor, updateNodeAttrs } from '../../store/actions';
 import {
   getEditorUI,
-  getAttributeEditorLocation, showAttributeEditor,
+  getAttributeEditorLocation,
+  showAttributeEditor,
   getNodeAttrs,
   getEditorState,
   getAttributeEditorPos,
 } from '../../store/selectors';
 import { isEditable } from '../../prosemirror/plugins/editable';
 
-
 const HEIGHT = 300;
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-    backgroundColor: '#fff',
-    padding: theme.spacing(1),
-    width: 300,
-    maxHeight: HEIGHT,
-    overflowY: 'scroll',
-    overscrollBehavior: 'none',
-    '& > *': {
-      margin: theme.spacing(1),
-      width: 'calc(100% - 15px)',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      backgroundColor: '#fff',
+      padding: theme.spacing(1),
+      width: 300,
+      maxHeight: HEIGHT,
+      overflowY: 'scroll',
+      overscrollBehavior: 'none',
+      '& > *': {
+        margin: theme.spacing(1),
+        width: 'calc(100% - 15px)',
+      },
     },
-  },
-}));
+  }),
+);
 
 export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 
@@ -53,16 +61,19 @@ const Attributes = () => {
   }, isEqual);
   const location = useSelector((state: State) => getAttributeEditorLocation(state), isEqual);
 
-  const attrs = useSelector((state: State) => (
-    node ? getNodeAttrs(state, stateKey, pos) ?? {} : {}
-  ), isEqual);
+  const attrs = useSelector(
+    (state: State) => (node ? getNodeAttrs(state, stateKey, pos) ?? {} : {}),
+    isEqual,
+  );
   const keys = Object.keys(attrs);
 
-
-  const onChange = useCallback((key: string, value: string) => {
-    if (node == null) return;
-    dispatch(updateNodeAttrs(stateKey, null, { node, pos }, { [key]: value }));
-  }, [dispatch, stateKey, node]);
+  const onChange = useCallback(
+    (key: string, value: string) => {
+      if (node == null) return;
+      dispatch(updateNodeAttrs(stateKey, null, { node, pos }, { [key]: value }));
+    },
+    [dispatch, stateKey, node],
+  );
   const onClose = useCallback(() => dispatch(closeAttributeEditor()), []);
 
   if (!editing || !location || node == null || keys.length === 0) return null;
@@ -86,12 +97,8 @@ const Attributes = () => {
                 label={key}
                 key={key}
                 value={value}
-                onChange={
-                  (event: any) => onChange(key, event.target.value)
-                }
-                onBlur={
-                  (event: any) => onChange(key, event.target.value)
-                }
+                onChange={(event: any) => onChange(key, event.target.value)}
+                onBlur={(event: any) => onChange(key, event.target.value)}
                 multiline
               />
             );

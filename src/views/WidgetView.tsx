@@ -22,13 +22,17 @@ class WidgetView {
     this.getPos = getPos;
     this.dom = document.createElement<'div'>('div');
     this.dom.classList.add('widget', `widget-${node.type.name}`);
-    this.dom.addEventListener('contextmenu', (event) => {
-      store.dispatch(openAttributeEditor(true, getPos?.() || 0, this.dom));
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      return false;
-    }, true);
+    this.dom.addEventListener(
+      'contextmenu',
+      (event) => {
+        store.dispatch(openAttributeEditor(true, getPos?.() || 0, this.dom));
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        return false;
+      },
+      true,
+    );
     const widgetTag = (node.type.spec.toDOM?.(node) as DOMOutputSpecArray)?.[0] ?? 'span';
     this.widget = document.createElement(widgetTag);
     this.setAttrs(node);
@@ -56,10 +60,7 @@ class WidgetView {
   }
 }
 
-export const newWidgetView = (
-  node: Node, view: EditorView, getPos: boolean | (() => number),
-) => (
-  new WidgetView(node, view, getPos as () => number)
-);
+export const newWidgetView = (node: Node, view: EditorView, getPos: boolean | (() => number)) =>
+  new WidgetView(node, view, getPos as () => number);
 
 export default WidgetView;

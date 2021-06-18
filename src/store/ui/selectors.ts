@@ -22,9 +22,8 @@ export function getInlineActionKind(state: State) {
   return state.editor.ui.selection?.kind ?? null;
 }
 export function getInlineActionPlacement(state: State) {
-  return state.editor.ui.selection?.placement ?? 'bottom-start' as PopperPlacementType;
+  return state.editor.ui.selection?.placement ?? ('bottom-start' as PopperPlacementType);
 }
-
 
 export function getSelectedView(state: State) {
   const { viewId } = getEditorUI(state);
@@ -45,9 +44,5 @@ export function isEditorViewFocused(state: State, stateKey: any | null, viewId: 
   if (stateKey == null) return null;
   const stateId = opts.transformKeyToId(stateKey);
   const { ui } = state.editor;
-  return (
-    ui.stateId === stateId
-    && ui.viewId === viewId
-    && ui.focused
-  );
+  return ui.stateId === stateId && ui.viewId === viewId && ui.focused;
 }

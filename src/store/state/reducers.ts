@@ -1,28 +1,25 @@
 import { process } from '@curvenote/schema';
 import {
-  INIT_EDITOR_STATE, UPDATE_EDITOR_STATE,
-  SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW,
-  RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS,
-  EditorActionTypes, EditorsState,
+  INIT_EDITOR_STATE,
+  UPDATE_EDITOR_STATE,
+  SUBSCRIBE_EDITOR_VIEW,
+  UNSUBSCRIBE_EDITOR_VIEW,
+  RESET_ALL_EDITORS_AND_VIEWS,
+  RESET_ALL_VIEWS,
+  EditorActionTypes,
+  EditorsState,
 } from './types';
 import { createEditorState } from '../../prosemirror';
-
-
 
 export const initialState: EditorsState = {
   editors: {},
   views: {},
 };
 
-const editorReducer = (
-  state = initialState,
-  action: EditorActionTypes,
-): EditorsState => {
+const editorReducer = (state = initialState, action: EditorActionTypes): EditorsState => {
   switch (action.type) {
     case INIT_EDITOR_STATE: {
-      const {
-        useSchema, stateKey, stateId, content, editable, version,
-      } = action.payload;
+      const { useSchema, stateKey, stateId, content, editable, version } = action.payload;
       if (state.editors[stateId] !== undefined) return state;
       const editorState = createEditorState(useSchema, stateKey, content, version, editable);
       const counts = process.countState(editorState);
@@ -31,15 +28,16 @@ const editorReducer = (
         editors: {
           ...state.editors,
           [stateId]: {
-            state: editorState, viewIds: [], key: stateKey, counts,
+            state: editorState,
+            viewIds: [],
+            key: stateKey,
+            counts,
           },
         },
       };
     }
     case SUBSCRIBE_EDITOR_VIEW: {
-      const {
-        stateId, viewId, view,
-      } = action.payload;
+      const { stateId, viewId, view } = action.payload;
       const editor = state.editors[stateId];
       if (editor === undefined) throw new Error('Editor state has not been setup.');
       return {
@@ -71,9 +69,7 @@ const editorReducer = (
       };
     }
     case UNSUBSCRIBE_EDITOR_VIEW: {
-      const {
-        stateId, viewId,
-      } = action.payload;
+      const { stateId, viewId } = action.payload;
       const editor = state.editors[stateId];
       if (editor === undefined) throw new Error('Editor state has not been setup.');
       const newState: EditorsState = {

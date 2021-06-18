@@ -16,14 +16,15 @@ const getFirstSuggestion = (kind: VarSuggestionKinds) => {
   return {
     id: 'FINISHED',
     name: title[kind],
-    description: 'Enter a value or expression. Select the variables below to add them to your expression.',
+    description:
+      'Enter a value or expression. Select the variables below to add them to your expression.',
   } as VariableResult;
 };
 
-export const startingSuggestions = (kind: VarSuggestionKinds, getState: () => State) => ([
+export const startingSuggestions = (kind: VarSuggestionKinds, getState: () => State) => [
   getFirstSuggestion(kind),
   ...Object.entries(getState().runtime.variables).map(([, variable]) => variable),
-]);
+];
 
 function createVariable(schema: Schema, dispatch: Dispatch, trigger: string, search: string) {
   const name = trigger.match(variableTrigger)?.[1] ?? 'myVar';
@@ -47,11 +48,16 @@ function createDisplay(schema: Schema, dispatch: Dispatch, search: string) {
   return true;
 }
 
-export function chooseSelection(kind: VarSuggestionKinds, result: VariableResult):
-AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
+export function chooseSelection(
+  kind: VarSuggestionKinds,
+  result: VariableResult,
+): AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
   return (dispatch, getState) => {
     const {
-      view, range: { from, to }, trigger, search,
+      view,
+      range: { from, to },
+      trigger,
+      search,
     } = getSuggestion(getState());
     if (view == null || search == null) return false;
 

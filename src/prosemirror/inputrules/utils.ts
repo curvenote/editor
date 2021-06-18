@@ -3,9 +3,12 @@ import { NodeType, MarkType, Node } from 'prosemirror-model';
 import { NodeSelection, Selection } from 'prosemirror-state';
 import { findParentNode } from 'prosemirror-utils';
 
-type GetAttrs = {
-  content?: Node<any>;[key: string]: any;
-} | ((p: string[]) => { content?: Node<any>;[key: string]: any });
+type GetAttrs =
+  | {
+      content?: Node<any>;
+      [key: string]: any;
+    }
+  | ((p: string[]) => { content?: Node<any>; [key: string]: any });
 
 // https://discuss.prosemirror.net/t/input-rules-for-wrapping-marks/537/11
 export function markInputRule(
@@ -41,7 +44,9 @@ export function markInputRule(
 }
 
 export function insertNodeRule(
-  regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs,
+  regExp: RegExp,
+  nodeType: NodeType,
+  getAttrs?: GetAttrs,
   select: boolean | ((p: string[]) => boolean) = false,
   test?: (p: string[]) => boolean,
 ) {
@@ -49,9 +54,10 @@ export function insertNodeRule(
   return new InputRule(regExp, (state, match, start, end) => {
     if (test && !test(match)) return null;
     const { content, ...attrs } = (getAttrs instanceof Function ? getAttrs(match) : getAttrs) ?? {};
-    const tr = state.tr.delete(start, end).replaceSelectionWith(
-      nodeType.create(attrs, content), false,
-    ).scrollIntoView();
+    const tr = state.tr
+      .delete(start, end)
+      .replaceSelectionWith(nodeType.create(attrs, content), false)
+      .scrollIntoView();
     const doSelect = select instanceof Function ? select(match) : select;
     if (!doSelect) return tr;
     const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
@@ -62,15 +68,18 @@ export function insertNodeRule(
 }
 
 export function replaceNodeRule(
-  regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs,
+  regExp: RegExp,
+  nodeType: NodeType,
+  getAttrs?: GetAttrs,
   select: boolean | ((p: string[]) => boolean) = false,
 ) {
   // return textblockTypeInputRule(/^\$\$\s$/, nodeType);
   return new InputRule(regExp, (state, match, start, end) => {
     const { content, ...attrs } = (getAttrs instanceof Function ? getAttrs(match) : getAttrs) ?? {};
-    const tr = state.tr.delete(start, end).replaceSelectionWith(
-      nodeType.create(attrs, content), false,
-    ).scrollIntoView();
+    const tr = state.tr
+      .delete(start, end)
+      .replaceSelectionWith(nodeType.create(attrs, content), false)
+      .scrollIntoView();
     const doSelect = select instanceof Function ? select(match) : select;
     if (!doSelect) return tr;
     const resolvedPos = tr.doc.resolve(start - 1);

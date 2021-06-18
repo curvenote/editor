@@ -10,7 +10,10 @@ export function getEditorView(state: State, viewId: string | null) {
 
 export function getEditorState(state: State, stateKey: any | null) {
   const blank = {
-    key: null, state: null, viewIds: [], counts: null,
+    key: null,
+    state: null,
+    viewIds: [],
+    counts: null,
   };
   const stateId = opts.transformKeyToId(stateKey);
   if (!stateId) return blank;

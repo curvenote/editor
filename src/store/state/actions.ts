@@ -3,29 +3,44 @@ import { EditorView } from 'prosemirror-view';
 import { schemas, process } from '@curvenote/schema';
 import {
   EditorActionTypes,
-  UPDATE_EDITOR_STATE, INIT_EDITOR_STATE,
-  SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW,
-  RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS,
+  UPDATE_EDITOR_STATE,
+  INIT_EDITOR_STATE,
+  SUBSCRIBE_EDITOR_VIEW,
+  UNSUBSCRIBE_EDITOR_VIEW,
+  RESET_ALL_EDITORS_AND_VIEWS,
+  RESET_ALL_VIEWS,
 } from './types';
 import { AppThunk } from '../types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
 
 export function initEditorState(
-  useSchema: schemas.UseSchema, stateKey: any, editable: boolean, content: string, version: number,
+  useSchema: schemas.UseSchema,
+  stateKey: any,
+  editable: boolean,
+  content: string,
+  version: number,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
   return {
     type: INIT_EDITOR_STATE,
     payload: {
-      useSchema, stateKey, stateId, editable, content, version,
+      useSchema,
+      stateKey,
+      stateId,
+      editable,
+      content,
+      version,
     },
   };
 }
 
 export function updateEditorState(
-  stateKey: any, viewId: string | null, editorState: EditorState, tr: Transaction,
+  stateKey: any,
+  viewId: string | null,
+  editorState: EditorState,
+  tr: Transaction,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
@@ -33,13 +48,18 @@ export function updateEditorState(
   return {
     type: UPDATE_EDITOR_STATE,
     payload: {
-      stateId, viewId, editorState, counts,
+      stateId,
+      viewId,
+      editorState,
+      counts,
     },
   };
 }
 
 export function applyProsemirrorTransaction(
-  stateKey: any, viewId: string | null, tr: Transaction,
+  stateKey: any,
+  viewId: string | null,
+  tr: Transaction,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const { view } = getEditorView(getState(), viewId);
@@ -55,9 +75,7 @@ export function applyProsemirrorTransaction(
   };
 }
 
-export function subscribeView(
-  stateKey: any, viewId: string, view: EditorView,
-): EditorActionTypes {
+export function subscribeView(stateKey: any, viewId: string, view: EditorView): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
   return {
@@ -66,9 +84,7 @@ export function subscribeView(
   };
 }
 
-export function unsubscribeView(
-  stateKey: any, viewId: string,
-): EditorActionTypes {
+export function unsubscribeView(stateKey: any, viewId: string): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
   return {
