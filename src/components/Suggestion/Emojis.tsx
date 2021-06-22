@@ -7,24 +7,31 @@ import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { EmojiResult } from '../../store/suggestion/types';
+import { positionPopper } from '../InlineActions/utils';
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    '& span': {
-      fontFamily: '\'Noto Serif\', serif',
-      margin: 5,
-      marginRight: 15,
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      '& span': {
+        // eslint-disable-next-line quotes
+        fontFamily: "'Noto Serif', serif",
+        margin: 5,
+        marginRight: 15,
+      },
     },
-  },
-  none: {
-    margin: 10,
-  },
-}));
+    none: {
+      margin: 10,
+    },
+  }),
+);
 
 const EmojiSuggestions: React.FC = () => {
   const results = useSelector(
-    (state: State) => selectors.getSuggestionResults<EmojiResult>(state), isEqual,
+    (state: State) => selectors.getSuggestionResults<EmojiResult>(state),
+    isEqual,
   );
+
+  positionPopper();
 
   const classes = useStyles();
 
@@ -38,14 +45,14 @@ const EmojiSuggestions: React.FC = () => {
 
   return (
     <div>
-      {results.map(((item, index) => (
+      {results.map((item, index) => (
         <Suggestion key={item.c} index={index} className={classes.root}>
           <Typography>
             <span>{item.c}</span>
             {item.n}
           </Typography>
         </Suggestion>
-      )))}
+      ))}
     </div>
   );
 };

@@ -20,9 +20,7 @@ class ImageView {
     this.view = view;
     this.getPos = getPos;
     this.dom = document.createElement('div');
-    const {
-      align, src, title, alt, width,
-    } = node.attrs;
+    const { align, src, title, alt, width } = node.attrs;
     this.dom.style.textAlign = align;
     this.dom.style.margin = '1.5em 0';
     this.img = document.createElement('img');

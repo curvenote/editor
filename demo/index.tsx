@@ -4,11 +4,18 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
-import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
+import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
-  actions, Editor, EditorMenu, Store, setup, Suggestions,
-  Attributes, InlineActions, LinkKind, LinkResult,
+  actions,
+  Editor,
+  EditorMenu,
+  Store,
+  setup,
+  Suggestions,
+  Attributes,
+  InlineActions,
+  LinkResult,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -25,12 +32,7 @@ declare global {
   }
 }
 
-const store: Store = createStore(
-  rootReducer,
-  applyMiddleware(
-    ...middleware,
-  ),
-);
+const store: Store = createStore(rootReducer, applyMiddleware(...middleware));
 const theme = createMuiTheme({});
 
 const stateKey = 'myEditor';
@@ -44,8 +46,21 @@ const removeComment = () => {
 };
 
 const someLinks: LinkResult[] = [
-  { kind: LinkKind.cite, uid: 'simpeg2015', content: 'Cockett et al., 2015', alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.' },
-  { kind: LinkKind.link, uid: 'https://curvenote.com', content: 'Curvenote', alt: 'Move ideas forward' },
+  {
+    kind: ReferenceKind.cite,
+    uid: 'simpeg2015',
+    label: 'simpeg',
+    content: 'Cockett et al., 2015',
+    title:
+      'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
+  },
+  {
+    kind: ReferenceKind.link,
+    uid: 'https://curvenote.com',
+    label: null,
+    content: 'Curvenote',
+    title: 'Move ideas forward',
+  },
 ];
 
 const opts: Options = {
@@ -53,9 +68,9 @@ const opts: Options = {
   uploadImage: async (file) => {
     // eslint-disable-next-line no-console
     console.log(file);
-    return new Promise((resolve) => (
-      setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000)
-    ));
+    return new Promise((resolve) =>
+      setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000),
+    );
   },
   addComment() {
     newComment();
@@ -66,10 +81,20 @@ const opts: Options = {
     console.log('Double click', stateId, viewId);
     return false;
   },
-  getDocId() { return docId; },
+  getDocId() {
+    return docId;
+  },
   theme,
   throttle: 0,
-  citationPrompt: async () => ['simpeg2015'],
+  citationPrompt: async () => [
+    {
+      key: 'simpeg2015',
+      kind: ReferenceKind.cite,
+      text: 'Cockett et al, 2015',
+      label: 'simpeg',
+      title: '',
+    },
+  ],
   createLinkSearch: async () => ({ search: () => someLinks }),
   nodeViews: {},
 };
@@ -78,7 +103,6 @@ setup(store, opts);
 
 window.store = store;
 store.dispatch(actions.initEditorState('full', stateKey, true, snippet, 0));
-
 
 store.subscribe(() => {
   const myst = document.getElementById('myst');
@@ -105,7 +129,9 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone />
-      <InlineActions><InlineActionSwitch /></InlineActions>
+      <InlineActions>
+        <InlineActionSwitch />
+      </InlineActions>
       <article id={docId} className="content centered">
         <AnchorBase anchor="anchor">
           <div className="selected">
@@ -131,7 +157,9 @@ ReactDOM.render(
         <Button onClick={newComment}>Comment</Button>
         <Button onClick={removeComment}>Remove</Button>
       </div>
-      <Suggestions><SuggestionSwitch /></Suggestions>
+      <Suggestions>
+        <SuggestionSwitch />
+      </Suggestions>
       <Attributes />
     </React.StrictMode>
   </Provider>,

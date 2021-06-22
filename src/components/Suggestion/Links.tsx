@@ -7,12 +7,14 @@ import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { LinkResult } from '../../store/suggestion/types';
+import { positionPopper } from '../InlineActions/utils';
 
 const LinkSuggestions = () => {
   const results = useSelector(
-    (state: State) => selectors.getSuggestionResults<LinkResult>(state), isEqual,
+    (state: State) => selectors.getSuggestionResults<LinkResult>(state),
+    isEqual,
   );
-
+  positionPopper();
   if (results.length === 0) {
     return (
       <Suggestion index={0}>
@@ -25,16 +27,12 @@ const LinkSuggestions = () => {
 
   return (
     <div>
-      {results.map(((item, index) => (
+      {results.map((item, index) => (
         <Suggestion key={item.uid} index={index}>
-          <Typography variant="subtitle2">
-            {item?.content}
-          </Typography>
-          <Typography variant="caption">
-            {item?.alt || item.uid}
-          </Typography>
+          <Typography variant="subtitle2">{item?.content}</Typography>
+          <Typography variant="caption">{item?.title || item.uid}</Typography>
         </Suggestion>
-      )))}
+      ))}
     </div>
   );
 };

@@ -18,7 +18,7 @@ export type Options = {
 export type ClassWrapperProps = {
   node: Node;
   view: EditorView;
-  getPos: (() => number);
+  getPos: () => number;
   Child: React.FunctionComponent<NodeViewProps>;
 };
 
@@ -37,14 +37,17 @@ class ClassWrapper extends Component<ClassWrapperProps, ClassWrapperState> {
   }
 
   render() {
-    const {
-      view, node, getPos, Child,
-    } = this.props;
+    const { view, node, getPos, Child } = this.props;
     const { open, edit } = this.state;
     return (
-      <Child {...{
-        view, node, getPos, open, edit,
-      }}
+      <Child
+        {...{
+          view,
+          node,
+          getPos,
+          open,
+          edit,
+        }}
       />
     );
   }
@@ -59,7 +62,7 @@ export class ReactWrapper {
 
   editor: null | React.Component = null;
 
-  getPos: (() => number);
+  getPos: () => number;
 
   constructor(
     NodeView: React.FunctionComponent<NodeViewProps>,
@@ -78,9 +81,14 @@ export class ReactWrapper {
         <Provider store={ref.store()}>
           <ClassWrapper
             {...{
-              node, view, getPos, Child: NodeView,
+              node,
+              view,
+              getPos,
+              Child: NodeView,
             }}
-            ref={(r) => { this.editor = r; }}
+            ref={(r) => {
+              this.editor = r;
+            }}
           />
         </Provider>
       </ThemeProvider>,
@@ -102,7 +110,8 @@ export class ReactWrapper {
     this.editor?.setState({ open: false, edit });
   }
 
-  update(node: Node) { // TODO: this has decorations in the args!
+  update(node: Node) {
+    // TODO: this has decorations in the args!
     if (!node.sameMarkup(this.node)) return false;
     this.node = node;
     const edit = isEditable(this.view.state);
@@ -115,9 +124,8 @@ function createNodeView(
   Editor: React.FunctionComponent<NodeViewProps>,
   options: Options = { wrapper: 'div' },
 ) {
-  return (node: Node, view: EditorView, getPos: boolean | (() => number)) => (
-    new ReactWrapper(Editor, { node, view, getPos: getPos as (() => number) }, options)
-  );
+  return (node: Node, view: EditorView, getPos: boolean | (() => number)) =>
+    new ReactWrapper(Editor, { node, view, getPos: getPos as () => number }, options);
 }
 
 export default createNodeView;

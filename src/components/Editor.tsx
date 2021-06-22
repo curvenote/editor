@@ -5,9 +5,7 @@ import throttle from 'lodash.throttle';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
-import {
-  Dispatch, State, actions, selectors,
-} from '../store';
+import { Dispatch, State, actions, selectors } from '../store';
 
 type Props = {
   stateKey: any;
@@ -17,9 +15,7 @@ type Props = {
 };
 
 const Editor = (props: Props) => {
-  const {
-    stateKey, viewId, className, autoUnsubscribe,
-  } = props;
+  const { stateKey, viewId, className, autoUnsubscribe } = props;
 
   const dispatch = useDispatch<Dispatch>();
 
@@ -29,31 +25,26 @@ const Editor = (props: Props) => {
   const editorState = useSelector(
     (state: State) => selectors.getEditorState(state, stateKey)?.state,
   );
-  const focused = useSelector(
-    (state: State) => (selectors.isEditorViewFocused(state, stateKey, viewId)),
+  const focused = useSelector((state: State) =>
+    selectors.isEditorViewFocused(state, stateKey, viewId),
   );
 
   // Create editorView
   useEffect(() => {
     if (editorView.current || !editorEl.current || !editorState) return;
-    const doUpdateState = (next: EditorState, tr: Transaction) => (
-      dispatch(actions.updateEditorState(stateKey, viewId, next, tr))
-    );
+    const doUpdateState = (next: EditorState, tr: Transaction) =>
+      dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
     const updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
-    editorView.current = createEditorView(
-      editorEl.current,
-      editorState,
-      (tr) => {
-        const view = editorView.current as EditorView;
-        const mtr = opts.modifyTransaction(stateKey, viewId, view.state, tr);
-        const next = view.state.apply(mtr);
-        updateState(next, mtr);
-        // Immidiately update the view.
-        // This is important for properly handling selections.
-        // Cannot use react event loop here.
-        editorView.current?.updateState(next);
-      },
-    );
+    editorView.current = createEditorView(editorEl.current, editorState, (tr) => {
+      const view = editorView.current as EditorView;
+      const mtr = opts.modifyTransaction(stateKey, viewId, view.state, tr);
+      const next = view.state.apply(mtr);
+      updateState(next, mtr);
+      // Immidiately update the view.
+      // This is important for properly handling selections.
+      // Cannot use react event loop here.
+      editorView.current?.updateState(next);
+    });
     editorView.current.dom.id = viewId;
     if (className) editorView.current.dom.classList.add(...className.split(' '));
 
@@ -68,11 +59,14 @@ const Editor = (props: Props) => {
   }, [editorView.current == null, editorEl.current == null, editorState == null]);
 
   // Unsubscribe when it goes away
-  useEffect(() => () => {
-    if (autoUnsubscribe && editorView.current) {
-      dispatch(actions.unsubscribeView(stateKey, viewId));
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (autoUnsubscribe && editorView.current) {
+        dispatch(actions.unsubscribeView(stateKey, viewId));
+      }
+    },
+    [],
+  );
 
   // Handle an external focus event:
   useEffect(() => {

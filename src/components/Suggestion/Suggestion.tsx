@@ -7,17 +7,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isSuggestionSelected } from '../../store/selectors';
 import { Dispatch, State } from '../../store';
 import { chooseSelection, selectSuggestion } from '../../store/actions';
+import { positionPopper } from '../InlineActions/utils';
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    padding: 10,
-    cursor: 'pointer',
-    clear: 'both',
-  },
-  selected: {
-    backgroundColor: '#e8e8e8',
-  },
-}));
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      padding: 10,
+      cursor: 'pointer',
+      clear: 'both',
+    },
+    selected: {
+      backgroundColor: '#e8e8e8',
+    },
+  }),
+);
 
 type Props = {
   index: number;
@@ -26,7 +29,7 @@ type Props = {
 
 const Suggestion: React.FC<Props> = (props) => {
   const { index, children, className } = props;
-
+  positionPopper();
   const classes = useStyles();
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<Dispatch>();
@@ -46,7 +49,10 @@ const Suggestion: React.FC<Props> = (props) => {
 
   return (
     <div
-      className={classNames(classes.root, { [className ?? '']: className, [classes.selected]: selected })}
+      className={classNames(classes.root, {
+        [className ?? '']: className,
+        [classes.selected]: selected,
+      })}
       onClick={onClick}
       onMouseEnter={onHover}
       ref={ref}

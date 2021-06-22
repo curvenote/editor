@@ -48,14 +48,9 @@ export interface FocusEditorViewAction {
   };
 }
 
-
 export interface InlineSelectionAction {
   type: typeof INLINE_SELECTION;
   payload: InlineSelection | null;
 }
 
-export type UIActionTypes = (
-  SelectEditorViewAction |
-  FocusEditorViewAction |
-  InlineSelectionAction
-);
+export type UIActionTypes = SelectEditorViewAction | FocusEditorViewAction | InlineSelectionAction;

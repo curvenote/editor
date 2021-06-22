@@ -8,6 +8,26 @@ import katex from 'katex';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 
+export function renderMath(math: string, element: HTMLElement, inline: boolean) {
+  // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
+  // const txt = toText(this.node, this.outerView.state.schema, document);
+  // console.log({ math, txt });
+  // const render = math.replace(/−/g, '-');
+  const render = math?.trim() || '...';
+  try {
+    katex.render(render, element, {
+      displayMode: !inline,
+      throwOnError: false,
+      macros: {
+        '\\boldsymbol': '\\mathbf',
+      },
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-param-reassign
+    element.innerText = error;
+  }
+}
+
 class MathView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
@@ -25,9 +45,9 @@ class MathView {
 
   outerView: EditorView;
 
-  getPos: (() => number);
+  getPos: () => number;
 
-  constructor(node: Node, view: EditorView, getPos: (() => number), inline: boolean) {
+  constructor(node: Node, view: EditorView, getPos: () => number, inline: boolean) {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;
@@ -45,6 +65,8 @@ class MathView {
     if (this.inline) {
       this.dom.classList.add('inline');
       this.editor.classList.add('inline');
+    } else {
+      this.dom.classList.add('display');
     }
     this.addFakeCursor();
     this.dom.classList.remove('editing');
@@ -57,52 +79,63 @@ class MathView {
     };
     const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
     // And put a sub-ProseMirror into that
-    this.innerView = new EditorView({ mount: this.editor }, {
-      // You can use any node as an editor document
-      state: EditorState.create({
-        doc: this.node,
-        plugins: [keymap({
-          'Mod-a': () => {
-            const { doc, tr } = this.innerView.state;
-            const sel = TextSelection.create(doc, 0, this.node.nodeSize - 2);
-            this.innerView.dispatch(tr.setSelection(sel));
-            return true;
+    this.innerView = new EditorView(
+      { mount: this.editor },
+      {
+        // You can use any node as an editor document
+        state: EditorState.create({
+          doc: this.node,
+          plugins: [
+            keymap({
+              'Mod-a': () => {
+                const { doc, tr } = this.innerView.state;
+                const sel = TextSelection.create(doc, 0, this.node.nodeSize - 2);
+                this.innerView.dispatch(tr.setSelection(sel));
+                return true;
+              },
+              'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
+              'Mod-Z': () => redo(this.outerView.state, this.outerView.dispatch),
+              ...(mac
+                ? {}
+                : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
+              Escape: () => {
+                this.dom.classList.remove('editing');
+                this.outerView.focus();
+                return true;
+              },
+              Enter: unfocus,
+              'Ctrl-Enter': chainCommands(newlineInCode, unfocus),
+              'Shift-Enter': chainCommands(newlineInCode, unfocus),
+              Backspace: chainCommands(deleteSelection, (state) => {
+                // default backspace behavior for non-empty selections
+                if (!state.selection.empty) {
+                  return false;
+                }
+                // default backspace behavior when math node is non-empty
+                if (this.node.textContent.length > 0) {
+                  return false;
+                }
+                // otherwise, we want to delete the empty math node and focus the outer view
+                this.outerView.dispatch(this.outerView.state.tr.insertText(''));
+                this.outerView.focus();
+                return true;
+              }),
+            }),
+          ],
+        }),
+        // This is the magic part
+        dispatchTransaction: this.dispatchInner.bind(this),
+        handleDOMEvents: {
+          mousedown: () => {
+            // Kludge to prevent issues due to the fact that the whole
+            // footnote is node-selected (and thus DOM-selected) when
+            // the parent editor is focused.
+            if (this.outerView.hasFocus()) this.innerView.focus();
+            return false;
           },
-          'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
-          'Mod-Z': () => redo(this.outerView.state, this.outerView.dispatch),
-          ...(mac ? {} : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
-          Escape: () => {
-            this.dom.classList.remove('editing');
-            this.outerView.focus();
-            return true;
-          },
-          Enter: unfocus,
-          'Ctrl-Enter': chainCommands(newlineInCode, unfocus),
-          'Shift-Enter': chainCommands(newlineInCode, unfocus),
-          Backspace: chainCommands(deleteSelection, (state) => {
-            // default backspace behavior for non-empty selections
-            if (!state.selection.empty) { return false; }
-            // default backspace behavior when math node is non-empty
-            if (this.node.textContent.length > 0) { return false; }
-            // otherwise, we want to delete the empty math node and focus the outer view
-            this.outerView.dispatch(this.outerView.state.tr.insertText(''));
-            this.outerView.focus();
-            return true;
-          }),
-        })],
-      }),
-      // This is the magic part
-      dispatchTransaction: this.dispatchInner.bind(this),
-      handleDOMEvents: {
-        mousedown: () => {
-          // Kludge to prevent issues due to the fact that the whole
-          // footnote is node-selected (and thus DOM-selected) when
-          // the parent editor is focused.
-          if (this.outerView.hasFocus()) this.innerView.focus();
-          return false;
         },
       },
-    });
+    );
   }
 
   selectNode() {
@@ -153,11 +186,12 @@ class MathView {
         const ends = node.content.findDiffEnd(state.doc.content as any);
         let { a: endA, b: endB } = ends ?? { a: 0, b: 0 };
         const overlap = start - Math.min(endA, endB);
-        if (overlap > 0) { endA += overlap; endB += overlap; }
+        if (overlap > 0) {
+          endA += overlap;
+          endB += overlap;
+        }
         this.innerView.dispatch(
-          state.tr
-            .replace(start, endB, node.slice(start, endA))
-            .setMeta('fromOutside', true),
+          state.tr.replace(start, endB, node.slice(start, endA)).setMeta('fromOutside', true),
         );
       }
     }
@@ -166,27 +200,12 @@ class MathView {
   }
 
   renderMath() {
-    const math = this.node.textContent;
-    // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
-    // const txt = toText(this.node, this.outerView.state.schema, document);
-    // console.log({ math, txt });
-    // const render = math.replace(/−/g, '-');
-    const render = math?.trim() || '...';
-    try {
-      katex.render(
-        render,
-        this.math,
-        {
-          displayMode: !this.inline,
-          throwOnError: false,
-          macros: {
-            '\\boldsymbol': '\\mathbf',
-          },
-        },
-      );
-    } catch (error) {
-      this.math.innerText = error;
+    if (this.node.attrs.numbered) {
+      this.dom.setAttribute('numbered', '');
+    } else {
+      this.dom.removeAttribute('numbered');
     }
+    renderMath(this.node.textContent, this.math, this.inline);
   }
 
   destroy() {
@@ -199,7 +218,9 @@ class MathView {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  ignoreMutation() { return true; }
+  ignoreMutation() {
+    return true;
+  }
 }
 
 export default MathView;

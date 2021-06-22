@@ -17,13 +17,11 @@ const SuggestionSwitch = () => {
       {kind === SuggestionKind.emoji && <EmojiSuggestions />}
       {kind === SuggestionKind.command && <CommandSuggestions />}
       {kind === SuggestionKind.link && <LinkSuggestions />}
-      {
-        (kind === SuggestionKind.variable || kind === SuggestionKind.display)
-        && <VariableSuggestions />
-      }
+      {(kind === SuggestionKind.variable || kind === SuggestionKind.display) && (
+        <VariableSuggestions />
+      )}
     </>
   );
 };
 
 export default SuggestionSwitch;
-

@@ -1,7 +1,10 @@
 import {
-  SuggestionState, SuggestionActionTypes, UPDATE_SUGGESTION, UPDATE_RESULTS, SELECT_SUGGESTION,
+  SuggestionState,
+  SuggestionActionTypes,
+  UPDATE_SUGGESTION,
+  UPDATE_RESULTS,
+  SELECT_SUGGESTION,
 } from './types';
-
 
 const initialState: SuggestionState = {
   view: null,
@@ -20,9 +23,7 @@ const suggestionReducer = (
 ): SuggestionState => {
   switch (action.type) {
     case UPDATE_SUGGESTION: {
-      const {
-        open, kind, search, range, view, trigger,
-      } = action.payload;
+      const { open, kind, search, range, view, trigger } = action.payload;
       return {
         ...state,
         open,

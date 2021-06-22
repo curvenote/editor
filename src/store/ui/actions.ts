@@ -1,8 +1,11 @@
 import { PopperPlacementType } from '@material-ui/core';
 import {
-  SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW,
-  InlineSelection, UIActionTypes,
-  INLINE_SELECTION, SelectionKinds,
+  SELECT_EDITOR_VIEW,
+  FOCUS_EDITOR_VIEW,
+  InlineSelection,
+  UIActionTypes,
+  INLINE_SELECTION,
+  SelectionKinds,
 } from './types';
 import { AppThunk } from '../types';
 import { getEditorUI, getSelectedEditorAndViews } from './selectors';
@@ -19,9 +22,7 @@ export function selectEditorView(viewId: string | null): AppThunk<void> {
   };
 }
 
-export function focusEditorView(
-  viewId: string | null, focused: boolean,
-): AppThunk<void> {
+export function focusEditorView(viewId: string | null, focused: boolean): AppThunk<void> {
   return (dispatch, getState) => {
     const { stateId } = getEditorView(getState(), viewId);
     dispatch({
@@ -59,9 +60,11 @@ export function positionInlineActions(): AppThunk<void> {
     };
     const getAnchorEl = (tag: string) => {
       const { anchorEl } = placement;
-      return anchorEl?.getElementsByClassName('ProseMirror-node')[0]
-        ?? anchorEl?.getElementsByTagName?.(tag)[0]
-        ?? anchorEl;
+      return (
+        anchorEl?.getElementsByClassName('ProseMirror-node')[0] ??
+        anchorEl?.getElementsByTagName?.(tag)[0] ??
+        anchorEl
+      );
     };
     switch (selection.kind) {
       case SelectionKinds.link:
@@ -76,10 +79,13 @@ export function positionInlineActions(): AppThunk<void> {
         placement.placement = 'bottom';
         break;
       case SelectionKinds.callout:
-      case SelectionKinds.equation:
         placement.placement = 'bottom';
         break;
-      default: break;
+      case SelectionKinds.equation:
+        placement.placement = 'right';
+        break;
+      default:
+        break;
     }
     dispatch(setInlineSelection({ ...selection, ...placement }));
   };

@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import {
-  makeStyles, createStyles, Grid, Input, CircularProgress,
-} from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Input, CircularProgress } from '@material-ui/core';
 import MenuIcon from '../Menu/Icon';
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    width: 'fit-content',
-    fontSize: 20,
-    flexWrap: 'nowrap',
-  },
-}));
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      width: 'fit-content',
+      fontSize: 20,
+      flexWrap: 'nowrap',
+    },
+  }),
+);
 
 type Props = {
   text: string;
@@ -20,10 +20,8 @@ type Props = {
   onCancel: () => void;
 };
 
-const TextAction = (props: Props) => {
-  const {
-    text: initial, help, validate, onSubmit, onCancel,
-  } = props;
+const TextAction: React.FC<Props> = (props) => {
+  const { text: initial, help, validate, onSubmit, onCancel } = props;
   const classes = useStyles();
   const [text, setText] = useState(initial);
   const [current, setCurrent] = useState(initial);
@@ -56,16 +54,24 @@ const TextAction = (props: Props) => {
         onKeyDownCapture={(e) => {
           if (e.key === 'Enter') {
             if (!valid || loading) return;
-            e.stopPropagation(); e.preventDefault();
+            e.stopPropagation();
+            e.preventDefault();
             onSubmit(text);
           } else if (e.key === 'Escape') {
-            e.stopPropagation(); e.preventDefault();
+            e.stopPropagation();
+            e.preventDefault();
             onCancel();
           }
         }}
       />
       {loading && <CircularProgress size={18} />}
-      <MenuIcon kind="enterSave" title={valid ? 'Save' : help} disabled={loading || !valid} error={!valid} onClick={() => onSubmit(text)} />
+      <MenuIcon
+        kind="enterSave"
+        title={valid ? 'Save' : help}
+        disabled={loading || !valid}
+        error={!valid}
+        onClick={() => onSubmit(text)}
+      />
     </Grid>
   );
 };

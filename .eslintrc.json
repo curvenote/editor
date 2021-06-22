@@ -8,7 +8,8 @@
     "eslint:recommended",
     "airbnb-typescript",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -20,11 +21,7 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": [
-    "@typescript-eslint",
-    "no-skip-tests",
-    "no-only-tests"
-  ],
+  "plugins": ["@typescript-eslint", "no-skip-tests", "no-only-tests"],
   "rules": {
     "quotes": ["error", "single"],
     "import/prefer-default-export": "off",
@@ -36,16 +33,13 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/accessible-emoji": "off",
-    "no-multiple-empty-lines": "off"
+    "no-multiple-empty-lines": "off",
+    "react/prop-types": "off"
   },
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".js",
-          ".ts",
-          ".spec.ts"
-        ]
+        "extensions": [".js", ".ts", ".spec.ts"]
       }
     }
   }

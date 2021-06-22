@@ -8,10 +8,9 @@ import { commands, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
-import {
-  getYouTubeId, getMiroId, getLoomId, getVimeoId,
-} from './utils';
+import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
+import { createId } from '../../../utils';
 
 const options = {
   shouldSort: true,
@@ -46,7 +45,6 @@ const filterCommands = (schema: Schema, results: CommandResult[]) => {
 };
 
 export const startingSuggestions = (schema: Schema) => filterCommands(schema, commands);
-
 
 export function executeCommand(
   command: CommandNames,
@@ -115,9 +113,9 @@ export function executeCommand(
         return true;
       case CommandNames.time:
         removeText();
-        dispatch(actions.insertInlineNode(
-          schema.nodes.time, { datetime: new Date() }, undefined, false,
-        ));
+        dispatch(
+          actions.insertInlineNode(schema.nodes.time, { datetime: new Date() }, undefined, false),
+        );
         dispatch(actions.insertText(' '));
         return true;
       case CommandNames.bullet_list:
@@ -138,11 +136,11 @@ export function executeCommand(
         return true;
       case CommandNames.equation:
         removeText();
-        dispatch(replaceOrInsert(schema.nodes.equation));
+        dispatch(replaceOrInsert(schema.nodes.equation, { id: createId() }));
         return true;
       case CommandNames.code:
         removeText();
-        dispatch(replaceOrInsert(schema.nodes.code_block));
+        dispatch(replaceOrInsert(schema.nodes.code_block, { id: createId() }));
         return true;
       case CommandNames.variable:
         removeText();
@@ -156,21 +154,36 @@ export function executeCommand(
         removeText();
         // eslint-disable-next-line no-alert
         const name = prompt('Name of the variable:') ?? 'myVar';
-        dispatch(actions.insertInlineNode(schema.nodes.range, { valueFunction: name, changeFunction: `{${name}: value}` }));
+        dispatch(
+          actions.insertInlineNode(schema.nodes.range, {
+            valueFunction: name,
+            changeFunction: `{${name}: value}`,
+          }),
+        );
         return true;
       }
       case CommandNames.dynamic: {
         removeText();
         // eslint-disable-next-line no-alert
         const name = prompt('Name of the variable:') ?? 'myVar';
-        dispatch(actions.insertInlineNode(schema.nodes.dynamic, { valueFunction: name, changeFunction: `{${name}: value}` }));
+        dispatch(
+          actions.insertInlineNode(schema.nodes.dynamic, {
+            valueFunction: name,
+            changeFunction: `{${name}: value}`,
+          }),
+        );
         return true;
       }
       case CommandNames.switch: {
         removeText();
         // eslint-disable-next-line no-alert
         const name = prompt('Name of the variable:') ?? 'myVar';
-        dispatch(actions.insertInlineNode(schema.nodes.switch, { valueFunction: name, changeFunction: `{${name}: value}` }));
+        dispatch(
+          actions.insertInlineNode(schema.nodes.switch, {
+            valueFunction: name,
+            changeFunction: `{${name}: value}`,
+          }),
+        );
         return true;
       }
       case CommandNames.button: {
@@ -226,6 +239,22 @@ export function executeCommand(
         dispatch(actions.insertNode(schema.nodes.iframe, { src }));
         return true;
       }
+      case CommandNames.link_section:
+        removeText();
+        triggerSuggestion(view, '[[', 'sec: ');
+        return true;
+      case CommandNames.link_figure:
+        removeText();
+        triggerSuggestion(view, '[[', 'fig: ');
+        return true;
+      case CommandNames.link_equation:
+        removeText();
+        triggerSuggestion(view, '[[', 'eq: ');
+        return true;
+      case CommandNames.link_code:
+        removeText();
+        triggerSuggestion(view, '[[', 'code: ');
+        return true;
       case CommandNames.link_article:
         removeText();
         triggerSuggestion(view, '[[', 'article: ');
@@ -240,23 +269,27 @@ export function executeCommand(
         return true;
       case CommandNames.add_citation: {
         removeText();
-        const keys = await opts.citationPrompt();
-        if (!keys || keys.length === 0) return true;
-        const nodes = keys.map((k) => schema.nodes.cite.create({ key: k }));
+        const cites = await opts.citationPrompt();
+        if (!cites || cites.length === 0) return true;
+        const nodes = cites.map((attrs) => schema.nodes.cite.create({ ...attrs }));
         const wrapped = schema.nodes.cite_group.createAndFill({}, Fragment.from(nodes));
         if (!wrapped) return false;
         const tr = view.state.tr.replaceSelectionWith(wrapped).scrollIntoView();
         view.dispatch(tr);
         return true;
       }
-      default: return removeText();
+      default:
+        return removeText();
     }
   };
 }
 
 export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean>> {
   return async (dispatch, getState) => {
-    const { view, range: { from, to } } = getSuggestion(getState());
+    const {
+      view,
+      range: { from, to },
+    } = getSuggestion(getState());
     if (view == null) return false;
     const removeText = () => {
       const { tr } = view.state;
@@ -269,7 +302,9 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
 }
 
 export function filterResults(
-  schema: Schema, search: string, callback: (results: CommandResult[]) => void,
+  schema: Schema,
+  search: string,
+  callback: (results: CommandResult[]) => void,
 ): void {
   // This lets the keystroke go through:
   setTimeout(() => {

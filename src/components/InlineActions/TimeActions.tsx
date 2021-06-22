@@ -10,21 +10,25 @@ import { State, Dispatch } from '../../store/types';
 import { getEditorState } from '../../store/selectors';
 import { ActionProps } from './utils';
 
-const TimeActions = (props: ActionProps) => {
+const TimeActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
-  const selection = useSelector(
-    (state: State) => getEditorState(state, stateId)?.state?.selection,
-  );
+  const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   if (!selection || !isNodeSelection(selection)) return null;
   const { node, from } = selection as NodeSelection;
 
   const date = getDatetime(node.attrs.datetime);
   const onChange = (newDate: Date | null) => {
     if (!newDate) return;
-    dispatch(updateNodeAttrs(
-      stateId, viewId, { node, pos: from }, { datetime: newDate.toISOString() }, 'after',
-    ));
+    dispatch(
+      updateNodeAttrs(
+        stateId,
+        viewId,
+        { node, pos: from },
+        { datetime: newDate.toISOString() },
+        'after',
+      ),
+    );
   };
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>

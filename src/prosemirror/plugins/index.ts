@@ -14,8 +14,8 @@ import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 
-const ALL_TRIGGERS = /(?:^|\s|\n)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
-const NO_VARIABLE = /(?:^|\s|\n)(:|\/|(?:\{\{)|(?:\[\[))$/;
+const ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
+const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
 
 export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [

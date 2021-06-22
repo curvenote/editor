@@ -12,7 +12,10 @@ import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 
 export function createEditorState(
   useSchema: schemas.UseSchema,
-  stateKey: any, content: string, version: number, startEditable: boolean,
+  stateKey: any,
+  content: string,
+  version: number,
+  startEditable: boolean,
 ) {
   const schema = schemas.getSchema(useSchema);
   const plugins = getPlugins(schema, stateKey, version, startEditable);
@@ -37,64 +40,62 @@ export function createEditorView(
   dispatch: (tr: Transaction) => void,
 ): EditorView {
   let shiftKey = false; // https://discuss.prosemirror.net/t/change-transformpasted-behaviour-when-shift-key-is-pressed/949/3
-  const editorView = new EditorView({ mount: dom }, {
-    state,
-    dispatchTransaction: dispatch,
-    nodeViews: {
-      math(node, view, getPos) {
-        return new views.MathView(node, view, getPos as () => number, true);
+  const editorView = new EditorView(
+    { mount: dom },
+    {
+      state,
+      dispatchTransaction: dispatch,
+      nodeViews: {
+        math(node, view, getPos) {
+          return new views.MathView(node, view, getPos as () => number, true);
+        },
+        equation(node, view, getPos) {
+          return new views.MathView(node, view, getPos as () => number, false);
+        },
+        image(node, view, getPos) {
+          return new views.ImageView(node, view, getPos as () => number);
+        },
+        iframe(node, view, getPos) {
+          return new views.IFrameView(node, view, getPos as () => number);
+        },
+        link(node, view, getPos) {
+          return new views.LinkView(node, view, getPos as () => number);
+        },
+        time(node, view, getPos) {
+          return new views.TimeView(node, view, getPos as () => number);
+        },
+        button: views.newWidgetView,
+        display: views.newWidgetView,
+        dynamic: views.newWidgetView,
+        range: views.newWidgetView,
+        switch: views.newWidgetView,
+        variable: views.newWidgetView,
+        ...opts.nodeViews,
       },
-      equation(node, view, getPos) {
-        return new views.MathView(node, view, getPos as () => number, false);
+      // This can be set in the middleware `tr.setMeta(editable, false)`
+      editable: (s) => isEditable(s),
+      // handleClickOn: (view, pos, node, nodePos, event, direct) => {
+      // },
+      handleKeyDown(_, event) {
+        shiftKey = event.shiftKey;
+        return false;
       },
-      image(node, view, getPos) {
-        return new views.ImageView(node, view, getPos as () => number);
+      handlePaste: (view, event, slice) => {
+        if (shiftKey) return false;
+        if (!view.hasFocus()) return true;
+        return (
+          opts.handlePaste(view, event, slice) ||
+          addLink(view, event.clipboardData) ||
+          uploadAndInsertImages(view, event.clipboardData)
+        );
       },
-      iframe(node, view, getPos) {
-        return new views.IFrameView(node, view, getPos as () => number);
+      // clipboardTextSerializer: (slice) => {},
+      handleDrop: (view, event) => uploadAndInsertImages(view, (event as DragEvent).dataTransfer),
+      handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
+        const { viewId, stateId } = getSelectedViewId(store.getState());
+        return opts.onDoubleClick(stateId, viewId, view, pos, event);
       },
-      link(node, view, getPos) {
-        return new views.LinkView(node, view, getPos as () => number);
-      },
-      time(node, view, getPos) {
-        return new views.TimeView(node, view, getPos as () => number);
-      },
-      cite(node, view, getPos) {
-        return new views.CiteView(node, view, getPos as () => number);
-      },
-      button: views.newWidgetView,
-      display: views.newWidgetView,
-      dynamic: views.newWidgetView,
-      range: views.newWidgetView,
-      switch: views.newWidgetView,
-      variable: views.newWidgetView,
-      ...opts.nodeViews,
     },
-    // This can be set in the middleware `tr.setMeta(editable, false)`
-    editable: (s) => isEditable(s),
-    // handleClickOn: (view, pos, node, nodePos, event, direct) => {
-    // },
-    handleKeyDown(_, event) {
-      shiftKey = event.shiftKey;
-      return false;
-    },
-    handlePaste: (view, event, slice) => {
-      if (shiftKey) return false;
-      if (!view.hasFocus()) return true;
-      return (
-        opts.handlePaste(view, event, slice)
-        || addLink(view, event.clipboardData)
-        || uploadAndInsertImages(view, event.clipboardData)
-      );
-    },
-    // clipboardTextSerializer: (slice) => {},
-    handleDrop: (view, event) => (
-      uploadAndInsertImages(view, (event as DragEvent).dataTransfer)
-    ),
-    handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
-      const { viewId, stateId } = getSelectedViewId(store.getState());
-      return opts.onDoubleClick(stateId, viewId, view, pos, event);
-    },
-  });
+  );
   return editorView;
 }

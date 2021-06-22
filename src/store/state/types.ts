@@ -1,8 +1,7 @@
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
-import { schemas } from '@curvenote/schema';
-import { StateCounter } from './utils';
+import { types, schemas } from '@curvenote/schema';
 
 export const INIT_EDITOR_STATE = 'INIT_EDITOR_STATE';
 export const SUBSCRIBE_EDITOR_VIEW = 'SUBSCRIBE_EDITOR_VIEW';
@@ -18,7 +17,7 @@ export type EditorsState = {
       key: any;
       state: EditorState<Schema<keyof typeof schemas.nodes, keyof typeof schemas.marks>>;
       viewIds: string[];
-      counts: StateCounter;
+      counts: types.StateCounter;
     };
   };
   views: {
@@ -47,7 +46,7 @@ export interface UpdateEditorState {
     stateId: string;
     viewId: string | null;
     editorState: EditorState;
-    counts: StateCounter | null;
+    counts: types.StateCounter | null;
   };
 }
 
@@ -76,11 +75,10 @@ export interface ResetAllViews {
   type: typeof RESET_ALL_VIEWS;
 }
 
-export type EditorActionTypes = (
-  InitEditorState |
-  UpdateEditorState |
-  SubscribeEditorView |
-  UnsubscribeEditorView |
-  ResetAllEditorsAndViews |
-  ResetAllViews
-);
+export type EditorActionTypes =
+  | InitEditorState
+  | UpdateEditorState
+  | SubscribeEditorView
+  | UnsubscribeEditorView
+  | ResetAllEditorsAndViews
+  | ResetAllViews;

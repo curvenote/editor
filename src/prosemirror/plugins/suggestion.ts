@@ -5,7 +5,10 @@ import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 export const SUGGESTION_ID = 'suggestion';
 export const KEEP_SELECTION_ALIVE = 'KEEP_SELECTION_ALIVE';
 
-interface Range { from: number; to: number }
+interface Range {
+  from: number;
+  to: number;
+}
 
 interface SuggestionState {
   active: boolean;
@@ -15,7 +18,11 @@ interface SuggestionState {
   range: Range | null;
 }
 const inactiveSuggestionState = {
-  active: false, trigger: null, decorations: DecorationSet.empty, text: null, range: null,
+  active: false,
+  trigger: null,
+  decorations: DecorationSet.empty,
+  text: null,
+  range: null,
 };
 
 export const key = new PluginKey('suggestion');
@@ -53,12 +60,18 @@ export interface SuggestionAction {
 
 function actionFromEvent(event: KeyboardEvent) {
   switch (event.key) {
-    case 'ArrowUp': return SuggestionActionKind.previous;
-    case 'ArrowDown': return SuggestionActionKind.next;
-    case 'Tab': return SuggestionActionKind.select;
-    case 'Enter': return SuggestionActionKind.select;
-    case 'Escape': return SuggestionActionKind.close;
-    default: return null;
+    case 'ArrowUp':
+      return SuggestionActionKind.previous;
+    case 'ArrowDown':
+      return SuggestionActionKind.next;
+    case 'Tab':
+      return SuggestionActionKind.select;
+    case 'Enter':
+      return SuggestionActionKind.select;
+    case 'Escape':
+      return SuggestionActionKind.close;
+    default:
+      return null;
   }
 }
 
@@ -103,9 +116,9 @@ export default function getPlugins(
 
           const action = {
             view,
-            trigger: next.trigger ?? prev.trigger as string,
+            trigger: next.trigger ?? (prev.trigger as string),
             search: next.text ?? prev.text,
-            range: next.range ?? prev.range as Range,
+            range: next.range ?? (prev.range as Range),
           };
           if (started) onAction({ ...action, kind: SuggestionActionKind.open });
           if (changed) onAction({ ...action, kind: SuggestionActionKind.filter });
@@ -121,10 +134,15 @@ export default function getPlugins(
           const { trigger, search } = meta;
           const from = tr.selection.from - trigger.length - (search?.length ?? 0);
           const to = tr.selection.from;
-          const deco = Decoration.inline(from, to, {
-            id: SUGGESTION_ID,
-            class: suggestionClass,
-          }, { inclusiveStart: false, inclusiveEnd: true });
+          const deco = Decoration.inline(
+            from,
+            to,
+            {
+              id: SUGGESTION_ID,
+              class: suggestionClass,
+            },
+            { inclusiveStart: false, inclusiveEnd: true },
+          );
           return {
             active: true,
             trigger: meta.trigger,
@@ -138,10 +156,11 @@ export default function getPlugins(
         const hasDecoration = nextDecorations.find().length > 0;
         // If no decoration, explicitly remove, or click somewhere else in the editor
         if (
-          meta?.action === 'remove'
-          || !inSuggestion(tr.selection, nextDecorations)
-          || !hasDecoration
-        ) return { ...inactiveSuggestionState };
+          meta?.action === 'remove' ||
+          !inSuggestion(tr.selection, nextDecorations) ||
+          !hasDecoration
+        )
+          return { ...inactiveSuggestionState };
 
         // Ensure that the trigger is in the decoration
         const { from, to } = nextDecorations.find()[0];
@@ -171,8 +190,15 @@ export default function getPlugins(
 
         const search = text.slice(trigger?.length ?? 1);
 
-        const cancelOnSpace = typeof cancelOnFirstSpace === 'boolean' ? cancelOnFirstSpace : cancelOnFirstSpace(trigger);
-        if (cancelOnSpace && search.length === 0 && (event.key === ' ' || event.key === 'Spacebar')) {
+        const cancelOnSpace =
+          typeof cancelOnFirstSpace === 'boolean'
+            ? cancelOnFirstSpace
+            : cancelOnFirstSpace(trigger);
+        if (
+          cancelOnSpace &&
+          search.length === 0 &&
+          (event.key === ' ' || event.key === 'Spacebar')
+        ) {
           cancelSuggestion(view);
           return false;
         }
@@ -192,7 +218,9 @@ export default function getPlugins(
           case SuggestionActionKind.select: {
             // Only trigger the cancel if it is not expliticly handled in the select
             const result = onAction({ ...action, kind: SuggestionActionKind.select });
-            if (result === KEEP_SELECTION_ALIVE) { return true; }
+            if (result === KEEP_SELECTION_ALIVE) {
+              return true;
+            }
             return result || cancelSuggestion(view);
           }
           case SuggestionActionKind.previous:

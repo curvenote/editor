@@ -1,14 +1,18 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import {
-  Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer,
-} from 'redux';
+import { Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer } from 'redux';
 import { types as runtimeTypes } from '@curvenote/runtime';
 import { State as SidenotesState } from 'sidenotes';
 import { EditorsState, EditorActionTypes } from './state/types';
 import { UIState, UIActionTypes, SelectionKinds } from './ui/types';
 import {
-  SuggestionState, SuggestionActionTypes, SuggestionKind, LinkKind,
-  SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult,
+  SuggestionState,
+  SuggestionActionTypes,
+  SuggestionKind,
+  SuggestionResult,
+  EmojiResult,
+  CommandResult,
+  VariableResult,
+  LinkResult,
 } from './suggestion/types';
 import { AttributesState, AttributesActionTypes } from './attrs/types';
 
@@ -23,12 +27,11 @@ export interface State {
   sidenotes: SidenotesState['sidenotes'];
 }
 
-export type EditorActions = (
-  EditorActionTypes |
-  UIActionTypes |
-  SuggestionActionTypes |
-  AttributesActionTypes
-);
+export type EditorActions =
+  | EditorActionTypes
+  | UIActionTypes
+  | SuggestionActionTypes
+  | AttributesActionTypes;
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, null, Action<string>>;
 export type Dispatch = ThunkDispatch<State, null, Action<string>>;
@@ -36,14 +39,8 @@ export type Store = RStore<State, EditorActions> & { dispatch: Dispatch };
 export type Middleware = RMiddleware<Record<string, any>, State, Dispatch>;
 export type Reducer = RReducer<State, EditorActions>;
 
-export { SuggestionKind, LinkKind, SelectionKinds };
+export { SuggestionKind, SelectionKinds };
 
 export * from './state/types';
 
-export type {
-  SuggestionResult,
-  EmojiResult,
-  CommandResult,
-  VariableResult,
-  LinkResult,
-};
+export type { SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult };
