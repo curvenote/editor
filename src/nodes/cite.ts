@@ -89,7 +89,7 @@ export const toTex: FormatSerialize = (state, node) => {
     default:
       prepend = `${text}~`;
   }
-  const id = key?.split('#')[1];
+  const id = key?.split('#')[1] ?? key;
   if (id) state.write(`${prepend}\\ref{${id}}`);
 };
 
