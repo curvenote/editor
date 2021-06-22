@@ -95,14 +95,11 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.1"
 
-"@curvenote/schema@^0.4.0":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.4.3.tgz#99c4bc4026a2b1ae786dbf222d3b726e08f444f5"
-  integrity sha512-CGeoXnU6LVZUC1GWY5gbGPmfuH5h4yEQ4OHbtIAZ0tSJ6DlgubR3xObipAukXQZKgTbkeJn8GPd4rSzNe/XOLA==
+"@curvenote/schema@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.5.0.tgz#96aa2ae169933fc988350d1a6db70379f7f06f03"
+  integrity sha512-aod93Xf2Yj/TM0+pVmj5iUC0cqlrCgDmm6Me3wJczLXzmLm1TDYW7wsX34blKLHjHDG2cEjFi9qDYzTg7w48CA==
   dependencies:
-    "@types/prosemirror-markdown" "^1.5.1"
-    "@types/prosemirror-model" "^1.11.3"
-    "@types/prosemirror-state" "^1.2.6"
     markdown-it "^12.0.4"
     markdown-it-myst "^0.0.8"
     orderedmap "^1.1.1"
@@ -843,11 +840,6 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/highlight.js@^9.7.0":
-  version "9.12.4"
-  resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.4.tgz#8c3496bd1b50cc04aeefd691140aa571d4dbfa34"
-  integrity sha512-t2szdkwmg2JJyuCM20e8kR2X59WCE5Zkl4bzm1u1Oukjm79zpbiAv+QjnwLnuuV0WHEcX2NgUItu0pAMKuOPww==
-
 "@types/hoist-non-react-statics@^3.3.0":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
@@ -903,11 +895,6 @@
   resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.11.0.tgz#b16c54ee670925ffef0616beae9e90c557e17334"
   integrity sha512-27BfE8zASRLYfSBNMk5/+KIjr2CBBrH0i5lhsO04fca4TGirIIMay73v3zNkzqmsaeIa/Mi5kejWDcxPLAmkvA==
 
-"@types/linkify-it@*":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-3.0.1.tgz#4d26a9efe3aa2caf829234ec5a39580fc88b6001"
-  integrity sha512-pQv3Sygwxxh6jYQzXaiyWDAHevJqWtqDUv6t11Sa9CPGiXny66II7Pl6PR8QO5OVysD6HYOkHMeBgIjLnk9SkQ==
-
 "@types/lodash.debounce@^4.0.6":
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/@types/lodash.debounce/-/lodash.debounce-4.0.6.tgz#c5a2326cd3efc46566c47e4c0aa248dc0ee57d60"
@@ -933,20 +920,6 @@
   version "4.14.168"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.168.tgz#fe24632e79b7ade3f132891afff86caa5e5ce008"
   integrity sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
-
-"@types/markdown-it@*":
-  version "12.0.2"
-  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-12.0.2.tgz#153e5477970ed2a47b2f619ed4ab66f870de8a04"
-  integrity sha512-p4DIfLMmGN0iLSbMxknDXeSm8W2ZRqQeN/1EAwVxVqJietzgp3WeP1UQjCKWDXWBcEbUa1ECx8YAfdpQdDQmZQ==
-  dependencies:
-    "@types/highlight.js" "^9.7.0"
-    "@types/linkify-it" "*"
-    "@types/mdurl" "*"
-
-"@types/mdurl@*":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@types/mdurl/-/mdurl-1.0.2.tgz#e2ce9d83a613bacf284c7be7d491945e39e1f8e9"
-  integrity sha512-eC4U9MlIcu2q0KQmXszyn5Akca/0jrQmwDRgpAMJai7qBWq4amIQhZyNau4VYGtCeALvW1/NtjzJJ567aZxfKA==
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -1025,14 +998,6 @@
     "@types/prosemirror-model" "*"
     "@types/prosemirror-state" "*"
     "@types/prosemirror-view" "*"
-
-"@types/prosemirror-markdown@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@types/prosemirror-markdown/-/prosemirror-markdown-1.5.1.tgz#a6a1b5cc4ecb1de5c4c8157f5647203bfb1d2180"
-  integrity sha512-AqHCy80J9HUF+9FHveOB9fbKZwOf+1Ds2Vm1pPN6bfZ/Y6vdgXDry/hoz74+K7fQZZ8+f1J4x16llFj3PAohVg==
-  dependencies:
-    "@types/markdown-it" "*"
-    "@types/prosemirror-model" "*"
 
 "@types/prosemirror-model@*", "@types/prosemirror-model@^1.11.3":
   version "1.11.3"
