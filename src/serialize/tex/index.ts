@@ -1,9 +1,10 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { blankTex, blankTexLines, latexStatement, TAB } from './utils';
+import { blankTex, blankTexLines, createLatexStatement, TAB } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../schemas';
+import { FormatTypes } from './types';
 
 export const texSerializer = new MarkdownSerializer(
   {
@@ -39,7 +40,7 @@ export const texSerializer = new MarkdownSerializer(
       state.closeBlock(node);
     },
     heading: nodes.Heading.toTex,
-    blockquote: latexStatement('quote', (state, node) => {
+    blockquote: createLatexStatement('quote', (state, node) => {
       state.renderContent(node);
     }),
     code_block: nodes.Code.toTex,
@@ -55,7 +56,7 @@ export const texSerializer = new MarkdownSerializer(
         }
       }
     },
-    ordered_list: latexStatement(
+    ordered_list: createLatexStatement(
       'enumerate',
       (state, node) => {
         state.renderList(node, TAB, () => '\\item ');
@@ -67,7 +68,7 @@ export const texSerializer = new MarkdownSerializer(
         },
       },
     ),
-    bullet_list: latexStatement('itemize', (state, node) => {
+    bullet_list: createLatexStatement('itemize', (state, node) => {
       state.renderList(node, TAB, () => '\\item ');
     }),
     list_item(state, node) {
@@ -82,13 +83,7 @@ export const texSerializer = new MarkdownSerializer(
     equation: nodes.Equation.toTex,
     // \usepackage{framed}
     callout: nodes.Callout.toTex,
-    aside: latexStatement(
-      'marginpar',
-      (state, node) => {
-        state.renderContent(node);
-      },
-      { inline: true },
-    ),
+    aside: nodes.Aside.toTex,
     variable: blankTexLines,
     display: blankTex,
     dynamic: blankTex,
@@ -135,6 +130,6 @@ export const texSerializer = new MarkdownSerializer(
   },
 );
 
-export function toTex(doc: ProsemirrorNode) {
-  return texSerializer.serialize(doc, { tightLists: true });
+export function toTex(doc: ProsemirrorNode, format: FormatTypes) {
+  return texSerializer.serialize(doc, { tightLists: true, format });
 }
