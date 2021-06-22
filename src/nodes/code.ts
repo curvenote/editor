@@ -1,4 +1,4 @@
-import { FormatTypes, LatexOptions } from '../serialize/tex/types';
+import { LatexFormatTypes, LatexOptions } from '../serialize/tex/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { NodeGroups, NumberedNode, MyNodeSpec, FormatSerialize } from './types';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
@@ -56,7 +56,8 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options: LatexOptions) => (options.format === FormatTypes.tex_curvenote ? 'code' : 'verbatim'),
+  (options: LatexOptions) =>
+    options.format === LatexFormatTypes.tex_curvenote ? 'code' : 'verbatim',
   (state, node) => {
     state.renderContent(node);
   },

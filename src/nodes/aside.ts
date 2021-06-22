@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { FormatTypes, LatexOptions } from '../serialize/tex/types';
+import { LatexFormatTypes, LatexOptions } from '../serialize/tex/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { NodeGroups, FormatSerialize } from './types';
 
@@ -25,11 +25,12 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 };
 
 export const toTex: FormatSerialize = createLatexStatement(
-  (options: LatexOptions) => (options.format === FormatTypes.tex_curvenote ? 'aside' : 'marginpar'),
+  (options: LatexOptions) =>
+    options.format === LatexFormatTypes.tex_curvenote ? 'aside' : 'marginpar',
   (state, node) => {
     state.renderContent(node);
   },
-  (options: LatexOptions) => ({ inline: options.format === FormatTypes.tex }),
+  (options: LatexOptions) => ({ inline: options.format === LatexFormatTypes.tex }),
 );
 
 export default aside;

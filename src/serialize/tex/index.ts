@@ -4,7 +4,7 @@ import { blankTex, blankTexLines, createLatexStatement, TAB } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../schemas';
-import { FormatTypes } from './types';
+import { LatexFormatTypes, LatexOptions } from './types';
 
 export const texSerializer = new MarkdownSerializer(
   {
@@ -130,6 +130,11 @@ export const texSerializer = new MarkdownSerializer(
   },
 );
 
-export function toTex(doc: ProsemirrorNode, format: FormatTypes) {
-  return texSerializer.serialize(doc, { tightLists: true, format });
+export function toTex(
+  doc: ProsemirrorNode,
+  options: LatexOptions = { format: LatexFormatTypes.tex },
+) {
+  const opts = { ...options };
+  opts.tightLists = opts.tightLists === undefined ? true : opts.tightLists;
+  return texSerializer.serialize(doc, opts);
 }

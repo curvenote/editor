@@ -45,6 +45,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   // TODO: export the label if it is AMS math mode
   if (!ams && numbered && id) {
     state.write(`\\label{${id}}`);
+    state.ensureNewLine();
   }
   state.text(node.textContent, false);
   if (!ams) state.write('$$');
@@ -57,6 +58,7 @@ export const toTex = createLatexStatement('equation', (state, node) => {
   if (numbered && id) {
     state.write(`\\label{${id}}`);
   }
+  state.ensureNewLine();
   state.text(node.textContent, false);
 });
 

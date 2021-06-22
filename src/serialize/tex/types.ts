@@ -1,14 +1,14 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 
-export enum FormatTypes {
+export enum LatexFormatTypes {
   'tex' = 'tex',
   'tex_curvenote' = 'tex:curvenote',
 }
 
 export interface LatexOptions {
   tightLists?: boolean | null;
-  format?: FormatTypes;
+  format?: LatexFormatTypes;
 }
 
 export interface LatexStatementOptions {
