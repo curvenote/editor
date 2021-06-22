@@ -1,4 +1,5 @@
 # @curvenote/schema
+
 [![@curvenote/schema on npm](https://img.shields.io/npm/v/@curvenote/schema.svg)](https://www.npmjs.com/package/@curvenote/schema)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/schema/blob/master/LICENSE)
 ![CI](https://github.com/curvenote/schema/workflows/CI/badge.svg)
@@ -8,17 +9,19 @@ Schema for interactive scientific writing, with translations to [MyST flavoured 
 ![@curvenote/schema in curvenote.com](https://github.com/curvenote/schema/raw/main/images/schema.gif)
 
 ## Overview & Goals
-* Provide a typed schema for writing reactive scientific documents using [@curvenote/components](https://curvenote.dev)
-  * Uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in the rendered HTML output for non-standard components
-  * Uses standard html for all other compnents, with no styling enforced
-* Interoperability with CommonMark markdown and [MyST](https://github.com/executablebooks/markdown-it-myst)
-  * Through `fromMarkdown` and `toMarkdown` methods
-* Provide components for [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editing of reactive documents
-  * See [`@curvenote/editor`](https://github.com/curvenote/editor) or [curvenote.com](Curvenote.com) for the editor!
+
+- Provide a typed schema for writing reactive scientific documents using [@curvenote/components](https://curvenote.dev)
+  - Uses [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) in the rendered HTML output for non-standard components
+  - Uses standard html for all other compnents, with no styling enforced
+- Interoperability with CommonMark markdown and [MyST](https://github.com/executablebooks/markdown-it-myst)
+  - Through `fromMarkdown` and `toMarkdown` methods
+- Provide components for [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editing of reactive documents
+  - See [`@curvenote/editor`](https://github.com/curvenote/editor) or [curvenote.com](Curvenote.com) for the editor!
 
 ## Choices
-* The internal representation for the library is a [ProseMirror Document](https://prosemirror.net/docs/guide/#doc) structure (that can be rendered as JSON)
-* [markdown-it](https://github.com/markdown-it/markdown-it) is used parse and tokenize markdown content
+
+- The internal representation for the library is a [ProseMirror Document](https://prosemirror.net/docs/guide/#doc) structure (that can be rendered as JSON)
+- [markdown-it](https://github.com/markdown-it/markdown-it) is used parse and tokenize markdown content
 
 ## Schema
 
@@ -26,42 +29,41 @@ The schema has `Nodes` and `Marks` where `Nodes` are basically a block of conten
 
 **Overview of `Nodes`**
 
-* Basic Markdown
-  * text
-  * paragraph
-  * heading
-  * blockquote
-  * code_block
-  * image
-  * horizontal_rule
-  * hard_break
-  * ordered_list
-  * bullet_list
-  * list_item
-* Presentational Components
-  * [callout](https://curvenote.dev/article/callout)
-  * [aside](https://curvenote.dev/article/aside)
-  * [math](https://curvenote.dev/article/math)
-  * [equation](https://curvenote.dev/article/equation)
-* Reactive Components
-  * [variable](https://curvenote.dev/components/variable)
-  * [display](https://curvenote.dev/components/display)
-  * [dynamic](https://curvenote.dev/components/dynamic)
-  * [range](https://curvenote.dev/components/range)
-  * [switch](https://curvenote.dev/components/switch)
+- Basic Markdown
+  - text
+  - paragraph
+  - heading
+  - blockquote
+  - code_block
+  - image
+  - horizontal_rule
+  - hard_break
+  - ordered_list
+  - bullet_list
+  - list_item
+- Presentational Components
+  - [callout](https://curvenote.dev/article/callout)
+  - [aside](https://curvenote.dev/article/aside)
+  - [math](https://curvenote.dev/article/math)
+  - [equation](https://curvenote.dev/article/equation)
+- Reactive Components
+  - [variable](https://curvenote.dev/components/variable)
+  - [display](https://curvenote.dev/components/display)
+  - [dynamic](https://curvenote.dev/components/dynamic)
+  - [range](https://curvenote.dev/components/range)
+  - [switch](https://curvenote.dev/components/switch)
 
 **Overview of `Marks`**
 
-* link
-* code
-* em
-* strong
-* superscript
-* subscript
-* strikethrough
-* underline
-* abbr
-
+- link
+- code
+- em
+- strong
+- superscript
+- subscript
+- strikethrough
+- underline
+- abbr
 
 ## Simple Example
 
@@ -108,15 +110,15 @@ console.log(html);
 
 ### Roadmap
 
-* Integrate other `@curvenote/components` as nodes
-* Improve equation and start to go to/from various MyST syntax for this
-* Add figure properties (name, width, caption etc.)
-* Provide citations, probably bring in a bibtex parser
-  * Introduce citation and reference component to curvenote/components or article
-* Add overlaping roles/directives with MyST (e.g. see [executablebooks/meta#70](https://github.com/executablebooks/meta/issues/70)) for pointers
-  * Add the necessary pieces to curvenote/components that are not basic html (MyST uses sphinx for the heavy lifting, cross-refs etc.)
-* Provide other sereializers from the document strucutre (e.g. latex or simple html without curvenote/components, possibly idyll)
-
+- Integrate other `@curvenote/components` as nodes
+- Improve equation and start to go to/from various MyST syntax for this
+- Add figure properties (name, width, caption etc.)
+- Provide citations, probably bring in a bibtex parser
+  - Introduce citation and reference component to curvenote/components or article
+- Add overlaping roles/directives with MyST (e.g. see [executablebooks/meta#70](https://github.com/executablebooks/meta/issues/70)) for pointers
+  - Add the necessary pieces to curvenote/components that are not basic html (MyST uses sphinx for the heavy lifting, cross-refs etc.)
+- Provide other sereializers from the document strucutre (e.g. latex or simple html without curvenote/components, possibly idyll)
 
 ## See also:
-* [Idyll Lang](https://idyll-lang.org/) has a different markdown-like serialization with very similar base components to curvenote - see [curvenote/article#8](https://github.com/curvenote/article/issues/8) for a comparison.
+
+- [Idyll Lang](https://idyll-lang.org/) has a different markdown-like serialization with very similar base components to curvenote - see [curvenote/article#8](https://github.com/curvenote/article/issues/8) for a comparison.

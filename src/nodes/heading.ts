@@ -1,18 +1,19 @@
-import { NodeSpec } from 'prosemirror-model';
-import { readBooleanDomAttr } from '../utils';
-import { NodeGroups, FormatSerialize } from './types';
+import { NodeGroups, FormatSerialize, MyNodeSpec, NumberedNode } from './types';
+import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
-const getAttrs = (level: number) => (dom: any) => ({
+const getAttrs = (level: number) => (dom: HTMLElement) => ({
+  ...getNumberedAttrs(dom),
   level,
-  numbered: readBooleanDomAttr(dom, 'numbered'),
-  label: dom.getAttribute('label') ?? '',
 });
 
-export const heading: NodeSpec = {
+export type Attrs = NumberedNode & {
+  level: number;
+};
+
+const heading: MyNodeSpec<Attrs> = {
   attrs: {
+    ...getNumberedDefaultAttrs(),
     level: { default: 1 },
-    numbered: { default: false },
-    label: { default: '' },
   },
   content: `${NodeGroups.inline}*`,
   group: NodeGroups.block,
@@ -26,30 +27,30 @@ export const heading: NodeSpec = {
     { tag: 'h6', getAttrs: getAttrs(6) },
   ],
   toDOM(node) {
-    const {
-      level, numbered, label,
-    } = node.attrs;
-    return [`h${level}`, { numbered: numbered ? '' : undefined, label: label || undefined }, 0];
+    return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
   },
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {
+  // TODO: Put the id in:
   state.write(`${state.repeat('#', node.attrs.level)} `);
   state.renderInline(node);
   state.closeBlock(node);
 };
 
 export const toTex: FormatSerialize = (state, node) => {
-  const { level } = node.attrs;
-  if (level === 1) state.write('\\section*{');
-  if (level === 2) state.write('\\subsection*{');
-  if (level === 3) state.write('\\subsubsection*{');
-  if (level === 4) state.write('\\paragraph*{');
-  if (level === 5) state.write('\\subparagraph*{');
-  if (level === 6) state.write('\\subparagraph*{');
+  const { level, id, numbered } = node.attrs as Attrs;
+  if (level === 1) state.write(`\\section${numbered ? '' : '*'}{`);
+  if (level === 2) state.write(`\\subsection${numbered ? '' : '*'}{`);
+  if (level === 3) state.write(`\\subsubsection${numbered ? '' : '*'}{`);
+  if (level === 4) state.write(`\\paragraph${numbered ? '' : '*'}{`);
+  if (level === 5) state.write(`\\subparagraph${numbered ? '' : '*'}{`);
+  if (level === 6) state.write(`\\subparagraph${numbered ? '' : '*'}{`);
   state.renderInline(node);
   state.write('}');
-  // TODO \label{sec:x}
+  if (numbered && id) {
+    state.write(`\\label{${id}}`);
+  }
   state.closeBlock(node);
 };
 

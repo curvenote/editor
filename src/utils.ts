@@ -3,30 +3,27 @@ import { Node, NodeSpec, AttributeSpec } from 'prosemirror-model';
 import { NodeDef, Attr } from './nodes/types';
 
 export const DEFAULT_FORMAT = '.1f';
-export const DEFAULT_IMAGE_WIDTH = 70;
 
 export const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
 
-export const getImageWidth = (width?: string) => {
-  const widthNum = Number.parseInt((width ?? String(DEFAULT_IMAGE_WIDTH)).replace('%', ''), 10);
-  return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
-};
-
-export const readBooleanDomAttr = (dom: HTMLElement, attr: string): boolean => {
-  if (!dom.hasAttribute(attr)) return false;
-  const val = dom.getAttribute(attr);
-  if (val?.toLowerCase() === 'false') return false;
-  return true;
-};
-
-export const createAttr = (name: string, func: boolean | 'only' = true, defaultValue: string | false = ''): Attr => {
+export const createAttr = (
+  name: string,
+  func: boolean | 'only' = true,
+  defaultValue: string | false = '',
+): Attr => {
   if (defaultValue === false) {
     return {
-      name, func, default: false, optional: false,
+      name,
+      func,
+      default: false,
+      optional: false,
     };
   }
   return {
-    name, func, default: defaultValue, optional: true,
+    name,
+    func,
+    default: defaultValue,
+    optional: true,
   };
 };
 
@@ -55,24 +52,25 @@ export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttr
       });
       return [def.tag, domAttrs ? domAttrs(props) : props];
     },
-    parseDOM: [{
-      tag: def.tag,
-      getAttrs(dom: any) {
-        const props: Record<string, string> = {};
-        def.attrs.forEach((attr) => {
-          if (attr.func !== 'only') props[attr.name] = dom.getAttribute(attr.name) ?? attr.default;
-          if (attr.func) props[`${attr.name}Function`] = dom.getAttribute(`:${attr.name}`) ?? '';
-        });
-        return props;
+    parseDOM: [
+      {
+        tag: def.tag,
+        getAttrs(dom: any) {
+          const props: Record<string, string> = {};
+          def.attrs.forEach((attr) => {
+            if (attr.func !== 'only')
+              props[attr.name] = dom.getAttribute(attr.name) ?? attr.default;
+            if (attr.func) props[`${attr.name}Function`] = dom.getAttribute(`:${attr.name}`) ?? '';
+          });
+          return props;
+        },
       },
-    }],
+    ],
   };
   return spec;
 };
 
-export const nodeToMystRole = (
-  state: MarkdownSerializerState, node: Node, def: NodeDef,
-) => {
+export const nodeToMystRole = (state: MarkdownSerializerState, node: Node, def: NodeDef) => {
   state.write(`{${def.name}}\`<`);
   const values = def.attrs.map((attr) => {
     if (attr.func) {
@@ -90,10 +88,7 @@ export const nodeToMystRole = (
   state.write('>`');
 };
 
-
-export const nodeToMystDirective = (
-  state: MarkdownSerializerState, node: Node, def: NodeDef,
-) => {
+export const nodeToMystDirective = (state: MarkdownSerializerState, node: Node, def: NodeDef) => {
   state.ensureNewLine();
   state.write(`\`\`\`{${def.name}}`);
   state.ensureNewLine();

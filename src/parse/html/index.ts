@@ -1,8 +1,7 @@
 import { DOMParser as DOMParserPM } from 'prosemirror-model';
 import { setInnerHTML } from './utils';
-import { Parser } from '../../types';
+import { Parser } from '../types';
 import { getSchema, UseSchema } from '../../schemas';
-
 
 function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parser): HTMLDivElement {
   // Bring all variables to the top of the document:
@@ -47,7 +46,11 @@ function migrateV0(element: HTMLDivElement, document: Document, DOMParser: Parse
     n.replaceWith(callout);
   });
   const html = element.innerHTML;
-  return setInnerHTML(document.createElement('div'), html.replace(/<ink-/g, '<r-').replace(/<\/ink-/g, '</r-'), DOMParser) as HTMLDivElement;
+  return setInnerHTML(
+    document.createElement('div'),
+    html.replace(/<ink-/g, '<r-').replace(/<\/ink-/g, '</r-'),
+    DOMParser,
+  ) as HTMLDivElement;
 }
 
 function migrateV1(element: HTMLDivElement): HTMLDivElement {
@@ -64,7 +67,10 @@ export function migrateHTML(content: string, document: Document, DOMParser: Pars
 }
 
 export function fromHTML(
-  content: string, useSchema: UseSchema, document: Document, DOMParser: Parser,
+  content: string,
+  useSchema: UseSchema,
+  document: Document,
+  DOMParser: Parser,
 ) {
   const schema = getSchema(useSchema);
   const element = migrateHTML(content, document, DOMParser);

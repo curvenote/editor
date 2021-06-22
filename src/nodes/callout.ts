@@ -1,5 +1,6 @@
 import { NodeSpec } from 'prosemirror-model';
-import { latexStatement } from '../serialize/tex/utils';
+import { LatexOptions, FormatTypes } from '../serialize/tex/types';
+import { createLatexStatement } from '../serialize/tex/utils';
 import { NodeGroups, FormatSerialize } from './types';
 
 export enum CalloutKinds {
@@ -16,7 +17,9 @@ const callout: NodeSpec = {
   attrs: {
     kind: { default: CalloutKinds.info },
   },
-  toDOM(node) { return ['aside', { class: `callout ${node.attrs.kind}` }, 0]; },
+  toDOM(node) {
+    return ['aside', { class: `callout ${node.attrs.kind}` }, 0];
+  },
   parseDOM: [
     {
       tag: 'aside.callout',
@@ -45,8 +48,11 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex = latexStatement('callout', (state, node) => {
-  state.renderContent(node);
-});
+export const toTex = createLatexStatement(
+  (options: LatexOptions) => (options.format === FormatTypes.tex_curvenote ? 'callout' : 'framed'),
+  (state, node) => {
+    state.renderContent(node);
+  },
+);
 
 export default callout;

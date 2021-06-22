@@ -4,12 +4,15 @@ import { migrateHTML } from '../src';
 
 const { document, DOMParser } = new JSDOM('').window;
 
-const nestedVariable = '<p>Hello<ink-var name="x" value="3" format=".1f"></ink-var><ink-var name="y" value="3" format=".1f"></ink-var></p>';
-const displays = '<p>Hello <ink-display name="x" format=".1f" transform=""></ink-display> <ink-display name="y" format=".1f" transform="y + 1"></ink-display></p>';
+const nestedVariable =
+  '<p>Hello<ink-var name="x" value="3" format=".1f"></ink-var><ink-var name="y" value="3" format=".1f"></ink-var></p>';
+const displays =
+  '<p>Hello <ink-display name="x" format=".1f" transform=""></ink-display> <ink-display name="y" format=".1f" transform="y + 1"></ink-display></p>';
 const dynamics = '<p>Hello <ink-dynamic name="days"></ink-dynamic></p>';
 const ranges = '<p>Hello <ink-range name="days"></ink-range></p>';
 const asides = '<p>Hello</p><ink-aside>Aside</ink-aside>';
-const callouts = '<p>Hello</p><ink-callout kind="info">Callout</ink-callout><ink-callout kind="danger">Callout</ink-callout>';
+const callouts =
+  '<p>Hello</p><ink-callout kind="info">Callout</ink-callout><ink-callout kind="danger">Callout</ink-callout>';
 
 function getElement(content: string) {
   const element = setInnerHTML(document.createElement('div'), content, DOMParser);

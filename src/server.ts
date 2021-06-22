@@ -3,7 +3,7 @@ import { EditorState } from 'prosemirror-state';
 import { collab, receiveTransaction } from 'prosemirror-collab';
 import { fromHTML } from './parse';
 
-import { Parser } from './types';
+import { Parser } from './parse/types';
 import { getSchema, UseSchema } from './schemas';
 
 export { EditorState };
@@ -13,7 +13,11 @@ function serverPlugins(version: number) {
 }
 
 export function getEditorState(
-  useSchema: UseSchema, content: string, version: number, document: Document, DOMParser: Parser,
+  useSchema: UseSchema,
+  content: string,
+  version: number,
+  document: Document,
+  DOMParser: Parser,
 ) {
   const schema = getSchema(useSchema);
   try {

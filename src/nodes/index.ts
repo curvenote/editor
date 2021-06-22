@@ -3,13 +3,13 @@ export * as Heading from './heading';
 export * as Aside from './aside';
 export * as Callout from './callout';
 export * as Image from './image';
+export * as Code from './code';
 export * as IFrame from './iframe';
 export * as Time from './time';
 
 // Technical
 export * as Cite from './cite';
 export * as CiteGroup from './cite-group';
-export * as Ref from './ref';
 export * as Math from './math';
 export * as Equation from './equation';
 

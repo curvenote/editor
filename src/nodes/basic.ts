@@ -15,7 +15,9 @@ export const paragraph: NodeSpec = {
   content: `${NodeGroups.inline}*`,
   group: NodeGroups.block,
   parseDOM: [{ tag: 'p' }],
-  toDOM() { return ['p', 0]; },
+  toDOM() {
+    return ['p', 0];
+  },
 };
 
 export const blockquote: NodeSpec = {
@@ -23,24 +25,18 @@ export const blockquote: NodeSpec = {
   group: NodeGroups.block,
   defining: true,
   parseDOM: [{ tag: 'blockquote' }],
-  toDOM() { return ['blockquote', 0]; },
+  toDOM() {
+    return ['blockquote', 0];
+  },
 };
 
 /** Horizontal rule */
 export const horizontal_rule: NodeSpec = {
   group: NodeGroups.block,
   parseDOM: [{ tag: 'hr' }],
-  toDOM() { return ['hr', { class: 'break' }]; },
-};
-
-export const code_block: NodeSpec = {
-  content: `${NodeGroups.text}*`,
-  marks: '',
-  group: NodeGroups.block,
-  code: true,
-  defining: true,
-  parseDOM: [{ tag: 'pre', preserveWhitespace: 'full' }],
-  toDOM() { return ['pre', ['code', 0]]; },
+  toDOM() {
+    return ['hr', { class: 'break' }];
+  },
 };
 
 export const text: NodeSpec = {
@@ -52,10 +48,16 @@ export const hard_break: NodeSpec = {
   group: NodeGroups.inline,
   selectable: false,
   parseDOM: [{ tag: 'br' }],
-  toDOM() { return ['br']; },
+  toDOM() {
+    return ['br'];
+  },
 };
 
-const listNodes = addListNodes(OrderedMap.from({}), `paragraph ${NodeGroups.block}*`, NodeGroups.block);
+const listNodes = addListNodes(
+  OrderedMap.from({}),
+  `paragraph ${NodeGroups.block}*`,
+  NodeGroups.block,
+);
 
 export const ordered_list = listNodes.get('ordered_list') as NodeSpec;
 export const bullet_list = listNodes.get('bullet_list') as NodeSpec;

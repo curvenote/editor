@@ -1,5 +1,15 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node, Schema } from 'prosemirror-model';
+import { Node, NodeSpec, AttributeSpec, Schema, ParseRule } from 'prosemirror-model';
+
+export enum ReferenceKind {
+  cite = 'cite',
+  link = 'link',
+  sec = 'sec',
+  fig = 'fig',
+  eq = 'eq',
+  code = 'code',
+  table = 'table',
+}
 
 export enum NodeGroups {
   'top' = 'topblock',
@@ -13,6 +23,26 @@ export enum NodeGroups {
 export enum MarkGroups {
   'format' = 'format',
 }
+
+type O = Record<string, any>;
+export type NodeSpecAttrs<T extends O> = Record<keyof T, AttributeSpec>;
+
+export interface MyParseRule<T extends O> extends ParseRule {
+  getAttrs?: (p: any) => T;
+}
+
+export interface MyNodeSpec<T extends O> extends NodeSpec {
+  attrs: NodeSpecAttrs<T>;
+  parseDOM?: MyParseRule<T>[];
+}
+
+export type NumberedNode = {
+  id: string | null;
+  label: string | null;
+  numbered: boolean;
+};
+
+export type AlignOptions = 'left' | 'center' | 'right';
 
 export type Attr = {
   name: string;
@@ -30,8 +60,8 @@ export type NodeDef = {
 };
 
 export type FormatSerialize<S extends Schema<any, any> = any> = (
-  state: MarkdownSerializerState<S> & { delim?: string },
+  state: MarkdownSerializerState & { delim?: string },
   node: Node<S>,
   parent: Node<S>,
-  index: number
+  index: number,
 ) => void;

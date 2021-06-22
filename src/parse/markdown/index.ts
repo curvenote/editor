@@ -2,7 +2,7 @@ import { Node as ProsemirrorNode } from 'prosemirror-model';
 import Token from 'markdown-it/lib/token';
 import { MarkdownParser, TokenConfig } from 'prosemirror-markdown';
 import { MyST } from 'markdown-it-myst';
-import { DEFAULT_IMAGE_WIDTH } from '../../utils';
+import { DEFAULT_IMAGE_WIDTH } from '../../defaults';
 import { getSchema, UseSchema } from '../../schemas';
 
 type Tokens = {
@@ -13,7 +13,10 @@ const tokens: Tokens = {
   paragraph: { block: 'paragraph' },
   list_item: { block: 'list_item' },
   bullet_list: { block: 'bullet_list' },
-  ordered_list: { block: 'ordered_list', getAttrs: (tok: Token) => ({ order: +(tok.attrGet('start') ?? 1) }) },
+  ordered_list: {
+    block: 'ordered_list',
+    getAttrs: (tok: Token) => ({ order: +(tok.attrGet('start') ?? 1) }),
+  },
   heading: { block: 'heading', getAttrs: (tok: Token) => ({ level: +tok.tag.slice(1) }) },
   code_block: { block: 'code_block' },
   fence: {
