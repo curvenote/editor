@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 
-const Attributes = () => {
+const Attributes: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
 

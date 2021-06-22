@@ -32,7 +32,7 @@ export function useInlineActionProps() {
   };
 }
 
-const InlineActionSwitch = () => {
+const InlineActionSwitch: React.FC = () => {
   const { stateId, viewId, kind, anchorEl } = useInlineActionProps();
   return (
     <>

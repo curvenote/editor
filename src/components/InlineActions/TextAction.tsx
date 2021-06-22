@@ -20,7 +20,7 @@ type Props = {
   onCancel: () => void;
 };
 
-const TextAction = (props: Props) => {
+const TextAction: React.FC<Props> = (props) => {
   const { text: initial, help, validate, onSubmit, onCancel } = props;
   const classes = useStyles();
   const [text, setText] = useState(initial);

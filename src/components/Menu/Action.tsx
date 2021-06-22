@@ -44,7 +44,7 @@ export type MenuActionProps = {
   selected?: boolean;
 };
 
-const MenuAction = (props: MenuActionProps) => {
+const MenuAction: React.FC<MenuActionProps> = (props) => {
   const { kind, title, action, disabled, children, selected } = props;
   const classes = useStyles();
   const Icon = kind && icons[kind];

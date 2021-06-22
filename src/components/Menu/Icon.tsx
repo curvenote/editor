@@ -151,7 +151,7 @@ type Props = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-const MenuIcon = (props: Props) => {
+const MenuIcon: React.FC<Props> = (props) => {
   const { kind, active, dangerous, error, disabled, onClick, title, text } = props;
 
   const classes = useStyles();

@@ -26,7 +26,7 @@ const useStyles = makeStyles(() =>
 
 const ABOVE_MODALS = { zIndex: 1301 };
 
-const HeadingActions = (props: ActionProps) => {
+const HeadingActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();

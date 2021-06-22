@@ -33,7 +33,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const EditorMenu = (props: Props) => {
+const EditorMenu: React.FC<Props> = (props) => {
   const { standAlone, disabled } = props;
 
   const classes = useStyles();

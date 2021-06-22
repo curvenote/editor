@@ -24,7 +24,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const CalloutActions = (props: ActionProps) => {
+const CalloutActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId, anchorEl } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();

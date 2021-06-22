@@ -27,7 +27,7 @@ type Props = ActionProps & {
   showCaption?: boolean;
 };
 
-const AlignActions = (props: Props) => {
+const AlignActions: React.FC<Props> = (props) => {
   const { stateId, viewId, anchorEl, showCaption } = props;
   const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();

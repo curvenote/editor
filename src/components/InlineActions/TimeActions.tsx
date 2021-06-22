@@ -10,7 +10,7 @@ import { State, Dispatch } from '../../store/types';
 import { getEditorState } from '../../store/selectors';
 import { ActionProps } from './utils';
 
-const TimeActions = (props: ActionProps) => {
+const TimeActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);

@@ -7,7 +7,7 @@ type Props = {
   onWidth: (width: number) => void;
 };
 
-const SelectWidth = (props: Props) => {
+const SelectWidth: React.FC<Props> = (props) => {
   const { width, onWidth } = props;
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 

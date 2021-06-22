@@ -79,8 +79,10 @@ export function positionInlineActions(): AppThunk<void> {
         placement.placement = 'bottom';
         break;
       case SelectionKinds.callout:
-      case SelectionKinds.equation:
         placement.placement = 'bottom';
+        break;
+      case SelectionKinds.equation:
+        placement.placement = 'right';
         break;
       default:
         break;

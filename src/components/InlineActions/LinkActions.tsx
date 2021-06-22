@@ -65,7 +65,7 @@ export function useLinkActions(stateId: any, viewId: string | null) {
   };
 }
 
-const LinkActions = (props: ActionProps) => {
+const LinkActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const [labelOpen, setLabelOpen] = useState(false);
   const classes = useStyles();

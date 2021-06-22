@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const EquationActions = (props: ActionProps) => {
+const EquationActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
