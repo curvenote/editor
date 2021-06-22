@@ -78,7 +78,11 @@ var ClassWrapper = (function (_super) {
         var _a = this.props, view = _a.view, node = _a.node, getPos = _a.getPos, Child = _a.Child;
         var _b = this.state, open = _b.open, edit = _b.edit;
         return (React.createElement(Child, __assign({}, {
-            view: view, node: node, getPos: getPos, open: open, edit: edit,
+            view: view,
+            node: node,
+            getPos: getPos,
+            open: open,
+            edit: edit,
         })));
     };
     return ClassWrapper;
@@ -97,9 +101,13 @@ var ReactWrapper = (function () {
         render(React.createElement(ThemeProvider, { theme: opts.theme },
             React.createElement(Provider, { store: ref.store() },
                 React.createElement(ClassWrapper, __assign({}, {
-                    node: node, view: view, getPos: getPos,
+                    node: node,
+                    view: view,
+                    getPos: getPos,
                     Child: NodeView,
-                }, { ref: function (r) { _this.editor = r; } })))), this.dom, function () { return __awaiter(_this, void 0, void 0, function () {
+                }, { ref: function (r) {
+                        _this.editor = r;
+                    } })))), this.dom, function () { return __awaiter(_this, void 0, void 0, function () {
             var edit;
             var _a;
             return __generator(this, function (_b) {
@@ -133,7 +141,9 @@ var ReactWrapper = (function () {
 export { ReactWrapper };
 function createNodeView(Editor, options) {
     if (options === void 0) { options = { wrapper: 'div' }; }
-    return function (node, view, getPos) { return (new ReactWrapper(Editor, { node: node, view: view, getPos: getPos }, options)); };
+    return function (node, view, getPos) {
+        return new ReactWrapper(Editor, { node: node, view: view, getPos: getPos }, options);
+    };
 }
 export default createNodeView;
 //# sourceMappingURL=NodeView.js.map

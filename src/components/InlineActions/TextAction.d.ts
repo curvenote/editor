@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 declare type Props = {
     text: string;
     help: string;
@@ -6,5 +6,5 @@ declare type Props = {
     onSubmit: (text: string) => void;
     onCancel: () => void;
 };
-declare const TextAction: (props: Props) => JSX.Element;
+declare const TextAction: React.FC<Props>;
 export default TextAction;

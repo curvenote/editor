@@ -42,7 +42,10 @@ export function insertNodeRule(regExp, nodeType, getAttrs, select, test) {
         if (test && !test(match))
             return null;
         var _d = (_a = (getAttrs instanceof Function ? getAttrs(match) : getAttrs)) !== null && _a !== void 0 ? _a : {}, content = _d.content, attrs = __rest(_d, ["content"]);
-        var tr = state.tr.delete(start, end).replaceSelectionWith(nodeType.create(attrs, content), false).scrollIntoView();
+        var tr = state.tr
+            .delete(start, end)
+            .replaceSelectionWith(nodeType.create(attrs, content), false)
+            .scrollIntoView();
         var doSelect = select instanceof Function ? select(match) : select;
         if (!doSelect)
             return tr;
@@ -57,7 +60,10 @@ export function replaceNodeRule(regExp, nodeType, getAttrs, select) {
     return new InputRule(regExp, function (state, match, start, end) {
         var _a;
         var _b = (_a = (getAttrs instanceof Function ? getAttrs(match) : getAttrs)) !== null && _a !== void 0 ? _a : {}, content = _b.content, attrs = __rest(_b, ["content"]);
-        var tr = state.tr.delete(start, end).replaceSelectionWith(nodeType.create(attrs, content), false).scrollIntoView();
+        var tr = state.tr
+            .delete(start, end)
+            .replaceSelectionWith(nodeType.create(attrs, content), false)
+            .scrollIntoView();
         var doSelect = select instanceof Function ? select(match) : select;
         if (!doSelect)
             return tr;

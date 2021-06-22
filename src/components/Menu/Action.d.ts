@@ -13,18 +13,9 @@ export declare type MenuActionProps = {
     kind?: IconTypes;
     title?: string | React.ReactNode;
     children?: React.ReactNode;
-    action?: (() => void);
+    action?: () => void;
     disabled?: boolean;
     selected?: boolean;
 };
-declare const MenuAction: {
-    (props: MenuActionProps): JSX.Element;
-    defaultProps: {
-        kind: undefined;
-        title: string;
-        action: undefined;
-        disabled: boolean;
-        selected: boolean;
-    };
-};
+declare const MenuAction: React.FC<MenuActionProps>;
 export default MenuAction;

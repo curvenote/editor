@@ -1,9 +1,12 @@
 import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } from 'prosemirror-inputrules';
 import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
+import { createId } from '../../utils';
 export var quotes = function (schema) { return smartQuotes; };
 export var ellipsis = function (schema) { return [new InputRule(/\.\.\.$/, '…')]; };
-export var blockquote = function (schema) { return [wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote)]; };
+export var blockquote = function (schema) { return [
+    wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote),
+]; };
 export var arrows = function (schema) { return [
     new InputRule(/<--?>\s$/, '↔ '),
     new InputRule(/<==?>\s$/, '⇔ '),
@@ -38,9 +41,7 @@ export var fractions = function (schema) { return [
     new InputRule(/1\/9$/, '⅑'),
     new InputRule(/1\/10$/, '⅒'),
 ]; };
-export var emdash = function (schema) { return [
-    new InputRule(/--\s$/, '— '),
-]; };
+export var emdash = function (schema) { return [new InputRule(/--\s$/, '— ')]; };
 export var copyright = function (schema) { return [
     new InputRule(/\s?\(c\)\s$/, ' © '),
     new InputRule(/\s?\(r\)\s$/, ' ® '),
@@ -62,9 +63,7 @@ export var lists = function (schema) { return [
 export var codeBlock = function (schema) { return [
     textblockTypeInputRule(/^```$/, schema.nodes.code_block),
 ]; };
-export var codeInline = function (schema) { return [
-    markInputRule(/`([\W\w]+)`$/, schema.marks.code),
-]; };
+export var codeInline = function (schema) { return [markInputRule(/`([\W\w]+)`$/, schema.marks.code)]; };
 export var strong = function (schema) { return [
     markInputRule(/\*\*([\W\w]+)\*\*$/, schema.marks.strong),
     markInputRule(/__([\W\w]+)__$/, schema.marks.strong),
@@ -83,11 +82,14 @@ export var em = function (schema) { return [
 export var headings = function (schema, maxLevel) {
     if (maxLevel === void 0) { maxLevel = 6; }
     return [
-        textblockTypeInputRule(new RegExp("^(#{1," + maxLevel + "})\\s$"), schema.nodes.heading, function (match) { return ({ level: match[1].length }); }),
+        textblockTypeInputRule(new RegExp("^(#{1," + maxLevel + "})\\s$"), schema.nodes.heading, function (match) { return ({
+            level: match[1].length,
+            id: createId(),
+        }); }),
     ];
 };
 export var equation = function (schema) { return [
-    replaceNodeRule(/^\$\$$/, schema.nodes.equation, undefined, true),
+    replaceNodeRule(/^\$\$$/, schema.nodes.equation, function () { return ({ id: createId() }); }, true),
 ]; };
 export var mathInline = function (schema) { return [
     insertNodeRule(/(\$([^$]*)\$)$/, schema.nodes.math, function (match) {
@@ -104,9 +106,15 @@ export var hr = function (schema) { return [
     insertNodeRule(/^(~~~|---|\*\*\*)$/, schema.nodes.horizontal_rule),
 ]; };
 export var slider = function (schema) { return [
-    insertNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, function (match) { return ({ valueFunction: match[1], changeFunction: "{" + match[1] + ": value}" }); }),
+    insertNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, function (match) { return ({
+        valueFunction: match[1],
+        changeFunction: "{" + match[1] + ": value}",
+    }); }),
 ]; };
 export var dynamic = function (schema) { return [
-    insertNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, function (match) { return ({ valueFunction: match[1], changeFunction: "{" + match[1] + ": value}" }); }),
+    insertNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, function (match) { return ({
+        valueFunction: match[1],
+        changeFunction: "{" + match[1] + ": value}",
+    }); }),
 ]; };
 //# sourceMappingURL=rules.js.map

@@ -24,7 +24,9 @@ export var store = {
 };
 export var opts = {
     transformKeyToId: function (key) { return ref.opts().transformKeyToId(key); },
-    uploadImage: function (file, node) { return ref.opts().uploadImage(file, node); },
+    uploadImage: function (file, node) {
+        return ref.opts().uploadImage(file, node);
+    },
     handlePaste: function (view, event, slice) {
         var _a, _b, _c;
         return (_c = (_b = (_a = ref.opts()).handlePaste) === null || _b === void 0 ? void 0 : _b.call(_a, view, event, slice)) !== null && _c !== void 0 ? _c : false;
@@ -44,11 +46,24 @@ export var opts = {
         var _a, _b, _c;
         return (_c = (_b = (_a = ref.opts()).onDoubleClick) === null || _b === void 0 ? void 0 : _b.call(_a, stateId, viewId, view, pos, event)) !== null && _c !== void 0 ? _c : false;
     },
-    getDocId: function () { return ref.opts().getDocId(); },
-    citationPrompt: function () { return ref.opts().citationPrompt(); },
-    createLinkSearch: function () { return ref.opts().createLinkSearch(); },
-    get theme() { return ref.opts().theme; },
-    get throttle() { return ref.opts().throttle; },
-    get nodeViews() { var _a; return (_a = ref.opts().nodeViews) !== null && _a !== void 0 ? _a : {}; },
+    getDocId: function () {
+        return ref.opts().getDocId();
+    },
+    citationPrompt: function () {
+        return ref.opts().citationPrompt();
+    },
+    createLinkSearch: function () {
+        return ref.opts().createLinkSearch();
+    },
+    get theme() {
+        return ref.opts().theme;
+    },
+    get throttle() {
+        return ref.opts().throttle;
+    },
+    get nodeViews() {
+        var _a;
+        return (_a = ref.opts().nodeViews) !== null && _a !== void 0 ? _a : {};
+    },
 };
 //# sourceMappingURL=connect.js.map

@@ -75,25 +75,62 @@ function getFuse() {
         });
     });
 }
-export var startingSuggestions = [{
-        c: '👍', n: 'Thumbs Up', s: '+1', o: 'thumbsup',
-    }, {
-        c: '👎', n: 'Thumbs Down', s: '-1', o: 'thumbsdown',
-    }, {
-        c: '😀', n: 'Grinning Face', s: 'grinning', o: ' :D',
-    }, {
-        c: '❤️', n: 'Red Heart', s: 'heart', o: ' <3',
-    }, {
-        c: '🚀', n: 'Rocket', s: 'rocket', o: '',
-    }, {
-        c: '🎉', n: 'Party Popper', s: 'tada', o: '',
-    }, {
-        c: '👀', n: 'Eyes', s: 'eyes', o: '',
-    }, {
-        c: '😕', n: 'Confused Face', s: 'confused', o: '',
-    }, {
-        c: '😛', n: 'Face With Tongue', s: 'stuck_out_tongue', o: ' :p',
-    }];
+export var startingSuggestions = [
+    {
+        c: '👍',
+        n: 'Thumbs Up',
+        s: '+1',
+        o: 'thumbsup',
+    },
+    {
+        c: '👎',
+        n: 'Thumbs Down',
+        s: '-1',
+        o: 'thumbsdown',
+    },
+    {
+        c: '😀',
+        n: 'Grinning Face',
+        s: 'grinning',
+        o: ' :D',
+    },
+    {
+        c: '❤️',
+        n: 'Red Heart',
+        s: 'heart',
+        o: ' <3',
+    },
+    {
+        c: '🚀',
+        n: 'Rocket',
+        s: 'rocket',
+        o: '',
+    },
+    {
+        c: '🎉',
+        n: 'Party Popper',
+        s: 'tada',
+        o: '',
+    },
+    {
+        c: '👀',
+        n: 'Eyes',
+        s: 'eyes',
+        o: '',
+    },
+    {
+        c: '😕',
+        n: 'Confused Face',
+        s: 'confused',
+        o: '',
+    },
+    {
+        c: '😛',
+        n: 'Face With Tongue',
+        s: 'stuck_out_tongue',
+        o: ' :p',
+    },
+];
 export function chooseSelection(result) {
     return function (dispatch, getState) {
         var _a = getSuggestion(getState()), view = _a.view, _b = _a.range, from = _b.from, to = _b.to;

@@ -2,6 +2,7 @@ import { Theme } from '@material-ui/core';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Node, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
+import { Nodes } from '@curvenote/schema';
 import { Store } from './store/types';
 import { LinkResult } from './store/suggestion/types';
 export declare type SearchContext = {
@@ -16,7 +17,7 @@ export declare type Options = {
     addComment?: (stateKey: any, state: EditorState) => boolean;
     onDoubleClick?: (stateKey: any, viewId: string | null, view: EditorView<any>, pos: number, event: MouseEvent) => boolean;
     theme: Theme;
-    citationPrompt: () => Promise<string[] | null>;
+    citationPrompt: () => Promise<Nodes.Cite.Attrs[] | null>;
     createLinkSearch: () => Promise<SearchContext>;
     throttle: number;
     nodeViews?: DirectEditorProps['nodeViews'];

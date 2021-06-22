@@ -3,19 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import throttle from 'lodash.throttle';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
-import { actions, selectors, } from '../store';
+import { actions, selectors } from '../store';
 var Editor = function (props) {
     var stateKey = props.stateKey, viewId = props.viewId, className = props.className, autoUnsubscribe = props.autoUnsubscribe;
     var dispatch = useDispatch();
     var editorEl = useRef(null);
     var editorView = useRef();
     var editorState = useSelector(function (state) { var _a; return (_a = selectors.getEditorState(state, stateKey)) === null || _a === void 0 ? void 0 : _a.state; });
-    var focused = useSelector(function (state) { return (selectors.isEditorViewFocused(state, stateKey, viewId)); });
+    var focused = useSelector(function (state) {
+        return selectors.isEditorViewFocused(state, stateKey, viewId);
+    });
     useEffect(function () {
         var _a;
         if (editorView.current || !editorEl.current || !editorState)
             return;
-        var doUpdateState = function (next, tr) { return (dispatch(actions.updateEditorState(stateKey, viewId, next, tr))); };
+        var doUpdateState = function (next, tr) {
+            return dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
+        };
         var updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
         editorView.current = createEditorView(editorEl.current, editorState, function (tr) {
             var _a;

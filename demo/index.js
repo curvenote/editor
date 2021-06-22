@@ -39,9 +39,9 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createMuiTheme } from '@material-ui/core';
-import { toHTML, toMarkdown, toTex } from '@curvenote/schema';
+import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
-import { actions, Editor, EditorMenu, setup, Suggestions, Attributes, InlineActions, LinkKind, } from '../src';
+import { actions, Editor, EditorMenu, setup, Suggestions, Attributes, InlineActions, } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
 import '../styles/index.scss';
@@ -61,15 +61,29 @@ var removeComment = function () {
     store.dispatch(actions.removeComment(viewId1, 'sidenote1'));
 };
 var someLinks = [
-    { kind: LinkKind.cite, uid: 'simpeg2015', content: 'Cockett et al., 2015', alt: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.' },
-    { kind: LinkKind.link, uid: 'https://curvenote.com', content: 'Curvenote', alt: 'Move ideas forward' },
+    {
+        kind: ReferenceKind.cite,
+        uid: 'simpeg2015',
+        label: 'simpeg',
+        content: 'Cockett et al., 2015',
+        title: 'SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications.',
+    },
+    {
+        kind: ReferenceKind.link,
+        uid: 'https://curvenote.com',
+        label: null,
+        content: 'Curvenote',
+        title: 'Move ideas forward',
+    },
 ];
 var opts = {
     transformKeyToId: function (key) { return key; },
     uploadImage: function (file) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             console.log(file);
-            return [2, new Promise(function (resolve) { return (setTimeout(function () { return resolve('https://curvenote.dev/images/logo.png'); }, 2000)); })];
+            return [2, new Promise(function (resolve) {
+                    return setTimeout(function () { return resolve('https://curvenote.dev/images/logo.png'); }, 2000);
+                })];
         });
     }); },
     addComment: function () {
@@ -80,12 +94,24 @@ var opts = {
         console.log('Double click', stateId, viewId);
         return false;
     },
-    getDocId: function () { return docId; },
+    getDocId: function () {
+        return docId;
+    },
     theme: theme,
     throttle: 0,
-    citationPrompt: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2, ['simpeg2015']];
-    }); }); },
+    citationPrompt: function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2, [
+                    {
+                        key: 'simpeg2015',
+                        kind: ReferenceKind.cite,
+                        text: 'Cockett et al, 2015',
+                        label: 'simpeg',
+                        title: '',
+                    },
+                ]];
+        });
+    }); },
     createLinkSearch: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2, ({ search: function () { return someLinks; } })];
     }); }); },

@@ -9,7 +9,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { ATTRIBUTES_SHOW_EDITOR, } from './types';
+import { ATTRIBUTES_SHOW_EDITOR } from './types';
 var initialState = {
     show: false,
     pos: 0,

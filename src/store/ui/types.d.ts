@@ -45,4 +45,4 @@ export interface InlineSelectionAction {
     type: typeof INLINE_SELECTION;
     payload: InlineSelection | null;
 }
-export declare type UIActionTypes = (SelectEditorViewAction | FocusEditorViewAction | InlineSelectionAction);
+export declare type UIActionTypes = SelectEditorViewAction | FocusEditorViewAction | InlineSelectionAction;

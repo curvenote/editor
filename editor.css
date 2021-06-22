@@ -80,13 +80,15 @@
   color: purple;
 }
 
-.eqn-editor::before, .eqn-editor::after {
+.eqn-editor::before,
+.eqn-editor::after {
   content: "$$";
   color: #aaa;
   display: block;
 }
 
-.eqn-editor.inline::before, .eqn-editor.inline::after {
+.eqn-editor.inline::before,
+.eqn-editor.inline::after {
   content: "$";
   display: inline;
 }
@@ -448,7 +450,8 @@ article time {
   background-color: #fdfdfd;
   border: 1px solid #ddd;
 }
-.ProseMirror-focused time, .ProseMirror-focused r-display {
+.ProseMirror-focused time,
+.ProseMirror-focused r-display {
   border: 1px solid #ddd;
   border-bottom-color: #8cf;
 }
@@ -481,6 +484,68 @@ img.placeholder {
     opacity: 0.3;
   }
 }
+article {
+  counter-reset: h1_cnt eq_cnt fig_cnt;
+}
+article h1 {
+  counter-reset: h2_cnt;
+}
+article h2 {
+  counter-reset: h3_cnt;
+}
+article h3 {
+  counter-reset: h4_cnt;
+}
+article h4 {
+  counter-reset: h5_cnt;
+}
+article h5 {
+  counter-reset: h6_cnt;
+}
+
+h1[numbered]:before {
+  content: counter(h1_cnt) ".  ";
+  counter-increment: h1_cnt;
+}
+
+h2[numbered]:before {
+  content: counter(h1_cnt) "." counter(h2_cnt) ".  ";
+  counter-increment: h2_cnt;
+}
+
+h3[numbered]:before {
+  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) ".  ";
+  counter-increment: h3_cnt;
+}
+
+h4[numbered]:before {
+  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) "." counter(h4_cnt) ".  ";
+  counter-increment: h4_cnt;
+}
+
+h5[numbered]:before {
+  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) "." counter(h4_cnt) "." counter(h5_cnt) ".  ";
+  counter-increment: h5_cnt;
+}
+
+h6[numbered]:before {
+  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) "." counter(h4_cnt) "." counter(h5_cnt) "." counter(h6_cnt) ".  ";
+  counter-increment: h6_cnt;
+}
+
+.eqn.display[numbered] {
+  counter-increment: eq_cnt;
+  padding-right: 30px;
+  position: relative;
+}
+
+.eqn.display[numbered]:before {
+  content: "(" counter(eq_cnt) ")";
+  position: absolute;
+  top: calc(50% - 0.6em);
+  right: 5px;
+}
+
 .hidden {
   display: none;
 }

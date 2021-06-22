@@ -5,19 +5,23 @@ import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { isSuggestionSelected } from '../../store/selectors';
 import { chooseSelection, selectSuggestion } from '../../store/actions';
-var useStyles = makeStyles(function () { return createStyles({
-    root: {
-        padding: 10,
-        cursor: 'pointer',
-        clear: 'both',
-    },
-    selected: {
-        backgroundColor: '#e8e8e8',
-    },
-}); });
+import { positionPopper } from '../InlineActions/utils';
+var useStyles = makeStyles(function () {
+    return createStyles({
+        root: {
+            padding: 10,
+            cursor: 'pointer',
+            clear: 'both',
+        },
+        selected: {
+            backgroundColor: '#e8e8e8',
+        },
+    });
+});
 var Suggestion = function (props) {
     var _a;
     var index = props.index, children = props.children, className = props.className;
+    positionPopper();
     var classes = useStyles();
     var ref = useRef(null);
     var dispatch = useDispatch();
@@ -34,7 +38,10 @@ var Suggestion = function (props) {
             boundary: (_a = ref.current.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement,
         });
     }, [selected]);
-    return (React.createElement("div", { className: classNames(classes.root, (_a = {}, _a[className !== null && className !== void 0 ? className : ''] = className, _a[classes.selected] = selected, _a)), onClick: onClick, onMouseEnter: onHover, ref: ref }, children));
+    return (React.createElement("div", { className: classNames(classes.root, (_a = {},
+            _a[className !== null && className !== void 0 ? className : ''] = className,
+            _a[classes.selected] = selected,
+            _a)), onClick: onClick, onMouseEnter: onHover, ref: ref }, children));
 };
 export default Suggestion;
 //# sourceMappingURL=Suggestion.js.map

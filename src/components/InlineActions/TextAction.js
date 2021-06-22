@@ -1,13 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, createStyles, Grid, Input, CircularProgress, } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Input, CircularProgress } from '@material-ui/core';
 import MenuIcon from '../Menu/Icon';
-var useStyles = makeStyles(function () { return createStyles({
-    root: {
-        width: 'fit-content',
-        fontSize: 20,
-        flexWrap: 'nowrap',
-    },
-}); });
+var useStyles = makeStyles(function () {
+    return createStyles({
+        root: {
+            width: 'fit-content',
+            fontSize: 20,
+            flexWrap: 'nowrap',
+        },
+    });
+});
 var TextAction = function (props) {
     var initial = props.text, help = props.help, validate = props.validate, onSubmit = props.onSubmit, onCancel = props.onCancel;
     var classes = useStyles();

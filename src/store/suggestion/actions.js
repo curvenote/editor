@@ -47,13 +47,20 @@ function positiveModulus(n, m) {
 function triggerToKind(trigger) {
     var _a;
     switch (trigger) {
-        case ':': return SuggestionKind.emoji;
-        case '/': return SuggestionKind.command;
-        case '@': return SuggestionKind.person;
-        case '[[': return SuggestionKind.link;
-        case '{{': return SuggestionKind.display;
-        case ((_a = trigger.match(variableTrigger)) !== null && _a !== void 0 ? _a : {}).input: return SuggestionKind.variable;
-        default: throw new Error('Unknown trigger.');
+        case ':':
+            return SuggestionKind.emoji;
+        case '/':
+            return SuggestionKind.command;
+        case '@':
+            return SuggestionKind.person;
+        case '[[':
+            return SuggestionKind.link;
+        case '{{':
+            return SuggestionKind.display;
+        case ((_a = trigger.match(variableTrigger)) !== null && _a !== void 0 ? _a : {}).input:
+            return SuggestionKind.variable;
+        default:
+            throw new Error('Unknown trigger.');
     }
 }
 export function updateSuggestion(open, kind, search, view, range, trigger) {
@@ -103,7 +110,8 @@ export function chooseSelection(selected) {
             case SuggestionKind.variable:
             case SuggestionKind.display:
                 return dispatch(variable.chooseSelection(kind, result));
-            default: throw new Error('Unknown suggestion kind.');
+            default:
+                throw new Error('Unknown suggestion kind.');
         }
     };
 }
@@ -112,15 +120,22 @@ export function filterResults(schema, search) {
         var kind = getSuggestion(getState()).kind;
         switch (kind) {
             case SuggestionKind.emoji:
-                return emoji.filterResults(schema, search, function (results) { return dispatch(updateResults(results)); });
+                return emoji.filterResults(schema, search, function (results) {
+                    return dispatch(updateResults(results));
+                });
             case SuggestionKind.command:
-                return command.filterResults(schema, search, function (results) { return dispatch(updateResults(results)); });
+                return command.filterResults(schema, search, function (results) {
+                    return dispatch(updateResults(results));
+                });
             case SuggestionKind.link:
-                return link.filterResults(schema, search, function (results) { return dispatch(updateResults(results)); });
+                return link.filterResults(schema, search, function (results) {
+                    return dispatch(updateResults(results));
+                });
             case SuggestionKind.variable:
             case SuggestionKind.display:
                 return variable.filterResults(kind, schema, search, dispatch, getState, function (results) { return dispatch(updateResults(results)); });
-            default: throw new Error('Unknown suggestion kind.');
+            default:
+                throw new Error('Unknown suggestion kind.');
         }
     };
 }
@@ -185,7 +200,7 @@ export function handleSuggestion(action) {
         }
         if (action.kind === 'previous' || action.kind === 'next') {
             var _b = getSuggestion(getState()), results = _b.results, selected = _b.selected;
-            dispatch(selectSuggestion(positiveModulus((selected + (action.kind === 'previous' ? -1 : +1)), results.length)));
+            dispatch(selectSuggestion(positiveModulus(selected + (action.kind === 'previous' ? -1 : +1), results.length)));
             return true;
         }
         if (action.kind === 'filter') {

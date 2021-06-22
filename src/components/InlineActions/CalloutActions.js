@@ -1,22 +1,24 @@
 import React from 'react';
-import { makeStyles, createStyles, Grid, } from '@material-ui/core';
+import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { findParentNode } from 'prosemirror-utils';
 import { schemas } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
-import { deleteNode, liftContentOutOfNode, updateNodeAttrs, } from '../../store/actions';
+import { deleteNode, liftContentOutOfNode, updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { positionPopper } from './utils';
-var useStyles = makeStyles(function () { return createStyles({
-    root: {
-        width: 'fit-content',
-        fontSize: 20,
-        flexWrap: 'nowrap',
-    },
-    popover: {
-        overflow: 'visible',
-    },
-}); });
+var useStyles = makeStyles(function () {
+    return createStyles({
+        root: {
+            width: 'fit-content',
+            fontSize: 20,
+            flexWrap: 'nowrap',
+        },
+        popover: {
+            overflow: 'visible',
+        },
+    });
+});
 var CalloutActions = function (props) {
     var _a, _b;
     var stateId = props.stateId, viewId = props.viewId, anchorEl = props.anchorEl;
@@ -29,7 +31,9 @@ var CalloutActions = function (props) {
     if (!node || pos == null)
         return null;
     positionPopper(anchorEl);
-    var onKind = function (value) { return function () { return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { kind: value }, false)); }; };
+    var onKind = function (value) { return function () {
+        return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { kind: value }, false));
+    }; };
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: node, pos: pos })); };
     var onLift = function () { return dispatch(liftContentOutOfNode(stateId, viewId, { node: node, pos: pos })); };
     var kind = node.attrs.kind;

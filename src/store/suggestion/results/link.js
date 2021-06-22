@@ -34,8 +34,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import { ReferenceKind } from '@curvenote/schema';
 import { getSuggestion } from '../selectors';
-import { LinkKind } from '../types';
 import { opts } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
 var context = null;
@@ -61,32 +61,34 @@ export var startingSuggestions = function (search, create) {
 };
 export function chooseSelection(result) {
     return function (dispatch, getState) {
-        var _a, _b;
-        var _c = getSuggestion(getState()), view = _c.view, _d = _c.range, from = _d.from, to = _d.to;
+        var _a, _b, _c, _d;
+        var _e = getSuggestion(getState()), view = _e.view, _f = _e.range, from = _f.from, to = _f.to;
         if (view == null)
             return false;
         view.dispatch(view.state.tr.insertText('', from, to));
         switch (result.kind) {
-            case LinkKind.cite: {
-                var citeAttrs = { key: result.uid, inline: result.content };
-                return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
-            }
-            case LinkKind.link: {
+            case ReferenceKind.link: {
                 var tr = view.state.tr;
                 var text = result.content;
                 tr.insertText(text + " ", from);
                 var mark = view.state.schema.marks.link.create({
                     href: result.uid,
-                    title: (_a = result.alt) !== null && _a !== void 0 ? _a : '',
+                    title: (_a = result.title) !== null && _a !== void 0 ? _a : '',
                     kind: (_b = result.linkKind) !== null && _b !== void 0 ? _b : '',
                 });
                 view.dispatch(tr.addMark(from, from + text.length, mark));
                 return true;
             }
-            case LinkKind.ref:
-                return dispatch(insertInlineNode(view.state.schema.nodes.ref, { key: result.uid }));
-            default:
-                return false;
+            default: {
+                var citeAttrs = {
+                    key: result.uid,
+                    title: (_c = result.title) !== null && _c !== void 0 ? _c : '',
+                    label: (_d = result.label) !== null && _d !== void 0 ? _d : null,
+                    kind: result.kind,
+                    text: result.content,
+                };
+                return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
+            }
         }
     };
 }

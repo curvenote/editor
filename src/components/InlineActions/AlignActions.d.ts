@@ -1,12 +1,7 @@
-/// <reference types="react" />
+import React from 'react';
 import { ActionProps } from './utils';
 declare type Props = ActionProps & {
     showCaption?: boolean;
 };
-declare const AlignActions: {
-    (props: Props): JSX.Element | null;
-    defaultProps: {
-        showCaption: boolean;
-    };
-};
+declare const AlignActions: React.FC<Props>;
 export default AlignActions;

@@ -1,15 +1,18 @@
 import { wrapIn, setBlockType, chainCommands, toggleMark, exitCode, joinUp, joinDown, lift, selectParentNode, } from 'prosemirror-commands';
-import { wrapInList, splitListItem, liftListItem, sinkListItem, } from 'prosemirror-schema-list';
+import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { store, opts } from '../connect';
 import { focusSelectedEditorView } from '../store/ui/actions';
 import { executeCommand } from '../store/actions';
 import { CommandNames } from '../store/suggestion/commands';
+import { createId } from '../utils';
 var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 export function buildKeymap(stateKey, schema) {
     var keys = {};
-    var bind = function (key, cmd) { keys[key] = cmd; };
+    var bind = function (key, cmd) {
+        keys[key] = cmd;
+    };
     var allUndo = chainCommands(undoInputRule, undo);
     bind('Mod-z', allUndo);
     bind('Backspace', undoInputRule);
@@ -78,9 +81,11 @@ export function buildKeymap(stateKey, schema) {
     }
     if (schema.nodes.paragraph)
         bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
-    if (schema.nodes.heading)
-        for (var i = 1; i <= 6; i += 1)
-            bind("Mod-Alt-" + i, setBlockType(schema.nodes.heading, { level: i }));
+    if (schema.nodes.heading) {
+        for (var i = 1; i <= 6; i += 1) {
+            bind("Mod-Alt-" + i, setBlockType(schema.nodes.heading, { level: i, id: createId() }));
+        }
+    }
     if (schema.nodes.horizontal_rule) {
         var hr_1 = schema.nodes.horizontal_rule;
         bind('Mod-_', function (state, dispatch) {

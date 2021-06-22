@@ -34,6 +34,10 @@ export var CommandNames;
     CommandNames["citation"] = "citation";
     CommandNames["link_article"] = "link_article";
     CommandNames["link_notebook"] = "link_notebook";
+    CommandNames["link_section"] = "link_section";
+    CommandNames["link_figure"] = "link_figure";
+    CommandNames["link_equation"] = "link_equation";
+    CommandNames["link_code"] = "link_code";
 })(CommandNames || (CommandNames = {}));
 export var commands = [
     {
@@ -94,13 +98,31 @@ export var commands = [
         name: CommandNames.link_article,
         title: 'Link to Article',
         description: 'Add a link to an article',
-        shortcut: ['[[article: Lookup an article'],
+        shortcut: ['[[article: Link to an article'],
     },
     {
         name: CommandNames.link_notebook,
         title: 'Link to Notebook',
         description: 'Add a link to an notebook',
-        shortcut: ['[[nb: Lookup a notebook'],
+        shortcut: ['[[nb: Link to a notebook'],
+    },
+    {
+        name: CommandNames.link_section,
+        title: 'Link to an internal Section',
+        description: 'Add a link to title',
+        shortcut: ['[[sec: Link to a section'],
+    },
+    {
+        name: CommandNames.link_figure,
+        title: 'Link to an internal Section',
+        description: 'Add a link to figure',
+        shortcut: ['[[fig: Link to a figure'],
+    },
+    {
+        name: CommandNames.link_equation,
+        title: 'Link to an internal equation',
+        description: 'Add a link to equation',
+        shortcut: ['[[eq: Link to an equation'],
     },
     {
         name: CommandNames.add_citation,

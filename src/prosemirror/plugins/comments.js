@@ -9,7 +9,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { Plugin, PluginKey, } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
@@ -22,9 +22,6 @@ export function dispatchCommentAction(view, action) {
     var plugin = key.get(view.state);
     var tr = view.state.tr.setMeta(plugin, action);
     view.dispatch(tr);
-}
-function inComment(selection, decorations) {
-    return decorations.find(selection.from, selection.to).length > 0;
 }
 var reducer = function (state, tr, action) {
     var decorations = state.decorations;

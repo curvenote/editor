@@ -15,7 +15,11 @@ import { Decoration, DecorationSet } from 'prosemirror-view';
 export var SUGGESTION_ID = 'suggestion';
 export var KEEP_SELECTION_ALIVE = 'KEEP_SELECTION_ALIVE';
 var inactiveSuggestionState = {
-    active: false, trigger: null, decorations: DecorationSet.empty, text: null, range: null,
+    active: false,
+    trigger: null,
+    decorations: DecorationSet.empty,
+    text: null,
+    range: null,
 };
 export var key = new PluginKey('suggestion');
 export function triggerSuggestion(view, trigger, search) {
@@ -37,12 +41,18 @@ export var SuggestionActionKind;
 })(SuggestionActionKind || (SuggestionActionKind = {}));
 function actionFromEvent(event) {
     switch (event.key) {
-        case 'ArrowUp': return SuggestionActionKind.previous;
-        case 'ArrowDown': return SuggestionActionKind.next;
-        case 'Tab': return SuggestionActionKind.select;
-        case 'Enter': return SuggestionActionKind.select;
-        case 'Escape': return SuggestionActionKind.close;
-        default: return null;
+        case 'ArrowUp':
+            return SuggestionActionKind.previous;
+        case 'ArrowDown':
+            return SuggestionActionKind.next;
+        case 'Tab':
+            return SuggestionActionKind.select;
+        case 'Enter':
+            return SuggestionActionKind.select;
+        case 'Escape':
+            return SuggestionActionKind.close;
+        default:
+            return null;
     }
 }
 function inSuggestion(selection, decorations) {
@@ -118,9 +128,9 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
                 var active = state.active, trigger = state.trigger, decorations = state.decorations;
                 var nextDecorations = decorations.map(tr.mapping, tr.doc);
                 var hasDecoration = nextDecorations.find().length > 0;
-                if ((meta === null || meta === void 0 ? void 0 : meta.action) === 'remove'
-                    || !inSuggestion(tr.selection, nextDecorations)
-                    || !hasDecoration)
+                if ((meta === null || meta === void 0 ? void 0 : meta.action) === 'remove' ||
+                    !inSuggestion(tr.selection, nextDecorations) ||
+                    !hasDecoration)
                     return __assign({}, inactiveSuggestionState);
                 var _c = nextDecorations.find()[0], from = _c.from, to = _c.to;
                 var text = tr.doc.textBetween(from, to);
@@ -147,8 +157,12 @@ export default function getPlugins(onAction, suggestionTrigger, cancelOnFirstSpa
                 var _c = decorations.find()[0], from = _c.from, to = _c.to;
                 var text = view.state.doc.textBetween(from, to);
                 var search = text.slice((_a = trigger === null || trigger === void 0 ? void 0 : trigger.length) !== null && _a !== void 0 ? _a : 1);
-                var cancelOnSpace = typeof cancelOnFirstSpace === 'boolean' ? cancelOnFirstSpace : cancelOnFirstSpace(trigger);
-                if (cancelOnSpace && search.length === 0 && (event.key === ' ' || event.key === 'Spacebar')) {
+                var cancelOnSpace = typeof cancelOnFirstSpace === 'boolean'
+                    ? cancelOnFirstSpace
+                    : cancelOnFirstSpace(trigger);
+                if (cancelOnSpace &&
+                    search.length === 0 &&
+                    (event.key === ' ' || event.key === 'Spacebar')) {
                     cancelSuggestion(view);
                     return false;
                 }

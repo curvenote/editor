@@ -57,9 +57,6 @@ export function createEditorView(dom, state, dispatch) {
             },
             time: function (node, view, getPos) {
                 return new views.TimeView(node, view, getPos);
-            },
-            cite: function (node, view, getPos) {
-                return new views.CiteView(node, view, getPos);
             }, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
         handleKeyDown: function (_, event) {
@@ -71,11 +68,11 @@ export function createEditorView(dom, state, dispatch) {
                 return false;
             if (!view.hasFocus())
                 return true;
-            return (opts.handlePaste(view, event, slice)
-                || addLink(view, event.clipboardData)
-                || uploadAndInsertImages(view, event.clipboardData));
+            return (opts.handlePaste(view, event, slice) ||
+                addLink(view, event.clipboardData) ||
+                uploadAndInsertImages(view, event.clipboardData));
         },
-        handleDrop: function (view, event) { return (uploadAndInsertImages(view, event.dataTransfer)); },
+        handleDrop: function (view, event) { return uploadAndInsertImages(view, event.dataTransfer); },
         handleDoubleClick: function (view, pos, event) {
             var _a = getSelectedViewId(store.getState()), viewId = _a.viewId, stateId = _a.stateId;
             return opts.onDoubleClick(stateId, viewId, view, pos, event);

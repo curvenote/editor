@@ -59,7 +59,7 @@ export function positionInlineActions() {
         var getAnchorEl = function (tag) {
             var _a, _b, _c;
             var anchorEl = placement.anchorEl;
-            return (_c = (_a = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByClassName('ProseMirror-node')[0]) !== null && _a !== void 0 ? _a : (_b = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByTagName) === null || _b === void 0 ? void 0 : _b.call(anchorEl, tag)[0]) !== null && _c !== void 0 ? _c : anchorEl;
+            return ((_c = (_a = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByClassName('ProseMirror-node')[0]) !== null && _a !== void 0 ? _a : (_b = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByTagName) === null || _b === void 0 ? void 0 : _b.call(anchorEl, tag)[0]) !== null && _c !== void 0 ? _c : anchorEl);
         };
         switch (selection.kind) {
             case SelectionKinds.link:
@@ -74,10 +74,13 @@ export function positionInlineActions() {
                 placement.placement = 'bottom';
                 break;
             case SelectionKinds.callout:
-            case SelectionKinds.equation:
                 placement.placement = 'bottom';
                 break;
-            default: break;
+            case SelectionKinds.equation:
+                placement.placement = 'right';
+                break;
+            default:
+                break;
         }
         dispatch(setInlineSelection(__assign(__assign({}, selection), placement)));
     };

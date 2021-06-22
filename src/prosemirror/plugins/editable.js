@@ -1,4 +1,4 @@
-import { Plugin, PluginKey, } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
 var key = new PluginKey('editable');
 export var isEditable = function (state) {
     var _a;
@@ -7,7 +7,9 @@ export var isEditable = function (state) {
     var plugin = key.get(state);
     return (_a = plugin === null || plugin === void 0 ? void 0 : plugin.getState(state)) !== null && _a !== void 0 ? _a : false;
 };
-export var setEditable = function (state, tr, editable) { return (tr.setMeta(key.get(state), editable)); };
+export var setEditable = function (state, tr, editable) {
+    return tr.setMeta(key.get(state), editable);
+};
 export var editablePlugin = function (startEditable) {
     var plugin = new Plugin({
         key: key,

@@ -1,4 +1,5 @@
 import { types } from '@curvenote/runtime';
+import { ReferenceKind } from '@curvenote/schema';
 import { EditorView } from 'prosemirror-view';
 import { CommandResult } from './commands';
 export declare const UPDATE_SUGGESTION = "UPDATE_SUGGESTION";
@@ -19,17 +20,13 @@ export interface EmojiResult {
     s: string;
     o: string;
 }
-export declare enum LinkKind {
-    'link' = 0,
-    'cite' = 1,
-    'ref' = 2
-}
 export declare type LinkResult = {
-    kind: LinkKind;
+    kind: ReferenceKind;
     uid: string;
+    title: string | null;
+    label: string | null;
     content: string;
     linkKind?: string;
-    alt?: string;
 };
 export declare type VariableResult = Partial<types.Variable>;
 export type { CommandResult };
@@ -77,4 +74,4 @@ export interface UpdateSuggestionSelectionAction {
         selection: number;
     };
 }
-export declare type SuggestionActionTypes = (UpdateSuggestionAction | UpdateSuggestionResultsAction | UpdateSuggestionSelectionAction);
+export declare type SuggestionActionTypes = UpdateSuggestionAction | UpdateSuggestionResultsAction | UpdateSuggestionSelectionAction;

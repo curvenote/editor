@@ -19,7 +19,10 @@ export function getEditorView(state, viewId) {
 }
 export function getEditorState(state, stateKey) {
     var blank = {
-        key: null, state: null, viewIds: [], counts: null,
+        key: null,
+        state: null,
+        viewIds: [],
+        counts: null,
     };
     var stateId = opts.transformKeyToId(stateKey);
     if (!stateId)

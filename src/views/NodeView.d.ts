@@ -9,7 +9,7 @@ export declare type Options = {
 export declare type ClassWrapperProps = {
     node: Node;
     view: EditorView;
-    getPos: (() => number);
+    getPos: () => number;
     Child: React.FunctionComponent<NodeViewProps>;
 };
 export declare class ReactWrapper {
@@ -17,7 +17,7 @@ export declare class ReactWrapper {
     node: Node;
     view: EditorView;
     editor: null | React.Component;
-    getPos: (() => number);
+    getPos: () => number;
     constructor(NodeView: React.FunctionComponent<NodeViewProps>, nodeViewPos: Omit<ClassWrapperProps, 'Child'>, options: Options);
     selectNode(): void;
     deselectNode(): void;

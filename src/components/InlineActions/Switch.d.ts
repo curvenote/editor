@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 import { SelectionKinds as Kinds } from '../../store/ui/types';
 export declare function useInlineActionProps(): {
     stateId: string | null;
@@ -6,5 +6,5 @@ export declare function useInlineActionProps(): {
     kind: Kinds | null;
     anchorEl: Element | null;
 };
-declare const InlineActionSwitch: () => JSX.Element;
+declare const InlineActionSwitch: React.FC;
 export default InlineActionSwitch;

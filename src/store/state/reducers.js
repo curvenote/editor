@@ -16,9 +16,9 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+import { process } from '@curvenote/schema';
 import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
 import { createEditorState } from '../../prosemirror';
-import { countState } from './utils';
 export var initialState = {
     editors: {},
     views: {},
@@ -33,9 +33,11 @@ var editorReducer = function (state, action) {
             if (state.editors[stateId] !== undefined)
                 return state;
             var editorState = createEditorState(useSchema, stateKey, content, version, editable);
-            var counts = countState(editorState);
+            var counts = process.countState(editorState);
             return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_a = {}, _a[stateId] = {
-                    state: editorState, viewIds: [], key: stateKey,
+                    state: editorState,
+                    viewIds: [],
+                    key: stateKey,
                     counts: counts,
                 }, _a)) });
         }

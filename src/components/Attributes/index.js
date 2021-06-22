@@ -7,20 +7,22 @@ import { closeAttributeEditor, updateNodeAttrs } from '../../store/actions';
 import { getEditorUI, getAttributeEditorLocation, showAttributeEditor, getNodeAttrs, getEditorState, getAttributeEditorPos, } from '../../store/selectors';
 import { isEditable } from '../../prosemirror/plugins/editable';
 var HEIGHT = 300;
-var useStyles = makeStyles(function (theme) { return createStyles({
-    root: {
-        backgroundColor: '#fff',
-        padding: theme.spacing(1),
-        width: 300,
-        maxHeight: HEIGHT,
-        overflowY: 'scroll',
-        overscrollBehavior: 'none',
-        '& > *': {
-            margin: theme.spacing(1),
-            width: 'calc(100% - 15px)',
+var useStyles = makeStyles(function (theme) {
+    return createStyles({
+        root: {
+            backgroundColor: '#fff',
+            padding: theme.spacing(1),
+            width: 300,
+            maxHeight: HEIGHT,
+            overflowY: 'scroll',
+            overscrollBehavior: 'none',
+            '& > *': {
+                margin: theme.spacing(1),
+                width: 'calc(100% - 15px)',
+            },
         },
-    },
-}); });
+    });
+});
 export var NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 var Attributes = function () {
     var classes = useStyles();
@@ -39,10 +41,7 @@ var Attributes = function () {
         return { node: potentialNode, editing: blank.editing };
     }, isEqual), node = _a.node, editing = _a.editing;
     var location = useSelector(function (state) { return getAttributeEditorLocation(state); }, isEqual);
-    var attrs = useSelector(function (state) {
-        var _a;
-        return (node ? (_a = getNodeAttrs(state, stateKey, pos)) !== null && _a !== void 0 ? _a : {} : {});
-    }, isEqual);
+    var attrs = useSelector(function (state) { var _a; return (node ? (_a = getNodeAttrs(state, stateKey, pos)) !== null && _a !== void 0 ? _a : {} : {}); }, isEqual);
     var keys = Object.keys(attrs);
     var onChange = useCallback(function (key, value) {
         var _a;

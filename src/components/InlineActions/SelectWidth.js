@@ -19,7 +19,10 @@ var SelectWidth = function (props) {
                 horizontal: 'center',
             } },
             React.createElement("div", { style: { width: 120, padding: '5px 25px' } },
-                React.createElement(Slider, { defaultValue: width, step: 10, marks: true, min: 10, max: 100, onChangeCommitted: function (e, v) { handleClose(); onWidth(v); } })))));
+                React.createElement(Slider, { defaultValue: width, step: 10, marks: true, min: 10, max: 100, onChangeCommitted: function (e, v) {
+                        handleClose();
+                        onWidth(v);
+                    } })))));
 };
 export default SelectWidth;
 //# sourceMappingURL=SelectWidth.js.map

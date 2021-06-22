@@ -19,8 +19,8 @@ import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
-var ALL_TRIGGERS = /(?:^|\s|\n)(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
-var NO_VARIABLE = /(?:^|\s|\n)(:|\/|(?:\{\{)|(?:\[\[))$/;
+var ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
+var NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
 export function getPlugins(schema, stateKey, version, startEditable) {
     return __spreadArrays([
         editablePlugin(startEditable)

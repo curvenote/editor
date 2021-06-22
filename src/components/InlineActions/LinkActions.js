@@ -1,27 +1,29 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip, } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist, removeMark, testLink, testLinkWeak, } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import TextAction from './TextAction';
-var useStyles = makeStyles(function () { return createStyles({
-    grid: {
-        width: 'fit-content',
-        fontSize: 20,
-    },
-    button: {
-        marginLeft: 5,
-    },
-}); });
+var useStyles = makeStyles(function () {
+    return createStyles({
+        grid: {
+            width: 'fit-content',
+            fontSize: 20,
+        },
+        button: {
+            marginLeft: 5,
+        },
+    });
+});
 export function useLinkActions(stateId, viewId) {
     var _a;
     var dispatch = useDispatch();
     var state = useSelector(function (s) { var _a; return (_a = getEditorState(s, stateId)) === null || _a === void 0 ? void 0 : _a.state; });
     var linkBounds = getLinkBoundsIfTheyExist(state);
     var attrs = (_a = linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.mark.attrs) !== null && _a !== void 0 ? _a : null;
-    var onOpen = useCallback(function () { return window.open(attrs === null || attrs === void 0 ? void 0 : attrs.href, '_blank'); }, [attrs === null || attrs === void 0 ? void 0 : attrs.href]);
     var mark = state === null || state === void 0 ? void 0 : state.schema.marks.link;
+    var onOpen = useCallback(function () { return window.open(attrs === null || attrs === void 0 ? void 0 : attrs.href, '_blank'); }, [attrs === null || attrs === void 0 ? void 0 : attrs.href]);
     var onDelete = useCallback(function () {
         if (!linkBounds || !mark)
             return;
@@ -56,7 +58,10 @@ var LinkActions = function (props) {
         return null;
     var attrs = link.attrs, onEdit = link.onEdit, onOpen = link.onOpen, onDelete = link.onDelete;
     if (labelOpen) {
-        return (React.createElement(TextAction, { text: (_a = attrs === null || attrs === void 0 ? void 0 : attrs.href) !== null && _a !== void 0 ? _a : '', onCancel: function () { return setLabelOpen(false); }, onSubmit: function (t) { onEdit(t); setLabelOpen(false); }, validate: testLinkWeak, help: "Please provide a valid URL" }));
+        return (React.createElement(TextAction, { text: (_a = attrs === null || attrs === void 0 ? void 0 : attrs.href) !== null && _a !== void 0 ? _a : '', onCancel: function () { return setLabelOpen(false); }, onSubmit: function (t) {
+                onEdit(t);
+                setLabelOpen(false);
+            }, validate: testLinkWeak, help: "Please provide a valid URL" }));
     }
     return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.grid },
         React.createElement(Tooltip, { title: link.tooltip },

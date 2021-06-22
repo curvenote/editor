@@ -1,5 +1,5 @@
 import { UPDATE_EDITOR_STATE } from './types';
-var updateProsemirrorViewsMiddleware = (function (store) { return function (next) { return function (action) {
+var updateProsemirrorViewsMiddleware = function (store) { return function (next) { return function (action) {
     var result = next(action);
     if (action.type === UPDATE_EDITOR_STATE) {
         var _a = action.payload, stateId = _a.stateId, viewId_1 = _a.viewId, editorState_1 = _a.editorState;
@@ -15,6 +15,6 @@ var updateProsemirrorViewsMiddleware = (function (store) { return function (next
         });
     }
     return result;
-}; }; });
+}; }; };
 export default [updateProsemirrorViewsMiddleware];
 //# sourceMappingURL=middleware.js.map

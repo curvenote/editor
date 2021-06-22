@@ -33,7 +33,11 @@ export declare enum CommandNames {
     'add_citation' = "add_citation",
     'citation' = "citation",
     'link_article' = "link_article",
-    'link_notebook' = "link_notebook"
+    'link_notebook' = "link_notebook",
+    'link_section' = "link_section",
+    'link_figure' = "link_figure",
+    'link_equation' = "link_equation",
+    'link_code' = "link_code"
 }
 export interface CommandResult {
     name: CommandNames;

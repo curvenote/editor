@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -42,8 +53,9 @@ import { commands, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
-import { getYouTubeId, getMiroId, getLoomId, getVimeoId, } from './utils';
+import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
+import { createId } from '../../../utils';
 var options = {
     shouldSort: true,
     threshold: 0.4,
@@ -81,7 +93,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
     if (removeText === void 0) { removeText = function () { return true; }; }
     if (replace === void 0) { replace = false; }
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-        var view, ev, schema, replaceOrInsert, _a, linkBounds, from_1, to_1, href, _b, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, keys, nodes, wrapped, tr;
+        var view, ev, schema, replaceOrInsert, _a, linkBounds, from_1, to_1, href, _b, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, cites, nodes, wrapped, tr;
         var _c, _d, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
@@ -131,12 +143,16 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         case CommandNames.vimeo: return [3, 23];
                         case CommandNames.miro: return [3, 24];
                         case CommandNames.iframe: return [3, 25];
-                        case CommandNames.link_article: return [3, 26];
-                        case CommandNames.link_notebook: return [3, 27];
-                        case CommandNames.citation: return [3, 28];
-                        case CommandNames.add_citation: return [3, 29];
+                        case CommandNames.link_section: return [3, 26];
+                        case CommandNames.link_figure: return [3, 27];
+                        case CommandNames.link_equation: return [3, 28];
+                        case CommandNames.link_code: return [3, 29];
+                        case CommandNames.link_article: return [3, 30];
+                        case CommandNames.link_notebook: return [3, 31];
+                        case CommandNames.citation: return [3, 32];
+                        case CommandNames.add_citation: return [3, 33];
                     }
-                    return [3, 31];
+                    return [3, 35];
                 case 1:
                     {
                         removeText();
@@ -201,11 +217,11 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     return [2, true];
                 case 13:
                     removeText();
-                    dispatch(replaceOrInsert(schema.nodes.equation));
+                    dispatch(replaceOrInsert(schema.nodes.equation, { id: createId() }));
                     return [2, true];
                 case 14:
                     removeText();
-                    dispatch(replaceOrInsert(schema.nodes.code_block));
+                    dispatch(replaceOrInsert(schema.nodes.code_block, { id: createId() }));
                     return [2, true];
                 case 15:
                     removeText();
@@ -219,7 +235,10 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     {
                         removeText();
                         name_1 = (_c = prompt('Name of the variable:')) !== null && _c !== void 0 ? _c : 'myVar';
-                        dispatch(actions.insertInlineNode(schema.nodes.range, { valueFunction: name_1, changeFunction: "{" + name_1 + ": value}" }));
+                        dispatch(actions.insertInlineNode(schema.nodes.range, {
+                            valueFunction: name_1,
+                            changeFunction: "{" + name_1 + ": value}",
+                        }));
                         return [2, true];
                     }
                     _f.label = 18;
@@ -227,7 +246,10 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     {
                         removeText();
                         name_2 = (_d = prompt('Name of the variable:')) !== null && _d !== void 0 ? _d : 'myVar';
-                        dispatch(actions.insertInlineNode(schema.nodes.dynamic, { valueFunction: name_2, changeFunction: "{" + name_2 + ": value}" }));
+                        dispatch(actions.insertInlineNode(schema.nodes.dynamic, {
+                            valueFunction: name_2,
+                            changeFunction: "{" + name_2 + ": value}",
+                        }));
                         return [2, true];
                     }
                     _f.label = 19;
@@ -235,7 +257,10 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     {
                         removeText();
                         name_3 = (_e = prompt('Name of the variable:')) !== null && _e !== void 0 ? _e : 'myVar';
-                        dispatch(actions.insertInlineNode(schema.nodes.switch, { valueFunction: name_3, changeFunction: "{" + name_3 + ": value}" }));
+                        dispatch(actions.insertInlineNode(schema.nodes.switch, {
+                            valueFunction: name_3,
+                            changeFunction: "{" + name_3 + ": value}",
+                        }));
                         return [2, true];
                     }
                     _f.label = 20;
@@ -306,31 +331,47 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     _f.label = 26;
                 case 26:
                     removeText();
-                    triggerSuggestion(view, '[[', 'article: ');
+                    triggerSuggestion(view, '[[', 'sec: ');
                     return [2, true];
                 case 27:
                     removeText();
-                    triggerSuggestion(view, '[[', 'notebook: ');
+                    triggerSuggestion(view, '[[', 'fig: ');
                     return [2, true];
                 case 28:
                     removeText();
-                    triggerSuggestion(view, '[[', 'cite: ');
+                    triggerSuggestion(view, '[[', 'eq: ');
                     return [2, true];
                 case 29:
                     removeText();
-                    return [4, opts.citationPrompt()];
+                    triggerSuggestion(view, '[[', 'code: ');
+                    return [2, true];
                 case 30:
-                    keys = _f.sent();
-                    if (!keys || keys.length === 0)
+                    removeText();
+                    triggerSuggestion(view, '[[', 'article: ');
+                    return [2, true];
+                case 31:
+                    removeText();
+                    triggerSuggestion(view, '[[', 'notebook: ');
+                    return [2, true];
+                case 32:
+                    removeText();
+                    triggerSuggestion(view, '[[', 'cite: ');
+                    return [2, true];
+                case 33:
+                    removeText();
+                    return [4, opts.citationPrompt()];
+                case 34:
+                    cites = _f.sent();
+                    if (!cites || cites.length === 0)
                         return [2, true];
-                    nodes = keys.map(function (k) { return schema.nodes.cite.create({ key: k }); });
+                    nodes = cites.map(function (attrs) { return schema.nodes.cite.create(__assign({}, attrs)); });
                     wrapped = schema.nodes.cite_group.createAndFill({}, Fragment.from(nodes));
                     if (!wrapped)
                         return [2, false];
                     tr = view.state.tr.replaceSelectionWith(wrapped).scrollIntoView();
                     view.dispatch(tr);
                     return [2, true];
-                case 31: return [2, removeText()];
+                case 35: return [2, removeText()];
             }
         });
     }); };

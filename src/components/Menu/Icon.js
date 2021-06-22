@@ -54,7 +54,9 @@ function BracketsIcon(props) {
         React.createElement("path", { d: "M15 4v2h3v12h-3v2h5V4M4 4v16h5v-2H6V6h3V4H4z" })));
 }
 var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
-var deMacify = function (title) { return (mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-')); };
+var deMacify = function (title) {
+    return mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-');
+};
 var icons = {
     cancel: { help: 'Cancel', Icon: CancelIcon },
     enterSave: { help: 'Save', Icon: KeyboardReturnIcon },
@@ -89,36 +91,38 @@ var icons = {
     caption: { help: 'Show/Hide Caption', Icon: ShortTextIcon },
     label: { help: 'Reference ID', Icon: LocalOfferIcon },
 };
-var useStyles = makeStyles(function (theme) { return createStyles({
-    root: {
-        color: theme.palette.text.secondary,
-        display: 'inline-block',
-        '& button:hover': {
-            backgroundColor: 'transparent',
+var useStyles = makeStyles(function (theme) {
+    return createStyles({
+        root: {
+            color: theme.palette.text.secondary,
+            display: 'inline-block',
+            '& button:hover': {
+                backgroundColor: 'transparent',
+            },
+            '& button.active svg, button:hover svg': {
+                backgroundColor: theme.palette.text.secondary,
+                color: 'white',
+            },
+            '& button:hover svg.dangerous, svg.error': {
+                backgroundColor: 'transparent',
+                color: theme.palette.error.main,
+            },
+            '& svg': {
+                margin: 4,
+                padding: 2,
+                borderRadius: 4,
+            },
         },
-        '& button.active svg, button:hover svg': {
-            backgroundColor: theme.palette.text.secondary,
-            color: 'white',
+        hr: {
+            margin: theme.spacing(0, 0.5),
+            height: 20,
         },
-        '& button:hover svg.dangerous, svg.error': {
-            backgroundColor: 'transparent',
-            color: theme.palette.error.main,
+        button: {
+            margin: theme.spacing(0, 0.5),
+            textTransform: 'none',
         },
-        '& svg': {
-            margin: 4,
-            padding: 2,
-            borderRadius: 4,
-        },
-    },
-    hr: {
-        margin: theme.spacing(0, 0.5),
-        height: 20,
-    },
-    button: {
-        margin: theme.spacing(0, 0.5),
-        textTransform: 'none',
-    },
-}); });
+    });
+});
 var MenuIcon = function (props) {
     var kind = props.kind, active = props.active, dangerous = props.dangerous, error = props.error, disabled = props.disabled, onClick = props.onClick, title = props.title, text = props.text;
     var classes = useStyles();
@@ -126,13 +130,21 @@ var MenuIcon = function (props) {
         return React.createElement(Divider, { className: classes.hr, orientation: "vertical" });
     var _a = icons[kind], help = _a.help, Icon = _a.Icon;
     if (text) {
-        return (React.createElement(Button, { disabled: disabled, className: classes.button, size: "small", onClickCapture: function (e) { e.stopPropagation(); e.preventDefault(); onClick === null || onClick === void 0 ? void 0 : onClick(e); }, disableRipple: true },
+        return (React.createElement(Button, { disabled: disabled, className: classes.button, size: "small", onClickCapture: function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                onClick === null || onClick === void 0 ? void 0 : onClick(e);
+            }, disableRipple: true },
             text,
             React.createElement(Icon, { fontSize: "small", className: classNames({ dangerous: dangerous, error: error }) })));
     }
     return (React.createElement(Tooltip, { title: title || deMacify(help) },
         React.createElement("div", { className: classes.root },
-            React.createElement(IconButton, { disabled: disabled, className: active ? 'active' : '', size: "small", onClickCapture: function (e) { e.stopPropagation(); e.preventDefault(); onClick === null || onClick === void 0 ? void 0 : onClick(e); }, disableRipple: true },
+            React.createElement(IconButton, { disabled: disabled, className: active ? 'active' : '', size: "small", onClickCapture: function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onClick === null || onClick === void 0 ? void 0 : onClick(e);
+                }, disableRipple: true },
                 React.createElement(Icon, { fontSize: "small", className: classNames({ dangerous: dangerous, error: error }) })))));
 };
 MenuIcon.defaultProps = {

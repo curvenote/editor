@@ -51,31 +51,38 @@ import { Decoration, DecorationSet } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
 import { getNodeIfSelected } from '../../store/actions/utils';
+import { createId } from '../../utils';
 export var key = new PluginKey('placeholder');
-export var getImagePlaceholderPlugin = function () { return new Plugin({
-    key: key,
-    state: {
-        init: function () { return DecorationSet.empty; },
-        apply: function (tr, setIn) {
-            var set = setIn.map(tr.mapping, tr.doc);
-            var action = tr.getMeta(this);
-            if (action && 'add' in action) {
-                var widget = document.createElement('img');
-                widget.src = action.add.dataUrl;
-                widget.classList.add('placeholder');
-                var deco = Decoration.widget(action.add.pos, widget, { id: action.add.id });
-                set = set.add(tr.doc, [deco]);
-            }
-            else if (action && 'remove' in action) {
-                set = set.remove(set.find(undefined, undefined, function (spec) { return spec.id === action.remove.id; }));
-            }
-            return set;
+export var getImagePlaceholderPlugin = function () {
+    return new Plugin({
+        key: key,
+        state: {
+            init: function () {
+                return DecorationSet.empty;
+            },
+            apply: function (tr, setIn) {
+                var set = setIn.map(tr.mapping, tr.doc);
+                var action = tr.getMeta(this);
+                if (action && 'add' in action) {
+                    var widget = document.createElement('img');
+                    widget.src = action.add.dataUrl;
+                    widget.classList.add('placeholder');
+                    var deco = Decoration.widget(action.add.pos, widget, { id: action.add.id });
+                    set = set.add(tr.doc, [deco]);
+                }
+                else if (action && 'remove' in action) {
+                    set = set.remove(set.find(undefined, undefined, function (spec) { return spec.id === action.remove.id; }));
+                }
+                return set;
+            },
         },
-    },
-    props: {
-        decorations: function (state) { return this.getState(state); },
-    },
-}); };
+        props: {
+            decorations: function (state) {
+                return this.getState(state);
+            },
+        },
+    });
+};
 var findImagePlaceholder = function (state, id) {
     var plugin = key.get(state);
     var decos = plugin.getState(state);
@@ -95,11 +102,13 @@ export var addImagePlaceholder = function (view, dataUrl, node) {
         view.dispatch(view.state.tr.setMeta(plugin, { remove: { id: id } }));
     };
     var success = function (url) {
+        var _a, _b;
         var pos = findImagePlaceholder(view.state, id);
         if (pos == null)
             return;
+        var attrs = __assign(__assign({ id: (_b = (_a = node === null || node === void 0 ? void 0 : node.attrs) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : createId() }, node === null || node === void 0 ? void 0 : node.attrs), { src: url });
         view.dispatch(view.state.tr
-            .replaceWith(pos, pos, view.state.schema.nodes.image.create(__assign(__assign({}, node === null || node === void 0 ? void 0 : node.attrs), { src: url })))
+            .replaceWith(pos, pos, view.state.schema.nodes.image.create(attrs))
             .setMeta(plugin, { remove: { id: id } }));
     };
     return { success: success, fail: fail };
@@ -107,11 +116,14 @@ export var addImagePlaceholder = function (view, dataUrl, node) {
 var getImages = function (data) {
     var _a;
     var items = (_a = data === null || data === void 0 ? void 0 : data.items) !== null && _a !== void 0 ? _a : [];
-    var images = Array(items.length).fill('').map(function (v, i) {
+    var images = Array(items.length)
+        .fill('')
+        .map(function (v, i) {
         if (items[i].type.indexOf('image') === -1)
             return null;
         return items[i].getAsFile();
-    }).filter(function (b) { return b != null; });
+    })
+        .filter(function (b) { return b != null; });
     return images;
 };
 var fileToDataUrl = function (blob, callback) {

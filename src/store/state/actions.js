@@ -1,7 +1,7 @@
+import { process } from '@curvenote/schema';
 import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
-import { countState } from './utils';
 export function initEditorState(useSchema, stateKey, editable, content, version) {
     var stateId = opts.transformKeyToId(stateKey);
     if (stateId == null)
@@ -9,7 +9,12 @@ export function initEditorState(useSchema, stateKey, editable, content, version)
     return {
         type: INIT_EDITOR_STATE,
         payload: {
-            useSchema: useSchema, stateKey: stateKey, stateId: stateId, editable: editable, content: content, version: version,
+            useSchema: useSchema,
+            stateKey: stateKey,
+            stateId: stateId,
+            editable: editable,
+            content: content,
+            version: version,
         },
     };
 }
@@ -17,11 +22,14 @@ export function updateEditorState(stateKey, viewId, editorState, tr) {
     var stateId = opts.transformKeyToId(stateKey);
     if (stateId == null)
         throw new Error('Must have a state ID');
-    var counts = tr.docChanged ? countState(editorState) : null;
+    var counts = tr.docChanged ? process.countState(editorState) : null;
     return {
         type: UPDATE_EDITOR_STATE,
         payload: {
-            stateId: stateId, viewId: viewId, editorState: editorState, counts: counts,
+            stateId: stateId,
+            viewId: viewId,
+            editorState: editorState,
+            counts: counts,
         },
     };
 }

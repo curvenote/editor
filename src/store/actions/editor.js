@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
 import { NodeSelection, Selection, TextSelection, } from 'prosemirror-state';
 import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode, } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
-import { Fragment, NodeRange, } from 'prosemirror-model';
+import { Fragment, NodeRange } from 'prosemirror-model';
 import { schemas } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
@@ -21,6 +21,7 @@ import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChil
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
 import { getNodeIfSelected } from './utils';
+import { createId } from '../../utils';
 export function updateNodeAttrs(stateKey, viewId, node, attrs, select) {
     if (select === void 0) { select = true; }
     return function (dispatch, getState) {
@@ -80,7 +81,9 @@ export function toggleMark(stateKey, viewId, mark, attrs) {
         if (editorState == null || !mark)
             return false;
         var action = toggleMarkPM(mark, attrs);
-        var result = action(editorState, function (tr) { return dispatch(applyProsemirrorTransaction(stateKey, viewId, tr)); });
+        var result = action(editorState, function (tr) {
+            return dispatch(applyProsemirrorTransaction(stateKey, viewId, tr));
+        });
         if (result)
             dispatch(focusEditorView(viewId, true));
         return result;
@@ -111,7 +114,9 @@ export function wrapInList(stateKey, viewId, node, test) {
             : wrapInListPM(node);
         if (test)
             return action(editorState);
-        var result = action(editorState, function (tr) { return dispatch(applyProsemirrorTransaction(stateKey, viewId, tr)); });
+        var result = action(editorState, function (tr) {
+            return dispatch(applyProsemirrorTransaction(stateKey, viewId, tr));
+        });
         if (result)
             dispatch(focusEditorView(viewId, true));
         return result;
@@ -122,14 +127,16 @@ export function wrapIn(node) {
         var editor = getSelectedEditorAndViews(getState());
         if (editor.state == null || !editor.key)
             return false;
-        var isList = (node === editor.state.schema.nodes.ordered_list
-            || node === editor.state.schema.nodes.bullet_list);
+        var isList = node === editor.state.schema.nodes.ordered_list ||
+            node === editor.state.schema.nodes.bullet_list;
         if (isList) {
             var viewId = getEditorUI(getState()).viewId;
             return dispatch(wrapInList(editor.key, viewId, node));
         }
         var action = wrapInPM(node);
-        var result = action(editor.state, function (tr) { return dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr)); });
+        var result = action(editor.state, function (tr) {
+            return dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr));
+        });
         if (result)
             dispatch(focusSelectedEditorView(true));
         return result;
@@ -182,7 +189,9 @@ function setBlockType(node, attrs) {
         if (editor.state == null)
             return false;
         var action = setBlockTypePM(node, attrs);
-        var result = action(editor.state, function (tr) { return dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr)); });
+        var result = action(editor.state, function (tr) {
+            return dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr));
+        });
         if (result)
             dispatch(focusSelectedEditorView(true));
         return result;
@@ -193,7 +202,9 @@ export function insertNode(node, attrs, content) {
         var editor = getSelectedEditorAndViews(getState());
         if (editor.state == null)
             return false;
-        var tr = editor.state.tr.insert(editor.state.tr.selection.$from.pos, node.create(attrs, content)).scrollIntoView();
+        var tr = editor.state.tr
+            .insert(editor.state.tr.selection.$from.pos, node.create(attrs, content))
+            .scrollIntoView();
         dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, selectNode(tr)));
         return true;
     };
@@ -205,7 +216,9 @@ export function insertInlineNode(node, attrs, content, select) {
         if (editor.state == null || !node)
             return false;
         var nodeContent = getContent(editor.state, content);
-        var tr = editor.state.tr.replaceSelectionWith(node.create(attrs, nodeContent), false).scrollIntoView();
+        var tr = editor.state.tr
+            .replaceSelectionWith(node.create(attrs, nodeContent), false)
+            .scrollIntoView();
         dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, selectNode(tr, select)));
         return true;
     };
@@ -223,11 +236,11 @@ export function insertText(text) {
 export var wrapInHeading = function (schema, level) {
     if (level === 0)
         return setBlockType(schema.nodes.paragraph);
-    return setBlockType(schema.nodes.heading, { level: level });
+    return setBlockType(schema.nodes.heading, { level: level, id: createId() });
 };
 export var insertVariable = function (schema, attrs) {
     if (attrs === void 0) { attrs = { name: 'myVar', value: '0', valueFunction: '' }; }
-    return (replaceSelection(schema.nodes.variable, attrs));
+    return replaceSelection(schema.nodes.variable, attrs);
 };
 export function addComment(viewId, commentId) {
     return function (dispatch, getState) {
@@ -272,10 +285,7 @@ export function toggleCitationBrackets() {
             parent.forEach(function (n) { return nodes_1.push(n); });
             var frag_1 = Fragment.from(nodes_1);
             selectParentNode(editor.state, function (tr) {
-                var tr2 = tr
-                    .deleteSelection()
-                    .insert(tr.selection.head, frag_1)
-                    .scrollIntoView();
+                var tr2 = tr.deleteSelection().insert(tr.selection.head, frag_1).scrollIntoView();
                 dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr2));
             });
             return true;

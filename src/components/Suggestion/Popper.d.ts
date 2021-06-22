@@ -1,5 +1,3 @@
 import React from 'react';
-declare const Suggestion: (props: {
-    children: React.ReactNode;
-}) => JSX.Element | null;
+declare const Suggestion: React.FC;
 export default Suggestion;

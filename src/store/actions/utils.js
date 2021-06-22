@@ -30,9 +30,7 @@ export var addLink = function (view, data) {
         return false;
     var schema = view.state.schema;
     var node = schema.text(href, [schema.marks.link.create({ href: href })]);
-    var tr = view.state.tr
-        .replaceSelectionWith(node, false)
-        .scrollIntoView();
+    var tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
     view.dispatch(tr);
     return true;
 };
@@ -73,17 +71,24 @@ function getLinkBounds(state, pos) {
     }
     return { from: startPos, to: endPos, mark: link };
 }
-export function getLinkBoundsIfTheyExist(state) {
+export function getLinkBoundsIfTheyExist(state, pos) {
     if (!state)
         return null;
     var _a = state.selection, from = _a.from, $from = _a.$from, to = _a.to, $to = _a.$to, empty = _a.empty;
+    if (pos != null) {
+        from = pos;
+        $from = state.doc.resolve(pos);
+        $to = $from;
+        to = pos;
+        empty = true;
+    }
     var mark = state.schema.marks.link;
     var searchForLink = empty
         ? Boolean(mark.isInSet(state.storedMarks || $from.marks()))
         : state.doc.rangeHasMark(from, to, mark);
     var linkBounds = searchForLink ? getLinkBounds(state, from) : null;
-    var hasLink = Boolean((mark.isInSet($from.marks()) || from === (linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.from))
-        && (mark.isInSet($to.marks()) || to === (linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.to)));
+    var hasLink = Boolean((mark.isInSet($from.marks()) || from === (linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.from)) &&
+        (mark.isInSet($to.marks()) || to === (linkBounds === null || linkBounds === void 0 ? void 0 : linkBounds.to)));
     if (!hasLink || !linkBounds)
         return null;
     return linkBounds;

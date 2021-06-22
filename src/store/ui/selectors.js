@@ -50,8 +50,6 @@ export function isEditorViewFocused(state, stateKey, viewId) {
         return null;
     var stateId = opts.transformKeyToId(stateKey);
     var ui = state.editor.ui;
-    return (ui.stateId === stateId
-        && ui.viewId === viewId
-        && ui.focused);
+    return ui.stateId === stateId && ui.viewId === viewId && ui.focused;
 }
 //# sourceMappingURL=selectors.js.map

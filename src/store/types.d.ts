@@ -4,7 +4,7 @@ import { types as runtimeTypes } from '@curvenote/runtime';
 import { State as SidenotesState } from 'sidenotes';
 import { EditorsState, EditorActionTypes } from './state/types';
 import { UIState, UIActionTypes, SelectionKinds } from './ui/types';
-import { SuggestionState, SuggestionActionTypes, SuggestionKind, LinkKind, SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult } from './suggestion/types';
+import { SuggestionState, SuggestionActionTypes, SuggestionKind, SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult } from './suggestion/types';
 import { AttributesState, AttributesActionTypes } from './attrs/types';
 export interface State {
     editor: {
@@ -16,7 +16,7 @@ export interface State {
     runtime: runtimeTypes.State['runtime'];
     sidenotes: SidenotesState['sidenotes'];
 }
-export declare type EditorActions = (EditorActionTypes | UIActionTypes | SuggestionActionTypes | AttributesActionTypes);
+export declare type EditorActions = EditorActionTypes | UIActionTypes | SuggestionActionTypes | AttributesActionTypes;
 export declare type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, null, Action<string>>;
 export declare type Dispatch = ThunkDispatch<State, null, Action<string>>;
 export declare type Store = RStore<State, EditorActions> & {
@@ -24,6 +24,6 @@ export declare type Store = RStore<State, EditorActions> & {
 };
 export declare type Middleware = RMiddleware<Record<string, any>, State, Dispatch>;
 export declare type Reducer = RReducer<State, EditorActions>;
-export { SuggestionKind, LinkKind, SelectionKinds };
+export { SuggestionKind, SelectionKinds };
 export * from './state/types';
-export type { SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult, };
+export type { SuggestionResult, EmojiResult, CommandResult, VariableResult, LinkResult };

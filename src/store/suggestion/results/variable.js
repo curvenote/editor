@@ -21,12 +21,12 @@ var getFirstSuggestion = function (kind) {
         description: 'Enter a value or expression. Select the variables below to add them to your expression.',
     };
 };
-export var startingSuggestions = function (kind, getState) { return (__spreadArrays([
+export var startingSuggestions = function (kind, getState) { return __spreadArrays([
     getFirstSuggestion(kind)
 ], Object.entries(getState().runtime.variables).map(function (_a) {
     var variable = _a[1];
     return variable;
-}))); };
+})); };
 function createVariable(schema, dispatch, trigger, search) {
     var _a, _b;
     var name = (_b = (_a = trigger.match(variableTrigger)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : 'myVar';

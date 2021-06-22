@@ -5,5 +5,6 @@ export * from './components';
 export { default as views } from './views';
 export { setup, opts } from './connect';
 export { runtime, collab };
+export { createId } from './utils';
 export { isEditable, setEditable } from './prosemirror/plugins/editable';
 //# sourceMappingURL=index.js.map

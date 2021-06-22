@@ -19,12 +19,16 @@ import AlignActions from './AlignActions';
 import CalloutActions from './CalloutActions';
 import TimeActions from './TimeActions';
 import HeadingActions from './HeadingActions';
+import EquationActions from './EquationActions';
 export function useInlineActionProps() {
     var _a = useSelector(function (state) { return getEditorUIStateAndViewIds(state); }, isEqual), stateId = _a.stateId, viewId = _a.viewId;
     var kind = useSelector(function (state) { return getInlineActionKind(state); });
     var anchorEl = useSelector(function (state) { return getInlineActionAnchorEl(state); });
     return {
-        stateId: stateId, viewId: viewId, kind: kind, anchorEl: anchorEl,
+        stateId: stateId,
+        viewId: viewId,
+        kind: kind,
+        anchorEl: anchorEl,
     };
 }
 var InlineActionSwitch = function () {
@@ -35,6 +39,7 @@ var InlineActionSwitch = function () {
         kind === Kinds.iframe && React.createElement(AlignActions, __assign({}, { stateId: stateId, viewId: viewId, anchorEl: anchorEl })),
         kind === Kinds.callout && React.createElement(CalloutActions, __assign({}, { stateId: stateId, viewId: viewId, anchorEl: anchorEl })),
         kind === Kinds.heading && React.createElement(HeadingActions, __assign({}, { stateId: stateId, viewId: viewId, anchorEl: anchorEl })),
+        kind === Kinds.equation && React.createElement(EquationActions, __assign({}, { stateId: stateId, viewId: viewId, anchorEl: anchorEl })),
         kind === Kinds.time && React.createElement(TimeActions, __assign({}, { stateId: stateId, viewId: viewId, anchorEl: anchorEl }))));
 };
 export default InlineActionSwitch;

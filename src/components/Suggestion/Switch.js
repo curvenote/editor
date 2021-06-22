@@ -12,8 +12,7 @@ var SuggestionSwitch = function () {
         kind === SuggestionKind.emoji && React.createElement(EmojiSuggestions, null),
         kind === SuggestionKind.command && React.createElement(CommandSuggestions, null),
         kind === SuggestionKind.link && React.createElement(LinkSuggestions, null),
-        (kind === SuggestionKind.variable || kind === SuggestionKind.display)
-            && React.createElement(VariableSuggestions, null)));
+        (kind === SuggestionKind.variable || kind === SuggestionKind.display) && (React.createElement(VariableSuggestions, null))));
 };
 export default SuggestionSwitch;
 //# sourceMappingURL=Switch.js.map

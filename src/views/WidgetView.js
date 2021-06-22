@@ -42,6 +42,8 @@ var WidgetView = (function () {
     };
     return WidgetView;
 }());
-export var newWidgetView = function (node, view, getPos) { return (new WidgetView(node, view, getPos)); };
+export var newWidgetView = function (node, view, getPos) {
+    return new WidgetView(node, view, getPos);
+};
 export default WidgetView;
 //# sourceMappingURL=WidgetView.js.map

@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 import { ActionProps } from './utils';
-declare const CalloutActions: (props: ActionProps) => JSX.Element | null;
+declare const CalloutActions: React.FC<ActionProps>;
 export default CalloutActions;

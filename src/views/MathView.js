@@ -17,6 +17,21 @@ import { EditorView } from 'prosemirror-view';
 import katex from 'katex';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
+export function renderMath(math, element, inline) {
+    var render = (math === null || math === void 0 ? void 0 : math.trim()) || '...';
+    try {
+        katex.render(render, element, {
+            displayMode: !inline,
+            throwOnError: false,
+            macros: {
+                '\\boldsymbol': '\\mathbf',
+            },
+        });
+    }
+    catch (error) {
+        element.innerText = error;
+    }
+}
 var MathView = (function () {
     function MathView(node, view, getPos, inline) {
         var _this = this;
@@ -37,6 +52,9 @@ var MathView = (function () {
             this.dom.classList.add('inline');
             this.editor.classList.add('inline');
         }
+        else {
+            this.dom.classList.add('display');
+        }
         this.addFakeCursor();
         this.dom.classList.remove('editing');
         this.renderMath();
@@ -49,12 +67,15 @@ var MathView = (function () {
         this.innerView = new EditorView({ mount: this.editor }, {
             state: EditorState.create({
                 doc: this.node,
-                plugins: [keymap(__assign(__assign({ 'Mod-a': function () {
+                plugins: [
+                    keymap(__assign(__assign({ 'Mod-a': function () {
                             var _a = _this.innerView.state, doc = _a.doc, tr = _a.tr;
                             var sel = TextSelection.create(doc, 0, _this.node.nodeSize - 2);
                             _this.innerView.dispatch(tr.setSelection(sel));
                             return true;
-                        }, 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } }, (mac ? {} : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: function () {
+                        }, 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } }, (mac
+                        ? {}
+                        : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: function () {
                             _this.dom.classList.remove('editing');
                             _this.outerView.focus();
                             return true;
@@ -68,7 +89,8 @@ var MathView = (function () {
                             _this.outerView.dispatch(_this.outerView.state.tr.insertText(''));
                             _this.outerView.focus();
                             return true;
-                        }) }))],
+                        }) })),
+                ],
             }),
             dispatchTransaction: this.dispatchInner.bind(this),
             handleDOMEvents: {
@@ -130,29 +152,20 @@ var MathView = (function () {
                     endA += overlap;
                     endB += overlap;
                 }
-                this.innerView.dispatch(state.tr
-                    .replace(start, endB, node.slice(start, endA))
-                    .setMeta('fromOutside', true));
+                this.innerView.dispatch(state.tr.replace(start, endB, node.slice(start, endA)).setMeta('fromOutside', true));
             }
         }
         this.renderMath();
         return true;
     };
     MathView.prototype.renderMath = function () {
-        var math = this.node.textContent;
-        var render = (math === null || math === void 0 ? void 0 : math.trim()) || '...';
-        try {
-            katex.render(render, this.math, {
-                displayMode: !this.inline,
-                throwOnError: false,
-                macros: {
-                    '\\boldsymbol': '\\mathbf',
-                },
-            });
+        if (this.node.attrs.numbered) {
+            this.dom.setAttribute('numbered', '');
         }
-        catch (error) {
-            this.math.innerText = error;
+        else {
+            this.dom.removeAttribute('numbered');
         }
+        renderMath(this.node.textContent, this.math, this.inline);
     };
     MathView.prototype.destroy = function () {
         this.innerView.destroy();
@@ -162,7 +175,9 @@ var MathView = (function () {
         var _a;
         return (_a = (this.innerView && this.innerView.dom.contains(event.target))) !== null && _a !== void 0 ? _a : false;
     };
-    MathView.prototype.ignoreMutation = function () { return true; };
+    MathView.prototype.ignoreMutation = function () {
+        return true;
+    };
     return MathView;
 }());
 export default MathView;
