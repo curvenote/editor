@@ -71,7 +71,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 };
 
 export const toTex: FormatSerialize = (state, node) => {
-  const { src, caption, numbered, label, width: nodeWidth, align: nodeAlign } = node.attrs;
+  const { src, caption, numbered, width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
   let align = 'center';
   switch (nodeAlign?.toLowerCase()) {
@@ -85,16 +85,20 @@ export const toTex: FormatSerialize = (state, node) => {
       break;
   }
   if (!caption) {
-    const template = `\n\\begin{${align}}
+    const template = `
+\\begin{${align}}
   \\includegraphics[width=${width / 100}\\linewidth]{${src}}
 \\end{${align}}\n`;
     state.write(template);
     return;
   }
-  const template = `\n\\begin{figure}[h]
+  const texLabel = `\n  \\label{${src}}`;
+  const star = numbered ? '' : '*';
+  const template = `
+\\begin{figure}[h]
   \\centering
   \\includegraphics[width=${width / 100}\\linewidth]{${src}}
-  \\caption{${src}.caption}${numbered ? `\n  \\label{${label}}` : ''}
+  \\caption${star}{${src}.caption}${texLabel}
 \\end{figure}\n`;
   state.write(template);
 };

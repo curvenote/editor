@@ -54,25 +54,43 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {
-  const { kind } = node.attrs;
+  const { kind, key, text } = node.attrs as Attrs;
   switch (kind) {
     case ReferenceKind.cite:
-      state.write(`{cite}\`${node.attrs.key}\``);
+      state.write(`{cite}\`${key}\``);
       return;
     default:
-      state.write(`{numref}\`${node.attrs.text} %s <${node.attrs.key}>\``);
+      state.write(`{numref}\`${text} %s <${key}>\``);
   }
 };
 
 export const toTex: FormatSerialize = (state, node) => {
-  const { kind } = node.attrs;
+  const { kind, text, key } = node.attrs as Attrs;
+  let prepend = '';
   switch (kind) {
     case ReferenceKind.cite:
-      state.write(`\\cite{${node.attrs.key}}`);
+      state.write(`\\cite{${key}}`);
       return;
+    case ReferenceKind.sec:
+      prepend = 'Section~';
+      break;
+    case ReferenceKind.fig:
+      prepend = 'Figure~';
+      break;
+    case ReferenceKind.eq:
+      prepend = 'Equation~';
+      break;
+    case ReferenceKind.table:
+      prepend = 'Table~';
+      break;
+    case ReferenceKind.code:
+      prepend = 'Program~';
+      break;
     default:
-      state.write(`\\ref{${node.attrs.key}}`);
+      prepend = `${text}~`;
   }
+  const id = key?.split('#')[1];
+  if (id) state.write(`${prepend}\\ref{${id}}`);
 };
 
 export default cite;

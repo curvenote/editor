@@ -36,12 +36,16 @@ const equation: MyNodeSpec<Attrs> = {
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {
+  const { numbered, id } = node.attrs;
   state.ensureNewLine();
   const amsBegin = node.textContent.startsWith('\\begin{');
   const amsEnd = node.textContent.match(/\\end{([a-z*]+)}$/);
   const ams = amsBegin && amsEnd;
   if (!ams) state.write('$$');
-  // TODO: export the label if it isn't inline!
+  // TODO: export the label if it is AMS math mode
+  if (!ams && numbered && id) {
+    state.write(`\\label{${id}}`);
+  }
   state.text(node.textContent, false);
   if (!ams) state.write('$$');
   state.closeBlock(node);
@@ -49,6 +53,10 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 
 export const toTex = latexStatement('equation', (state, node) => {
   // TODO: export the label if it isn't inline!
+  const { numbered, id } = node.attrs;
+  if (numbered && id) {
+    state.write(`\\label{${id}}`);
+  }
   state.text(node.textContent, false);
 });
 
