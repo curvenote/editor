@@ -33,7 +33,7 @@ const HeadingActions: React.FC<ActionProps> = (props) => {
   const parent =
     state?.selection &&
     findParentNode((n: Node) => n.type.name === schemas.nodeNames.heading)(state?.selection);
-  const node = parent?.node ?? (state?.selection as NodeSelection).node;
+  const node = parent?.node ?? (state?.selection as NodeSelection)?.node;
   const pos = parent?.pos ?? state?.selection?.from;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
