@@ -18,8 +18,10 @@ export type Counter<R extends Reference> = {
   all: R[];
 };
 
-export type CiteReference = Reference<ReferenceKind.cite, { level: number }>;
-export type SectionReference = Reference<ReferenceKind.sec, { level: number }>;
+export type SectionReference = Reference<
+  ReferenceKind.sec,
+  { level: number; section: string | null }
+>;
 export type FigureReference = Reference<ReferenceKind.fig, { src: string; caption: boolean }>;
 export type EquationReference = Reference<ReferenceKind.eq, { math: string }>;
 export type CodeReference = Reference<
@@ -30,7 +32,6 @@ export type TableReference = Reference<ReferenceKind.table>;
 export type LinkReference = Reference<ReferenceKind.link, { url: string }>;
 
 export type StateCounter = {
-  [ReferenceKind.cite]: Counter<CiteReference>;
   [ReferenceKind.sec]: Counter<SectionReference>;
   [ReferenceKind.fig]: Counter<FigureReference>;
   [ReferenceKind.eq]: Counter<EquationReference>;

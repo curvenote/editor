@@ -29,7 +29,6 @@ function push<K extends ReferenceKind, T extends CounterMeta>(
 
 export function countState(state: EditorState) {
   const counts: StateCounter = {
-    [ReferenceKind.cite]: { kind: ReferenceKind.cite, total: 0, all: [] },
     [ReferenceKind.sec]: { kind: ReferenceKind.sec, total: 0, all: [] },
     [ReferenceKind.fig]: { kind: ReferenceKind.fig, total: 0, all: [] },
     [ReferenceKind.eq]: { kind: ReferenceKind.eq, total: 0, all: [] },
@@ -65,7 +64,7 @@ export function countState(state: EditorState) {
         const attrs = node.attrs as Nodes.Heading.Attrs;
         const { level } = node.attrs;
         const title = toText(node, state.schema, document);
-        push(counts.sec, attrs, title, { level });
+        push(counts.sec, attrs, title, { level, section: '' });
         return false;
       }
       // Continue to search
