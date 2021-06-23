@@ -42,7 +42,9 @@ export function countState(state: EditorState) {
       case nodeNames.image: {
         const attrs = node.attrs as Nodes.Image.Attrs;
         const { caption, alt, src } = attrs;
-        push(counts.fig, attrs, alt, { src, caption });
+        // Override the numbered prop if the caption is off
+        const modifiedAttrs = { ...attrs, numbered: caption ? attrs.numbered : false };
+        push(counts.fig, modifiedAttrs, alt, { src, caption });
         return false;
       }
       case nodeNames.code_block: {
