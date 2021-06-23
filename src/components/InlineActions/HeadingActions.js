@@ -20,21 +20,21 @@ var useStyles = makeStyles(function () {
 });
 var ABOVE_MODALS = { zIndex: 1301 };
 var HeadingActions = function (props) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
     var dispatch = useDispatch();
     var state = useSelector(function (s) { var _a; return (_a = getEditorState(s, stateId)) === null || _a === void 0 ? void 0 : _a.state; });
     var parent = (state === null || state === void 0 ? void 0 : state.selection) &&
         findParentNode(function (n) { return n.type.name === schemas.nodeNames.heading; })(state === null || state === void 0 ? void 0 : state.selection);
-    var node = (_a = parent === null || parent === void 0 ? void 0 : parent.node) !== null && _a !== void 0 ? _a : (state === null || state === void 0 ? void 0 : state.selection).node;
-    var pos = (_b = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _b !== void 0 ? _b : (_c = state === null || state === void 0 ? void 0 : state.selection) === null || _c === void 0 ? void 0 : _c.from;
-    var _d = React.useState(null), anchorEl = _d[0], setAnchorEl = _d[1];
+    var node = (_a = parent === null || parent === void 0 ? void 0 : parent.node) !== null && _a !== void 0 ? _a : (_b = state === null || state === void 0 ? void 0 : state.selection) === null || _b === void 0 ? void 0 : _b.node;
+    var pos = (_c = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _c !== void 0 ? _c : (_d = state === null || state === void 0 ? void 0 : state.selection) === null || _d === void 0 ? void 0 : _d.from;
+    var _e = React.useState(null), anchorEl = _e[0], setAnchorEl = _e[1];
     var onOpen = useCallback(function (event) { return setAnchorEl(event.currentTarget); }, []);
     var onClose = useCallback(function () { return setAnchorEl(null); }, []);
     if (!node || pos == null)
         return null;
-    var _e = node.attrs, numbered = _e.numbered, level = _e.level;
+    var _f = node.attrs, numbered = _f.numbered, level = _f.level;
     var onNumbered = function () {
         return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { numbered: !numbered }, false));
     };
