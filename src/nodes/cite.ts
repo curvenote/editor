@@ -47,7 +47,12 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
     const { key, kind, text, label, title } = node.attrs as Attrs;
     return [
       'cite',
-      { key: key || undefined, kind: kind ?? 'cite', title: title || '', label: label || '' },
+      {
+        key: key || undefined,
+        kind: kind ?? 'cite',
+        title: title || undefined,
+        label: label || undefined,
+      },
       text || '',
     ];
   },
