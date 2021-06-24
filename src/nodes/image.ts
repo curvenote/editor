@@ -95,7 +95,7 @@ export const toTex: FormatSerialize = (state, node) => {
   const texLabel = `\n  \\label{${src}}`;
   const star = numbered ? '' : '*';
   const template = `
-\\begin{figure}[h]
+\\begin{figure}[ht]
   \\centering
   \\includegraphics[width=${width / 100}\\linewidth]{${src}}
   \\caption${star}{${src}.caption}${texLabel}
