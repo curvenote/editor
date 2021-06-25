@@ -126,7 +126,7 @@ export const commands: CommandResult[] = [
   },
   {
     name: CommandNames.link_figure,
-    title: 'Link to an internal Section',
+    title: 'Link to a figure or image',
     description: 'Add a link to figure',
     shortcut: ['[[fig: Link to a figure'],
   },
