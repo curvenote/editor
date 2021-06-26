@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import { Unsubscribe } from "redux";
-import { v4 as uuid } from "uuid";
-import { State, Store } from "./store/types";
+import { Unsubscribe } from 'redux';
+import { v4 as uuid } from 'uuid';
+import { State, Store } from './store/types';
 
 export type Options = {
   padding?: number;
@@ -16,11 +16,11 @@ type Ref<T> = {
 
 export const ref: Ref<Store> = {
   store() {
-    if (ref._store === undefined) throw new Error("Must init store.");
+    if (ref._store === undefined) throw new Error('Must init store.');
     return ref._store;
   },
   opts() {
-    if (ref._opts === undefined) throw new Error("Must init opts.");
+    if (ref._opts === undefined) throw new Error('Must init opts.');
     return ref._opts;
   },
 };
@@ -33,7 +33,7 @@ function subscribe(listener: () => void): Unsubscribe {
   return () => delete subscriptions[key];
 }
 
-let currentState: State["sidenotes"];
+let currentState: State['sidenotes'];
 function notify(store: Store) {
   const previousState = currentState;
   currentState = store.getState().sidenotes;
@@ -50,7 +50,7 @@ export function setup(store: Store, opts: Options) {
   store.subscribe(() => notify(store));
 }
 
-export const store: Pick<Store, "getState" | "dispatch" | "subscribe"> = {
+export const store: Pick<Store, 'getState' | 'dispatch' | 'subscribe'> = {
   getState: () => ref.store().getState(),
   dispatch: (action: any) => ref.store().dispatch(action),
   subscribe: (listener: () => void): Unsubscribe => subscribe(listener),

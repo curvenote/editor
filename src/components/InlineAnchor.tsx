@@ -1,15 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import classNames from "classnames";
-import {
-  connectAnchor,
-  disconnectAnchor,
-  selectAnchor,
-} from "../store/ui/actions";
-import { isSidenoteSelected } from "../store/ui/selectors";
-import { Dispatch, State } from "../store";
-import { getDoc } from "./utils";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { connectAnchor, disconnectAnchor, selectAnchor } from '../store/ui/actions';
+import { isSidenoteSelected } from '../store/ui/selectors';
+import { Dispatch, State } from '../store';
+import { getDoc } from './utils';
 
 type Props = {
   sidenote: string;
@@ -28,15 +24,13 @@ export const InlineAnchor = (props: Props) => {
     return () => dispatch(disconnectAnchor(doc, ref));
   }, [doc, ref]);
 
-  const selected = useSelector((state: State) =>
-    isSidenoteSelected(state, doc, sidenote)
-  );
+  const selected = useSelector((state: State) => isSidenoteSelected(state, doc, sidenote));
   const onClick = useCallback(
     (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
       event.stopPropagation();
       dispatch(selectAnchor(doc, ref));
     },
-    [doc, ref]
+    [doc, ref],
   );
   const onRef = useCallback((el: HTMLSpanElement) => {
     setRef(el);
@@ -46,9 +40,9 @@ export const InlineAnchor = (props: Props) => {
       dispatch(connectAnchor(parentDoc, sidenote, el));
     }
   }, []);
-  const classes = classNames("anchor", {
+  const classes = classNames('anchor', {
     selected,
-    [className ?? ""]: Boolean(className),
+    [className ?? '']: Boolean(className),
   });
   return (
     <span className={classes} onClick={onClick} ref={onRef}>

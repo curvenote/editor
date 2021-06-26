@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import classNames from "classnames";
-import { connectAnchorBase } from "../store/ui/actions";
-import { isSidenoteSelected } from "../store/ui/selectors";
-import { Dispatch, State } from "../store";
-import { getDoc } from "./utils";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { connectAnchorBase } from '../store/ui/actions';
+import { isSidenoteSelected } from '../store/ui/selectors';
+import { Dispatch, State } from '../store';
+import { getDoc } from './utils';
 
 /**
  * AnchorBase Props
@@ -22,9 +22,7 @@ export const AnchorBase = (props: Props) => {
   const [doc, setDoc] = useState<string>();
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
-  const selected = useSelector((state: State) =>
-    isSidenoteSelected(state, doc, anchor)
-  );
+  const selected = useSelector((state: State) => isSidenoteSelected(state, doc, anchor));
   const onRef = useCallback((el: HTMLDivElement) => {
     setRef(el);
     const parentDoc = getDoc(el);
@@ -35,7 +33,7 @@ export const AnchorBase = (props: Props) => {
   }, []);
   const classes = classNames({
     selected,
-    [className ?? ""]: Boolean(className),
+    [className ?? '']: Boolean(className),
   });
   return (
     <div className={classes} ref={onRef}>

@@ -12,7 +12,7 @@ import {
   ANCHOR_BASE,
   UI_REPOSITION_SIDENOTES,
   UI_RESET_ALL_SIDENOTES,
-} from "./types";
+} from './types';
 
 const docReducer = (state: DocState, action: UIActionTypes): DocState => {
   if (state == null && action.type !== UI_RESET_ALL_SIDENOTES) {
@@ -113,9 +113,7 @@ const docReducer = (state: DocState, action: UIActionTypes): DocState => {
           ...state.sidenotes,
           [anchor.sidenote]: {
             ...sidenote,
-            inlineAnchors: [...(sidenote?.inlineAnchors ?? [])].filter(
-              (a) => a !== anchorId
-            ),
+            inlineAnchors: [...(sidenote?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
           },
         },
         anchors,
@@ -128,10 +126,7 @@ const docReducer = (state: DocState, action: UIActionTypes): DocState => {
       return {
         ...state,
         selectedSidenote: sidenoteId,
-        selectedAnchor:
-          prevSidenote?.inlineAnchors?.[0] ??
-          prevSidenote?.baseAnchors?.[0] ??
-          null,
+        selectedAnchor: prevSidenote?.inlineAnchors?.[0] ?? prevSidenote?.baseAnchors?.[0] ?? null,
         sidenotes: {
           ...state.sidenotes,
           [sidenoteId]: {

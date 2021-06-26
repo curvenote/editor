@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 import {
   UI_CONNECT_ANCHOR,
   UI_DESELECT_SIDENOTE,
@@ -10,13 +10,13 @@ import {
   UI_CONNECT_ANCHOR_BASE,
   UI_REPOSITION_SIDENOTES,
   UI_RESET_ALL_SIDENOTES,
-} from "./types";
-import { AppThunk, SidenotesUIActions } from "../types";
+} from './types';
+import { AppThunk, SidenotesUIActions } from '../types';
 
 export function connectSidenote(
   docId?: string,
   sidenoteId?: string,
-  baseId?: string
+  baseId?: string,
 ): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || sidenoteId == null) return;
@@ -30,7 +30,7 @@ export function connectSidenote(
 export function connectAnchor(
   docId?: string,
   sidenoteId?: string,
-  element?: HTMLElement
+  element?: HTMLElement,
 ): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || sidenoteId == null || element == null) return;
@@ -52,7 +52,7 @@ export function connectAnchor(
 export function connectAnchorBase(
   docId?: string,
   anchorId?: string,
-  element?: HTMLElement
+  element?: HTMLElement,
 ): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || anchorId == null || element == null) return;
@@ -69,20 +69,14 @@ export function connectAnchorBase(
   };
 }
 
-export function updateSidenote(
-  docId: string,
-  sidenoteId: string
-): SidenotesUIActions {
+export function updateSidenote(docId: string, sidenoteId: string): SidenotesUIActions {
   return {
     type: UI_SELECT_SIDENOTE,
     payload: { docId, sidenoteId },
   };
 }
 
-export function selectSidenote(
-  docId?: string,
-  sidenoteId?: string
-): AppThunk<void> {
+export function selectSidenote(docId?: string, sidenoteId?: string): AppThunk<void> {
   return (dispatch) => {
     dispatch({
       type: UI_SELECT_SIDENOTE,
@@ -91,10 +85,7 @@ export function selectSidenote(
   };
 }
 
-export function selectAnchor(
-  docId?: string,
-  anchor?: HTMLElement | null
-): AppThunk<void> {
+export function selectAnchor(docId?: string, anchor?: HTMLElement | null): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || anchor == null) return;
     const { anchorId } = (anchor as any) ?? {};
@@ -106,10 +97,7 @@ export function selectAnchor(
   };
 }
 
-export function disconnectSidenote(
-  docId?: string,
-  sidenoteId?: string
-): AppThunk<void> {
+export function disconnectSidenote(docId?: string, sidenoteId?: string): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || sidenoteId == null) return;
     dispatch({
@@ -119,10 +107,7 @@ export function disconnectSidenote(
   };
 }
 
-export function disconnectAnchor(
-  docId?: string,
-  anchor?: HTMLElement | null
-): AppThunk<void> {
+export function disconnectAnchor(docId?: string, anchor?: HTMLElement | null): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || anchor == null) return;
     const { anchorId } = (anchor as any) ?? {};

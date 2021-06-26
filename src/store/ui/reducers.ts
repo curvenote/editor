@@ -1,5 +1,5 @@
-import { opts } from "../../connect";
-import docReducer from "./docReducer";
+import { opts } from '../../connect';
+import docReducer from './docReducer';
 import {
   UIState,
   UIActionTypes,
@@ -14,7 +14,7 @@ import {
   UI_CONNECT_ANCHOR_BASE,
   UI_REPOSITION_SIDENOTES,
   UI_RESET_ALL_SIDENOTES,
-} from "./types";
+} from './types';
 
 export const initialState: UIState = {
   docs: {},
@@ -32,7 +32,7 @@ function getTopLeft(anchor?: Anchor) {
     top += el?.offsetTop || 0;
     left += el?.offsetLeft || 0;
     el = (el?.offsetParent ?? null) as HTMLElement | null;
-  } while (el && el.tagName !== "ARTICLE");
+  } while (el && el.tagName !== 'ARTICLE');
   return { top, left };
 }
 
@@ -43,9 +43,7 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
   let findMe: Loc | undefined;
   const sorted = Object.entries(state.sidenotes)
     .map(([id, cmt]) => {
-      const anchor =
-        state.anchors[cmt.inlineAnchors?.[0]] ??
-        state.anchors[cmt.baseAnchors?.[0]];
+      const anchor = state.anchors[cmt.inlineAnchors?.[0]] ?? state.anchors[cmt.baseAnchors?.[0]];
       const loc: Loc = [id, { ...getTopLeft(anchor), height: getHeight(id) }];
       if (id === state.selectedSidenote) {
         findMe = loc;
@@ -61,8 +59,7 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
   // Push upwards from target (or nothing)
   const before = sorted.slice(0, idx + 1).reduceRight((prev, [id, loc]) => {
     const { top } = prev[prev.length - 1]?.[1] ?? {};
-    const newTop =
-      Math.min(top - loc.height - opts.padding, loc.top) || loc.top;
+    const newTop = Math.min(top - loc.height - opts.padding, loc.top) || loc.top;
     const next = [id, { top: newTop, height: loc.height }] as Loc;
     return [...prev, next];
   }, [] as Loc[]);
@@ -86,7 +83,7 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
         return [id, { ...comment, top }];
       }
       return [id, comment];
-    })
+    }),
   );
   if (!hasChanges) return state;
   return {
@@ -106,10 +103,7 @@ const uiReducer = (state = initialState, action: UIActionTypes): UIState => {
     case UI_DESELECT_SIDENOTE:
     case UI_REPOSITION_SIDENOTES: {
       const { docId } = action.payload;
-      const nextDoc = placeSidenotes(
-        docReducer(state.docs[docId], action),
-        action.type
-      );
+      const nextDoc = placeSidenotes(docReducer(state.docs[docId], action), action.type);
       return {
         ...state,
         docs: {
