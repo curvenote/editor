@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
-import { connectSidenote, disconnectSidenote, selectSidenote } from '../store/ui/actions';
-import { sidenoteTop, isSidenoteSelected } from '../store/ui/selectors';
-import { Dispatch, State } from '../store';
-import { getDoc } from './utils';
-
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import classNames from "classnames";
+import {
+  connectSidenote,
+  disconnectSidenote,
+  selectSidenote,
+} from "../store/ui/actions";
+import { sidenoteTop, isSidenoteSelected } from "../store/ui/selectors";
+import { Dispatch, State } from "../store";
+import { getDoc } from "./utils";
 
 type Props = {
   base?: string;
@@ -19,13 +22,18 @@ export const Sidenote = (props: Props) => {
   const dispatch = useDispatch<Dispatch>();
   const [doc, setDoc] = useState<string>();
 
-  const selected = useSelector((state: State) => isSidenoteSelected(state, doc, sidenote));
+  const selected = useSelector((state: State) =>
+    isSidenoteSelected(state, doc, sidenote)
+  );
   const top = useSelector((state: State) => sidenoteTop(state, doc, sidenote));
-  const onClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    event.stopPropagation();
-    if (selected) return;
-    dispatch(selectSidenote(doc, sidenote));
-  }, [doc, selected]);
+  const onClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      event.stopPropagation();
+      if (selected) return;
+      dispatch(selectSidenote(doc, sidenote));
+    },
+    [doc, selected]
+  );
   const onRef = useCallback((el: HTMLDivElement) => {
     const parentDoc = getDoc(el);
     if (parentDoc) {
@@ -36,7 +44,7 @@ export const Sidenote = (props: Props) => {
   return (
     <div
       id={sidenote}
-      className={classNames('sidenote', { selected })}
+      className={classNames("sidenote", { selected })}
       onClick={onClick}
       ref={onRef}
       style={{ top }}

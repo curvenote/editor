@@ -1,15 +1,20 @@
 import {
-  UIActionTypes, UI_SELECT_SIDENOTE, UI_CONNECT_SIDENOTE,
-  DocState, UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, UI_DISCONNECT_ANCHOR,
-  UI_DESELECT_SIDENOTE, UI_DISCONNECT_SIDENOTE,
-  UI_CONNECT_ANCHOR_BASE, ANCHOR_BASE, UI_REPOSITION_SIDENOTES, UI_RESET_ALL_SIDENOTES,
-} from './types';
+  UIActionTypes,
+  UI_SELECT_SIDENOTE,
+  UI_CONNECT_SIDENOTE,
+  DocState,
+  UI_CONNECT_ANCHOR,
+  UI_SELECT_ANCHOR,
+  UI_DISCONNECT_ANCHOR,
+  UI_DESELECT_SIDENOTE,
+  UI_DISCONNECT_SIDENOTE,
+  UI_CONNECT_ANCHOR_BASE,
+  ANCHOR_BASE,
+  UI_REPOSITION_SIDENOTES,
+  UI_RESET_ALL_SIDENOTES,
+} from "./types";
 
-
-const docReducer = (
-  state: DocState,
-  action: UIActionTypes,
-): DocState => {
+const docReducer = (state: DocState, action: UIActionTypes): DocState => {
   if (state == null && action.type !== UI_RESET_ALL_SIDENOTES) {
     const { docId } = action.payload;
     // eslint-disable-next-line no-param-reassign
@@ -22,7 +27,8 @@ const docReducer = (
     };
   }
   switch (action.type) {
-    case UI_REPOSITION_SIDENOTES: return state;
+    case UI_REPOSITION_SIDENOTES:
+      return state;
     case UI_CONNECT_SIDENOTE: {
       const { sidenoteId, baseId } = action.payload;
       const baseIds = baseId ? [baseId] : [];
@@ -107,7 +113,9 @@ const docReducer = (
           ...state.sidenotes,
           [anchor.sidenote]: {
             ...sidenote,
-            inlineAnchors: [...(sidenote?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
+            inlineAnchors: [...(sidenote?.inlineAnchors ?? [])].filter(
+              (a) => a !== anchorId
+            ),
           },
         },
         anchors,
@@ -120,7 +128,10 @@ const docReducer = (
       return {
         ...state,
         selectedSidenote: sidenoteId,
-        selectedAnchor: prevSidenote?.inlineAnchors?.[0] ?? prevSidenote?.baseAnchors?.[0] ?? null,
+        selectedAnchor:
+          prevSidenote?.inlineAnchors?.[0] ??
+          prevSidenote?.baseAnchors?.[0] ??
+          null,
         sidenotes: {
           ...state.sidenotes,
           [sidenoteId]: {
@@ -139,7 +150,8 @@ const docReducer = (
       const sidenote = state.sidenotes[anchor.sidenote];
       // Bring the selected anchor to the front
       const anchors = [
-        anchorId, ...[...(sidenote?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
+        anchorId,
+        ...[...(sidenote?.inlineAnchors ?? [])].filter((a) => a !== anchorId),
       ];
       return {
         ...state,

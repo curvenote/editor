@@ -1,17 +1,17 @@
 // This is a placeholder for base-anchors
-export const ANCHOR_BASE = 'ANCHOR_BASE';
+export const ANCHOR_BASE = "ANCHOR_BASE";
 
-export const UI_CONNECT_SIDENOTE = 'UI_CONNECT_SIDENOTE';
-export const UI_DISCONNECT_SIDENOTE = 'UI_DISCONNECT_SIDENOTE';
-export const UI_CONNECT_ANCHOR = 'UI_CONNECT_ANCHOR';
-export const UI_CONNECT_ANCHOR_BASE = 'UI_CONNECT_ANCHOR_BASE';
-export const UI_DISCONNECT_ANCHOR = 'UI_DISCONNECT_ANCHOR';
-export const UI_SELECT_SIDENOTE = 'UI_SELECT_SIDENOTE';
-export const UI_DESELECT_SIDENOTE = 'UI_DESELECT_SIDENOTE';
-export const UI_SELECT_ANCHOR = 'UI_SELECT_ANCHOR';
-export const UI_UPDATE_COMMENT = 'UI_UPDATE_COMMENT';
-export const UI_REPOSITION_SIDENOTES = 'UI_REPOSITION_SIDENOTES';
-export const UI_RESET_ALL_SIDENOTES = 'UI_RESET_ALL_SIDENOTES';
+export const UI_CONNECT_SIDENOTE = "UI_CONNECT_SIDENOTE";
+export const UI_DISCONNECT_SIDENOTE = "UI_DISCONNECT_SIDENOTE";
+export const UI_CONNECT_ANCHOR = "UI_CONNECT_ANCHOR";
+export const UI_CONNECT_ANCHOR_BASE = "UI_CONNECT_ANCHOR_BASE";
+export const UI_DISCONNECT_ANCHOR = "UI_DISCONNECT_ANCHOR";
+export const UI_SELECT_SIDENOTE = "UI_SELECT_SIDENOTE";
+export const UI_DESELECT_SIDENOTE = "UI_DESELECT_SIDENOTE";
+export const UI_SELECT_ANCHOR = "UI_SELECT_ANCHOR";
+export const UI_UPDATE_COMMENT = "UI_UPDATE_COMMENT";
+export const UI_REPOSITION_SIDENOTES = "UI_REPOSITION_SIDENOTES";
+export const UI_RESET_ALL_SIDENOTES = "UI_RESET_ALL_SIDENOTES";
 
 export type Sidenote = {
   id: string;
@@ -114,15 +114,14 @@ export interface RepositionSidenotesAction {
   };
 }
 
-export type UIActionTypes = (
-  ConnectSidenoteAction |
-  DisconnectSidenoteAction |
-  ConnectAnchorAction |
-  ConnectAnchorBaseAction |
-  DisconnectAnchorAction |
-  SelectSidenoteAction |
-  SelectAnchorAction |
-  DeselectSidenoteAction |
-  RepositionSidenotesAction |
-  ResetAllSidenotesAction
-);
+export type UIActionTypes =
+  | ConnectSidenoteAction
+  | DisconnectSidenoteAction
+  | ConnectAnchorAction
+  | ConnectAnchorBaseAction
+  | DisconnectAnchorAction
+  | SelectSidenoteAction
+  | SelectAnchorAction
+  | DeselectSidenoteAction
+  | RepositionSidenotesAction
+  | ResetAllSidenotesAction;
