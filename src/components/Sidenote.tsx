@@ -7,7 +7,6 @@ import { sidenoteTop, isSidenoteSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
 import { getDoc } from './utils';
 
-
 type Props = {
   base?: string;
   sidenote: string;
@@ -21,11 +20,14 @@ export const Sidenote = (props: Props) => {
 
   const selected = useSelector((state: State) => isSidenoteSelected(state, doc, sidenote));
   const top = useSelector((state: State) => sidenoteTop(state, doc, sidenote));
-  const onClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    event.stopPropagation();
-    if (selected) return;
-    dispatch(selectSidenote(doc, sidenote));
-  }, [doc, selected]);
+  const onClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      event.stopPropagation();
+      if (selected) return;
+      dispatch(selectSidenote(doc, sidenote));
+    },
+    [doc, selected],
+  );
   const onRef = useCallback((el: HTMLDivElement) => {
     const parentDoc = getDoc(el);
     if (parentDoc) {

@@ -114,15 +114,14 @@ export interface RepositionSidenotesAction {
   };
 }
 
-export type UIActionTypes = (
-  ConnectSidenoteAction |
-  DisconnectSidenoteAction |
-  ConnectAnchorAction |
-  ConnectAnchorBaseAction |
-  DisconnectAnchorAction |
-  SelectSidenoteAction |
-  SelectAnchorAction |
-  DeselectSidenoteAction |
-  RepositionSidenotesAction |
-  ResetAllSidenotesAction
-);
+export type UIActionTypes =
+  | ConnectSidenoteAction
+  | DisconnectSidenoteAction
+  | ConnectAnchorAction
+  | ConnectAnchorBaseAction
+  | DisconnectAnchorAction
+  | SelectSidenoteAction
+  | SelectAnchorAction
+  | DeselectSidenoteAction
+  | RepositionSidenotesAction
+  | ResetAllSidenotesAction;

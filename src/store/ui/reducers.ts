@@ -1,11 +1,19 @@
 import { opts } from '../../connect';
 import docReducer from './docReducer';
 import {
-  UIState, UIActionTypes,
-  UI_CONNECT_SIDENOTE, UI_SELECT_SIDENOTE,
-  UI_CONNECT_ANCHOR, UI_SELECT_ANCHOR, DocState, Anchor,
-  UI_DISCONNECT_ANCHOR, UI_DESELECT_SIDENOTE, UI_CONNECT_ANCHOR_BASE,
-  UI_REPOSITION_SIDENOTES, UI_RESET_ALL_SIDENOTES,
+  UIState,
+  UIActionTypes,
+  UI_CONNECT_SIDENOTE,
+  UI_SELECT_SIDENOTE,
+  UI_CONNECT_ANCHOR,
+  UI_SELECT_ANCHOR,
+  DocState,
+  Anchor,
+  UI_DISCONNECT_ANCHOR,
+  UI_DESELECT_SIDENOTE,
+  UI_CONNECT_ANCHOR_BASE,
+  UI_REPOSITION_SIDENOTES,
+  UI_RESET_ALL_SIDENOTES,
 } from './types';
 
 export const initialState: UIState = {
@@ -33,17 +41,19 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
   if (actionType === UI_DESELECT_SIDENOTE) return state;
   type Loc = [string, { top: number; left: number; height: number }];
   let findMe: Loc | undefined;
-  const sorted = Object.entries(state.sidenotes).map(
-    ([id, cmt]) => {
+  const sorted = Object.entries(state.sidenotes)
+    .map(([id, cmt]) => {
       const anchor = state.anchors[cmt.inlineAnchors?.[0]] ?? state.anchors[cmt.baseAnchors?.[0]];
       const loc: Loc = [id, { ...getTopLeft(anchor), height: getHeight(id) }];
-      if (id === state.selectedSidenote) { findMe = loc; }
+      if (id === state.selectedSidenote) {
+        findMe = loc;
+      }
       return loc;
-    },
-  ).sort((a, b) => {
-    if (a[1].top === b[1].top) return a[1].left - b[1].left;
-    return a[1].top - b[1].top;
-  });
+    })
+    .sort((a, b) => {
+      if (a[1].top === b[1].top) return a[1].left - b[1].left;
+      return a[1].top - b[1].top;
+    });
 
   const idx = findMe ? sorted.indexOf(findMe) : 0;
   // Push upwards from target (or nothing)
@@ -65,16 +75,16 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
   const idealPlacement = Object.fromEntries([...before, ...after]);
 
   let hasChanges = false;
-  const sidenotes = Object.fromEntries(Object.entries(state.sidenotes).map(
-    ([id, comment]) => {
+  const sidenotes = Object.fromEntries(
+    Object.entries(state.sidenotes).map(([id, comment]) => {
       const { top } = idealPlacement[id];
       if (comment.top !== top) {
         hasChanges = true;
         return [id, { ...comment, top }];
       }
       return [id, comment];
-    },
-  ));
+    }),
+  );
   if (!hasChanges) return state;
   return {
     ...state,
@@ -82,11 +92,7 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
   };
 }
 
-
-const uiReducer = (
-  state = initialState,
-  action: UIActionTypes,
-): UIState => {
+const uiReducer = (state = initialState, action: UIActionTypes): UIState => {
   switch (action.type) {
     case UI_SELECT_SIDENOTE:
     case UI_SELECT_ANCHOR:
@@ -95,8 +101,7 @@ const uiReducer = (
     case UI_CONNECT_ANCHOR_BASE:
     case UI_DISCONNECT_ANCHOR:
     case UI_DESELECT_SIDENOTE:
-    case UI_REPOSITION_SIDENOTES:
-    {
+    case UI_REPOSITION_SIDENOTES: {
       const { docId } = action.payload;
       const nextDoc = placeSidenotes(docReducer(state.docs[docId], action), action.type);
       return {

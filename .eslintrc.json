@@ -8,7 +8,8 @@
     "eslint:recommended",
     "airbnb-typescript",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -18,15 +19,9 @@
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
-    "project": [
-      "./tsconfig.json"
-    ]
+    "project": ["./tsconfig.json"]
   },
-  "plugins": [
-    "@typescript-eslint",
-    "no-skip-tests",
-    "no-only-tests"
-  ],
+  "plugins": ["@typescript-eslint", "no-skip-tests", "no-only-tests"],
   "rules": {
     "quotes": ["error", "single"],
     "import/prefer-default-export": "off",
@@ -43,11 +38,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".js",
-          ".ts",
-          ".spec.ts"
-        ]
+        "extensions": [".js", ".ts", ".spec.ts"]
       }
     }
   }

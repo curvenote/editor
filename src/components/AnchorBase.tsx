@@ -17,9 +17,7 @@ type Props = {
 };
 
 export const AnchorBase = (props: Props) => {
-  const {
-    anchor, children, className,
-  } = props;
+  const { anchor, children, className } = props;
   const dispatch = useDispatch<Dispatch>();
   const [doc, setDoc] = useState<string>();
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
@@ -33,7 +31,10 @@ export const AnchorBase = (props: Props) => {
       dispatch(connectAnchorBase(parentDoc, anchor, el));
     }
   }, []);
-  const classes = classNames({ selected, [className ?? '']: Boolean(className) });
+  const classes = classNames({
+    selected,
+    [className ?? '']: Boolean(className),
+  });
   return (
     <div className={classes} ref={onRef}>
       {children}

@@ -25,7 +25,6 @@ export const ref: Ref<Store> = {
   },
 };
 
-
 const subscriptions: { [index: string]: { listener: () => void } } = {};
 
 function subscribe(listener: () => void): Unsubscribe {
@@ -45,7 +44,6 @@ function notify(store: Store) {
   });
 }
 
-
 export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
@@ -59,5 +57,7 @@ export const store: Pick<Store, 'getState' | 'dispatch' | 'subscribe'> = {
 };
 
 export const opts: Required<Options> = {
-  get padding() { return ref.opts().padding ?? 10; },
+  get padding() {
+    return ref.opts().padding ?? 10;
+  },
 };
