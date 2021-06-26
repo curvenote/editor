@@ -1,11 +1,13 @@
-name: demo
+name: CI
+
 on:
   push:
-    branches:
-      - main
+    branches: [main, ci-*]
+  pull_request:
+    branches: [main]
 
 jobs:
-  gh-pages:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,10 +18,9 @@ jobs:
         with:
           path: 'node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
-      - run: yarn install
-      - run: yarn build
-      - name: GitHub Pages action
-        uses: peaceiris/actions-gh-pages@v3.5.9
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      - name: install
+        run: yarn install
+      - name: lint
+        run: yarn run lint
+      - name: format
+        run: yarn run lint:format
