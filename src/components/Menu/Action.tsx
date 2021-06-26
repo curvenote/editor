@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { createStyles, makeStyles, MenuItem, Typography } from '@material-ui/core';
 import FunctionsIcon from '@material-ui/icons/Functions';
