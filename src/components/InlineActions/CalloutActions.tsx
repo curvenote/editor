@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
 );
 
 const CalloutActions: React.FC<ActionProps> = (props) => {
-  const { stateId, viewId, anchorEl } = props;
+  const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
 
@@ -35,7 +35,7 @@ const CalloutActions: React.FC<ActionProps> = (props) => {
   const node = parent?.node ?? (selection as NodeSelection).node;
   const pos = parent?.pos ?? selection?.from;
   if (!node || pos == null) return null;
-  positionPopper(anchorEl);
+  positionPopper();
 
   const onKind = (value: string) => () =>
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { kind: value }, false));

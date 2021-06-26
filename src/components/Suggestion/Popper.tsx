@@ -4,6 +4,7 @@ import { makeStyles, createStyles, Paper, Popper, PopperProps } from '@material-
 import { State } from '../../store/types';
 import { selectors } from '../../store';
 import { SUGGESTION_ID } from '../../prosemirror/plugins/suggestion';
+import { registerPopper } from '../InlineActions';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,9 +39,14 @@ const Suggestion: React.FC = (props) => {
   const open = useSelector((state: State) => selectors.isSuggestionOpen(state));
   const classes = useStyles();
   if (!open || !getNode()) return null;
-  // popperRef={(pop) => console.log(pop)}
   return (
-    <Popper className="above-modals" open={open} anchorEl={anchorEl} placement="bottom-start">
+    <Popper
+      className="above-modals"
+      open={open}
+      anchorEl={anchorEl}
+      popperRef={(pop) => registerPopper(pop)}
+      placement="bottom-start"
+    >
       <Paper className={classes.root} elevation={10}>
         {children}
       </Paper>
