@@ -26,7 +26,7 @@ type Props = ActionProps & {
 };
 
 const AlignActions: React.FC<Props> = (props) => {
-  const { stateId, viewId, anchorEl, showCaption } = props;
+  const { stateId, viewId, showCaption } = props;
   const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
@@ -47,7 +47,7 @@ const AlignActions: React.FC<Props> = (props) => {
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 
-  positionPopper(anchorEl);
+  positionPopper();
 
   return (
     <Grid container alignItems="center" justify="center" className={classes.root}>

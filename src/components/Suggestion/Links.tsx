@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
@@ -9,7 +8,7 @@ import Suggestion from './Suggestion';
 import { LinkResult } from '../../store/suggestion/types';
 import { positionPopper } from '../InlineActions/utils';
 
-const LinkSuggestions = () => {
+const LinkSuggestions: React.FC = () => {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<LinkResult>(state),
     isEqual,

@@ -1,11 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
+import { makeStyles, createStyles, Paper, Popper, PopperProps } from '@material-ui/core';
 import { State } from '../../store/types';
 import { selectors } from '../../store';
 import { SUGGESTION_ID } from '../../prosemirror/plugins/suggestion';
+import { registerPopper } from '../InlineActions';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,15 +18,35 @@ const useStyles = makeStyles(() =>
   }),
 );
 
+function getNode() {
+  return document.getElementById(SUGGESTION_ID);
+}
+
+const anchorEl: PopperProps['anchorEl'] = {
+  getBoundingClientRect() {
+    return getNode()?.getBoundingClientRect() as ClientRect;
+  },
+  get clientWidth() {
+    return getNode()?.clientWidth ?? 0;
+  },
+  get clientHeight() {
+    return getNode()?.clientHeight ?? 0;
+  },
+};
+
 const Suggestion: React.FC = (props) => {
   const { children } = props;
   const open = useSelector((state: State) => selectors.isSuggestionOpen(state));
   const classes = useStyles();
-  const anchorEl = document.getElementById(SUGGESTION_ID);
-  if (!open || !anchorEl) return null;
-  // popperRef={(pop) => console.log(pop)}
+  if (!open || !getNode()) return null;
   return (
-    <Popper className="above-modals" open={open} anchorEl={anchorEl} placement="bottom-start">
+    <Popper
+      className="above-modals"
+      open={open}
+      anchorEl={anchorEl}
+      popperRef={(pop) => registerPopper(pop)}
+      placement="bottom-start"
+    >
       <Paper className={classes.root} elevation={10}>
         {children}
       </Paper>

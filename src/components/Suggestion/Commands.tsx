@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Typography, makeStyles, createStyles } from '@material-ui/core';
@@ -29,7 +28,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const CommandSuggestions = () => {
+const CommandSuggestions: React.FC = () => {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<CommandResult>(state),
     isEqual,
