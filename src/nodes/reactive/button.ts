@@ -17,11 +17,6 @@ export const def: NodeDef = {
   group: NodeGroups.inline,
 };
 
-export const spec = createSpec(def, (props) => {
-  const out = { ...props };
-  out.dense = '';
-  out.outlined = '';
-  return out;
-});
+export const spec = createSpec(def);
 export const toMarkdown: FormatSerialize = (state, node) => nodeToMystRole(state, node, def);
 export default spec;
