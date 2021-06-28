@@ -3,7 +3,7 @@ import { positionInlineActions } from '../actions';
 import { Dispatch, Middleware } from '../types';
 import { UPDATE_EDITOR_STATE } from '../state/types';
 
-const position = debounce((dispatch: Dispatch) => dispatch(positionInlineActions()), 300, {
+const position = debounce((dispatch: Dispatch) => dispatch(positionInlineActions()), 25, {
   leading: true,
   trailing: true,
 });

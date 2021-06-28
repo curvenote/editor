@@ -1,6 +1,5 @@
-import { migrateHTML, schemas } from '@curvenote/schema';
+import { schemas, fromHTML } from '@curvenote/schema';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import { store, opts } from '../connect';
@@ -27,8 +26,7 @@ export function createEditorState(
       { doc: data, selection: { type: 'text', anchor: 0, head: 0 } },
     );
   } catch (error) {
-    const element = migrateHTML(content, document, DOMParser);
-    const doc = Parser.fromSchema(schema).parse(element);
+    const doc = fromHTML(content, schema, document, DOMParser);
     state = EditorState.create({ doc, plugins });
   }
   return state;
