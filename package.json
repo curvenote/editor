@@ -35,6 +35,7 @@
   "dependencies": {
     "markdown-it": "^12.0.6",
     "markdown-it-myst": "^0.0.9",
+    "orderedmap": "^1.1.1",
     "prosemirror-collab": "^1.2.2",
     "prosemirror-markdown": "^1.5.1",
     "prosemirror-model": "^1.14.2",
