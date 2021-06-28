@@ -9,9 +9,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { migrateHTML, schemas } from '@curvenote/schema';
+import { schemas, fromHTML } from '@curvenote/schema';
 import { EditorState } from 'prosemirror-state';
-import { DOMParser as Parser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import { store, opts } from '../connect';
@@ -29,8 +28,7 @@ export function createEditorState(useSchema, stateKey, content, version, startEd
         state = EditorState.fromJSON({ schema: schema, plugins: plugins }, { doc: data, selection: { type: 'text', anchor: 0, head: 0 } });
     }
     catch (error) {
-        var element = migrateHTML(content, document, DOMParser);
-        var doc = Parser.fromSchema(schema).parse(element);
+        var doc = fromHTML(content, schema, document, DOMParser);
         state = EditorState.create({ doc: doc, plugins: plugins });
     }
     return state;

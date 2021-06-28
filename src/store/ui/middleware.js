@@ -1,7 +1,7 @@
 import debounce from 'lodash.debounce';
 import { positionInlineActions } from '../actions';
 import { UPDATE_EDITOR_STATE } from '../state/types';
-var position = debounce(function (dispatch) { return dispatch(positionInlineActions()); }, 300, {
+var position = debounce(function (dispatch) { return dispatch(positionInlineActions()); }, 25, {
     leading: true,
     trailing: true,
 });
