@@ -1,6 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { addListNodes } from 'prosemirror-schema-list';
-import OrderedMap from 'orderedmap';
+import { orderedList, bulletList, listItem } from 'prosemirror-schema-list';
 import { NodeGroups } from './types';
 
 export const doc: NodeSpec = {
@@ -53,12 +52,6 @@ export const hard_break: NodeSpec = {
   },
 };
 
-const listNodes = addListNodes(
-  OrderedMap.from({}),
-  `paragraph ${NodeGroups.block}*`,
-  NodeGroups.block,
-);
-
-export const ordered_list = listNodes.get('ordered_list') as NodeSpec;
-export const bullet_list = listNodes.get('bullet_list') as NodeSpec;
-export const list_item = listNodes.get('list_item') as NodeSpec;
+export const ordered_list = orderedList;
+export const bullet_list = bulletList;
+export const list_item = listItem;
