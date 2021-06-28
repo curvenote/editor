@@ -23,18 +23,11 @@
   },
   "plugins": ["@typescript-eslint", "no-skip-tests", "no-only-tests"],
   "rules": {
-    "quotes": ["error", "single"],
     "import/prefer-default-export": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/naming-convention": "off",
-    "jsx-a11y/interactive-supports-focus": "off",
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
-    "jsx-a11y/accessible-emoji": "off",
-    "no-multiple-empty-lines": "off",
-    "object-curly-newline": "off"
+    "react/destructuring-assignment": "off"
   },
   "settings": {
     "import/resolver": {
