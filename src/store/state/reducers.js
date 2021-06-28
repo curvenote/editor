@@ -9,12 +9,10 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 import { process } from '@curvenote/schema';
 import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
@@ -46,7 +44,7 @@ var editorReducer = function (state, action) {
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
-            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_b = {}, _b[stateId] = __assign(__assign({}, editor), { viewIds: __spreadArrays(editor.viewIds, [viewId]) }), _b)), views: __assign(__assign({}, state.views), (_c = {}, _c[viewId] = { stateId: stateId, view: view }, _c)) });
+            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_b = {}, _b[stateId] = __assign(__assign({}, editor), { viewIds: __spreadArray(__spreadArray([], editor.viewIds), [viewId]) }), _b)), views: __assign(__assign({}, state.views), (_c = {}, _c[viewId] = { stateId: stateId, view: view }, _c)) });
         }
         case RESET_ALL_EDITORS_AND_VIEWS: {
             return __assign(__assign({}, state), { editors: {}, views: {} });
@@ -68,7 +66,7 @@ var editorReducer = function (state, action) {
                 var index = entry.viewIds.indexOf(viewId_1);
                 if (index === -1)
                     return;
-                var viewIds = __spreadArrays(entry.viewIds);
+                var viewIds = __spreadArray([], entry.viewIds);
                 viewIds.splice(index, 1);
                 newState_1.editors[k] = __assign(__assign({}, entry), { viewIds: viewIds });
             });

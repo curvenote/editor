@@ -1,6 +1,10 @@
 export declare type ActionProps = {
     stateId: any;
     viewId: string | null;
-    anchorEl: HTMLElement | Element | null | undefined;
 };
-export declare function positionPopper(anchorEl?: HTMLElement | Element | null): void;
+declare let popper: {
+    update: () => void;
+} | null;
+export declare function registerPopper(next: typeof popper): void;
+export declare function positionPopper(): void;
+export {};

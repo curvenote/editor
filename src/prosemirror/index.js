@@ -42,20 +42,15 @@ export function createEditorView(dom, state, dispatch) {
         dispatchTransaction: dispatch,
         nodeViews: __assign({ math: function (node, view, getPos) {
                 return new views.MathView(node, view, getPos, true);
-            },
-            equation: function (node, view, getPos) {
+            }, equation: function (node, view, getPos) {
                 return new views.MathView(node, view, getPos, false);
-            },
-            image: function (node, view, getPos) {
+            }, image: function (node, view, getPos) {
                 return new views.ImageView(node, view, getPos);
-            },
-            iframe: function (node, view, getPos) {
+            }, iframe: function (node, view, getPos) {
                 return new views.IFrameView(node, view, getPos);
-            },
-            link: function (node, view, getPos) {
+            }, link: function (node, view, getPos) {
                 return new views.LinkView(node, view, getPos);
-            },
-            time: function (node, view, getPos) {
+            }, time: function (node, view, getPos) {
                 return new views.TimeView(node, view, getPos);
             }, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },

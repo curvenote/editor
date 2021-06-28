@@ -1,7 +1,8 @@
-export function positionPopper(anchorEl) {
-    if ((anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.isConnected) || anchorEl == null) {
-        window.scrollBy(0, 1);
-        window.scrollBy(0, -1);
-    }
+var popper = null;
+export function registerPopper(next) {
+    popper = next;
+}
+export function positionPopper() {
+    popper === null || popper === void 0 ? void 0 : popper.update();
 }
 //# sourceMappingURL=utils.js.map

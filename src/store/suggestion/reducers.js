@@ -25,12 +25,7 @@ var suggestionReducer = function (state, action) {
     switch (action.type) {
         case UPDATE_SUGGESTION: {
             var _a = action.payload, open_1 = _a.open, kind = _a.kind, search = _a.search, range = _a.range, view = _a.view, trigger = _a.trigger;
-            return __assign(__assign({}, state), { open: open_1,
-                kind: kind,
-                search: search,
-                range: range,
-                view: view,
-                trigger: trigger, results: !open_1 ? [] : state.results });
+            return __assign(__assign({}, state), { open: open_1, kind: kind, search: search, range: range, view: view, trigger: trigger, results: !open_1 ? [] : state.results });
         }
         case UPDATE_RESULTS: {
             var results = action.payload.results;

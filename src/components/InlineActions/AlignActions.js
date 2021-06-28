@@ -18,7 +18,7 @@ var useStyles = makeStyles(function () {
 });
 var AlignActions = function (props) {
     var _a;
-    var stateId = props.stateId, viewId = props.viewId, anchorEl = props.anchorEl, showCaption = props.showCaption;
+    var stateId = props.stateId, viewId = props.viewId, showCaption = props.showCaption;
     var dispatch = useDispatch();
     var classes = useStyles();
     var selection = useSelector(function (state) { var _a, _b; return (_b = (_a = getEditorState(state, stateId)) === null || _a === void 0 ? void 0 : _a.state) === null || _b === void 0 ? void 0 : _b.selection; });
@@ -39,7 +39,7 @@ var AlignActions = function (props) {
         return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { caption: !caption }));
     };
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: node, pos: pos })); };
-    positionPopper(anchorEl);
+    positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "left", active: align === 'left', onClick: onAlign('left') }),
         React.createElement(MenuIcon, { kind: "center", active: align === 'center', onClick: onAlign('center') }),

@@ -1,9 +1,7 @@
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 import { getSuggestion } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
@@ -21,7 +19,7 @@ var getFirstSuggestion = function (kind) {
         description: 'Enter a value or expression. Select the variables below to add them to your expression.',
     };
 };
-export var startingSuggestions = function (kind, getState) { return __spreadArrays([
+export var startingSuggestions = function (kind, getState) { return __spreadArray([
     getFirstSuggestion(kind)
 ], Object.entries(getState().runtime.variables).map(function (_a) {
     var variable = _a[1];
@@ -84,7 +82,7 @@ export function filterResults(kind, schema, search, dispatch, getState, callback
         return;
     }
     setTimeout(function () {
-        var results = __spreadArrays([
+        var results = __spreadArray([
             getFirstSuggestion(kind)
         ], Object.entries(getState().runtime.variables).map(function (_a) {
             var variable = _a[1];

@@ -24,16 +24,14 @@ var uiReducer = function (state, action) {
             if (state.stateId === stateId && state.viewId === viewId) {
                 return state;
             }
-            return __assign(__assign({}, state), { stateId: stateId,
-                viewId: viewId });
+            return __assign(__assign({}, state), { stateId: stateId, viewId: viewId });
         }
         case FOCUS_EDITOR_VIEW: {
             var _b = action.payload, stateId = _b.stateId, viewId = _b.viewId, focused = _b.focused;
             if (state.stateId === stateId && state.viewId === viewId && state.focused === focused) {
                 return state;
             }
-            return __assign(__assign({}, state), { stateId: stateId,
-                viewId: viewId, focused: focused && viewId != null && stateId != null });
+            return __assign(__assign({}, state), { stateId: stateId, viewId: viewId, focused: focused && viewId != null && stateId != null });
         }
         case INLINE_SELECTION: {
             return __assign(__assign({}, state), { selection: action.payload });

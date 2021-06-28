@@ -21,7 +21,7 @@ var useStyles = makeStyles(function () {
 });
 var CalloutActions = function (props) {
     var _a, _b;
-    var stateId = props.stateId, viewId = props.viewId, anchorEl = props.anchorEl;
+    var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
     var dispatch = useDispatch();
     var selection = useSelector(function (state) { var _a, _b; return (_b = (_a = getEditorState(state, stateId)) === null || _a === void 0 ? void 0 : _a.state) === null || _b === void 0 ? void 0 : _b.selection; });
@@ -30,7 +30,7 @@ var CalloutActions = function (props) {
     var pos = (_b = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _b !== void 0 ? _b : selection === null || selection === void 0 ? void 0 : selection.from;
     if (!node || pos == null)
         return null;
-    positionPopper(anchorEl);
+    positionPopper();
     var onKind = function (value) { return function () {
         return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { kind: value }, false));
     }; };

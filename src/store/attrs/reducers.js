@@ -20,9 +20,7 @@ var AttributesReducer = function (state, action) {
     switch (action.type) {
         case ATTRIBUTES_SHOW_EDITOR: {
             var _a = action.payload, show = _a.show, location_1 = _a.location, pos = _a.pos;
-            return __assign(__assign({}, state), { show: show,
-                pos: pos,
-                location: location_1 });
+            return __assign(__assign({}, state), { show: show, pos: pos, location: location_1 });
         }
         default:
             return state;
