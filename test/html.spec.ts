@@ -1,5 +1,5 @@
 import { JSDOM } from 'jsdom';
-import { fromHTML, toHTML, migrateHTML } from '../src';
+import { fromHTML, toHTML } from '../src';
 import { compare, tnodes, tdoc } from './build';
 
 const { document, DOMParser } = new JSDOM('').window;
@@ -34,27 +34,6 @@ const {
   range,
   dynamic,
 } = tnodes;
-
-describe('HTML Upgrades', () => {
-  it('upgrades and hoists variables', () =>
-    same(
-      migrateHTML(
-        '<p>hello</p><p><ink-var name="x" value="1" format=".0f"></ink-var>world</p>',
-        document,
-        DOMParser,
-      ).innerHTML,
-      tdoc(variable(), p('hello'), p('world')),
-    ));
-  it('upgrades equations', () =>
-    same(
-      migrateHTML(
-        '<p>A line is: <ink-equation inline>y = mx + b</ink-equation></p>',
-        document,
-        DOMParser,
-      ).innerHTML,
-      tdoc(p('A line is: ', math('y = mx + b'))),
-    ));
-});
 
 describe('HTML', () => {
   it('parses headings', () =>

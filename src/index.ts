@@ -6,7 +6,7 @@ export * as Nodes from './nodes';
 export * as types from './types';
 export { ReferenceKind } from './nodes/types';
 
-export { fromHTML, migrateHTML, fromText, fromMarkdown } from './parse';
+export { fromHTML, fromText, fromMarkdown } from './parse';
 export { toHTML, toMarkdown, toTex, toText } from './serialize';
 
 export * as server from './server';
