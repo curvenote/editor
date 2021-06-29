@@ -4,7 +4,7 @@ import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
-import { getNodeIfSelected } from '../../store/actions/utils';
+import { getNodeIfSelected } from '../../store/ui/utils';
 import { createId } from '../../utils';
 
 export const key = new PluginKey('placeholder');

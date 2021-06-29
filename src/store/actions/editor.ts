@@ -28,7 +28,7 @@ import {
 } from '../selectors';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
-import { getNodeIfSelected } from './utils';
+import { getNodeIfSelected } from '../ui/utils';
 import { createId } from '../../utils';
 
 export function updateNodeAttrs(

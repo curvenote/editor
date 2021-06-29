@@ -3,13 +3,13 @@ import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { Node } from 'prosemirror-model';
 import { schemas } from '@curvenote/schema';
 import { findParentNode } from 'prosemirror-utils';
-import { NodeSelection } from 'prosemirror-state';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
 import { Dispatch, State } from '../../store';
 import { ActionProps, positionPopper } from './utils';
+import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,7 +29,7 @@ const EquationActions: React.FC<ActionProps> = (props) => {
   const parent =
     state?.selection &&
     findParentNode((n: Node) => n.type.name === schemas.nodeNames.heading)(state?.selection);
-  const node = parent?.node ?? (state?.selection as NodeSelection).node;
+  const node = parent?.node ?? getNodeFromSelection(state?.selection);
   const pos = parent?.pos ?? state?.selection?.from;
 
   if (!node || pos == null) return null;

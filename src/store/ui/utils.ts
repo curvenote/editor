@@ -1,9 +1,24 @@
-import { NodeSelection, EditorState } from 'prosemirror-state';
+import { NodeSelection, EditorState, Selection } from 'prosemirror-state';
 import { Node } from 'prosemirror-model';
 import { findParentNode, isNodeSelection } from 'prosemirror-utils';
 import { schemas } from '@curvenote/schema';
 import { getLinkBoundsIfTheyExist } from '../actions/utils';
 import { SelectionKinds } from './types';
+
+export function getNodeFromSelection(selection?: Selection) {
+  if (!selection || !isNodeSelection(selection)) return null;
+  const nodeSelection = selection as NodeSelection;
+  return nodeSelection.node;
+}
+
+export function getNodeIfSelected(state: EditorState | null, nodeName?: schemas.nodeNames) {
+  if (state == null) return null;
+  const node = getNodeFromSelection(state.selection);
+  if (node && (!nodeName || node.type.name === nodeName)) {
+    return node;
+  }
+  return null;
+}
 
 export const getSelectionKind = (
   state: EditorState | null,
@@ -13,9 +28,7 @@ export const getSelectionKind = (
   const linkBounds = getLinkBoundsIfTheyExist(state);
   if (linkBounds) return { kind: SelectionKinds.link, pos: linkBounds.from };
   // Then selected nodes
-  const { node } = isNodeSelection(state.selection)
-    ? (state.selection as NodeSelection)
-    : { node: null };
+  const node = getNodeFromSelection(state.selection);
   const pos = state.selection.from;
   switch (node?.type.name as schemas.nodeNames | undefined) {
     case schemas.nodeNames.image:
