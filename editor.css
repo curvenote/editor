@@ -465,11 +465,10 @@ article time {
   border-bottom-color: #8cf;
 }
 
-p.prompt {
+article .selected p.prompt {
   position: relative;
 }
-
-p.prompt:before {
+article .selected p.prompt:before {
   content: "Type '/' for commands, or just start writing!";
   color: #929292;
   position: absolute;

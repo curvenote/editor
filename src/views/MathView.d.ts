@@ -1,7 +1,7 @@
 import { Node } from 'prosemirror-model';
 import { Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-export declare function renderMath(math: string, element: HTMLElement, inline: boolean): void;
+export declare function renderMath(math: string, element: HTMLElement, inline: boolean): Promise<void>;
 declare class MathView {
     dom: HTMLElement;
     editor: HTMLElement;
