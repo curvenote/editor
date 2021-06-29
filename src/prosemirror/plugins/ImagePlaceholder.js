@@ -50,7 +50,7 @@ import { Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
-import { getNodeIfSelected } from '../../store/actions/utils';
+import { getNodeIfSelected } from '../../store/ui/utils';
 import { createId } from '../../utils';
 export var key = new PluginKey('placeholder');
 export var getImagePlaceholderPlugin = function () {

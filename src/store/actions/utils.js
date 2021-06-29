@@ -10,7 +10,6 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { isNodeSelection } from 'prosemirror-utils';
 export var TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
@@ -92,15 +91,5 @@ export function getLinkBoundsIfTheyExist(state, pos) {
     if (!hasLink || !linkBounds)
         return null;
     return linkBounds;
-}
-export function getNodeIfSelected(state, nodeName) {
-    if (state == null)
-        return null;
-    var selected = isNodeSelection(state.selection);
-    var node = state.selection.node;
-    if (selected && (!nodeName || (node === null || node === void 0 ? void 0 : node.type.name) === nodeName)) {
-        return node;
-    }
-    return null;
 }
 //# sourceMappingURL=utils.js.map

@@ -20,7 +20,7 @@ import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf, getSelectedView, getEditorView, } from '../selectors';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
-import { getNodeIfSelected } from './utils';
+import { getNodeIfSelected } from '../ui/utils';
 import { createId } from '../../utils';
 export function updateNodeAttrs(stateKey, viewId, node, attrs, select) {
     if (select === void 0) { select = true; }

@@ -7,6 +7,7 @@ import MenuIcon from '../Menu/Icon';
 import { deleteNode, liftContentOutOfNode, updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { positionPopper } from './utils';
+import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
         root: {
@@ -26,7 +27,7 @@ var CalloutActions = function (props) {
     var dispatch = useDispatch();
     var selection = useSelector(function (state) { var _a, _b; return (_b = (_a = getEditorState(state, stateId)) === null || _a === void 0 ? void 0 : _a.state) === null || _b === void 0 ? void 0 : _b.selection; });
     var parent = selection && findParentNode(function (n) { return n.type.name === schemas.nodeNames.callout; })(selection);
-    var node = (_a = parent === null || parent === void 0 ? void 0 : parent.node) !== null && _a !== void 0 ? _a : selection.node;
+    var node = (_a = parent === null || parent === void 0 ? void 0 : parent.node) !== null && _a !== void 0 ? _a : getNodeFromSelection(selection);
     var pos = (_b = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _b !== void 0 ? _b : selection === null || selection === void 0 ? void 0 : selection.from;
     if (!node || pos == null)
         return null;

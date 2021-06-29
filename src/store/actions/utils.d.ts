@@ -1,5 +1,3 @@
-/// <reference types="prosemirror-model" />
-import { schemas } from '@curvenote/schema';
 import { EditorState } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
@@ -18,4 +16,3 @@ export declare function getLinkBoundsIfTheyExist(state?: EditorState | null, pos
     to: number;
     mark: import("prosemirror-model").Mark<any>;
 } | null;
-export declare function getNodeIfSelected(state: EditorState | null, nodeName?: schemas.nodeNames): import("prosemirror-model").Node<any> | null;

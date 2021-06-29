@@ -2,6 +2,21 @@ import { findParentNode, isNodeSelection } from 'prosemirror-utils';
 import { schemas } from '@curvenote/schema';
 import { getLinkBoundsIfTheyExist } from '../actions/utils';
 import { SelectionKinds } from './types';
+export function getNodeFromSelection(selection) {
+    if (!selection || !isNodeSelection(selection))
+        return null;
+    var nodeSelection = selection;
+    return nodeSelection.node;
+}
+export function getNodeIfSelected(state, nodeName) {
+    if (state == null)
+        return null;
+    var node = getNodeFromSelection(state.selection);
+    if (node && (!nodeName || node.type.name === nodeName)) {
+        return node;
+    }
+    return null;
+}
 export var getSelectionKind = function (state) {
     var _a;
     if (state == null)
@@ -9,9 +24,7 @@ export var getSelectionKind = function (state) {
     var linkBounds = getLinkBoundsIfTheyExist(state);
     if (linkBounds)
         return { kind: SelectionKinds.link, pos: linkBounds.from };
-    var node = (isNodeSelection(state.selection)
-        ? state.selection
-        : { node: null }).node;
+    var node = getNodeFromSelection(state.selection);
     var pos = state.selection.from;
     switch (node === null || node === void 0 ? void 0 : node.type.name) {
         case schemas.nodeNames.image:

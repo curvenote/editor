@@ -7,6 +7,7 @@ import { deleteNode, updateNodeAttrs } from '../../store/actions';
 import SelectWidth from './SelectWidth';
 import { positionPopper } from './utils';
 import { getEditorState } from '../../store/selectors';
+import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
         root: {
@@ -17,15 +18,15 @@ var useStyles = makeStyles(function () {
     });
 });
 var AlignActions = function (props) {
-    var _a;
     var stateId = props.stateId, viewId = props.viewId, showCaption = props.showCaption;
     var dispatch = useDispatch();
     var classes = useStyles();
     var selection = useSelector(function (state) { var _a, _b; return (_b = (_a = getEditorState(state, stateId)) === null || _a === void 0 ? void 0 : _a.state) === null || _b === void 0 ? void 0 : _b.selection; });
-    var _b = (_a = selection) !== null && _a !== void 0 ? _a : {}, node = _b.node, pos = _b.from;
+    var node = getNodeFromSelection(selection);
     if (!node || !selection || !isNodeSelection(selection))
         return null;
-    var _c = node === null || node === void 0 ? void 0 : node.attrs, align = _c.align, width = _c.width, numbered = _c.numbered, caption = _c.caption;
+    var pos = selection.from;
+    var _a = node === null || node === void 0 ? void 0 : node.attrs, align = _a.align, width = _a.width, numbered = _a.numbered, caption = _a.caption;
     var onAlign = function (a) { return function () {
         dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { align: a }));
     }; };
