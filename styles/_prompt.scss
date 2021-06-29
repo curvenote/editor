@@ -11,14 +11,18 @@
 // "Type '```' to create a code block",
 // "Type '---' to create a divider",
 
-p.prompt {
-  position: relative;
-}
-p.prompt:before {
-  content: "Type '/' for commands, or just start writing!";
-  color: #929292;
-  position: absolute;
-  user-select: none;
-  cursor: text;
-  left: 5px;
+article {
+  .selected {
+    p.prompt {
+      position: relative;
+    }
+    p.prompt:before {
+      content: "Type '/' for commands, or just start writing!";
+      color: #929292;
+      position: absolute;
+      user-select: none;
+      cursor: text;
+      left: 5px;
+    }
+  }
 }

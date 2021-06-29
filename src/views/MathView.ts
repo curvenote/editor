@@ -4,17 +4,17 @@ import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
 import { Transaction, EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import katex from 'katex';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 
-export function renderMath(math: string, element: HTMLElement, inline: boolean) {
+export async function renderMath(math: string, element: HTMLElement, inline: boolean) {
   // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
   // const txt = toText(this.node, this.outerView.state.schema, document);
   // console.log({ math, txt });
   // const render = math.replace(/−/g, '-');
   const render = math?.trim() || '...';
   try {
+    const katex = await import('katex');
     katex.render(render, element, {
       displayMode: !inline,
       throwOnError: false,
