@@ -53,12 +53,12 @@
     redux-thunk "^2.3.0"
     scroll-into-view-if-needed "^2.2.28"
 
-"@curvenote/components@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@curvenote/components/-/components-0.3.0.tgz#6007867a7fa2b26c2d9682071feec9b8226febc5"
-  integrity sha512-LOcTEj4BeFnDNeXrk9ONUgGOavfOIACHoUJtGWvL4ELbgFOmDXzMBv2AZehqYadJqZn4xV6ZtY/4Jo1ojpSKQg==
+"@curvenote/components@^0.3.0", "@curvenote/components@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@curvenote/components/-/components-0.3.2.tgz#a2eadb09ecad69ae0c237d52da01fec45cab2ebf"
+  integrity sha512-FN4j79p/YR03nbfeddIxqrb/k9ZmsUgmoazMFyGyUSq9ptuaywDAf7DTBf9F6fmVFqzeYXIqyG8c7v+2VHiDwA==
   dependencies:
-    "@curvenote/runtime" "^0.2.7"
+    "@curvenote/runtime" "^0.2.8"
     d3-drag "^3.0.0"
     d3-format "^3.0.1"
     d3-selection "^3.0.0"
@@ -69,7 +69,7 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.2"
 
-"@curvenote/runtime@^0.2.7", "@curvenote/runtime@^0.2.8":
+"@curvenote/runtime@^0.2.8":
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@curvenote/runtime/-/runtime-0.2.8.tgz#1bab6ba8051d2aeb05ebbe6a7f6ec46a73be93c5"
   integrity sha512-VjL8IgZMoe5Dy+UpBDJUOybc5YVKYSOqxFl2l6GaeVr7ewfrJw4RYYX9U9RjzZ05g2iHnYiry1/Fz9AYHV+iGw==
