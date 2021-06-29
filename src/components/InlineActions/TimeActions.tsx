@@ -1,6 +1,5 @@
 import React from 'react';
 import { isNodeSelection } from 'prosemirror-utils';
-import { NodeSelection } from 'prosemirror-state';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { getDatetime } from '@curvenote/schema/dist/nodes/time';
@@ -9,17 +8,19 @@ import { updateNodeAttrs } from '../../store/actions';
 import { State, Dispatch } from '../../store/types';
 import { getEditorState } from '../../store/selectors';
 import { ActionProps } from './utils';
+import { getNodeFromSelection } from '../../store/ui/utils';
 
 const TimeActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   if (!selection || !isNodeSelection(selection)) return null;
-  const { node, from } = selection as NodeSelection;
+  const node = getNodeFromSelection(selection);
 
-  const date = getDatetime(node.attrs.datetime);
+  const date = getDatetime(node?.attrs.datetime);
+  const { from } = selection;
   const onChange = (newDate: Date | null) => {
-    if (!newDate) return;
+    if (!newDate || !node || from == null) return;
     dispatch(
       updateNodeAttrs(
         stateId,

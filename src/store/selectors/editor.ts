@@ -7,7 +7,7 @@ import {
   hasParentNode,
 } from 'prosemirror-utils';
 import { schemas } from '@curvenote/schema';
-import { getNodeIfSelected } from '../actions/utils';
+import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditorState } from '../state/selectors';
 import { State } from '../types';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { findParentNode } from 'prosemirror-utils';
-import { NodeSelection } from 'prosemirror-state';
 import { Node } from 'prosemirror-model';
 import { schemas } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import { deleteNode, liftContentOutOfNode, updateNodeAttrs } from '../../store/a
 import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
 import { ActionProps, positionPopper } from './utils';
+import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -32,7 +32,7 @@ const CalloutActions: React.FC<ActionProps> = (props) => {
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   const parent =
     selection && findParentNode((n: Node) => n.type.name === schemas.nodeNames.callout)(selection);
-  const node = parent?.node ?? (selection as NodeSelection).node;
+  const node = parent?.node ?? getNodeFromSelection(selection);
   const pos = parent?.pos ?? selection?.from;
   if (!node || pos == null) return null;
   positionPopper();

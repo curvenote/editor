@@ -3,7 +3,6 @@ import { makeStyles, createStyles, Grid, Menu } from '@material-ui/core';
 import { Node } from 'prosemirror-model';
 import { schemas } from '@curvenote/schema';
 import { findParentNode } from 'prosemirror-utils';
-import { NodeSelection } from 'prosemirror-state';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs, wrapInHeading } from '../../store/actions';
@@ -12,6 +11,7 @@ import { Dispatch, State } from '../../store';
 import { ActionProps, positionPopper } from './utils';
 import MenuAction from '../Menu/Action';
 import Keyboard from '../Keyboard';
+import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,7 +33,7 @@ const HeadingActions: React.FC<ActionProps> = (props) => {
   const parent =
     state?.selection &&
     findParentNode((n: Node) => n.type.name === schemas.nodeNames.heading)(state?.selection);
-  const node = parent?.node ?? (state?.selection as NodeSelection)?.node;
+  const node = parent?.node ?? getNodeFromSelection(state?.selection);
   const pos = parent?.pos ?? state?.selection?.from;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

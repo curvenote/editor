@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { isNodeSelection } from 'prosemirror-utils';
-import { NodeSelection } from 'prosemirror-state';
 import { useDispatch, useSelector } from 'react-redux';
 import { types } from '@curvenote/schema';
 import MenuIcon from '../Menu/Icon';
@@ -10,6 +9,7 @@ import SelectWidth from './SelectWidth';
 import { ActionProps, positionPopper } from './utils';
 import { Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
+import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,8 +30,9 @@ const AlignActions: React.FC<Props> = (props) => {
   const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
-  const { node, from: pos } = (selection as NodeSelection) ?? {};
+  const node = getNodeFromSelection(selection);
   if (!node || !selection || !isNodeSelection(selection)) return null;
+  const { from: pos } = selection;
   const { align, width, numbered, caption } = node?.attrs;
 
   const onAlign = (a: types.AlignOptions) => () => {
