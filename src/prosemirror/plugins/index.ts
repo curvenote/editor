@@ -13,6 +13,7 @@ import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
+import getPromptPlugin from './prompts';
 
 const ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
 const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
@@ -27,6 +28,7 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
     commentsPlugin(),
+    getPromptPlugin(),
     getImagePlaceholderPlugin(),
     inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),
