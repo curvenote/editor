@@ -1,2 +1,2 @@
 import { Schema } from 'prosemirror-model';
-export declare function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean): (import("prosemirror-state").Plugin<any, any> | import("prosemirror-state").Plugin<import("./comments").CommentState, any> | import("./ImagePlaceholder").ImagePlaceholderPlugin)[];
+export declare function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean): (import("prosemirror-state").Plugin<any, any> | import("prosemirror-state").Plugin<import("./comments").CommentState, any> | import("prosemirror-state").Plugin<import("./prompts").PromptState, any> | import("./ImagePlaceholder").ImagePlaceholderPlugin)[];

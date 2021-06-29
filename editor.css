@@ -465,6 +465,19 @@ article time {
   border-bottom-color: #8cf;
 }
 
+p.prompt {
+  position: relative;
+}
+
+p.prompt:before {
+  content: "Type '/' for commands, or just start writing!";
+  color: #929292;
+  position: absolute;
+  user-select: none;
+  cursor: text;
+  left: 5px;
+}
+
 .widget {
   display: inline-block;
 }
