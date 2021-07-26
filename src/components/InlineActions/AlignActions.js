@@ -41,7 +41,7 @@ var AlignActions = function (props) {
     };
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: node, pos: pos })); };
     positionPopper();
-    return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.root },
+    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "left", active: align === 'left', onClick: onAlign('left') }),
         React.createElement(MenuIcon, { kind: "center", active: align === 'center', onClick: onAlign('center') }),
         React.createElement(MenuIcon, { kind: "right", active: align === 'right', onClick: onAlign('right') }),

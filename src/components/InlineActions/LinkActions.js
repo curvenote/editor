@@ -63,7 +63,7 @@ var LinkActions = function (props) {
                 setLabelOpen(false);
             }, validate: testLinkWeak, help: "Please provide a valid URL" }));
     }
-    return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.grid },
+    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.grid },
         React.createElement(Tooltip, { title: link.tooltip },
             React.createElement(Button, { className: classes.button, onClick: function () { return setLabelOpen(true); }, size: "small", disableElevation: true }, "Edit Link")),
         React.createElement(MenuIcon, { kind: "divider" }),

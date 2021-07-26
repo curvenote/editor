@@ -38,7 +38,7 @@ var CalloutActions = function (props) {
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: node, pos: pos })); };
     var onLift = function () { return dispatch(liftContentOutOfNode(stateId, viewId, { node: node, pos: pos })); };
     var kind = node.attrs.kind;
-    return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.root },
+    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "info", active: kind === 'info', onClick: onKind('info') }),
         React.createElement(MenuIcon, { kind: "success", active: kind === 'success', onClick: onKind('success') }),
         React.createElement(MenuIcon, { kind: "active", active: kind === 'active', onClick: onKind('active') }),

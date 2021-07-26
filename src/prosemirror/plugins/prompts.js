@@ -4,28 +4,30 @@ import { findParentNode } from 'prosemirror-utils';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { isEditable } from './editable';
 export var key = new PluginKey('prompt');
+var getParentIfParagraph = findParentNode(function (node) { return node.type.name === schemas.nodeNames.paragraph; });
 var getPromptPlugin = function () {
     var promptPlugin = new Plugin({
         key: key,
         state: {
-            init: function () { return ({ prompt: DecorationSet.empty }); },
+            init: function () { return DecorationSet.empty; },
             apply: function (tr, value, oldState, newState) {
-                var getParagraph = findParentNode(function (node) { return node.type.name === schemas.nodeNames.paragraph; });
-                var para = getParagraph(tr.selection);
-                var editable = isEditable(newState);
-                if (editable && tr.selection.empty && para && para.node.nodeSize === 2) {
+                if (!isEditable(newState))
+                    return DecorationSet.empty;
+                var paragraph = getParentIfParagraph(newState.selection);
+                var emptyParagraph = paragraph && paragraph.node.nodeSize === 2;
+                if (tr.selection.empty && emptyParagraph) {
                     var deco = Decoration.node(tr.selection.from - 1, tr.selection.to + 1, {
                         class: 'prompt',
                     });
-                    return { prompt: new DecorationSet().add(tr.doc, [deco]) };
+                    return DecorationSet.create(tr.doc, [deco]);
                 }
-                return {
-                    prompt: DecorationSet.empty,
-                };
+                return DecorationSet.empty;
             },
         },
         props: {
-            decorations: function (state) { return promptPlugin.getState(state).prompt; },
+            decorations: function (state) {
+                return this.getState(state);
+            },
         },
     });
     return promptPlugin;

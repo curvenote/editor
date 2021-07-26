@@ -32,7 +32,7 @@ var TextAction = function (props) {
             setValid(false);
         });
     }, []);
-    return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.root },
+    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "cancel", onClick: onCancel }),
         React.createElement(Input, { autoFocus: true, disableUnderline: true, value: current, onChange: updateText, onKeyDownCapture: function (e) {
                 if (e.key === 'Enter') {

@@ -34,7 +34,7 @@ var EquationActions = function (props) {
         return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { numbered: !numbered }, false));
     };
     positionPopper();
-    return (React.createElement(Grid, { container: true, alignItems: "center", justify: "center", className: classes.root },
+    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered })));
 };
 export default EquationActions;
