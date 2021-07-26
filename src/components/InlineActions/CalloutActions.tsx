@@ -44,7 +44,7 @@ const CalloutActions: React.FC<ActionProps> = (props) => {
 
   const { kind } = node.attrs;
   return (
-    <Grid container alignItems="center" justify="center" className={classes.root}>
+    <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <MenuIcon kind="info" active={kind === 'info'} onClick={onKind('info')} />
       <MenuIcon kind="success" active={kind === 'success'} onClick={onKind('success')} />
       <MenuIcon kind="active" active={kind === 'active'} onClick={onKind('active')} />

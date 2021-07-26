@@ -64,7 +64,7 @@ const HeadingActions: React.FC<ActionProps> = (props) => {
   positionPopper();
 
   return (
-    <Grid container alignItems="center" justify="center" className={classes.root}>
+    <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <MenuIcon
         kind="expand"
         onClick={onOpen}

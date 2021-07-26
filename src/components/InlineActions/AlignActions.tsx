@@ -51,7 +51,7 @@ const AlignActions: React.FC<Props> = (props) => {
   positionPopper();
 
   return (
-    <Grid container alignItems="center" justify="center" className={classes.root}>
+    <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <MenuIcon kind="left" active={align === 'left'} onClick={onAlign('left')} />
       <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
       <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />

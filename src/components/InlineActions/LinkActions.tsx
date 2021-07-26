@@ -89,7 +89,7 @@ const LinkActions: React.FC<ActionProps> = (props) => {
   }
 
   return (
-    <Grid container alignItems="center" justify="center" className={classes.grid}>
+    <Grid container alignItems="center" justifyContent="center" className={classes.grid}>
       <Tooltip title={link.tooltip}>
         <Button
           className={classes.button}

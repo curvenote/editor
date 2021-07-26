@@ -44,7 +44,7 @@ const TextAction: React.FC<Props> = (props) => {
   }, []);
 
   return (
-    <Grid container alignItems="center" justify="center" className={classes.root}>
+    <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <MenuIcon kind="cancel" onClick={onCancel} />
       <Input
         autoFocus
