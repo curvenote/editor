@@ -1,9 +1,8 @@
-/* eslint-disable object-curly-newline */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { Button, createMuiTheme } from '@material-ui/core';
+import { Button, createTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
@@ -33,7 +32,7 @@ declare global {
 }
 
 const store: Store = createStore(rootReducer, applyMiddleware(...middleware));
-const theme = createMuiTheme({});
+const theme = createTheme({});
 
 const stateKey = 'myEditor';
 const viewId1 = 'view1';
