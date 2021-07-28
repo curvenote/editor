@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { formatDatetime } from '@curvenote/schema/dist/nodes/time';

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Node } from 'prosemirror-model';

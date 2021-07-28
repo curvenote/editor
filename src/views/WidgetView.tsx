@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Node, DOMOutputSpecArray } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { openAttributeEditor } from '../store/attrs/actions';

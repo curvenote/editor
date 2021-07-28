@@ -1,9 +1,8 @@
-/* eslint-disable max-classes-per-file */
 import { Node } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
+import { EditorView, NodeView } from 'prosemirror-view';
 import { isEditable } from '../prosemirror/plugins/editable';
 
-class ImageView {
+class ImageView implements NodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLDivElement;
 
