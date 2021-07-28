@@ -1,6 +1,6 @@
 import { Node } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
-declare class ImageView {
+import { EditorView, NodeView } from 'prosemirror-view';
+declare class ImageView implements NodeView {
     dom: HTMLDivElement;
     div: HTMLDivElement;
     iframe: HTMLIFrameElement;
