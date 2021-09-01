@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { connectSidenote, disconnectSidenote, selectSidenote } from '../store/ui/actions';
+import { connectSidenote, selectSidenote } from '../store/ui/actions';
 import { sidenoteTop, isSidenoteSelected } from '../store/ui/selectors';
 import { Dispatch, State } from '../store';
 import { getDoc } from './utils';

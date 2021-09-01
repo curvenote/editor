@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { connectAnchorBase } from '../store/ui/actions';
@@ -20,7 +19,7 @@ export const AnchorBase = (props: Props) => {
   const { anchor, children, className } = props;
   const dispatch = useDispatch<Dispatch>();
   const [doc, setDoc] = useState<string>();
-  const [ref, setRef] = useState<HTMLDivElement | null>(null);
+  const [, setRef] = useState<HTMLDivElement | null>(null);
 
   const selected = useSelector((state: State) => isSidenoteSelected(state, doc, anchor));
   const onRef = useCallback((el: HTMLDivElement) => {
@@ -30,6 +29,7 @@ export const AnchorBase = (props: Props) => {
       setDoc(parentDoc);
       dispatch(connectAnchorBase(parentDoc, anchor, el));
     }
+    // TODO: handle disconnect in a useEffect
   }, []);
   const classes = classNames({
     selected,
