@@ -108,7 +108,7 @@ const EditorMenu: React.FC<Props> = (props) => {
   const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [stateId, viewId]);
   const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [stateId, viewId]);
   const clickUl = useCallback(() => command(CommandNames.bullet_list), [stateId, viewId]);
-  const clickGrid = useCallback(() => command(CommandNames.create_grid), [stateId, viewId]);
+  const clickGrid = useCallback(() => command(CommandNames.insert_table), [stateId, viewId]);
   const clickOl = useCallback(() => command(CommandNames.ordered_list), [stateId, viewId]);
   const clickLink = useCallback(() => command(CommandNames.link), [stateId, viewId]);
   const clickMath = useCallback(() => wrapInline(schema?.nodes.math), [stateId, viewId]);

@@ -19,14 +19,18 @@ import getPromptPlugin from './prompts';
 const ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
 const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
 
+const tablesPlugin = [
+  columnResizing({}),
+  tableEditing(),
+  keymap({
+    Tab: goToNextCell(1),
+    'Shift-Tab': goToNextCell(-1),
+  }),
+];
+
 export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [
-    columnResizing({}),
-    tableEditing(),
-    keymap({
-      Tab: goToNextCell(1),
-      'Shift-Tab': goToNextCell(-1),
-    }),
+    ...tablesPlugin,
     editablePlugin(startEditable),
     ...suggestion(
       (action) => store.dispatch(handleSuggestion(action)),

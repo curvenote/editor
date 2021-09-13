@@ -8,7 +8,7 @@ export enum CommandNames {
   'equation' = 'equation',
   'horizontal_rule' = 'horizontal_rule',
   'bullet_list' = 'bullet_list',
-  'create_grid' = 'create_grid',
+  'insert_table' = 'insert_table',
   'ordered_list' = 'ordered_list',
   'emoji' = 'emoji',
   'paragraph' = 'paragraph',

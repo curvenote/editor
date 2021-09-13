@@ -67,7 +67,7 @@ export function executeCommand(
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
     switch (command) {
-      case CommandNames.create_grid: {
+      case CommandNames.insert_table: {
         const tr = view.state.tr
           .replaceSelectionWith(
             schema.nodes.table.create(
