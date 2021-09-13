@@ -37,6 +37,7 @@ import LooksOneIcon from '@material-ui/icons/LooksOne';
 import ShortTextIcon from '@material-ui/icons/ShortText';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import CancelIcon from '@material-ui/icons/Cancel';
+import GridIcon from '@material-ui/icons/GridOn';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import classNames from 'classnames';
@@ -71,6 +72,7 @@ const deMacify = (title: string | React.ReactElement) =>
   mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-');
 
 const icons = {
+  table: { help: 'Create Table', Icon: GridIcon },
   cancel: { help: 'Cancel', Icon: CancelIcon },
   enterSave: { help: 'Save', Icon: KeyboardReturnIcon },
   bold: { help: 'Bold ⌘B', Icon: FormatBoldIcon },

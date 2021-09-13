@@ -108,6 +108,7 @@ const EditorMenu: React.FC<Props> = (props) => {
   const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [stateId, viewId]);
   const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [stateId, viewId]);
   const clickUl = useCallback(() => command(CommandNames.bullet_list), [stateId, viewId]);
+  const clickGrid = useCallback(() => command(CommandNames.create_grid), [stateId, viewId]);
   const clickOl = useCallback(() => command(CommandNames.ordered_list), [stateId, viewId]);
   const clickLink = useCallback(() => command(CommandNames.link), [stateId, viewId]);
   const clickMath = useCallback(() => wrapInline(schema?.nodes.math), [stateId, viewId]);
@@ -141,6 +142,8 @@ const EditorMenu: React.FC<Props> = (props) => {
       <MenuIcon kind="code" active={active.code} disabled={off} onClick={clickCode} />
       <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
       <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSuper} />
+      <MenuIcon kind="divider" />
+      <MenuIcon kind="table" active={parents.ul} disabled={off} onClick={clickGrid} />
       <MenuIcon kind="divider" />
       <MenuIcon
         kind="ul"

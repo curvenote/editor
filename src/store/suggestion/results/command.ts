@@ -67,6 +67,26 @@ export function executeCommand(
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
     switch (command) {
+      case CommandNames.create_grid: {
+        const tr = view.state.tr
+          .replaceSelectionWith(
+            schema.nodes.table.create(
+              undefined,
+              Fragment.fromArray([
+                schema.nodes.table_row.create(
+                  undefined,
+                  Fragment.fromArray([
+                    schema.nodes.table_cell.createAndFill(),
+                    schema.nodes.table_cell.createAndFill(),
+                  ]),
+                ),
+              ]),
+            ),
+          )
+          .scrollIntoView();
+        view.dispatch(tr);
+        return true;
+      }
       case CommandNames.link: {
         removeText();
         const linkBounds = getLinkBoundsIfTheyExist(view.state);

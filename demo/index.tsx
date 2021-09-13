@@ -109,7 +109,8 @@ store.subscribe(() => {
   const html = document.getElementById('html');
   const editor = store.getState().editor.state.editors[stateKey];
   if (myst) {
-    myst.innerText = toMarkdown(editor.state.doc);
+    // TODO: revive this
+    // myst.innerText = toMarkdown(editor.state.doc);
   }
   if (tex) {
     try {
@@ -121,7 +122,6 @@ store.subscribe(() => {
   if (html) {
     html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
   }
-  console.log(editor.counts);
 });
 
 ReactDOM.render(

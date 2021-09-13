@@ -24,7 +24,7 @@ export async function renderMath(math: string, element: HTMLElement, inline: boo
     });
   } catch (error) {
     // eslint-disable-next-line no-param-reassign
-    element.innerText = error;
+    element.innerText = error as string;
   }
 }
 

@@ -5,6 +5,7 @@ import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
 import { Schema } from 'prosemirror-model';
+import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import suggestion from './suggestion';
 import { buildKeymap } from '../keymap';
 import inputrules from '../inputrules';
@@ -20,6 +21,12 @@ const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
 
 export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [
+    columnResizing({}),
+    tableEditing(),
+    keymap({
+      Tab: goToNextCell(1),
+      'Shift-Tab': goToNextCell(-1),
+    }),
     editablePlugin(startEditable),
     ...suggestion(
       (action) => store.dispatch(handleSuggestion(action)),
