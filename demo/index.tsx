@@ -109,8 +109,11 @@ store.subscribe(() => {
   const html = document.getElementById('html');
   const editor = store.getState().editor.state.editors[stateKey];
   if (myst) {
-    // TODO: revive this
-    // myst.innerText = toMarkdown(editor.state.doc);
+    try {
+      myst.innerText = toMarkdown(editor.state.doc);
+    } catch (e) {
+      myst.innerText = 'Error converting to markdown';
+    }
   }
   if (tex) {
     try {
