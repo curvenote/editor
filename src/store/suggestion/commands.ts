@@ -170,6 +170,12 @@ export const commands: CommandResult[] = [
     shortcut: [':'],
   },
   {
+    name: CommandNames.insert_table,
+    title: 'Table',
+    description: 'Creates a 1X2 Table',
+    node: 'table',
+  },
+  {
     name: CommandNames.code,
     title: 'Code Block',
     description: 'Add a block of code',

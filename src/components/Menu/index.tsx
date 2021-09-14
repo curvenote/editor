@@ -133,6 +133,7 @@ const EditorMenu: React.FC<Props> = (props) => {
       selectors.selectionIsChildOf(state, stateId, {
         ul: schema?.nodes.bullet_list,
         ol: schema?.nodes.ordered_list,
+        table: schema?.nodes.table,
         math: schema?.nodes.math,
         cite_group: schema?.nodes.cite_group,
       }),
@@ -204,17 +205,20 @@ const EditorMenu: React.FC<Props> = (props) => {
       <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
       <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSuper} />
 
-      <MenuIcon kind="divider" />
-      <MenuIcon kind="table" active={parents.ul} disabled={off} onClick={clickGrid} />
-      <MenuIcon
-        kind="table"
-        active={parents.ul}
-        disabled={off}
-        onClick={(e) => {
-          setIsTableMenuOpen(true);
-          setTableAnchor(e.currentTarget);
-        }}
-      />
+      {parents.table && (
+        <>
+          <MenuIcon kind="divider" />
+          <MenuIcon
+            kind="table"
+            active={parents.ul}
+            disabled={off}
+            onClick={(e) => {
+              setIsTableMenuOpen(true);
+              setTableAnchor(e.currentTarget);
+            }}
+          />
+        </>
+      )}
       <TableMenu
         anchor={tableAnchor}
         onClose={() => {
@@ -268,6 +272,10 @@ const EditorMenu: React.FC<Props> = (props) => {
                 action={clickEquation}
                 title="Equation Block"
               />
+            )}
+
+            {!parents.table && (
+              <MenuAction title="Table" kind="table" disabled={off} action={clickGrid} />
             )}
             {schema?.nodes.cite && (
               <MenuAction kind="link" disabled={off} action={clickCite} title="Citation" />
