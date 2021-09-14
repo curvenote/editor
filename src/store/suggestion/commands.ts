@@ -8,7 +8,6 @@ export enum CommandNames {
   'equation' = 'equation',
   'horizontal_rule' = 'horizontal_rule',
   'bullet_list' = 'bullet_list',
-  'insert_table' = 'insert_table',
   'ordered_list' = 'ordered_list',
   'emoji' = 'emoji',
   'paragraph' = 'paragraph',
@@ -40,6 +39,21 @@ export enum CommandNames {
   'link_figure' = 'link_figure',
   'link_equation' = 'link_equation',
   'link_code' = 'link_code',
+
+  // Table
+  'insert_table' = 'insert_table',
+  'add_column_before' = 'add_column_before',
+  'add_column_after' = 'add_column_after',
+  'delete_column' = 'delete_column',
+  'add_row_before' = 'add_row_before',
+  'add_row_after' = 'add_row_after',
+  'delete_row' = 'delete_row',
+  'delete_table' = 'delete_table',
+  'merge_cells' = 'merge_cells',
+  'split_cell' = 'split_cell',
+  'toggle_header_column' = 'toggle_header_column',
+  'toggle_header_row' = 'toggle_header_row',
+  'toggle_header_cell' = 'toggle_header_cell',
 }
 
 export interface CommandResult {

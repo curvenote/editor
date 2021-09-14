@@ -1,6 +1,22 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
 import { Fragment, Schema } from 'prosemirror-model';
+import {
+  addColumnAfter,
+  addColumnBefore,
+  deleteColumn,
+  addRowAfter,
+  addRowBefore,
+  deleteRow,
+  mergeCells,
+  splitCell,
+  setCellAttr,
+  toggleHeaderRow,
+  toggleHeaderColumn,
+  toggleHeaderCell,
+  deleteTable,
+} from 'prosemirror-tables';
+
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
@@ -35,6 +51,21 @@ const options = {
 };
 const fuse = new Fuse(commands, options);
 
+const TABLE_COMMANDS: { [key: string]: any } = {
+  [CommandNames.add_column_before]: addColumnBefore,
+  [CommandNames.add_column_after]: addColumnAfter,
+  [CommandNames.delete_column]: deleteColumn,
+  [CommandNames.add_row_before]: addRowBefore,
+  [CommandNames.add_row_after]: addRowAfter,
+  [CommandNames.delete_row]: deleteRow,
+  [CommandNames.delete_table]: deleteTable,
+  [CommandNames.merge_cells]: mergeCells,
+  [CommandNames.split_cell]: splitCell,
+  [CommandNames.toggle_header_row]: toggleHeaderRow,
+  [CommandNames.toggle_header_column]: toggleHeaderColumn,
+  [CommandNames.toggle_header_cell]: toggleHeaderCell,
+};
+
 const filterCommands = (schema: Schema, results: CommandResult[]) => {
   const allowedNodes = new Set(Object.keys(schema.nodes));
   const filtered = results.filter((r) => {
@@ -66,6 +97,11 @@ export function executeCommand(
 
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
+    if (TABLE_COMMANDS[command]) {
+      TABLE_COMMANDS[command](view.state, view.dispatch);
+      return true;
+    }
+
     switch (command) {
       case CommandNames.insert_table: {
         const tr = view.state.tr
@@ -87,6 +123,20 @@ export function executeCommand(
         view.dispatch(tr);
         return true;
       }
+
+      case CommandNames.add_column_before: {
+        addColumnBefore(view.state, view.dispatch);
+        return true;
+      }
+      case CommandNames.add_column_after: {
+        addColumnAfter(view.state, view.dispatch);
+        return true;
+      }
+      case CommandNames.delete_column: {
+        deleteColumn(view.state, view.dispatch);
+        return true;
+      }
+
       case CommandNames.link: {
         removeText();
         const linkBounds = getLinkBoundsIfTheyExist(view.state);

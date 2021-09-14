@@ -33,6 +33,59 @@ interface Props {
   disabled?: boolean;
 }
 
+function TableMenu({
+  onClose,
+  anchor,
+  isOpen,
+  command,
+}: {
+  onClose: () => void;
+  anchor: any;
+  isOpen: boolean;
+  command: any;
+}) {
+  function item(title: string, action: CommandNames) {
+    return (
+      <MenuAction
+        title={title}
+        action={() => {
+          command(action);
+        }}
+      />
+    );
+  }
+  const tableMenu = [
+    item('Insert column before', CommandNames.add_column_before),
+    item('Insert column after', CommandNames.add_column_after),
+    item('Delete column', CommandNames.delete_column),
+    item('Insert row before', CommandNames.add_row_before),
+    item('Insert row after', CommandNames.add_row_after),
+    item('Delete row', CommandNames.delete_row),
+    item('Delete table', CommandNames.delete_table),
+    item('Merge cells', CommandNames.merge_cells),
+    item('Split cell', CommandNames.split_cell),
+    item('Toggle header column', CommandNames.toggle_header_column),
+    item('Toggle header row', CommandNames.toggle_header_row),
+    item('Toggle header cells', CommandNames.toggle_header_cell),
+  ];
+
+  return (
+    <>
+      {isOpen && (
+        <Menu
+          id="table-menu"
+          anchorEl={anchor}
+          keepMounted
+          open={Boolean(anchor)}
+          onClose={onClose}
+        >
+          <div onClick={() => onClose()}>{tableMenu}</div>
+        </Menu>
+      )}
+    </>
+  );
+}
+
 const EditorMenu: React.FC<Props> = (props) => {
   const { standAlone, disabled } = props;
 
@@ -41,6 +94,8 @@ const EditorMenu: React.FC<Props> = (props) => {
   const dispatch = useDispatch<Dispatch>();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [tableAnchor, setTableAnchor] = React.useState<null | HTMLElement>(null);
+  const [isTableMenuOpen, setIsTableMenuOpen] = React.useState(false);
 
   const onOpen = useCallback(
     (event: React.MouseEvent<any>) => setAnchorEl(event.currentTarget),
@@ -95,32 +150,38 @@ const EditorMenu: React.FC<Props> = (props) => {
   // TODO: make this memoized? Needs to be done carefully.
 
   // Helper functions
-  const toggleMark = (mark?: MarkType) => dispatch(actions.toggleMark(stateId, viewId, mark));
+  const toggleMark = useCallback(
+    (mark?: MarkType) => dispatch(actions.toggleMark(stateId, viewId, mark)),
+    [stateId, viewId],
+  );
   const wrapInline = (node?: NodeType) => dispatch(actions.insertInlineNode(node));
-  const command = (name: CommandNames) => dispatch(actions.executeCommand(name, viewId));
+  const command = useCallback(
+    (name: CommandNames) => dispatch(actions.executeCommand(name, viewId)),
+    [stateId, viewId],
+  );
   const toggleBrackets = useCallback(() => dispatch(toggleCitationBrackets()), []);
 
-  const clickBold = useCallback(() => toggleMark(schema?.marks.strong), [stateId, viewId]);
-  const clickItalic = useCallback(() => toggleMark(schema?.marks.em), [stateId, viewId]);
-  const clickUnderline = useCallback(() => toggleMark(schema?.marks.underline), [stateId, viewId]);
-  const clickStrike = useCallback(() => toggleMark(schema?.marks.strikethrough), [stateId, viewId]);
-  const clickCode = useCallback(() => toggleMark(schema?.marks.code), [stateId, viewId]);
-  const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [stateId, viewId]);
-  const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [stateId, viewId]);
-  const clickUl = useCallback(() => command(CommandNames.bullet_list), [stateId, viewId]);
-  const clickGrid = useCallback(() => command(CommandNames.insert_table), [stateId, viewId]);
-  const clickOl = useCallback(() => command(CommandNames.ordered_list), [stateId, viewId]);
-  const clickLink = useCallback(() => command(CommandNames.link), [stateId, viewId]);
-  const clickMath = useCallback(() => wrapInline(schema?.nodes.math), [stateId, viewId]);
-  const clickEquation = useCallback(() => command(CommandNames.equation), [stateId, viewId]);
-  const clickCite = useCallback(() => command(CommandNames.citation), [stateId, viewId]);
-  const clickHr = useCallback(() => command(CommandNames.horizontal_rule), [stateId, viewId]);
-  const clickCodeBlk = useCallback(() => command(CommandNames.code), [stateId, viewId]);
-  const clickYoutube = useCallback(() => command(CommandNames.youtube), [stateId, viewId]);
-  const clickVimeo = useCallback(() => command(CommandNames.vimeo), [stateId, viewId]);
-  const clickLoom = useCallback(() => command(CommandNames.loom), [stateId, viewId]);
-  const clickMiro = useCallback(() => command(CommandNames.miro), [stateId, viewId]);
-  const clickIframe = useCallback(() => command(CommandNames.iframe), [stateId, viewId]);
+  const clickBold = useCallback(() => toggleMark(schema?.marks.strong), [toggleMark]);
+  const clickItalic = useCallback(() => toggleMark(schema?.marks.em), [toggleMark]);
+  const clickUnderline = useCallback(() => toggleMark(schema?.marks.underline), [toggleMark]);
+  const clickStrike = useCallback(() => toggleMark(schema?.marks.strikethrough), [toggleMark]);
+  const clickCode = useCallback(() => toggleMark(schema?.marks.code), [toggleMark]);
+  const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [toggleMark]);
+  const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [toggleMark]);
+  const clickUl = useCallback(() => command(CommandNames.bullet_list), [command]);
+  const clickGrid = useCallback(() => command(CommandNames.insert_table), [command]);
+  const clickOl = useCallback(() => command(CommandNames.ordered_list), [command]);
+  const clickLink = useCallback(() => command(CommandNames.link), [command]);
+  const clickMath = useCallback(() => wrapInline(schema?.nodes.math), [command]);
+  const clickEquation = useCallback(() => command(CommandNames.equation), [command]);
+  const clickCite = useCallback(() => command(CommandNames.citation), [command]);
+  const clickHr = useCallback(() => command(CommandNames.horizontal_rule), [command]);
+  const clickCodeBlk = useCallback(() => command(CommandNames.code), [command]);
+  const clickYoutube = useCallback(() => command(CommandNames.youtube), [command]);
+  const clickVimeo = useCallback(() => command(CommandNames.vimeo), [command]);
+  const clickLoom = useCallback(() => command(CommandNames.loom), [command]);
+  const clickMiro = useCallback(() => command(CommandNames.miro), [command]);
+  const clickIframe = useCallback(() => command(CommandNames.iframe), [command]);
 
   return (
     <Grid
@@ -142,9 +203,28 @@ const EditorMenu: React.FC<Props> = (props) => {
       <MenuIcon kind="code" active={active.code} disabled={off} onClick={clickCode} />
       <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
       <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSuper} />
+
       <MenuIcon kind="divider" />
       <MenuIcon kind="table" active={parents.ul} disabled={off} onClick={clickGrid} />
+      <MenuIcon
+        kind="table"
+        active={parents.ul}
+        disabled={off}
+        onClick={(e) => {
+          setIsTableMenuOpen(true);
+          setTableAnchor(e.currentTarget);
+        }}
+      />
+      <TableMenu
+        anchor={tableAnchor}
+        onClose={() => {
+          setIsTableMenuOpen(false);
+        }}
+        isOpen={isTableMenuOpen}
+        command={command}
+      />
       <MenuIcon kind="divider" />
+
       <MenuIcon
         kind="ul"
         active={parents.ul}
