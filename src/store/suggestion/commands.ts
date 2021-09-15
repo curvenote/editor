@@ -227,7 +227,7 @@ export const DEFAULT_COMMANDS: CommandResult[] = [
   {
     name: CommandNames.insert_table,
     title: 'Table',
-    description: 'Creates a 1X2 Table',
+    description: 'Creates a 2X2 Table',
     node: 'table',
   },
   {

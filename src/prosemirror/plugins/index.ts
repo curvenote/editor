@@ -30,7 +30,6 @@ const tablesPlugin = [
 
 export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [
-    ...tablesPlugin,
     editablePlugin(startEditable),
     ...suggestion(
       (action) => store.dispatch(handleSuggestion(action)),
@@ -47,6 +46,7 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
     dropCursor(),
     gapCursor(),
     collab({ version }),
+    ...tablesPlugin, // put this plugin near the end of the array of plugins, since it handles mouse and arrow key events in tables rather broadly
     history(),
   ];
 }

@@ -10,7 +10,6 @@ import {
   deleteRow,
   mergeCells,
   splitCell,
-  setCellAttr,
   toggleHeaderRow,
   toggleHeaderColumn,
   toggleHeaderCell,
@@ -49,7 +48,6 @@ const options = {
     },
   ],
 };
-const fuse = new Fuse(DEFAULT_COMMANDS, options);
 
 const TABLE_COMMANDS: { [key: string]: any } = {
   [CommandNames.add_column_before]: addColumnBefore,
@@ -112,6 +110,13 @@ export function executeCommand(
             schema.nodes.table.create(
               undefined,
               Fragment.fromArray([
+                schema.nodes.table_row.create(
+                  undefined,
+                  Fragment.fromArray([
+                    schema.nodes.table_cell.createAndFill(),
+                    schema.nodes.table_cell.createAndFill(),
+                  ]),
+                ),
                 schema.nodes.table_row.create(
                   undefined,
                   Fragment.fromArray([
@@ -362,11 +367,13 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
 
 export function filterResults(
   schema: Schema,
+  commands: CommandResult[],
   search: string,
   callback: (results: CommandResult[]) => void,
 ): void {
   // This lets the keystroke go through:
   setTimeout(() => {
+    const fuse = new Fuse(commands, options);
     const results = fuse.search(search as string);
     callback(filterCommands(schema, results.map((result) => result.item) as CommandResult[]));
   }, 1);

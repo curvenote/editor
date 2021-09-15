@@ -274,9 +274,8 @@ const EditorMenu: React.FC<Props> = (props) => {
               />
             )}
 
-            {!parents.table && (
-              <MenuAction title="Table" kind="table" disabled={off} action={clickGrid} />
-            )}
+            <MenuAction title="Table" kind="table" disabled={off} action={clickGrid} />
+
             {schema?.nodes.cite && (
               <MenuAction kind="link" disabled={off} action={clickCite} title="Citation" />
             )}

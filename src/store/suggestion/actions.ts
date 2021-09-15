@@ -110,7 +110,11 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
   };
 }
 
-export function filterResults(schema: Schema, search: string): AppThunk<void> {
+export function filterResults(
+  schema: Schema,
+  search: string,
+  { commands }: { commands: CommandResult[] },
+): AppThunk<void> {
   return (dispatch, getState) => {
     const { kind } = getSuggestion(getState());
     switch (kind) {
@@ -119,7 +123,7 @@ export function filterResults(schema: Schema, search: string): AppThunk<void> {
           dispatch(updateResults(results)),
         );
       case SuggestionKind.command:
-        return command.filterResults(schema, search, (results: CommandResult[]) =>
+        return command.filterResults(schema, commands, search, (results: CommandResult[]) =>
           dispatch(updateResults(results)),
         );
       case SuggestionKind.link:
@@ -147,22 +151,16 @@ function setStartingSuggestions(
   kind: SuggestionKind,
   search: string,
   create = true,
+  { commands }: { commands: CommandResult[] },
 ): AppThunk<void> {
   return async (dispatch, getState) => {
-    const { table: isParentTable } = selectionIsChildOfActiveState(getState(), {
-      table: schema?.nodes.table,
-    });
-
     switch (kind) {
       case SuggestionKind.emoji: {
         dispatch(updateResults(emoji.startingSuggestions));
         return;
       }
       case SuggestionKind.command: {
-        const starting = command.buildSuggestionsFromSchema(
-          schema,
-          isParentTable ? DEFAULT_TABLE_COMMANDS : DEFAULT_COMMANDS,
-        );
+        const starting = command.buildSuggestionsFromSchema(schema, commands);
         dispatch(updateResults(starting));
         return;
       }
@@ -200,9 +198,13 @@ export function handleSuggestion(
       ),
     );
     const { schema } = action.view.state;
+    const { table: isParentTable } = selectionIsChildOfActiveState(getState(), {
+      table: schema?.nodes.table,
+    });
+    const commands = isParentTable ? DEFAULT_TABLE_COMMANDS : DEFAULT_COMMANDS;
 
     if (action.kind === 'open') {
-      dispatch(setStartingSuggestions(schema, kind, action.search ?? '', true));
+      dispatch(setStartingSuggestions(schema, kind, action.search ?? '', true, { commands }));
       dispatch(selectSuggestion(0));
     }
     if (action.kind === 'previous' || action.kind === 'next') {
@@ -216,9 +218,9 @@ export function handleSuggestion(
     }
     if (action.kind === 'filter') {
       if (action.search === '' || action.search == null) {
-        dispatch(setStartingSuggestions(schema, kind, '', false));
+        dispatch(setStartingSuggestions(schema, kind, '', false, { commands }));
       } else {
-        dispatch(filterResults(action.view.state.schema, action.search));
+        dispatch(filterResults(action.view.state.schema, action.search, { commands }));
       }
     }
     if (action.kind === 'select') {
