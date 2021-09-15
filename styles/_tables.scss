@@ -60,7 +60,12 @@
   font-weight: bold;
   text-align: left;
 }
+.ProseMirror th {
+  background-color: rgba(232, 232, 232, 0.4);
+}
+.ProseMirror th p {
+  font-weight: bold;
+}
 .ProseMirror p {
-  margin-top: 0.8rem;
-  margin-bottom: 0.8rem;
+  margin: 0.75rem 0.25rem;
 }

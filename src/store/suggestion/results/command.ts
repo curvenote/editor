@@ -102,6 +102,8 @@ export function executeCommand(
       return true;
     }
 
+    console.log('nodes', schema.nodes.text, schema.nodes.text.create, schema);
+
     switch (command) {
       case CommandNames.insert_table: {
         removeText();
@@ -110,6 +112,14 @@ export function executeCommand(
             schema.nodes.table.create(
               undefined,
               Fragment.fromArray([
+                // TODO: create placeholder table with header
+                // schema.nodes.table_row.create(
+                //   undefined,
+                //   Fragment.fromArray([
+                //     schema.nodes.table_header.create({}, schema.nodes.text.create('LOVELIFE')),
+                //     schema.nodes.table_header.createAndFill(),
+                //   ]),
+                // ),
                 schema.nodes.table_row.create(
                   undefined,
                   Fragment.fromArray([

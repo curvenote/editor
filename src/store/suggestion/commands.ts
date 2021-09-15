@@ -110,7 +110,7 @@ export const DEFAULT_TABLE_COMMANDS: CommandResult[] = [
   },
   {
     name: CommandNames.add_row_before,
-    title: 'Add Row Left',
+    title: 'Add Row Above',
     description: 'Add a row on the left of current cell',
     node: 'table',
   },
@@ -136,6 +136,18 @@ export const DEFAULT_TABLE_COMMANDS: CommandResult[] = [
     name: CommandNames.delete_column,
     title: 'Delete Column',
     description: 'Delete the column the current cell belongs to',
+    node: 'table',
+  },
+  {
+    name: CommandNames.toggle_header_row,
+    title: 'Toggle Header Row',
+    description: 'Toggle the current row to be a table header',
+    node: 'table',
+  },
+  {
+    name: CommandNames.toggle_header_column,
+    title: 'Toggle Header Column',
+    description: 'Toggle the current column to be a table header',
     node: 'table',
   },
   {
