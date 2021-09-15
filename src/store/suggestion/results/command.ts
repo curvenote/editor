@@ -98,12 +98,14 @@ export function executeCommand(
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
     if (TABLE_COMMANDS[command]) {
+      removeText();
       TABLE_COMMANDS[command](view.state, view.dispatch);
       return true;
     }
 
     switch (command) {
       case CommandNames.insert_table: {
+        removeText();
         const tr = view.state.tr
           .replaceSelectionWith(
             schema.nodes.table.create(
@@ -123,20 +125,6 @@ export function executeCommand(
         view.dispatch(tr);
         return true;
       }
-
-      case CommandNames.add_column_before: {
-        addColumnBefore(view.state, view.dispatch);
-        return true;
-      }
-      case CommandNames.add_column_after: {
-        addColumnAfter(view.state, view.dispatch);
-        return true;
-      }
-      case CommandNames.delete_column: {
-        deleteColumn(view.state, view.dispatch);
-        return true;
-      }
-
       case CommandNames.link: {
         removeText();
         const linkBounds = getLinkBoundsIfTheyExist(view.state);
