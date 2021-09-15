@@ -69,3 +69,11 @@
 .ProseMirror p {
   margin: 0.75rem 0.25rem;
 }
+.ProseMirror td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ProseMirror td p.prompt:before {
+  left: 0px;
+}
