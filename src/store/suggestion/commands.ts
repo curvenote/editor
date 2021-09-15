@@ -66,7 +66,91 @@ export interface CommandResult {
   node?: keyof typeof schemas.nodes;
 }
 
-export const commands: CommandResult[] = [
+const MATH_COMMAND: CommandResult = {
+  name: CommandNames.math,
+  title: 'Inline Math',
+  description: 'Add some inline math!',
+  shortcut: ['$$ Type $Ax=b$ or two dollar signs in a paragraph'],
+  node: 'math',
+};
+const EMOJI_COMMAND: CommandResult = {
+  name: CommandNames.emoji,
+  title: 'Emoji',
+  description: 'Add some emotion to your work 🎉',
+  shortcut: [':'],
+};
+const ORDERED_LIST_COMMAND: CommandResult = {
+  name: CommandNames.ordered_list,
+  title: 'Numbered list',
+  description: 'Insert an ordered list',
+  shortcut: 'Mod-Shift-7',
+  node: 'ordered_list',
+};
+const BULLET_LIST_COMMAND: CommandResult = {
+  name: CommandNames.bullet_list,
+  title: 'Bullet list',
+  description: 'Insert an unordered list',
+  shortcut: 'Mod-Shift-8',
+  node: 'bullet_list',
+};
+const CITATION_COMMAND: CommandResult = {
+  name: CommandNames.citation,
+  title: 'Cite',
+  description: 'Quickly reference a citation',
+  shortcut: ['[[cite: To access existing ciations'],
+  node: 'cite',
+};
+
+export const DEFAULT_TABLE_COMMANDS: CommandResult[] = [
+  {
+    name: CommandNames.add_row_after,
+    title: 'Add Row Below',
+    description: 'Add a row after current cell',
+    node: 'table',
+  },
+  {
+    name: CommandNames.add_row_before,
+    title: 'Add Row Left',
+    description: 'Add a row on the left of current cell',
+    node: 'table',
+  },
+  {
+    name: CommandNames.add_column_after,
+    title: 'Add Column Right',
+    description: 'Add a column on the right of current cell',
+    node: 'table',
+  },
+  {
+    name: CommandNames.add_column_before,
+    title: 'Add Column Left',
+    description: 'Add a column on the left of current cell',
+    node: 'table',
+  },
+  {
+    name: CommandNames.delete_row,
+    title: 'Delete Row',
+    description: 'Delete the entire row',
+    node: 'table',
+  },
+  {
+    name: CommandNames.delete_column,
+    title: 'Delete Column',
+    description: 'Delete the column the current cell belongs to',
+    node: 'table',
+  },
+  {
+    name: CommandNames.delete_table,
+    title: 'Delete Table',
+    description: 'Delete the entire table',
+    node: 'table',
+  },
+  MATH_COMMAND,
+  ORDERED_LIST_COMMAND,
+  BULLET_LIST_COMMAND,
+  CITATION_COMMAND,
+];
+
+export const DEFAULT_COMMANDS: CommandResult[] = [
   {
     name: CommandNames.callout,
     title: 'Callout Panel',
@@ -79,13 +163,7 @@ export const commands: CommandResult[] = [
     description: 'Add a section in the right-hand column',
     node: 'aside',
   },
-  {
-    name: CommandNames.math,
-    title: 'Inline Math',
-    description: 'Add some inline math!',
-    shortcut: ['$$ Type $Ax=b$ or two dollar signs in a paragraph'],
-    node: 'math',
-  },
+  MATH_COMMAND,
   {
     name: CommandNames.equation,
     title: 'Equation',
@@ -100,27 +178,9 @@ export const commands: CommandResult[] = [
     shortcut: ['--- Insert three -, ~, or * on a new line'],
     node: 'horizontal_rule',
   },
-  {
-    name: CommandNames.bullet_list,
-    title: 'Bullet list',
-    description: 'Insert an unordered list',
-    shortcut: 'Mod-Shift-8',
-    node: 'bullet_list',
-  },
-  {
-    name: CommandNames.ordered_list,
-    title: 'Numbered list',
-    description: 'Insert an ordered list',
-    shortcut: 'Mod-Shift-7',
-    node: 'ordered_list',
-  },
-  {
-    name: CommandNames.citation,
-    title: 'Cite',
-    description: 'Quickly reference a citation',
-    shortcut: ['[[cite: To access existing ciations'],
-    node: 'cite',
-  },
+  ORDERED_LIST_COMMAND,
+  BULLET_LIST_COMMAND,
+  CITATION_COMMAND,
   {
     name: CommandNames.link_article,
     title: 'Link to Article',
@@ -163,12 +223,7 @@ export const commands: CommandResult[] = [
     description: 'Cite existing literature',
     node: 'cite',
   },
-  {
-    name: CommandNames.emoji,
-    title: 'Emoji',
-    description: 'Add some emotion to your work 🎉',
-    shortcut: [':'],
-  },
+  EMOJI_COMMAND,
   {
     name: CommandNames.insert_table,
     title: 'Table',

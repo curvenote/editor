@@ -20,7 +20,7 @@ import {
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
-import { commands, CommandResult, CommandNames } from '../commands';
+import { DEFAULT_COMMANDS, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
@@ -49,7 +49,7 @@ const options = {
     },
   ],
 };
-const fuse = new Fuse(commands, options);
+const fuse = new Fuse(DEFAULT_COMMANDS, options);
 
 const TABLE_COMMANDS: { [key: string]: any } = {
   [CommandNames.add_column_before]: addColumnBefore,
@@ -75,7 +75,8 @@ const filterCommands = (schema: Schema, results: CommandResult[]) => {
   return filtered;
 };
 
-export const startingSuggestions = (schema: Schema) => filterCommands(schema, commands);
+export const buildSuggestionsFromSchema = (schema: Schema, commands = DEFAULT_COMMANDS) =>
+  filterCommands(schema, commands);
 
 export function executeCommand(
   command: CommandNames,

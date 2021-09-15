@@ -11,6 +11,7 @@ import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditorState } from '../state/selectors';
 import { State } from '../types';
+import { getEditorUI } from '../ui/selectors';
 
 export function getParentsOfSelection(state: State, stateKey: any | null) {
   /* Can be used to show:
@@ -107,6 +108,14 @@ export function selectionIsChildOf<T extends Record<string, any>>(
     }),
   );
   return active as Record<keyof T, boolean>;
+}
+
+export function selectionIsChildOfActiveState<T extends Record<string, any>>(
+  state: State,
+  nodes: Record<keyof T, NodeType | undefined>,
+) {
+  const { stateId } = getEditorUI(state);
+  return selectionIsChildOf(state, stateId, nodes);
 }
 
 export function selectionIsThisNodeType<T extends Record<string, any>>(

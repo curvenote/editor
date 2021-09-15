@@ -1,5 +1,6 @@
 import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
+import { selectionIsChildOfActiveState } from '../selectors';
 import {
   SuggestionActionTypes,
   SuggestionKind,
@@ -12,7 +13,7 @@ import {
   VariableResult,
   LinkResult,
 } from './types';
-import { CommandResult } from './commands';
+import { CommandResult, DEFAULT_COMMANDS, DEFAULT_TABLE_COMMANDS } from './commands';
 import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
 import { AppThunk } from '../types';
 import { getSuggestion } from './selectors';
@@ -148,13 +149,20 @@ function setStartingSuggestions(
   create = true,
 ): AppThunk<void> {
   return async (dispatch, getState) => {
+    const { table: isParentTable } = selectionIsChildOfActiveState(getState(), {
+      table: schema?.nodes.table,
+    });
+
     switch (kind) {
       case SuggestionKind.emoji: {
         dispatch(updateResults(emoji.startingSuggestions));
         return;
       }
       case SuggestionKind.command: {
-        const starting = command.startingSuggestions(schema);
+        const starting = command.buildSuggestionsFromSchema(
+          schema,
+          isParentTable ? DEFAULT_TABLE_COMMANDS : DEFAULT_COMMANDS,
+        );
         dispatch(updateResults(starting));
         return;
       }
@@ -192,6 +200,7 @@ export function handleSuggestion(
       ),
     );
     const { schema } = action.view.state;
+
     if (action.kind === 'open') {
       dispatch(setStartingSuggestions(schema, kind, action.search ?? '', true));
       dispatch(selectSuggestion(0));
