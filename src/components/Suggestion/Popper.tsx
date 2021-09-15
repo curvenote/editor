@@ -1,10 +1,13 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, createStyles, Paper, Popper, PopperProps } from '@material-ui/core';
 import { State } from '../../store/types';
 import { selectors } from '../../store';
+import useClickOutside from '../hooks/useClickOutside';
+
 import { SUGGESTION_ID } from '../../prosemirror/plugins/suggestion';
 import { registerPopper } from '../InlineActions';
+import { closeSuggestion } from '../../store/actions';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,6 +41,11 @@ const Suggestion: React.FC = (props) => {
   const { children } = props;
   const open = useSelector((state: State) => selectors.isSuggestionOpen(state));
   const classes = useStyles();
+  const paperRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  useClickOutside(paperRef, () => {
+    dispatch(closeSuggestion());
+  });
   if (!open || !getNode()) return null;
   return (
     <Popper
@@ -47,7 +55,7 @@ const Suggestion: React.FC = (props) => {
       popperRef={(pop) => registerPopper(pop)}
       placement="bottom-start"
     >
-      <Paper className={classes.root} elevation={10}>
+      <Paper className={classes.root} elevation={10} ref={paperRef}>
         {children}
       </Paper>
     </Popper>

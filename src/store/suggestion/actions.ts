@@ -69,6 +69,15 @@ export function updateSuggestion(
   };
 }
 
+export function closeSuggestion() {
+  return {
+    type: UPDATE_SUGGESTION,
+    payload: {
+      open: false,
+    },
+  };
+}
+
 export function updateResults(results: any[]): SuggestionActionTypes {
   return {
     type: UPDATE_RESULTS,
