@@ -1,8 +1,7 @@
 import { Schema } from 'prosemirror-model';
-import { tableNodes } from 'prosemirror-tables';
 
-import { NodeGroups } from './nodes/types';
 import * as basic from './nodes/basic';
+import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
 
@@ -55,22 +54,7 @@ export const nodes = {
   hard_break: basic.hard_break,
   time: Nodes.Time.default,
   ...listNodes,
-  ...tableNodes({
-    tableGroup: NodeGroups.top,
-    cellContent: NodeGroups.blockOrEquation,
-    cellAttributes: {
-      background: {
-        default: null,
-        getFromDOM(dom: any) {
-          return dom.style.backgroundColor || null;
-        },
-        setDOMAttr(value: any, attrs: any) {
-          // eslint-disable-next-line no-param-reassign, prefer-template
-          if (value) attrs.style = (attrs.style || '') + `background-color: ${value};`;
-        },
-      },
-    },
-  }),
+  ...tableNodes,
   // Presentational components
   ...presentationalNodes,
   ...citationNodes,

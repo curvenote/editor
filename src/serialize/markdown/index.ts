@@ -68,6 +68,7 @@ export const markdownSerializer = new MarkdownSerializer(
     range: nodes.Range.toMarkdown,
     switch: nodes.Switch.toMarkdown,
     button: nodes.Button.toMarkdown,
+    table: nodes.Button.toMarkdown,
   },
   {
     em: {

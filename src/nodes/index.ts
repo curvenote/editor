@@ -6,6 +6,7 @@ export * as Image from './image';
 export * as Code from './code';
 export * as IFrame from './iframe';
 export * as Time from './time';
+export * as Table from './table';
 
 // Technical
 export * as Cite from './cite';
