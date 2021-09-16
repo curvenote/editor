@@ -93,7 +93,6 @@ export function executeCommand(
       view = viewOrId;
     }
     const { schema } = view.state;
-
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
     if (TABLE_COMMANDS[command]) {
@@ -101,8 +100,6 @@ export function executeCommand(
       TABLE_COMMANDS[command](view.state, view.dispatch);
       return true;
     }
-
-    console.log('nodes', schema.nodes.text, schema.nodes.text.create, schema);
 
     switch (command) {
       case CommandNames.insert_table: {

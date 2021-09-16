@@ -74,6 +74,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.ProseMirror th {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .ProseMirror td p.prompt:before {
   left: 0px;
 }
