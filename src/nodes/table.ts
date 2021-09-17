@@ -21,39 +21,70 @@ export const nodes = tableNodes({
 export const toMarkdown: FormatSerialize = (state, node) => {
   let mdStr = '';
 
+  let rowIndex = 0;
   node.content.forEach((child) => {
+    /**
+     * TODO:
+     * - insert header if first row is not header like column 1,2,3,4 ...
+     * - handle row span or probably not
+     */
     if (child.type.name === 'table_row') {
       let isHeader = false;
-      mdStr += '|';
+      let rowStr = '|';
+
+      let columnIndex = 0;
       child.content.forEach((cell) => {
-        if (cell.type.name === 'table_header') {
-          isHeader = true;
+        if (columnIndex === 0 && rowIndex === 0) {
+          if (cell.type.name === 'table_header') {
+            // mark this row as header row to append header string after this row before the second row rendering
+            isHeader = true;
+          } else {
+            // creates placeholder header with header seperateor
+            let headerStr = '|';
+            let counter = 0;
+            child.content.forEach(() => {
+              counter += 1;
+              headerStr += `column ${counter} |`;
+            });
+            headerStr += '\n|';
+            child.content.forEach(() => {
+              headerStr += '---|';
+            });
+            headerStr += '\n';
+            mdStr += headerStr;
+          }
         }
+
         if (cell.type.name === 'table_cell' || cell.type.name === 'table_header') {
-          mdStr += ' ';
+          rowStr += ' ';
           // state.renderInline(cell);
           if (Number(cell.attrs.colspan) > 1) {
-            mdStr += `${cell.textContent} |`.repeat(Number(cell.attrs.colspan));
+            rowStr += `${cell.textContent} |`.repeat(Number(cell.attrs.colspan));
           } else {
-            mdStr += cell.textContent;
-            mdStr += ' |';
+            rowStr += cell.textContent;
+            rowStr += ' |';
           }
         }
+        columnIndex += 1;
       });
-      mdStr += '\n';
+      rowStr += '\n';
       if (isHeader) {
-        mdStr += '|';
+        isHeader = false;
+        rowStr += '|';
         child.content.forEach((cell) => {
           if (cell.type.name === 'table_header') {
-            mdStr += '---|';
+            rowStr += '---|';
           }
         });
-        mdStr += '\n';
+        rowStr += '\n';
       }
+      mdStr += rowStr;
     }
+
+    rowIndex += 1;
   });
+  mdStr += `\n`;
   state.write(mdStr);
-  state.ensureNewLine();
 };
 export const toTex: FormatSerialize = (state, node) => {
   console.log('table toTex', node);
