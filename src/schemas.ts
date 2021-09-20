@@ -88,6 +88,11 @@ export enum nodeNames {
   range = 'range',
   switch = 'switch',
   button = 'button',
+  // tables
+  table = 'table',
+  table_row = 'table_row',
+  table_cell = 'table_cell',
+  table_header = 'table_header',
 }
 
 export const marks = {
