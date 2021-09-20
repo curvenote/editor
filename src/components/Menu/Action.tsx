@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, makeStyles, MenuItem, Tooltip, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, MenuItem, Typography } from '@material-ui/core';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import CodeIcon from '@material-ui/icons/Code';
 import RemoveIcon from '@material-ui/icons/Remove';
