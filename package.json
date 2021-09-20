@@ -25,7 +25,7 @@
     "build": "yarn run clean && tsc -p .;rm -rf dist/test; mv dist/src/* dist; rmdir dist/src;",
     "build:watch": "tsc -w -p .",
     "prepublishOnly": "yarn build",
-    "test": "jest",
+    "test": "jest src test",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",

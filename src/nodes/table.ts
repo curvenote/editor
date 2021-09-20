@@ -102,6 +102,10 @@ export interface TableJson {
   type: 'table';
   content: TableRow[];
 }
+
+function extractContentFromCell(cell: TableCell): string {
+  return cell.content.map(({ content }) => content.map(({ text }) => text).join()).join();
+}
 /**
  * convert prosemirror table node into latex table
  */
@@ -116,16 +120,24 @@ export function convertTableJsonToLatex(nodeJson: TableJson): string {
 
   nodeJson.content.forEach(({ content: rowContent, type: rowType }) => {
     let rowStr = ' ';
-    const flatten = rowContent.map(({ content: cellContent, type: cellType }) => {
-      return cellContent.map(({ content }) => content.map(({ text }) => text).join()).join();
+    const flatten = rowContent.map((cell) => {
+      const {
+        attrs: { colspan },
+      } = cell;
+      let cellStr = '';
+      if (colspan > 1) {
+        cellStr = `\\multicolumn{${colspan}}{ |c| }{${extractContentFromCell(cell)}}`;
+      } else {
+        cellStr = extractContentFromCell(cell);
+      }
+      return cellStr;
     });
     rowStr += flatten.join(' & ');
     rowStr += '\\\\\n \\hline\n';
     texStr += rowStr;
   });
 
-  texStr += '\\end{tabular}\n\\end{center}';
-  console.log('result: ', texStr);
+  texStr += '\\end{tabular}\n\\end{center}\n';
   return texStr; // eslint-disable-line
 }
 
