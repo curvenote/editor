@@ -1,4 +1,4 @@
-import { convertTableJsonToLatex, TableJson } from './table';
+import { convertTableJsonToLatex, serializeTableToMarkdown, TableJson } from './table';
 
 const tableWithColspanAndHeader: TableJson = {
   type: 'table',
@@ -129,6 +129,19 @@ describe('convertTableNodeToLatex', () => {
   test('should convert table with colspan and header correctly', () => {
     expect(convertTableJsonToLatex(tableWithColspanAndHeader)).toBe(
       '\\begin{center}\n\\begin{tabular}{|c c c|}\n \\hline\n Header 1 & Header 2 & Header 3\\\\\n \\hline\n \\multicolumn{2}{ |c| }{this} & 3\\\\\n \\hline\n 4 & 5 & 6\\\\\n \\hline\n\\end{tabular}\n\\end{center}\n',
+    );
+  });
+});
+
+describe('serializeTableToMarkdown', () => {
+  test('should conver plain table to markdown table with placeholder header', () => {
+    expect(serializeTableToMarkdown(plainTable)).toBe(
+      '|column 1 |column 2 |column 3 |\n|---|---|---|\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n\n',
+    );
+  });
+  test('should convert table with colspan and header correctly', () => {
+    expect(serializeTableToMarkdown(plainTable)).toBe(
+      '|column 1 |column 2 |column 3 |\n|---|---|---|\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n\n',
     );
   });
 });
