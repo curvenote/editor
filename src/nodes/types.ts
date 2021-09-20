@@ -14,7 +14,10 @@ export enum ReferenceKind {
 export enum NodeGroups {
   'top' = 'topblock',
   'block' = 'block',
+  'heading' = 'heading',
+  'blockOrHeading' = '(block | heading)+',
   'blockOrEquation' = '(block | equation)+',
+  'blockOrEquationOrHeading' = '(block | heading | equation)+',
   'inline' = 'inline',
   'text' = 'text',
   'cite' = 'cite',

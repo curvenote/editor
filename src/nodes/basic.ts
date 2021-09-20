@@ -4,7 +4,7 @@ import { addListNodes } from 'prosemirror-schema-list';
 import { NodeGroups } from './types';
 
 export const doc: NodeSpec = {
-  content: `(${NodeGroups.block} | ${NodeGroups.top})+`,
+  content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
 };
 
 export const docParagraph: NodeSpec = {
