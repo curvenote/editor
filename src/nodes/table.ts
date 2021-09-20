@@ -23,11 +23,6 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 
   let rowIndex = 0;
   node.content.forEach((child) => {
-    /**
-     * TODO:
-     * - insert header if first row is not header like column 1,2,3,4 ...
-     * - handle row span or probably not
-     */
     if (child.type.name === 'table_row') {
       let isHeader = false;
       let rowStr = '|';
@@ -86,7 +81,60 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   mdStr += `\n`;
   state.write(mdStr);
 };
+
+type CellContent = {
+  type: 'paragraph';
+  content: { type: 'text'; text: string }[];
+};
+
+interface TableCell {
+  type: 'table_cell' | 'table_header';
+  attrs: any;
+  content: CellContent[];
+}
+
+interface TableRow {
+  type: 'table_row';
+  content: TableCell[];
+}
+
+export interface TableJson {
+  type: 'table';
+  content: TableRow[];
+}
+/**
+ * convert prosemirror table node into latex table
+ */
+export function convertTableJsonToLatex(nodeJson: TableJson): string {
+  const columLength = nodeJson.content[0].content.length;
+  if (!columLength) {
+    throw new Error('invalid table format');
+  }
+  let texStr = `\\begin{center}\n\\begin{tabular}{|${new Array(columLength)
+    .fill('c')
+    .join(' ')}|}\n \\hline\n`;
+
+  nodeJson.content.forEach(({ content: rowContent, type: rowType }) => {
+    let rowStr = ' ';
+    const flatten = rowContent.map(({ content: cellContent, type: cellType }) => {
+      return cellContent.map(({ content }) => content.map(({ text }) => text).join()).join();
+    });
+    rowStr += flatten.join(' & ');
+    rowStr += '\\\\\n \\hline\n';
+    texStr += rowStr;
+  });
+
+  texStr += '\\end{tabular}\n\\end{center}';
+  console.log('result: ', texStr);
+  return texStr; // eslint-disable-line
+}
+
 export const toTex: FormatSerialize = (state, node) => {
-  console.log('table toTex', node);
-  state.write(`{\\bf \`${node.type.name}' not supported in \\LaTeX}`);
+  let result = '';
+  try {
+    result = convertTableJsonToLatex(node.toJSON() as TableJson);
+  } catch (e) {
+    state.write(`{\\bf Error converting \`${node.type.name}' to \\LaTeX}`);
+  }
+  state.write(result);
 };
