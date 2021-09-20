@@ -7,7 +7,7 @@ import { collab } from 'prosemirror-collab';
 import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import suggestion from './suggestion';
-import { buildKeymap } from '../keymap';
+import { buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -48,5 +48,6 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
     collab({ version }),
     ...tablesPlugin, // put this plugin near the end of the array of plugins, since it handles mouse and arrow key events in tables rather broadly
     history(),
+    keymap(captureTab()),
   ];
 }
