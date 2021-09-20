@@ -15,6 +15,7 @@ export enum SelectionKinds {
   time = 'time',
   heading = 'heading',
   callout = 'callout',
+  table = 'table',
 }
 
 export type InlineSelection = {

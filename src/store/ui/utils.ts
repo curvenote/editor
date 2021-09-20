@@ -66,6 +66,8 @@ export const getSelectionKind = (
       }
       case schemas.nodeNames.callout:
         return true;
+      case schemas.nodeNames.table:
+        return true;
       default:
         return false;
     }
@@ -77,6 +79,8 @@ export const getSelectionKind = (
       return { kind: SelectionKinds.heading, pos: parent.pos };
     case schemas.nodeNames.callout:
       return { kind: SelectionKinds.callout, pos: parent.pos };
+    case schemas.nodeNames.table:
+      return { kind: SelectionKinds.table, pos: parent.pos };
     default:
       break;
   }
