@@ -1,24 +1,25 @@
 import { tableNodes } from 'prosemirror-tables';
+import { nodeNames } from '../types';
 import { FormatSerialize, NodeGroups } from './types';
 
 type CellContent = {
-  type: 'paragraph';
-  content: { type: 'text'; text: string }[];
+  type: nodeNames.paragraph;
+  content: { type: nodeNames.text; text: string }[];
 };
 
 interface TableCell {
-  type: 'table_cell' | 'table_header';
+  type: nodeNames.table_cell | nodeNames.table_header;
   attrs: any;
   content: CellContent[];
 }
 
 interface TableRow {
-  type: 'table_row';
+  type: nodeNames.table_row;
   content: TableCell[];
 }
 
 export interface TableJson {
-  type: 'table';
+  type: nodeNames.table;
   content: TableRow[];
 }
 
@@ -47,14 +48,14 @@ export function serializeTableToMarkdown(nodeJson: TableJson) {
   let mdStr = '';
   let rowIndex = 0;
   nodeJson.content.forEach((child) => {
-    if (child.type === 'table_row') {
+    if (child.type === nodeNames.table_row) {
       let isHeader = false;
       let rowStr = '|';
 
       let columnIndex = 0;
       child.content.forEach((cell) => {
         if (columnIndex === 0 && rowIndex === 0) {
-          if (cell.type === 'table_header') {
+          if (cell.type === nodeNames.table_header) {
             // mark this row as header row to append header string after this row before the second row rendering
             isHeader = true;
           } else {
@@ -74,7 +75,7 @@ export function serializeTableToMarkdown(nodeJson: TableJson) {
           }
         }
 
-        if (cell.type === 'table_cell' || cell.type === 'table_header') {
+        if (cell.type === nodeNames.table_cell || cell.type === nodeNames.table_header) {
           rowStr += ' ';
           // state.renderInline(cell);
           const cellContent = extractContentFromCell(cell);
@@ -92,7 +93,7 @@ export function serializeTableToMarkdown(nodeJson: TableJson) {
         isHeader = false;
         rowStr += '|';
         child.content.forEach((cell) => {
-          if (cell.type === 'table_header') {
+          if (cell.type === nodeNames.table_header) {
             rowStr += '---|';
           }
         });

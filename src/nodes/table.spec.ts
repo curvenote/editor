@@ -1,60 +1,69 @@
+import { nodeNames } from '../types';
 import { convertTableJsonToLatex, serializeTableToMarkdown, TableJson } from './table';
 
 const tableWithColspanAndHeader: TableJson = {
-  type: 'table',
+  type: nodeNames.table,
   content: [
     {
-      type: 'table_row',
+      type: nodeNames.table_row,
       content: [
         {
-          type: 'table_header',
+          type: nodeNames.table_header,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Header 1' }] }],
+          content: [
+            { type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: 'Header 1' }] },
+          ],
         },
         {
-          type: 'table_header',
+          type: nodeNames.table_header,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Header 2' }] }],
+          content: [
+            { type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: 'Header 2' }] },
+          ],
         },
         {
-          type: 'table_header',
+          type: nodeNames.table_header,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Header 3' }] }],
+          content: [
+            { type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: 'Header 3' }] },
+          ],
         },
       ],
     },
     {
-      type: 'table_row',
+      type: nodeNames.table_row,
       content: [
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 2, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'this' }] }],
+          content: [
+            { type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: 'this' }] },
+          ],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '3' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '3' }] }],
         },
       ],
     },
     {
-      type: 'table_row',
+      type: nodeNames.table_row,
       content: [
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '4' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '4' }] }],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '5' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '5' }] }],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '6' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '6' }] }],
         },
       ],
     },
@@ -62,45 +71,45 @@ const tableWithColspanAndHeader: TableJson = {
 };
 
 const plainTable: TableJson = {
-  type: 'table',
+  type: nodeNames.table,
   content: [
     {
-      type: 'table_row',
+      type: nodeNames.table_row,
       content: [
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '1' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '1' }] }],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '2' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '2' }] }],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '3' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '3' }] }],
         },
       ],
     },
     {
-      type: 'table_row',
+      type: nodeNames.table_row,
       content: [
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '4' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '4' }] }],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '5' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '5' }] }],
         },
         {
-          type: 'table_cell',
+          type: nodeNames.table_cell,
           attrs: { colspan: 1, rowspan: 1, colwidth: null, background: null },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '6' }] }],
+          content: [{ type: nodeNames.paragraph, content: [{ type: nodeNames.text, text: '6' }] }],
         },
       ],
     },
@@ -116,7 +125,10 @@ describe('convertTableNodeToLatex', () => {
 
   test('should throw if table column is empty', () => {
     expect(() => {
-      convertTableJsonToLatex({ type: 'table', content: [{ content: [], type: 'table_row' }] });
+      convertTableJsonToLatex({
+        type: nodeNames.table,
+        content: [{ content: [], type: nodeNames.table_row }],
+      });
     }).toThrow('invalid table format');
   });
 
