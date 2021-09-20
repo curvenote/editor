@@ -15,11 +15,15 @@ article {
   .selected {
     p.prompt {
       position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     p.prompt:before {
       content: "Type '/' for commands, or just start writing!";
       color: #929292;
       position: absolute;
+      font-weight: normal;
       user-select: none;
       cursor: text;
       left: 5px;
