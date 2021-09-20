@@ -1,4 +1,6 @@
 import { tableNodes } from 'prosemirror-tables';
+import { Node } from 'prosemirror-model';
+import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { FormatSerialize, NodeGroups } from './types';
 
 type CellContent = {
@@ -43,18 +45,17 @@ function extractContentFromCell(cell: TableCell): string {
   return cell.content.map(({ content }) => content.map(({ text }) => text).join()).join();
 }
 
-export function serializeTableToMarkdown(nodeJson: TableJson) {
-  let mdStr = '';
+export const toMarkdown: FormatSerialize = (state, node) => {
   let rowIndex = 0;
-  nodeJson.content.forEach((child) => {
-    if (child.type === 'table_row') {
-      let isHeader = false;
-      let rowStr = '|';
 
+  node.content.forEach((child) => {
+    if (child.type.name === 'table_row') {
+      let isHeader = false;
       let columnIndex = 0;
+      state.write('| ');
       child.content.forEach((cell) => {
         if (columnIndex === 0 && rowIndex === 0) {
-          if (cell.type === 'table_header') {
+          if (cell.type.name === 'table_header') {
             // mark this row as header row to append header string after this row before the second row rendering
             isHeader = true;
           } else {
@@ -70,45 +71,43 @@ export function serializeTableToMarkdown(nodeJson: TableJson) {
               headerStr += '---|';
             });
             headerStr += '\n';
-            mdStr += headerStr;
+            state.write(headerStr);
           }
         }
 
-        if (cell.type === 'table_cell' || cell.type === 'table_header') {
-          rowStr += ' ';
-          // state.renderInline(cell);
-          const cellContent = extractContentFromCell(cell);
-          if (Number(cell.attrs.colspan) > 1) {
-            rowStr += `${cellContent} |`.repeat(Number(cell.attrs.colspan));
+        if (cell.type.name === 'table_cell' || cell.type.name === 'table_header') {
+          const columnCount = Number(cell.attrs.colspan);
+          if (columnCount > 1) {
+            for (let i = 0; i < columnCount; i += 1) {
+              cell.content.forEach((content) => {
+                state.renderInline(content);
+                state.write(' ');
+              });
+              state.write(' |');
+            }
           } else {
-            rowStr += cellContent;
-            rowStr += ' |';
+            cell.content.forEach((content) => {
+              state.renderInline(content);
+              state.write(' |');
+            });
           }
         }
         columnIndex += 1;
       });
-      rowStr += '\n';
       if (isHeader) {
         isHeader = false;
-        rowStr += '|';
+        state.ensureNewLine();
+        state.write('|');
         child.content.forEach((cell) => {
-          if (cell.type === 'table_header') {
-            rowStr += '---|';
+          if (cell.type.name === 'table_header') {
+            state.write('---|');
           }
         });
-        rowStr += '\n';
       }
-      mdStr += rowStr;
+      state.ensureNewLine();
     }
-
     rowIndex += 1;
   });
-  mdStr += `\n`;
-  return mdStr;
-}
-
-export const toMarkdown: FormatSerialize = (state, node) => {
-  state.write(serializeTableToMarkdown(node.toJSON() as TableJson));
 };
 
 /**
