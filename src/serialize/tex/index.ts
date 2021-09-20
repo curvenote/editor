@@ -78,10 +78,10 @@ export const texSerializer = new MarkdownSerializer(
     iframe: blankTexLines,
     time: nodes.Time.toTex,
     cite: nodes.Cite.toTex,
-    table: nodes.Table.toTex,
     cite_group: nodes.CiteGroup.toTex,
     math: nodes.Math.toTex,
     equation: nodes.Equation.toTex,
+    table: nodes.Table.toTex,
     // \usepackage{framed}
     callout: nodes.Callout.toTex,
     aside: nodes.Aside.toTex,

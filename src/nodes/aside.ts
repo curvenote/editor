@@ -5,7 +5,7 @@ import { NodeGroups, FormatSerialize } from './types';
 
 const aside: NodeSpec = {
   group: NodeGroups.top,
-  content: `${NodeGroups.block}+`,
+  content: NodeGroups.blockOrHeading,
   toDOM() {
     return ['aside', { class: 'margin' }, 0];
   },

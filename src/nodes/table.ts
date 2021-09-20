@@ -1,26 +1,25 @@
 import { tableNodes } from 'prosemirror-tables';
-import { Node } from 'prosemirror-model';
-import { MarkdownSerializerState } from 'prosemirror-markdown';
+import { nodeNames } from '../types';
 import { FormatSerialize, NodeGroups } from './types';
 
 type CellContent = {
-  type: 'paragraph';
-  content: { type: 'text'; text: string }[];
+  type: nodeNames.paragraph;
+  content: { type: nodeNames.text; text: string }[];
 };
 
 interface TableCell {
-  type: 'table_cell' | 'table_header';
+  type: nodeNames.table_cell | nodeNames.table_header;
   attrs: any;
   content: CellContent[];
 }
 
 interface TableRow {
-  type: 'table_row';
+  type: nodeNames.table_row;
   content: TableCell[];
 }
 
 export interface TableJson {
-  type: 'table';
+  type: nodeNames.table;
   content: TableRow[];
 }
 
@@ -49,13 +48,13 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   let rowIndex = 0;
 
   node.content.forEach((child) => {
-    if (child.type.name === 'table_row') {
+    if (child.type.name === nodeNames.table_row) {
       let isHeader = false;
       let columnIndex = 0;
       state.write('| ');
       child.content.forEach((cell) => {
         if (columnIndex === 0 && rowIndex === 0) {
-          if (cell.type.name === 'table_header') {
+          if (cell.type.name === nodeNames.table_header) {
             // mark this row as header row to append header string after this row before the second row rendering
             isHeader = true;
           } else {
@@ -75,7 +74,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
           }
         }
 
-        if (cell.type.name === 'table_cell' || cell.type.name === 'table_header') {
+        if (cell.type.name === nodeNames.table_cell || cell.type.name === nodeNames.table_header) {
           const columnCount = Number(cell.attrs.colspan);
           if (columnCount > 1) {
             for (let i = 0; i < columnCount; i += 1) {
@@ -99,7 +98,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
         state.ensureNewLine();
         state.write('|');
         child.content.forEach((cell) => {
-          if (cell.type.name === 'table_header') {
+          if (cell.type.name === nodeNames.table_header) {
             state.write('---|');
           }
         });

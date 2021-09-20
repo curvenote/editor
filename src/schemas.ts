@@ -5,6 +5,8 @@ import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
 
+export { nodeNames } from './types';
+
 export const listNodes = {
   ordered_list: basic.ordered_list,
   bullet_list: basic.bullet_list,
@@ -61,39 +63,6 @@ export const nodes = {
   ...mathNodes,
   ...reactiveNodes,
 };
-
-export enum nodeNames {
-  text = 'text',
-  paragraph = 'paragraph',
-  heading = 'heading',
-  blockquote = 'blockquote',
-  code_block = 'code_block',
-  image = 'image',
-  horizontal_rule = 'horizontal_rule',
-  hard_break = 'hard_break',
-  time = 'time',
-  ordered_list = 'ordered_list',
-  bullet_list = 'bullet_list',
-  list_item = 'list_item',
-  aside = 'aside',
-  callout = 'callout',
-  iframe = 'iframe',
-  cite = 'cite',
-  cite_group = 'cite_group',
-  math = 'math',
-  equation = 'equation',
-  variable = 'variable',
-  display = 'display',
-  dynamic = 'dynamic',
-  range = 'range',
-  switch = 'switch',
-  button = 'button',
-  // tables
-  table = 'table',
-  table_row = 'table_row',
-  table_cell = 'table_cell',
-  table_header = 'table_header',
-}
 
 export const marks = {
   link: basicMarks.link,
