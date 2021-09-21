@@ -6,11 +6,12 @@ import {
   isNodeSelection,
   hasParentNode,
 } from 'prosemirror-utils';
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditorState } from '../state/selectors';
 import { State } from '../types';
+import { getEditorUI } from '../ui/selectors';
 
 export function getParentsOfSelection(state: State, stateKey: any | null) {
   /* Can be used to show:
@@ -109,6 +110,14 @@ export function selectionIsChildOf<T extends Record<string, any>>(
   return active as Record<keyof T, boolean>;
 }
 
+export function selectionIsChildOfActiveState<T extends Record<string, any>>(
+  state: State,
+  nodes: Record<keyof T, NodeType | undefined>,
+) {
+  const { stateId } = getEditorUI(state);
+  return selectionIsChildOf(state, stateId, nodes);
+}
+
 export function selectionIsThisNodeType<T extends Record<string, any>>(
   state: State,
   stateKey: any | null,
@@ -120,7 +129,7 @@ export function selectionIsThisNodeType<T extends Record<string, any>>(
     Object.entries(nodes).map(([key, type]) => {
       const node = type as NodeType | undefined;
       if (!node) return [key, false];
-      return [key, Boolean(getNodeIfSelected(editor.state, node.name as schemas.nodeNames))];
+      return [key, Boolean(getNodeIfSelected(editor.state, node.name as nodeNames))];
     }),
   );
   return active as Record<keyof T, boolean>;

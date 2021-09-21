@@ -6,7 +6,7 @@ import {
   smartQuotes,
 } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
-import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
+import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 import { createId } from '../../utils';
 
@@ -116,11 +116,11 @@ export const headings = (schema: Schema, maxLevel = 6) => [
 ];
 
 export const equation = (schema: Schema) => [
-  replaceNodeRule(/^\$\$$/, schema.nodes.equation, () => ({ id: createId() }), true),
+  changeNodeRule(/^\$\$$/, schema.nodes.equation, () => ({ id: createId() })),
 ];
 
 export const mathInline = (schema: Schema) => [
-  insertNodeRule(
+  replaceNodeRule(
     // $Ax=b$ or $$, only select if there is not content.
     /(\$([^$]*)\$)$/,
     schema.nodes.math,
@@ -137,18 +137,18 @@ export const mathInline = (schema: Schema) => [
 ];
 
 export const hr = (schema: Schema) => [
-  insertNodeRule(/^(~~~|---|\*\*\*)$/, schema.nodes.horizontal_rule),
+  replaceNodeRule(/^(~~~|---|\*\*\*)$/, schema.nodes.horizontal_rule),
 ];
 
 export const slider = (schema: Schema) => [
-  insertNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, (match: string[]) => ({
+  replaceNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, (match: string[]) => ({
     valueFunction: match[1],
     changeFunction: `{${match[1]}: value}`,
   })),
 ];
 
 export const dynamic = (schema: Schema) => [
-  insertNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, (match: string[]) => ({
+  replaceNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, (match: string[]) => ({
     valueFunction: match[1],
     changeFunction: `{${match[1]}: value}`,
   })),

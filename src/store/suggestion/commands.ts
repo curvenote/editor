@@ -1,4 +1,7 @@
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema/dist/types';
+import { isInTable } from 'prosemirror-tables';
+import { hasParentNode } from 'prosemirror-utils';
+import { EditorView } from 'prosemirror-view';
 
 export enum CommandNames {
   'link' = 'link',
@@ -39,6 +42,22 @@ export enum CommandNames {
   'link_figure' = 'link_figure',
   'link_equation' = 'link_equation',
   'link_code' = 'link_code',
+  'link_table' = 'link_table',
+
+  // Table
+  'insert_table' = 'insert_table',
+  'add_column_before' = 'add_column_before',
+  'add_column_after' = 'add_column_after',
+  'delete_column' = 'delete_column',
+  'add_row_before' = 'add_row_before',
+  'add_row_after' = 'add_row_after',
+  'delete_row' = 'delete_row',
+  'delete_table' = 'delete_table',
+  'merge_cells' = 'merge_cells',
+  'split_cell' = 'split_cell',
+  'toggle_header_column' = 'toggle_header_column',
+  'toggle_header_row' = 'toggle_header_row',
+  'toggle_header_cell' = 'toggle_header_cell',
 }
 
 export interface CommandResult {
@@ -47,65 +66,206 @@ export interface CommandResult {
   description: string;
   image?: string;
   shortcut?: string | string[];
-  // Filters these out if not in the schema
-  node?: keyof typeof schemas.nodes;
+  available?: (view: EditorView) => boolean;
 }
 
-export const commands: CommandResult[] = [
+function nodeInSchema(nodeName: nodeNames) {
+  return (view: EditorView) => {
+    return view.state.schema.nodes[nodeName] !== undefined;
+  };
+}
+
+// Do a fast `&&` across a list
+function chain(...checks: ((view: EditorView) => boolean)[]) {
+  return (view: EditorView) => {
+    return checks.reduce((prev, check) => prev && check(view), true);
+  };
+}
+
+// TODO: I think we could cache these, and it would speed things up
+const onlyInTable = (view: EditorView) => isInTable(view.state);
+const notInTable = (view: EditorView) => !isInTable(view.state);
+const nonTopLevelNodes = new Set([
+  nodeNames.callout,
+  nodeNames.aside,
+  nodeNames.blockquote,
+  nodeNames.table,
+]);
+const onlyTopLevel = (view: EditorView) =>
+  !hasParentNode((n) => nonTopLevelNodes.has(n.type.name as nodeNames))(view.state.selection);
+
+const MATH_COMMAND: CommandResult = {
+  name: CommandNames.math,
+  title: 'Inline Math',
+  description: 'Add some inline math!',
+  shortcut: ['$$ Type $Ax=b$ or two dollar signs in a paragraph'],
+  available: nodeInSchema(nodeNames.math),
+};
+const EMOJI_COMMAND: CommandResult = {
+  name: CommandNames.emoji,
+  title: 'Emoji',
+  description: 'Add some emotion to your work 🎉',
+  shortcut: [':'],
+};
+const ORDERED_LIST_COMMAND: CommandResult = {
+  name: CommandNames.ordered_list,
+  title: 'Numbered list',
+  description: 'Insert an ordered list',
+  shortcut: 'Mod-Shift-7',
+  available: nodeInSchema(nodeNames.ordered_list),
+};
+const BULLET_LIST_COMMAND: CommandResult = {
+  name: CommandNames.bullet_list,
+  title: 'Bullet list',
+  description: 'Insert an unordered list',
+  shortcut: 'Mod-Shift-8',
+  available: nodeInSchema(nodeNames.bullet_list),
+};
+const CITATION_COMMAND: CommandResult = {
+  name: CommandNames.citation,
+  title: 'Cite',
+  description: 'Quickly reference a citation',
+  shortcut: ['[[cite: To access existing ciations'],
+  available: nodeInSchema(nodeNames.cite),
+};
+
+export const TABLE_COMMANDS: CommandResult[] = [
+  {
+    name: CommandNames.add_row_after,
+    title: 'Add Row Below',
+    description: 'Add a row after current cell',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.add_row_before,
+    title: 'Add Row Above',
+    description: 'Add a row on the left of current cell',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.add_column_after,
+    title: 'Add Column Right',
+    description: 'Add a column on the right of current cell',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.add_column_before,
+    title: 'Add Column Left',
+    description: 'Add a column on the left of current cell',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.delete_row,
+    title: 'Delete Row',
+    description: 'Delete the entire row',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.delete_column,
+    title: 'Delete Column',
+    description: 'Delete the column the current cell belongs to',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.toggle_header_row,
+    title: 'Toggle Header Row',
+    description: 'Toggle the current row to be a table header',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.toggle_header_column,
+    title: 'Toggle Header Column',
+    description: 'Toggle the current column to be a table header',
+    available: onlyInTable,
+  },
+  {
+    name: CommandNames.delete_table,
+    title: 'Delete Table',
+    description: 'Delete the entire table',
+    available: onlyInTable,
+  },
+];
+
+const headerAvailable = chain(nodeInSchema(nodeNames.heading), notInTable);
+
+export const HEADINGS: CommandResult[] = [
+  {
+    name: CommandNames.heading1,
+    title: 'Heading 1',
+    description: 'Insert the biggest header',
+    shortcut: 'Mod-Alt-1',
+    available: headerAvailable,
+  },
+  {
+    name: CommandNames.heading2,
+    title: 'Heading 2',
+    description: 'Insert a big header',
+    shortcut: 'Mod-Alt-2',
+    available: headerAvailable,
+  },
+  {
+    name: CommandNames.heading3,
+    title: 'Heading 3',
+    description: 'Insert a medium sized header',
+    shortcut: 'Mod-Alt-3',
+    available: headerAvailable,
+  },
+  {
+    name: CommandNames.heading4,
+    title: 'Heading 4',
+    description: 'Insert a small header',
+    shortcut: 'Mod-Alt-4',
+    available: headerAvailable,
+  },
+  {
+    name: CommandNames.heading5,
+    title: 'Heading 5',
+    description: 'Insert a tiny header',
+    shortcut: 'Mod-Alt-5',
+    available: headerAvailable,
+  },
+  {
+    name: CommandNames.heading6,
+    title: 'Heading 6',
+    description: 'Insert a teensy-tiny header',
+    shortcut: 'Mod-Alt-6',
+    available: headerAvailable,
+  },
+];
+
+export const ALL_COMMANDS: CommandResult[] = [
+  // Put specific commands first, when they are active, they should be the first thing you see
+  ...TABLE_COMMANDS,
   {
     name: CommandNames.callout,
     title: 'Callout Panel',
     description: 'Callout information in a panel',
-    node: 'callout',
+    available: chain(nodeInSchema(nodeNames.callout), onlyTopLevel),
   },
   {
     name: CommandNames.aside,
     title: 'Aside',
     description: 'Add a section in the right-hand column',
-    node: 'aside',
+    available: chain(nodeInSchema(nodeNames.aside), onlyTopLevel),
   },
-  {
-    name: CommandNames.math,
-    title: 'Inline Math',
-    description: 'Add some inline math!',
-    shortcut: ['$$ Type $Ax=b$ or two dollar signs in a paragraph'],
-    node: 'math',
-  },
+  MATH_COMMAND,
   {
     name: CommandNames.equation,
     title: 'Equation',
     description: 'Add a standalone math equation',
     shortcut: ['$$ Start the line with two dollar signs'],
-    node: 'equation',
+    available: nodeInSchema(nodeNames.equation),
   },
   {
     name: CommandNames.horizontal_rule,
     title: 'Divider',
     description: 'Insert a horizontal rule',
     shortcut: ['--- Insert three -, ~, or * on a new line'],
-    node: 'horizontal_rule',
+    available: nodeInSchema(nodeNames.horizontal_rule),
   },
-  {
-    name: CommandNames.bullet_list,
-    title: 'Bullet list',
-    description: 'Insert an unordered list',
-    shortcut: 'Mod-Shift-8',
-    node: 'bullet_list',
-  },
-  {
-    name: CommandNames.ordered_list,
-    title: 'Numbered list',
-    description: 'Insert an ordered list',
-    shortcut: 'Mod-Shift-7',
-    node: 'ordered_list',
-  },
-  {
-    name: CommandNames.citation,
-    title: 'Cite',
-    description: 'Quickly reference a citation',
-    shortcut: ['[[cite: To access existing ciations'],
-    node: 'cite',
-  },
+  ORDERED_LIST_COMMAND,
+  BULLET_LIST_COMMAND,
+  CITATION_COMMAND,
   {
     name: CommandNames.link_article,
     title: 'Link to Article',
@@ -146,152 +306,112 @@ export const commands: CommandResult[] = [
     name: CommandNames.add_citation,
     title: 'Add Reference',
     description: 'Cite existing literature',
-    node: 'cite',
+    available: nodeInSchema(nodeNames.cite),
   },
+  EMOJI_COMMAND,
   {
-    name: CommandNames.emoji,
-    title: 'Emoji',
-    description: 'Add some emotion to your work 🎉',
-    shortcut: [':'],
+    name: CommandNames.insert_table,
+    title: 'Table',
+    description: 'Creates a 2X2 Table',
+    available: chain(nodeInSchema(nodeNames.table), onlyTopLevel),
   },
   {
     name: CommandNames.code,
     title: 'Code Block',
     description: 'Add a block of code',
     shortcut: ['```'],
-    node: 'code_block',
+    available: nodeInSchema(nodeNames.code_block),
   },
   {
     name: CommandNames.quote,
     title: 'Quote',
     description: 'Add a blockquote',
     shortcut: ['>'],
-    node: 'blockquote',
+    available: nodeInSchema(nodeNames.blockquote),
   },
   {
     name: CommandNames.time,
     title: 'Date',
     description: 'Add a calendar date 📅',
     shortcut: ['//'],
-    node: 'time',
+    available: nodeInSchema(nodeNames.time),
   },
   {
     name: CommandNames.variable,
     title: 'Variable',
     description: 'Add a variable, make your document dynamic',
     shortcut: ['x='],
-    node: 'variable',
+    available: chain(nodeInSchema(nodeNames.variable), onlyTopLevel),
   },
   {
     name: CommandNames.display,
     title: 'Display',
     description: 'Display a variable or expression',
     shortcut: ['{{'],
-    node: 'display',
+    available: nodeInSchema(nodeNames.display),
   },
   {
     name: CommandNames.range,
     title: 'Slider',
     description: 'Insert a slider over a range',
     shortcut: ['==x=='],
-    node: 'range',
+    available: nodeInSchema(nodeNames.range),
   },
   {
     name: CommandNames.dynamic,
     title: 'Dynamic Text',
     description: 'Insert dynamic text that acts as an inline slider',
     shortcut: ['<x>'],
-    node: 'dynamic',
+    available: nodeInSchema(nodeNames.dynamic),
   },
   {
     name: CommandNames.switch,
     title: 'Inline Switch',
     description: 'Insert a switch for a boolean value',
-    node: 'switch',
+    available: nodeInSchema(nodeNames.switch),
   },
   {
     name: CommandNames.button,
     title: 'Inline Button',
     description: 'Insert a button',
-    node: 'button',
+    available: nodeInSchema(nodeNames.button),
   },
   {
     name: CommandNames.paragraph,
     title: 'Paragraph',
     description: 'Turn header into a paragraph',
     shortcut: 'Mod-Alt-0',
-    node: 'paragraph',
+    available: nodeInSchema(nodeNames.paragraph),
   },
-  {
-    name: CommandNames.heading1,
-    title: 'Heading 1',
-    description: 'Insert the biggest header',
-    shortcut: 'Mod-Alt-1',
-    node: 'heading',
-  },
-  {
-    name: CommandNames.heading2,
-    title: 'Heading 2',
-    description: 'Insert a big header',
-    shortcut: 'Mod-Alt-2',
-    node: 'heading',
-  },
-  {
-    name: CommandNames.heading3,
-    title: 'Heading 3',
-    description: 'Insert a medium sized header',
-    shortcut: 'Mod-Alt-3',
-    node: 'heading',
-  },
-  {
-    name: CommandNames.heading4,
-    title: 'Heading 4',
-    description: 'Insert a small header',
-    shortcut: 'Mod-Alt-4',
-    node: 'heading',
-  },
-  {
-    name: CommandNames.heading5,
-    title: 'Heading 5',
-    description: 'Insert a tiny header',
-    shortcut: 'Mod-Alt-5',
-    node: 'heading',
-  },
-  {
-    name: CommandNames.heading6,
-    title: 'Heading 6',
-    description: 'Insert a teensy-tiny header',
-    shortcut: 'Mod-Alt-6',
-    node: 'heading',
-  },
+  ...HEADINGS,
   {
     name: CommandNames.youtube,
     title: 'YouTube',
     description: 'Embed a video',
-    node: 'iframe',
+    available: nodeInSchema(nodeNames.iframe),
   },
   {
     name: CommandNames.vimeo,
     title: 'Vimeo',
     description: 'Embed a video',
-    node: 'iframe',
+    available: nodeInSchema(nodeNames.iframe),
   },
   {
     name: CommandNames.loom,
     title: 'Loom',
     description: 'Embed a video',
-    node: 'iframe',
+    available: nodeInSchema(nodeNames.iframe),
   },
   {
     name: CommandNames.miro,
     title: 'Miro',
     description: 'Embed a Miro board',
-    node: 'iframe',
+    available: nodeInSchema(nodeNames.iframe),
   },
   {
     name: CommandNames.iframe,
     title: 'IFrame',
     description: 'Embed an IFrame',
-    node: 'iframe',
+    available: nodeInSchema(nodeNames.iframe),
   },
 ];

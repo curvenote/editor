@@ -13,7 +13,7 @@ import {
 } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { MarkType, NodeType, Node, Fragment, Schema, NodeRange } from 'prosemirror-model';
-import { Nodes, schemas } from '@curvenote/schema';
+import { Nodes, nodeNames } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
@@ -308,7 +308,7 @@ export function toggleCitationBrackets(): AppThunk<boolean> {
     const editor = getSelectedEditorAndViews(getState());
     if (editor.state == null) return false;
     const { schema } = editor.state;
-    const node = getNodeIfSelected(editor.state, schemas.nodeNames.cite);
+    const node = getNodeIfSelected(editor.state, nodeNames.cite);
     if (!node) return false;
     const { parent } = editor.state.selection.$from;
     const hasParenthesis = parent.type.name === schema.nodes.cite_group.name;

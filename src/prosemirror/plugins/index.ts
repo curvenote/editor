@@ -5,8 +5,10 @@ import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
 import { Schema } from 'prosemirror-model';
+import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
+import { nodeNames } from '@curvenote/schema';
 import suggestion from './suggestion';
-import { buildKeymap } from '../keymap';
+import { buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -17,6 +19,19 @@ import getPromptPlugin from './prompts';
 
 const ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
 const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
+
+function tablesPlugins(schema: Schema) {
+  // Don't add plugins if they are not in the schema
+  if (!schema.nodes[nodeNames.table]) return [];
+  return [
+    columnResizing({}),
+    tableEditing(),
+    keymap({
+      Tab: goToNextCell(1),
+      'Shift-Tab': goToNextCell(-1),
+    }),
+  ];
+}
 
 export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
   return [
@@ -36,6 +51,8 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
     dropCursor(),
     gapCursor(),
     collab({ version }),
+    ...tablesPlugins(schema), // put this plugin near the end of the array of plugins, since it handles mouse and arrow key events in tables rather broadly
     history(),
+    keymap(captureTab()),
   ];
 }

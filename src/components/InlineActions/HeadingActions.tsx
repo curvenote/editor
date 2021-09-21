@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { makeStyles, createStyles, Grid, Menu } from '@material-ui/core';
 import { Node } from 'prosemirror-model';
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
@@ -32,7 +32,7 @@ const HeadingActions: React.FC<ActionProps> = (props) => {
   const state = useSelector((s: State) => getEditorState(s, stateId)?.state);
   const parent =
     state?.selection &&
-    findParentNode((n: Node) => n.type.name === schemas.nodeNames.heading)(state?.selection);
+    findParentNode((n: Node) => n.type.name === nodeNames.heading)(state?.selection);
   const node = parent?.node ?? getNodeFromSelection(state?.selection);
   const pos = parent?.pos ?? state?.selection?.from;
 

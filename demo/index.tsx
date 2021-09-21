@@ -109,7 +109,11 @@ store.subscribe(() => {
   const html = document.getElementById('html');
   const editor = store.getState().editor.state.editors[stateKey];
   if (myst) {
-    myst.innerText = toMarkdown(editor.state.doc);
+    try {
+      myst.innerText = toMarkdown(editor.state.doc);
+    } catch (e) {
+      myst.innerText = 'Error converting to markdown';
+    }
   }
   if (tex) {
     try {
@@ -121,7 +125,6 @@ store.subscribe(() => {
   if (html) {
     html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
   }
-  console.log(editor.counts);
 });
 
 ReactDOM.render(

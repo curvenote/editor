@@ -1,10 +1,27 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
-import { Fragment, Schema } from 'prosemirror-model';
+import { Fragment } from 'prosemirror-model';
+import {
+  addColumnAfter,
+  addColumnBefore,
+  deleteColumn,
+  addRowAfter,
+  addRowBefore,
+  deleteRow,
+  mergeCells,
+  splitCell,
+  toggleHeaderRow,
+  toggleHeaderColumn,
+  toggleHeaderCell,
+  deleteTable,
+  isInTable,
+} from 'prosemirror-tables';
+
+import { Transaction } from 'prosemirror-state';
 import { AppThunk } from '../../types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
-import { commands, CommandResult, CommandNames } from '../commands';
+import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
@@ -33,18 +50,30 @@ const options = {
     },
   ],
 };
-const fuse = new Fuse(commands, options);
 
-const filterCommands = (schema: Schema, results: CommandResult[]) => {
-  const allowedNodes = new Set(Object.keys(schema.nodes));
-  const filtered = results.filter((r) => {
-    if (r.node == null) return true;
-    return allowedNodes.has(r.node);
-  });
+const TABLE_ACTIONS: { [key: string]: any } = {
+  [CommandNames.add_column_before]: addColumnBefore,
+  [CommandNames.add_column_after]: addColumnAfter,
+  [CommandNames.delete_column]: deleteColumn,
+  [CommandNames.add_row_before]: addRowBefore,
+  [CommandNames.add_row_after]: addRowAfter,
+  [CommandNames.delete_row]: deleteRow,
+  [CommandNames.delete_table]: deleteTable,
+  [CommandNames.merge_cells]: mergeCells,
+  [CommandNames.split_cell]: splitCell,
+  [CommandNames.toggle_header_row]: toggleHeaderRow,
+  [CommandNames.toggle_header_column]: toggleHeaderColumn,
+  [CommandNames.toggle_header_cell]: toggleHeaderCell,
+};
+
+const filterCommands = (view: EditorView, results: CommandResult[]) => {
+  const filtered = results.filter((r) => r.available?.(view) ?? true);
   return filtered;
 };
 
-export const startingSuggestions = (schema: Schema) => filterCommands(schema, commands);
+export const startingSuggestions = (view: EditorView) => {
+  return filterCommands(view, ALL_COMMANDS);
+};
 
 export function executeCommand(
   command: CommandNames,
@@ -63,10 +92,47 @@ export function executeCommand(
       view = viewOrId;
     }
     const { schema } = view.state;
-
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
+    if (TABLE_ACTIONS[command] && isInTable(view.state)) {
+      removeText();
+      TABLE_ACTIONS[command](view.state, (tr: Transaction) => {
+        view.dispatch(tr.scrollIntoView());
+        view.focus();
+      });
+      return true;
+    }
+
     switch (command) {
+      case CommandNames.insert_table: {
+        removeText();
+        const tr = view.state.tr
+          .replaceSelectionWith(
+            schema.nodes.table.create(
+              undefined,
+              Fragment.fromArray([
+                schema.nodes.table_row.create(
+                  undefined,
+                  Fragment.fromArray([
+                    schema.nodes.table_header.createAndFill(),
+                    schema.nodes.table_header.createAndFill(),
+                  ]),
+                ),
+                schema.nodes.table_row.create(
+                  undefined,
+                  Fragment.fromArray([
+                    schema.nodes.table_cell.createAndFill(),
+                    schema.nodes.table_cell.createAndFill(),
+                  ]),
+                ),
+              ]),
+            ),
+          )
+          .scrollIntoView();
+        view.dispatch(tr);
+        view.focus();
+        return true;
+      }
       case CommandNames.link: {
         removeText();
         const linkBounds = getLinkBoundsIfTheyExist(view.state);
@@ -259,6 +325,10 @@ export function executeCommand(
         removeText();
         triggerSuggestion(view, '[[', 'article: ');
         return true;
+      case CommandNames.link_table:
+        removeText();
+        triggerSuggestion(view, '[[', 'table: ');
+        return true;
       case CommandNames.link_notebook:
         removeText();
         triggerSuggestion(view, '[[', 'notebook: ');
@@ -301,14 +371,18 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
   };
 }
 
+// This is created once, is slightly expensive, and then search method is called many times.
+const fuse = new Fuse(ALL_COMMANDS, options);
+
 export function filterResults(
-  schema: Schema,
+  view: EditorView,
   search: string,
   callback: (results: CommandResult[]) => void,
 ): void {
   // This lets the keystroke go through:
   setTimeout(() => {
-    const results = fuse.search(search as string);
-    callback(filterCommands(schema, results.map((result) => result.item) as CommandResult[]));
+    const results: CommandResult[] = fuse.search(search as string).map((result) => result.item);
+    const filtered = filterCommands(view, results);
+    callback(filtered);
   }, 1);
 }

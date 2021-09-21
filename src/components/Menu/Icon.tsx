@@ -37,6 +37,7 @@ import LooksOneIcon from '@material-ui/icons/LooksOne';
 import ShortTextIcon from '@material-ui/icons/ShortText';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import CancelIcon from '@material-ui/icons/Cancel';
+import GridIcon from '@material-ui/icons/GridOn';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import classNames from 'classnames';
@@ -58,6 +59,54 @@ function SuperscriptIcon(props: any) {
     </SvgIcon>
   );
 }
+function RowAboveIcon(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M21,15c-0.7,0.3-1.5,0.5-2.3,0.5c-3.1,0-5.6-2.4-5.8-5.4l-5.4,0V8.7l2.7,0L6.6,5L2.9,8.7l2.8,0v1.4H3.9c-1,0-1.9,0.8-1.9,1.9v6.3c0,1,0.8,1.9,1.9,1.9h15.3c1,0,1.9-0.8,1.9-1.9L21,15z" />
+      <path d="M18.7,14.4c-2.6,0-4.7-2.1-4.7-4.7S16.1,5,18.7,5s4.7,2.1,4.7,4.7S21.2,14.4,18.7,14.4z M21.5,10.5V8.7h-1.9V6.8h-1.8v1.9h-1.9v1.8h1.9v1.9h1.8v-1.9H21.5z" />
+    </SvgIcon>
+  );
+}
+function RowBelowIcon(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M19.1,5H3.9C2.8,5,2,5.8,2,6.9v6.3c0,1,0.8,1.9,1.9,1.9h1.8v1.4l-2.8,0l3.6,3.7l3.6-3.7l-2.7,0V15l5.4,0c0.2-3,2.7-5.4,5.8-5.4c0.8,0,1.6,0.2,2.3,0.5l0-3.2C21,5.8,20.2,5,19.1,5z" />
+      <path d="M23.3,15.4c0,2.6-2.1,4.7-4.7,4.7S14,17.9,14,15.4s2.1-4.7,4.7-4.7S23.3,12.8,23.3,15.4z M19.6,14.6v-1.9h-1.8v1.9h-1.9v1.8h1.9v1.9h1.8v-1.9h1.9v-1.8H19.6z" />
+    </SvgIcon>
+  );
+}
+function RowDelete(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10.9,12.1l-1.2,1.2l1.2,1.2l1.2-1.2l1.2,1.2l1.2-1.2l-1.2-1.2l1.2-1.2l-1.2-1.2l-1.2,1.2l-1.2-1.2l-1.2,1.2L10.9,12.1z" />
+      <path d="M2.6,15.3V8.9c0-1,0.8-1.8,1.8-1.8h15.4c1,0,1.8,0.8,1.8,1.8v6.4c0,1-0.8,1.8-1.8,1.8H4.4C3.4,17.1,2.6,16.3,2.6,15.3zM15.9,12.1c0-2.1-1.7-3.8-3.8-3.8S8.2,10,8.2,12.1s1.7,3.8,3.8,3.8S15.9,14.2,15.9,12.1z" />
+    </SvgIcon>
+  );
+}
+function ColLeftIcon(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M8.8,10.1V7.4h1.4l0,5.4c3,0.2,5.4,2.7,5.4,5.8c0,0.8-0.2,1.6-0.5,2.3h3.2c1.1,0,1.9-0.9,1.9-1.9V3.7c0-1.1-0.9-1.9-1.9-1.9h-6.2c-1.1,0-1.9,0.9-1.9,1.9v1.9H8.8V2.8L5.1,6.4L8.8,10.1z" />
+      <path d="M9.8,23.2c-2.6,0-4.7-2.1-4.7-4.7s2.1-4.7,4.7-4.7s4.7,2.1,4.7,4.7S12.4,23.2,9.8,23.2z M10.6,19.4h1.9v-1.8h-1.9v-1.9H8.8v1.9H6.9v1.8h1.9v1.9h1.8V19.4z" />
+    </SvgIcon>
+  );
+}
+function ColRightIcon(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M20.2,6.4l-3.7-3.6l0,2.8h-1.4V3.7c0-1-0.8-1.9-1.9-1.9H7c-1,0-1.9,0.8-1.9,1.9V19c0,1,0.8,1.9,1.9,1.9l3.2,0c-0.3-0.7-0.5-1.5-0.5-2.3c0-3.1,2.4-5.6,5.4-5.8l0-5.4h1.4l0,2.7L20.2,6.4z" />
+      <path d="M10.8,18.5c0-2.6,2.1-4.7,4.7-4.7s4.7,2.1,4.7,4.7s-2.1,4.7-4.7,4.7S10.8,21.1,10.8,18.5z M14.7,21.3h1.8v-1.9h1.9v-1.8h-1.9v-1.9h-1.8v1.9h-1.9v1.8h1.9V21.3z" />
+    </SvgIcon>
+  );
+}
+function ColDelete(props: any) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M12.1,13.2l1.2,1.2l1.2-1.2l-1.2-1.2l1.2-1.2l-1.2-1.2l-1.2,1.2l-1.2-1.2l-1.2,1.2l1.2,1.2l-1.2,1.2l1.2,1.2L12.1,13.2z" />
+      <path d="M15.3,21.6H8.8c-1,0-1.8-0.8-1.8-1.8V4.4c0-1,0.8-1.8,1.8-1.8h6.4c1,0,1.8,0.8,1.8,1.8v15.4C17.1,20.8,16.3,21.6,15.3,21.6zM12.1,8.3c-2.1,0-3.8,1.7-3.8,3.8s1.7,3.8,3.8,3.8s3.8-1.7,3.8-3.8S14.2,8.3,12.1,8.3z" />
+    </SvgIcon>
+  );
+}
 function BracketsIcon(props: any) {
   return (
     <SvgIcon {...props}>
@@ -71,6 +120,7 @@ const deMacify = (title: string | React.ReactElement) =>
   mac || typeof title !== 'string' ? title : title.replace('⌘', 'Ctrl-');
 
 const icons = {
+  table: { help: 'Create Table', Icon: GridIcon },
   cancel: { help: 'Cancel', Icon: CancelIcon },
   enterSave: { help: 'Save', Icon: KeyboardReturnIcon },
   bold: { help: 'Bold ⌘B', Icon: FormatBoldIcon },
@@ -103,6 +153,12 @@ const icons = {
   numbered: { help: 'Toggle Numbering', Icon: LooksOneIcon },
   caption: { help: 'Show/Hide Caption', Icon: ShortTextIcon },
   label: { help: 'Reference ID', Icon: LocalOfferIcon },
+  rowAbove: { help: 'Insert Row Above', Icon: RowAboveIcon },
+  rowBelow: { help: 'Insert Row Below', Icon: RowBelowIcon },
+  rowDelete: { help: 'Delete Row', Icon: RowDelete },
+  colLeft: { help: 'Insert Column Left', Icon: ColLeftIcon },
+  colRight: { help: 'Insert Column Right', Icon: ColRightIcon },
+  colDelete: { help: 'Delete Column', Icon: ColDelete },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';

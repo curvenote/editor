@@ -105,9 +105,8 @@ export function buildKeymap(stateKey: any, schema: Schema) {
       'Mod-Shift-8',
       chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.bullet_list)),
     );
-    // Always capture the Tab.
-    const cmdLift = chainCommands(liftListItem(schema.nodes.list_item), () => true);
-    const cmdSink = chainCommands(sinkListItem(schema.nodes.list_item), () => true);
+    const cmdLift = liftListItem(schema.nodes.list_item);
+    const cmdSink = sinkListItem(schema.nodes.list_item);
     bind('Shift-Tab', cmdLift);
     bind('Mod-[', cmdLift);
     bind('Tab', cmdSink);
@@ -141,5 +140,15 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
   );
 
+  return keys;
+}
+
+export function captureTab() {
+  // Always capture the Tab.
+  const capture: KeyMap = () => true;
+  const keys = {
+    'Shift-Tab': capture,
+    Tab: capture,
+  };
   return keys;
 }

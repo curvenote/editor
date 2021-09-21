@@ -24,7 +24,7 @@ export async function renderMath(math: string, element: HTMLElement, inline: boo
     });
   } catch (error) {
     // eslint-disable-next-line no-param-reassign
-    element.innerText = error;
+    element.innerText = error as string;
   }
 }
 
@@ -98,11 +98,9 @@ class MathView {
               ...(mac
                 ? {}
                 : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
-              Escape: () => {
-                this.dom.classList.remove('editing');
-                this.outerView.focus();
-                return true;
-              },
+              Escape: unfocus,
+              Tab: unfocus,
+              'Shift-Tab': unfocus,
               Enter: unfocus,
               'Ctrl-Enter': chainCommands(newlineInCode, unfocus),
               'Shift-Enter': chainCommands(newlineInCode, unfocus),
