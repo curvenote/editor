@@ -45,11 +45,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _a;
 import Fuse from 'fuse.js';
 import { Fragment } from 'prosemirror-model';
+import { addColumnAfter, addColumnBefore, deleteColumn, addRowAfter, addRowBefore, deleteRow, mergeCells, splitCell, toggleHeaderRow, toggleHeaderColumn, toggleHeaderCell, deleteTable, isInTable, } from 'prosemirror-tables';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
-import { commands, CommandNames } from '../commands';
+import { ALL_COMMANDS, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
@@ -77,23 +79,33 @@ var options = {
         },
     ],
 };
-var fuse = new Fuse(commands, options);
-var filterCommands = function (schema, results) {
-    var allowedNodes = new Set(Object.keys(schema.nodes));
-    var filtered = results.filter(function (r) {
-        if (r.node == null)
-            return true;
-        return allowedNodes.has(r.node);
-    });
+var TABLE_ACTIONS = (_a = {},
+    _a[CommandNames.add_column_before] = addColumnBefore,
+    _a[CommandNames.add_column_after] = addColumnAfter,
+    _a[CommandNames.delete_column] = deleteColumn,
+    _a[CommandNames.add_row_before] = addRowBefore,
+    _a[CommandNames.add_row_after] = addRowAfter,
+    _a[CommandNames.delete_row] = deleteRow,
+    _a[CommandNames.delete_table] = deleteTable,
+    _a[CommandNames.merge_cells] = mergeCells,
+    _a[CommandNames.split_cell] = splitCell,
+    _a[CommandNames.toggle_header_row] = toggleHeaderRow,
+    _a[CommandNames.toggle_header_column] = toggleHeaderColumn,
+    _a[CommandNames.toggle_header_cell] = toggleHeaderCell,
+    _a);
+var filterCommands = function (view, results) {
+    var filtered = results.filter(function (r) { var _a, _b; return (_b = (_a = r.available) === null || _a === void 0 ? void 0 : _a.call(r, view)) !== null && _b !== void 0 ? _b : true; });
     return filtered;
 };
-export var startingSuggestions = function (schema) { return filterCommands(schema, commands); };
+export var startingSuggestions = function (view) {
+    return filterCommands(view, ALL_COMMANDS);
+};
 export function executeCommand(command, viewOrId, removeText, replace) {
     var _this = this;
     if (removeText === void 0) { removeText = function () { return true; }; }
     if (replace === void 0) { replace = false; }
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-        var view, ev, schema, replaceOrInsert, _a, linkBounds, from_1, to_1, href, _b, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, cites, nodes, wrapped, tr;
+        var view, ev, schema, replaceOrInsert, _a, tr, linkBounds, from_1, to_1, href, _b, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, cites, nodes, wrapped, tr;
         var _c, _d, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
@@ -111,49 +123,79 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     }
                     schema = view.state.schema;
                     replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
+                    if (TABLE_ACTIONS[command] && isInTable(view.state)) {
+                        removeText();
+                        TABLE_ACTIONS[command](view.state, function (tr) {
+                            view.dispatch(tr.scrollIntoView());
+                            view.focus();
+                        });
+                        return [2, true];
+                    }
                     _a = command;
                     switch (_a) {
-                        case CommandNames.link: return [3, 1];
-                        case CommandNames.callout: return [3, 2];
-                        case CommandNames.aside: return [3, 3];
-                        case CommandNames.horizontal_rule: return [3, 4];
-                        case CommandNames.paragraph: return [3, 5];
-                        case CommandNames.heading1: return [3, 6];
-                        case CommandNames.heading2: return [3, 6];
-                        case CommandNames.heading3: return [3, 6];
-                        case CommandNames.heading4: return [3, 6];
-                        case CommandNames.heading5: return [3, 6];
-                        case CommandNames.heading6: return [3, 6];
-                        case CommandNames.quote: return [3, 7];
-                        case CommandNames.time: return [3, 8];
-                        case CommandNames.bullet_list: return [3, 9];
-                        case CommandNames.ordered_list: return [3, 10];
-                        case CommandNames.emoji: return [3, 11];
-                        case CommandNames.math: return [3, 12];
-                        case CommandNames.equation: return [3, 13];
-                        case CommandNames.code: return [3, 14];
-                        case CommandNames.variable: return [3, 15];
-                        case CommandNames.display: return [3, 16];
-                        case CommandNames.range: return [3, 17];
-                        case CommandNames.dynamic: return [3, 18];
-                        case CommandNames.switch: return [3, 19];
-                        case CommandNames.button: return [3, 20];
-                        case CommandNames.youtube: return [3, 21];
-                        case CommandNames.loom: return [3, 22];
-                        case CommandNames.vimeo: return [3, 23];
-                        case CommandNames.miro: return [3, 24];
-                        case CommandNames.iframe: return [3, 25];
-                        case CommandNames.link_section: return [3, 26];
-                        case CommandNames.link_figure: return [3, 27];
-                        case CommandNames.link_equation: return [3, 28];
-                        case CommandNames.link_code: return [3, 29];
-                        case CommandNames.link_article: return [3, 30];
-                        case CommandNames.link_notebook: return [3, 31];
-                        case CommandNames.citation: return [3, 32];
-                        case CommandNames.add_citation: return [3, 33];
+                        case CommandNames.insert_table: return [3, 1];
+                        case CommandNames.link: return [3, 2];
+                        case CommandNames.callout: return [3, 3];
+                        case CommandNames.aside: return [3, 4];
+                        case CommandNames.horizontal_rule: return [3, 5];
+                        case CommandNames.paragraph: return [3, 6];
+                        case CommandNames.heading1: return [3, 7];
+                        case CommandNames.heading2: return [3, 7];
+                        case CommandNames.heading3: return [3, 7];
+                        case CommandNames.heading4: return [3, 7];
+                        case CommandNames.heading5: return [3, 7];
+                        case CommandNames.heading6: return [3, 7];
+                        case CommandNames.quote: return [3, 8];
+                        case CommandNames.time: return [3, 9];
+                        case CommandNames.bullet_list: return [3, 10];
+                        case CommandNames.ordered_list: return [3, 11];
+                        case CommandNames.emoji: return [3, 12];
+                        case CommandNames.math: return [3, 13];
+                        case CommandNames.equation: return [3, 14];
+                        case CommandNames.code: return [3, 15];
+                        case CommandNames.variable: return [3, 16];
+                        case CommandNames.display: return [3, 17];
+                        case CommandNames.range: return [3, 18];
+                        case CommandNames.dynamic: return [3, 19];
+                        case CommandNames.switch: return [3, 20];
+                        case CommandNames.button: return [3, 21];
+                        case CommandNames.youtube: return [3, 22];
+                        case CommandNames.loom: return [3, 23];
+                        case CommandNames.vimeo: return [3, 24];
+                        case CommandNames.miro: return [3, 25];
+                        case CommandNames.iframe: return [3, 26];
+                        case CommandNames.link_section: return [3, 27];
+                        case CommandNames.link_figure: return [3, 28];
+                        case CommandNames.link_equation: return [3, 29];
+                        case CommandNames.link_code: return [3, 30];
+                        case CommandNames.link_article: return [3, 31];
+                        case CommandNames.link_table: return [3, 32];
+                        case CommandNames.link_notebook: return [3, 33];
+                        case CommandNames.citation: return [3, 34];
+                        case CommandNames.add_citation: return [3, 35];
                     }
-                    return [3, 35];
+                    return [3, 37];
                 case 1:
+                    {
+                        removeText();
+                        tr = view.state.tr
+                            .replaceSelectionWith(schema.nodes.table.create(undefined, Fragment.fromArray([
+                            schema.nodes.table_row.create(undefined, Fragment.fromArray([
+                                schema.nodes.table_header.createAndFill(),
+                                schema.nodes.table_header.createAndFill(),
+                            ])),
+                            schema.nodes.table_row.create(undefined, Fragment.fromArray([
+                                schema.nodes.table_cell.createAndFill(),
+                                schema.nodes.table_cell.createAndFill(),
+                            ])),
+                        ])))
+                            .scrollIntoView();
+                        view.dispatch(tr);
+                        view.focus();
+                        return [2, true];
+                    }
+                    _f.label = 2;
+                case 2:
                     {
                         removeText();
                         linkBounds = getLinkBoundsIfTheyExist(view.state);
@@ -169,69 +211,69 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         view.dispatch(view.state.tr.addMark(from, to, schema.marks.link.create({ href: href })));
                         return [2, true];
                     }
-                    _f.label = 2;
-                case 2:
+                    _f.label = 3;
+                case 3:
                     removeText();
                     dispatch(actions.wrapIn(schema.nodes.callout));
                     return [2, true];
-                case 3:
+                case 4:
                     removeText();
                     dispatch(actions.wrapIn(schema.nodes.aside));
                     return [2, true];
-                case 4:
+                case 5:
                     removeText();
                     dispatch(replaceOrInsert(schema.nodes.horizontal_rule));
                     return [2, true];
-                case 5:
+                case 6:
                     removeText();
                     dispatch(actions.wrapInHeading(schema, 0));
                     return [2, true];
-                case 6:
+                case 7:
                     removeText();
                     dispatch(actions.wrapInHeading(schema, Number.parseInt(command.slice(7), 10)));
                     return [2, true];
-                case 7:
+                case 8:
                     removeText();
                     dispatch(actions.wrapIn(schema.nodes.blockquote));
                     return [2, true];
-                case 8:
+                case 9:
                     removeText();
                     dispatch(actions.insertInlineNode(schema.nodes.time, { datetime: new Date() }, undefined, false));
                     dispatch(actions.insertText(' '));
                     return [2, true];
-                case 9:
+                case 10:
                     removeText();
                     dispatch(actions.wrapIn(schema.nodes.bullet_list));
                     return [2, true];
-                case 10:
+                case 11:
                     removeText();
                     dispatch(actions.wrapIn(schema.nodes.ordered_list));
                     return [2, true];
-                case 11:
+                case 12:
                     removeText();
                     triggerSuggestion(view, ':');
                     return [2, true];
-                case 12:
+                case 13:
                     removeText();
                     dispatch(actions.insertNode(schema.nodes.math));
                     return [2, true];
-                case 13:
+                case 14:
                     removeText();
                     dispatch(replaceOrInsert(schema.nodes.equation, { id: createId() }));
                     return [2, true];
-                case 14:
+                case 15:
                     removeText();
                     dispatch(replaceOrInsert(schema.nodes.code_block, { id: createId() }));
                     return [2, true];
-                case 15:
+                case 16:
                     removeText();
                     dispatch(actions.insertVariable(schema, { name: 'myVar', value: '0', valueFunction: '' }));
                     return [2, true];
-                case 16:
+                case 17:
                     removeText();
                     triggerSuggestion(view, '{{');
                     return [2, true];
-                case 17:
+                case 18:
                     {
                         removeText();
                         name_1 = (_c = prompt('Name of the variable:')) !== null && _c !== void 0 ? _c : 'myVar';
@@ -241,8 +283,8 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         }));
                         return [2, true];
                     }
-                    _f.label = 18;
-                case 18:
+                    _f.label = 19;
+                case 19:
                     {
                         removeText();
                         name_2 = (_d = prompt('Name of the variable:')) !== null && _d !== void 0 ? _d : 'myVar';
@@ -252,8 +294,8 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         }));
                         return [2, true];
                     }
-                    _f.label = 19;
-                case 19:
+                    _f.label = 20;
+                case 20:
                     {
                         removeText();
                         name_3 = (_e = prompt('Name of the variable:')) !== null && _e !== void 0 ? _e : 'myVar';
@@ -263,15 +305,15 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         }));
                         return [2, true];
                     }
-                    _f.label = 20;
-                case 20:
+                    _f.label = 21;
+                case 21:
                     {
                         removeText();
                         dispatch(actions.insertInlineNode(schema.nodes.button, { clickFunction: '' }));
                         return [2, true];
                     }
-                    _f.label = 21;
-                case 21:
+                    _f.label = 22;
+                case 22:
                     {
                         removeText();
                         url = prompt('Link to the YouTube video:');
@@ -282,8 +324,8 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
-                    _f.label = 22;
-                case 22:
+                    _f.label = 23;
+                case 23:
                     {
                         removeText();
                         url = prompt('Link to the Loom Video:');
@@ -294,8 +336,8 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
-                    _f.label = 23;
-                case 23:
+                    _f.label = 24;
+                case 24:
                     {
                         removeText();
                         url = prompt('Link to the Vimeo Video:');
@@ -306,8 +348,8 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
-                    _f.label = 24;
-                case 24:
+                    _f.label = 25;
+                case 25:
                     {
                         removeText();
                         url = prompt('Link to the Miro Board:');
@@ -318,8 +360,8 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
-                    _f.label = 25;
-                case 25:
+                    _f.label = 26;
+                case 26:
                     {
                         removeText();
                         src = prompt('Link to the IFrame:');
@@ -328,39 +370,43 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
-                    _f.label = 26;
-                case 26:
+                    _f.label = 27;
+                case 27:
                     removeText();
                     triggerSuggestion(view, '[[', 'sec: ');
                     return [2, true];
-                case 27:
+                case 28:
                     removeText();
                     triggerSuggestion(view, '[[', 'fig: ');
                     return [2, true];
-                case 28:
+                case 29:
                     removeText();
                     triggerSuggestion(view, '[[', 'eq: ');
                     return [2, true];
-                case 29:
+                case 30:
                     removeText();
                     triggerSuggestion(view, '[[', 'code: ');
                     return [2, true];
-                case 30:
+                case 31:
                     removeText();
                     triggerSuggestion(view, '[[', 'article: ');
                     return [2, true];
-                case 31:
-                    removeText();
-                    triggerSuggestion(view, '[[', 'notebook: ');
-                    return [2, true];
                 case 32:
                     removeText();
-                    triggerSuggestion(view, '[[', 'cite: ');
+                    triggerSuggestion(view, '[[', 'table: ');
                     return [2, true];
                 case 33:
                     removeText();
-                    return [4, opts.citationPrompt()];
+                    triggerSuggestion(view, '[[', 'notebook: ');
+                    return [2, true];
                 case 34:
+                    removeText();
+                    triggerSuggestion(view, '[[', 'cite: ');
+                    return [2, true];
+                case 35:
+                    removeText();
+                    return [4, opts.citationPrompt()];
+                case 36:
                     cites = _f.sent();
                     if (!cites || cites.length === 0)
                         return [2, true];
@@ -371,7 +417,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     tr = view.state.tr.replaceSelectionWith(wrapped).scrollIntoView();
                     view.dispatch(tr);
                     return [2, true];
-                case 35: return [2, removeText()];
+                case 37: return [2, removeText()];
             }
         });
     }); };
@@ -394,10 +440,12 @@ export function chooseSelection(result) {
         });
     }); };
 }
-export function filterResults(schema, search, callback) {
+var fuse = new Fuse(ALL_COMMANDS, options);
+export function filterResults(view, search, callback) {
     setTimeout(function () {
-        var results = fuse.search(search);
-        callback(filterCommands(schema, results.map(function (result) { return result.item; })));
+        var results = fuse.search(search).map(function (result) { return result.item; });
+        var filtered = filterCommands(view, results);
+        callback(filtered);
     }, 1);
 }
 //# sourceMappingURL=command.js.map

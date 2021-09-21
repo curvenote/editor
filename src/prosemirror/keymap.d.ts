@@ -4,4 +4,8 @@ declare type KeyMap = (state: EditorState<Schema>, dispatch?: (p: Transaction<Sc
 export declare function buildKeymap(stateKey: any, schema: Schema): {
     [index: string]: KeyMap;
 };
+export declare function captureTab(): {
+    'Shift-Tab': KeyMap;
+    Tab: KeyMap;
+};
 export {};

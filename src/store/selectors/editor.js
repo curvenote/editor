@@ -3,6 +3,7 @@ import { findParentNode, isNodeSelection, hasParentNode, } from 'prosemirror-uti
 import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditorState } from '../state/selectors';
+import { getEditorUI } from '../ui/selectors';
 export function getParentsOfSelection(state, stateKey) {
     if (stateKey == null)
         return [];
@@ -79,6 +80,10 @@ export function selectionIsChildOf(state, stateKey, nodes) {
         return [key, hasParentNode(function (test) { return test.type === node; })(editor.state.selection)];
     }));
     return active;
+}
+export function selectionIsChildOfActiveState(state, nodes) {
+    var stateId = getEditorUI(state).stateId;
+    return selectionIsChildOf(state, stateId, nodes);
 }
 export function selectionIsThisNodeType(state, stateKey, nodes) {
     var editor = getEditorState(state, stateKey);

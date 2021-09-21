@@ -72,8 +72,8 @@ export function buildKeymap(stateKey, schema) {
         bind('Enter', splitListItem(schema.nodes.list_item));
         bind('Mod-Shift-7', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.ordered_list)));
         bind('Mod-Shift-8', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.bullet_list)));
-        var cmdLift = chainCommands(liftListItem(schema.nodes.list_item), function () { return true; });
-        var cmdSink = chainCommands(sinkListItem(schema.nodes.list_item), function () { return true; });
+        var cmdLift = liftListItem(schema.nodes.list_item);
+        var cmdSink = sinkListItem(schema.nodes.list_item);
         bind('Shift-Tab', cmdLift);
         bind('Mod-[', cmdLift);
         bind('Tab', cmdSink);
@@ -97,6 +97,14 @@ export function buildKeymap(stateKey, schema) {
     }
     bind('Mod-Alt-c', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
     bind('Mod-Alt-m', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
+    return keys;
+}
+export function captureTab() {
+    var capture = function () { return true; };
+    var keys = {
+        'Shift-Tab': capture,
+        Tab: capture,
+    };
     return keys;
 }
 //# sourceMappingURL=keymap.js.map

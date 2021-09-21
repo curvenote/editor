@@ -76,6 +76,14 @@ export function updateSuggestion(open, kind, search, view, range, trigger) {
         },
     };
 }
+export function closeSuggestion() {
+    return {
+        type: UPDATE_SUGGESTION,
+        payload: {
+            open: false,
+        },
+    };
+}
 export function updateResults(results) {
     return {
         type: UPDATE_RESULTS,
@@ -115,31 +123,31 @@ export function chooseSelection(selected) {
         }
     };
 }
-export function filterResults(schema, search) {
+export function filterResults(view, search) {
     return function (dispatch, getState) {
         var kind = getSuggestion(getState()).kind;
         switch (kind) {
             case SuggestionKind.emoji:
-                return emoji.filterResults(schema, search, function (results) {
+                return emoji.filterResults(view.state.schema, search, function (results) {
                     return dispatch(updateResults(results));
                 });
             case SuggestionKind.command:
-                return command.filterResults(schema, search, function (results) {
+                return command.filterResults(view, search, function (results) {
                     return dispatch(updateResults(results));
                 });
             case SuggestionKind.link:
-                return link.filterResults(schema, search, function (results) {
+                return link.filterResults(view.state.schema, search, function (results) {
                     return dispatch(updateResults(results));
                 });
             case SuggestionKind.variable:
             case SuggestionKind.display:
-                return variable.filterResults(kind, schema, search, dispatch, getState, function (results) { return dispatch(updateResults(results)); });
+                return variable.filterResults(kind, view.state.schema, search, dispatch, getState, function (results) { return dispatch(updateResults(results)); });
             default:
                 throw new Error('Unknown suggestion kind.');
         }
     };
 }
-function setStartingSuggestions(schema, kind, search, create) {
+function setStartingSuggestions(view, kind, search, create) {
     var _this = this;
     if (create === void 0) { create = true; }
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
@@ -164,7 +172,7 @@ function setStartingSuggestions(schema, kind, search, create) {
                     _b.label = 2;
                 case 2:
                     {
-                        starting = command.startingSuggestions(schema);
+                        starting = command.startingSuggestions(view);
                         dispatch(updateResults(starting));
                         return [2];
                     }
@@ -193,9 +201,8 @@ export function handleSuggestion(action) {
         var _a;
         var kind = triggerToKind(action.trigger);
         dispatch(updateSuggestion(action.kind !== 'close', kind, action.search, action.view, action.range, action.trigger));
-        var schema = action.view.state.schema;
         if (action.kind === 'open') {
-            dispatch(setStartingSuggestions(schema, kind, (_a = action.search) !== null && _a !== void 0 ? _a : '', true));
+            dispatch(setStartingSuggestions(action.view, kind, (_a = action.search) !== null && _a !== void 0 ? _a : '', true));
             dispatch(selectSuggestion(0));
         }
         if (action.kind === 'previous' || action.kind === 'next') {
@@ -205,10 +212,10 @@ export function handleSuggestion(action) {
         }
         if (action.kind === 'filter') {
             if (action.search === '' || action.search == null) {
-                dispatch(setStartingSuggestions(schema, kind, '', false));
+                dispatch(setStartingSuggestions(action.view, kind, '', false));
             }
             else {
-                dispatch(filterResults(action.view.state.schema, action.search));
+                dispatch(filterResults(action.view, action.search));
             }
         }
         if (action.kind === 'select') {

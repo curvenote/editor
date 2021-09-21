@@ -24,11 +24,37 @@ var useStyles = makeStyles(function (theme) {
         },
     });
 });
+function TableMenu(_a) {
+    var onClose = _a.onClose, anchor = _a.anchor, isOpen = _a.isOpen, command = _a.command;
+    function item(title, action) {
+        return (React.createElement(MenuAction, { key: action, title: title, action: function () {
+                command(action);
+            } }));
+    }
+    var tableMenu = [
+        item('Insert column before', CommandNames.add_column_before),
+        item('Insert column after', CommandNames.add_column_after),
+        item('Delete column', CommandNames.delete_column),
+        item('Insert row before', CommandNames.add_row_before),
+        item('Insert row after', CommandNames.add_row_after),
+        item('Delete row', CommandNames.delete_row),
+        item('Delete table', CommandNames.delete_table),
+        item('Merge cells', CommandNames.merge_cells),
+        item('Split cell', CommandNames.split_cell),
+        item('Toggle header column', CommandNames.toggle_header_column),
+        item('Toggle header row', CommandNames.toggle_header_row),
+        item('Toggle header cells', CommandNames.toggle_header_cell),
+    ];
+    return (React.createElement(React.Fragment, null, isOpen && (React.createElement(Menu, { id: "table-menu", anchorEl: anchor, keepMounted: true, open: Boolean(anchor), onClose: onClose },
+        React.createElement("div", { onClick: function () { return onClose(); } }, tableMenu)))));
+}
 var EditorMenu = function (props) {
     var standAlone = props.standAlone, disabled = props.disabled;
     var classes = useStyles();
     var dispatch = useDispatch();
     var _a = React.useState(null), anchorEl = _a[0], setAnchorEl = _a[1];
+    var _b = React.useState(null), tableAnchor = _b[0], setTableAnchor = _b[1];
+    var _c = React.useState(false), isTableMenuOpen = _c[0], setIsTableMenuOpen = _c[1];
     var onOpen = useCallback(function (event) { return setAnchorEl(event.currentTarget); }, []);
     var onClose = useCallback(function () { return setAnchorEl(null); }, []);
     var stateId = useSelector(function (state) { return selectors.getEditorUI(state).stateId; });
@@ -52,6 +78,7 @@ var EditorMenu = function (props) {
         return selectors.selectionIsChildOf(state, stateId, {
             ul: schema === null || schema === void 0 ? void 0 : schema.nodes.bullet_list,
             ol: schema === null || schema === void 0 ? void 0 : schema.nodes.ordered_list,
+            table: schema === null || schema === void 0 ? void 0 : schema.nodes.table,
             math: schema === null || schema === void 0 ? void 0 : schema.nodes.math,
             cite_group: schema === null || schema === void 0 ? void 0 : schema.nodes.cite_group,
         });
@@ -61,30 +88,31 @@ var EditorMenu = function (props) {
             cite: schema === null || schema === void 0 ? void 0 : schema.nodes.cite,
         });
     }, isEqual);
-    var toggleMark = function (mark) { return dispatch(actions.toggleMark(stateId, viewId, mark)); };
+    var toggleMark = useCallback(function (mark) { return dispatch(actions.toggleMark(stateId, viewId, mark)); }, [stateId, viewId]);
     var wrapInline = function (node) { return dispatch(actions.insertInlineNode(node)); };
-    var command = function (name) { return dispatch(actions.executeCommand(name, viewId)); };
+    var command = useCallback(function (name) { return dispatch(actions.executeCommand(name, viewId)); }, [stateId, viewId]);
     var toggleBrackets = useCallback(function () { return dispatch(toggleCitationBrackets()); }, []);
-    var clickBold = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strong); }, [stateId, viewId]);
-    var clickItalic = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.em); }, [stateId, viewId]);
-    var clickUnderline = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.underline); }, [stateId, viewId]);
-    var clickStrike = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strikethrough); }, [stateId, viewId]);
-    var clickCode = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.code); }, [stateId, viewId]);
-    var clickSub = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.subscript); }, [stateId, viewId]);
-    var clickSuper = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.superscript); }, [stateId, viewId]);
-    var clickUl = useCallback(function () { return command(CommandNames.bullet_list); }, [stateId, viewId]);
-    var clickOl = useCallback(function () { return command(CommandNames.ordered_list); }, [stateId, viewId]);
-    var clickLink = useCallback(function () { return command(CommandNames.link); }, [stateId, viewId]);
-    var clickMath = useCallback(function () { return wrapInline(schema === null || schema === void 0 ? void 0 : schema.nodes.math); }, [stateId, viewId]);
-    var clickEquation = useCallback(function () { return command(CommandNames.equation); }, [stateId, viewId]);
-    var clickCite = useCallback(function () { return command(CommandNames.citation); }, [stateId, viewId]);
-    var clickHr = useCallback(function () { return command(CommandNames.horizontal_rule); }, [stateId, viewId]);
-    var clickCodeBlk = useCallback(function () { return command(CommandNames.code); }, [stateId, viewId]);
-    var clickYoutube = useCallback(function () { return command(CommandNames.youtube); }, [stateId, viewId]);
-    var clickVimeo = useCallback(function () { return command(CommandNames.vimeo); }, [stateId, viewId]);
-    var clickLoom = useCallback(function () { return command(CommandNames.loom); }, [stateId, viewId]);
-    var clickMiro = useCallback(function () { return command(CommandNames.miro); }, [stateId, viewId]);
-    var clickIframe = useCallback(function () { return command(CommandNames.iframe); }, [stateId, viewId]);
+    var clickBold = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strong); }, [toggleMark]);
+    var clickItalic = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.em); }, [toggleMark]);
+    var clickUnderline = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.underline); }, [toggleMark]);
+    var clickStrike = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.strikethrough); }, [toggleMark]);
+    var clickCode = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.code); }, [toggleMark]);
+    var clickSub = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.subscript); }, [toggleMark]);
+    var clickSuper = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.superscript); }, [toggleMark]);
+    var clickUl = useCallback(function () { return command(CommandNames.bullet_list); }, [command]);
+    var clickGrid = useCallback(function () { return command(CommandNames.insert_table); }, [command]);
+    var clickOl = useCallback(function () { return command(CommandNames.ordered_list); }, [command]);
+    var clickLink = useCallback(function () { return command(CommandNames.link); }, [command]);
+    var clickMath = useCallback(function () { return wrapInline(schema === null || schema === void 0 ? void 0 : schema.nodes.math); }, [command]);
+    var clickEquation = useCallback(function () { return command(CommandNames.equation); }, [command]);
+    var clickCite = useCallback(function () { return command(CommandNames.citation); }, [command]);
+    var clickHr = useCallback(function () { return command(CommandNames.horizontal_rule); }, [command]);
+    var clickCodeBlk = useCallback(function () { return command(CommandNames.code); }, [command]);
+    var clickYoutube = useCallback(function () { return command(CommandNames.youtube); }, [command]);
+    var clickVimeo = useCallback(function () { return command(CommandNames.vimeo); }, [command]);
+    var clickLoom = useCallback(function () { return command(CommandNames.loom); }, [command]);
+    var clickMiro = useCallback(function () { return command(CommandNames.miro); }, [command]);
+    var clickIframe = useCallback(function () { return command(CommandNames.iframe); }, [command]);
     return (React.createElement(Grid, { container: true, alignItems: "center", className: classes.root + " " + (standAlone ? classes.center : classes.pad), wrap: "nowrap" },
         !standAlone && React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "bold", active: active.strong, disabled: off, onClick: clickBold }),
@@ -94,6 +122,15 @@ var EditorMenu = function (props) {
         React.createElement(MenuIcon, { kind: "code", active: active.code, disabled: off, onClick: clickCode }),
         React.createElement(MenuIcon, { kind: "subscript", active: active.sub, disabled: off, onClick: clickSub }),
         React.createElement(MenuIcon, { kind: "superscript", active: active.sup, disabled: off, onClick: clickSuper }),
+        parents.table && (React.createElement(React.Fragment, null,
+            React.createElement(MenuIcon, { kind: "divider" }),
+            React.createElement(MenuIcon, { kind: "table", active: parents.ul, disabled: off, onClick: function (e) {
+                    setIsTableMenuOpen(true);
+                    setTableAnchor(e.currentTarget);
+                } }))),
+        React.createElement(TableMenu, { anchor: tableAnchor, onClose: function () {
+                setIsTableMenuOpen(false);
+            }, isOpen: isTableMenuOpen, command: command }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "ul", active: parents.ul, disabled: off || !(schema === null || schema === void 0 ? void 0 : schema.nodes.bullet_list), onClick: clickUl }),
         React.createElement(MenuIcon, { kind: "ol", active: parents.ol, disabled: off || !(schema === null || schema === void 0 ? void 0 : schema.nodes.ordered_list), onClick: clickOl }),
@@ -106,6 +143,7 @@ var EditorMenu = function (props) {
             React.createElement("div", { onClick: function () { return onClose(); } },
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.math) && (React.createElement(MenuAction, { kind: "math", disabled: off, action: clickMath, title: "Inline Math" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.equation) && (React.createElement(MenuAction, { kind: "math", disabled: off, action: clickEquation, title: "Equation Block" })),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.table) && (React.createElement(MenuAction, { title: "Table", kind: "table", disabled: off, action: clickGrid })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.cite) && (React.createElement(MenuAction, { kind: "link", disabled: off, action: clickCite, title: "Citation" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.horizontal_rule) && (React.createElement(MenuAction, { kind: "hr", disabled: off, action: clickHr, title: "Divider" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.code_block) && (React.createElement(MenuAction, { kind: "code", disabled: off, action: clickCodeBlk, title: "Code" })),

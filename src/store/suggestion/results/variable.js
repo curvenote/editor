@@ -1,7 +1,11 @@
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 import { getSuggestion } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
@@ -24,7 +28,7 @@ export var startingSuggestions = function (kind, getState) { return __spreadArra
 ], Object.entries(getState().runtime.variables).map(function (_a) {
     var variable = _a[1];
     return variable;
-})); };
+}), true); };
 function createVariable(schema, dispatch, trigger, search) {
     var _a, _b;
     var name = (_b = (_a = trigger.match(variableTrigger)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : 'myVar';
@@ -87,7 +91,7 @@ export function filterResults(kind, schema, search, dispatch, getState, callback
         ], Object.entries(getState().runtime.variables).map(function (_a) {
             var variable = _a[1];
             return variable;
-        }));
+        }), true);
         callback(results);
     }, 1);
 }

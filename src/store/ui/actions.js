@@ -76,6 +76,10 @@ export function positionInlineActions() {
             case SelectionKinds.callout:
                 placement.placement = 'bottom';
                 break;
+            case SelectionKinds.table:
+                placement.anchorEl = getAnchorEl('table');
+                placement.placement = 'bottom';
+                break;
             case SelectionKinds.equation:
                 placement.placement = 'right';
                 break;

@@ -1,4 +1,4 @@
-import { schemas } from '@curvenote/schema';
+import { EditorView } from 'prosemirror-view';
 export declare enum CommandNames {
     'link' = "link",
     'callout' = "callout",
@@ -37,7 +37,21 @@ export declare enum CommandNames {
     'link_section' = "link_section",
     'link_figure' = "link_figure",
     'link_equation' = "link_equation",
-    'link_code' = "link_code"
+    'link_code' = "link_code",
+    'link_table' = "link_table",
+    'insert_table' = "insert_table",
+    'add_column_before' = "add_column_before",
+    'add_column_after' = "add_column_after",
+    'delete_column' = "delete_column",
+    'add_row_before' = "add_row_before",
+    'add_row_after' = "add_row_after",
+    'delete_row' = "delete_row",
+    'delete_table' = "delete_table",
+    'merge_cells' = "merge_cells",
+    'split_cell' = "split_cell",
+    'toggle_header_column' = "toggle_header_column",
+    'toggle_header_row' = "toggle_header_row",
+    'toggle_header_cell' = "toggle_header_cell"
 }
 export interface CommandResult {
     name: CommandNames;
@@ -45,6 +59,8 @@ export interface CommandResult {
     description: string;
     image?: string;
     shortcut?: string | string[];
-    node?: keyof typeof schemas.nodes;
+    available?: (view: EditorView) => boolean;
 }
-export declare const commands: CommandResult[];
+export declare const TABLE_COMMANDS: CommandResult[];
+export declare const HEADINGS: CommandResult[];
+export declare const ALL_COMMANDS: CommandResult[];

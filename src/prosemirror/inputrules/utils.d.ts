@@ -12,6 +12,6 @@ export declare function markInputRule(regexp: RegExp, markType: MarkType, option
     getText?: (p: string[]) => string;
     addSpace?: boolean;
 }): InputRule<any>;
-export declare function insertNodeRule(regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs, select?: boolean | ((p: string[]) => boolean), test?: (p: string[]) => boolean): InputRule<any>;
-export declare function replaceNodeRule(regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs, select?: boolean | ((p: string[]) => boolean)): InputRule<any>;
+export declare function replaceNodeRule(regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs, select?: boolean | ((p: string[]) => boolean), test?: (p: string[]) => boolean): InputRule<any>;
+export declare function changeNodeRule(regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs): InputRule<any>;
 export {};

@@ -1,4 +1,3 @@
-/// <reference types="prosemirror-model" />
 import MathView, { renderMath } from './MathView';
 import ImageView from './ImageView';
 import IFrameView from './IFrameView';

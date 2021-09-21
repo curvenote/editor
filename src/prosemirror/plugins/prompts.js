@@ -1,10 +1,10 @@
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { findParentNode } from 'prosemirror-utils';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { isEditable } from './editable';
 export var key = new PluginKey('prompt');
-var getParentIfParagraph = findParentNode(function (node) { return node.type.name === schemas.nodeNames.paragraph; });
+var getParentIfParagraph = findParentNode(function (node) { return node.type.name === nodeNames.paragraph; });
 var getPromptPlugin = function () {
     var promptPlugin = new Plugin({
         key: key,

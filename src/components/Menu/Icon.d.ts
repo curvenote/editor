@@ -1,8 +1,18 @@
 import React from 'react';
 declare function SubscriptIcon(props: any): JSX.Element;
 declare function SuperscriptIcon(props: any): JSX.Element;
+declare function RowAboveIcon(props: any): JSX.Element;
+declare function RowBelowIcon(props: any): JSX.Element;
+declare function RowDelete(props: any): JSX.Element;
+declare function ColLeftIcon(props: any): JSX.Element;
+declare function ColRightIcon(props: any): JSX.Element;
+declare function ColDelete(props: any): JSX.Element;
 declare function BracketsIcon(props: any): JSX.Element;
 declare const icons: {
+    table: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
     cancel: {
         help: string;
         Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
@@ -130,6 +140,30 @@ declare const icons: {
     label: {
         help: string;
         Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
+    rowAbove: {
+        help: string;
+        Icon: typeof RowAboveIcon;
+    };
+    rowBelow: {
+        help: string;
+        Icon: typeof RowBelowIcon;
+    };
+    rowDelete: {
+        help: string;
+        Icon: typeof RowDelete;
+    };
+    colLeft: {
+        help: string;
+        Icon: typeof ColLeftIcon;
+    };
+    colRight: {
+        help: string;
+        Icon: typeof ColRightIcon;
+    };
+    colDelete: {
+        help: string;
+        Icon: typeof ColDelete;
     };
 };
 export declare type IconTypes = keyof typeof icons | 'divider';

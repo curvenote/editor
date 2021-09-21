@@ -7,6 +7,7 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import LinkIcon from '@material-ui/icons/Link';
+import GridIcon from '@material-ui/icons/GridOn';
 var icons = {
     math: FunctionsIcon,
     code: CodeIcon,
@@ -15,6 +16,7 @@ var icons = {
     video: OndemandVideoIcon,
     iframe: WebAssetIcon,
     link: LinkIcon,
+    table: GridIcon,
 };
 var useStyles = makeStyles(function () {
     return createStyles({

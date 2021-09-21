@@ -126,7 +126,12 @@ store.subscribe(function () {
     var html = document.getElementById('html');
     var editor = store.getState().editor.state.editors[stateKey];
     if (myst) {
-        myst.innerText = toMarkdown(editor.state.doc);
+        try {
+            myst.innerText = toMarkdown(editor.state.doc);
+        }
+        catch (e) {
+            myst.innerText = 'Error converting to markdown';
+        }
     }
     if (tex) {
         try {
@@ -139,7 +144,6 @@ store.subscribe(function () {
     if (html) {
         html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
     }
-    console.log(editor.counts);
 });
 ReactDOM.render(React.createElement(Provider, { store: store },
     React.createElement(React.StrictMode, null,

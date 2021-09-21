@@ -467,11 +467,15 @@ article time {
 
 article .selected p.prompt {
   position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 article .selected p.prompt:before {
   content: "Type '/' for commands, or just start writing!";
   color: #929292;
   position: absolute;
+  font-weight: normal;
   user-select: none;
   cursor: text;
   left: 5px;
@@ -565,6 +569,65 @@ h6[numbered]:before {
   position: absolute;
   top: calc(50% - 0.6em);
   right: 5px;
+}
+
+.ProseMirror {
+  /* Give selected cells a blue overlay */
+}
+.ProseMirror .tableWrapper {
+  overflow-x: auto;
+  margin: 1em 0;
+}
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+}
+.ProseMirror td,
+.ProseMirror th {
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+  min-width: 1em;
+  border: 1px solid #ddd;
+  padding: 3px 5px;
+}
+.ProseMirror th {
+  text-align: left;
+  background-color: rgba(232, 232, 232, 0.4);
+}
+.ProseMirror th p {
+  font-weight: bold;
+}
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 20;
+  background-color: #adf;
+  pointer-events: none;
+}
+.ProseMirror.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
+.ProseMirror .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(200, 200, 255, 0.4);
+  pointer-events: none;
+}
+.ProseMirror p {
+  margin: 0.75rem 0.25rem;
 }
 
 .hidden {

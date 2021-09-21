@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
@@ -24,7 +24,7 @@ var EquationActions = function (props) {
     var dispatch = useDispatch();
     var state = useSelector(function (s) { var _a; return (_a = getEditorState(s, stateId)) === null || _a === void 0 ? void 0 : _a.state; });
     var parent = (state === null || state === void 0 ? void 0 : state.selection) &&
-        findParentNode(function (n) { return n.type.name === schemas.nodeNames.heading; })(state === null || state === void 0 ? void 0 : state.selection);
+        findParentNode(function (n) { return n.type.name === nodeNames.heading; })(state === null || state === void 0 ? void 0 : state.selection);
     var node = (_a = parent === null || parent === void 0 ? void 0 : parent.node) !== null && _a !== void 0 ? _a : getNodeFromSelection(state === null || state === void 0 ? void 0 : state.selection);
     var pos = (_b = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _b !== void 0 ? _b : (_c = state === null || state === void 0 ? void 0 : state.selection) === null || _c === void 0 ? void 0 : _c.from;
     if (!node || pos == null)

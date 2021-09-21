@@ -13,5 +13,6 @@ export var SelectionKinds;
     SelectionKinds["time"] = "time";
     SelectionKinds["heading"] = "heading";
     SelectionKinds["callout"] = "callout";
+    SelectionKinds["table"] = "table";
 })(SelectionKinds || (SelectionKinds = {}));
 //# sourceMappingURL=types.js.map

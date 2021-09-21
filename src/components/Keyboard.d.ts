@@ -1,4 +1,3 @@
-/// <reference types="react" />
 declare type Props = {
     shortcut: string | string[];
 };

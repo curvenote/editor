@@ -1,1 +1,1 @@
-{"version":3,"file":"snippet.js","sourceRoot":"","sources":["../../demo/snippet.ts"],"names":[],"mappings":"AAAA,IAAM,OAAO,GACX,yhFAAyhF,CAAC;AAE5hF,eAAe,OAAO,CAAC"}
+{"version":3,"file":"snippet.js","sourceRoot":"","sources":["../../demo/snippet.ts"],"names":[],"mappings":"AAAA,OAAO,IAAI,MAAM,gBAAgB,CAAC;AAElC,IAAM,OAAO,GAAG,IAAI,CAAC;AAErB,eAAe,OAAO,CAAC"}

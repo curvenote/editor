@@ -7,6 +7,7 @@ export { default as HeadingActions } from './HeadingActions';
 export { default as AlignActions } from './AlignActions';
 export { default as TextAction } from './TextAction';
 export { default as TimeActions } from './TimeActions';
+export { default as TableActions } from './TableActions';
 export * from './hooks';
 export * from './utils';
 //# sourceMappingURL=index.js.map

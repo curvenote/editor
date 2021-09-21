@@ -35,7 +35,7 @@ export function markInputRule(regexp, markType, options) {
         return tr;
     });
 }
-export function insertNodeRule(regExp, nodeType, getAttrs, select, test) {
+export function replaceNodeRule(regExp, nodeType, getAttrs, select, test) {
     if (select === void 0) { select = false; }
     return new InputRule(regExp, function (state, match, start, end) {
         var _a, _b, _c;
@@ -55,20 +55,15 @@ export function insertNodeRule(regExp, nodeType, getAttrs, select, test) {
         return selected;
     });
 }
-export function replaceNodeRule(regExp, nodeType, getAttrs, select) {
-    if (select === void 0) { select = false; }
+export function changeNodeRule(regExp, nodeType, getAttrs) {
     return new InputRule(regExp, function (state, match, start, end) {
         var _a;
         var _b = (_a = (getAttrs instanceof Function ? getAttrs(match) : getAttrs)) !== null && _a !== void 0 ? _a : {}, content = _b.content, attrs = __rest(_b, ["content"]);
         var tr = state.tr
             .delete(start, end)
-            .replaceSelectionWith(nodeType.create(attrs, content), false)
+            .setNodeMarkup(state.selection.$from.before(), nodeType, attrs)
             .scrollIntoView();
-        var doSelect = select instanceof Function ? select(match) : select;
-        if (!doSelect)
-            return tr;
-        var resolvedPos = tr.doc.resolve(start - 1);
-        var selected = tr.setSelection(new NodeSelection(resolvedPos));
+        var selected = tr.setSelection(NodeSelection.create(tr.doc, tr.selection.$from.before()));
         return selected;
     });
 }

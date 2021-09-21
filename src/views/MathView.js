@@ -125,11 +125,7 @@ var MathView = (function () {
                             return true;
                         }, 'Mod-z': function () { return undo(_this.outerView.state, _this.outerView.dispatch); }, 'Mod-Z': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } }, (mac
                         ? {}
-                        : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: function () {
-                            _this.dom.classList.remove('editing');
-                            _this.outerView.focus();
-                            return true;
-                        }, Enter: unfocus, 'Ctrl-Enter': chainCommands(newlineInCode, unfocus), 'Shift-Enter': chainCommands(newlineInCode, unfocus), Backspace: chainCommands(deleteSelection, function (state) {
+                        : { 'Mod-y': function () { return redo(_this.outerView.state, _this.outerView.dispatch); } })), { Escape: unfocus, Tab: unfocus, 'Shift-Tab': unfocus, Enter: unfocus, 'Ctrl-Enter': chainCommands(newlineInCode, unfocus), 'Shift-Enter': chainCommands(newlineInCode, unfocus), Backspace: chainCommands(deleteSelection, function (state) {
                             if (!state.selection.empty) {
                                 return false;
                             }

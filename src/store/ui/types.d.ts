@@ -12,7 +12,8 @@ export declare enum SelectionKinds {
     citegroup = "citegroup",
     time = "time",
     heading = "heading",
-    callout = "callout"
+    callout = "callout",
+    table = "table"
 }
 export declare type InlineSelection = {
     kind: SelectionKinds;

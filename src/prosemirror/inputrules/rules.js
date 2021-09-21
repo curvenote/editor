@@ -1,5 +1,5 @@
 import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } from 'prosemirror-inputrules';
-import { insertNodeRule, markInputRule, replaceNodeRule } from './utils';
+import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 import { createId } from '../../utils';
 export var quotes = function (schema) { return smartQuotes; };
@@ -89,10 +89,10 @@ export var headings = function (schema, maxLevel) {
     ];
 };
 export var equation = function (schema) { return [
-    replaceNodeRule(/^\$\$$/, schema.nodes.equation, function () { return ({ id: createId() }); }, true),
+    changeNodeRule(/^\$\$$/, schema.nodes.equation, function () { return ({ id: createId() }); }),
 ]; };
 export var mathInline = function (schema) { return [
-    insertNodeRule(/(\$([^$]*)\$)$/, schema.nodes.math, function (match) {
+    replaceNodeRule(/(\$([^$]*)\$)$/, schema.nodes.math, function (match) {
         if (match[2] === '')
             return {};
         return { content: schema.text(match[2]) };
@@ -103,16 +103,16 @@ export var mathInline = function (schema) { return [
     }),
 ]; };
 export var hr = function (schema) { return [
-    insertNodeRule(/^(~~~|---|\*\*\*)$/, schema.nodes.horizontal_rule),
+    replaceNodeRule(/^(~~~|---|\*\*\*)$/, schema.nodes.horizontal_rule),
 ]; };
 export var slider = function (schema) { return [
-    insertNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, function (match) { return ({
+    replaceNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, function (match) { return ({
         valueFunction: match[1],
         changeFunction: "{" + match[1] + ": value}",
     }); }),
 ]; };
 export var dynamic = function (schema) { return [
-    insertNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, function (match) { return ({
+    replaceNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, function (match) { return ({
         valueFunction: match[1],
         changeFunction: "{" + match[1] + ": value}",
     }); }),
