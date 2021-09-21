@@ -1,7 +1,7 @@
 import { EditorState } from 'prosemirror-state';
 import * as Nodes from '../nodes';
 import { NumberedNode, ReferenceKind } from '../nodes/types';
-import { nodeNames } from '../schemas';
+import { nodeNames } from '../types';
 import { toText } from '../serialize/text';
 import { StateCounter, Reference, Counter, CounterMeta } from './types';
 

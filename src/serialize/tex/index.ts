@@ -3,7 +3,7 @@ import { MarkdownSerializer } from 'prosemirror-markdown';
 import { blankTex, blankTexLines, createLatexStatement, TAB } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
-import { nodeNames } from '../../schemas';
+import { nodeNames } from '../../types';
 import { LatexFormatTypes, LatexOptions } from './types';
 
 export const texSerializer = new MarkdownSerializer(

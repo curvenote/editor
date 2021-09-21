@@ -5,8 +5,6 @@ import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
 
-export { nodeNames } from './types';
-
 export const listNodes = {
   ordered_list: basic.ordered_list,
   bullet_list: basic.bullet_list,
