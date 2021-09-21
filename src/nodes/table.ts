@@ -4,27 +4,6 @@ import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { nodeNames } from '../types';
 import { FormatSerialize, NodeGroups } from './types';
 
-type CellContent = {
-  type: nodeNames.paragraph;
-  content: { type: nodeNames.text; text: string }[];
-};
-
-interface TableCell {
-  type: nodeNames.table_cell | nodeNames.table_header;
-  attrs: any;
-  content: CellContent[];
-}
-
-interface TableRow {
-  type: nodeNames.table_row;
-  content: TableCell[];
-}
-
-export interface TableJson {
-  type: nodeNames.table;
-  content: TableRow[];
-}
-
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
   cellContent: NodeGroups.blockOrEquation,
