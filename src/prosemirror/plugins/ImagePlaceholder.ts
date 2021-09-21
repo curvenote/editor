@@ -1,4 +1,4 @@
-import { nodeNames } from '@curvenote/schema/dist/schemas';
+import { nodeNames } from '@curvenote/schema';
 import { Node } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';

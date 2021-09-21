@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { findParentNode } from 'prosemirror-utils';
 import { Node } from 'prosemirror-model';
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { deleteNode } from '../../store/actions';
@@ -32,7 +32,7 @@ const TableActions: React.FC<ActionProps> = (props) => {
 
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   const parent =
-    selection && findParentNode((n: Node) => n.type.name === schemas.nodeNames.table)(selection);
+    selection && findParentNode((n: Node) => n.type.name === nodeNames.table)(selection);
   const node = parent?.node ?? getNodeFromSelection(selection);
   const pos = parent?.pos ?? selection?.from;
 

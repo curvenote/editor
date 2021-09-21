@@ -6,7 +6,7 @@ import {
   isNodeSelection,
   hasParentNode,
 } from 'prosemirror-utils';
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditorState } from '../state/selectors';
@@ -129,7 +129,7 @@ export function selectionIsThisNodeType<T extends Record<string, any>>(
     Object.entries(nodes).map(([key, type]) => {
       const node = type as NodeType | undefined;
       if (!node) return [key, false];
-      return [key, Boolean(getNodeIfSelected(editor.state, node.name as schemas.nodeNames))];
+      return [key, Boolean(getNodeIfSelected(editor.state, node.name as nodeNames))];
     }),
   );
   return active as Record<keyof T, boolean>;

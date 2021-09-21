@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { findParentNode } from 'prosemirror-utils';
 import { Node } from 'prosemirror-model';
-import { schemas } from '@curvenote/schema';
+import { nodeNames } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { deleteNode, liftContentOutOfNode, updateNodeAttrs } from '../../store/actions';
@@ -31,7 +31,7 @@ const CalloutActions: React.FC<ActionProps> = (props) => {
 
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   const parent =
-    selection && findParentNode((n: Node) => n.type.name === schemas.nodeNames.callout)(selection);
+    selection && findParentNode((n: Node) => n.type.name === nodeNames.callout)(selection);
   const node = parent?.node ?? getNodeFromSelection(selection);
   const pos = parent?.pos ?? selection?.from;
   if (!node || pos == null) return null;
