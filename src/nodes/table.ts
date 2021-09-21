@@ -1,4 +1,6 @@
 import { tableNodes } from 'prosemirror-tables';
+import { Node } from 'prosemirror-model';
+import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { nodeNames } from '../types';
 import { FormatSerialize, NodeGroups } from './types';
 
@@ -112,44 +114,49 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 /**
  * convert prosemirror table node into latex table
  */
-export function convertTableJsonToLatex(nodeJson: TableJson): string {
-  const columLength = nodeJson.content[0].content.length;
+export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any>) {
+  console.log('state', node);
+  const columLength = node.content.firstChild?.content.childCount;
   if (!columLength) {
     throw new Error('invalid table format');
   }
-  let texStr = `\\begin{center}\n\\begin{tabular}{|${new Array(columLength)
-    .fill('c')
-    .join(' ')}|}\n \\hline\n`;
+  state.write(
+    `\\begin{center}\n\\begin{tabular}{|${new Array(columLength)
+      .fill('c')
+      .join(' ')}|}\n \\hline\n`,
+  );
 
-  nodeJson.content.forEach(({ content: rowContent, type: rowType }) => {
-    let rowStr = ' ';
-    const flatten = rowContent.map((cell) => {
+  node.content.forEach(({ content: rowContent, type: rowType }) => {
+    let i = 0;
+    rowContent.forEach((cell, index) => {
+      console.log('i ', index);
       const {
         attrs: { colspan },
       } = cell;
-      let cellStr = '';
       if (colspan > 1) {
-        cellStr = `\\multicolumn{${colspan}}{ |c| }{${extractContentFromCell(cell)}}`;
+        state.write(`\\multicolumn{${colspan}}{ |c| }{`);
+        cell.content.forEach((content) => {
+          state.renderInline(content);
+        });
+        state.write('}');
       } else {
-        cellStr = extractContentFromCell(cell);
+        state.renderInline(cell);
       }
-      return cellStr;
+      if (i < rowContent.childCount - 1) {
+        state.write(' & ');
+      }
+      i += 1;
     });
-    rowStr += flatten.join(' & ');
-    rowStr += '\\\\\n \\hline\n';
-    texStr += rowStr;
+    state.write('\\\\\n \\hline\n');
   });
 
-  texStr += '\\end{tabular}\n\\end{center}\n';
-  return texStr; // eslint-disable-line
+  state.write('\\end{tabular}\n\\end{center}\n');
 }
 
 export const toTex: FormatSerialize = (state, node) => {
-  let result = '';
   try {
-    result = convertTableJsonToLatex(node.toJSON() as TableJson);
+    renderNodeToLatex(state, node);
   } catch (e) {
     state.write(`{\\bf Error converting \`${node.type.name}' to \\LaTeX}`);
   }
-  state.write(result);
 };
