@@ -47,6 +47,7 @@ function TableMenu({
   function item(title: string, action: CommandNames) {
     return (
       <MenuAction
+        key={action}
         title={title}
         action={() => {
           command(action);
