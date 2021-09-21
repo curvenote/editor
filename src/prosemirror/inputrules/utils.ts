@@ -60,7 +60,9 @@ export function replaceNodeRule(
       .scrollIntoView();
     const doSelect = select instanceof Function ? select(match) : select;
     if (!doSelect) return tr;
-    const selected = tr.setSelection(NodeSelection.create(tr.doc, tr.selection.$from.before()));
+    const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
+    const resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
+    const selected = tr.setSelection(new NodeSelection(resolvedPos));
     return selected;
   });
 }
