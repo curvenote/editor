@@ -1,5 +1,7 @@
 import { Schema } from 'prosemirror-model';
+
 import * as basic from './nodes/basic';
+import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
 
@@ -52,40 +54,13 @@ export const nodes = {
   hard_break: basic.hard_break,
   time: Nodes.Time.default,
   ...listNodes,
+  ...tableNodes,
   // Presentational components
   ...presentationalNodes,
   ...citationNodes,
   ...mathNodes,
   ...reactiveNodes,
 };
-
-export enum nodeNames {
-  text = 'text',
-  paragraph = 'paragraph',
-  heading = 'heading',
-  blockquote = 'blockquote',
-  code_block = 'code_block',
-  image = 'image',
-  horizontal_rule = 'horizontal_rule',
-  hard_break = 'hard_break',
-  time = 'time',
-  ordered_list = 'ordered_list',
-  bullet_list = 'bullet_list',
-  list_item = 'list_item',
-  aside = 'aside',
-  callout = 'callout',
-  iframe = 'iframe',
-  cite = 'cite',
-  cite_group = 'cite_group',
-  math = 'math',
-  equation = 'equation',
-  variable = 'variable',
-  display = 'display',
-  dynamic = 'dynamic',
-  range = 'range',
-  switch = 'switch',
-  button = 'button',
-}
 
 export const marks = {
   link: basicMarks.link,

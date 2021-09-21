@@ -16,7 +16,7 @@ const heading: MyNodeSpec<Attrs> = {
     level: { default: 1 },
   },
   content: `${NodeGroups.inline}*`,
-  group: NodeGroups.block,
+  group: NodeGroups.heading,
   defining: true,
   parseDOM: [
     { tag: 'h1', getAttrs: getAttrs(1) },

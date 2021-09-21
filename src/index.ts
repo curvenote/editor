@@ -1,9 +1,7 @@
-// Note: Sometimes you need to ensure that the libs are exactly the same
-//       Exporting the `prosemirror-model` schema from here does the trick.
-export { Schema } from 'prosemirror-model';
 export * as schemas from './schemas';
 export * as Nodes from './nodes';
 export * as types from './types';
+export { nodeNames } from './types';
 export { ReferenceKind } from './nodes/types';
 
 export { fromHTML, fromText, fromMarkdown } from './parse';
