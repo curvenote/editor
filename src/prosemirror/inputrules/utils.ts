@@ -43,7 +43,7 @@ export function markInputRule(
   });
 }
 
-export function insertNodeRule(
+export function replaceNodeRule(
   regExp: RegExp,
   nodeType: NodeType,
   getAttrs?: GetAttrs,
@@ -60,30 +60,19 @@ export function insertNodeRule(
       .scrollIntoView();
     const doSelect = select instanceof Function ? select(match) : select;
     if (!doSelect) return tr;
-    const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
-    const resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
-    const selected = tr.setSelection(new NodeSelection(resolvedPos));
+    const selected = tr.setSelection(NodeSelection.create(tr.doc, tr.selection.$from.before()));
     return selected;
   });
 }
 
-export function replaceNodeRule(
-  regExp: RegExp,
-  nodeType: NodeType,
-  getAttrs?: GetAttrs,
-  select: boolean | ((p: string[]) => boolean) = false,
-) {
-  // return textblockTypeInputRule(/^\$\$\s$/, nodeType);
+export function changeNodeRule(regExp: RegExp, nodeType: NodeType, getAttrs?: GetAttrs) {
   return new InputRule(regExp, (state, match, start, end) => {
     const { content, ...attrs } = (getAttrs instanceof Function ? getAttrs(match) : getAttrs) ?? {};
     const tr = state.tr
       .delete(start, end)
-      .replaceSelectionWith(nodeType.create(attrs, content), false)
+      .setNodeMarkup(state.selection.$from.before(), nodeType, attrs)
       .scrollIntoView();
-    const doSelect = select instanceof Function ? select(match) : select;
-    if (!doSelect) return tr;
-    const resolvedPos = tr.doc.resolve(start - 1);
-    const selected = tr.setSelection(new NodeSelection(resolvedPos));
+    const selected = tr.setSelection(NodeSelection.create(tr.doc, tr.selection.$from.before()));
     return selected;
   });
 }
