@@ -1,6 +1,4 @@
 import { EditorView } from 'prosemirror-view';
-import { Schema } from 'prosemirror-model';
-import { selectionIsChildOfActiveState } from '../selectors';
 import {
   SuggestionActionTypes,
   SuggestionKind,
@@ -13,7 +11,7 @@ import {
   VariableResult,
   LinkResult,
 } from './types';
-import { CommandResult, DEFAULT_COMMANDS, DEFAULT_TABLE_COMMANDS } from './commands';
+import { CommandResult } from './commands';
 import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
 import { AppThunk } from '../types';
 import { getSuggestion } from './selectors';
@@ -119,31 +117,27 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
   };
 }
 
-export function filterResults(
-  schema: Schema,
-  search: string,
-  { commands }: { commands: CommandResult[] },
-): AppThunk<void> {
+export function filterResults(view: EditorView, search: string): AppThunk<void> {
   return (dispatch, getState) => {
     const { kind } = getSuggestion(getState());
     switch (kind) {
       case SuggestionKind.emoji:
-        return emoji.filterResults(schema, search, (results: EmojiResult[]) =>
+        return emoji.filterResults(view.state.schema, search, (results: EmojiResult[]) =>
           dispatch(updateResults(results)),
         );
       case SuggestionKind.command:
-        return command.filterResults(schema, commands, search, (results: CommandResult[]) =>
+        return command.filterResults(view, search, (results: CommandResult[]) =>
           dispatch(updateResults(results)),
         );
       case SuggestionKind.link:
-        return link.filterResults(schema, search, (results: LinkResult[]) =>
+        return link.filterResults(view.state.schema, search, (results: LinkResult[]) =>
           dispatch(updateResults(results)),
         );
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return variable.filterResults(
           kind,
-          schema,
+          view.state.schema,
           search,
           dispatch,
           getState,
@@ -156,11 +150,10 @@ export function filterResults(
 }
 
 function setStartingSuggestions(
-  schema: Schema,
+  view: EditorView,
   kind: SuggestionKind,
   search: string,
   create = true,
-  { commands }: { commands: CommandResult[] },
 ): AppThunk<void> {
   return async (dispatch, getState) => {
     switch (kind) {
@@ -169,12 +162,13 @@ function setStartingSuggestions(
         return;
       }
       case SuggestionKind.command: {
-        const starting = command.buildSuggestionsFromSchema(schema, commands);
+        const starting = command.startingSuggestions(view);
         dispatch(updateResults(starting));
         return;
       }
       case SuggestionKind.link: {
         dispatch(updateResults([]));
+        // TODO: this needs to be non-blocking, and show a loading indicator
         const suggestions = await link.startingSuggestions(search, create);
         dispatch(updateResults(suggestions));
         return;
@@ -206,14 +200,9 @@ export function handleSuggestion(
         action.trigger,
       ),
     );
-    const { schema } = action.view.state;
-    const { table: isParentTable } = selectionIsChildOfActiveState(getState(), {
-      table: schema?.nodes.table,
-    });
-    const commands = isParentTable ? DEFAULT_TABLE_COMMANDS : DEFAULT_COMMANDS;
 
     if (action.kind === 'open') {
-      dispatch(setStartingSuggestions(schema, kind, action.search ?? '', true, { commands }));
+      dispatch(setStartingSuggestions(action.view, kind, action.search ?? '', true));
       dispatch(selectSuggestion(0));
     }
     if (action.kind === 'previous' || action.kind === 'next') {
@@ -227,9 +216,9 @@ export function handleSuggestion(
     }
     if (action.kind === 'filter') {
       if (action.search === '' || action.search == null) {
-        dispatch(setStartingSuggestions(schema, kind, '', false, { commands }));
+        dispatch(setStartingSuggestions(action.view, kind, '', false));
       } else {
-        dispatch(filterResults(action.view.state.schema, action.search, { commands }));
+        dispatch(filterResults(action.view, action.search));
       }
     }
     if (action.kind === 'select') {
