@@ -108,6 +108,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
     }
     rowIndex += 1;
   });
+  state.closeBlock(node);
 };
 
 /**
@@ -148,6 +149,7 @@ export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any
     }
   });
   state.write('\\hline\n\\end{tabular}\n\\end{center}\n');
+  state.closeBlock(node);
 }
 
 export const toTex: FormatSerialize = (state, node) => {
