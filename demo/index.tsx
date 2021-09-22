@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { Button, createTheme, IconButton, Box, Paper, styled } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
-import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
+import { toHTML, toMarkdown, toTex, ReferenceKind, process, toText } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import { isEditable } from '../src/prosemirror/plugins/editable';
 import {
@@ -118,6 +118,7 @@ function selectEditorState(state: any, key: string) {
 
 store.subscribe(() => {
   const myst = document.getElementById('myst');
+  const text = document.getElementById('text');
   const tex = document.getElementById('tex');
   const html = document.getElementById('html');
   const editor = selectEditorState(store.getState(), stateKey);
@@ -135,9 +136,32 @@ store.subscribe(() => {
       tex.innerText = 'There was an error :(';
     }
   }
+  if (text) {
+    try {
+      text.innerText = toText(editor.state.doc);
+    } catch (error) {
+      text.innerText = 'There was an error :(';
+    }
+  }
   if (html) {
     html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
   }
+  // Update the counter
+  const counts = process.countState(editor.state);
+  const words = process.countWords(editor.state);
+  const updates = {
+    'count-sec': `${counts.sec.all.length} (${counts.sec.total})`,
+    'count-fig': `${counts.fig.all.length} (${counts.fig.total})`,
+    'count-eq': `${counts.eq.all.length} (${counts.eq.total})`,
+    'count-code': `${counts.code.all.length} (${counts.code.total})`,
+    'count-table': `${counts.table.all.length} (${counts.table.total})`,
+    'count-words': `${words.words}`,
+    'count-char': `${words.characters_including_spaces}  (${words.characters_excluding_spaces})`,
+  };
+  Object.entries(updates).forEach(([key, count]) => {
+    const el = document.getElementById(key);
+    if (el) el.innerText = count;
+  });
 });
 
 function DemoUI() {
@@ -165,7 +189,7 @@ function DemoUI() {
             const state = editor.state.reconfigure({
               plugins: [],
             });
-            dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
+            // dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
           }}
         >
           <LockIcon />
