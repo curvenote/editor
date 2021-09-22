@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createTheme } from '@material-ui/core';
-import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
+import { toHTML, toMarkdown, toTex, ReferenceKind, process, toText } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import {
   actions,
@@ -105,6 +105,7 @@ store.dispatch(actions.initEditorState('full', stateKey, true, snippet, 0));
 
 store.subscribe(() => {
   const myst = document.getElementById('myst');
+  const text = document.getElementById('text');
   const tex = document.getElementById('tex');
   const html = document.getElementById('html');
   const editor = store.getState().editor.state.editors[stateKey];
@@ -122,9 +123,32 @@ store.subscribe(() => {
       tex.innerText = 'There was an error :(';
     }
   }
+  if (text) {
+    try {
+      text.innerText = toText(editor.state.doc);
+    } catch (error) {
+      text.innerText = 'There was an error :(';
+    }
+  }
   if (html) {
     html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
   }
+  // Update the counter
+  const counts = process.countState(editor.state);
+  const words = process.countWords(editor.state);
+  const updates = {
+    'count-sec': `${counts.sec.all.length} (${counts.sec.total})`,
+    'count-fig': `${counts.fig.all.length} (${counts.fig.total})`,
+    'count-eq': `${counts.eq.all.length} (${counts.eq.total})`,
+    'count-code': `${counts.code.all.length} (${counts.code.total})`,
+    'count-table': `${counts.table.all.length} (${counts.table.total})`,
+    'count-words': `${words.words}`,
+    'count-char': `${words.characters_including_spaces}  (${words.characters_excluding_spaces})`,
+  };
+  Object.entries(updates).forEach(([key, count]) => {
+    const el = document.getElementById(key);
+    if (el) el.innerText = count;
+  });
 });
 
 ReactDOM.render(

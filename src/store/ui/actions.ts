@@ -58,8 +58,11 @@ export function positionInlineActions(): AppThunk<void> {
       anchorEl: view.nodeDOM(selection.pos) as Element | HTMLElement | null | undefined,
       placement: 'bottom-start' as PopperPlacementType,
     };
-    const getAnchorEl = (tag: string) => {
+    const getAnchorEl = (tag: string, container = false) => {
       const { anchorEl } = placement;
+      // If container is true, look for the tag name first
+      if (container) return anchorEl?.getElementsByTagName?.(tag)[0] ?? anchorEl;
+      // Otherwise look to `ProseMirror-node` as a class
       return (
         anchorEl?.getElementsByClassName('ProseMirror-node')[0] ??
         anchorEl?.getElementsByTagName?.(tag)[0] ??
@@ -82,7 +85,8 @@ export function positionInlineActions(): AppThunk<void> {
         placement.placement = 'bottom';
         break;
       case SelectionKinds.table:
-        placement.anchorEl = getAnchorEl('table');
+        // Note: we are always looking for the table in this case
+        placement.anchorEl = getAnchorEl('table', true);
         placement.placement = 'bottom';
         break;
       case SelectionKinds.equation:

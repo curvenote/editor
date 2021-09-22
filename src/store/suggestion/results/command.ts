@@ -130,6 +130,7 @@ export function executeCommand(
           )
           .scrollIntoView();
         view.dispatch(tr);
+        // TODO: change selection to the first cell!!
         view.focus();
         return true;
       }
