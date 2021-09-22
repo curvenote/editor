@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import { Button, createTheme } from '@material-ui/core';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Button, createTheme, IconButton, Box, Paper, styled } from '@material-ui/core';
+import LockIcon from '@material-ui/icons/Lock';
 import { toHTML, toMarkdown, toTex, ReferenceKind } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
+import { isEditable } from '../src/prosemirror/plugins/editable';
 import {
   actions,
   Editor,
@@ -30,6 +32,13 @@ declare global {
     [index: string]: any;
   }
 }
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const store: Store = createStore(rootReducer, applyMiddleware(...middleware));
 const theme = createTheme({});
@@ -103,11 +112,15 @@ setup(store, opts);
 window.store = store;
 store.dispatch(actions.initEditorState('full', stateKey, true, snippet, 0));
 
+function selectEditorState(state: any, key: string) {
+  return state.editor.state.editors[stateKey];
+}
+
 store.subscribe(() => {
   const myst = document.getElementById('myst');
   const tex = document.getElementById('tex');
   const html = document.getElementById('html');
-  const editor = store.getState().editor.state.editors[stateKey];
+  const editor = selectEditorState(store.getState(), stateKey);
   if (myst) {
     try {
       myst.innerText = toMarkdown(editor.state.doc);
@@ -127,10 +140,46 @@ store.subscribe(() => {
   }
 });
 
+function DemoUI() {
+  const editor = useSelector((s) => selectEditorState(s, stateKey));
+  const dispatch = useDispatch();
+  console.log('state', editor);
+  const [locked, setLocked] = React.useState(isEditable(editor.state));
+  console.log('isEdiable', locked);
+
+  return (
+    <Box
+      maxWidth={800}
+      mx="auto"
+      display="flex"
+      flexDirection="row"
+      position="fixed"
+      bottom={0}
+      right={0}
+    >
+      <Item>
+        <IconButton
+          aria-label="delete"
+          size="small"
+          onClick={() => {
+            const state = editor.state.reconfigure({
+              plugins: [],
+            });
+            dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
+          }}
+        >
+          <LockIcon />
+        </IconButton>
+      </Item>
+    </Box>
+  );
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <EditorMenu standAlone />
+      <DemoUI />
       <InlineActions>
         <InlineActionSwitch />
       </InlineActions>
