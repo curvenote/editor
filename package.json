@@ -33,6 +33,7 @@
     "lint:format:fix": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
+    "@wordpress/wordcount": "^3.2.1",
     "markdown-it": "^12.2.0",
     "markdown-it-myst": "^0.0.9",
     "orderedmap": "^1.1.1",
@@ -63,6 +64,7 @@
     "@types/prosemirror-test-builder": "^1.0.2",
     "@types/prosemirror-transform": "^1.1.4",
     "@types/prosemirror-view": "^1.19.1",
+    "@types/wordpress__wordcount": "^2.4.2",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
     "date-fns": "^2.22.1",
