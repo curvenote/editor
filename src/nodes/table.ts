@@ -100,7 +100,8 @@ export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any
     throw new Error('invalid table format, no columns');
   }
 
-  state.write(`\\begin{center}\n\\begin{tabular}{|*{${numColumns}}{c}|}\n\\hline\n`);
+  // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
+  state.write(`\\begin{center}\n\\begin{tabular}{*{${numColumns}}{c}}\n\\hline\n`);
 
   node.content.forEach(({ content: rowContent }) => {
     let i = 0;
@@ -108,7 +109,7 @@ export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any
       const {
         attrs: { colspan },
       } = cell;
-      if (colspan > 1) state.write(`\\multicolumn{${colspan}}{ |c| }{`);
+      if (colspan > 1) state.write(`\\multicolumn{${colspan}}{c}{`);
       cell.content.forEach((content) => {
         // NOTE: this doesn't work well for multi-paragraphs
         state.renderInline(content);
