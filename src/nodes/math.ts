@@ -21,7 +21,7 @@ const math: MyNodeSpec<Attrs> = {
 
 export const toMarkdown: FormatSerialize = (state, node) => {
   state.write('$');
-  state.renderInline(node);
+  state.text(node.textContent, false);
   state.write('$');
 };
 
