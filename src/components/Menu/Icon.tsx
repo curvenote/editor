@@ -59,6 +59,7 @@ function SuperscriptIcon(props: any) {
     </SvgIcon>
   );
 }
+// Some inspiration from https://icons8.com/icons/set/insert-row
 function RowAboveIcon(props: any) {
   return (
     <SvgIcon {...props}>
