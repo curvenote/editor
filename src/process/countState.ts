@@ -1,9 +1,10 @@
 import { EditorState } from 'prosemirror-state';
+import { count as wordcount } from '@wordpress/wordcount';
 import * as Nodes from '../nodes';
 import { NumberedNode, ReferenceKind } from '../nodes/types';
 import { nodeNames } from '../types';
 import { toText } from '../serialize/text';
-import { StateCounter, Reference, Counter, CounterMeta } from './types';
+import { StateCounter, Reference, Counter, CounterMeta, WordCounter } from './types';
 
 function push<K extends ReferenceKind, T extends CounterMeta>(
   counter: Counter<Reference<K, T>>,
@@ -27,7 +28,7 @@ function push<K extends ReferenceKind, T extends CounterMeta>(
   }
 }
 
-export function countState(state: EditorState) {
+export function countState(state: EditorState): StateCounter {
   const counts: StateCounter = {
     [ReferenceKind.sec]: { kind: ReferenceKind.sec, total: 0, all: [] },
     [ReferenceKind.fig]: { kind: ReferenceKind.fig, total: 0, all: [] },
@@ -49,23 +50,29 @@ export function countState(state: EditorState) {
       case nodeNames.code_block: {
         const attrs = node.attrs as Nodes.Code.Attrs;
         const { title, language } = attrs;
-        const code = toText(node, state.schema, document);
+        const code = toText(node);
         push(counts.code, attrs, title, { code, language });
         return false;
       }
       case nodeNames.equation: {
         const attrs = node.attrs as Nodes.Equation.Attrs;
         const { title } = attrs;
-        const math = toText(node, state.schema, document);
+        const math = toText(node);
         push(counts.eq, attrs, title, { math });
         return false;
       }
       case nodeNames.heading: {
         const attrs = node.attrs as Nodes.Heading.Attrs;
         const { level } = node.attrs;
-        const title = toText(node, state.schema, document);
+        const title = toText(node);
         push(counts.sec, attrs, title, { level, section: '' });
         return false;
+      }
+      case nodeNames.table: {
+        const attrs: NumberedNode = { numbered: false, id: null, label: null };
+        push(counts.table, attrs, '', {});
+        // There are children of tables to be counted
+        return true;
       }
       // Continue to search
       case nodeNames.aside:
@@ -76,4 +83,16 @@ export function countState(state: EditorState) {
     }
   });
   return counts;
+}
+
+export function countWords(state: EditorState): WordCounter {
+  const text = toText(state.doc);
+  const words = wordcount(text, 'words');
+  const characters_excluding_spaces = wordcount(text, 'characters_excluding_spaces');
+  const characters_including_spaces = wordcount(text, 'characters_including_spaces');
+  return {
+    words,
+    characters_excluding_spaces,
+    characters_including_spaces,
+  };
 }

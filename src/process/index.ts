@@ -1,1 +1,1 @@
-export { countState } from './countState';
+export { countState, countWords } from './countState';
