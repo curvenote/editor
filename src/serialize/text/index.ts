@@ -29,7 +29,7 @@ const noMarks = {
 export const textSerializer = new MarkdownSerializer(
   {
     text(state, node) {
-      state.text(node.text ?? '');
+      state.text(node.text ?? '', false);
     },
     paragraph: simpleBlockRender,
     heading: simpleBlockRender,
