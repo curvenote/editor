@@ -56,10 +56,13 @@ export function positionInlineActions() {
             anchorEl: view.nodeDOM(selection.pos),
             placement: 'bottom-start',
         };
-        var getAnchorEl = function (tag) {
-            var _a, _b, _c;
+        var getAnchorEl = function (tag, container) {
+            var _a, _b, _c, _d, _e;
+            if (container === void 0) { container = false; }
             var anchorEl = placement.anchorEl;
-            return ((_c = (_a = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByClassName('ProseMirror-node')[0]) !== null && _a !== void 0 ? _a : (_b = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByTagName) === null || _b === void 0 ? void 0 : _b.call(anchorEl, tag)[0]) !== null && _c !== void 0 ? _c : anchorEl);
+            if (container)
+                return (_b = (_a = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByTagName) === null || _a === void 0 ? void 0 : _a.call(anchorEl, tag)[0]) !== null && _b !== void 0 ? _b : anchorEl;
+            return ((_e = (_c = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByClassName('ProseMirror-node')[0]) !== null && _c !== void 0 ? _c : (_d = anchorEl === null || anchorEl === void 0 ? void 0 : anchorEl.getElementsByTagName) === null || _d === void 0 ? void 0 : _d.call(anchorEl, tag)[0]) !== null && _e !== void 0 ? _e : anchorEl);
         };
         switch (selection.kind) {
             case SelectionKinds.link:
@@ -77,7 +80,7 @@ export function positionInlineActions() {
                 placement.placement = 'bottom';
                 break;
             case SelectionKinds.table:
-                placement.anchorEl = getAnchorEl('table');
+                placement.anchorEl = getAnchorEl('table', true);
                 placement.placement = 'bottom';
                 break;
             case SelectionKinds.equation:
