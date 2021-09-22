@@ -4,7 +4,6 @@ import * as nodes from '../../nodes';
 
 function simpleInlineRender(state: MarkdownSerializerState, node: ProsemirrorNode) {
   state.renderInline(node);
-  state.closeBlock(node);
 }
 
 function simpleBlockRender(state: MarkdownSerializerState, node: ProsemirrorNode) {
