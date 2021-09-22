@@ -289,7 +289,7 @@
     core-js-pure "^3.16.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.13.10":
   version "7.15.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
   integrity sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==
@@ -807,6 +807,11 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.1.tgz#8f80dd965ad81f3e1bc26d6f5c727e132721ff40"
   integrity sha512-Y0K95ThC3esLEYD6ZuqNek29lNX2EM1qxV8y2FTLUB0ff5wWrk7az+mLrnNFUnaXcgKye22+sFBRXOgpPILZNg==
 
+"@types/wordpress__wordcount@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@types/wordpress__wordcount/-/wordpress__wordcount-2.4.2.tgz#9496822dd5e919134aad345c70e181ebacb3e670"
+  integrity sha512-bMiBGqZTRV0/VzHjwlVcAVXsjvdlCWF7N6p7b5vOj2O+EWu35WQdTCWPxvBGp14CKdpK4AGm19v10z9zg3X5vA==
+
 "@types/yargs-parser@*":
   version "20.2.1"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-20.2.1.tgz#3b9ce2489919d9e4fea439b76916abc34b2df129"
@@ -887,6 +892,14 @@
   dependencies:
     "@typescript-eslint/types" "4.31.2"
     eslint-visitor-keys "^2.0.0"
+
+"@wordpress/wordcount@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@wordpress/wordcount/-/wordcount-3.2.1.tgz#3a86d5a30491d41055e44f2e856dc8d4b8869859"
+  integrity sha512-OBHR1QIuNC8RNrFJ1EnqWAJmaFCK71JDw8WvQWy2ZN7tAlzvKGofpmCWdOrP/JXGRhVpNzLGlyMoiGB0QmvYdw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    lodash "^4.17.21"
 
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"

@@ -39,3 +39,9 @@ export type StateCounter = {
   [ReferenceKind.table]: Counter<TableReference>;
   [ReferenceKind.link]: Counter<LinkReference>;
 };
+
+export type WordCounter = {
+  words: number;
+  characters_excluding_spaces: number;
+  characters_including_spaces: number;
+};
