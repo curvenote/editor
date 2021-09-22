@@ -39,7 +39,6 @@
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
     "lint:format": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\"",
     "lint:format:fix": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
-    "prepare": "husky install",
     "watch": "tsc -w -p ."
   },
   "dependencies": {
@@ -144,7 +143,6 @@
     "fuse.js": "^6.4.6",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
-    "husky": "^7.0.2",
     "prettier": "^2.4.1",
     "prosemirror-collab": "^1.2.2",
     "prosemirror-model": "^1.14.3",
