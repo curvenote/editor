@@ -52,6 +52,7 @@ export function updateEditorState(
       viewId,
       editorState,
       counts,
+      tr,
     },
   };
 }
