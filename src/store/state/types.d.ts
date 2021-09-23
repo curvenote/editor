@@ -1,4 +1,4 @@
-import { EditorState } from 'prosemirror-state';
+import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
 import { types, schemas } from '@curvenote/schema';
@@ -42,6 +42,7 @@ export interface UpdateEditorState {
         viewId: string | null;
         editorState: EditorState;
         counts: types.StateCounter | null;
+        tr: Transaction;
     };
 }
 export interface SubscribeEditorView {

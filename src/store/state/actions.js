@@ -30,6 +30,7 @@ export function updateEditorState(stateKey, viewId, editorState, tr) {
             viewId: viewId,
             editorState: editorState,
             counts: counts,
+            tr: tr,
         },
     };
 }
