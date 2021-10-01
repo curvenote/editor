@@ -2,10 +2,16 @@
  * Reference: https://prosemirror.net/examples/codemirror/
  */
 
+import React, { useEffect } from 'react';
+import { render } from 'react-dom';
+import { FormControl, Select as MuiSelect, MenuItem, InputLabel, styled } from '@material-ui/core';
 import CodeMirror from 'codemirror';
 import { exitCode } from 'prosemirror-commands';
 import { NodeView } from 'prosemirror-view';
 import { undo, redo } from 'prosemirror-history';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/python/python';
 import { Selection, TextSelection } from 'prosemirror-state';
 
 function computeChange(oldVal: any, newVal: any) {
@@ -23,6 +29,40 @@ function computeChange(oldVal: any, newVal: any) {
     newEnd--;
   }
   return { from: start, to: oldEnd, text: newVal.slice(start, newEnd) };
+}
+
+const SUPPORTED_LANGUAGE = [
+  { name: 'javascript', label: 'JavaScript' },
+  { name: 'jsx', label: 'JSX' },
+  { name: 'python', label: 'Python' },
+];
+
+const Select = styled(MuiSelect)(() => ({
+  '& .MuiSelect-select': {
+    padding: 2,
+  },
+}));
+
+function LanguageSeletionDropdown({ onChanged }: { onChanged: (lang: string) => void }) {
+  const [selectedLanguage, setSelectedLanguage] = React.useState(SUPPORTED_LANGUAGE[0].name);
+  return (
+    <FormControl fullWidth>
+      <Select
+        onChange={(e) => {
+          const value = e.target.value as string;
+          setSelectedLanguage(value);
+          onChanged(value);
+        }}
+        value={selectedLanguage}
+      >
+        {SUPPORTED_LANGUAGE.map(({ name, label }) => (
+          <MenuItem key={name} value={name}>
+            {label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
 }
 
 export default class CodeBlockView implements NodeView {
@@ -46,18 +86,28 @@ export default class CodeBlockView implements NodeView {
     this.view = view;
     this.getPos = getPos;
     this.incomingChanges = false;
-
-    console.log('constructor', view);
-
     // Create a CodeMirror instance
-    this.cm = new (CodeMirror as any)(null, {
+    const container = document.createElement('div');
+    container.classList.add('codeblock-container');
+    this.cm = new (CodeMirror as any)(container, {
       value: this.node.textContent,
       lineNumbers: true,
       extraKeys: this.codeMirrorKeymap(),
     });
 
     // The editor's outer node is our DOM representation
-    this.dom = this.cm.getWrapperElement();
+    this.dom = container;
+    const dropdownContainer = document.createElement('div');
+    dropdownContainer.classList.add('CodeMirror-dropdown-wrapper');
+    container.append(dropdownContainer);
+    render(
+      <LanguageSeletionDropdown
+        onChanged={(language) => {
+          this.cm.setOption('mode', language);
+        }}
+      />,
+      dropdownContainer,
+    );
     // CodeMirror needs to be in the DOM to properly initialize, so
     // schedule it to update itself
     setTimeout(() => this.cm.refresh(), 20);

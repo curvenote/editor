@@ -7,3 +7,15 @@
   height: auto;
   border: 1px solid #eee;
 }
+
+.codeblock-container {
+  position: relative;
+}
+
+.CodeMirror-dropdown-wrapper {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  z-index: 3; // codemirror input zindex is 2, this needs to stay above that
+  width: 100px;
+}
