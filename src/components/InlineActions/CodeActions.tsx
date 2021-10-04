@@ -56,6 +56,7 @@ const SUPPORTED_LANGUAGE = [
   { name: LanguageNames.Julia, label: 'Julia' },
   { name: LanguageNames.Html, label: 'HTML' },
   { name: LanguageNames.Sql, label: 'SQL' },
+  { name: LanguageNames.Ruby, label: 'Ruby' },
 ];
 
 const Select = styled(MuiSelect)(() => ({

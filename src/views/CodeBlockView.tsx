@@ -17,6 +17,7 @@ import 'codemirror/mode/julia/julia';
 import 'codemirror/mode/r/r';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/ruby/ruby';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { LanguageNames } from './types';
 

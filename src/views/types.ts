@@ -9,6 +9,7 @@ export type NodeViewProps = {
   edit: boolean;
 };
 
+// See languages modes names on https://codemirror.net/mode/index.html#
 export enum LanguageNames {
   Js = 'javascript',
   Jsx = 'jsx',
@@ -26,4 +27,5 @@ export enum LanguageNames {
   Html = 'htmlmixed',
   R = 'r',
   Sql = 'sql',
+  Ruby = 'ruby',
 }
