@@ -43,8 +43,17 @@ const SUPPORTED_LANGUAGE = [
   { name: LanguageNames.Js, label: 'JavaScript' },
   { name: LanguageNames.Ts, label: 'TypeScript' },
   { name: LanguageNames.Jsx, label: 'JSX' },
-  { name: LanguageNames.Json, label: 'JSON' },
   { name: LanguageNames.Python, label: 'Python' },
+  { name: LanguageNames.Swift, label: 'Swift' },
+  { name: LanguageNames.Php, label: 'PHP' },
+  { name: LanguageNames.C, label: 'C' },
+  { name: LanguageNames.Cpp, label: 'Cpp' },
+  { name: LanguageNames.Csharp, label: 'C#' },
+  { name: LanguageNames.ObjC, label: 'Objective-C' },
+  { name: LanguageNames.Java, label: 'Java' },
+  { name: LanguageNames.Scala, label: 'Scala' },
+  { name: LanguageNames.Julia, label: 'Julia' },
+  { name: LanguageNames.Html, label: 'HTML' },
 ];
 
 const Select = styled(MuiSelect)(() => ({

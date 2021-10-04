@@ -10,6 +10,11 @@ import { undo, redo } from 'prosemirror-history';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/python/python';
+import 'codemirror/mode/swift/swift';
+import 'codemirror/mode/php/php';
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/julia/julia';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { LanguageNames } from './types';
 
@@ -158,8 +163,6 @@ export default class CodeBlockView implements NodeView {
       const { language: newLang } = node.attrs;
       if (newLang === LanguageNames.Ts) {
         this.cm.setOption('mode', { name: 'javascript', typescript: true });
-      } else if (newLang === LanguageNames.Json) {
-        this.cm.setOption('mode', { name: 'javascript', json: true });
       } else {
         this.cm.setOption('mode', node.attrs.language);
       }
