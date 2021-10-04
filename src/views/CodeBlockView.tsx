@@ -14,6 +14,7 @@ import 'codemirror/mode/swift/swift';
 import 'codemirror/mode/php/php';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/julia/julia';
+import 'codemirror/mode/r/r';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { LanguageNames } from './types';

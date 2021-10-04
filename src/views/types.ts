@@ -24,4 +24,5 @@ export enum LanguageNames {
   Csharp = 'text/x-csharp',
   Julia = 'julia',
   Html = 'htmlmixed',
+  R = 'r',
 }

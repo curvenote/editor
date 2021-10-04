@@ -40,10 +40,11 @@ const useStyles = makeStyles(() =>
 );
 
 const SUPPORTED_LANGUAGE = [
+  { name: LanguageNames.Python, label: 'Python' },
+  { name: LanguageNames.R, label: 'R' },
   { name: LanguageNames.Js, label: 'JavaScript' },
   { name: LanguageNames.Ts, label: 'TypeScript' },
   { name: LanguageNames.Jsx, label: 'JSX' },
-  { name: LanguageNames.Python, label: 'Python' },
   { name: LanguageNames.Swift, label: 'Swift' },
   { name: LanguageNames.Php, label: 'PHP' },
   { name: LanguageNames.C, label: 'C' },
