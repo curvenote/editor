@@ -40,9 +40,9 @@ const useStyles = makeStyles(() =>
 );
 
 const SUPPORTED_LANGUAGE = [
+  { name: LanguageNames.Js, label: 'JavaScript' },
   { name: LanguageNames.Python, label: 'Python' },
   { name: LanguageNames.R, label: 'R' },
-  { name: LanguageNames.Js, label: 'JavaScript' },
   { name: LanguageNames.Ts, label: 'TypeScript' },
   { name: LanguageNames.Jsx, label: 'JSX' },
   { name: LanguageNames.Swift, label: 'Swift' },
@@ -55,6 +55,7 @@ const SUPPORTED_LANGUAGE = [
   { name: LanguageNames.Scala, label: 'Scala' },
   { name: LanguageNames.Julia, label: 'Julia' },
   { name: LanguageNames.Html, label: 'HTML' },
+  { name: LanguageNames.Sql, label: 'SQL' },
 ];
 
 const Select = styled(MuiSelect)(() => ({
@@ -72,7 +73,7 @@ function LanguageSeletionDropdown({ onChanged }: { onChanged: (lang: string) => 
     <FormControl fullWidth>
       <Select
         onChange={(e) => {
-          const value = e.target.value as string;
+          const value = e.target.value as LanguageNames;
           setSelectedLanguage(value);
           onChanged(value);
         }}

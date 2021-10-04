@@ -25,4 +25,5 @@ export enum LanguageNames {
   Julia = 'julia',
   Html = 'htmlmixed',
   R = 'r',
+  Sql = 'sql',
 }
