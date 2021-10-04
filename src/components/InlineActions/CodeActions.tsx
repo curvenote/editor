@@ -29,7 +29,9 @@ const useStyles = makeStyles(() =>
       fontSize: 20,
       flexWrap: 'nowrap',
     },
-
+    menulist: {
+      maxHeight: '15rem',
+    },
     dropdownContainer: {
       width: 100,
     },
@@ -72,6 +74,7 @@ const Select = styled(MuiSelect)(() => ({
 
 function LanguageSeletionDropdown({ onChanged }: { onChanged: (lang: string) => void }) {
   const [selectedLanguage, setSelectedLanguage] = React.useState(SUPPORTED_LANGUAGE[0].name);
+  const classes = useStyles();
   return (
     <FormControl fullWidth>
       <Select
@@ -83,6 +86,9 @@ function LanguageSeletionDropdown({ onChanged }: { onChanged: (lang: string) => 
         value={selectedLanguage}
         MenuProps={{
           className: 'above-modals',
+          MenuListProps: {
+            className: classes.menulist,
+          },
         }}
       >
         {SUPPORTED_LANGUAGE.map(({ name, label }) => (
