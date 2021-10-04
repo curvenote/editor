@@ -28,4 +28,6 @@ export enum LanguageNames {
   R = 'r',
   Sql = 'sql',
   Ruby = 'ruby',
+  Rust = 'rust',
+  Go = 'go',
 }

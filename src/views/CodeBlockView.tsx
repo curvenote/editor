@@ -18,6 +18,8 @@ import 'codemirror/mode/r/r';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/mode/ruby/ruby';
+import 'codemirror/mode/rust/rust';
+import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { LanguageNames } from './types';
 
