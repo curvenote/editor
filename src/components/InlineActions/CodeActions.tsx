@@ -19,6 +19,7 @@ import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
 import { ActionProps, positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
+import classNames from 'classnames';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -28,6 +29,7 @@ const useStyles = makeStyles(() =>
       fontSize: 20,
       flexWrap: 'nowrap',
     },
+
     dropdownContainer: {
       width: 100,
     },
@@ -64,6 +66,9 @@ function LanguageSeletionDropdown({ onChanged }: { onChanged: (lang: string) => 
           onChanged(value);
         }}
         value={selectedLanguage}
+        MenuProps={{
+          className: 'above-modals',
+        }}
       >
         {SUPPORTED_LANGUAGE.map(({ name, label }) => (
           <MenuItem key={name} value={name}>
