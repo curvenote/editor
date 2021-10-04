@@ -89,6 +89,10 @@ export function positionInlineActions(): AppThunk<void> {
         placement.anchorEl = getAnchorEl('table', true);
         placement.placement = 'bottom';
         break;
+      case SelectionKinds.code:
+        // Note: we are always looking for the table in this case
+        placement.placement = 'bottom';
+        break;
       case SelectionKinds.equation:
         placement.placement = 'right';
         break;

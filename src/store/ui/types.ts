@@ -16,6 +16,7 @@ export enum SelectionKinds {
   heading = 'heading',
   callout = 'callout',
   table = 'table',
+  code = 'code_block',
 }
 
 export type InlineSelection = {
