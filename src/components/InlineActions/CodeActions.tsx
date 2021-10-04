@@ -72,18 +72,21 @@ const Select = styled(MuiSelect)(() => ({
   },
 }));
 
-function LanguageSeletionDropdown({ onChanged }: { onChanged: (lang: string) => void }) {
-  const [selectedLanguage, setSelectedLanguage] = React.useState(SUPPORTED_LANGUAGE[0].name);
+function LanguageSeletionDropdown({
+  value,
+  onChanged,
+}: {
+  onChanged: (lang: string) => void;
+  value: LanguageNames;
+}) {
   const classes = useStyles();
   return (
     <FormControl fullWidth>
       <Select
         onChange={(e) => {
-          const value = e.target.value as LanguageNames;
-          setSelectedLanguage(value);
-          onChanged(value);
+          onChanged(e.target.value as LanguageNames);
         }}
-        value={selectedLanguage}
+        value={value || SUPPORTED_LANGUAGE[0].name}
         MenuProps={{
           className: 'above-modals',
           MenuListProps: {
@@ -120,6 +123,7 @@ const CodeActions: React.FC<ActionProps> = (props) => {
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <div className={classes.dropdownContainer}>
         <LanguageSeletionDropdown
+          value={node.attrs.language}
           onChanged={(language) => {
             dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { language }, false));
           }}
