@@ -11,6 +11,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/python/python';
 import { Selection, TextSelection } from 'prosemirror-state';
+import { LanguageNames } from './types';
 
 function computeChange(oldVal: any, newVal: any) {
   if (oldVal === newVal) return null;
@@ -28,19 +29,6 @@ function computeChange(oldVal: any, newVal: any) {
   }
   return { from: start, to: oldEnd, text: newVal.slice(start, newEnd) };
 }
-
-const SUPPORTED_LANGUAGE = [
-  { name: 'javascript', label: 'JavaScript' },
-  { name: 'typescript', label: 'TypeScript (TODO)' },
-  { name: 'jsx', label: 'JSX' },
-  { name: 'python', label: 'Python' },
-];
-
-const Select = styled(MuiSelect)(() => ({
-  '& .MuiSelect-select': {
-    padding: 2,
-  },
-}));
 
 export default class CodeBlockView implements NodeView {
   view: any;
@@ -122,12 +110,6 @@ export default class CodeBlockView implements NodeView {
     const change = computeChange(this.node.textContent, this.cm.getValue());
     if (change) {
       const start = this.getPos() + 1;
-      console.log(
-        'changed',
-        start + change.from,
-        start + change.to,
-        this.view.state.schema.text(change.text),
-      );
       const tr = this.view.state.tr.replaceWith(
         start + change.from,
         start + change.to,
@@ -173,7 +155,14 @@ export default class CodeBlockView implements NodeView {
   update(node: any) {
     if (node.type !== this.node.type) return false;
     if (this.node.attrs.language !== node.attrs.language) {
-      this.cm.setOption('mode', node.attrs.language);
+      const { language: newLang } = node.attrs;
+      if (newLang === LanguageNames.Ts) {
+        this.cm.setOption('mode', { name: 'javascript', typescript: true });
+      } else if (newLang === LanguageNames.Json) {
+        this.cm.setOption('mode', { name: 'javascript', json: true });
+      } else {
+        this.cm.setOption('mode', node.attrs.language);
+      }
     }
 
     this.node = node;

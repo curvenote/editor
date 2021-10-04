@@ -12,6 +12,7 @@ import { findParentNode } from 'prosemirror-utils';
 import { Node } from 'prosemirror-model';
 import { nodeNames } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
+import { LanguageNames } from '../../views/types';
 import MenuIcon from '../Menu/Icon';
 import { deleteNode } from '../../store/actions';
 import { updateNodeAttrs } from '../../store/actions/editor';
@@ -19,7 +20,6 @@ import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
 import { ActionProps, positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
-import classNames from 'classnames';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -40,10 +40,11 @@ const useStyles = makeStyles(() =>
 );
 
 const SUPPORTED_LANGUAGE = [
-  { name: 'javascript', label: 'JavaScript' },
-  { name: 'typescript', label: 'TypeScript (TODO)' },
-  { name: 'jsx', label: 'JSX' },
-  { name: 'python', label: 'Python' },
+  { name: LanguageNames.Js, label: 'JavaScript' },
+  { name: LanguageNames.Ts, label: 'TypeScript' },
+  { name: LanguageNames.Jsx, label: 'JSX' },
+  { name: LanguageNames.Json, label: 'JSON' },
+  { name: LanguageNames.Python, label: 'Python' },
 ];
 
 const Select = styled(MuiSelect)(() => ({

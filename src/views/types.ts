@@ -8,3 +8,11 @@ export type NodeViewProps = {
   open: boolean;
   edit: boolean;
 };
+
+export enum LanguageNames {
+  Js = 'javascript',
+  Jsx = 'jsx',
+  Ts = 'typescript',
+  Json = 'json',
+  Python = 'python',
+}
