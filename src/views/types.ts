@@ -31,3 +31,25 @@ export enum LanguageNames {
   Rust = 'rust',
   Go = 'go',
 }
+
+export const SUPPORTED_LANGUAGES = [
+  { name: LanguageNames.Js, label: 'JavaScript' },
+  { name: LanguageNames.Python, label: 'Python' },
+  { name: LanguageNames.R, label: 'R' },
+  { name: LanguageNames.Ts, label: 'TypeScript' },
+  { name: LanguageNames.Jsx, label: 'JSX' },
+  { name: LanguageNames.Swift, label: 'Swift' },
+  { name: LanguageNames.Php, label: 'PHP' },
+  { name: LanguageNames.C, label: 'C' },
+  { name: LanguageNames.Cpp, label: 'Cpp' },
+  { name: LanguageNames.Csharp, label: 'C#' },
+  { name: LanguageNames.ObjC, label: 'Objective-C' },
+  { name: LanguageNames.Java, label: 'Java' },
+  { name: LanguageNames.Scala, label: 'Scala' },
+  { name: LanguageNames.Julia, label: 'Julia' },
+  { name: LanguageNames.Html, label: 'HTML' },
+  { name: LanguageNames.Sql, label: 'SQL' },
+  { name: LanguageNames.Ruby, label: 'Ruby' },
+  { name: LanguageNames.Rust, label: 'Rust' },
+  { name: LanguageNames.Go, label: 'Go' },
+];

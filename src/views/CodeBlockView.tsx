@@ -21,7 +21,7 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
-import { LanguageNames } from './types';
+import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
 
 function computeChange(oldVal: any, newVal: any) {
   if (oldVal === newVal) return null;
@@ -65,6 +65,7 @@ export default class CodeBlockView implements NodeView {
     this.cm = new (CodeMirror as any)(null, {
       value: this.node.textContent,
       lineNumbers: true,
+      mode: node.attrs.language || SUPPORTED_LANGUAGES[0].name,
       extraKeys: this.codeMirrorKeymap(),
     });
 

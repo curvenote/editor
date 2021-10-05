@@ -12,7 +12,7 @@ import { findParentNode } from 'prosemirror-utils';
 import { Node } from 'prosemirror-model';
 import { nodeNames } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
-import { LanguageNames } from '../../views/types';
+import { LanguageNames, SUPPORTED_LANGUAGES } from '../../views/types';
 import MenuIcon from '../Menu/Icon';
 import { deleteNode } from '../../store/actions';
 import { updateNodeAttrs } from '../../store/actions/editor';
@@ -41,28 +41,6 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const SUPPORTED_LANGUAGE = [
-  { name: LanguageNames.Js, label: 'JavaScript' },
-  { name: LanguageNames.Python, label: 'Python' },
-  { name: LanguageNames.R, label: 'R' },
-  { name: LanguageNames.Ts, label: 'TypeScript' },
-  { name: LanguageNames.Jsx, label: 'JSX' },
-  { name: LanguageNames.Swift, label: 'Swift' },
-  { name: LanguageNames.Php, label: 'PHP' },
-  { name: LanguageNames.C, label: 'C' },
-  { name: LanguageNames.Cpp, label: 'Cpp' },
-  { name: LanguageNames.Csharp, label: 'C#' },
-  { name: LanguageNames.ObjC, label: 'Objective-C' },
-  { name: LanguageNames.Java, label: 'Java' },
-  { name: LanguageNames.Scala, label: 'Scala' },
-  { name: LanguageNames.Julia, label: 'Julia' },
-  { name: LanguageNames.Html, label: 'HTML' },
-  { name: LanguageNames.Sql, label: 'SQL' },
-  { name: LanguageNames.Ruby, label: 'Ruby' },
-  { name: LanguageNames.Rust, label: 'Rust' },
-  { name: LanguageNames.Go, label: 'Go' },
-];
-
 const Select = styled(MuiSelect)(() => ({
   root: {
     zIndex: 1302,
@@ -86,7 +64,7 @@ function LanguageSeletionDropdown({
         onChange={(e) => {
           onChanged(e.target.value as LanguageNames);
         }}
-        value={value || SUPPORTED_LANGUAGE[0].name}
+        value={value || SUPPORTED_LANGUAGES[0].name}
         MenuProps={{
           className: 'above-modals',
           MenuListProps: {
@@ -94,7 +72,7 @@ function LanguageSeletionDropdown({
           },
         }}
       >
-        {SUPPORTED_LANGUAGE.map(({ name, label }) => (
+        {SUPPORTED_LANGUAGES.map(({ name, label }) => (
           <MenuItem key={name} value={name}>
             {label}
           </MenuItem>
