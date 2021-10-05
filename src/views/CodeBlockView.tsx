@@ -7,9 +7,9 @@ import CodeMirror from 'codemirror';
 import { exitCode } from 'prosemirror-commands';
 import { NodeView } from 'prosemirror-view';
 import { undo, redo } from 'prosemirror-history';
+import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
-import 'codemirror/mode/python/python';
 import 'codemirror/mode/swift/swift';
 import 'codemirror/mode/php/php';
 import 'codemirror/mode/clike/clike';
@@ -22,6 +22,7 @@ import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
+import { isEditable } from '../prosemirror/plugins/editable';
 
 function computeChange(oldVal: any, newVal: any) {
   if (oldVal === newVal) return null;
@@ -67,6 +68,7 @@ export default class CodeBlockView implements NodeView {
       lineNumbers: true,
       mode: node.attrs.language || SUPPORTED_LANGUAGES[0].name,
       extraKeys: this.codeMirrorKeymap(),
+      readOnly: !isEditable(view.state),
     });
 
     // The editor's outer node is our DOM representation
@@ -138,7 +140,11 @@ export default class CodeBlockView implements NodeView {
       Left: () => this.maybeEscape('char', -1),
       Down: () => this.maybeEscape('line', 1),
       Right: () => this.maybeEscape('char', 1),
-      'Ctrl-Enter': () => {
+      Esc: () => {
+        console.log('escape');
+        this.view.focus();
+      },
+      [`${mod}-Enter`]: () => {
         if (exitCode(view.state, view.dispatch)) view.focus();
       },
       [`${mod}-Z`]: () => undo(view.state, view.dispatch),
@@ -189,6 +195,9 @@ export default class CodeBlockView implements NodeView {
   }
 
   selectNode() {
+    const edit = isEditable(this.view.state);
+    this.cm.setOption('readOnly', !edit);
+    if (!edit) return;
     this.cm.focus();
   }
 
