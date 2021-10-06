@@ -18,6 +18,7 @@ import {
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
+import 'codemirror/lib/codemirror.css';
 import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
 import { Options } from '../src/connect';

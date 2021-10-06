@@ -11,6 +11,7 @@ import TimeActions from './TimeActions';
 import HeadingActions from './HeadingActions';
 import EquationActions from './EquationActions';
 import TableActions from './TableActions';
+import CodeActions from './CodeActions';
 
 export function useInlineActionProps() {
   const { stateId, viewId } = useSelector(
@@ -38,6 +39,7 @@ const InlineActionSwitch: React.FC = () => {
       {kind === Kinds.equation && <EquationActions {...{ stateId, viewId }} />}
       {kind === Kinds.time && <TimeActions {...{ stateId, viewId }} />}
       {kind === Kinds.table && <TableActions {...{ stateId, viewId }} />}
+      {kind === Kinds.code && <CodeActions stateId={stateId} viewId={viewId} />}
     </>
   );
 };

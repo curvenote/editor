@@ -24,6 +24,7 @@
   "plugins": ["@typescript-eslint", "no-skip-tests", "no-only-tests"],
   "rules": {
     "quotes": ["error", "single"],
+    "no-plusplus": "off",
     "import/prefer-default-export": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
@@ -33,6 +34,7 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/accessible-emoji": "off",
+    "max-classes-per-file": "off",
     "no-multiple-empty-lines": "off",
     "react/prop-types": "off"
   },

@@ -19,6 +19,7 @@ import {
 
 import { Transaction } from 'prosemirror-state';
 import { AppThunk } from '../../types';
+import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
@@ -207,7 +208,12 @@ export function executeCommand(
         return true;
       case CommandNames.code:
         removeText();
-        dispatch(replaceOrInsert(schema.nodes.code_block, { id: createId() }));
+        dispatch(
+          replaceOrInsert(schema.nodes.code_block, {
+            id: createId(),
+            language: LanguageNames.Python,
+          }),
+        );
         return true;
       case CommandNames.variable:
         removeText();

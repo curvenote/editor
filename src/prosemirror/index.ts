@@ -50,6 +50,9 @@ export function createEditorView(
         equation(node, view, getPos) {
           return new views.MathView(node, view, getPos as () => number, false);
         },
+        code_block(node, view, getPos) {
+          return new views.CodeBlockView(node, view, getPos as () => number);
+        },
         image(node, view, getPos) {
           return new views.ImageView(node, view, getPos as () => number);
         },

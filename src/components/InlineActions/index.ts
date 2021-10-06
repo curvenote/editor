@@ -8,6 +8,7 @@ export { default as AlignActions } from './AlignActions';
 export { default as TextAction } from './TextAction';
 export { default as TimeActions } from './TimeActions';
 export { default as TableActions } from './TableActions';
+export { default as CodeActions } from './CodeActions';
 
 export * from './hooks';
 export * from './utils';

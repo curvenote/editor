@@ -9,13 +9,14 @@
 @use 'imgPlaceholder';
 @use 'numbered';
 @use 'tables';
+@use 'codeblock';
 
 .hidden {
   display: none;
 }
 // This allows it to be overtop of the asides and modals
 .above-modals {
-  z-index: 1301;
+  z-index: 1301 !important;
 }
 
 @media print {

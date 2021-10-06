@@ -9,6 +9,7 @@ import { Schema } from 'prosemirror-model';
 import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 import { createId } from '../../utils';
+import { LanguageNames } from '../../views/types';
 
 export const quotes = (schema: Schema) => smartQuotes;
 export const ellipsis = (schema: Schema) => [new InputRule(/\.\.\.$/, '…')];
@@ -83,7 +84,10 @@ export const lists = (schema: Schema) => [
 ];
 
 export const codeBlock = (schema: Schema) => [
-  textblockTypeInputRule(/^```$/, schema.nodes.code_block),
+  textblockTypeInputRule(/^```$/, schema.nodes.code_block, {
+    id: createId(),
+    language: LanguageNames.Python,
+  }),
 ];
 
 // TODO: Should have a look ahead as well
