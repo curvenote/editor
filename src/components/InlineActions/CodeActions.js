@@ -41,7 +41,7 @@ function LanguageSeletionDropdown(_a) {
     var value = _a.value, onChanged = _a.onChanged;
     var classes = useStyles();
     return (React.createElement(FormControl, { fullWidth: true },
-        React.createElement(Select, { onChange: function (e) {
+        React.createElement(Select, { disableUnderline: true, onChange: function (e) {
                 onChanged(e.target.value);
             }, value: value || SUPPORTED_LANGUAGES[0].name, MenuProps: {
                 className: 'above-modals',
