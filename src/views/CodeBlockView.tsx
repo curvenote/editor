@@ -4,7 +4,8 @@
 
 import CodeMirror from 'codemirror';
 import { exitCode } from 'prosemirror-commands';
-import { NodeView } from 'prosemirror-view';
+import { EditorView, NodeView } from 'prosemirror-view';
+import { Node } from 'prosemirror-model';
 import { undo, redo } from 'prosemirror-history';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
@@ -43,11 +44,11 @@ function computeChange(oldVal: any, newVal: any) {
 }
 
 export default class CodeBlockView implements NodeView {
-  view: any;
+  view: EditorView;
 
-  node: any;
+  node: Node;
 
-  getPos: any;
+  getPos: () => number;
 
   incomingChanges: boolean;
 
@@ -146,6 +147,23 @@ export default class CodeBlockView implements NodeView {
       Esc: () => {
         // TODO: change this to select the node, and then enter
         if (exitCode(view.state, view.dispatch)) view.focus();
+      },
+      Backspace: () => {
+        if (this.node.textContent.length > 0) return CodeMirror.Pass;
+        // When you hit backspace in an empty codeblock, create a paragraph and select the text inside of it
+        const pos = this.getPos();
+        const { schema } = view.state;
+        const paragraph = schema.nodes.paragraph.create('');
+        const tr = view.state.tr.delete(pos, pos + this.node.nodeSize).insert(pos, paragraph);
+        // The selection should be in the same place as before the delete
+        // Note, we could replace the node instead, that might be better
+        const { selection } = view.state;
+        const selectedTr = tr
+          .setSelection(TextSelection.create(tr.doc, selection.from))
+          .scrollIntoView();
+        view.dispatch(selectedTr);
+        view.focus();
+        return true;
       },
       [`${mod}-Enter`]: () => {
         if (exitCode(view.state, view.dispatch)) view.focus();
