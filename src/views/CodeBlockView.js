@@ -35,6 +35,17 @@ function computeChange(oldVal, newVal) {
     }
     return { from: start, to: oldEnd, text: newVal.slice(start, newEnd) };
 }
+function createMode(node) {
+    var name = node.attrs.language || SUPPORTED_LANGUAGES[0].name;
+    var mode = { name: name };
+    if (name === LanguageNames.Ts) {
+        return {
+            name: LanguageNames.Js,
+            typescript: true,
+        };
+    }
+    return mode;
+}
 var CodeBlockView = (function () {
     function CodeBlockView(node, view, getPos) {
         var _this = this;
@@ -45,7 +56,7 @@ var CodeBlockView = (function () {
         this.cm = new CodeMirror(null, {
             value: this.node.textContent,
             lineNumbers: true,
-            mode: node.attrs.language || SUPPORTED_LANGUAGES[0].name,
+            mode: createMode(node),
             extraKeys: this.codeMirrorKeymap(),
             readOnly: isEditable(view.state) ? false : 'nocursor',
         });
@@ -152,13 +163,7 @@ var CodeBlockView = (function () {
         if (node.type !== this.node.type)
             return false;
         if (this.node.attrs.language !== node.attrs.language) {
-            var newLang = node.attrs.language;
-            if (newLang === LanguageNames.Ts) {
-                this.cm.setOption('mode', { name: 'javascript', typescript: true });
-            }
-            else {
-                this.cm.setOption('mode', node.attrs.language);
-            }
+            this.cm.setOption('mode', createMode(node));
         }
         this.node = node;
         var change = computeChange(this.cm.getValue(), node.textContent);
