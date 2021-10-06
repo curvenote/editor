@@ -61,6 +61,7 @@ function LanguageSeletionDropdown({
   return (
     <FormControl fullWidth>
       <Select
+        disableUnderline
         onChange={(e) => {
           onChanged(e.target.value as LanguageNames);
         }}
