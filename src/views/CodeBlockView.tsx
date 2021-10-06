@@ -43,6 +43,23 @@ function computeChange(oldVal: any, newVal: any) {
   return { from: start, to: oldEnd, text: newVal.slice(start, newEnd) };
 }
 
+interface ModeOption {
+  name: LanguageNames;
+  typescript?: boolean;
+}
+
+function createMode(node: Node): ModeOption {
+  const name = node.attrs.language || SUPPORTED_LANGUAGES[0].name;
+  const mode = { name };
+  if (name === LanguageNames.Ts) {
+    return {
+      name: LanguageNames.Js,
+      typescript: true,
+    };
+  }
+  return mode;
+}
+
 export default class CodeBlockView implements NodeView {
   view: EditorView;
 
@@ -68,7 +85,7 @@ export default class CodeBlockView implements NodeView {
     this.cm = new (CodeMirror as any)(null, {
       value: this.node.textContent,
       lineNumbers: true,
-      mode: node.attrs.language || SUPPORTED_LANGUAGES[0].name,
+      mode: createMode(node),
       extraKeys: this.codeMirrorKeymap(),
       readOnly: isEditable(view.state) ? false : 'nocursor',
     });
@@ -193,12 +210,7 @@ export default class CodeBlockView implements NodeView {
   update(node: any) {
     if (node.type !== this.node.type) return false;
     if (this.node.attrs.language !== node.attrs.language) {
-      const { language: newLang } = node.attrs;
-      if (newLang === LanguageNames.Ts) {
-        this.cm.setOption('mode', { name: 'javascript', typescript: true });
-      } else {
-        this.cm.setOption('mode', node.attrs.language);
-      }
+      this.cm.setOption('mode', createMode(node));
     }
 
     this.node = node;
