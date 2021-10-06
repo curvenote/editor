@@ -4,6 +4,7 @@ import IFrameView from './IFrameView';
 import LinkView from './LinkView';
 import TimeView from './TimeView';
 import createNodeView from './NodeView';
+import CodeBlockView from './CodeBlockView';
 import WidgetView, { newWidgetView } from './WidgetView';
 export default {
     createNodeView: createNodeView,
@@ -15,5 +16,6 @@ export default {
     TimeView: TimeView,
     WidgetView: WidgetView,
     newWidgetView: newWidgetView,
+    CodeBlockView: CodeBlockView,
 };
 //# sourceMappingURL=index.js.map

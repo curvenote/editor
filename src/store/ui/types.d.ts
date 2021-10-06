@@ -13,7 +13,8 @@ export declare enum SelectionKinds {
     time = "time",
     heading = "heading",
     callout = "callout",
-    table = "table"
+    table = "table",
+    code = "code_block"
 }
 export declare type InlineSelection = {
     kind: SelectionKinds;

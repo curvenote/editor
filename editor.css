@@ -630,12 +630,22 @@ h6[numbered]:before {
   margin: 5px;
 }
 
+.CodeMirror-scroll {
+  height: auto;
+}
+
+.CodeMirror {
+  height: auto;
+  margin: 16px 0;
+  border: 1px solid #eee;
+}
+
 .hidden {
   display: none;
 }
 
 .above-modals {
-  z-index: 1301;
+  z-index: 1301 !important;
 }
 
 @media print {

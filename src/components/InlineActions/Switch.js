@@ -21,6 +21,7 @@ import TimeActions from './TimeActions';
 import HeadingActions from './HeadingActions';
 import EquationActions from './EquationActions';
 import TableActions from './TableActions';
+import CodeActions from './CodeActions';
 export function useInlineActionProps() {
     var _a = useSelector(function (state) { return getEditorUIStateAndViewIds(state); }, isEqual), stateId = _a.stateId, viewId = _a.viewId;
     var kind = useSelector(function (state) { return getInlineActionKind(state); });
@@ -40,7 +41,8 @@ var InlineActionSwitch = function () {
         kind === Kinds.heading && React.createElement(HeadingActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.equation && React.createElement(EquationActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.time && React.createElement(TimeActions, __assign({}, { stateId: stateId, viewId: viewId })),
-        kind === Kinds.table && React.createElement(TableActions, __assign({}, { stateId: stateId, viewId: viewId }))));
+        kind === Kinds.table && React.createElement(TableActions, __assign({}, { stateId: stateId, viewId: viewId })),
+        kind === Kinds.code && React.createElement(CodeActions, { stateId: stateId, viewId: viewId })));
 };
 export default InlineActionSwitch;
 //# sourceMappingURL=Switch.js.map

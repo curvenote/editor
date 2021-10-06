@@ -56,6 +56,8 @@ export var getSelectionKind = function (state) {
                 return true;
             case nodeNames.table:
                 return true;
+            case nodeNames.code_block:
+                return true;
             default:
                 return false;
         }
@@ -69,6 +71,8 @@ export var getSelectionKind = function (state) {
             return { kind: SelectionKinds.callout, pos: parent.pos };
         case nodeNames.table:
             return { kind: SelectionKinds.table, pos: parent.pos };
+        case nodeNames.code_block:
+            return { kind: SelectionKinds.code, pos: parent.pos };
         default:
             break;
     }

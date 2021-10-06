@@ -44,6 +44,7 @@ import { Sidenote, AnchorBase } from 'sidenotes';
 import { actions, Editor, EditorMenu, setup, Suggestions, Attributes, InlineActions, } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
+import 'codemirror/lib/codemirror.css';
 import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
 import snippet from './snippet';

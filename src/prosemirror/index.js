@@ -42,6 +42,8 @@ export function createEditorView(dom, state, dispatch) {
                 return new views.MathView(node, view, getPos, true);
             }, equation: function (node, view, getPos) {
                 return new views.MathView(node, view, getPos, false);
+            }, code_block: function (node, view, getPos) {
+                return new views.CodeBlockView(node, view, getPos);
             }, image: function (node, view, getPos) {
                 return new views.ImageView(node, view, getPos);
             }, iframe: function (node, view, getPos) {

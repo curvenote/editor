@@ -49,6 +49,7 @@ var _a;
 import Fuse from 'fuse.js';
 import { Fragment } from 'prosemirror-model';
 import { addColumnAfter, addColumnBefore, deleteColumn, addRowAfter, addRowBefore, deleteRow, mergeCells, splitCell, toggleHeaderRow, toggleHeaderColumn, toggleHeaderCell, deleteTable, isInTable, } from 'prosemirror-tables';
+import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandNames } from '../commands';
@@ -263,7 +264,10 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     return [2, true];
                 case 15:
                     removeText();
-                    dispatch(replaceOrInsert(schema.nodes.code_block, { id: createId() }));
+                    dispatch(replaceOrInsert(schema.nodes.code_block, {
+                        id: createId(),
+                        language: LanguageNames.Python,
+                    }));
                     return [2, true];
                 case 16:
                     removeText();

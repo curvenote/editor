@@ -14,5 +14,6 @@ export var SelectionKinds;
     SelectionKinds["heading"] = "heading";
     SelectionKinds["callout"] = "callout";
     SelectionKinds["table"] = "table";
+    SelectionKinds["code"] = "code_block";
 })(SelectionKinds || (SelectionKinds = {}));
 //# sourceMappingURL=types.js.map

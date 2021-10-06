@@ -2,6 +2,7 @@ import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } fr
 import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
 import { createId } from '../../utils';
+import { LanguageNames } from '../../views/types';
 export var quotes = function (schema) { return smartQuotes; };
 export var ellipsis = function (schema) { return [new InputRule(/\.\.\.$/, '…')]; };
 export var blockquote = function (schema) { return [
@@ -61,7 +62,10 @@ export var lists = function (schema) { return [
     wrappingInputRule(/^\s*([-+*])\s$/, schema.nodes.bullet_list),
 ]; };
 export var codeBlock = function (schema) { return [
-    textblockTypeInputRule(/^```$/, schema.nodes.code_block),
+    textblockTypeInputRule(/^```$/, schema.nodes.code_block, {
+        id: createId(),
+        language: LanguageNames.Python,
+    }),
 ]; };
 export var codeInline = function (schema) { return [markInputRule(/`([\W\w]+)`$/, schema.marks.code)]; };
 export var strong = function (schema) { return [

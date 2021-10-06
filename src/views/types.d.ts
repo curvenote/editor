@@ -7,3 +7,28 @@ export declare type NodeViewProps = {
     open: boolean;
     edit: boolean;
 };
+export declare enum LanguageNames {
+    Js = "javascript",
+    Jsx = "jsx",
+    Ts = "typescript",
+    Python = "python",
+    Swift = "swift",
+    Php = "php",
+    Cpp = "text/x-c++src",
+    ObjC = "text/x-objectivec",
+    Java = "text/x-java",
+    Scala = "text/x-scala",
+    C = "text/x-csrc",
+    Csharp = "text/x-csharp",
+    Julia = "julia",
+    Html = "htmlmixed",
+    R = "r",
+    Sql = "sql",
+    Ruby = "ruby",
+    Rust = "rust",
+    Go = "go"
+}
+export declare const SUPPORTED_LANGUAGES: {
+    name: LanguageNames;
+    label: string;
+}[];
