@@ -141,8 +141,8 @@ export default class CodeBlockView implements NodeView {
       Down: () => this.maybeEscape('line', 1),
       Right: () => this.maybeEscape('char', 1),
       Esc: () => {
-        console.log('escape');
-        this.view.focus();
+        // TODO: change this to select the node, and then enter
+        if (exitCode(view.state, view.dispatch)) view.focus();
       },
       [`${mod}-Enter`]: () => {
         if (exitCode(view.state, view.dispatch)) view.focus();
