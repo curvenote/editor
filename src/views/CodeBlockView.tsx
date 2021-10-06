@@ -22,6 +22,8 @@ import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
+import { focusEditorView } from '../store/actions';
+import { store } from '../connect';
 
 function computeChange(oldVal: any, newVal: any) {
   if (oldVal === newVal) return null;
@@ -99,6 +101,8 @@ export default class CodeBlockView implements NodeView {
 
   forwardSelection() {
     if (!this.cm.hasFocus()) return;
+    // This is required to ensure that the current view is selected (not focused though)
+    store.dispatch(focusEditorView(this.view.dom.id, false));
     const { state } = this.view;
     const selection = this.asProseMirrorSelection(state.doc);
     if (!selection.eq(state.selection)) this.view.dispatch(state.tr.setSelection(selection));
