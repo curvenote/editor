@@ -68,7 +68,7 @@ export default class CodeBlockView implements NodeView {
       lineNumbers: true,
       mode: node.attrs.language || SUPPORTED_LANGUAGES[0].name,
       extraKeys: this.codeMirrorKeymap(),
-      readOnly: !isEditable(view.state),
+      readOnly: !isEditable(view.state) ? 'nocursor' : true,
     });
 
     // The editor's outer node is our DOM representation
@@ -196,7 +196,7 @@ export default class CodeBlockView implements NodeView {
 
   selectNode() {
     const edit = isEditable(this.view.state);
-    this.cm.setOption('readOnly', !edit);
+    this.cm.setOption('readOnly', !edit ? 'nocursor' : true);
     if (!edit) return;
     this.cm.focus();
   }
