@@ -2,7 +2,6 @@
  * Reference: https://prosemirror.net/examples/codemirror/
  */
 
-import { Select as MuiSelect, styled } from '@material-ui/core';
 import CodeMirror from 'codemirror';
 import { exitCode } from 'prosemirror-commands';
 import { NodeView } from 'prosemirror-view';
