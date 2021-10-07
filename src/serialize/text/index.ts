@@ -34,6 +34,7 @@ export const textSerializer = new MarkdownSerializer(
     heading: simpleBlockRender,
     blockquote: simpleBlockRender,
     code_block: simpleBlockRender,
+    footnote: simpleBlockRender,
     horizontal_rule: newLine,
     hard_break: newLine,
     ordered_list(state, node) {

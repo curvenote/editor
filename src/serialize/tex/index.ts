@@ -75,6 +75,7 @@ export const texSerializer = new MarkdownSerializer(
       state.renderInline(node);
     },
     image: nodes.Image.toTex,
+    footnote: nodes.Footnote.toTex,
     iframe: blankTexLines,
     time: nodes.Time.toTex,
     cite: nodes.Cite.toTex,
