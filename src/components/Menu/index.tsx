@@ -170,6 +170,7 @@ const EditorMenu: React.FC<Props> = (props) => {
   const clickCode = useCallback(() => toggleMark(schema?.marks.code), [toggleMark]);
   const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [toggleMark]);
   const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [toggleMark]);
+  const clickFootnote = useCallback(() => command(CommandNames.footnote), [command]);
   const clickUl = useCallback(() => command(CommandNames.bullet_list), [command]);
   const clickGrid = useCallback(() => command(CommandNames.insert_table), [command]);
   const clickOl = useCallback(() => command(CommandNames.ordered_list), [command]);
@@ -205,6 +206,7 @@ const EditorMenu: React.FC<Props> = (props) => {
       <MenuIcon kind="code" active={active.code} disabled={off} onClick={clickCode} />
       <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
       <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSuper} />
+      <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickFootnote} />
 
       {parents.table && (
         <>

@@ -22,6 +22,7 @@ export enum CommandNames {
   'heading6' = 'heading6',
   'code' = 'code',
   'quote' = 'quote',
+  'footnote' = 'footnote',
   'time' = 'time',
   'variable' = 'variable',
   'display' = 'display',
@@ -255,6 +256,12 @@ export const ALL_COMMANDS: CommandResult[] = [
     description: 'Add a standalone math equation',
     shortcut: ['$$ Start the line with two dollar signs'],
     available: nodeInSchema(nodeNames.equation),
+  },
+  {
+    name: CommandNames.footnote,
+    title: 'Footnote',
+    description: 'Add a footnote',
+    available: nodeInSchema(nodeNames.footnote),
   },
   {
     name: CommandNames.horizontal_rule,

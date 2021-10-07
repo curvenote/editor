@@ -53,6 +53,9 @@ export function createEditorView(
         code_block(node, view, getPos) {
           return new views.CodeBlockView(node, view, getPos as () => number);
         },
+        footnote(node, view, getPos) {
+          return new views.FootnoteView(node, view, getPos as () => number);
+        },
         image(node, view, getPos) {
           return new views.ImageView(node, view, getPos as () => number);
         },

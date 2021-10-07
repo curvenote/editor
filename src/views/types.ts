@@ -53,3 +53,5 @@ export const SUPPORTED_LANGUAGES = [
   { name: LanguageNames.Ruby, label: 'Ruby' },
   { name: LanguageNames.Rust, label: 'Rust' },
 ];
+
+export type GetPos = () => number;
