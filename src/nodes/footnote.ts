@@ -1,16 +1,16 @@
-import { FormatSerialize, MyNodeSpec } from './types';
+import { FormatSerialize, MyNodeSpec, NodeGroups } from './types';
 
 const footnote: MyNodeSpec<any> = {
   attrs: {},
   group: 'inline',
-  content: 'inline*',
+  content: `(${NodeGroups.text} | math)*`,
   inline: true,
   draggable: true,
   // This makes the view treat the node as a leaf, even though it
   // technically has content
   atom: true,
-  toDOM: () => ['footnote', 0],
-  parseDOM: [{ tag: 'footnote' }],
+  toDOM: () => ['span', { class: 'footnote' }, 0],
+  parseDOM: [{ tag: 'span.footnote' }],
 };
 
 export const toMarkdown: FormatSerialize = (state, node) => {
