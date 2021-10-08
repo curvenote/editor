@@ -1,24 +1,27 @@
-.ProseMirror {
-  counter-reset: prosemirror-footnote;
+article {
+  counter-reset: footnote;
 }
-footnote {
+span.footnote {
   display: inline-block;
   position: relative;
   cursor: pointer;
 }
-footnote::after {
-  content: counter(prosemirror-footnote);
+span.footnote::after {
+  content: counter(footnote);
   vertical-align: super;
   font-size: 75%;
-  counter-increment: prosemirror-footnote;
+  counter-increment: footnote;
 }
-.ProseMirror-hideselection .footnote-tooltip *::selection {
-  background-color: transparent;
+span.footnote > .tooltip {
+  display: none;
 }
-.ProseMirror-hideselection .footnote-tooltip *::-moz-selection {
-  background-color: transparent;
+span.footnote:hover > .tooltip {
+  display: block;
 }
-.footnote-tooltip {
+span.footnote.open > .tooltip {
+  display: block;
+}
+span.footnote .tooltip {
   cursor: auto;
   position: absolute;
   left: -30px;
@@ -27,16 +30,5 @@ footnote::after {
   padding: 3px;
   border-radius: 2px;
   width: 500px;
-}
-.footnote-tooltip::before {
-  border: 5px solid silver;
-  border-top-width: 0px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  position: absolute;
-  top: -5px;
-  left: 27px;
-  content: ' ';
-  height: 0;
-  width: 0;
+  z-index: 1;
 }

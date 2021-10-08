@@ -24,6 +24,40 @@ type KeyMap = (state: EditorState<Schema>, dispatch?: (p: Transaction<Schema>) =
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
+export function buildBasicKeymap(schema: Schema, bind?: (key: string, cmd: KeyMap) => void) {
+  const keys: { [index: string]: KeyMap } = {};
+
+  const ourBind =
+    bind ??
+    ((key: string, cmd: KeyMap) => {
+      keys[key] = cmd;
+    });
+
+  if (schema.marks.strong) {
+    ourBind('Mod-b', toggleMark(schema.marks.strong));
+    ourBind('Mod-B', toggleMark(schema.marks.strong));
+  }
+  if (schema.marks.em) {
+    ourBind('Mod-i', toggleMark(schema.marks.em));
+    ourBind('Mod-I', toggleMark(schema.marks.em));
+  }
+  if (schema.marks.underline) {
+    ourBind('Mod-u', toggleMark(schema.marks.underline));
+    ourBind('Mod-U', toggleMark(schema.marks.underline));
+  }
+  if (schema.marks.code) ourBind('Mod-C', toggleMark(schema.marks.code));
+  if (schema.marks.link) {
+    const addLink = () => {
+      const { viewId } = store.getState().editor.ui;
+      store.dispatch(executeCommand(CommandNames.link, viewId));
+      return true;
+    };
+    ourBind('Mod-k', addLink);
+    ourBind('Mod-K', addLink);
+  }
+  return keys;
+}
+
 export function buildKeymap(stateKey: any, schema: Schema) {
   const keys: { [index: string]: KeyMap } = {};
 
@@ -56,28 +90,7 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     }),
   );
 
-  if (schema.marks.strong) {
-    bind('Mod-b', toggleMark(schema.marks.strong));
-    bind('Mod-B', toggleMark(schema.marks.strong));
-  }
-  if (schema.marks.em) {
-    bind('Mod-i', toggleMark(schema.marks.em));
-    bind('Mod-I', toggleMark(schema.marks.em));
-  }
-  if (schema.marks.underline) {
-    bind('Mod-u', toggleMark(schema.marks.underline));
-    bind('Mod-U', toggleMark(schema.marks.underline));
-  }
-  if (schema.marks.code) bind('Mod-C', toggleMark(schema.marks.code));
-  if (schema.marks.link) {
-    const addLink = () => {
-      const { viewId } = store.getState().editor.ui;
-      store.dispatch(executeCommand(CommandNames.link, viewId));
-      return true;
-    };
-    bind('Mod-k', addLink);
-    bind('Mod-K', addLink);
-  }
+  buildBasicKeymap(schema, bind);
 
   // if (schema.nodes.code_block) bind('Mod-M', setBlockType(schema.nodes.code_block));
 

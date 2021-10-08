@@ -1,15 +1,22 @@
-import { EditorView } from 'prosemirror-view';
+import { Node } from 'prosemirror-model';
 import { StepMap } from 'prosemirror-transform';
 import { keymap } from 'prosemirror-keymap';
-import { Transaction, EditorState } from 'prosemirror-state';
 import { undo, redo } from 'prosemirror-history';
-import { Node } from 'prosemirror-model';
-import { GetPos } from './types';
+import { Transaction, EditorState, TextSelection } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
+import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
+import { isEditable } from '../prosemirror/plugins/editable';
+import { getInlinePlugins } from '../prosemirror/plugins';
+import MathView from './MathView';
 
-export default class FootnoteView {
+class FootnoteView {
+  // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
 
-  innerView: EditorView | null;
+  editor: HTMLElement;
+
+  // These are used when the footnote is selected
+  innerView: EditorView;
 
   node: Node;
 
@@ -17,84 +24,111 @@ export default class FootnoteView {
 
   getPos: () => number;
 
-  constructor(node: Node, view: EditorView, getPos: GetPos) {
-    // We'll need these later
+  constructor(node: Node, view: EditorView, getPos: () => number) {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;
+    this.dom = document.createElement('span');
+    this.dom.classList.add('footnote');
 
-    // The node's representation in the editor (empty, for now)
-    this.dom = document.createElement('footnote');
-    // These are used when the footnote is selected
-    this.innerView = null;
+    this.editor = document.createElement('span');
+    this.editor.classList.add('tooltip');
+    this.dom.addEventListener('click', () => this.selectNode());
+    this.dom.appendChild(this.editor);
+    const unfocus = () => {
+      this.dom.classList.remove('open');
+      this.outerView.focus();
+      return true;
+    };
+    const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
+    // And put a sub-ProseMirror into that
+    this.innerView = new EditorView(
+      { mount: this.editor },
+      {
+        // You can use any node as an editor document
+        state: EditorState.create({
+          doc: this.node,
+          plugins: [
+            ...getInlinePlugins(this.outerView.state.schema),
+            keymap({
+              'Mod-a': () => {
+                const { doc, tr } = this.innerView.state;
+                const sel = TextSelection.create(doc, 0, this.node.nodeSize - 2);
+                this.innerView.dispatch(tr.setSelection(sel));
+                return true;
+              },
+              'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
+              'Mod-Z': () => redo(this.outerView.state, this.outerView.dispatch),
+              ...(mac
+                ? {}
+                : { 'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch) }),
+              Escape: unfocus,
+              Tab: unfocus,
+              'Shift-Tab': unfocus,
+              Enter: unfocus,
+              'Ctrl-Enter': chainCommands(newlineInCode, unfocus),
+              'Shift-Enter': chainCommands(newlineInCode, unfocus),
+              Backspace: chainCommands(deleteSelection, (state) => {
+                // default backspace behavior for non-empty selections
+                if (!state.selection.empty) {
+                  return false;
+                }
+                // default backspace behavior when math node is non-empty
+                if (this.node.textContent.length > 0) {
+                  return false;
+                }
+                // otherwise, we want to delete the empty math node and focus the outer view
+                this.outerView.dispatch(this.outerView.state.tr.insertText(''));
+                this.outerView.focus();
+                return true;
+              }),
+            }),
+          ],
+        }),
+        // This is the magic part
+        dispatchTransaction: this.dispatchInner.bind(this),
+        handleDOMEvents: {
+          mousedown: () => {
+            // Kludge to prevent issues due to the fact that the whole
+            // footnote is node-selected (and thus DOM-selected) when
+            // the parent editor is focused.
+            if (this.outerView.hasFocus()) this.innerView.focus();
+            return false;
+          },
+        },
+        nodeViews: {
+          math(n, v, gP) {
+            return new MathView(n, v, gP as () => number, true);
+          },
+        },
+      },
+    );
   }
 
   selectNode() {
+    const edit = isEditable(this.outerView.state);
     this.dom.classList.add('ProseMirror-selectednode');
-    if (!this.innerView) this.open();
+    if (!edit) return;
+    this.dom.classList.add('open');
+    // This is necessary on first insert.
+    setTimeout(() => this.innerView.focus(), 1);
   }
 
   deselectNode() {
     this.dom.classList.remove('ProseMirror-selectednode');
-    if (this.innerView) this.close();
-  }
-
-  open() {
-    // Append a tooltip to the outer node
-    const tooltip = this.dom.appendChild(document.createElement('div'));
-    tooltip.className = 'footnote-tooltip';
-    // And put a sub-ProseMirror into that
-    this.innerView = new EditorView(tooltip, {
-      // You can use any node as an editor document
-      state: EditorState.create({
-        doc: this.node,
-        plugins: [
-          keymap({
-            'Mod-z': () => undo(this.outerView.state, this.outerView.dispatch),
-            'Mod-y': () => redo(this.outerView.state, this.outerView.dispatch),
-          }),
-        ],
-      }),
-      // This is the magic part
-      dispatchTransaction: this.dispatchInner.bind(this),
-      handleDOMEvents: {
-        mousedown: () => {
-          // Kludge to prevent issues due to the fact that the whole
-          // footnote is node-selected (and thus DOM-selected) when
-          // the parent editor is focused.
-          if (this.outerView.hasFocus()) this.innerView?.focus();
-          return false;
-        },
-      },
-    });
-  }
-
-  close() {
-    this.innerView?.destroy();
-    this.innerView = null;
-    this.dom.textContent = '';
+    this.dom.classList.remove('open');
   }
 
   dispatchInner(tr: Transaction) {
-    const result = this.innerView?.state.applyTransaction(tr);
-    if (!result) {
-      return;
-    }
-    const { state, transactions } = result;
-
-    this.innerView?.updateState(state);
+    const { state, transactions } = this.innerView.state.applyTransaction(tr);
+    this.innerView.updateState(state);
 
     if (!tr.getMeta('fromOutside')) {
       const outerTr = this.outerView.state.tr;
       const offsetMap = StepMap.offset(this.getPos() + 1);
-      for (let i = 0; i < transactions.length; i++) {
+      for (let i = 0; i < transactions.length; i += 1) {
         const { steps } = transactions[i];
-        for (let j = 0; j < steps.length; j++) {
-          const step = steps[j].map(offsetMap);
-          if (step) {
-            outerTr.step(step);
-          }
-        }
+        for (let j = 0; j < steps.length; j += 1) outerTr.step(steps[j].map(offsetMap) as any);
       }
       if (outerTr.docChanged) this.outerView.dispatch(outerTr);
     }
@@ -107,32 +141,34 @@ export default class FootnoteView {
       const { state } = this.innerView;
       const start = node.content.findDiffStart(state.doc.content);
       if (start != null) {
-        const diff = node.content.findDiffEnd(state.doc.content);
-        if (diff) {
-          let { a: endA, b: endB } = diff;
-          const overlap = start - Math.min(endA, endB);
-          if (overlap > 0) {
-            endA += overlap;
-            endB += overlap;
-          }
-          this.innerView.dispatch(
-            state.tr.replace(start, endB, node.slice(start, endA)).setMeta('fromOutside', true),
-          );
+        const ends = node.content.findDiffEnd(state.doc.content as any);
+        let { a: endA, b: endB } = ends ?? { a: 0, b: 0 };
+        const overlap = start - Math.min(endA, endB);
+        if (overlap > 0) {
+          endA += overlap;
+          endB += overlap;
         }
+        this.innerView.dispatch(
+          state.tr.replace(start, endB, node.slice(start, endA)).setMeta('fromOutside', true),
+        );
       }
     }
     return true;
   }
 
   destroy() {
-    if (this.innerView) this.close();
+    this.innerView.destroy();
+    this.dom.textContent = '';
   }
 
-  stopEvent(event: any) {
-    return Boolean(this.innerView && this.innerView.dom.contains(event.target));
+  stopEvent(event: any): boolean {
+    return (this.innerView && this.innerView.dom.contains(event.target)) ?? false;
   }
 
-  static ignoreMutation() {
+  // eslint-disable-next-line class-methods-use-this
+  ignoreMutation() {
     return true;
   }
 }
+
+export default FootnoteView;
