@@ -48,5 +48,5 @@ span.footnote .tooltip {
   padding: 3px;
   border-radius: 2px;
   width: 400px;
-  z-index: 1;
+  z-index: 5; // higher than CodeMirror-gutters-wrapper z-index
 }
