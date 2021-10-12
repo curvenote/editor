@@ -43,8 +43,11 @@ class FootnoteView {
     const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
     // And put a sub-ProseMirror into that
     this.innerView = new EditorView(
-      { mount: this.editor },
       {
+        mount: this.editor,
+      },
+      {
+        editable: () => isEditable(view.state),
         // You can use any node as an editor document
         state: EditorState.create({
           doc: this.node,
@@ -105,12 +108,13 @@ class FootnoteView {
   }
 
   selectNode() {
-    const edit = isEditable(this.outerView.state);
-    if (!edit) return;
     this.dom.classList.add('ProseMirror-selectednode');
     this.dom.classList.add('open');
     // This is necessary on first insert.
-    setTimeout(() => this.innerView.focus(), 1);
+    const editable = isEditable(this.outerView.state);
+    if (editable) {
+      this.innerView.focus();
+    }
   }
 
   deselectNode() {
