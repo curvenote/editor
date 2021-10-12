@@ -110,10 +110,8 @@ class FootnoteView {
   selectNode() {
     this.dom.classList.add('ProseMirror-selectednode');
     this.dom.classList.add('open');
-    // This is necessary on first insert.
-    const editable = isEditable(this.outerView.state);
-    if (editable) {
-      this.innerView.focus();
+    if (isEditable(this.outerView.state)) {
+      setTimeout(() => this.innerView.focus(), 0); // setTimeout is to ensure component is rendered
     }
   }
 
