@@ -206,7 +206,6 @@ const EditorMenu: React.FC<Props> = (props) => {
       <MenuIcon kind="code" active={active.code} disabled={off} onClick={clickCode} />
       <MenuIcon kind="subscript" active={active.sub} disabled={off} onClick={clickSub} />
       <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickSuper} />
-      <MenuIcon kind="superscript" active={active.sup} disabled={off} onClick={clickFootnote} />
 
       {parents.table && (
         <>
@@ -275,6 +274,10 @@ const EditorMenu: React.FC<Props> = (props) => {
                 action={clickEquation}
                 title="Equation Block"
               />
+            )}
+
+            {schema?.nodes.footnote && (
+              <MenuAction title="Footnote" kind="footnote" disabled={off} action={clickFootnote} />
             )}
 
             {schema?.nodes.table && (
