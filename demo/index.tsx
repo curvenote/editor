@@ -110,27 +110,27 @@ store.subscribe(() => {
   const tex = document.getElementById('tex');
   const html = document.getElementById('html');
   const editor = store.getState().editor.state.editors[stateKey];
-  // if (myst) {
-  //   try {
-  //     myst.innerText = toMarkdown(editor.state.doc);
-  //   } catch (e) {
-  //     myst.innerText = 'Error converting to markdown';
-  //   }
-  // }
-  // if (tex) {
-  //   try {
-  //     tex.innerText = toTex(editor.state.doc);
-  //   } catch (error) {
-  //     tex.innerText = 'There was an error :(';
-  //   }
-  // }
-  // if (text) {
-  //   try {
-  //     text.innerText = toText(editor.state.doc);
-  //   } catch (error) {
-  //     text.innerText = 'There was an error :(';
-  //   }
-  // }
+  if (myst) {
+    try {
+      myst.innerText = toMarkdown(editor.state.doc);
+    } catch (e) {
+      myst.innerText = 'Error converting to markdown';
+    }
+  }
+  if (tex) {
+    try {
+      tex.innerText = toTex(editor.state.doc);
+    } catch (error) {
+      tex.innerText = 'There was an error :(';
+    }
+  }
+  if (text) {
+    try {
+      text.innerText = toText(editor.state.doc);
+    } catch (error) {
+      text.innerText = 'There was an error :(';
+    }
+  }
   if (html) {
     html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
   }
