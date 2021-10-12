@@ -67,7 +67,6 @@ class FootnoteView {
               'Shift-Tab': unfocus,
               Enter: unfocus,
               'Ctrl-Enter': chainCommands(newlineInCode, unfocus),
-              'Shift-Enter': chainCommands(newlineInCode, unfocus),
               Backspace: chainCommands(deleteSelection, (state) => {
                 // default backspace behavior for non-empty selections
                 if (!state.selection.empty) {
@@ -103,7 +102,6 @@ class FootnoteView {
         },
       },
     );
-    this.selectNode();
   }
 
   selectNode() {

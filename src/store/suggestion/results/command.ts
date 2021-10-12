@@ -18,7 +18,6 @@ import {
 } from 'prosemirror-tables';
 
 import { Transaction } from 'prosemirror-state';
-import { insertPoint } from 'prosemirror-transform';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
@@ -112,9 +111,10 @@ export function executeCommand(
         let content = Fragment.empty;
         if (!empty && $from.sameParent($to) && $from.parent.inlineContent)
           content = $from.parent.content.cut($from.parentOffset, $to.parentOffset);
-        view.dispatch(
-          view.state.tr.replaceSelectionWith(schema.nodes.footnote.create(null, content)),
-        );
+        const tr = view.state.tr.replaceSelectionWith(schema.nodes.footnote.create(null, content));
+        view.dispatch(tr);
+        view.dispatch(actions.selectNode(view.state.tr, empty));
+        view.focus();
         return true;
       }
       case CommandNames.insert_table: {
