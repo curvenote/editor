@@ -28,7 +28,7 @@ $shadow-ambient-shadow-opacity: 0.12 !default;
 span.footnote .tooltip {
   cursor: auto;
   position: absolute;
-  background: rgb(235, 235, 235);
+  background: #fafafa;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
     0 1px 18px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
     0 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity);
