@@ -174,7 +174,7 @@ function getContent(state: EditorState, content?: Node) {
   return nodeContent;
 }
 
-const selectNode = (tr: Transaction, select: boolean | 'after' = true) => {
+export function selectNode(tr: Transaction, select: boolean | 'after' = true) {
   if (!select) return tr;
   const nodeSize = tr.selection.$anchor.nodeBefore?.nodeSize ?? 0;
   const resolvedPos = tr.doc.resolve(tr.selection.anchor - nodeSize);
@@ -183,7 +183,7 @@ const selectNode = (tr: Transaction, select: boolean | 'after' = true) => {
   } catch (error) {
     return tr;
   }
-};
+}
 
 export function replaceSelection(
   node: NodeType,

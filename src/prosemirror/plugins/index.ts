@@ -8,7 +8,7 @@ import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames } from '@curvenote/schema';
 import suggestion from './suggestion';
-import { buildKeymap, captureTab } from '../keymap';
+import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -54,5 +54,17 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
     ...tablesPlugins(schema), // put this plugin near the end of the array of plugins, since it handles mouse and arrow key events in tables rather broadly
     history(),
     keymap(captureTab()),
+  ];
+}
+
+export function getInlinePlugins(schema: Schema) {
+  return [
+    editablePlugin(true),
+    commentsPlugin(),
+    inputrules(schema),
+    keymap(buildBasicKeymap(schema)),
+    keymap(baseKeymap),
+    dropCursor(),
+    gapCursor(),
   ];
 }

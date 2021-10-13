@@ -79,10 +79,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.2"
 
-"@curvenote/schema@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.6.1.tgz#9f944d07a3b7a5d37bce40fdfa462e147a440f32"
-  integrity sha512-/pddnSrmOX+nuk9waFMbD+ZtNQ0T/du6Yzv8IcTCAbJvVleb0jCOk9/D55Qb+tZ4ZpYZkmNGQgEBMBvBs0V82w==
+"@curvenote/schema@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.7.0.tgz#745a44a98c04b458a5b2a2df116be65e7fb4c0d0"
+  integrity sha512-TY7FYp+Qp/F8yUCMeAySMqygDDWv29XqID9LgxDvxJchjGeC4I7dp3yhU/hUnBWUzv+8xH6G7og/6rHbi7Tu9A==
   dependencies:
     "@wordpress/wordcount" "^3.2.1"
     markdown-it "^12.2.0"

@@ -1,0 +1,40 @@
+article {
+  counter-reset: footnote;
+}
+span.footnote {
+  display: inline-block;
+  cursor: pointer;
+}
+span.footnote::after {
+  content: counter(footnote);
+  vertical-align: super;
+  font-size: 75%;
+  counter-increment: footnote;
+}
+span.footnote > .tooltip {
+  display: none;
+}
+span.footnote:hover > .tooltip {
+  display: block;
+}
+span.footnote.open > .tooltip {
+  display: block;
+}
+
+$shadow-key-umbra-opacity: 0.2 !default;
+$shadow-key-penumbra-opacity: 0.14 !default;
+$shadow-ambient-shadow-opacity: 0.12 !default;
+
+span.footnote .tooltip {
+  cursor: auto;
+  position: absolute;
+  background: #fafafa;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
+    0 1px 18px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
+    0 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity);
+  padding: 4px 8px;
+  border-radius: 2px;
+  width: calc(100% - 46px);
+  left: 15px;
+  z-index: 5; // higher than CodeMirror-gutters-wrapper z-index
+}

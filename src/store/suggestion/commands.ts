@@ -22,6 +22,7 @@ export enum CommandNames {
   'heading6' = 'heading6',
   'code' = 'code',
   'quote' = 'quote',
+  'footnote' = 'footnote',
   'time' = 'time',
   'variable' = 'variable',
   'display' = 'display',
@@ -100,6 +101,12 @@ const MATH_COMMAND: CommandResult = {
   description: 'Add some inline math!',
   shortcut: ['$$ Type $Ax=b$ or two dollar signs in a paragraph'],
   available: nodeInSchema(nodeNames.math),
+};
+const FOOTNOTE_COMMAND: CommandResult = {
+  name: CommandNames.footnote,
+  title: 'Footnote',
+  description: 'Add a footnote',
+  available: nodeInSchema(nodeNames.footnote),
 };
 const EMOJI_COMMAND: CommandResult = {
   name: CommandNames.emoji,
@@ -249,6 +256,7 @@ export const ALL_COMMANDS: CommandResult[] = [
     available: chain(nodeInSchema(nodeNames.aside), onlyTopLevel),
   },
   MATH_COMMAND,
+  FOOTNOTE_COMMAND,
   {
     name: CommandNames.equation,
     title: 'Equation',

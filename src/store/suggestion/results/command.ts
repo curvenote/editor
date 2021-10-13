@@ -105,6 +105,18 @@ export function executeCommand(
     }
 
     switch (command) {
+      case CommandNames.footnote: {
+        removeText();
+        const { empty, $from, $to } = view.state.selection;
+        let content = Fragment.empty;
+        if (!empty && $from.sameParent($to) && $from.parent.inlineContent)
+          content = $from.parent.content.cut($from.parentOffset, $to.parentOffset);
+        const tr = view.state.tr.replaceSelectionWith(schema.nodes.footnote.create(null, content));
+        view.dispatch(tr);
+        view.dispatch(actions.selectNode(view.state.tr, empty));
+        view.focus();
+        return true;
+      }
       case CommandNames.insert_table: {
         removeText();
         const tr = view.state.tr

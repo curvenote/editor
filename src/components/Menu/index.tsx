@@ -170,6 +170,7 @@ const EditorMenu: React.FC<Props> = (props) => {
   const clickCode = useCallback(() => toggleMark(schema?.marks.code), [toggleMark]);
   const clickSub = useCallback(() => toggleMark(schema?.marks.subscript), [toggleMark]);
   const clickSuper = useCallback(() => toggleMark(schema?.marks.superscript), [toggleMark]);
+  const clickFootnote = useCallback(() => command(CommandNames.footnote), [command]);
   const clickUl = useCallback(() => command(CommandNames.bullet_list), [command]);
   const clickGrid = useCallback(() => command(CommandNames.insert_table), [command]);
   const clickOl = useCallback(() => command(CommandNames.ordered_list), [command]);
@@ -273,6 +274,10 @@ const EditorMenu: React.FC<Props> = (props) => {
                 action={clickEquation}
                 title="Equation Block"
               />
+            )}
+
+            {schema?.nodes.footnote && (
+              <MenuAction title="Footnote" kind="footnote" disabled={off} action={clickFootnote} />
             )}
 
             {schema?.nodes.table && (
