@@ -13,7 +13,8 @@ export type ImagePlaceholderPlugin = Plugin<DecorationSet>;
 
 export type Action =
   | { add: { id: string; pos: number; dataUrl: string } }
-  | { remove: { id: string } };
+  | { remove: { id: string } }
+  | { prompt: { id: string; pos: number; remove: () => void; success: (url: string) => void } };
 
 export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
   new Plugin({
@@ -27,14 +28,30 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
         let set: DecorationSet = setIn.map(tr.mapping, tr.doc);
         // See if the transaction adds or removes any placeholders
         const action: Action = tr.getMeta(this);
-        if (action && 'add' in action) {
+        if (!action) return set;
+        if ('add' in action) {
           const widget = document.createElement('img');
           widget.src = action.add.dataUrl;
           widget.classList.add('placeholder');
           const deco = Decoration.widget(action.add.pos, widget, { id: action.add.id });
           set = set.add(tr.doc, [deco]);
-        } else if (action && 'remove' in action) {
+        } else if ('remove' in action) {
           set = set.remove(set.find(undefined, undefined, (spec) => spec.id === action.remove.id));
+        } else if ('prompt' in action) {
+          const widget = document.createElement('div');
+          const upload = document.createElement('button');
+          upload.innerText = 'Upload';
+          upload.addEventListener('click', () =>
+            action.prompt.success('https://curvenote.dev/images/logo.png'),
+          );
+          const close = document.createElement('button');
+          close.innerText = 'Close';
+          close.addEventListener('click', action.prompt.remove);
+          widget.append(upload);
+          widget.append(close);
+          widget.classList.add('image-upload-prompt');
+          const deco = Decoration.widget(action.prompt.pos, widget, { id: action.prompt.id });
+          set = set.add(tr.doc, [deco]);
         }
         return set;
       },
@@ -53,15 +70,12 @@ const findImagePlaceholder = (state: EditorState, id: string) => {
   return found.length ? found[0].from : null;
 };
 
-export const addImagePlaceholder = (view: EditorView, dataUrl: string, node: Node | null) => {
+export const addImagePlaceholder = (view: EditorView, node?: Node | null, dataUrl?: string) => {
   const id = uuid();
   const { tr } = view.state;
   if (!tr.selection.empty) tr.deleteSelection();
   const plugin = key.get(view.state) as ImagePlaceholderPlugin;
-  const action: Action = { add: { id, pos: tr.selection.from, dataUrl } };
-  tr.setMeta(plugin, action);
-  view.dispatch(tr);
-  const fail = () => {
+  const remove = () => {
     view.dispatch(view.state.tr.setMeta(plugin, { remove: { id } }));
   };
   const success = (url: string) => {
@@ -74,7 +88,12 @@ export const addImagePlaceholder = (view: EditorView, dataUrl: string, node: Nod
         .setMeta(plugin, { remove: { id } }),
     );
   };
-  return { success, fail };
+  const action: Action = dataUrl
+    ? { add: { id, pos: tr.selection.from, dataUrl } }
+    : { prompt: { id, pos: tr.selection.from, success, remove } };
+  tr.setMeta(plugin, action);
+  view.dispatch(tr);
+  return { success, remove };
 };
 
 const getImages = (data: DataTransfer | null) => {
@@ -109,7 +128,7 @@ export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | nul
   const node = getNodeIfSelected(view.state, nodeNames.image);
   fileToDataUrl(images[0], async (canvas) => {
     const uri = canvas.toDataURL('image/png');
-    const finish = addImagePlaceholder(view, uri, node);
+    const finish = addImagePlaceholder(view, node, uri);
     let s: string | null;
     try {
       s = await opts.uploadImage(images[0], node);
@@ -117,7 +136,7 @@ export const uploadAndInsertImages = (view: EditorView, data: DataTransfer | nul
       s = null;
     }
     if (s == null) {
-      finish.fail();
+      finish.remove();
       return;
     }
     finish.success(s);
