@@ -128,7 +128,8 @@ class MathView {
             // Kludge to prevent issues due to the fact that the whole
             // footnote is node-selected (and thus DOM-selected) when
             // the parent editor is focused.
-            if (this.outerView.hasFocus()) this.innerView.focus();
+            const editable = isEditable(this.outerView.state);
+            if (editable && this.outerView.hasFocus()) this.innerView.focus();
             return false;
           },
         },
