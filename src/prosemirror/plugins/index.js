@@ -16,7 +16,7 @@ import { collab } from 'prosemirror-collab';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames } from '@curvenote/schema';
 import suggestion from './suggestion';
-import { buildKeymap, captureTab } from '../keymap';
+import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -55,5 +55,16 @@ export function getPlugins(schema, stateKey, version, startEditable) {
         history(),
         keymap(captureTab()),
     ], false);
+}
+export function getInlinePlugins(schema) {
+    return [
+        editablePlugin(true),
+        commentsPlugin(),
+        inputrules(schema),
+        keymap(buildBasicKeymap(schema)),
+        keymap(baseKeymap),
+        dropCursor(),
+        gapCursor(),
+    ];
 }
 //# sourceMappingURL=index.js.map

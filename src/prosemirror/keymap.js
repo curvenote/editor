@@ -8,6 +8,36 @@ import { executeCommand } from '../store/actions';
 import { CommandNames } from '../store/suggestion/commands';
 import { createId } from '../utils';
 var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
+export function buildBasicKeymap(schema, bind) {
+    var keys = {};
+    var ourBind = bind !== null && bind !== void 0 ? bind : (function (key, cmd) {
+        keys[key] = cmd;
+    });
+    if (schema.marks.strong) {
+        ourBind('Mod-b', toggleMark(schema.marks.strong));
+        ourBind('Mod-B', toggleMark(schema.marks.strong));
+    }
+    if (schema.marks.em) {
+        ourBind('Mod-i', toggleMark(schema.marks.em));
+        ourBind('Mod-I', toggleMark(schema.marks.em));
+    }
+    if (schema.marks.underline) {
+        ourBind('Mod-u', toggleMark(schema.marks.underline));
+        ourBind('Mod-U', toggleMark(schema.marks.underline));
+    }
+    if (schema.marks.code)
+        ourBind('Mod-C', toggleMark(schema.marks.code));
+    if (schema.marks.link) {
+        var addLink = function () {
+            var viewId = store.getState().editor.ui.viewId;
+            store.dispatch(executeCommand(CommandNames.link, viewId));
+            return true;
+        };
+        ourBind('Mod-k', addLink);
+        ourBind('Mod-K', addLink);
+    }
+    return keys;
+}
 export function buildKeymap(stateKey, schema) {
     var keys = {};
     var bind = function (key, cmd) {
@@ -30,29 +60,7 @@ export function buildKeymap(stateKey, schema) {
         store.dispatch(focusSelectedEditorView(false));
         return true;
     }));
-    if (schema.marks.strong) {
-        bind('Mod-b', toggleMark(schema.marks.strong));
-        bind('Mod-B', toggleMark(schema.marks.strong));
-    }
-    if (schema.marks.em) {
-        bind('Mod-i', toggleMark(schema.marks.em));
-        bind('Mod-I', toggleMark(schema.marks.em));
-    }
-    if (schema.marks.underline) {
-        bind('Mod-u', toggleMark(schema.marks.underline));
-        bind('Mod-U', toggleMark(schema.marks.underline));
-    }
-    if (schema.marks.code)
-        bind('Mod-C', toggleMark(schema.marks.code));
-    if (schema.marks.link) {
-        var addLink = function () {
-            var viewId = store.getState().editor.ui.viewId;
-            store.dispatch(executeCommand(CommandNames.link, viewId));
-            return true;
-        };
-        bind('Mod-k', addLink);
-        bind('Mod-K', addLink);
-    }
+    buildBasicKeymap(schema, bind);
     if (schema.nodes.blockquote)
         bind('Ctrl->', wrapIn(schema.nodes.blockquote));
     if (schema.nodes.hard_break) {

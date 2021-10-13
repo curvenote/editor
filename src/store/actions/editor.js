@@ -151,7 +151,7 @@ function getContent(state, content) {
     }
     return nodeContent;
 }
-var selectNode = function (tr, select) {
+export function selectNode(tr, select) {
     var _a, _b;
     if (select === void 0) { select = true; }
     if (!select)
@@ -164,7 +164,7 @@ var selectNode = function (tr, select) {
     catch (error) {
         return tr;
     }
-};
+}
 export function replaceSelection(node, attrs, content) {
     return function (dispatch, getState) {
         var editor = getSelectedEditorAndViews(getState());

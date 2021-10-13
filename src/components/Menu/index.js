@@ -99,6 +99,7 @@ var EditorMenu = function (props) {
     var clickCode = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.code); }, [toggleMark]);
     var clickSub = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.subscript); }, [toggleMark]);
     var clickSuper = useCallback(function () { return toggleMark(schema === null || schema === void 0 ? void 0 : schema.marks.superscript); }, [toggleMark]);
+    var clickFootnote = useCallback(function () { return command(CommandNames.footnote); }, [command]);
     var clickUl = useCallback(function () { return command(CommandNames.bullet_list); }, [command]);
     var clickGrid = useCallback(function () { return command(CommandNames.insert_table); }, [command]);
     var clickOl = useCallback(function () { return command(CommandNames.ordered_list); }, [command]);
@@ -143,6 +144,7 @@ var EditorMenu = function (props) {
             React.createElement("div", { onClick: function () { return onClose(); } },
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.math) && (React.createElement(MenuAction, { kind: "math", disabled: off, action: clickMath, title: "Inline Math" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.equation) && (React.createElement(MenuAction, { kind: "math", disabled: off, action: clickEquation, title: "Equation Block" })),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.footnote) && (React.createElement(MenuAction, { title: "Footnote", kind: "footnote", disabled: off, action: clickFootnote })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.table) && (React.createElement(MenuAction, { title: "Table", kind: "table", disabled: off, action: clickGrid })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.cite) && (React.createElement(MenuAction, { kind: "link", disabled: off, action: clickCite, title: "Citation" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.horizontal_rule) && (React.createElement(MenuAction, { kind: "hr", disabled: off, action: clickHr, title: "Divider" })),

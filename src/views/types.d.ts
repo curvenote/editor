@@ -32,3 +32,4 @@ export declare const SUPPORTED_LANGUAGES: {
     name: LanguageNames;
     label: string;
 }[];
+export declare type GetPos = () => number;

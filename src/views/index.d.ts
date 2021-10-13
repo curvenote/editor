@@ -5,6 +5,7 @@ import LinkView from './LinkView';
 import TimeView from './TimeView';
 import createNodeView from './NodeView';
 import CodeBlockView from './CodeBlockView';
+import FootnoteView from './FootnoteView';
 import WidgetView from './WidgetView';
 export type { NodeViewProps } from './types';
 declare const _default: {
@@ -18,5 +19,6 @@ declare const _default: {
     WidgetView: typeof WidgetView;
     newWidgetView: (node: import("prosemirror-model").Node<any>, view: import("prosemirror-view").EditorView<any>, getPos: boolean | (() => number)) => WidgetView;
     CodeBlockView: typeof CodeBlockView;
+    FootnoteView: typeof FootnoteView;
 };
 export default _default;

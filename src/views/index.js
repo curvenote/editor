@@ -5,6 +5,7 @@ import LinkView from './LinkView';
 import TimeView from './TimeView';
 import createNodeView from './NodeView';
 import CodeBlockView from './CodeBlockView';
+import FootnoteView from './FootnoteView';
 import WidgetView, { newWidgetView } from './WidgetView';
 export default {
     createNodeView: createNodeView,
@@ -17,5 +18,6 @@ export default {
     WidgetView: WidgetView,
     newWidgetView: newWidgetView,
     CodeBlockView: CodeBlockView,
+    FootnoteView: FootnoteView,
 };
 //# sourceMappingURL=index.js.map

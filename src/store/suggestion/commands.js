@@ -30,6 +30,7 @@ export var CommandNames;
     CommandNames["heading6"] = "heading6";
     CommandNames["code"] = "code";
     CommandNames["quote"] = "quote";
+    CommandNames["footnote"] = "footnote";
     CommandNames["time"] = "time";
     CommandNames["variable"] = "variable";
     CommandNames["display"] = "display";
@@ -96,6 +97,12 @@ var MATH_COMMAND = {
     description: 'Add some inline math!',
     shortcut: ['$$ Type $Ax=b$ or two dollar signs in a paragraph'],
     available: nodeInSchema(nodeNames.math),
+};
+var FOOTNOTE_COMMAND = {
+    name: CommandNames.footnote,
+    title: 'Footnote',
+    description: 'Add a footnote',
+    available: nodeInSchema(nodeNames.footnote),
 };
 var EMOJI_COMMAND = {
     name: CommandNames.emoji,
@@ -239,6 +246,7 @@ export var ALL_COMMANDS = __spreadArray(__spreadArray(__spreadArray(__spreadArra
         available: chain(nodeInSchema(nodeNames.aside), onlyTopLevel),
     },
     MATH_COMMAND,
+    FOOTNOTE_COMMAND,
     {
         name: CommandNames.equation,
         title: 'Equation',
