@@ -3,7 +3,6 @@ article {
 }
 span.footnote {
   display: inline-block;
-  position: relative;
   cursor: pointer;
 }
 span.footnote::after {
@@ -26,27 +25,16 @@ $shadow-key-umbra-opacity: 0.2 !default;
 $shadow-key-penumbra-opacity: 0.14 !default;
 $shadow-ambient-shadow-opacity: 0.12 !default;
 
-.shadow-6dp {
-  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
-    0 1px 18px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
-    0 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity);
-}
-.shadow-2dp {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
-    0 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity),
-    0 1px 5px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
-}
 span.footnote .tooltip {
   cursor: auto;
   position: absolute;
-  left: 0;
-  top: calc(100% + 8px);
   background: rgb(235, 235, 235);
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
     0 1px 18px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
     0 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity);
-  padding: 3px;
+  padding: 4px 8px;
   border-radius: 2px;
-  width: 400px;
+  width: calc(100% - 30px);
+  left: 15px;
   z-index: 5; // higher than CodeMirror-gutters-wrapper z-index
 }
