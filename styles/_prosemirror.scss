@@ -1,5 +1,4 @@
 .ProseMirror {
-  position: relative;
   word-wrap: break-word;
   white-space: pre-wrap;
   -webkit-font-variant-ligatures: none;
@@ -8,12 +7,11 @@
   outline: none;
   padding: 2px;
 }
+
 .ProseMirror pre {
   white-space: pre-wrap;
 }
-.ProseMirror li {
-  position: relative;
-}
+
 .ProseMirror-hideselection *::selection {
   background: transparent;
 }
