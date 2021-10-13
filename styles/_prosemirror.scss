@@ -1,4 +1,5 @@
 .ProseMirror {
+  position: relative;
   word-wrap: break-word;
   white-space: pre-wrap;
   -webkit-font-variant-ligatures: none;
@@ -21,7 +22,6 @@
 .ProseMirror-hideselection {
   caret-color: transparent;
 }
-
 .ProseMirror-focused .ProseMirror-selectednode {
   cursor: move;
 }

@@ -34,6 +34,7 @@ class FootnoteView {
     this.editor = document.createElement('span');
     this.editor.classList.add('tooltip');
     this.dom.addEventListener('click', () => this.selectNode());
+    this.dom.addEventListener('mouseenter', () => this.positionTooltip());
     this.dom.appendChild(this.editor);
     const unfocus = () => {
       this.dom.classList.remove('open');
@@ -107,12 +108,16 @@ class FootnoteView {
     );
   }
 
+  positionTooltip() {
+    const { offsetTop, offsetHeight } = this.dom;
+    this.editor.style.top = `${offsetTop + offsetHeight + 8}px`;
+  }
+
   selectNode() {
     this.dom.classList.add('ProseMirror-selectednode');
     this.dom.classList.add('open');
     if (isEditable(this.outerView.state)) {
-      const offset = this.dom.offsetTop;
-      this.editor.style.top = `${Number(offset) + 30}px`;
+      this.positionTooltip();
       setTimeout(() => this.innerView.focus(), 0); // setTimeout is to ensure component is rendered
     }
   }
