@@ -141,7 +141,8 @@ var MathView = (function () {
             dispatchTransaction: this.dispatchInner.bind(this),
             handleDOMEvents: {
                 mousedown: function () {
-                    if (_this.outerView.hasFocus())
+                    var editable = isEditable(_this.outerView.state);
+                    if (editable && _this.outerView.hasFocus())
                         _this.innerView.focus();
                     return false;
                 },
