@@ -13,14 +13,17 @@ const footnote: MyNodeSpec<any> = {
   parseDOM: [{ tag: 'span.footnote' }],
 };
 
+// TODO: add markdown support
 export const toMarkdown: FormatSerialize = (state, node) => {
-  state.write('footnote markdown translation not supported');
-  state.ensureNewLine();
+  state.write('(');
+  state.renderInline(node);
+  state.write(')');
 };
 
 export const toTex: FormatSerialize = (state, node) => {
-  state.write('footnote tex translation is not supported');
-  state.ensureNewLine();
+  state.write('\\footnote{');
+  state.renderInline(node);
+  state.write('}');
 };
 
 export default footnote;
