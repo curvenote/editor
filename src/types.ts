@@ -26,6 +26,7 @@ export enum nodeNames {
   cite_group = 'cite_group',
   math = 'math',
   equation = 'equation',
+  footnote = 'footnote',
   variable = 'variable',
   display = 'display',
   dynamic = 'dynamic',
