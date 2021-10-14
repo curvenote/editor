@@ -17,13 +17,14 @@ img.placeholder {
   button {
     cursor: pointer;
     padding: 8px 16px;
-    border: 1px solid rgb(222, 222, 222);
-    background-color: #d9d7d7;
+    border: none;
+    color: white;
+    background-color: #265f9e;
     transition: background-color 0.2s ease-in-out;
   }
 
   button:hover {
-    background-color: #c9c7c7;
+    background-color: #265e9e94;
   }
 
   .upload {

@@ -45,6 +45,7 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
           upload.addEventListener('click', () =>
             action.prompt.success('https://curvenote.dev/images/logo.png'),
           );
+          // TODO: focus on the upload button after prompt is being created
           const close = document.createElement('button');
           close.classList.add('close-icon');
           close.innerText = 'Close';
