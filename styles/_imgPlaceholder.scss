@@ -6,6 +6,37 @@ img.placeholder {
   animation-timing-function: ease;
   display: block;
 }
+.image-upload-prompt {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background: rgb(230, 230, 230);
+
+  button {
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 1px solid rgb(222, 222, 222);
+    background-color: #d9d7d7;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  button:hover {
+    background-color: #c9c7c7;
+  }
+
+  .upload {
+  }
+
+  .close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    // background: url(/images/close.svg) no-repeat center;
+    background-size: cover;
+  }
+}
 
 @keyframes pulsePlaceholder {
   0% {

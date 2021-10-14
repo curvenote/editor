@@ -40,11 +40,13 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
         } else if ('prompt' in action) {
           const widget = document.createElement('div');
           const upload = document.createElement('button');
-          upload.innerText = 'Upload';
+          upload.classList.add('upload');
+          upload.innerText = 'Upload Image';
           upload.addEventListener('click', () =>
             action.prompt.success('https://curvenote.dev/images/logo.png'),
           );
           const close = document.createElement('button');
+          close.classList.add('close-icon');
           close.innerText = 'Close';
           close.addEventListener('click', action.prompt.remove);
           widget.append(upload);
