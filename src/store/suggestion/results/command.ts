@@ -120,7 +120,6 @@ export function executeCommand(
       }
       case CommandNames.image: {
         removeText();
-        console.log('image command');
         addImagePrompt(view);
         return true;
       }

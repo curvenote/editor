@@ -14,7 +14,7 @@ export type ImagePlaceholderPlugin = Plugin<DecorationSet>;
 
 interface PromptProps {
   view: EditorView;
-  remove: () => void;
+  remove: (targetId?: string) => void;
   success: (url: string) => void;
 }
 
@@ -146,7 +146,7 @@ function createWidget(action: PromptAction) {
   upload.focus();
   const close = document.createElement('button');
   close.classList.add('close-icon');
-  close.addEventListener('click', action.prompt.remove);
+  close.addEventListener('click', () => action.prompt.remove());
   widget.append(upload);
   widget.append(close);
   widget.classList.add('image-upload-prompt');
@@ -204,8 +204,8 @@ function createImageHandlers(
   plugin: ImagePlaceholderPlugin,
   node?: Node | null,
 ): PromptProps {
-  const remove = () => {
-    view.dispatch(view.state.tr.setMeta(plugin, { remove: { id } }));
+  const remove = (targetId?: string) => {
+    view.dispatch(view.state.tr.setMeta(plugin, { remove: { id: targetId || id } }));
   };
   const success = (url: string) => {
     const pos = findImagePlaceholder(view.state, id);
@@ -227,10 +227,12 @@ function setup(view: EditorView) {
   return { plugin, tr };
 }
 
+const promptId = uuid(); // TODO: put this into closure shares the life cycle of an editor instance
 export function addImagePrompt(view: EditorView) {
-  const id = uuid();
+  const id = promptId;
   const { plugin, tr } = setup(view);
   const { success, remove } = createImageHandlers(view, id, plugin);
+  remove(id);
   const action: PromptAction = {
     prompt: { id, pos: tr.selection.from, remove, success, view },
   };
