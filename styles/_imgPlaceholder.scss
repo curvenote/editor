@@ -16,6 +16,7 @@ img.placeholder {
   background: white;
   border: 1px solid #b5b5b5;
   border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
 
   button {
     cursor: pointer;
@@ -39,6 +40,9 @@ img.placeholder {
       no-repeat center;
     background-size: cover;
   }
+}
+.is-dragover {
+  background-color: rgb(205, 205, 205);
 }
 
 @keyframes pulsePlaceholder {

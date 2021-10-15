@@ -1,8 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { nodeNames } from '@curvenote/schema';
-import { ContactSupportOutlined } from '@material-ui/icons';
-import { StringNullableChain } from 'lodash';
-import { inputRules } from 'prosemirror-inputrules';
 import { Node } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
@@ -50,33 +47,11 @@ function fileToDataUrl(blob: File, callback: (canvas: HTMLCanvasElement) => void
 }
 
 function fileToDataUrlAsPromise(blob: File) {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string>((resolve) => {
     fileToDataUrl(blob, (canvas) => {
       resolve(canvas.toDataURL('image/png'));
     });
   });
-}
-
-function readImage(files: File) {
-  const P: Promise<string> = new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const myDataUrl: string | null = (event?.target?.result as string) ?? null;
-      if (myDataUrl == null) {
-        reject(new Error('Could not load image.'));
-        return;
-      }
-      resolve(myDataUrl);
-    };
-    reader.readAsDataURL(files);
-  });
-  return P;
-}
-
-function forEachFiles(files: FileList, callback: (file: File) => void) {
-  for (let i = 0; i < files.length; i++) {
-    callback(files[i]);
-  }
 }
 
 function mapFiles<T>(files: FileList, callback: (file: File) => T): T[] {
@@ -87,40 +62,22 @@ function mapFiles<T>(files: FileList, callback: (file: File) => T): T[] {
   return result;
 }
 
-function dropHandler(ev: any, placeholderImage: HTMLImageElement) {
-  // Prevent default behavior (Prevent file from being opened)
-  ev.preventDefault();
+type Maybe<T> = T | undefined;
 
-  if (ev.dataTransfer.items) {
-    // Use DataTransferItemList interface to access the file(s)
-    for (let i = 0; i < ev.dataTransfer.items.length; i++) {
-      // If dropped items aren't files, reject them
-      if (ev.dataTransfer.items[i].kind === 'file') {
-        const file = ev.dataTransfer.items[i].getAsFile();
-        console.log(
-          `... file[${i}].name = ${file.name}`,
-          file,
-          // ev.dataTransfer.items[i],
-          // ev.dataTransfer.items[i].getAsString((e) => {
-          //   console.log('get as string', e);
-          // }),
-        );
-        readImage(file).then((e) => {
-          console.log('image read', e);
-          placeholderImage.src = e;
-          placeholderImage.hidden = false;
-        });
-
-        break;
-      }
+function mapDataTransferItemList<T>(
+  files: DataTransferItemList,
+  callback: (file: DataTransferItem) => T,
+): Maybe<T>[] {
+  const result: Maybe<T>[] = [];
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file) {
+      result.push(callback(file));
+    } else {
+      result.push(undefined);
     }
-  } else {
-    // Use DataTransfer interface to access the file(s)
-    console.log('files', ev.dataTransfer.files);
-    readImage(ev.dataTransfer.files).then((e) => {
-      console.log('image read', e);
-    });
   }
+  return result;
 }
 
 function dragOverHandler(ev: any) {
@@ -133,18 +90,17 @@ function createWidget(action: PromptAction) {
   const upload = document.createElement('input');
   const uploadPreview = document.createElement('div');
   upload.addEventListener('change', async (e) => {
-    console.log('e', upload.files);
     if (!upload.files) {
       return;
     }
-    uploadPreview.innerHTML = '';
     action.prompt.remove();
-    // eslint-disable-next-line
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     uploadImageFiles(
       action.prompt.view,
       mapFiles(upload.files, (f) => f),
     );
   });
+
   upload.type = 'file';
   upload.multiple = true;
   upload.name = 'uploadImageInput';
@@ -157,21 +113,39 @@ function createWidget(action: PromptAction) {
   uploadContainer.append(uploadPreview);
   widget.append(uploadContainer);
   widget.addEventListener('drop', (e) => {
-    dropHandler(e, placeholderImage);
+    e.preventDefault();
+
+    action.prompt.remove();
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const items = e.dataTransfer?.items;
+    if (!items) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    uploadImageFiles(
+      action.prompt.view,
+      mapDataTransferItemList(items, (f) => f.getAsFile()).filter((v) => v) as File[],
+    );
   });
   widget.addEventListener('dragover', (e) => {
     dragOverHandler(e);
+    widget.classList.add('is-dragover');
+  });
+  widget.addEventListener('dragend drop dragleave', () => {
+    widget.classList.remove('is-dragover');
+  });
+
+  ['dragend', 'drop', 'dragleave'].forEach((eventName) => {
+    widget.addEventListener(eventName, () => {
+      widget.classList.remove('is-dragover');
+    });
   });
   upload.classList.add('upload');
   upload.innerText = 'Upload Image';
-  // TODO: focus on the upload button after prompt is being created
+  // TODO: focus on the upload button?
   upload.focus();
-  // upload.addEventListener('click', () =>
-  // action.prompt.success('https://curvenote.dev/images/logo.png'),
-  // );
   const close = document.createElement('button');
   close.classList.add('close-icon');
-  close.innerText = 'Close';
   close.addEventListener('click', action.prompt.remove);
   widget.append(upload);
   widget.append(close);
@@ -191,7 +165,6 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
         let set: DecorationSet = setIn.map(tr.mapping, tr.doc);
         // See if the transaction adds or removes any placeholders
         const action: Action = tr.getMeta(this);
-        console.log('apply', action);
         if (!action) return set;
         if ('add' in action) {
           const widget = document.createElement('img');
@@ -202,7 +175,6 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
         } else if ('remove' in action) {
           set = set.remove(set.find(undefined, undefined, (spec) => spec.id === action.remove.id));
         } else if ('prompt' in action) {
-          console.log('prompt?', action);
           const widget = createWidget(action);
           const deco = Decoration.widget(action.prompt.pos, widget, { id: action.prompt.id });
           set = set.add(tr.doc, [deco]);
@@ -220,7 +192,9 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
 const findImagePlaceholder = (state: EditorState, id: string) => {
   const plugin = key.get(state) as ImagePlaceholderPlugin;
   const decos = plugin.getState(state);
-  const found = decos.find(undefined, undefined, (spec) => spec.id === id);
+  const found = decos.find(undefined, undefined, (spec) => {
+    return spec.id === id;
+  });
   return found.length ? found[0].from : null;
 };
 
@@ -235,12 +209,11 @@ function createImageHandlers(
   };
   const success = (url: string) => {
     const pos = findImagePlaceholder(view.state, id);
-    console.log('pos', pos, url, id);
     if (pos == null) return;
     const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
     view.dispatch(
       view.state.tr
-        .replaceWith(pos, pos, view.state.schema.nodes.image.create(attrs))
+        .replaceWith(pos, pos, view.state.schema.nodes.image.create(attrs)) // TODO: is this replacing too much?
         .setMeta(plugin, { remove: { id } }),
     );
   };
@@ -248,15 +221,15 @@ function createImageHandlers(
 }
 
 function setup(view: EditorView) {
-  const id = uuid();
   const { tr } = view.state;
   if (!tr.selection.empty) tr.deleteSelection();
   const plugin = key.get(view.state) as ImagePlaceholderPlugin;
-  return { id, plugin, tr };
+  return { plugin, tr };
 }
 
 export function addImagePrompt(view: EditorView) {
-  const { id, plugin, tr } = setup(view);
+  const id = uuid();
+  const { plugin, tr } = setup(view);
   const { success, remove } = createImageHandlers(view, id, plugin);
   const action: PromptAction = {
     prompt: { id, pos: tr.selection.from, remove, success, view },
@@ -265,8 +238,13 @@ export function addImagePrompt(view: EditorView) {
   view.dispatch(tr);
 }
 
-function addImagePlaceholder(view: EditorView, dataUrl: string, node: Node | null): PromptProps {
-  const { id, plugin, tr } = setup(view);
+function addImagePlaceholder(
+  view: EditorView,
+  id: string,
+  dataUrl: string,
+  node: Node | null,
+): PromptProps {
+  const { plugin, tr } = setup(view);
   const { success, remove } = createImageHandlers(view, id, plugin, node);
   const action: Action = { add: { id, pos: tr.selection.from, dataUrl } };
   tr.setMeta(plugin, action);
@@ -291,7 +269,8 @@ function uploadImageFiles(view: EditorView, images: File[]) {
   return Promise.all(
     images.map((file) =>
       fileToDataUrlAsPromise(file).then((uri) => {
-        const { success, remove } = addImagePlaceholder(view, uri, node);
+        const id = uuid();
+        const { success, remove } = addImagePlaceholder(view, id, uri, node);
         return opts
           .uploadImage(file, node)
           .then((url) => {
