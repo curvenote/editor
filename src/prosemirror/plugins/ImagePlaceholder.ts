@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { nodeNames } from '@curvenote/schema';
-import { Node } from 'prosemirror-model';
+import { Fragment, Node } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
@@ -15,7 +15,7 @@ export type ImagePlaceholderPlugin = Plugin<DecorationSet>;
 interface PromptProps {
   view: EditorView;
   remove: (targetId?: string) => void;
-  success: (url: string) => void;
+  success: (urls: string[]) => void;
 }
 
 interface PromptActionProps extends PromptProps {
@@ -28,7 +28,7 @@ interface PromptAction {
 }
 
 export type Action =
-  | { add: { id: string; pos: number; dataUrl: string } }
+  | { add: { id: string; pos: number; dataUrls: string[] } }
   | { remove: { id: string } }
   | PromptAction;
 
@@ -89,7 +89,7 @@ function createWidget(action: PromptAction) {
   const widget = document.createElement('div');
   const upload = document.createElement('input');
   const uploadPreview = document.createElement('div');
-  upload.addEventListener('change', async (e) => {
+  upload.addEventListener('change', async () => {
     if (!upload.files) {
       return;
     }
@@ -167,9 +167,13 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
         const action: Action = tr.getMeta(this);
         if (!action) return set;
         if ('add' in action) {
-          const widget = document.createElement('img');
-          widget.src = action.add.dataUrl;
-          widget.classList.add('placeholder');
+          const widget = document.createElement('div');
+          action.add.dataUrls.forEach((uri) => {
+            const img = document.createElement('img');
+            img.src = uri;
+            img.classList.add('placeholder');
+            widget.appendChild(img);
+          });
           const deco = Decoration.widget(action.add.pos, widget, { id: action.add.id });
           set = set.add(tr.doc, [deco]);
         } else if ('remove' in action) {
@@ -207,13 +211,17 @@ function createImageHandlers(
   const remove = (targetId?: string) => {
     view.dispatch(view.state.tr.setMeta(plugin, { remove: { id: targetId || id } }));
   };
-  const success = (url: string) => {
+  const success = (urls: string[]) => {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
-    const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
+    const images = urls.map(() => {
+      const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: urls[0] };
+      return view.state.schema.nodes.image.create(attrs);
+    });
+    const fragment = Fragment.fromArray(images);
     view.dispatch(
       view.state.tr
-        .replaceWith(pos, pos, view.state.schema.nodes.image.create(attrs)) // TODO: is this replacing too much?
+        .replaceWith(pos, pos, fragment) // TODO: is this replacing too much?
         .setMeta(plugin, { remove: { id } }),
     );
   };
@@ -243,12 +251,12 @@ export function addImagePrompt(view: EditorView) {
 function addImagePlaceholder(
   view: EditorView,
   id: string,
-  dataUrl: string,
+  dataUrls: string[],
   node: Node | null,
 ): PromptProps {
   const { plugin, tr } = setup(view);
   const { success, remove } = createImageHandlers(view, id, plugin, node);
-  const action: Action = { add: { id, pos: tr.selection.from, dataUrl } };
+  const action: Action = { add: { id, pos: tr.selection.from, dataUrls } };
   tr.setMeta(plugin, action);
   view.dispatch(tr);
   return { success, remove, view };
@@ -266,28 +274,26 @@ function getImages(data: DataTransfer | null) {
   return images;
 }
 
-function uploadImageFiles(view: EditorView, images: File[]) {
+async function uploadImageFiles(view: EditorView, images: File[]) {
   const node = getNodeIfSelected(view.state, nodeNames.image);
-  return Promise.all(
-    images.map((file) =>
-      fileToDataUrlAsPromise(file).then((uri) => {
-        const id = uuid();
-        const { success, remove } = addImagePlaceholder(view, id, uri, node);
-        return opts
-          .uploadImage(file, node)
-          .then((url) => {
-            if (url == null) {
-              remove();
-              return;
-            }
-            success(url);
-          })
-          .catch(() => {
-            remove();
-          });
-      }),
-    ),
-  );
+  const dataUrls = await Promise.all(images.map((file) => fileToDataUrlAsPromise(file)));
+  const id = uuid();
+  // If there is only one image, allow it to replace
+  const nodeToUse = dataUrls.length === 1 ? node : null;
+  const { success, remove } = addImagePlaceholder(view, id, dataUrls, nodeToUse);
+  let urls;
+  try {
+    urls = await Promise.all(images.map((file) => opts.uploadImage(file, nodeToUse)));
+  } catch (error) {
+    remove();
+    return;
+  }
+  const validUrls = urls.filter((url) => url) as string[];
+  if (validUrls.length === 0) {
+    remove();
+    return;
+  }
+  success(validUrls);
 }
 
 export function uploadAndInsertImages(view: EditorView, data: DataTransfer | null): boolean {
