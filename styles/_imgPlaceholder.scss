@@ -6,6 +6,7 @@ img.placeholder {
   animation-timing-function: ease;
   display: block;
 }
+
 .image-upload-prompt {
   display: flex;
   position: relative;
@@ -18,13 +19,17 @@ img.placeholder {
     cursor: pointer;
     padding: 8px 16px;
     border: none;
-    color: white;
-    background-color: #265f9e;
+    color: black;
+    background-color: #cecece;
     transition: background-color 0.2s ease-in-out;
   }
 
   button:hover {
-    background-color: #084d9b;
+    background-color: #989898;
+  }
+
+  .upload-container > img {
+    height: 100px;
   }
 
   .upload {

@@ -29,7 +29,7 @@ import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
 import { createId } from '../../../utils';
-import { addImagePlaceholder } from '../../../prosemirror/plugins/ImagePlaceholder';
+import { addImagePrompt } from '../../../prosemirror/plugins/ImagePlaceholder';
 
 const options = {
   shouldSort: true,
@@ -120,7 +120,8 @@ export function executeCommand(
       }
       case CommandNames.image: {
         removeText();
-        addImagePlaceholder(view);
+        console.log('image command');
+        addImagePrompt(view);
         return true;
       }
       case CommandNames.insert_table: {
