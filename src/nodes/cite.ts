@@ -1,4 +1,5 @@
-import { NodeGroups, FormatSerialize, MyNodeSpec, ReferenceKind } from './types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';
 
 export type Attrs = {
   key: string | null;
@@ -58,7 +59,7 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
   },
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { kind, key, text } = node.attrs as Attrs;
   switch (kind) {
     case ReferenceKind.cite:
@@ -69,7 +70,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   }
 };
 
-export const toTex: FormatSerialize = (state, node) => {
+export const toTex: TexFormatSerialize = (state, node) => {
   const { kind, text, key } = node.attrs as Attrs;
   let prepend = '';
   switch (kind) {

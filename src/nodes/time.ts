@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
-import { NodeGroups, FormatSerialize, MyNodeSpec } from './types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { NodeGroups, MyNodeSpec } from './types';
 
 export function getDatetime(object?: Date | string | null): Date {
   if (object == null) {
@@ -54,12 +55,12 @@ const time: MyNodeSpec<Attrs> = {
   ],
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { f } = formatDatetime(node.attrs.datetime);
   state.write(f);
 };
 
-export const toTex: FormatSerialize = (state, node) => {
+export const toTex: TexFormatSerialize = (state, node) => {
   const { f } = formatDatetime(node.attrs.datetime);
   state.write(f);
 };

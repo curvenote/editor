@@ -1,4 +1,5 @@
-import { NodeGroups, FormatSerialize, MyNodeSpec } from './types';
+import { MdFormatSerialize } from '../serialize/types';
+import { NodeGroups, MyNodeSpec } from './types';
 
 export type Attrs = Record<string, never>;
 
@@ -19,7 +20,7 @@ const math: MyNodeSpec<Attrs> = {
   ],
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write('$');
   state.text(node.textContent, false);
   state.write('$');

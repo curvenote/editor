@@ -1,5 +1,6 @@
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import { NodeGroups, FormatSerialize, NumberedNode, MyNodeSpec, AlignOptions } from './types';
+import { NodeGroups, NumberedNode, MyNodeSpec, AlignOptions } from './types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import {
   getImageWidth,
   readBooleanDomAttr,
@@ -62,16 +63,18 @@ const image: MyNodeSpec<Attrs> = {
   },
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
-  const md = `![${state.esc(node.attrs.alt || '')}](${state.esc(node.attrs.src)}${
+export const toMarkdown: MdFormatSerialize = (state, node) => {
+  const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
+  const md = `![${state.esc(node.attrs.alt || '')}](${state.esc(src)}${
     node.attrs.title ? ` ${state.quote(node.attrs.title)}` : ''
   })`;
   state.write(md);
   state.closeBlock(node);
 };
 
-export const toTex: FormatSerialize = (state, node) => {
-  const { src, caption, numbered, width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
+export const toTex: TexFormatSerialize = (state, node) => {
+  const { caption, numbered, width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
+  const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
   let align = 'center';
   switch (nodeAlign?.toLowerCase()) {

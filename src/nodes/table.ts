@@ -1,8 +1,8 @@
 import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
 import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { nodeNames } from '../types';
-import { FormatSerialize, NodeGroups } from './types';
+import { MdFormatSerialize, nodeNames, TexFormatSerialize } from '../types';
+import { NodeGroups } from './types';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -21,7 +21,7 @@ export const nodes = tableNodes({
   },
 });
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   let rowIndex = 0;
 
   node.content.forEach((child) => {
@@ -132,7 +132,7 @@ export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any
   state.closeBlock(node);
 }
 
-export const toTex: FormatSerialize = (state, node) => {
+export const toTex: TexFormatSerialize = (state, node) => {
   try {
     renderNodeToLatex(state, node);
   } catch (e) {
