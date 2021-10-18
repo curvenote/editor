@@ -92,23 +92,39 @@ function dragOverHandler(ev: any) {
 
 function createWidget(action: PromptAction) {
   const widget = document.createElement('div');
-  const upload = document.createElement('input');
-  upload.addEventListener('change', async () => {
-    if (!upload.files) {
+  const uploadLabel = document.createElement('label');
+  const uploadInput = document.createElement('input');
+  uploadInput.addEventListener('change', async () => {
+    if (!uploadInput.files) {
       return;
     }
     action.prompt.remove();
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     uploadImageFiles(
       action.prompt.view,
-      mapFileList(upload.files, (f) => f),
+      mapFileList(uploadInput.files, (f) => f),
     );
   });
+  uploadInput.type = 'file';
+  const uploadInputId = 'imageUploadInput';
+  uploadInput.id = uploadInputId;
+  uploadInput.multiple = true;
+  uploadInput.name = 'uploadImageInput';
+  uploadInput.accept = 'image/*';
+  uploadInput.classList.add('upload');
+  uploadLabel.innerText = 'Upload Image';
+  uploadLabel.htmlFor = uploadInputId;
 
-  upload.type = 'file';
-  upload.multiple = true;
-  upload.name = 'uploadImageInput';
-  upload.accept = 'image/*';
+  const uploadDescription = document.createElement('div');
+  uploadDescription.classList.add('description');
+  uploadDescription.innerText = 'Drag and drop or click to upload image';
+
+  const uploadContainer = document.createElement('div');
+  uploadContainer.classList.add('upload-container');
+  uploadContainer.append(uploadLabel);
+  uploadContainer.append(uploadInput);
+  uploadContainer.append(uploadDescription);
+
   widget.addEventListener('drop', (e) => {
     e.preventDefault();
     action.prompt.remove();
@@ -136,13 +152,12 @@ function createWidget(action: PromptAction) {
       widget.classList.remove('is-dragover');
     });
   });
-  upload.classList.add('upload');
-  upload.innerText = 'Upload Image';
-  upload.focus();
+
   const close = document.createElement('button');
   close.classList.add('close-icon');
   close.addEventListener('click', () => action.prompt.remove());
-  widget.append(upload);
+
+  widget.append(uploadContainer);
   widget.append(close);
   widget.classList.add('image-upload-prompt');
   return widget;

@@ -31,6 +31,24 @@ img.placeholder {
       no-repeat center;
     background-size: cover;
   }
+
+  .upload-container {
+    text-align: center;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+
+  label {
+    cursor: pointer;
+    font-weight: bold;
+    color: #1d5f9e;
+  }
+
+  .description {
+    font-size: small;
+  }
 }
 .is-dragover {
   background-color: rgb(205, 205, 205);
