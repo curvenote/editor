@@ -214,8 +214,8 @@ function createImageHandlers(
   const success = (urls: string[]) => {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
-    const images = urls.map(() => {
-      const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: urls[0] };
+    const images = urls.map((url) => {
+      const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
       return view.state.schema.nodes.image.create(attrs);
     });
     const fragment = Fragment.fromArray(images);
