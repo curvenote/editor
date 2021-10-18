@@ -59,7 +59,7 @@ function fileToDataUrlAsPromise(blob: File) {
   });
 }
 
-function mapFiles<T>(files: FileList, callback: (file: File) => T): T[] {
+function mapFileList<T>(files: FileList, callback: (file: File) => T): T[] {
   const result: T[] = [];
   for (let i = 0; i < files.length; i++) {
     result.push(callback(files[i]));
@@ -101,7 +101,7 @@ function createWidget(action: PromptAction) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     uploadImageFiles(
       action.prompt.view,
-      mapFiles(upload.files, (f) => f),
+      mapFileList(upload.files, (f) => f),
     );
   });
 
