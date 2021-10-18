@@ -18,19 +18,10 @@ img.placeholder {
   border-radius: 5px;
   transition: background-color 0.2s ease-in-out;
 
-  button {
+  .close-icon {
     cursor: pointer;
     border: none;
-  }
 
-  .upload-container > img {
-    height: 100px;
-  }
-
-  .upload {
-  }
-
-  .close-icon {
     position: absolute;
     top: 2px;
     right: 2px;

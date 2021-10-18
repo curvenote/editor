@@ -203,10 +203,10 @@ function createImageHandlers(
   plugin: ImagePlaceholderPlugin,
   node?: Node | null,
 ): PromptProps {
-  const remove = (targetId?: string) => {
+  function remove(targetId?: string) {
     view.dispatch(view.state.tr.setMeta(plugin, { remove: { id: targetId || id } }));
-  };
-  const success = (urls: string[]) => {
+  }
+  function success(urls: string[]) {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
     const images = urls.map((url) => {
@@ -219,7 +219,7 @@ function createImageHandlers(
         .replaceWith(pos, pos, fragment) // TODO: is this replacing too much?
         .setMeta(plugin, { remove: { id } }),
     );
-  };
+  }
   return { success, remove, view };
 }
 
