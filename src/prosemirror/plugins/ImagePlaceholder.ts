@@ -27,10 +27,15 @@ interface PromptAction {
   prompt: PromptActionProps;
 }
 
-export type Action =
-  | { add: { id: string; pos: number; dataUrls: string[] } }
-  | { remove: { id: string } }
-  | PromptAction;
+interface AddAction {
+  add: { id: string; pos: number; dataUrls: string[] };
+}
+
+interface RemoveAction {
+  remove: { id: string };
+}
+
+export type Action = AddAction | RemoveAction | PromptAction;
 
 function fileToDataUrl(blob: File, callback: (canvas: HTMLCanvasElement) => void) {
   const URLObj = window.URL ?? window.webkitURL;
@@ -88,7 +93,6 @@ function dragOverHandler(ev: any) {
 function createWidget(action: PromptAction) {
   const widget = document.createElement('div');
   const upload = document.createElement('input');
-  const uploadPreview = document.createElement('div');
   upload.addEventListener('change', async () => {
     if (!upload.files) {
       return;
@@ -105,16 +109,8 @@ function createWidget(action: PromptAction) {
   upload.multiple = true;
   upload.name = 'uploadImageInput';
   upload.accept = 'image/*';
-  const uploadContainer = document.createElement('div');
-  const placeholderImage = document.createElement('img');
-  placeholderImage.hidden = true;
-  uploadContainer.classList.add('uploadContainer');
-  uploadContainer.append(placeholderImage);
-  uploadContainer.append(uploadPreview);
-  widget.append(uploadContainer);
   widget.addEventListener('drop', (e) => {
     e.preventDefault();
-
     action.prompt.remove();
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const items = e.dataTransfer?.items;
@@ -142,7 +138,6 @@ function createWidget(action: PromptAction) {
   });
   upload.classList.add('upload');
   upload.innerText = 'Upload Image';
-  // TODO: focus on the upload button?
   upload.focus();
   const close = document.createElement('button');
   close.classList.add('close-icon');
@@ -235,12 +230,12 @@ function setup(view: EditorView) {
   return { plugin, tr };
 }
 
-const promptId = uuid(); // TODO: put this into closure shares the life cycle of an editor instance
+const promptId = uuid(); // prompt id is shared across all editors, to ensure there's only one prompt opens at a time
 export function addImagePrompt(view: EditorView) {
   const id = promptId;
   const { plugin, tr } = setup(view);
   const { success, remove } = createImageHandlers(view, id, plugin);
-  remove(id);
+  remove(id); // remove any existing prompts
   const action: PromptAction = {
     prompt: { id, pos: tr.selection.from, remove, success, view },
   };
