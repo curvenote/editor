@@ -6,12 +6,14 @@ import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './u
 export type Attrs = NumberedNode & {
   language: string | null;
   title: string;
+  linenumber: boolean;
 };
 
 const code: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     language: { default: null },
+    linenumber: { default: true },
     title: { default: '' },
   },
   content: `${NodeGroups.text}*`,
@@ -27,19 +29,21 @@ const code: MyNodeSpec<Attrs> = {
         return {
           ...getNumberedAttrs(dom),
           language: dom.getAttribute('language') || null,
+          linenumber: dom.getAttribute('linenumber') === 'true',
           title: dom.getAttribute('title') ?? '',
         };
       },
     },
   ],
   toDOM(node) {
-    const { language, title } = node.attrs;
+    const { language, title, linenumber } = node.attrs;
     return [
       'pre',
       {
         ...setNumberedAttrs(node.attrs),
         language,
         title,
+        linenumber,
       },
       ['code', 0],
     ];
