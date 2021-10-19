@@ -60,7 +60,7 @@
   "peerDependencies": {
     "@curvenote/components": "^0.3.3",
     "@curvenote/runtime": "^0.2.8",
-    "@curvenote/schema": "^0.6.0",
+    "@curvenote/schema": "^0.7.2",
     "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.11.2",
@@ -86,7 +86,7 @@
     "@curvenote/article": "^0.3.0",
     "@curvenote/components": "^0.3.3",
     "@curvenote/runtime": "^0.2.8",
-    "@curvenote/schema": "^0.7.0",
+    "@curvenote/schema": "^0.7.2",
     "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.11.2",
