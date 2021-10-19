@@ -227,9 +227,7 @@ function createImageHandlers(
     });
     const fragment = Fragment.fromArray(images);
     view.dispatch(
-      view.state.tr
-        .replaceWith(pos, pos, fragment) // TODO: is this replacing too much?
-        .setMeta(plugin, { remove: { id } }),
+      view.state.tr.replaceWith(pos, pos, fragment).setMeta(plugin, { remove: { id } }),
     );
   }
   return { success, remove, view };
