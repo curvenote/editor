@@ -108,6 +108,24 @@ const CodeActions: React.FC<ActionProps> = (props) => {
           }}
         />
       </div>
+
+      <MenuIcon kind="divider" />
+      <MenuIcon
+        kind="lineNumbers"
+        onClick={() => {
+          dispatch(
+            updateNodeAttrs(
+              stateId,
+              viewId,
+              { node, pos },
+              { linenumbers: !node.attrs.linenumbers },
+              false,
+            ),
+          );
+        }}
+        active={node.attrs.linenumbers}
+      />
+
       <MenuIcon kind="divider" />
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>

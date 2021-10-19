@@ -40,6 +40,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import GridIcon from '@material-ui/icons/GridOn';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import LooksOneOutlinedIcon from '@material-ui/icons/LooksOneOutlined';
 import classNames from 'classnames';
 // import ImageIcon from '@material-ui/icons/Image';
 // import TuneIcon from '@material-ui/icons/Tune';
@@ -160,6 +161,7 @@ const icons = {
   colLeft: { help: 'Insert Column Left', Icon: ColLeftIcon },
   colRight: { help: 'Insert Column Right', Icon: ColRightIcon },
   colDelete: { help: 'Delete Column', Icon: ColDelete },
+  lineNumbers: { help: 'Toggle Line Numbers', Icon: LooksOneOutlinedIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';
