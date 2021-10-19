@@ -40,6 +40,7 @@ export declare enum CommandNames {
     'link_equation' = "link_equation",
     'link_code' = "link_code",
     'link_table' = "link_table",
+    'image' = "image",
     'insert_table' = "insert_table",
     'add_column_before' = "add_column_before",
     'add_column_after' = "add_column_after",

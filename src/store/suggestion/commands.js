@@ -52,6 +52,7 @@ export var CommandNames;
     CommandNames["link_equation"] = "link_equation";
     CommandNames["link_code"] = "link_code";
     CommandNames["link_table"] = "link_table";
+    CommandNames["image"] = "image";
     CommandNames["insert_table"] = "insert_table";
     CommandNames["add_column_before"] = "add_column_before";
     CommandNames["add_column_after"] = "add_column_after";
@@ -246,6 +247,12 @@ export var ALL_COMMANDS = __spreadArray(__spreadArray(__spreadArray(__spreadArra
         available: chain(nodeInSchema(nodeNames.aside), onlyTopLevel),
     },
     MATH_COMMAND,
+    {
+        name: CommandNames.image,
+        title: 'Image',
+        description: 'Insert or upload an image',
+        available: nodeInSchema(nodeNames.image),
+    },
     FOOTNOTE_COMMAND,
     {
         name: CommandNames.equation,

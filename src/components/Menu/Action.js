@@ -18,6 +18,7 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import LinkIcon from '@material-ui/icons/Link';
+import ImageIcon from '@material-ui/icons/Image';
 import GridIcon from '@material-ui/icons/GridOn';
 function FootnoteIcon(props) {
     return (React.createElement(SvgIcon, __assign({}, props, { viewBox: "0 0 18 18" }),
@@ -27,6 +28,7 @@ function FootnoteIcon(props) {
 var icons = {
     math: FunctionsIcon,
     code: CodeIcon,
+    image: ImageIcon,
     hr: RemoveIcon,
     footnote: FootnoteIcon,
     youtube: YouTubeIcon,

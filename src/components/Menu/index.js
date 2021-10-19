@@ -106,6 +106,7 @@ var EditorMenu = function (props) {
     var clickLink = useCallback(function () { return command(CommandNames.link); }, [command]);
     var clickMath = useCallback(function () { return wrapInline(schema === null || schema === void 0 ? void 0 : schema.nodes.math); }, [command]);
     var clickEquation = useCallback(function () { return command(CommandNames.equation); }, [command]);
+    var clickImage = useCallback(function () { return command(CommandNames.image); }, [command]);
     var clickCite = useCallback(function () { return command(CommandNames.citation); }, [command]);
     var clickHr = useCallback(function () { return command(CommandNames.horizontal_rule); }, [command]);
     var clickCodeBlk = useCallback(function () { return command(CommandNames.code); }, [command]);
@@ -144,6 +145,7 @@ var EditorMenu = function (props) {
             React.createElement("div", { onClick: function () { return onClose(); } },
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.math) && (React.createElement(MenuAction, { kind: "math", disabled: off, action: clickMath, title: "Inline Math" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.equation) && (React.createElement(MenuAction, { kind: "math", disabled: off, action: clickEquation, title: "Equation Block" })),
+                (schema === null || schema === void 0 ? void 0 : schema.nodes.image) && (React.createElement(MenuAction, { kind: "image", disabled: off, action: clickImage, title: "Image" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.footnote) && (React.createElement(MenuAction, { title: "Footnote", kind: "footnote", disabled: off, action: clickFootnote })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.table) && (React.createElement(MenuAction, { title: "Table", kind: "table", disabled: off, action: clickGrid })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.cite) && (React.createElement(MenuAction, { kind: "link", disabled: off, action: clickCite, title: "Citation" })),

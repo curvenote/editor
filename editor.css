@@ -493,6 +493,46 @@ img.placeholder {
   display: block;
 }
 
+.image-upload-prompt {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background: white;
+  border: 1px solid #b5b5b5;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+.image-upload-prompt .close-icon {
+  cursor: pointer;
+  border: none;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'%3E%3C/path%3E%3C/svg%3E") no-repeat center;
+  background-size: cover;
+}
+.image-upload-prompt .upload-container {
+  text-align: center;
+}
+.image-upload-prompt input[type=file] {
+  display: none;
+}
+.image-upload-prompt label {
+  cursor: pointer;
+  font-weight: bold;
+  color: #1d5f9e;
+}
+.image-upload-prompt .description {
+  font-size: small;
+}
+.image-upload-prompt.is-dragover {
+  background-color: #cdcdcd;
+}
+
 @keyframes pulsePlaceholder {
   0% {
     opacity: 0.3;
