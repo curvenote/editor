@@ -15,6 +15,7 @@ import 'codemirror/mode/php/php';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/julia/julia';
 import 'codemirror/mode/r/r';
+import 'codemirror/mode/shell/shell';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/mode/ruby/ruby';
