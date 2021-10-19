@@ -19,7 +19,7 @@ const code: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     language: { default: null },
-    linenumbers: { default: true },
+    linenumbers: { default: false },
     title: { default: '' },
   },
   content: `${NodeGroups.text}*`,
