@@ -41,6 +41,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import GridIcon from '@material-ui/icons/GridOn';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import LooksOneOutlinedIcon from '@material-ui/icons/LooksOneOutlined';
 import classNames from 'classnames';
 function SubscriptIcon(props) {
     return (React.createElement(SvgIcon, __assign({}, props),
@@ -128,6 +129,7 @@ var icons = {
     colLeft: { help: 'Insert Column Left', Icon: ColLeftIcon },
     colRight: { help: 'Insert Column Right', Icon: ColRightIcon },
     colDelete: { help: 'Delete Column', Icon: ColDelete },
+    lineNumbers: { help: 'Toggle Line Numbers', Icon: LooksOneOutlinedIcon },
 };
 var useStyles = makeStyles(function (theme) {
     return createStyles({

@@ -72,6 +72,10 @@ var CodeActions = function (props) {
                     dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { language: language }, false));
                 } })),
         React.createElement(MenuIcon, { kind: "divider" }),
+        React.createElement(MenuIcon, { kind: "lineNumbers", onClick: function () {
+                dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { linenumbers: !node.attrs.linenumbers }, false));
+            }, active: node.attrs.linenumbers }),
+        React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
 };
 export default CodeActions;

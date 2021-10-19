@@ -165,6 +165,10 @@ declare const icons: {
         help: string;
         Icon: typeof ColDelete;
     };
+    lineNumbers: {
+        help: string;
+        Icon: import("@material-ui/core/OverridableComponent").OverridableComponent<import("@material-ui/core").SvgIconTypeMap<{}, "svg">>;
+    };
 };
 export declare type IconTypes = keyof typeof icons | 'divider';
 declare type Props = {

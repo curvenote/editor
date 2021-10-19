@@ -56,10 +56,10 @@ var CodeBlockView = (function () {
         this.incomingChanges = false;
         this.cm = new CodeMirror(null, {
             value: this.node.textContent,
-            lineNumbers: true,
             mode: createMode(node),
             extraKeys: this.codeMirrorKeymap(),
             readOnly: isEditable(view.state) ? false : 'nocursor',
+            lineNumbers: this.node.attrs.linenumbers,
         });
         this.dom = this.cm.getWrapperElement();
         setTimeout(function () { return _this.cm.refresh(); }, 20);
@@ -165,6 +165,9 @@ var CodeBlockView = (function () {
             return false;
         if (this.node.attrs.language !== node.attrs.language) {
             this.cm.setOption('mode', createMode(node));
+        }
+        if (this.node.attrs.linenumbers !== node.attrs.linenumbers) {
+            this.cm.setOption('lineNumbers', node.attrs.linenumbers);
         }
         this.node = node;
         var change = computeChange(this.cm.getValue(), node.textContent);
