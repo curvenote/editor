@@ -49,9 +49,9 @@ img.placeholder {
   .description {
     font-size: small;
   }
-}
-.is-dragover {
-  background-color: rgb(205, 205, 205);
+  &.is-dragover {
+    background-color: rgb(205, 205, 205);
+  }
 }
 
 @keyframes pulsePlaceholder {
