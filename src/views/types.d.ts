@@ -12,6 +12,7 @@ export declare enum LanguageNames {
     Jsx = "jsx",
     Ts = "typescript",
     Python = "python",
+    Shell = "shell",
     Swift = "swift",
     Php = "php",
     Cpp = "text/x-c++src",

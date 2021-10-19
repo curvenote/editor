@@ -4,6 +4,7 @@ export var LanguageNames;
     LanguageNames["Jsx"] = "jsx";
     LanguageNames["Ts"] = "typescript";
     LanguageNames["Python"] = "python";
+    LanguageNames["Shell"] = "shell";
     LanguageNames["Swift"] = "swift";
     LanguageNames["Php"] = "php";
     LanguageNames["Cpp"] = "text/x-c++src";
@@ -24,6 +25,7 @@ export var SUPPORTED_LANGUAGES = [
     { name: LanguageNames.Python, label: 'Python' },
     { name: LanguageNames.R, label: 'R' },
     { name: LanguageNames.Julia, label: 'Julia' },
+    { name: LanguageNames.Shell, label: 'Shell' },
     { name: LanguageNames.Html, label: 'HTML' },
     { name: LanguageNames.Js, label: 'JavaScript' },
     { name: LanguageNames.Jsx, label: 'JSX' },
