@@ -1,4 +1,5 @@
-import { NodeGroups, FormatSerialize, MyNodeSpec, NumberedNode } from './types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
 const getAttrs = (level: number) => (dom: HTMLElement) => ({
@@ -31,14 +32,14 @@ const heading: MyNodeSpec<Attrs> = {
   },
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   // TODO: Put the id in:
   state.write(`${state.repeat('#', node.attrs.level)} `);
   state.renderInline(node);
   state.closeBlock(node);
 };
 
-export const toTex: FormatSerialize = (state, node) => {
+export const toTex: TexFormatSerialize = (state, node) => {
   const { level, id, numbered } = node.attrs as Attrs;
   if (level === 1) state.write(`\\section${numbered ? '' : '*'}{`);
   if (level === 2) state.write(`\\subsection${numbered ? '' : '*'}{`);

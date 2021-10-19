@@ -1,5 +1,5 @@
 import { Node } from 'prosemirror-model';
-import { LatexFormatTypes } from '../src/serialize/tex/types';
+import { TexFormatTypes } from '../src/serialize/types';
 import { tnodes, tdoc } from './build';
 import { toTex } from '../src';
 
@@ -31,14 +31,14 @@ const {
   aside,
 } = tnodes;
 
-const same = (text: string, doc: Node, format: LatexFormatTypes = LatexFormatTypes.tex) => {
+const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.tex) => {
   expect(toTex(doc, { format })).toEqual(text);
 };
 
 const expectEnvironment = (
   name: string,
   doc: Node,
-  format: LatexFormatTypes = LatexFormatTypes.tex,
+  format: TexFormatTypes = TexFormatTypes.tex,
 ) => {
   expect(toTex(doc, { format })).toEqual(`\\begin{${name}}\n  hello!\n\\end{${name}}`);
 };
@@ -56,9 +56,9 @@ describe('Tex', () => {
 
 describe('Tex:curvenote', () => {
   it('serializes a callout', () =>
-    expectEnvironment('callout', tdoc(callout('hello!')), LatexFormatTypes.tex_curvenote));
+    expectEnvironment('callout', tdoc(callout('hello!')), TexFormatTypes.tex_curvenote));
   it('serializes an aside', () =>
-    expectEnvironment('aside', tdoc(aside('hello!')), LatexFormatTypes.tex_curvenote));
+    expectEnvironment('aside', tdoc(aside('hello!')), TexFormatTypes.tex_curvenote));
   it('serializes a code_block', () =>
-    expectEnvironment('code', tdoc(pre('hello!')), LatexFormatTypes.tex_curvenote));
+    expectEnvironment('code', tdoc(pre('hello!')), TexFormatTypes.tex_curvenote));
 });

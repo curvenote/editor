@@ -1,18 +1,17 @@
 /* eslint-disable no-param-reassign */
-import { FormatSerialize } from '../../nodes/types';
-import { LatexOptions, LatexSerializerState, LatexStatementOptions } from './types';
+import { TexStatementOptions, TexFormatSerialize, TexOptions, TexSerializerState } from '../types';
 
 export const TAB = '  ';
 
 export const createLatexStatement =
   (
-    command: string | ((options: LatexOptions) => string),
-    f: FormatSerialize,
-    opts: LatexStatementOptions | ((options: LatexOptions) => LatexStatementOptions) = {
+    command: string | ((options: TexOptions) => string),
+    f: TexFormatSerialize,
+    opts: TexStatementOptions | ((options: TexOptions) => TexStatementOptions) = {
       inline: false,
     },
-  ): FormatSerialize =>
-  (state: LatexSerializerState, node, p, i) => {
+  ): TexFormatSerialize =>
+  (state: TexSerializerState, node, p, i) => {
     const { bracketOpts, inline } = typeof opts === 'function' ? opts(state.options) : opts;
     const latexOption = bracketOpts?.(node) ?? '';
     const optsInBrackets = latexOption ? `[${latexOption}]` : '';
@@ -26,11 +25,11 @@ export const createLatexStatement =
     state.closeBlock(node);
   };
 
-export const blankTex: FormatSerialize = (state, node) => {
+export const blankTex: TexFormatSerialize = (state, node) => {
   state.write(`{\\bf \`${node.type.name}' not supported in \\LaTeX}`);
 };
 
-export const blankTexLines: FormatSerialize = (state, node) => {
+export const blankTexLines: TexFormatSerialize = (state, node) => {
   state.ensureNewLine();
   state.write(`{\\bf \`${node.type.name}' not supported in \\LaTeX}`);
   state.ensureNewLine();

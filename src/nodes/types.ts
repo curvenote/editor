@@ -1,5 +1,4 @@
-import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node, NodeSpec, AttributeSpec, Schema, ParseRule } from 'prosemirror-model';
+import { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
 
 export enum ReferenceKind {
   cite = 'cite',
@@ -61,10 +60,3 @@ export type NodeDef = {
   inline: boolean;
   group: NodeGroups;
 };
-
-export type FormatSerialize<S extends Schema<any, any> = any> = (
-  state: MarkdownSerializerState & { delim?: string },
-  node: Node<S>,
-  parent: Node<S>,
-  index: number,
-) => void;

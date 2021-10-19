@@ -1,7 +1,12 @@
 import { NodeSpec } from 'prosemirror-model';
-import { LatexFormatTypes, LatexOptions } from '../serialize/tex/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { NodeGroups, FormatSerialize } from './types';
+import {
+  MdFormatSerialize,
+  TexFormatSerialize,
+  TexFormatTypes,
+  TexOptions,
+} from '../serialize/types';
+import { NodeGroups } from './types';
 
 const aside: NodeSpec = {
   group: NodeGroups.top,
@@ -15,7 +20,7 @@ const aside: NodeSpec = {
   ],
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
   state.write('```{margin}');
   state.ensureNewLine();
@@ -24,13 +29,13 @@ export const toMarkdown: FormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex: FormatSerialize = createLatexStatement(
-  (options: LatexOptions) =>
-    options.format === LatexFormatTypes.tex_curvenote ? 'aside' : 'marginpar',
+export const toTex: TexFormatSerialize = createLatexStatement(
+  (options: TexOptions) =>
+    options.format === TexFormatTypes.tex_curvenote ? 'aside' : 'marginpar',
   (state, node) => {
     state.renderContent(node);
   },
-  (options: LatexOptions) => ({ inline: options.format === LatexFormatTypes.tex }),
+  (options: TexOptions) => ({ inline: options.format === TexFormatTypes.tex }),
 );
 
 export default aside;

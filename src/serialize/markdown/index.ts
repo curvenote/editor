@@ -2,6 +2,7 @@ import { MarkdownSerializer } from 'prosemirror-markdown';
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { isPlainURL, backticksFor, wrapMark } from './utils';
 import * as nodes from '../../nodes';
+import { MarkdownOptions } from '../types';
 
 export function mdPostProcess(md: string): string {
   // Replace trailing newlines in code fences
@@ -114,8 +115,9 @@ export const markdownSerializer = new MarkdownSerializer(
   },
 );
 
-export function toMarkdown(doc: ProsemirrorNode) {
-  const md = markdownSerializer.serialize(doc, { tightLists: true });
+export function toMarkdown(doc: ProsemirrorNode, opts?: MarkdownOptions) {
+  const defualtOpts = { tightLists: true };
+  const md = markdownSerializer.serialize(doc, { ...defualtOpts, ...opts });
   const post = mdPostProcess(md);
   return post;
 }

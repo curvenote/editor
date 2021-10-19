@@ -1,5 +1,6 @@
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import { NodeGroups, FormatSerialize, MyNodeSpec, AlignOptions } from './types';
+import { MdFormatSerialize } from '../serialize/types';
+import { NodeGroups, MyNodeSpec, AlignOptions } from './types';
 import { getImageWidth } from './utils';
 
 export type Attrs = {
@@ -41,7 +42,7 @@ const iframe: MyNodeSpec<Attrs> = {
   },
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
   state.write('```{iframe}');
   state.ensureNewLine();

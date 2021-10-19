@@ -1,4 +1,5 @@
-import { NodeGroups, FormatSerialize, MyNodeSpec, NumberedNode } from './types';
+import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
+import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { getAttr, getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 
@@ -35,7 +36,7 @@ const equation: MyNodeSpec<Attrs> = {
   ],
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { numbered, id } = node.attrs;
   state.ensureNewLine();
   const amsBegin = node.textContent.startsWith('\\begin{');

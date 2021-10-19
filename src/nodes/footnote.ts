@@ -1,4 +1,5 @@
-import { FormatSerialize, MyNodeSpec, NodeGroups } from './types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { MyNodeSpec, NodeGroups } from './types';
 
 const footnote: MyNodeSpec<any> = {
   attrs: {},
@@ -14,13 +15,13 @@ const footnote: MyNodeSpec<any> = {
 };
 
 // TODO: add markdown support
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write('(');
   state.renderInline(node);
   state.write(')');
 };
 
-export const toTex: FormatSerialize = (state, node) => {
+export const toTex: TexFormatSerialize = (state, node) => {
   state.write('\\footnote{');
   state.renderInline(node);
   state.write('}');

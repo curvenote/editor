@@ -1,7 +1,7 @@
 import { NodeSpec } from 'prosemirror-model';
-import { LatexOptions, LatexFormatTypes } from '../serialize/tex/types';
+import { TexOptions, TexFormatTypes, MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { NodeGroups, FormatSerialize } from './types';
+import { NodeGroups } from './types';
 
 export enum CalloutKinds {
   'active' = 'active',
@@ -37,7 +37,7 @@ const callout: NodeSpec = {
   ],
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
   const { kind } = node.attrs;
   // TODO: Translate between callout/admonition
@@ -49,8 +49,7 @@ export const toMarkdown: FormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options: LatexOptions) =>
-    options.format === LatexFormatTypes.tex_curvenote ? 'callout' : 'framed',
+  (options: TexOptions) => (options.format === TexFormatTypes.tex_curvenote ? 'callout' : 'framed'),
   (state, node) => {
     state.renderContent(node);
   },

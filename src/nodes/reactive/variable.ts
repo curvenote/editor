@@ -1,4 +1,5 @@
-import { NodeGroups, FormatSerialize, NodeDef } from '../types';
+import { NodeGroups, NodeDef } from '../types';
+import { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, createSpec, nodeToMystDirective, DEFAULT_FORMAT } from '../../utils';
 
 export type Attrs = {
@@ -17,5 +18,5 @@ export const def: NodeDef = {
 };
 
 const spec = createSpec(def);
-export const toMarkdown: FormatSerialize = (state, node) => nodeToMystDirective(state, node, def);
+export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystDirective(state, node, def);
 export default spec;

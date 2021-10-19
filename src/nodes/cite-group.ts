@@ -1,5 +1,6 @@
 import { Node } from 'prosemirror-model';
-import { NodeGroups, FormatSerialize, MyNodeSpec } from './types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { NodeGroups, MyNodeSpec } from './types';
 
 export type Attrs = Record<string, never>;
 
@@ -30,11 +31,11 @@ const getKeys = (node: Node) => {
   return keys;
 };
 
-export const toMarkdown: FormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write(`{citep}\`${getKeys(node).join(', ')}\``);
 };
 
-export const toTex: FormatSerialize = (state, node) => {
+export const toTex: TexFormatSerialize = (state, node) => {
   state.write(`\\citep{${getKeys(node).join(', ')}}`);
 };
 
