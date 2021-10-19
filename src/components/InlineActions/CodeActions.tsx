@@ -100,6 +100,21 @@ const CodeActions: React.FC<ActionProps> = (props) => {
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
+      <MenuIcon
+        kind="lineNumber"
+        onClick={() => {
+          dispatch(
+            updateNodeAttrs(
+              stateId,
+              viewId,
+              { node, pos },
+              { linenumber: !node.attrs.linenumber },
+              false,
+            ),
+          );
+        }}
+        active={node.attrs.linenumber}
+      />
       <div className={classes.dropdownContainer}>
         <LanguageSeletionDropdown
           value={node.attrs.language}
