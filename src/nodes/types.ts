@@ -20,6 +20,7 @@ export enum NodeGroups {
   'inline' = 'inline',
   'text' = 'text',
   'cite' = 'cite',
+  'insideFigure' = '(figcaption table) | ((image | code_block | iframe) figcaption)',
 }
 
 export enum MarkGroups {

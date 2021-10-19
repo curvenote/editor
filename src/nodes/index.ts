@@ -9,6 +9,10 @@ export * as Time from './time';
 export * as Table from './table';
 export * as Footnote from './footnote';
 
+// Figures and Captions
+export * as Figure from './figure';
+export * as Figcaption from './figcaption';
+
 // Technical
 export * as Cite from './cite';
 export * as CiteGroup from './cite-group';

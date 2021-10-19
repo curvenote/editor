@@ -55,6 +55,8 @@ export const textSerializer = new MarkdownSerializer(
     // Presentational
     image: newLine,
     iframe: newLine,
+    figure: simpleBlockRender,
+    figcaption: simpleBlockRender,
     time: nodes.Time.toMarkdown, // This is just the time! :)
     callout: simpleBlockRender,
     aside: simpleBlockRender,

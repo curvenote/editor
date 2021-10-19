@@ -50,6 +50,8 @@ export const nodes = {
   footnote: Nodes.Footnote.default,
   blockquote: basic.blockquote,
   code_block: Nodes.Code.default,
+  figure: Nodes.Figure.default,
+  figcaption: Nodes.Figcaption.default,
   image: Nodes.Image.default,
   horizontal_rule: basic.horizontal_rule,
   hard_break: basic.hard_break,
