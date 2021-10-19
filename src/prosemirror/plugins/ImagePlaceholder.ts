@@ -106,14 +106,12 @@ function createWidget(action: PromptAction) {
     );
   });
   uploadInput.type = 'file';
-  const uploadInputId = 'imageUploadInput';
-  uploadInput.id = uploadInputId;
   uploadInput.multiple = true;
-  uploadInput.name = 'uploadImageInput';
   uploadInput.accept = 'image/*';
   uploadInput.classList.add('upload');
+
   uploadLabel.innerText = 'Upload Image';
-  uploadLabel.htmlFor = uploadInputId;
+  uploadLabel.append(uploadInput);
 
   const uploadDescription = document.createElement('div');
   uploadDescription.classList.add('description');
@@ -122,7 +120,6 @@ function createWidget(action: PromptAction) {
   const uploadContainer = document.createElement('div');
   uploadContainer.classList.add('upload-container');
   uploadContainer.append(uploadLabel);
-  uploadContainer.append(uploadInput);
   uploadContainer.append(uploadDescription);
 
   widget.addEventListener('drop', (e) => {
