@@ -1,19 +1,19 @@
 import { LatexFormatTypes, LatexOptions } from '../serialize/tex/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { NodeGroups, NumberedNode, MyNodeSpec, FormatSerialize } from './types';
-import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
+import { convertToBooleanAttribute, getNumberedAttrs, getNumberedDefaultAttrs, readBooleanDomAttr, setNumberedAttrs } from './utils';
 
 export type Attrs = NumberedNode & {
   language: string | null;
   title: string;
-  linenumber: boolean;
+  linenumbers: boolean;
 };
 
 const code: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     language: { default: null },
-    linenumber: { default: true },
+    linenumbers: { default: true },
     title: { default: '' },
   },
   content: `${NodeGroups.text}*`,
@@ -29,21 +29,21 @@ const code: MyNodeSpec<Attrs> = {
         return {
           ...getNumberedAttrs(dom),
           language: dom.getAttribute('language') || null,
-          linenumber: dom.getAttribute('linenumber') === 'true',
+          linenumbers: readBooleanDomAttr(dom, 'linenumbers'),
           title: dom.getAttribute('title') ?? '',
         };
       },
     },
   ],
   toDOM(node) {
-    const { language, title, linenumber } = node.attrs;
+    const { language, title, linenumbers } = node.attrs;
     return [
       'pre',
       {
         ...setNumberedAttrs(node.attrs),
         language,
         title,
-        linenumber,
+        linenumbers: convertToBooleanAttribute(linenumbers),
       },
       ['code', 0],
     ];

@@ -14,6 +14,10 @@ export function readBooleanDomAttr(dom: HTMLElement, attr: string): boolean {
   return true;
 }
 
+export function convertToBooleanAttribute(value: boolean) {
+  return value ? '' : undefined;
+}
+
 export const getNumberedDefaultAttrs = (): NodeSpecAttrs<NumberedNode> => ({
   id: { default: null },
   label: { default: null },
@@ -31,13 +35,12 @@ export function getNumberedAttrs(dom: HTMLElement): NumberedNode {
     label: dom.getAttribute('label') ?? null,
   };
 }
-
 export function setNumberedAttrs(
   attrs: Record<string, any>,
 ): Record<keyof NumberedNode, string | undefined> {
   return {
     id: attrs.id || undefined,
-    numbered: attrs.numbered ? '' : undefined,
+    numbered: convertToBooleanAttribute(attrs.numbered),
     label: attrs.label || undefined,
   };
 }
