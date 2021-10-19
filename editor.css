@@ -545,7 +545,7 @@ img.placeholder {
   }
 }
 article {
-  counter-reset: h1_cnt eq_cnt fig_cnt;
+  counter-reset: h1_cnt eq_cnt fig_cnt footnote;
 }
 article h1 {
   counter-reset: h2_cnt;
@@ -673,10 +673,6 @@ h6[numbered]:before {
   height: auto;
   margin: 16px 0;
   border: 1px solid #eee;
-}
-
-article {
-  counter-reset: footnote;
 }
 
 span.footnote {
