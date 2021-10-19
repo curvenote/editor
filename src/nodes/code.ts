@@ -1,7 +1,13 @@
 import { createLatexStatement } from '../serialize/tex/utils';
 import { TexFormatTypes, TexOptions, MdFormatSerialize } from '../serialize/types';
 import { NodeGroups, NumberedNode, MyNodeSpec } from './types';
-import { convertToBooleanAttribute, readBooleanDomAttr, getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
+import {
+  convertToBooleanAttribute,
+  readBooleanDomAttr,
+  getNumberedAttrs,
+  getNumberedDefaultAttrs,
+  setNumberedAttrs,
+} from './utils';
 
 export type Attrs = NumberedNode & {
   language: string | null;
