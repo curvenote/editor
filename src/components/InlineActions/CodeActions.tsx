@@ -111,19 +111,19 @@ const CodeActions: React.FC<ActionProps> = (props) => {
 
       <MenuIcon kind="divider" />
       <MenuIcon
-        kind="lineNumber"
+        kind="lineNumbers"
         onClick={() => {
           dispatch(
             updateNodeAttrs(
               stateId,
               viewId,
               { node, pos },
-              { linenumber: !node.attrs.linenumber },
+              { linenumbers: !node.attrs.linenumbers },
               false,
             ),
           );
         }}
-        active={node.attrs.linenumber}
+        active={node.attrs.linenumbers}
       />
 
       <MenuIcon kind="divider" />

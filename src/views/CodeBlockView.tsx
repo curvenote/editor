@@ -88,7 +88,7 @@ export default class CodeBlockView implements NodeView {
       mode: createMode(node),
       extraKeys: this.codeMirrorKeymap(),
       readOnly: isEditable(view.state) ? false : 'nocursor',
-      lineNumbers: this.node.attrs.linenumber,
+      lineNumbers: this.node.attrs.linenumbers,
     });
 
     // The editor's outer node is our DOM representation
@@ -213,8 +213,8 @@ export default class CodeBlockView implements NodeView {
     if (this.node.attrs.language !== node.attrs.language) {
       this.cm.setOption('mode', createMode(node));
     }
-    if (this.node.attrs.linenumber !== node.attrs.linenumber) {
-      this.cm.setOption('lineNumbers', node.attrs.linenumber);
+    if (this.node.attrs.linenumbers !== node.attrs.linenumbers) {
+      this.cm.setOption('lineNumbers', node.attrs.linenumbers);
     }
 
     this.node = node;

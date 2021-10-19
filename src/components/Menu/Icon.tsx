@@ -161,7 +161,7 @@ const icons = {
   colLeft: { help: 'Insert Column Left', Icon: ColLeftIcon },
   colRight: { help: 'Insert Column Right', Icon: ColRightIcon },
   colDelete: { help: 'Delete Column', Icon: ColDelete },
-  lineNumber: { help: 'Toggle Line Number', Icon: LooksOneOutlinedIcon },
+  lineNumbers: { help: 'Toggle Line Number', Icon: LooksOneOutlinedIcon },
 };
 
 export type IconTypes = keyof typeof icons | 'divider';
