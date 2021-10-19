@@ -8,6 +8,7 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import OndemandVideoIcon from '@material-ui/icons/OndemandVideo';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import LinkIcon from '@material-ui/icons/Link';
+import ImageIcon from '@material-ui/icons/Image';
 import GridIcon from '@material-ui/icons/GridOn';
 
 // https://icon-sets.iconify.design/fluent/text-footnote-20-regular/
@@ -27,6 +28,7 @@ function FootnoteIcon(props: any) {
 const icons = {
   math: FunctionsIcon,
   code: CodeIcon,
+  image: ImageIcon,
   hr: RemoveIcon,
   footnote: FootnoteIcon,
   youtube: YouTubeIcon,

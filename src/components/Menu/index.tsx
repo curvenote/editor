@@ -177,6 +177,7 @@ const EditorMenu: React.FC<Props> = (props) => {
   const clickLink = useCallback(() => command(CommandNames.link), [command]);
   const clickMath = useCallback(() => wrapInline(schema?.nodes.math), [command]);
   const clickEquation = useCallback(() => command(CommandNames.equation), [command]);
+  const clickImage = useCallback(() => command(CommandNames.image), [command]);
   const clickCite = useCallback(() => command(CommandNames.citation), [command]);
   const clickHr = useCallback(() => command(CommandNames.horizontal_rule), [command]);
   const clickCodeBlk = useCallback(() => command(CommandNames.code), [command]);
@@ -274,6 +275,10 @@ const EditorMenu: React.FC<Props> = (props) => {
                 action={clickEquation}
                 title="Equation Block"
               />
+            )}
+
+            {schema?.nodes.image && (
+              <MenuAction kind="image" disabled={off} action={clickImage} title="Image" />
             )}
 
             {schema?.nodes.footnote && (

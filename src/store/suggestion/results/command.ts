@@ -29,6 +29,7 @@ import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
 import { createId } from '../../../utils';
+import { addImagePrompt } from '../../../prosemirror/plugins/ImagePlaceholder';
 
 const options = {
   shouldSort: true,
@@ -115,6 +116,11 @@ export function executeCommand(
         view.dispatch(tr);
         view.dispatch(actions.selectNode(view.state.tr, empty));
         view.focus();
+        return true;
+      }
+      case CommandNames.image: {
+        removeText();
+        addImagePrompt(view);
         return true;
       }
       case CommandNames.insert_table: {
