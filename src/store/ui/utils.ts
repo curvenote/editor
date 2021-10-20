@@ -32,6 +32,9 @@ export const getSelectionKind = (
   const pos = state.selection.from;
   switch (node?.type.name as nodeNames | undefined) {
     case nodeNames.image:
+      // Check if parent is a figure, be caught below
+      if (findParentNode((n: Node) => n.type.name === nodeNames.figure)(state.selection)) break;
+      // Otherwise send image selection
       return { kind: SelectionKinds.image, pos };
     case nodeNames.iframe:
       return { kind: SelectionKinds.iframe, pos };
@@ -47,6 +50,8 @@ export const getSelectionKind = (
       return { kind: SelectionKinds.callout, pos };
     case nodeNames.heading:
       return { kind: SelectionKinds.heading, pos };
+    case nodeNames.figure:
+      return { kind: SelectionKinds.figure, pos };
     default:
       break;
   }
@@ -70,6 +75,8 @@ export const getSelectionKind = (
         return true;
       case nodeNames.code_block:
         return true;
+      case nodeNames.figure:
+        return true;
       default:
         return false;
     }
@@ -85,6 +92,8 @@ export const getSelectionKind = (
       return { kind: SelectionKinds.table, pos: parent.pos };
     case nodeNames.code_block:
       return { kind: SelectionKinds.code, pos: parent.pos };
+    case nodeNames.figure:
+      return { kind: SelectionKinds.figure, pos: parent.pos };
     default:
       break;
   }
