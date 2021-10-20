@@ -20,7 +20,12 @@ export enum NodeGroups {
   'inline' = 'inline',
   'text' = 'text',
   'cite' = 'cite',
-  'insideFigure' = '(figcaption table) | ((image | code_block | iframe) figcaption)',
+  // This allows you to drag images in/out and reposition the figure caption
+  // It does mean that the figure can be empty, which is not good
+  // We need to delete this empty figure in a post processing step
+  // This also allows two figure captions
+  'insideFigure' = 'figcaption{0,1} (image | code_block | iframe | table)* figcaption{0,1}',
+  // 'insideFigure' = '(figcaption | image | code_block | iframe | table)+',
 }
 
 export enum MarkGroups {
