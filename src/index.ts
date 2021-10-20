@@ -2,7 +2,7 @@ export * as schemas from './schemas';
 export * as Nodes from './nodes';
 export * as types from './types';
 export { nodeNames } from './types';
-export { ReferenceKind } from './nodes/types';
+export { ReferenceKind, CaptionKind } from './nodes/types';
 
 export { fromHTML, fromText, fromMarkdown } from './parse';
 export { toHTML, toMarkdown, toTex, toText } from './serialize';

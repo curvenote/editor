@@ -1,5 +1,12 @@
 import { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
 
+export enum CaptionKind {
+  fig = 'fig',
+  eq = 'eq',
+  code = 'code',
+  table = 'table',
+}
+
 export enum ReferenceKind {
   cite = 'cite',
   link = 'link',
