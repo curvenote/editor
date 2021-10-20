@@ -223,6 +223,7 @@ function createImageHandlers(
     if (pos == null) return;
     const images = urls.map((url) => {
       const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
+      // TODO: add as figures
       return view.state.schema.nodes.image.create(attrs);
     });
     const fragment = Fragment.fromArray(images);
