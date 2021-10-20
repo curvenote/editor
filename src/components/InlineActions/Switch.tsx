@@ -33,7 +33,7 @@ const InlineActionSwitch: React.FC = () => {
     <>
       {kind === Kinds.link && <LinkActions {...{ stateId, viewId }} />}
       {kind === Kinds.figure && <FigureImageActions {...{ stateId, viewId }} />}
-      {kind === Kinds.image && <AlignActions showCaption {...{ stateId, viewId }} />}
+      {kind === Kinds.image && <AlignActions {...{ stateId, viewId }} />}
       {kind === Kinds.iframe && <AlignActions {...{ stateId, viewId }} />}
       {kind === Kinds.callout && <CalloutActions {...{ stateId, viewId }} />}
       {kind === Kinds.heading && <HeadingActions {...{ stateId, viewId }} />}
