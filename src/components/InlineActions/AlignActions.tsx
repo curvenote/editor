@@ -21,19 +21,17 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-type Props = ActionProps & {
-  showCaption?: boolean;
-};
+type Props = ActionProps;
 
 const AlignActions: React.FC<Props> = (props) => {
-  const { stateId, viewId, showCaption } = props;
+  const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   const node = getNodeFromSelection(selection);
   if (!node || !selection || !isNodeSelection(selection)) return null;
   const { from: pos } = selection;
-  const { align, width, numbered, caption } = node?.attrs;
+  const { align, width } = node?.attrs;
 
   const onAlign = (a: types.AlignOptions) => () => {
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { align: a }));
@@ -41,11 +39,6 @@ const AlignActions: React.FC<Props> = (props) => {
   const onWidth = (value: number) => {
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { width: value }));
   };
-  const onNumbered = () =>
-    dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { numbered: !numbered }));
-  const onCaption = () =>
-    dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { caption: !caption }));
-
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 
   positionPopper();
@@ -57,21 +50,10 @@ const AlignActions: React.FC<Props> = (props) => {
       <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
       <MenuIcon kind="divider" />
       <SelectWidth width={width} onWidth={onWidth} />
-      {showCaption && (
-        <>
-          <MenuIcon kind="divider" />
-          <MenuIcon kind="caption" active={caption} onClick={onCaption} />
-          {caption && <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />}
-        </>
-      )}
       <MenuIcon kind="divider" />
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
   );
-};
-
-AlignActions.defaultProps = {
-  showCaption: false,
 };
 
 export default AlignActions;

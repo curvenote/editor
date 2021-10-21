@@ -36,7 +36,7 @@ export function updateNodeAttrs(
   viewId: string | null,
   node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
   attrs: { [index: string]: any },
-  select: boolean | 'after' = true,
+  select: boolean | 'after' | 'inside' = true,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -47,8 +47,11 @@ export function updateNodeAttrs(
       const sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
       tr.setSelection(sel);
     }
-    const result = dispatch(applyProsemirrorTransaction(stateKey, viewId, tr));
-    if (result && viewId) dispatch(focusEditorView(viewId, true));
+    if (select === 'inside') {
+      const sel = TextSelection.create(tr.doc, node.pos + 1);
+      tr.setSelection(sel);
+    }
+    const result = dispatch(applyProsemirrorTransaction(stateKey, viewId, tr, Boolean(select)));
     return result;
   };
 }
