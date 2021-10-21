@@ -103,7 +103,7 @@ export const strong = (schema: Schema) => [
 ];
 
 export const strikethrough = (schema: Schema) => [
-  markInputRule(/~([\W\w]+)~$/, schema.marks.strikethrough),
+  markInputRule(/~([\W\w]+[^\s])~$/, schema.marks.strikethrough),
 ];
 
 export const em = (schema: Schema) => [
