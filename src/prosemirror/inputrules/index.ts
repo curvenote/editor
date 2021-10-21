@@ -27,7 +27,6 @@ const inputrules = (schema: Schema) =>
       ...rules.equation(schema),
       ...rules.mathInline(schema),
       ...rules.slider(schema),
-      ...rules.dynamic(schema),
     ],
   });
 

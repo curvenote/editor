@@ -35,31 +35,34 @@ export const emojis = (schema: Schema) => [
   new InputRule(/(?:^|\s)\+1\s$/, '👍 '),
 ];
 
+// Match on fractions that are not part of a number sequence
 export const fractions = (schema: Schema) => [
-  new InputRule(/1\/2$/, '½'),
-  new InputRule(/1\/3$/, '⅓'),
-  new InputRule(/2\/3$/, '⅔'),
-  new InputRule(/1\/4$/, '¼'),
-  new InputRule(/1\/5$/, '⅕'),
-  new InputRule(/2\/5$/, '⅖'),
-  new InputRule(/3\/5$/, '⅗'),
-  new InputRule(/4\/5$/, '⅘'),
-  new InputRule(/1\/6$/, '⅙'),
-  new InputRule(/5\/6$/, '⅚'),
-  new InputRule(/1\/7$/, '⅐'),
-  new InputRule(/1\/8$/, '⅛'),
-  new InputRule(/3\/8$/, '⅜'),
-  new InputRule(/5\/8$/, '⅝'),
-  new InputRule(/7\/8$/, '⅞'),
-  new InputRule(/1\/9$/, '⅑'),
-  new InputRule(/1\/10$/, '⅒'),
+  new InputRule(/(?:^|[^\d,])(1\/2)$/, '½'),
+  new InputRule(/(?:^|[^\d,])(1\/3)$/, '⅓'),
+  new InputRule(/(?:^|[^\d,])(2\/3)$/, '⅔'),
+  new InputRule(/(?:^|[^\d,])(1\/4)$/, '¼'),
+  new InputRule(/(?:^|[^\d,])(1\/5)$/, '⅕'),
+  new InputRule(/(?:^|[^\d,])(2\/5)$/, '⅖'),
+  new InputRule(/(?:^|[^\d,])(3\/5)$/, '⅗'),
+  new InputRule(/(?:^|[^\d,])(4\/5)$/, '⅘'),
+  new InputRule(/(?:^|[^\d,])(1\/6)$/, '⅙'),
+  new InputRule(/(?:^|[^\d,])(5\/6)$/, '⅚'),
+  new InputRule(/(?:^|[^\d,])(1\/7)$/, '⅐'),
+  new InputRule(/(?:^|[^\d,])(1\/8)$/, '⅛'),
+  new InputRule(/(?:^|[^\d,])(3\/8)$/, '⅜'),
+  new InputRule(/(?:^|[^\d,])(5\/8)$/, '⅝'),
+  new InputRule(/(?:^|[^\d,])(7\/8)$/, '⅞'),
+  new InputRule(/(?:^|[^\d,])(1\/9)$/, '⅑'),
+  new InputRule(/(?:^|[^\d,])(1\/10)$/, '⅒'),
 ];
 
 export const emdash = (schema: Schema) => [new InputRule(/--\s$/, '— ')];
 
 export const copyright = (schema: Schema) => [
-  new InputRule(/\s?\(c\)\s$/, ' © '),
-  new InputRule(/\s?\(r\)\s$/, ' ® '),
+  // Capture a rule that looks for (b) first. Only create a © if you don't find that!
+  new InputRule(/(?:\(b\).*\(c\))(\s)$/, ' '),
+  new InputRule(/(\(c\)\s)$/, '© '),
+  new InputRule(/(\(r\)\s)$/, '® '),
 ];
 
 export const link = (schema: Schema) => [
@@ -100,7 +103,7 @@ export const strong = (schema: Schema) => [
 ];
 
 export const strikethrough = (schema: Schema) => [
-  markInputRule(/~([\W\w]+)~$/, schema.marks.strikethrough),
+  markInputRule(/~([\W\w]+[^\s])~$/, schema.marks.strikethrough),
 ];
 
 export const em = (schema: Schema) => [
@@ -134,7 +137,9 @@ export const mathInline = (schema: Schema) => [
     },
     (match: string[]) => match[2] === '',
     (match: string[]) => {
-      if (match[2].match(/^\d/) && match[2].match(/\s$/)) return false;
+      // "$1.00 and $"
+      // "$1.00 and ($"
+      if (match[2].match(/^\d/) && match[2].match(/(\s|\()$/)) return false;
       return true;
     },
   ),
@@ -146,13 +151,6 @@ export const hr = (schema: Schema) => [
 
 export const slider = (schema: Schema) => [
   replaceNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, (match: string[]) => ({
-    valueFunction: match[1],
-    changeFunction: `{${match[1]}: value}`,
-  })),
-];
-
-export const dynamic = (schema: Schema) => [
-  replaceNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, (match: string[]) => ({
     valueFunction: match[1],
     changeFunction: `{${match[1]}: value}`,
   })),
