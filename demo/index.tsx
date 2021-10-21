@@ -70,14 +70,7 @@ const opts: Options = {
     // eslint-disable-next-line no-console
     console.log(file);
     return new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve({
-            url: 'https://curvenote.dev/images/logo.png',
-            caption: 'uploaded image caption',
-          }),
-        2000,
-      ),
+      setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000),
     );
   },
   addComment() {
