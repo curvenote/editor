@@ -2,6 +2,7 @@ import {
   wrapIn,
   setBlockType,
   chainCommands,
+  Command,
   toggleMark,
   exitCode,
   joinUp,
@@ -13,12 +14,13 @@ import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirr
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
-import { EditorState, Transaction } from 'prosemirror-state';
+import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
 import { store, opts } from '../connect';
 import { focusSelectedEditorView } from '../store/ui/actions';
 import { executeCommand } from '../store/actions';
 import { CommandNames } from '../store/suggestion/commands';
 import { createId } from '../utils';
+import { nodeNames } from '@curvenote/schema';
 
 type KeyMap = (state: EditorState<Schema>, dispatch?: (p: Transaction<Schema>) => void) => boolean;
 
@@ -65,6 +67,7 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     keys[key] = cmd;
   };
 
+  const enterCommands: Command[] = [];
   const allUndo = chainCommands(undoInputRule, undo);
   bind('Mod-z', allUndo);
   bind('Backspace', undoInputRule);
@@ -106,9 +109,63 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     bind('Shift-Enter', cmd);
     if (mac) bind('Ctrl-Enter', cmd);
   }
+
+  if (schema.nodes.figure) {
+    enterCommands.push((state, dispatch, _view) => {
+      const { $head, $anchor } = state.selection;
+      if ($head.parent.type.name === nodeNames.figcaption) {
+        const figcaption = $head.parent;
+        // TODO: exit and create a new paragraph
+        const figure = $head.node($head.depth - 1);
+        if (figure.type.name !== nodeNames.figure) {
+          return false;
+        }
+
+        let imageIndex = -1;
+        let captionIndex = -1;
+
+        figure.forEach((child, _offset, i) => {
+          if (child.type.name === nodeNames.image) {
+            imageIndex = i;
+          }
+          if (child.eq(figcaption)) {
+            captionIndex = i;
+          }
+        });
+
+        if (imageIndex === -1) {
+          console.log('no image');
+        } else {
+          if (captionIndex > -1) {
+            if (captionIndex > imageIndex) {
+              // const selection = new NodeSelection($head.pos - $head.parentOffset)
+              const start = $head.pos - $head.parentOffset;
+              console.log(
+                `after ${start}`,
+                $head,
+                figure,
+                `compare ${$head.parentOffset} - ${$head.parent.nodeSize}`,
+              );
+              dispatch?.(state.tr.setSelection(NodeSelection.create(state.doc, start - 1)));
+              return true;
+            } else {
+              console.log('before');
+            }
+          } else {
+            // shouldn't reach here since caption should exsits in the figure
+            return false;
+          }
+        }
+
+        // TODO: handle whether the figurecaption is before or after the node
+      }
+      return false;
+    });
+  }
+
   if (schema.nodes.list_item) {
     // TODO: Could improve this a bunch!!
-    bind('Enter', splitListItem(schema.nodes.list_item));
+    enterCommands.push(splitListItem(schema.nodes.list_item));
 
     bind(
       'Mod-Shift-7',
@@ -125,6 +182,7 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     bind('Tab', cmdSink);
     bind('Mod-]', cmdSink);
   }
+
   if (schema.nodes.paragraph) bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
 
   if (schema.nodes.heading) {
@@ -152,6 +210,10 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     'Mod-Alt-m',
     (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
   );
+
+  if (enterCommands.length > 0) {
+    bind('Enter', chainCommands(...enterCommands));
+  }
 
   return keys;
 }
