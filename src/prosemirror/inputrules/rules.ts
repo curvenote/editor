@@ -155,10 +155,3 @@ export const slider = (schema: Schema) => [
     changeFunction: `{${match[1]}: value}`,
   })),
 ];
-
-export const dynamic = (schema: Schema) => [
-  replaceNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, (match: string[]) => ({
-    valueFunction: match[1],
-    changeFunction: `{${match[1]}: value}`,
-  })),
-];
