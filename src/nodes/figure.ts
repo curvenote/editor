@@ -7,7 +7,7 @@ export type Attrs = {
 };
 
 const figure: MyNodeSpec<Attrs> = {
-  group: NodeGroups.top,
+  group: NodeGroups.block,
   content: NodeGroups.insideFigure,
   attrs: {
     align: { default: 'center' },
