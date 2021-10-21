@@ -59,8 +59,10 @@ export const fractions = (schema: Schema) => [
 export const emdash = (schema: Schema) => [new InputRule(/--\s$/, '— ')];
 
 export const copyright = (schema: Schema) => [
-  new InputRule(/\s?\(c\)\s$/, ' © '),
-  new InputRule(/\s?\(r\)\s$/, ' ® '),
+  // Capture a rule that looks for (b) first. Only create a © if you don't find that!
+  new InputRule(/(?:\(b\).*\(c\))(\s)$/, ' '),
+  new InputRule(/(\(c\)\s)$/, '© '),
+  new InputRule(/(\(r\)\s)$/, '® '),
 ];
 
 export const link = (schema: Schema) => [
