@@ -137,7 +137,9 @@ export const mathInline = (schema: Schema) => [
     },
     (match: string[]) => match[2] === '',
     (match: string[]) => {
-      if (match[2].match(/^\d/) && match[2].match(/\s$/)) return false;
+      // "$1.00 and $"
+      // "$1.00 and ($"
+      if (match[2].match(/^\d/) && match[2].match(/(\s|\()$/)) return false;
       return true;
     },
   ),
