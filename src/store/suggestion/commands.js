@@ -360,7 +360,6 @@ export var ALL_COMMANDS = __spreadArray(__spreadArray(__spreadArray(__spreadArra
         name: CommandNames.dynamic,
         title: 'Dynamic Text',
         description: 'Insert dynamic text that acts as an inline slider',
-        shortcut: ['<x>'],
         available: nodeInSchema(nodeNames.dynamic),
     },
     {
