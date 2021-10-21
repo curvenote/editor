@@ -20,4 +20,3 @@ export declare const equation: (schema: Schema) => InputRule<any>[];
 export declare const mathInline: (schema: Schema) => InputRule<any>[];
 export declare const hr: (schema: Schema) => InputRule<any>[];
 export declare const slider: (schema: Schema) => InputRule<any>[];
-export declare const dynamic: (schema: Schema) => InputRule<any>[];

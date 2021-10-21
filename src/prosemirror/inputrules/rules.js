@@ -24,28 +24,29 @@ export var emojis = function (schema) { return [
     new InputRule(/(?:^|\s)\+1\s$/, '👍 '),
 ]; };
 export var fractions = function (schema) { return [
-    new InputRule(/1\/2$/, '½'),
-    new InputRule(/1\/3$/, '⅓'),
-    new InputRule(/2\/3$/, '⅔'),
-    new InputRule(/1\/4$/, '¼'),
-    new InputRule(/1\/5$/, '⅕'),
-    new InputRule(/2\/5$/, '⅖'),
-    new InputRule(/3\/5$/, '⅗'),
-    new InputRule(/4\/5$/, '⅘'),
-    new InputRule(/1\/6$/, '⅙'),
-    new InputRule(/5\/6$/, '⅚'),
-    new InputRule(/1\/7$/, '⅐'),
-    new InputRule(/1\/8$/, '⅛'),
-    new InputRule(/3\/8$/, '⅜'),
-    new InputRule(/5\/8$/, '⅝'),
-    new InputRule(/7\/8$/, '⅞'),
-    new InputRule(/1\/9$/, '⅑'),
-    new InputRule(/1\/10$/, '⅒'),
+    new InputRule(/(?:^|[^\d,])(1\/2)$/, '½'),
+    new InputRule(/(?:^|[^\d,])(1\/3)$/, '⅓'),
+    new InputRule(/(?:^|[^\d,])(2\/3)$/, '⅔'),
+    new InputRule(/(?:^|[^\d,])(1\/4)$/, '¼'),
+    new InputRule(/(?:^|[^\d,])(1\/5)$/, '⅕'),
+    new InputRule(/(?:^|[^\d,])(2\/5)$/, '⅖'),
+    new InputRule(/(?:^|[^\d,])(3\/5)$/, '⅗'),
+    new InputRule(/(?:^|[^\d,])(4\/5)$/, '⅘'),
+    new InputRule(/(?:^|[^\d,])(1\/6)$/, '⅙'),
+    new InputRule(/(?:^|[^\d,])(5\/6)$/, '⅚'),
+    new InputRule(/(?:^|[^\d,])(1\/7)$/, '⅐'),
+    new InputRule(/(?:^|[^\d,])(1\/8)$/, '⅛'),
+    new InputRule(/(?:^|[^\d,])(3\/8)$/, '⅜'),
+    new InputRule(/(?:^|[^\d,])(5\/8)$/, '⅝'),
+    new InputRule(/(?:^|[^\d,])(7\/8)$/, '⅞'),
+    new InputRule(/(?:^|[^\d,])(1\/9)$/, '⅑'),
+    new InputRule(/(?:^|[^\d,])(1\/10)$/, '⅒'),
 ]; };
 export var emdash = function (schema) { return [new InputRule(/--\s$/, '— ')]; };
 export var copyright = function (schema) { return [
-    new InputRule(/\s?\(c\)\s$/, ' © '),
-    new InputRule(/\s?\(r\)\s$/, ' ® '),
+    new InputRule(/(?:\(b\).*\(c\))(\s)$/, ' '),
+    new InputRule(/(\(c\)\s)$/, '© '),
+    new InputRule(/(\(r\)\s)$/, '® '),
 ]; };
 export var link = function (schema) { return [
     markInputRule(TEST_LINK_SPACE, schema.marks.link, {
@@ -73,7 +74,7 @@ export var strong = function (schema) { return [
     markInputRule(/__([\W\w]+)__$/, schema.marks.strong),
 ]; };
 export var strikethrough = function (schema) { return [
-    markInputRule(/~([\W\w]+)~$/, schema.marks.strikethrough),
+    markInputRule(/~([\W\w]+[^\s])~$/, schema.marks.strikethrough),
 ]; };
 export var em = function (schema) { return [
     markInputRule(/(\s|^)\*(?!\*)([\W\w]+)\*$/, schema.marks.em, {
@@ -101,7 +102,7 @@ export var mathInline = function (schema) { return [
             return {};
         return { content: schema.text(match[2]) };
     }, function (match) { return match[2] === ''; }, function (match) {
-        if (match[2].match(/^\d/) && match[2].match(/\s$/))
+        if (match[2].match(/^\d/) && match[2].match(/(\s|\()$/))
             return false;
         return true;
     }),
@@ -111,12 +112,6 @@ export var hr = function (schema) { return [
 ]; };
 export var slider = function (schema) { return [
     replaceNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, function (match) { return ({
-        valueFunction: match[1],
-        changeFunction: "{" + match[1] + ": value}",
-    }); }),
-]; };
-export var dynamic = function (schema) { return [
-    replaceNodeRule(/<([a-zA-Z0-9_]+)>$/, schema.nodes.dynamic, function (match) { return ({
         valueFunction: match[1],
         changeFunction: "{" + match[1] + ": value}",
     }); }),
