@@ -1,6 +1,7 @@
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { isEditable } from '../prosemirror/plugins/editable';
+import { GetPos } from './types';
 
 class ImageView {
   // The node's representation in the editor (empty, for now)
@@ -10,9 +11,9 @@ class ImageView {
 
   view: EditorView;
 
-  getPos?: () => number;
+  getPos?: GetPos;
 
-  constructor(node: Node, view: EditorView, getPos: () => number) {
+  constructor(node: Node, view: EditorView, getPos: GetPos) {
     this.node = node;
     this.view = view;
     this.getPos = getPos;
