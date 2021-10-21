@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
-import { Fragment } from 'prosemirror-model';
+import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import {
   addColumnAfter,
   addColumnBefore,
@@ -18,6 +18,7 @@ import {
 } from 'prosemirror-tables';
 
 import { Transaction } from 'prosemirror-state';
+import { nodeNames } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
@@ -93,7 +94,7 @@ export function executeCommand(
     } else {
       view = viewOrId;
     }
-    const { schema } = view.state;
+    const schema = view.state.schema as Schema;
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
     if (TABLE_ACTIONS[command] && isInTable(view.state)) {
@@ -125,26 +126,24 @@ export function executeCommand(
       }
       case CommandNames.insert_table: {
         removeText();
+        const Figure = schema.nodes[nodeNames.figure];
+        const Table = schema.nodes[nodeNames.table];
+        const Row = schema.nodes[nodeNames.table_row];
+
+        const header = schema.nodes[nodeNames.table_header].createAndFill() as Node;
+        const cell = schema.nodes[nodeNames.table_cell].createAndFill() as Node;
+
         const tr = view.state.tr
           .replaceSelectionWith(
-            schema.nodes.table.create(
-              undefined,
-              Fragment.fromArray([
-                schema.nodes.table_row.create(
-                  undefined,
-                  Fragment.fromArray([
-                    schema.nodes.table_header.createAndFill(),
-                    schema.nodes.table_header.createAndFill(),
-                  ]),
-                ),
-                schema.nodes.table_row.create(
-                  undefined,
-                  Fragment.fromArray([
-                    schema.nodes.table_cell.createAndFill(),
-                    schema.nodes.table_cell.createAndFill(),
-                  ]),
-                ),
-              ]),
+            Figure.create(
+              {},
+              Table.create(
+                {},
+                Fragment.fromArray([
+                  Row.create({}, Fragment.fromArray([header, header])),
+                  Row.create({}, Fragment.fromArray([cell, cell])),
+                ]),
+              ),
             ),
           )
           .scrollIntoView();
