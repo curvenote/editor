@@ -30,12 +30,13 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex: TexFormatSerialize = createLatexStatement(
-  (options: TexOptions) =>
-    options.format === TexFormatTypes.tex_curvenote ? 'aside' : 'marginpar',
+  (options: TexOptions) => ({
+    command: options.format === TexFormatTypes.tex_curvenote ? 'aside' : 'marginpar',
+    inline: options.format === TexFormatTypes.tex,
+  }),
   (state, node) => {
     state.renderContent(node);
   },
-  (options: TexOptions) => ({ inline: options.format === TexFormatTypes.tex }),
 );
 
 export default aside;

@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
-import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { MdFormatSerialize, nodeNames, TexFormatSerialize } from '../types';
+import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
 import { NodeGroups } from './types';
+import { INDENT } from '../serialize/tex/utils';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -93,7 +94,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 /**
  * convert prosemirror table node into latex table
  */
-export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any>) {
+export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   // TODO: this might not work with colspan in the first row?
   const numColumns = node.content.firstChild?.content.childCount;
   if (!numColumns) {
@@ -101,7 +102,12 @@ export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any
   }
 
   // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
-  state.write(`\\begin{center}\n\\begin{tabular}{*{${numColumns}}{c}}\n\\hline\n`);
+  state.write(`\\begin{tabular}{*{${numColumns}}{c}}`);
+  state.ensureNewLine();
+  const old = state.delim;
+  state.delim += state.options.indent ?? INDENT;
+  state.write(`\\hline`);
+  state.ensureNewLine();
 
   node.content.forEach(({ content: rowContent }) => {
     let i = 0;
@@ -128,7 +134,10 @@ export function renderNodeToLatex(state: MarkdownSerializerState, node: Node<any
       state.ensureNewLine();
     }
   });
-  state.write('\\hline\n\\end{tabular}\n\\end{center}\n');
+  state.write('\\hline');
+  state.ensureNewLine();
+  state.delim = old;
+  state.write('\\end{tabular}');
   state.closeBlock(node);
 }
 

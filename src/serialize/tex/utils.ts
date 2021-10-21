@@ -1,29 +1,30 @@
 /* eslint-disable no-param-reassign */
+import { Node } from 'prosemirror-model';
 import { TexStatementOptions, TexFormatSerialize, TexOptions, TexSerializerState } from '../types';
 
-export const TAB = '  ';
+export const INDENT = '  ';
 
-export const createLatexStatement =
-  (
-    command: string | ((options: TexOptions) => string),
-    f: TexFormatSerialize,
-    opts: TexStatementOptions | ((options: TexOptions) => TexStatementOptions) = {
-      inline: false,
-    },
-  ): TexFormatSerialize =>
-  (state: TexSerializerState, node, p, i) => {
-    const { bracketOpts, inline } = typeof opts === 'function' ? opts(state.options) : opts;
-    const latexOption = bracketOpts?.(node) ?? '';
-    const optsInBrackets = latexOption ? `[${latexOption}]` : '';
-    const name = typeof command === 'function' ? command(state.options) : command;
-    state.write(inline ? `\\${name}{\n` : `\\begin{${name}}${optsInBrackets}\n`);
+export function createLatexStatement(
+  opts: string | ((options: TexOptions, node: Node) => TexStatementOptions),
+  f: TexFormatSerialize,
+): TexFormatSerialize {
+  return (state: TexSerializerState, node, p, i) => {
+    const { command, bracketOpts, inline, before, after } =
+      typeof opts === 'string'
+        ? ({ command: opts } as TexStatementOptions)
+        : opts(state.options, node);
+    if (before) (state as any).out += `\n${state.delim}${before}`;
+    const optsInBrackets = bracketOpts ? `[${bracketOpts}]` : '';
+    state.write(inline ? `\\${command}{\n` : `\\begin{${command}}${optsInBrackets}\n`);
     const old = state.delim;
-    state.delim += TAB;
+    state.delim += state.options.indent ?? INDENT;
     f(state, node, p, i);
     state.delim = old;
-    (state as any).out += inline ? `\n${state.delim}}` : `\n${state.delim}\\end{${name}}`;
+    (state as any).out += inline ? `\n${state.delim}}` : `\n${state.delim}\\end{${command}}`;
+    if (after) (state as any).out += `\n${state.delim}${after}`;
     state.closeBlock(node);
   };
+}
 
 export const blankTex: TexFormatSerialize = (state, node) => {
   state.write(`{\\bf \`${node.type.name}' not supported in \\LaTeX}`);

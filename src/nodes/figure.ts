@@ -40,8 +40,15 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options: TexOptions) => (options.format === TexFormatTypes.tex_curvenote ? 'callout' : 'framed'),
+  (opts, node) => {
+    // TODO: look at the node (second arg) to define a caption
+    return {
+      command: 'figure',
+      bracketOpts: 'ht',
+    };
+  },
   (state, node) => {
+    state.write('\\centering\n');
     state.renderContent(node);
   },
 );

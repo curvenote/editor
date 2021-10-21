@@ -24,9 +24,9 @@ const image: MyNodeSpec<Attrs> = {
     src: {},
     alt: { default: null },
     title: { default: null },
-    align: { default: 'center' },
     width: { default: DEFAULT_IMAGE_WIDTH },
-    caption: { default: false },
+    align: { default: 'center' }, // Deprecated, use figure
+    caption: { default: false }, // Deprecated, use figcaption
   },
   group: NodeGroups.block,
   draggable: true,
@@ -47,7 +47,7 @@ const image: MyNodeSpec<Attrs> = {
     },
   ],
   toDOM(node) {
-    const { src, alt, title, align, width, caption } = node.attrs;
+    const { src, alt, title, width } = node.attrs;
     return [
       'img',
       {
@@ -55,9 +55,7 @@ const image: MyNodeSpec<Attrs> = {
         src,
         alt: alt || undefined,
         title: title || undefined,
-        align,
         width: `${width}%`,
-        caption: caption ? '' : undefined,
       },
     ];
   },
@@ -73,37 +71,30 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  const { caption, numbered, width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
+  const { width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
   const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
-  let align = 'center';
-  switch (nodeAlign?.toLowerCase()) {
-    case 'left':
-      align = 'flushleft';
-      break;
-    case 'right':
-      align = 'flushright';
-      break;
-    default:
-      break;
-  }
-  if (!caption) {
-    const template = `
-\\begin{${align}}
-  \\includegraphics[width=${width / 100}\\linewidth]{${src}}
-\\end{${align}}\n`;
-    state.write(template);
-    return;
-  }
-  const texLabel = `\n  \\label{${src}}`;
-  const star = numbered ? '' : '*';
-  const template = `
-\\begin{figure}[ht]
-  \\centering
-  \\includegraphics[width=${width / 100}\\linewidth]{${src}}
-  \\caption${star}{${src}.caption}${texLabel}
-\\end{figure}\n`;
-  state.write(template);
+  //   let align = 'center';
+  //   switch (nodeAlign?.toLowerCase()) {
+  //     case 'left':
+  //       align = 'flushleft';
+  //       break;
+  //     case 'right':
+  //       align = 'flushright';
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   if (!caption) {
+  //     const template = `
+  // \\begin{${align}}
+  //   \\includegraphics[width=${width / 100}\\linewidth]{${src}}
+  // \\end{${align}}\n`;
+  //     state.write(template);
+  //     return;
+  //   }
+  state.write(`\\includegraphics[width=${width / 100}\\linewidth]{${src}}`);
+  state.closeBlock(node);
 };
 
 export default image;

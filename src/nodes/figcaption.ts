@@ -1,4 +1,4 @@
-import { TexOptions, TexFormatTypes, MdFormatSerialize } from '../serialize/types';
+import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MyNodeSpec, NodeGroups, NumberedNode, CaptionKind } from './types';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
@@ -51,9 +51,17 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options: TexOptions) => (options.format === TexFormatTypes.tex_curvenote ? 'callout' : 'framed'),
+  (opts, node) => {
+    const { numbered, id } = node.attrs as Attrs;
+    const localId = opts.localizeId?.(id ?? '') ?? id;
+    const star = numbered ? '' : '*';
+    return {
+      command: 'caption',
+      after: localId ? `\\label${star}{${localId}}` : undefined,
+    };
+  },
   (state, node) => {
-    state.renderContent(node);
+    state.renderInline(node);
   },
 );
 
