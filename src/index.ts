@@ -11,3 +11,5 @@ export * as server from './server';
 export * as process from './process';
 
 export { DEFAULT_FORMAT, DEFAULT_IMAGE_WIDTH } from './defaults';
+
+export { createId } from './utils';
