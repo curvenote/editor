@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { Button, createTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex, ReferenceKind, process, toText } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
+import { Fragment } from 'prosemirror-model';
 import {
   actions,
   Editor,
@@ -96,6 +97,7 @@ const opts: Options = {
     },
   ],
   createLinkSearch: async () => ({ search: () => someLinks }),
+  getCaptionFragment: (schema) => Fragment.fromArray([schema.text('Hello caption world!')]),
   nodeViews: {},
 };
 

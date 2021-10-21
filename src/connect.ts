@@ -2,7 +2,7 @@
 import { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { Node, Slice } from 'prosemirror-model';
+import { Fragment, Node, Schema, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
 import { Nodes } from '@curvenote/schema';
 import { Store } from './store/types';
@@ -40,6 +40,7 @@ export type Options = {
   throttle: number;
   // nodeViews override any of the default nodeviews
   nodeViews?: DirectEditorProps['nodeViews'];
+  getCaptionFragment?: (schema: Schema, src: string) => Fragment;
 };
 
 type Ref<T> = {
@@ -101,6 +102,9 @@ export const opts: Required<Options> = {
   },
   createLinkSearch() {
     return ref.opts().createLinkSearch();
+  },
+  getCaptionFragment(schema, src) {
+    return ref.opts().getCaptionFragment?.(schema, src) ?? Fragment.empty;
   },
   get theme() {
     return ref.opts().theme;
