@@ -377,7 +377,6 @@ export const ALL_COMMANDS: CommandResult[] = [
     name: CommandNames.dynamic,
     title: 'Dynamic Text',
     description: 'Insert dynamic text that acts as an inline slider',
-    shortcut: ['<x>'],
     available: nodeInSchema(nodeNames.dynamic),
   },
   {
