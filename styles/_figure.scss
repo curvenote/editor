@@ -1,5 +1,9 @@
 // https://github.com/ProseMirror/prosemirror-tables/blob/master/style/tables.css
 .ProseMirror {
+  figure {
+    margin-inline-start: 10px;
+    margin-inline-end: 10px;
+  }
   figcaption {
     display: block;
     overflow-wrap: break-word;
