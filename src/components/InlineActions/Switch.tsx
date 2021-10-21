@@ -13,6 +13,7 @@ import EquationActions from './EquationActions';
 import TableActions from './TableActions';
 import CodeActions from './CodeActions';
 import FigureImageActions from './FigureActions';
+import ImageActions from './ImageActions';
 
 export function useInlineActionProps() {
   const { stateId, viewId } = useSelector(
@@ -33,7 +34,7 @@ const InlineActionSwitch: React.FC = () => {
     <>
       {kind === Kinds.link && <LinkActions {...{ stateId, viewId }} />}
       {kind === Kinds.figure && <FigureImageActions {...{ stateId, viewId }} />}
-      {kind === Kinds.image && <AlignActions {...{ stateId, viewId }} />}
+      {kind === Kinds.image && <ImageActions {...{ stateId, viewId }} />}
       {kind === Kinds.iframe && <AlignActions {...{ stateId, viewId }} />}
       {kind === Kinds.callout && <CalloutActions {...{ stateId, viewId }} />}
       {kind === Kinds.heading && <HeadingActions {...{ stateId, viewId }} />}
