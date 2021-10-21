@@ -13,10 +13,15 @@ export type SearchContext = {
   search: (query?: string) => LinkResult[];
 };
 
+export interface UploadImageState {
+  url: string;
+  caption: string;
+}
+
 export type Options = {
   transformKeyToId: (key: any) => string | null;
   handlePaste?: (view: EditorView, event: ClipboardEvent, slice: Slice) => boolean;
-  uploadImage: (file: File, node: Node | null) => Promise<string | null>;
+  uploadImage: (file: File, node: Node | null) => Promise<UploadImageState | null>;
   modifyTransaction?: (
     stateKey: any,
     viewId: string,
@@ -65,7 +70,7 @@ export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
   setupComponents(store);
-  sidenotes.setup(store as unknown as sidenotes.Store, { padding: 10 });
+  sidenotes.setup((store as unknown) as sidenotes.Store, { padding: 10 });
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {
