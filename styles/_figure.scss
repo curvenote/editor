@@ -1,14 +1,24 @@
 // https://github.com/ProseMirror/prosemirror-tables/blob/master/style/tables.css
 .ProseMirror {
+  figure {
+    padding: 20px 0;
+    img {
+    }
+  }
   figcaption {
     display: block;
     overflow-wrap: break-word;
-    font-size: 12px;
-    line-height: 1.3;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.2;
+    margin-top: 5px;
     color: #686868;
     font-family: var(--curvenote-font, sans-serif);
     font-weight: 300;
+  }
+  figcaption[numbered='']::before {
+    counter-increment: fig_cnt;
+    content: 'Figure ' counter(fig_cnt) ':\0000a0\0000a0';
+    padding-left: -5px;
+    font-weight: 700;
   }
 }

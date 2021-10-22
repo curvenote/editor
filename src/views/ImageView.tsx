@@ -4,9 +4,7 @@ import { isEditable } from '../prosemirror/plugins/editable';
 
 class ImageView {
   // The node's representation in the editor (empty, for now)
-  dom: HTMLDivElement;
-
-  img: HTMLImageElement;
+  dom: HTMLImageElement;
 
   node: Node;
 
@@ -18,25 +16,21 @@ class ImageView {
     this.node = node;
     this.view = view;
     this.getPos = getPos;
-    this.dom = document.createElement('div');
-    const { align, src, title, alt, width } = node.attrs;
-    this.dom.style.textAlign = align;
-    this.dom.style.margin = '1.5em 0';
-    this.img = document.createElement('img');
-    this.img.src = src;
-    this.img.alt = alt ?? '';
-    this.img.title = title ?? '';
-    this.img.style.width = `${width}%`;
-    this.dom.appendChild(this.img);
+    const { src, title, alt, width } = node.attrs;
+    this.dom = document.createElement('img');
+    this.dom.src = src;
+    this.dom.alt = alt ?? '';
+    this.dom.title = title ?? '';
+    this.dom.style.width = `${width}%`;
   }
 
   selectNode() {
     if (!isEditable(this.view.state)) return;
-    this.img.classList.add('ProseMirror-selectednode');
+    this.dom.classList.add('ProseMirror-selectednode');
   }
 
   deselectNode() {
-    this.img.classList.remove('ProseMirror-selectednode');
+    this.dom.classList.remove('ProseMirror-selectednode');
   }
 }
 
