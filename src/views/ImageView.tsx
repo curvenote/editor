@@ -31,6 +31,7 @@ class ImageView {
     const { src, title, alt, width } = node.attrs;
     this.dom = document.createElement('img');
     this.dom.addEventListener('mousedown', () => clickSelectFigure(view, getPos));
+    this.dom.addEventListener('click', () => clickSelectFigure(view, getPos));
     this.dom.src = src;
     this.dom.alt = alt ?? '';
     this.dom.title = title ?? '';
