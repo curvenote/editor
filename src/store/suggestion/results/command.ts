@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
-import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
+import { Fragment, Node, Schema } from 'prosemirror-model';
 import {
   addColumnAfter,
   addColumnBefore,
@@ -18,7 +18,7 @@ import {
 } from 'prosemirror-tables';
 
 import { Transaction } from 'prosemirror-state';
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, createId } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
@@ -29,7 +29,6 @@ import { getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
-import { createId } from '../../../utils';
 import { addImagePrompt } from '../../../prosemirror/plugins/ImagePlaceholder';
 
 const options = {

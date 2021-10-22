@@ -1,12 +1,11 @@
 /* eslint-disable no-param-reassign */
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, createId } from '@curvenote/schema';
 import { Fragment, Node, NodeType } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts, UploadImageState } from '../../connect';
 import { getNodeIfSelected } from '../../store/ui/utils';
-import { createId } from '../../utils';
 
 export const key = new PluginKey('placeholder');
 

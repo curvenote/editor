@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { Fragment, Node, Schema } from 'prosemirror-model';
 import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { nodeNames, Nodes, types, CaptionKind } from '@curvenote/schema';
+import { nodeNames, Nodes, types, CaptionKind, createId } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
@@ -12,7 +12,7 @@ import { ActionProps, positionPopper } from './utils';
 import { AppThunk, Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
-import { createId, opts } from '../..';
+import { opts } from '../..';
 
 const useStyles = makeStyles(() =>
   createStyles({

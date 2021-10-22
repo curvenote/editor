@@ -14,11 +14,11 @@ import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
+import { createId } from '@curvenote/schema';
 import { store, opts } from '../connect';
 import { focusSelectedEditorView } from '../store/ui/actions';
 import { executeCommand } from '../store/actions';
 import { CommandNames } from '../store/suggestion/commands';
-import { createId } from '../utils';
 
 type KeyMap = (state: EditorState<Schema>, dispatch?: (p: Transaction<Schema>) => void) => boolean;
 
