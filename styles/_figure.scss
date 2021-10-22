@@ -1,10 +1,5 @@
 // https://github.com/ProseMirror/prosemirror-tables/blob/master/style/tables.css
 .ProseMirror {
-  figure {
-    padding: 20px 0;
-    img {
-    }
-  }
   figcaption {
     display: block;
     overflow-wrap: break-word;
@@ -15,10 +10,20 @@
     font-family: var(--curvenote-font, sans-serif);
     font-weight: 300;
   }
-  figcaption[numbered='']::before {
-    counter-increment: fig_cnt;
-    content: 'Figure ' counter(fig_cnt) ':\0000a0\0000a0';
+  figcaption::before {
     padding-left: -5px;
     font-weight: 700;
+  }
+  figcaption[numbered=''][kind='fig']::before {
+    counter-increment: fig_cnt;
+    content: 'Figure ' counter(fig_cnt) ':\0000a0\0000a0';
+  }
+  figcaption[numbered=''][kind='code']::before {
+    counter-increment: code_cnt;
+    content: 'Code ' counter(code_cnt) ':\0000a0\0000a0';
+  }
+  figcaption[numbered=''][kind='table']::before {
+    counter-increment: table_cnt;
+    content: 'Table ' counter(table_cnt) ':\0000a0\0000a0';
   }
 }
