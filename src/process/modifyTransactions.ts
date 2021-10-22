@@ -1,4 +1,5 @@
 import { Transaction } from 'prosemirror-state';
+import { Node } from 'prosemirror-model';
 import { CaptionKind, NumberedNode } from '../nodes/types';
 import { nodeNames } from '../types';
 import { createId } from '../utils';
@@ -9,8 +10,36 @@ type CaptionState = {
   kind: CaptionKind | null;
 };
 
+export function determineCaptionKind(node: Node): CaptionKind | null {
+  if (node.type.name !== nodeNames.figure) return null;
+  const childrenKinds: CaptionKind[] = [];
+  node.forEach((n) => {
+    switch (n.type.name) {
+      case nodeNames.iframe:
+      case nodeNames.image:
+        childrenKinds.push(CaptionKind.fig);
+        break;
+      case nodeNames.table:
+        childrenKinds.push(CaptionKind.table);
+        break;
+      case nodeNames.code_block:
+        childrenKinds.push(CaptionKind.code);
+        break;
+      case nodeNames.equation:
+        childrenKinds.push(CaptionKind.eq);
+        break;
+      default:
+        break;
+    }
+  });
+  return childrenKinds[0] ?? null;
+}
+
 export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
   const transactions: ((tr: Transaction) => Transaction)[] = [];
+  function deleteNode(node: Node, pos: number) {
+    transactions.push((next: Transaction) => next.delete(pos, pos + node.nodeSize));
+  }
 
   // State for walk
   const takenIds: Record<string, boolean> = {};
@@ -31,32 +60,9 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
     switch (node.type.name) {
       case nodeNames.figure: {
         captionState.deleteNext = false;
-        if (node.childCount === 0) {
-          // Delete the empty figure!
-          transactions.push((next: Transaction) => next.delete(pos, pos + node.nodeSize));
-          return true;
-        }
-        const childrenKinds: CaptionKind[] = [];
-        node.forEach((n) => {
-          switch (n.type.name) {
-            case nodeNames.iframe:
-            case nodeNames.image:
-              childrenKinds.push(CaptionKind.fig);
-              break;
-            case nodeNames.table:
-              childrenKinds.push(CaptionKind.table);
-              break;
-            case nodeNames.code_block:
-              childrenKinds.push(CaptionKind.code);
-              break;
-            case nodeNames.equation:
-              childrenKinds.push(CaptionKind.eq);
-              break;
-            default:
-              break;
-          }
-        });
-        captionState.kind = childrenKinds[0] ?? null;
+        captionState.kind = determineCaptionKind(node);
+        // Delete the empty figure!
+        if (node.childCount === 0) deleteNode(node, pos);
         return true;
       }
       case nodeNames.figcaption: {
@@ -95,10 +101,7 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
         return false;
       }
       case nodeNames.table: {
-        if (node.childCount === 0) {
-          // Delete the empty table!
-          transactions.push((next: Transaction) => next.delete(pos, pos + node.nodeSize));
-        }
+        if (node.childCount === 0) deleteNode(node, pos);
         return false;
       }
       // Continue to search

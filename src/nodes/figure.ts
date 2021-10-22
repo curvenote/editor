@@ -1,6 +1,8 @@
-import { TexOptions, TexFormatTypes, MdFormatSerialize } from '../serialize/types';
+import { Node } from 'prosemirror-model';
+import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { AlignOptions, MyNodeSpec, NodeGroups } from './types';
+import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups } from './types';
+import { determineCaptionKind } from '../process/modifyTransactions';
 
 export type Attrs = {
   align: AlignOptions;
@@ -39,16 +41,32 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
+function nodeToCommand(node: Node) {
+  const kind = determineCaptionKind(node);
+  switch (kind) {
+    case CaptionKind.fig:
+      return 'figure';
+    case CaptionKind.table:
+      return 'table';
+    case CaptionKind.code:
+      return 'code';
+    case CaptionKind.eq:
+      return 'figure'; // not sure what to do here.
+    default:
+      return 'figure';
+  }
+}
+
 export const toTex = createLatexStatement(
   (opts, node) => {
-    // TODO: look at the node (second arg) to define a caption
     return {
-      command: 'figure',
-      bracketOpts: 'ht',
+      command: nodeToCommand(node),
+      bracketOpts: '!htbp',
     };
   },
   (state, node) => {
-    state.write('\\centering\n');
+    state.write('\\centering');
+    state.ensureNewLine();
     state.renderContent(node);
   },
 );
