@@ -1,5 +1,5 @@
 import MathView, { renderMath } from './MathView';
-import ImageView from './ImageView';
+import ImageView, { clickSelectFigure } from './ImageView';
 import IFrameView from './IFrameView';
 import LinkView from './LinkView';
 import TimeView from './TimeView';
@@ -14,6 +14,7 @@ export default {
   createNodeView,
   MathView,
   renderMath,
+  clickSelectFigure,
   ImageView,
   IFrameView,
   LinkView,
