@@ -2,6 +2,7 @@ import { Node, DOMOutputSpecArray } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { openAttributeEditor } from '../store/attrs/actions';
 import { store } from '../connect';
+import { GetPos } from './types';
 
 class WidgetView {
   // The node's representation in the editor (empty, for now)
@@ -13,9 +14,9 @@ class WidgetView {
 
   view: EditorView;
 
-  getPos?: () => number;
+  getPos?: GetPos;
 
-  constructor(node: Node, view: EditorView, getPos: (() => number) | undefined) {
+  constructor(node: Node, view: EditorView, getPos?: GetPos) {
     this.node = node;
     this.view = view;
     this.getPos = getPos;
@@ -59,7 +60,7 @@ class WidgetView {
   }
 }
 
-export const newWidgetView = (node: Node, view: EditorView, getPos: boolean | (() => number)) =>
-  new WidgetView(node, view, getPos as () => number);
+export const newWidgetView = (node: Node, view: EditorView, getPos: boolean | GetPos) =>
+  new WidgetView(node, view, getPos as GetPos);
 
 export default WidgetView;

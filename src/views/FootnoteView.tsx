@@ -8,6 +8,7 @@ import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-comma
 import { isEditable } from '../prosemirror/plugins/editable';
 import { getInlinePlugins } from '../prosemirror/plugins';
 import MathView from './MathView';
+import { GetPos } from './types';
 
 class FootnoteView {
   // The node's representation in the editor (empty, for now)
@@ -22,9 +23,9 @@ class FootnoteView {
 
   outerView: EditorView;
 
-  getPos: () => number;
+  getPos: GetPos;
 
-  constructor(node: Node, view: EditorView, getPos: () => number) {
+  constructor(node: Node, view: EditorView, getPos: GetPos) {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;
@@ -102,7 +103,7 @@ class FootnoteView {
         },
         nodeViews: {
           math(n, v, gP) {
-            return new MathView(n, v, gP as () => number, true);
+            return new MathView(n, v, gP as GetPos, true);
           },
         },
       },
