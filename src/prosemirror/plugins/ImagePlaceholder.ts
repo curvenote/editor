@@ -222,7 +222,6 @@ function createImageHandlers(
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
     const images = states.map((url) => {
-      console.log('create image node for', url);
       const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
       // TODO: add as figures
       const Figure = view.state.schema.nodes[nodeNames.figure] as NodeType;
