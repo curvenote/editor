@@ -58,6 +58,7 @@ export function selectFirstNodeOfTypeInParent(
   const parent = pos.nodeAfter;
   if (!parent) return tr;
   const node = findChildrenByType(parent, nodeType)[0];
+  if (!node) return tr;
   const start = parentPos + 1;
   try {
     const selected = tr
