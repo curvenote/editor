@@ -9,10 +9,9 @@ import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { actions, Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, positionPopper, createFigureCaption } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 import { CommandNames } from '../../store/suggestion/commands';
-import { createFigureCaption } from './FigureActions';
 
 const useStyles = makeStyles(() =>
   createStyles({

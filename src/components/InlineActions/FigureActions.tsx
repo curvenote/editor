@@ -1,18 +1,17 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { Fragment, Node, Schema } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { nodeNames, Nodes, types, CaptionKind, createId } from '@curvenote/schema';
+import { nodeNames, Nodes, types, CaptionKind } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, positionPopper, createFigureCaption } from './utils';
 import { AppThunk, Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
-import { opts } from '../..';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,19 +24,6 @@ const useStyles = makeStyles(() =>
 );
 
 type Props = ActionProps;
-
-export function createFigureCaption(schema: Schema, kind: CaptionKind, src?: string) {
-  const FigcaptionNode = schema.nodes[nodeNames.figcaption];
-  const fragment = src ? opts.getCaptionFragment(schema, src) : Fragment.empty;
-  const captionAttrs: Nodes.Figcaption.Attrs = {
-    kind,
-    id: createId(),
-    label: null,
-    numbered: true,
-  };
-  const caption = FigcaptionNode.create(captionAttrs, fragment);
-  return caption;
-}
 
 function toggleCaption(stateId: any, viewId: string | null, figurePos: number): AppThunk {
   return (dispatch, getState) => {
