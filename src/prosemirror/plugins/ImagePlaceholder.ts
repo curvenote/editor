@@ -223,7 +223,6 @@ function createImageHandlers(
     if (pos == null) return;
     const images = states.map((url) => {
       const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
-      // TODO: add as figures
       const Figure = view.state.schema.nodes[nodeNames.figure] as NodeType;
       const figureNode = Figure.createAndFill(
         {},
