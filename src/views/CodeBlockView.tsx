@@ -22,7 +22,7 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
-import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
+import { GetPos, LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { focusEditorView } from '../store/actions';
 import { store } from '../connect';
@@ -66,7 +66,7 @@ export default class CodeBlockView implements NodeView {
 
   node: Node;
 
-  getPos: () => number;
+  getPos: GetPos;
 
   incomingChanges: boolean;
 
