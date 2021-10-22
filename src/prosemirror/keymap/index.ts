@@ -14,14 +14,13 @@ import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirr
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
-import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
-import { createId, nodeNames } from '@curvenote/schema';
-import { store, opts } from '../connect';
-import { focusSelectedEditorView } from '../store/ui/actions';
-import { executeCommand } from '../store/actions';
-import { CommandNames } from '../store/suggestion/commands';
-
-type KeyMap = (state: EditorState<Schema>, dispatch?: (p: Transaction<Schema>) => void) => boolean;
+import { createId } from '@curvenote/schema';
+import { store, opts } from '../../connect';
+import { focusSelectedEditorView } from '../../store/ui/actions';
+import { executeCommand } from '../../store/actions';
+import { KeyMap } from './types';
+import { handleEnterCommand } from './figure';
+import { CommandNames } from '../../store/suggestion/commands';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
@@ -57,6 +56,19 @@ export function buildBasicKeymap(schema: Schema, bind?: (key: string, cmd: KeyMa
     ourBind('Mod-K', addLink);
   }
   return keys;
+}
+
+function newlineInCode(state: any, dispatch: any) {
+  const ref = state.selection;
+  const { $head } = ref;
+  const { $anchor } = ref;
+  if (!$head.parent.type.spec.code || !$head.sameParent($anchor)) {
+    return false;
+  }
+  if (dispatch) {
+    dispatch(state.tr.insertText('\n').scrollIntoView());
+  }
+  return true;
 }
 
 export function buildKeymap(stateKey: any, schema: Schema) {
@@ -110,53 +122,7 @@ export function buildKeymap(stateKey: any, schema: Schema) {
   }
 
   if (schema.nodes.figure) {
-    enterCommands.push((state, dispatch, _view) => {
-      const { $head, $anchor } = state.selection;
-      if ($head.parent.type.name === nodeNames.figcaption) {
-        const figcaption = $head.parent;
-        // TODO: exit and create a new paragraph
-        const figure = $head.node($head.depth - 1);
-        if (figure.type.name !== nodeNames.figure) {
-          return false;
-        }
-
-        let imageIndex = -1;
-        let captionIndex = -1;
-
-        figure.forEach((child, _offset, i) => {
-          if (child.type.name === nodeNames.image) {
-            imageIndex = i;
-          }
-          if (child.eq(figcaption)) {
-            captionIndex = i;
-          }
-        });
-
-        if (imageIndex === -1) {
-          console.log('no image');
-        } else if (captionIndex > -1) {
-          if (captionIndex > imageIndex) {
-            // const selection = new NodeSelection($head.pos - $head.parentOffset)
-            const start = $head.pos - $head.parentOffset;
-            console.log(
-              `after ${start}`,
-              $head,
-              figure,
-              `compare ${$head.parentOffset} - ${$head.parent.nodeSize}`,
-            );
-            dispatch?.(state.tr.setSelection(NodeSelection.create(state.doc, start - 1)));
-            return true;
-          }
-          console.log('before');
-        } else {
-          // shouldn't reach here since caption should exsits in the figure
-          return false;
-        }
-
-        // TODO: handle whether the figurecaption is before or after the node
-      }
-      return false;
-    });
+    enterCommands.push(handleEnterCommand);
   }
 
   if (schema.nodes.list_item) {
