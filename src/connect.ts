@@ -13,10 +13,7 @@ export type SearchContext = {
   search: (query?: string) => LinkResult[];
 };
 
-export interface UploadImageState {
-  url: string;
-  caption: string;
-}
+export type UploadImageState = string;
 
 export type Options = {
   transformKeyToId: (key: any) => string | null;

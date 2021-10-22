@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { nodeNames } from '@curvenote/schema';
-import { createFigureCaption } from '../../components/InlineActions/FigureActions';
 import { Fragment, Node, NodeType } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
@@ -222,15 +221,14 @@ function createImageHandlers(
   function success(states: UploadImageState[]) {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
-    const images = states.map(({ url, caption }) => {
+    const images = states.map((url) => {
       console.log('create image node for', url);
       const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
       // TODO: add as figures
       const Figure = view.state.schema.nodes[nodeNames.figure] as NodeType;
-      const captionNode = createFigureCaption(view.state.schema, url);
       const figureNode = Figure.createAndFill(
         {},
-        Fragment.fromArray([view.state.schema.nodes.image.create(attrs), captionNode]),
+        Fragment.fromArray([view.state.schema.nodes.image.create(attrs)]),
       ) as Node;
       return figureNode;
     });
