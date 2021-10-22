@@ -4,7 +4,7 @@ import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Fragment, Node, Schema, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
-import { Nodes } from '@curvenote/schema';
+import { Nodes, process } from '@curvenote/schema';
 import { Store } from './store/types';
 import setupComponents from './r-components';
 import { LinkResult } from './store/suggestion/types';
@@ -67,7 +67,7 @@ export function setup(store: Store, opts: Options) {
   ref._store = store;
   ref._opts = opts;
   setupComponents(store);
-  sidenotes.setup((store as unknown) as sidenotes.Store, { padding: 10 });
+  sidenotes.setup(store as unknown as sidenotes.Store, { padding: 10 });
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {
@@ -83,12 +83,22 @@ export const opts: Required<Options> = {
   handlePaste(view: EditorView, event: ClipboardEvent, slice: Slice) {
     return ref.opts().handlePaste?.(view, event, slice) ?? false;
   },
-  modifyTransaction(stateKey: any, viewId: string, state: EditorState, transaction: Transaction) {
+  modifyTransaction(stateKey: any, viewId: string, state: EditorState, tr: Transaction) {
     const { modifyTransaction } = ref.opts();
-    if (modifyTransaction) {
-      return modifyTransaction(stateKey, viewId, state, transaction);
+    let next = tr;
+    switch (tr.getMeta('uiEvent')) {
+      case 'cut':
+      case 'paste':
+      case 'drop':
+        next = process.modifyTransactionToValidDocState(tr);
+        break;
+      default:
+        break;
     }
-    return transaction;
+    if (modifyTransaction) {
+      return modifyTransaction(stateKey, viewId, state, next);
+    }
+    return next;
   },
   addComment(stateKey: any, state: EditorState) {
     return ref.opts().addComment?.(stateKey, state) ?? false;
