@@ -1,6 +1,7 @@
 import { nodeNames } from '@curvenote/schema';
 import { Schema } from 'prosemirror-model';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import { findParentNodeOfType } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 import { KeyMap } from './types';
 
@@ -54,8 +55,14 @@ export const handleBackspace: KeyMap = function handleBackspace(
           // when caption is below the image
           if (start === $head.pos) {
             // selection is at the end of the caption, we create a new paragraph below
-            dispatch(state.tr.setSelection(NodeSelection.create(state.doc, start - 2 - 1))); // TODO: refactor this to not depend on hardcoded position
-            return true;
+            const found = findParentNodeOfType(state.schema.nodes[nodeNames.figure])(
+              state.selection,
+            );
+            if (found) {
+              dispatch(state.tr.setSelection(NodeSelection.create(state.doc, found.pos)));
+              return true;
+            }
+            return false;
           }
         }
       } else {
