@@ -1,12 +1,17 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { Node, NodeType } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { nodeNames, Nodes, types, CaptionKind } from '@curvenote/schema';
-import { NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
-import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
+import {
+  applyProsemirrorTransaction,
+  deleteNode,
+  updateNodeAttrs,
+  selectFirstNodeOfTypeInParent,
+} from '../../store/actions';
 import SelectWidth from './SelectWidth';
 import { ActionProps, positionPopper, createFigureCaption } from './utils';
 import { AppThunk, Dispatch, State } from '../../store';
@@ -24,22 +29,6 @@ const useStyles = makeStyles(() =>
 );
 
 type Props = ActionProps;
-
-function selectFirstNodeOfTypeInParent(
-  nodeType: NodeType,
-  tr: Transaction,
-  parentPos: number,
-): Transaction {
-  const pos = tr.doc.resolve(parentPos);
-  const parent = pos.nodeAfter;
-  if (!parent) return tr;
-  const image = findChildrenByType(parent, nodeType)[0];
-  const start = parentPos + 1;
-  const selected = tr
-    .setSelection(NodeSelection.create(tr.doc, start + image.pos))
-    .scrollIntoView();
-  return selected;
-}
 
 function toggleCaption(stateId: any, viewId: string | null, figurePos: number): AppThunk {
   return (dispatch, getState) => {

@@ -1,5 +1,6 @@
-import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
-import { ContentNodeWithPos } from 'prosemirror-utils';
+import { NodeType } from 'prosemirror-model';
+import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import { ContentNodeWithPos, findChildrenByType } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 
 export const TEST_LINK =
@@ -46,6 +47,28 @@ export function updateNodeAttrsOnView(
   }
   view.dispatch(tr);
   view.focus();
+}
+
+export function selectFirstNodeOfTypeInParent(
+  nodeType: NodeType,
+  tr: Transaction,
+  parentPos: number,
+): Transaction {
+  const pos = tr.doc.resolve(parentPos);
+  const parent = pos.nodeAfter;
+  if (!parent) return tr;
+  const node = findChildrenByType(parent, nodeType)[0];
+  const start = parentPos + 1;
+  try {
+    const selected = tr
+      .setSelection(NodeSelection.create(tr.doc, start + node.pos))
+      .scrollIntoView();
+    return selected;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Could not select the ${nodeType.name} node.`);
+    return tr;
+  }
 }
 
 // https://discuss.prosemirror.net/t/expanding-the-selection-to-the-active-mark/478
