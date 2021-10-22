@@ -7,11 +7,10 @@ import { Fragment, Node, NodeType } from 'prosemirror-model';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, positionPopper, createFigureCaption } from './utils';
 import { Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
-import { createFigureCaption } from './FigureActions';
 
 const useStyles = makeStyles(() =>
   createStyles({
