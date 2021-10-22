@@ -58,19 +58,6 @@ export function buildBasicKeymap(schema: Schema, bind?: (key: string, cmd: KeyMa
   return keys;
 }
 
-function newlineInCode(state: any, dispatch: any) {
-  const ref = state.selection;
-  const { $head } = ref;
-  const { $anchor } = ref;
-  if (!$head.parent.type.spec.code || !$head.sameParent($anchor)) {
-    return false;
-  }
-  if (dispatch) {
-    dispatch(state.tr.insertText('\n').scrollIntoView());
-  }
-  return true;
-}
-
 export function buildKeymap(stateKey: any, schema: Schema) {
   const keys: { [index: string]: KeyMap } = {};
 
