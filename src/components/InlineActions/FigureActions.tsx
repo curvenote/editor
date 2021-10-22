@@ -7,12 +7,12 @@ import { nodeNames, Nodes, types } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
-// import SelectWidth from './SelectWidth';
+import SelectWidth from './SelectWidth';
 import { ActionProps, positionPopper } from './utils';
 import { AppThunk, Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
-import { opts } from '../..';
+import { createId, opts } from '../..';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,9 +33,8 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
     const pos = editorState.doc.resolve(figurePos);
     const figure = pos.nodeAfter;
     if (!figure || figure.type.name !== nodeNames.figure) return;
-    // const figureSelection = NodeSelection.create(editorState.doc, figurePos);
     const FigcaptionNode = editorState.schema.nodes[nodeNames.figcaption];
-    const figcaption = findChildrenByType(figure, FigcaptionNode)[0] ?? undefined;
+    const figcaption = findChildrenByType(figure, FigcaptionNode)[0]; // This might be undefined
     // TODO: this should be image or code or table
     const image = findChildrenByType(figure, editorState.schema.nodes[nodeNames.image])[0];
     // The inside of a non-leaf node is always node.pos + 1
@@ -49,7 +48,9 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
       dispatch(applyProsemirrorTransaction(stateId, viewId, selected, true));
     } else {
       const fragment = opts.getCaptionFragment(editorState.schema, image.node.attrs.src);
-      const newcaption = FigcaptionNode.create({}, fragment);
+      // TODO: put a kind in?
+      const captionAttrs: Nodes.Figcaption.Attrs = { id: createId(), label: null, numbered: true };
+      const newcaption = FigcaptionNode.create(captionAttrs, fragment);
       const insertion = start + image.pos + image.node.nodeSize;
       const tr = editorState.tr.insert(insertion, newcaption);
       const captionstart = insertion + 1;
@@ -78,19 +79,24 @@ const FigureImageActions: React.FC<Props> = (props) => {
   const image = findChildrenByType(figure, editorState.schema.nodes[nodeNames.image])[0];
   if (!image) return null;
   const FigcaptionNode = editorState.schema.nodes[nodeNames.figcaption];
-  const figcaption = findChildrenByType(figure, FigcaptionNode)[0] ?? undefined;
-  const hasCaption = Boolean(figcaption);
+  const figcaption = findChildrenByType(figure, FigcaptionNode)[0]; // Note: this may be undefined!!
 
   const onAlign = (a: types.AlignOptions) => () => {
     dispatch(updateNodeAttrs(stateId, viewId, { node: figure, pos }, { align: a }));
   };
-  // const onWidth = (value: number) => {
-  //   dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { width: value }));
-  // };
-  // const onNumbered = () =>
-  //   dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { numbered: !numbered }));
+  image.pos = pos + 1 + image.pos;
+  if (figcaption) figcaption.pos = pos + 1 + figcaption.pos;
+  const { width } = image.node.attrs as Nodes.Image.Attrs;
+  const numbered = (figcaption?.node.attrs as Nodes.Figcaption.Attrs)?.numbered ?? false;
+  const onWidth = (value: number) => {
+    dispatch(updateNodeAttrs(stateId, viewId, image, { width: value }));
+    positionPopper();
+  };
+  const onNumbered = () =>
+    dispatch(updateNodeAttrs(stateId, viewId, figcaption, { numbered: !numbered }, 'inside'));
   const onCaption = () => {
     dispatch(toggleCaption(stateId, viewId, pos));
+    positionPopper();
   };
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node: figure, pos }));
@@ -103,10 +109,10 @@ const FigureImageActions: React.FC<Props> = (props) => {
       <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
       <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
       <MenuIcon kind="divider" />
-      {/* <SelectWidth width={width} onWidth={onWidth} /> */}
+      <SelectWidth width={width} onWidth={onWidth} />
       <MenuIcon kind="divider" />
-      <MenuIcon kind="caption" active={hasCaption} onClick={onCaption} />
-      {/* {caption && <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />} */}
+      <MenuIcon kind="caption" active={Boolean(figcaption)} onClick={onCaption} />
+      {figcaption && <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />}
       <MenuIcon kind="divider" />
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>

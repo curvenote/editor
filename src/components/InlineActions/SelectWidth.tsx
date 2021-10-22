@@ -1,9 +1,10 @@
 import React from 'react';
 import { Popover, Slider } from '@material-ui/core';
+import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
 import MenuIcon from '../Menu/Icon';
 
 type Props = {
-  width: number;
+  width: number | null;
   onWidth: (width: number) => void;
 };
 
@@ -37,7 +38,7 @@ const SelectWidth: React.FC<Props> = (props) => {
       >
         <div style={{ width: 120, padding: '5px 25px' }}>
           <Slider
-            defaultValue={width}
+            defaultValue={width ?? DEFAULT_IMAGE_WIDTH}
             step={10}
             marks
             min={10}
