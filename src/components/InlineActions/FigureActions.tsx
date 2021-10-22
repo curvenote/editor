@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { Node, Schema } from 'prosemirror-model';
+import { Fragment, Node, Schema } from 'prosemirror-model';
 import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { nodeNames, Nodes, types, CaptionKind } from '@curvenote/schema';
@@ -26,11 +26,11 @@ const useStyles = makeStyles(() =>
 
 type Props = ActionProps;
 
-export function createFigureCaption(schema: Schema, src: string) {
+export function createFigureCaption(schema: Schema, kind: CaptionKind, src?: string) {
   const FigcaptionNode = schema.nodes[nodeNames.figcaption];
-  const fragment = opts.getCaptionFragment(schema, src);
+  const fragment = src ? opts.getCaptionFragment(schema, src) : Fragment.empty;
   const captionAttrs: Nodes.Figcaption.Attrs = {
-    kind: CaptionKind.fig, // TODO: determine out what kind it is!!
+    kind,
     id: createId(),
     label: null,
     numbered: true,
@@ -71,7 +71,11 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
       }
       dispatch(applyProsemirrorTransaction(stateId, viewId, selected, true));
     } else {
-      const newcaption = createFigureCaption(editorState.schema, image.node.attrs.src);
+      const newcaption = createFigureCaption(
+        editorState.schema,
+        CaptionKind.fig,
+        image.node.attrs.src,
+      );
       const insertion = start + image.pos + image.node.nodeSize;
       const tr = editorState.tr.insert(insertion, newcaption);
       const captionstart = insertion + 1;
@@ -130,8 +134,12 @@ const FigureImageActions: React.FC<Props> = (props) => {
       <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
       <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
       <MenuIcon kind="divider" />
-      <SelectWidth width={width} onWidth={onWidth} />
-      <MenuIcon kind="divider" />
+      {image && (
+        <>
+          <SelectWidth width={width} onWidth={onWidth} />
+          <MenuIcon kind="divider" />
+        </>
+      )}
       <MenuIcon kind="caption" active={Boolean(figcaption)} onClick={onCaption} />
       {figcaption && <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />}
       <MenuIcon kind="divider" />
