@@ -19,7 +19,7 @@ import { store, opts } from '../../connect';
 import { focusSelectedEditorView } from '../../store/ui/actions';
 import { executeCommand } from '../../store/actions';
 import { KeyMap } from './types';
-import { handleEnterCommand } from './figure';
+import { handleBackspace, handleEnterCommand } from './figure';
 import { CommandNames } from '../../store/suggestion/commands';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
@@ -79,9 +79,10 @@ export function buildKeymap(stateKey: any, schema: Schema) {
   };
 
   const enterCommands: Command[] = [];
+  const backspaceCommands: Command[] = [];
   const allUndo = chainCommands(undoInputRule, undo);
   bind('Mod-z', allUndo);
-  bind('Backspace', undoInputRule);
+  bind('Mod-z', allUndo);
   bind('Mod-Z', redo);
   if (!mac) bind('Mod-y', redo);
 
@@ -123,6 +124,7 @@ export function buildKeymap(stateKey: any, schema: Schema) {
 
   if (schema.nodes.figure) {
     enterCommands.push(handleEnterCommand);
+    backspaceCommands.push(handleBackspace);
   }
 
   if (schema.nodes.list_item) {
@@ -172,6 +174,12 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     'Mod-Alt-m',
     (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
   );
+
+  backspaceCommands.push(undoInputRule);
+
+  if (backspaceCommands.length > 0) {
+    bind('Backspace', chainCommands(...backspaceCommands));
+  }
 
   if (enterCommands.length > 0) {
     bind('Enter', chainCommands(...enterCommands));
