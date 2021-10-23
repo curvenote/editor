@@ -50,7 +50,7 @@ function basicMarkCommands(schema: Schema, bind: AddKey): void {
   }
 }
 
-export function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
+function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
   bind('Mod-z', undoInputRule, undo);
   bind('Mod-Z', redo);
   if (!mac) bind('Mod-y', redo);
