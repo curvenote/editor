@@ -11,6 +11,7 @@ import {
   deleteNode,
   updateNodeAttrs,
   selectFirstNodeOfTypeInParent,
+  findChildrenWithName,
 } from '../../store/actions';
 import SelectWidth from './SelectWidth';
 import { ActionProps, positionPopper, createFigureCaption } from './utils';
@@ -39,8 +40,7 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
     if (!figure || figure.type.name !== nodeNames.figure) return;
     const FigcaptionNode = editorState.schema.nodes[nodeNames.figcaption];
     const figcaption = findChildrenByType(figure, FigcaptionNode)[0]; // This might be undefined
-    // TODO: this should be image or code or table
-    const image = findChildrenByType(figure, editorState.schema.nodes[nodeNames.image])[0];
+    const child = findChildrenWithName(figure, [nodeNames.image, nodeNames.iframe])[0];
     // The inside of a non-leaf node is always node.pos + 1
     const start = figurePos + 1;
     if (figcaption) {
@@ -55,7 +55,7 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
       const nodeSelection = NodeSelection.create(editorState.doc, start + figcaption.pos);
       const tr = editorState.tr.setSelection(nodeSelection).deleteSelection();
       const selected = selectFirstNodeOfTypeInParent(
-        editorState.schema.nodes[nodeNames.image],
+        [nodeNames.image, nodeNames.iframe],
         tr,
         figurePos,
       );
@@ -64,9 +64,9 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
       const newcaption = createFigureCaption(
         editorState.schema,
         CaptionKind.fig,
-        image.node.attrs.src,
+        child.node.attrs.src, // Assumes that it is an image or an iframe
       );
-      const insertion = start + image.pos + image.node.nodeSize;
+      const insertion = start + child.pos + child.node.nodeSize;
       const tr = editorState.tr.insert(insertion, newcaption);
       const captionstart = insertion + 1;
       const captionend = captionstart + newcaption.nodeSize - 2;
@@ -91,20 +91,22 @@ const FigureImageActions: React.FC<Props> = (props) => {
   const pos = parent?.pos ?? selection?.from;
   if (!editorState || !figure || pos == null) return null;
   const { align } = figure?.attrs as Nodes.Figure.Attrs;
-  const image = findChildrenByType(figure, editorState.schema.nodes[nodeNames.image])[0];
+
+  const nodeWithWidth = findChildrenWithName(figure, [nodeNames.image, nodeNames.iframe])[0];
+
   const FigcaptionNode = editorState.schema.nodes[nodeNames.figcaption];
   const figcaption = findChildrenByType(figure, FigcaptionNode)[0]; // Note: this may be undefined!!
 
   const onAlign = (a: types.AlignOptions) => () => {
     dispatch(updateNodeAttrs(stateId, viewId, { node: figure, pos }, { align: a }));
   };
-  if (image) image.pos = pos + 1 + image.pos;
+  if (nodeWithWidth) nodeWithWidth.pos = pos + 1 + nodeWithWidth.pos;
   if (figcaption) figcaption.pos = pos + 1 + figcaption.pos;
-  const width = (image?.node.attrs as Nodes.Image.Attrs)?.width ?? null;
+  const width = (nodeWithWidth?.node.attrs as { width: number | null })?.width ?? null;
   const numbered = (figcaption?.node.attrs as Nodes.Figcaption.Attrs)?.numbered ?? false;
   const onWidth = (value: number) => {
-    if (!image) return;
-    dispatch(updateNodeAttrs(stateId, viewId, image, { width: value }));
+    if (!nodeWithWidth) return;
+    dispatch(updateNodeAttrs(stateId, viewId, nodeWithWidth, { width: value }));
     positionPopper();
   };
   const onNumbered = () =>
@@ -124,7 +126,7 @@ const FigureImageActions: React.FC<Props> = (props) => {
       <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
       <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
       <MenuIcon kind="divider" />
-      {image && (
+      {nodeWithWidth && (
         <>
           <SelectWidth width={width} onWidth={onWidth} />
           <MenuIcon kind="divider" />

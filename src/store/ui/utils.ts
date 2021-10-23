@@ -37,6 +37,9 @@ export const getSelectionKind = (
       // Otherwise send image selection
       return { kind: SelectionKinds.image, pos };
     case nodeNames.iframe:
+      // Check if parent is a figure, be caught below
+      if (findParentNode((n: Node) => n.type.name === nodeNames.figure)(state.selection)) break;
+      // Otherwise send iframe selection
       return { kind: SelectionKinds.iframe, pos };
     case nodeNames.math:
       return { kind: SelectionKinds.math, pos };

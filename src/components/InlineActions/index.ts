@@ -4,7 +4,6 @@ export { default as LinkActions, useLinkActions } from './LinkActions';
 export { default as CalloutActions } from './CalloutActions';
 export { default as EquationActions } from './EquationActions';
 export { default as HeadingActions } from './HeadingActions';
-export { default as AlignActions } from './AlignActions';
 export { default as TextAction } from './TextAction';
 export { default as TimeActions } from './TimeActions';
 export { default as TableActions } from './TableActions';

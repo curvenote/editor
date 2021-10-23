@@ -1,7 +1,9 @@
-import { NodeType } from 'prosemirror-model';
+import { nodeNames, findChildrenWithName } from '@curvenote/schema';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
-import { ContentNodeWithPos, findChildrenByType } from 'prosemirror-utils';
+import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
+
+export { findChildrenWithName };
 
 export const TEST_LINK =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
@@ -50,14 +52,14 @@ export function updateNodeAttrsOnView(
 }
 
 export function selectFirstNodeOfTypeInParent(
-  nodeType: NodeType,
+  nodeName: nodeNames | nodeNames[],
   tr: Transaction,
   parentPos: number,
 ): Transaction {
   const pos = tr.doc.resolve(parentPos);
   const parent = pos.nodeAfter;
   if (!parent) return tr;
-  const node = findChildrenByType(parent, nodeType)[0];
+  const node = findChildrenWithName(parent, nodeName)[0];
   if (!node) return tr;
   const start = parentPos + 1;
   try {
@@ -67,7 +69,9 @@ export function selectFirstNodeOfTypeInParent(
     return selected;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(`Could not select the ${nodeType.name} node.`);
+    console.error(
+      `Could not select the ${typeof nodeName === 'string' ? nodeName : nodeName.join(', ')} node.`,
+    );
     return tr;
   }
 }

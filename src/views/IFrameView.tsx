@@ -2,6 +2,7 @@ import { Node } from 'prosemirror-model';
 import { EditorView, NodeView } from 'prosemirror-view';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { GetPos } from './types';
+import { clickSelectFigure } from './utils';
 
 class ImageView implements NodeView {
   // The node's representation in the editor (empty, for now)
@@ -22,15 +23,15 @@ class ImageView implements NodeView {
     this.view = view;
     this.getPos = getPos;
     this.dom = document.createElement('div');
-    const { align, src, title, alt, width } = node.attrs;
-    this.dom.style.textAlign = align;
+    this.dom.addEventListener('mousedown', () => clickSelectFigure(view, getPos));
+    this.dom.addEventListener('click', () => clickSelectFigure(view, getPos));
+    const { src, title, alt, width } = node.attrs;
     this.dom.style.margin = '1.5em 0';
     this.div = document.createElement('div');
     this.div.style.position = 'relative';
+    this.div.style.display = 'inline-block';
     this.div.style.paddingBottom = `${Math.round((9 / 16) * width)}%`;
     this.div.style.width = `${width}%`;
-    this.div.style.marginLeft = align === 'left' ? '' : 'auto';
-    this.div.style.marginRight = align === 'right' ? '' : 'auto';
     this.iframe = document.createElement('iframe');
     this.iframe.title = src ?? '';
     this.iframe.style.width = '100%';
