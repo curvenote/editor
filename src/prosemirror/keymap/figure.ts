@@ -40,42 +40,15 @@ export const handleBackspace: KeyMap = function handleBackspace(
       return false;
     }
 
-    let imageIndex = -1;
-    let captionIndex = -1;
-
-    figure.forEach((child, _offset, i) => {
-      if (child.type.name === nodeNames.image) {
-        imageIndex = i;
-      }
-      if (child.eq(figcaption)) {
-        captionIndex = i;
-      }
-    });
-
     if (!view || !dispatch) {
       return false;
     }
 
-    if (imageIndex !== -1) {
-      if (captionIndex > -1) {
-        const start = $head.start();
-        if (captionIndex > imageIndex) {
-          // when caption is below the image
-          if (start === $head.pos) {
-            // selection is at the end of the caption, we create a new paragraph below
-            const found = findParentNodeOfType(state.schema.nodes[nodeNames.figure])(
-              state.selection,
-            );
-            if (found) {
-              dispatch(state.tr.setSelection(NodeSelection.create(state.doc, found.pos)));
-              return true;
-            }
-            return false;
-          }
-        }
-      } else {
-        // shouldn't reach here since caption should exsits in the figure
-        return false;
+    if ($head.parentOffset === 0) {
+      const found = findParentNodeOfType(state.schema.nodes[nodeNames.figure])(state.selection);
+      if (found) {
+        dispatch(state.tr.setSelection(NodeSelection.create(state.doc, found.pos)));
+        return true;
       }
     }
   }
