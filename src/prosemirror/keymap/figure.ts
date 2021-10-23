@@ -1,7 +1,7 @@
 import { nodeNames } from '@curvenote/schema';
 import { Schema } from 'prosemirror-model';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
-import { findParentNodeOfType } from 'prosemirror-utils';
+import { findParentNode, findParentNodeOfType } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 import { KeyMap } from './types';
 
@@ -24,6 +24,15 @@ export const handleBackspace: KeyMap = function handleBackspace(
   view?: EditorView,
 ) {
   const { $head } = state.selection;
+  const parent = findParentNode(() => true)(state.selection);
+  if (parent) {
+    const possibleFigure = state.doc.resolve(parent.pos).nodeBefore;
+    if (possibleFigure?.type.name === nodeNames.figure) {
+      const figPos = parent.pos - possibleFigure.nodeSize;
+      dispatch?.(state.tr.setSelection(NodeSelection.create(state.doc, figPos)));
+      return true;
+    }
+  }
   if ($head.parent.type.name === nodeNames.figcaption) {
     const figcaption = $head.parent;
     const figure = $head.node($head.depth - 1);
