@@ -83,14 +83,7 @@ const backspaceAfterFigure: Command = function backspaceAfterFigure(state, dispa
   return true;
 };
 
-const backspaceInFigure: Command = function backspaceInFigure(state, dispatch) {
-  const { $head } = state.selection;
-  if (
-    !state.selection.empty ||
-    $head.parent.type.name !== nodeNames.figcaption ||
-    $head.parentOffset !== 0
-  )
-    return false;
+const deleteCaptionAndSelect: Command = function deleteCaptionAndSelect(state, dispatch) {
   const parent = findParentNode(() => true)(state.selection);
   const figure = findParentNodeOfType(state.schema.nodes[nodeNames.figure])(state.selection);
   if (!parent || !figure) return false;
@@ -103,10 +96,32 @@ const backspaceInFigure: Command = function backspaceInFigure(state, dispatch) {
   return true;
 };
 
+const backspaceInFigure: Command = function backspaceInFigure(state, dispatch) {
+  const { $head } = state.selection;
+  if (
+    !state.selection.empty ||
+    $head.parent.type.name !== nodeNames.figcaption ||
+    $head.parentOffset !== 0
+  )
+    return false;
+  return deleteCaptionAndSelect(state, dispatch);
+};
+
+const deleteInFigure: Command = function deleteInFigure(state, dispatch) {
+  const { $head } = state.selection;
+  if (
+    !state.selection.empty ||
+    $head.parent.type.name !== nodeNames.figcaption ||
+    $head.parentOffset !== $head.parent.nodeSize - 2 // only at the end
+  )
+    return false;
+  return deleteCaptionAndSelect(state, dispatch);
+};
+
 export function buildFigureKeymap(schema: Schema, bind: AddKey) {
   if (schema.nodes.figure) {
     bind('Enter', handleEnter);
     bind('Backspace', backspaceAfterFigure, backspaceInFigure);
-    bind('Delete', deleteBeforeFigure);
+    bind('Delete', deleteBeforeFigure, deleteInFigure);
   }
 }
