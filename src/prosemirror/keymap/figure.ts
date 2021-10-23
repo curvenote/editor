@@ -61,6 +61,11 @@ export const handleEnterCommand: KeyMap = function handleEnterCommand(
   view?: EditorView,
 ) {
   const { $head } = state.selection;
+  if (!view || !dispatch) return false;
+  if ($head.parent.type.name === nodeNames.figure) {
+    view.dispatch(insertParagraphAndSelect(view, $head.end() + $head.depth));
+    return true;
+  }
   if ($head.parent.type.name !== nodeNames.figcaption) return false;
   // We are in a figure caption!!
   const figure = $head.node($head.depth - 1);
@@ -70,7 +75,7 @@ export const handleEnterCommand: KeyMap = function handleEnterCommand(
 
   const found = findParentNodeOfType(state.schema.nodes[nodeNames.figure])(state.selection);
 
-  if (!found || !view || !dispatch) {
+  if (!found) {
     return false;
   }
   if (found.pos + found.node.nodeSize === $head.pos + $head.depth) {
