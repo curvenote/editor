@@ -90,57 +90,24 @@ export const handleEnterCommand: KeyMap = function handleEnterCommand(
   const { $head } = state.selection;
   if ($head.parent.type.name !== nodeNames.figcaption) return false;
   // We are in a figure caption!!
-  const figcaption = $head.parent;
   const figure = $head.node($head.depth - 1);
   if (figure.type.name !== nodeNames.figure) {
     return false;
   }
 
-  let imageIndex = -1;
-  let captionIndex = -1;
+  const found = findParentNodeOfType(state.schema.nodes[nodeNames.figure])(state.selection);
 
-  figure.forEach((child, _offset, i) => {
-    if (child.type.name === nodeNames.image) {
-      imageIndex = i;
-    }
-    // TODO: if the figure caption is the same this is not going to work!!
-    if (child.eq(figcaption)) {
-      captionIndex = i;
-    }
-  });
-
-  if (!view || !dispatch) {
+  if (!found || !view || !dispatch) {
     return false;
   }
-
-  // TODO: I think this should work regardless of image.
-  // TODO: this needs to also work with iframe, table... code...
-  // TODO: maybe parentOffset of the caption??
-  if (imageIndex !== -1) {
-    if (captionIndex > -1) {
-      const start = $head.start();
-      const end = $head.end();
-      const { depth } = $head;
-      if (captionIndex > imageIndex) {
-        // when caption is below the image
-        if (end === $head.pos) {
-          // selection is at the end of the caption, we create a new paragraph below
-          view.dispatch(insertParagraphAndSelect(view, end + depth));
-        } else {
-          selectParent(view, start);
-        }
-        return true;
-      }
-      // when caption is above the image
-      if ($head.pos === start) {
-        view.dispatch(insertParagraphAndSelect(view, start - depth));
-      } else {
-        selectParent(view, start);
-      }
-      return true;
-    }
-    // shouldn't reach here since caption should exsits in the figure
-    return false;
+  if (found.pos + found.node.nodeSize === $head.pos + $head.depth) {
+    view.dispatch(insertParagraphAndSelect(view, $head.end() + $head.depth));
+    return true;
   }
-  return false;
+  if (found.start === $head.pos - 1) {
+    view.dispatch(insertParagraphAndSelect(view, $head.start() - $head.depth));
+    return true;
+  }
+  selectParent(view, $head.start());
+  return true;
 };
