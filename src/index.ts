@@ -1,6 +1,8 @@
 export * as schemas from './schemas';
 export * as Nodes from './nodes';
 export * as types from './types';
+export * from './utils';
+
 export { nodeNames } from './types';
 export { ReferenceKind, CaptionKind } from './nodes/types';
 
@@ -11,5 +13,3 @@ export * as server from './server';
 export * as process from './process';
 
 export { DEFAULT_FORMAT, DEFAULT_IMAGE_WIDTH } from './defaults';
-
-export { createId } from './utils';

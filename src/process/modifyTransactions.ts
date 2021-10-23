@@ -86,7 +86,8 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
         captionState.deleteNext = true;
         return false;
       }
-      case nodeNames.heading: {
+      case nodeNames.heading:
+      case nodeNames.equation: {
         const { id } = node.attrs as NumberedNode;
         const nextId = ensureIdIsValidOrCreateId(id);
         if (nextId.replace) {
