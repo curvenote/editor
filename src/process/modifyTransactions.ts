@@ -40,7 +40,6 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
   function deleteNode(node: Node, pos: number) {
     transactions.push((next: Transaction) => next.delete(pos, pos + node.nodeSize));
   }
-
   // State for walk
   const takenIds: Record<string, boolean> = {};
   const captionState: CaptionState = {

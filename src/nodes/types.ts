@@ -31,8 +31,9 @@ export enum NodeGroups {
   // It does mean that the figure can be empty, which is not good
   // We need to delete this empty figure in a post processing step
   // This also allows two figure captions
-  'insideFigure' = 'figcaption{0,1} (image | code_block | iframe | table)* figcaption{0,1}',
+  // 'insideFigure' = 'figcaption{0,1} (image | code_block | iframe | table)* figcaption{0,1}',
   // 'insideFigure' = '(figcaption | image | code_block | iframe | table)+',
+  'insideFigure' = '(figcaption | image | iframe | table | code_block){1,2}',
 }
 
 export enum MarkGroups {
