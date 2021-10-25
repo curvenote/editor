@@ -8,13 +8,13 @@ import {
   createStyles,
   Grid,
 } from '@material-ui/core';
-import { findParentNode } from 'prosemirror-utils';
-import { Node } from 'prosemirror-model';
-import { nodeNames } from '@curvenote/schema';
+import { findParentNode, replaceParentNodeOfType } from 'prosemirror-utils';
+import { Fragment, Node, NodeType } from 'prosemirror-model';
+import { CaptionKind, nodeNames } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import { LanguageNames, SUPPORTED_LANGUAGES } from '../../views/types';
 import MenuIcon from '../Menu/Icon';
-import { deleteNode } from '../../store/actions';
+import { applyProsemirrorTransaction, createFigure, deleteNode } from '../../store/actions';
 import { updateNodeAttrs } from '../../store/actions/editor';
 import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
@@ -87,17 +87,28 @@ const CodeActions: React.FC<ActionProps> = (props) => {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
-
+  const editorState = useSelector((state: State) => getEditorState(state, stateId)?.state);
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   const parent =
     selection && findParentNode((n: Node) => n.type.name === nodeNames.code_block)(selection);
   const node = parent?.node ?? getNodeFromSelection(selection);
   const pos = parent?.pos ?? selection?.from;
 
-  if (!node || pos == null) return null;
+  if (!editorState || !node || pos == null) return null;
   positionPopper();
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
+
+  const onCaption = () => {
+    const wrapped = createFigure(editorState.schema, node, true);
+    // const tr = editorState.tr.replaceSelectionWith(figure);
+    const tr = replaceParentNodeOfType(
+      editorState.schema.nodes[nodeNames.code_block] as NodeType,
+      wrapped,
+    )(editorState.tr);
+    dispatch(applyProsemirrorTransaction(stateId, viewId, tr, true));
+  };
+
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <div className={classes.dropdownContainer}>
@@ -108,8 +119,6 @@ const CodeActions: React.FC<ActionProps> = (props) => {
           }}
         />
       </div>
-
-      <MenuIcon kind="divider" />
       <MenuIcon
         kind="lineNumbers"
         onClick={() => {
@@ -125,6 +134,9 @@ const CodeActions: React.FC<ActionProps> = (props) => {
         }}
         active={node.attrs.linenumbers}
       />
+      <MenuIcon kind="divider" />
+
+      <MenuIcon kind="caption" onClick={onCaption} />
 
       <MenuIcon kind="divider" />
       <MenuIcon kind="remove" onClick={onDelete} dangerous />

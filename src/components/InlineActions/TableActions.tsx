@@ -15,7 +15,7 @@ import {
 } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { actions, Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, getFigure, positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 import { CommandNames } from '../../store/suggestion/commands';
 
@@ -39,12 +39,7 @@ const TableActions: React.FC<ActionProps> = (props) => {
 
   const editorState = useSelector((state: State) => getEditorState(state, stateId)?.state);
   const selection = editorState?.selection;
-  const figure =
-    selection && findParentNode((n: Node) => n.type.name === nodeNames.figure)(selection);
-  const figcaption =
-    editorState && figure
-      ? findChildrenByType(figure?.node, editorState?.schema.nodes[nodeNames.figcaption])[0]
-      : undefined;
+  const { figure, figcaption } = getFigure(editorState);
   const parent =
     selection && findParentNode((n: Node) => n.type.name === nodeNames.table)(selection);
   const node = parent?.node ?? getNodeFromSelection(selection);
