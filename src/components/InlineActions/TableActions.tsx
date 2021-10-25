@@ -15,7 +15,7 @@ import {
 } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { actions, Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps, getFigure, positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 import { CommandNames } from '../../store/suggestion/commands';
 
@@ -39,12 +39,8 @@ const TableActions: React.FC<ActionProps> = (props) => {
 
   const editorState = useSelector((state: State) => getEditorState(state, stateId)?.state);
   const selection = editorState?.selection;
-  const figure =
-    selection && findParentNode((n: Node) => n.type.name === nodeNames.figure)(selection);
-  const figcaption =
-    editorState && figure
-      ? findChildrenByType(figure?.node, editorState?.schema.nodes[nodeNames.figcaption])[0]
-      : undefined;
+  const { figure, figcaption } = getFigure(editorState);
+  if (figcaption && figure) figcaption.pos = figure.pos + 1 + figcaption.pos;
   const parent =
     selection && findParentNode((n: Node) => n.type.name === nodeNames.table)(selection);
   const node = parent?.node ?? getNodeFromSelection(selection);
@@ -56,8 +52,6 @@ const TableActions: React.FC<ActionProps> = (props) => {
   );
   if (!editorState || !node || pos == null) return null;
   positionPopper();
-
-  if (figcaption && figure) figcaption.pos = figure.pos + 1 + figcaption.pos;
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, figure ?? { node, pos }));
   const onCaption = () => {
@@ -87,8 +81,10 @@ const TableActions: React.FC<ActionProps> = (props) => {
   };
   const numbered = (figure?.node.attrs as Nodes.Figure.Attrs)?.numbered ?? false;
   const onNumbered = () => {
-    if (!figure) return;
-    dispatch(updateNodeAttrs(stateId, viewId, figure, { numbered: !numbered }, 'inside'));
+    if (!figure || !figcaption) return;
+    // TODO: this would be better in one transaction
+    dispatch(updateNodeAttrs(stateId, viewId, figure, { numbered: !numbered }));
+    dispatch(updateNodeAttrs(stateId, viewId, figcaption, {}, 'inside'));
   };
 
   return (

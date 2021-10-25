@@ -62,7 +62,12 @@ export function createFigureCaption(schema: Schema, kind: CaptionKind, src?: str
   return caption;
 }
 
-export function createFigure(schema: Schema, node: Node, caption = false) {
+export function createFigure(
+  schema: Schema,
+  node: Node,
+  caption = false,
+  initialFigureState: Partial<Pick<Nodes.Figure.Attrs, 'align'>> = {},
+) {
   const Figure = schema.nodes[nodeNames.figure] as NodeType;
   const kind = determineCaptionKind(node) ?? CaptionKind.fig;
   const attrs: Nodes.Figure.Attrs = {
@@ -70,6 +75,7 @@ export function createFigure(schema: Schema, node: Node, caption = false) {
     label: null,
     numbered: true,
     align: 'center',
+    ...initialFigureState,
   };
   if (!caption) {
     const figure = Figure.createAndFill(attrs, Fragment.fromArray([node])) as Node;

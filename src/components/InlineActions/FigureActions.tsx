@@ -93,7 +93,17 @@ const FigureImageActions: React.FC<Props> = (props) => {
   if (!editorState || !figure || pos == null) return null;
   const { align } = figure?.attrs as Nodes.Figure.Attrs;
 
-  const nodeWithWidth = findChildrenWithName(figure, [nodeNames.image, nodeNames.iframe])[0];
+  const child = findChildrenWithName(figure, [
+    nodeNames.image,
+    nodeNames.iframe,
+    nodeNames.table,
+    nodeNames.code_block,
+  ])[0];
+
+  const hasWidth =
+    child &&
+    !(child.node.type.name === nodeNames.table || child.node.type.name === nodeNames.code_block);
+  const hasAlign = child && child.node.type.name !== nodeNames.code_block;
 
   const FigcaptionNode = editorState.schema.nodes[nodeNames.figcaption];
   const figcaption = findChildrenByType(figure, FigcaptionNode)[0]; // Note: this may be undefined!!
@@ -101,13 +111,13 @@ const FigureImageActions: React.FC<Props> = (props) => {
   const onAlign = (a: types.AlignOptions) => () => {
     dispatch(updateNodeAttrs(stateId, viewId, { node: figure, pos }, { align: a }));
   };
-  if (nodeWithWidth) nodeWithWidth.pos = pos + 1 + nodeWithWidth.pos;
+  if (child) child.pos = pos + 1 + child.pos;
   if (figcaption) figcaption.pos = pos + 1 + figcaption.pos;
-  const width = (nodeWithWidth?.node.attrs as { width: number | null })?.width ?? null;
+  const width = (child?.node.attrs as { width: number | null })?.width ?? null;
   const numbered = (figure?.attrs as Nodes.Figure.Attrs)?.numbered ?? false;
   const onWidth = (value: number) => {
-    if (!nodeWithWidth) return;
-    dispatch(updateNodeAttrs(stateId, viewId, nodeWithWidth, { width: value }));
+    if (!child) return;
+    dispatch(updateNodeAttrs(stateId, viewId, child, { width: value }));
     positionPopper();
   };
   const onNumbered = () => {
@@ -126,11 +136,15 @@ const FigureImageActions: React.FC<Props> = (props) => {
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
-      <MenuIcon kind="left" active={align === 'left'} onClick={onAlign('left')} />
-      <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
-      <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
-      <MenuIcon kind="divider" />
-      {nodeWithWidth && (
+      {hasAlign && (
+        <>
+          <MenuIcon kind="left" active={align === 'left'} onClick={onAlign('left')} />
+          <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
+          <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
+          <MenuIcon kind="divider" />
+        </>
+      )}
+      {hasWidth && (
         <>
           <SelectWidth width={width} onWidth={onWidth} />
           <MenuIcon kind="divider" />
