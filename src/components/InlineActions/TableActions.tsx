@@ -81,8 +81,10 @@ const TableActions: React.FC<ActionProps> = (props) => {
   };
   const numbered = (figure?.node.attrs as Nodes.Figure.Attrs)?.numbered ?? false;
   const onNumbered = () => {
-    if (!figure) return;
-    dispatch(updateNodeAttrs(stateId, viewId, figure, { numbered: !numbered }, 'inside'));
+    if (!figure || !figcaption) return;
+    // TODO: this would be better in one transaction
+    dispatch(updateNodeAttrs(stateId, viewId, figure, { numbered: !numbered }));
+    dispatch(updateNodeAttrs(stateId, viewId, figcaption, {}, 'inside'));
   };
 
   return (
