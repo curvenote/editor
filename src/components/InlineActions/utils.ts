@@ -1,9 +1,7 @@
-import { CaptionKind, createId, nodeNames, Nodes } from '@curvenote/schema';
-import { findParentNode } from 'prosemirror-utils';
-import { Fragment, Schema, Node } from 'prosemirror-model';
+import { nodeNames } from '@curvenote/schema';
+import { findParentNode, findChildrenByType } from 'prosemirror-utils';
+import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
-import { findChildrenByType } from 'prosemirror-utils';
-import { opts } from '../../connect';
 
 export type ActionProps = {
   stateId: any;
