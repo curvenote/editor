@@ -322,7 +322,7 @@ export const ALL_COMMANDS: CommandResult[] = [
     name: CommandNames.link_code,
     title: 'Link to an internal program',
     description: 'Add a link to code block',
-    shortcut: ['[[program: Link to program'],
+    shortcut: ['[[code: Link to program'],
   },
   {
     name: CommandNames.add_citation,
