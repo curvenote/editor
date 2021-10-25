@@ -90,12 +90,12 @@ export function countState(state: EditorState): StateCounter {
         const captionText = caption?.node ? toText(caption.node) : '';
         switch (child.node.type.name) {
           case nodeNames.image: {
-            const { alt, src } = node.attrs as Nodes.Image.Attrs;
+            const { alt, src } = child.node.attrs as Nodes.Image.Attrs;
             push(counts.fig, { numbered, id, label }, captionText ?? alt, { src, alt });
             return false;
           }
           case nodeNames.iframe: {
-            const { src } = node.attrs as Nodes.IFrame.Attrs;
+            const { src } = child.node.attrs as Nodes.IFrame.Attrs;
             push(counts.fig, { numbered, id, label }, captionText, { src, alt: '' });
             return false;
           }
@@ -112,7 +112,7 @@ export function countState(state: EditorState): StateCounter {
             return false;
           }
           case nodeNames.code_block: {
-            const { title, language } = node.attrs as Nodes.Code.Attrs;
+            const { title, language } = child.node.attrs as Nodes.Code.Attrs;
             const code = toText(child.node);
             push(counts.code, { numbered, id, label }, captionText ?? title, { code, language });
             // There are children of tables to be counted
