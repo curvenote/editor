@@ -27,10 +27,9 @@ export function getFigure(editorState: EditorState | null) {
   const { selection } = editorState;
   const figure =
     selection && findParentNode((n: Node) => n.type.name === nodeNames.figure)(selection);
-  const figcaption =
-    editorState && figure
-      ? findChildrenByType(figure?.node, editorState?.schema.nodes[nodeNames.figcaption])[0]
-      : undefined;
+  const figcaption = figure
+    ? findChildrenByType(figure?.node, editorState.schema.nodes[nodeNames.figcaption])[0]
+    : undefined;
 
   return { figure, figcaption };
 }

@@ -94,6 +94,10 @@ export const getSelectionKind = (
     case nodeNames.table:
       return { kind: SelectionKinds.table, pos: parent.pos };
     case nodeNames.code_block:
+      const figure = findParentNode((n: Node) => n.type.name === nodeNames.figure)(state.selection);
+      if (figure) {
+        return { kind: SelectionKinds.code, pos: figure.pos };
+      }
       return { kind: SelectionKinds.code, pos: parent.pos };
     case nodeNames.figure:
       return { kind: SelectionKinds.figure, pos: parent.pos };

@@ -40,6 +40,7 @@ const TableActions: React.FC<ActionProps> = (props) => {
   const editorState = useSelector((state: State) => getEditorState(state, stateId)?.state);
   const selection = editorState?.selection;
   const { figure, figcaption } = getFigure(editorState);
+  if (figcaption && figure) figcaption.pos = figure.pos + 1 + figcaption.pos;
   const parent =
     selection && findParentNode((n: Node) => n.type.name === nodeNames.table)(selection);
   const node = parent?.node ?? getNodeFromSelection(selection);
@@ -51,8 +52,6 @@ const TableActions: React.FC<ActionProps> = (props) => {
   );
   if (!editorState || !node || pos == null) return null;
   positionPopper();
-
-  if (figcaption && figure) figcaption.pos = figure.pos + 1 + figcaption.pos;
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, figure ?? { node, pos }));
   const onCaption = () => {
