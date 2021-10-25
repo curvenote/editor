@@ -85,8 +85,8 @@ export function countState(state: EditorState): StateCounter {
         ])[0];
         if (!child) return false;
         const caption = findChildrenWithName(node, nodeNames.figcaption)[0];
-        const { numbered, id, label } =
-          (caption?.node.attrs as Nodes.Figcaption.Attrs) ?? NO_CAPTION;
+        const { numbered: isNumbered, id, label } = node.attrs as Nodes.Figure.Attrs;
+        const numbered = caption && isNumbered;
         const captionText = caption?.node ? toText(caption.node) : '';
         switch (child.node.type.name) {
           case nodeNames.image: {
@@ -99,7 +99,6 @@ export function countState(state: EditorState): StateCounter {
             push(counts.fig, { numbered, id, label }, captionText, { src, alt: '' });
             return false;
           }
-          // TODO: Iframe?
           case nodeNames.table: {
             push(counts.table, { numbered, id, label }, captionText, {});
             // There are children of tables to be counted

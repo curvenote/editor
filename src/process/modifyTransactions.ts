@@ -4,36 +4,13 @@ import { CaptionKind, NumberedNode } from '../nodes/types';
 import { nodeNames } from '../types';
 import { createId } from '../utils';
 import { Attrs as FigcaptionAttrs } from '../nodes/figcaption';
+import { Attrs as FigureAttrs } from '../nodes/figure';
+import { determineCaptionKind } from './utils';
 
 type CaptionState = {
   deleteNext: boolean;
   kind: CaptionKind | null;
 };
-
-export function determineCaptionKind(node: Node): CaptionKind | null {
-  if (node.type.name !== nodeNames.figure) return null;
-  const childrenKinds: CaptionKind[] = [];
-  node.forEach((n) => {
-    switch (n.type.name) {
-      case nodeNames.iframe:
-      case nodeNames.image:
-        childrenKinds.push(CaptionKind.fig);
-        break;
-      case nodeNames.table:
-        childrenKinds.push(CaptionKind.table);
-        break;
-      case nodeNames.code_block:
-        childrenKinds.push(CaptionKind.code);
-        break;
-      case nodeNames.equation:
-        childrenKinds.push(CaptionKind.eq);
-        break;
-      default:
-        break;
-    }
-  });
-  return childrenKinds[0] ?? null;
-}
 
 export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
   const transactions: ((tr: Transaction) => Transaction)[] = [];
@@ -60,8 +37,22 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
       case nodeNames.figure: {
         captionState.deleteNext = false;
         captionState.kind = determineCaptionKind(node);
-        // Delete the empty figure!
-        if (node.childCount === 0) deleteNode(node, pos);
+        if (node.childCount === 0) {
+          // Delete the empty figure!
+          deleteNode(node, pos);
+          return false;
+        }
+        // Check that the ID works
+        const { id } = node.attrs as FigureAttrs;
+        const nextId = ensureIdIsValidOrCreateId(id);
+        if (nextId.replace) {
+          transactions.push((next: Transaction) =>
+            next.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              id: nextId.id,
+            }),
+          );
+        }
         return true;
       }
       case nodeNames.figcaption: {
@@ -69,16 +60,14 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
           // Delete the second figure caption
           transactions.push((next: Transaction) => next.delete(pos, pos + node.nodeSize));
         } else {
-          const { kind, id } = node.attrs as FigcaptionAttrs;
-          const { kind: nextKind } = captionState; // Need to get access to the value, not the reference
-          const nextId = ensureIdIsValidOrCreateId(id);
-          if (kind !== nextKind || nextId.replace) {
+          const { kind } = node.attrs as FigcaptionAttrs;
+          const { kind: nextKind } = captionState; // Need to get access to the **value**, not the reference
+          if (kind !== nextKind) {
             // Change the kind and id of the caption
             transactions.push((next: Transaction) =>
               next.setNodeMarkup(pos, undefined, {
                 ...node.attrs,
                 kind: nextKind, // Note: this is the first one in the list
-                id: nextId.id,
               }),
             );
           }
