@@ -312,12 +312,18 @@ export const ALL_COMMANDS: CommandResult[] = [
     description: 'Add a link to equation',
     shortcut: ['[[eq: Link to an equation'],
   },
-  // {
-  //   name: CommandNames.link_code,
-  //   title: 'Link to an internal code',
-  //   description: 'Add a link to code block',
-  //   shortcut: ['[[code: Link to a section'],
-  // },
+  {
+    name: CommandNames.link_table,
+    title: 'Link to an internal table',
+    description: 'Add a link to table',
+    shortcut: ['[[table: Link to a table'],
+  },
+  {
+    name: CommandNames.link_code,
+    title: 'Link to an internal program',
+    description: 'Add a link to code block',
+    shortcut: ['[[program: Link to program'],
+  },
   {
     name: CommandNames.add_citation,
     title: 'Add Reference',
