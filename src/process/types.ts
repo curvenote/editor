@@ -31,6 +31,14 @@ export type CodeReference = Reference<
 export type TableReference = Reference<ReferenceKind.table>;
 export type LinkReference = Reference<ReferenceKind.link, { url: string }>;
 
+export type AnyReference =
+  | SectionReference
+  | FigureReference
+  | EquationReference
+  | CodeReference
+  | TableReference
+  | LinkReference;
+
 export type StateCounter = {
   [ReferenceKind.sec]: Counter<SectionReference>;
   [ReferenceKind.fig]: Counter<FigureReference>;
