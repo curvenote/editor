@@ -12,9 +12,10 @@ import {
   updateNodeAttrs,
   selectFirstNodeOfTypeInParent,
   findChildrenWithName,
+  createFigureCaption,
 } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { ActionProps, positionPopper, createFigureCaption } from './utils';
+import { ActionProps, positionPopper } from './utils';
 import { AppThunk, Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
@@ -103,14 +104,17 @@ const FigureImageActions: React.FC<Props> = (props) => {
   if (nodeWithWidth) nodeWithWidth.pos = pos + 1 + nodeWithWidth.pos;
   if (figcaption) figcaption.pos = pos + 1 + figcaption.pos;
   const width = (nodeWithWidth?.node.attrs as { width: number | null })?.width ?? null;
-  const numbered = (figcaption?.node.attrs as Nodes.Figcaption.Attrs)?.numbered ?? false;
+  const numbered = (figure?.attrs as Nodes.Figure.Attrs)?.numbered ?? false;
   const onWidth = (value: number) => {
     if (!nodeWithWidth) return;
     dispatch(updateNodeAttrs(stateId, viewId, nodeWithWidth, { width: value }));
     positionPopper();
   };
-  const onNumbered = () =>
-    dispatch(updateNodeAttrs(stateId, viewId, figcaption, { numbered: !numbered }, 'inside'));
+  const onNumbered = () => {
+    // TODO: this would be better in one transaction
+    dispatch(updateNodeAttrs(stateId, viewId, { node: figure, pos }, { numbered: !numbered }));
+    dispatch(updateNodeAttrs(stateId, viewId, figcaption, {}, 'inside'));
+  };
   const onCaption = () => {
     dispatch(toggleCaption(stateId, viewId, pos));
     positionPopper();

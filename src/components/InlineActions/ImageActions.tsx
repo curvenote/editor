@@ -2,12 +2,15 @@ import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { isNodeSelection } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { CaptionKind, nodeNames } from '@curvenote/schema';
-import { Fragment, Node, NodeType } from 'prosemirror-model';
 import MenuIcon from '../Menu/Icon';
-import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
+import {
+  applyProsemirrorTransaction,
+  deleteNode,
+  updateNodeAttrs,
+  createFigure,
+} from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { ActionProps, positionPopper, createFigureCaption } from './utils';
+import { ActionProps, positionPopper } from './utils';
 import { Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
@@ -33,15 +36,13 @@ const ImageActions: React.FC<Props> = (props) => {
   const node = getNodeFromSelection(selection);
   if (!editorState || !node || !selection || !isNodeSelection(selection)) return null;
   const { from: pos } = selection;
-  const { src, width } = node?.attrs;
+  const { width } = node?.attrs;
 
   const onWidth = (value: number) => {
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { width: value }));
   };
   const onCaption = () => {
-    const Figure = editorState.schema.nodes[nodeNames.figure] as NodeType;
-    const caption = createFigureCaption(editorState.schema, CaptionKind.fig, src);
-    const figure = Figure.createAndFill({}, Fragment.fromArray([node, caption])) as Node;
+    const figure = createFigure(editorState.schema, node, true);
     const tr = editorState.tr.replaceSelectionWith(figure);
     dispatch(applyProsemirrorTransaction(stateId, viewId, tr, true));
   };

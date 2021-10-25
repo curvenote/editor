@@ -1,15 +1,21 @@
 import React, { useCallback } from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { findChildrenByType, findParentNode } from 'prosemirror-utils';
-import { Fragment, Node, NodeType } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import { CaptionKind, nodeNames, Nodes } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
-import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs } from '../../store/actions';
+import {
+  applyProsemirrorTransaction,
+  deleteNode,
+  updateNodeAttrs,
+  createFigureCaption,
+  createFigure,
+} from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { actions, Dispatch, State } from '../../store';
-import { ActionProps, positionPopper, createFigureCaption } from './utils';
+import { ActionProps, positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 import { CommandNames } from '../../store/suggestion/commands';
 
@@ -57,9 +63,7 @@ const TableActions: React.FC<ActionProps> = (props) => {
   const onCaption = () => {
     if (!figure) {
       // Create the figure and the figcaption
-      const Figure = editorState.schema.nodes[nodeNames.figure] as NodeType;
-      const caption = createFigureCaption(editorState.schema, CaptionKind.table);
-      const wrapped = Figure.createAndFill({}, Fragment.fromArray([caption, node])) as Node;
+      const wrapped = createFigure(editorState.schema, node, true);
       const tr = editorState.tr
         .setSelection(NodeSelection.create(editorState.doc, pos))
         .replaceSelectionWith(wrapped);
@@ -81,10 +85,10 @@ const TableActions: React.FC<ActionProps> = (props) => {
       dispatch(applyProsemirrorTransaction(stateId, viewId, selected, true));
     }
   };
-  const numbered = (figcaption?.node.attrs as Nodes.Figcaption.Attrs)?.numbered ?? false;
+  const numbered = (figure?.node.attrs as Nodes.Figure.Attrs)?.numbered ?? false;
   const onNumbered = () => {
-    if (!figcaption) return;
-    dispatch(updateNodeAttrs(stateId, viewId, figcaption, { numbered: !numbered }, 'inside'));
+    if (!figure) return;
+    dispatch(updateNodeAttrs(stateId, viewId, figure, { numbered: !numbered }, 'inside'));
   };
 
   return (

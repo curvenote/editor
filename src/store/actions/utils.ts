@@ -1,7 +1,10 @@
-import { nodeNames, findChildrenWithName } from '@curvenote/schema';
+import { nodeNames, findChildrenWithName, CaptionKind, createId, Nodes } from '@curvenote/schema';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
+import { determineCaptionKind } from '@curvenote/schema/dist/process';
+import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
+import { opts } from '../../connect';
 
 export { findChildrenWithName };
 
@@ -49,6 +52,36 @@ export function updateNodeAttrsOnView(
   }
   view.dispatch(tr);
   view.focus();
+}
+
+export function createFigureCaption(schema: Schema, kind: CaptionKind, src?: string) {
+  const FigcaptionNode = schema.nodes[nodeNames.figcaption];
+  const fragment = src ? opts.getCaptionFragment(schema, src) : Fragment.empty;
+  const captionAttrs: Nodes.Figcaption.Attrs = { kind };
+  const caption = FigcaptionNode.create(captionAttrs, fragment);
+  return caption;
+}
+
+export function createFigure(schema: Schema, node: Node, caption = false) {
+  const Figure = schema.nodes[nodeNames.figure] as NodeType;
+  const kind = determineCaptionKind(node) ?? CaptionKind.fig;
+  const attrs: Nodes.Figure.Attrs = {
+    id: createId(),
+    label: null,
+    numbered: true,
+    align: 'center',
+  };
+  if (!caption) {
+    const figure = Figure.createAndFill(attrs, Fragment.fromArray([node])) as Node;
+    return figure;
+  }
+  const captionNode = createFigureCaption(schema, kind, node.attrs.src);
+  const captionFirst = kind === CaptionKind.table;
+  const figure = Figure.createAndFill(
+    attrs,
+    Fragment.fromArray(captionFirst ? [captionNode, node] : [node, captionNode]),
+  ) as Node;
+  return figure;
 }
 
 export function selectFirstNodeOfTypeInParent(

@@ -1,10 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { nodeNames, createId } from '@curvenote/schema';
-import { Fragment, Node, NodeType } from 'prosemirror-model';
+import { Fragment, Node } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts, UploadImageState } from '../../connect';
+import { createFigure } from '../../store/actions/utils';
 import { getNodeIfSelected } from '../../store/ui/utils';
 
 export const key = new PluginKey('placeholder');
@@ -222,12 +223,8 @@ function createImageHandlers(
     if (pos == null) return;
     const images = states.map((url) => {
       const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
-      const Figure = view.state.schema.nodes[nodeNames.figure] as NodeType;
-      const figureNode = Figure.createAndFill(
-        {},
-        Fragment.fromArray([view.state.schema.nodes.image.create(attrs)]),
-      ) as Node;
-      return figureNode;
+      const figure = createFigure(view.state.schema, view.state.schema.nodes.image.create(attrs));
+      return figure;
     });
     const fragment = Fragment.fromArray(images);
     view.dispatch(
