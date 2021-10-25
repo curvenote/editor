@@ -196,7 +196,7 @@ export default class CodeBlockView implements NodeView {
         return true;
       },
       'Shift-Enter': () => {
-        return newlineInCode(view.state, view.dispatch);
+        this.cm.execCommand('newlineAndIndent');
       },
       [`${mod}-Enter`]: () => {
         if (exitCode(view.state, view.dispatch)) view.focus();
