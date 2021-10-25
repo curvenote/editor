@@ -126,12 +126,12 @@ const FigureImageActions: React.FC<Props> = (props) => {
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
-      <MenuIcon kind="left" active={align === 'left'} onClick={onAlign('left')} />
-      <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
-      <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
-      <MenuIcon kind="divider" />
       {nodeWithWidth && (
         <>
+          <MenuIcon kind="left" active={align === 'left'} onClick={onAlign('left')} />
+          <MenuIcon kind="center" active={align === 'center'} onClick={onAlign('center')} />
+          <MenuIcon kind="right" active={align === 'right'} onClick={onAlign('right')} />
+          <MenuIcon kind="divider" />
           <SelectWidth width={width} onWidth={onWidth} />
           <MenuIcon kind="divider" />
         </>

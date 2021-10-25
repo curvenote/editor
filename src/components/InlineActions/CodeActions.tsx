@@ -121,7 +121,6 @@ const CodeActions: React.FC<ActionProps> = (props) => {
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 
-  console.log({ figure, figcaption });
   const onCaption = () => {
     if (!figure) {
       const wrapped = createFigure(editorState.schema, node, true, { align: 'left' });
