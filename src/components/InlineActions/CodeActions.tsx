@@ -12,6 +12,7 @@ import { findParentNode, replaceParentNodeOfType } from 'prosemirror-utils';
 import { Node, NodeType } from 'prosemirror-model';
 import { CaptionKind, nodeNames, Nodes } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { LanguageNames, SUPPORTED_LANGUAGES } from '../../views/types';
 import MenuIcon from '../Menu/Icon';
 import {
@@ -25,7 +26,6 @@ import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
 import { ActionProps, getFigure, positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
-import { NodeSelection, TextSelection } from 'prosemirror-state';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -100,9 +100,9 @@ const CodeActions: React.FC<ActionProps> = (props) => {
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
   const parent =
     selection && findParentNode((n: Node) => n.type.name === nodeNames.code_block)(selection);
-  let node: Node,
-    pos: number,
-    end = -1;
+  let node: Node;
+  let pos: number;
+  let end = -1;
   if (parent) {
     node = parent.node;
     pos = parent.pos;
