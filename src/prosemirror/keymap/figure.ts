@@ -1,16 +1,10 @@
 import { nodeNames } from '@curvenote/schema';
 import { Command } from 'prosemirror-commands';
-import { Node, Schema } from 'prosemirror-model';
-import { NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import { Schema } from 'prosemirror-model';
+import { NodeSelection, Transaction } from 'prosemirror-state';
 import { findParentNode, findParentNodeOfType } from 'prosemirror-utils';
+import { insertParagraphAndSelect } from '../../store/actions/utils';
 import { AddKey } from './utils';
-
-function insertParagraphAndSelect(schema: Schema, tr: Transaction, side: number) {
-  const paragraph = schema.nodes[nodeNames.paragraph].createAndFill() as Node;
-  const next = tr.insert(side, paragraph);
-  next.setSelection(TextSelection.create(next.doc, side + 1)).scrollIntoView();
-  return next;
-}
 
 function selectInsideParent(tr: Transaction, pos: number) {
   // -1 to select the parent node instead of the beginning of the parentnode

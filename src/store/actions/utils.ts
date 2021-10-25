@@ -115,6 +115,13 @@ export function selectFirstNodeOfTypeInParent(
   }
 }
 
+export function insertParagraphAndSelect(schema: Schema, tr: Transaction, side: number) {
+  const paragraph = schema.nodes[nodeNames.paragraph].createAndFill() as Node;
+  const next = tr.insert(side, paragraph);
+  next.setSelection(TextSelection.create(next.doc, side + 1)).scrollIntoView();
+  return next;
+}
+
 // https://discuss.prosemirror.net/t/expanding-the-selection-to-the-active-mark/478
 function getLinkBounds(state: EditorState, pos: number) {
   const $pos = state.doc.resolve(pos);
