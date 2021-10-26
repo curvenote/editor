@@ -1,10 +1,11 @@
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+import { GetPos } from './types';
 declare class LinkView {
     dom: HTMLElement;
     node: Node;
     view: EditorView;
-    getPos?: () => number;
-    constructor(node: Node, view: EditorView, getPos: (() => number) | undefined);
+    getPos?: GetPos;
+    constructor(node: Node, view: EditorView, getPos?: GetPos);
 }
 export default LinkView;

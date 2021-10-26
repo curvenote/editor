@@ -1,5 +1,4 @@
 import CodeMirror from 'codemirror';
-import { exitCode } from 'prosemirror-commands';
 import { undo, redo } from 'prosemirror-history';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
@@ -16,9 +15,11 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
+import { findParentNode } from 'prosemirror-utils';
+import { nodeNames } from '@curvenote/schema';
 import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
-import { focusEditorView } from '../store/actions';
+import { focusEditorView, insertParagraphAndSelect } from '../store/actions';
 import { store } from '../connect';
 function computeChange(oldVal, newVal) {
     if (oldVal === newVal)
@@ -46,6 +47,15 @@ function createMode(node) {
         };
     }
     return mode;
+}
+function exitCode(state, dispatch) {
+    var _a;
+    var parent = (_a = findParentNode(function (n) { return n.type.name === nodeNames.figure; })(state.selection)) !== null && _a !== void 0 ? _a : findParentNode(function (n) { return n.type.name === nodeNames.code_block; })(state.selection);
+    if (!parent)
+        return false;
+    var tr = insertParagraphAndSelect(state.schema, state.tr, parent.pos + parent.node.nodeSize);
+    dispatch === null || dispatch === void 0 ? void 0 : dispatch(tr);
+    return true;
 }
 var CodeBlockView = (function () {
     function CodeBlockView(node, view, getPos) {
@@ -137,6 +147,9 @@ var CodeBlockView = (function () {
                     view.dispatch(selectedTr);
                     view.focus();
                     return true;
+                },
+                'Shift-Enter': function () {
+                    _this.cm.execCommand('newlineAndIndent');
                 }
             },
             _a[mod + "-Enter"] = function () {

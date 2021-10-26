@@ -1,12 +1,12 @@
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+import { GetPos } from './types';
 declare class ImageView {
-    dom: HTMLDivElement;
-    img: HTMLImageElement;
+    dom: HTMLImageElement;
     node: Node;
     view: EditorView;
-    getPos?: () => number;
-    constructor(node: Node, view: EditorView, getPos: () => number);
+    getPos?: GetPos;
+    constructor(node: Node, view: EditorView, getPos: GetPos);
     selectNode(): void;
     deselectNode(): void;
 }

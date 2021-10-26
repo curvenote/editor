@@ -1,5 +1,6 @@
 import React from 'react';
 import { Popover, Slider } from '@material-ui/core';
+import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
 import MenuIcon from '../Menu/Icon';
 var SelectWidth = function (props) {
     var width = props.width, onWidth = props.onWidth;
@@ -19,7 +20,7 @@ var SelectWidth = function (props) {
                 horizontal: 'center',
             } },
             React.createElement("div", { style: { width: 120, padding: '5px 25px' } },
-                React.createElement(Slider, { defaultValue: width, step: 10, marks: true, min: 10, max: 100, onChangeCommitted: function (e, v) {
+                React.createElement(Slider, { defaultValue: width !== null && width !== void 0 ? width : DEFAULT_IMAGE_WIDTH, step: 10, marks: true, min: 10, max: 100, onChangeCommitted: function (e, v) {
                         handleClose();
                         onWidth(v);
                     } })))));

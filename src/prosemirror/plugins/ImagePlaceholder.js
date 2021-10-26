@@ -45,14 +45,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, createId } from '@curvenote/schema';
 import { Fragment } from 'prosemirror-model';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
 import { opts } from '../../connect';
+import { createFigure } from '../../store/actions/utils';
 import { getNodeIfSelected } from '../../store/ui/utils';
-import { createId } from '../../utils';
 export var key = new PluginKey('placeholder');
 function fileToDataUrl(blob, callback) {
     var _a;
@@ -210,14 +210,15 @@ function createImageHandlers(view, id, plugin, node) {
     function remove(targetId) {
         view.dispatch(view.state.tr.setMeta(plugin, { remove: { id: targetId || id } }));
     }
-    function success(urls) {
+    function success(states) {
         var pos = findImagePlaceholder(view.state, id);
         if (pos == null)
             return;
-        var images = urls.map(function (url) {
+        var images = states.map(function (url) {
             var _a, _b;
             var attrs = __assign(__assign({ id: (_b = (_a = node === null || node === void 0 ? void 0 : node.attrs) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : createId() }, node === null || node === void 0 ? void 0 : node.attrs), { src: url });
-            return view.state.schema.nodes.image.create(attrs);
+            var figure = createFigure(view.state.schema, view.state.schema.nodes.image.create(attrs));
+            return figure;
         });
         var fragment = Fragment.fromArray(images);
         view.dispatch(view.state.tr.replaceWith(pos, pos, fragment).setMeta(plugin, { remove: { id: id } }));

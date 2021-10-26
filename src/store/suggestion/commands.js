@@ -302,6 +302,18 @@ export var ALL_COMMANDS = __spreadArray(__spreadArray(__spreadArray(__spreadArra
         shortcut: ['[[eq: Link to an equation'],
     },
     {
+        name: CommandNames.link_table,
+        title: 'Link to an internal table',
+        description: 'Add a link to table',
+        shortcut: ['[[table: Link to a table'],
+    },
+    {
+        name: CommandNames.link_code,
+        title: 'Link to an internal program',
+        description: 'Add a link to code block',
+        shortcut: ['[[code: Link to program'],
+    },
+    {
         name: CommandNames.add_citation,
         title: 'Add Reference',
         description: 'Cite existing literature',

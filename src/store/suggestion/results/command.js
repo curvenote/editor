@@ -49,16 +49,16 @@ var _a;
 import Fuse from 'fuse.js';
 import { Fragment } from 'prosemirror-model';
 import { addColumnAfter, addColumnBefore, deleteColumn, addRowAfter, addRowBefore, deleteRow, mergeCells, splitCell, toggleHeaderRow, toggleHeaderColumn, toggleHeaderCell, deleteTable, isInTable, } from 'prosemirror-tables';
+import { nodeNames, createId } from '@curvenote/schema';
 import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
-import { getLinkBoundsIfTheyExist } from '../../actions/utils';
+import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
-import { createId } from '../../../utils';
 import { addImagePrompt } from '../../../prosemirror/plugins/ImagePlaceholder';
 var options = {
     shouldSort: true,
@@ -107,7 +107,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
     if (removeText === void 0) { removeText = function () { return true; }; }
     if (replace === void 0) { replace = false; }
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
-        var view, ev, schema, replaceOrInsert, _a, _b, empty, $from, $to, content, tr, tr, linkBounds, from_1, to_1, href, _c, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, cites, nodes, wrapped, tr;
+        var view, ev, schema, replaceOrInsert, _a, _b, empty, $from, $to, content, tr, Table, Row, header, cell, figure, tr, linkBounds, from_1, to_1, href, _c, from, to, name_1, name_2, name_3, url, id, src, url, id, src, url, id, src, url, id, src, src, cites, nodes, wrapped, tr;
         var _d, _e, _f;
         return __generator(this, function (_g) {
             switch (_g.label) {
@@ -203,18 +203,15 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                 case 3:
                     {
                         removeText();
-                        tr = view.state.tr
-                            .replaceSelectionWith(schema.nodes.table.create(undefined, Fragment.fromArray([
-                            schema.nodes.table_row.create(undefined, Fragment.fromArray([
-                                schema.nodes.table_header.createAndFill(),
-                                schema.nodes.table_header.createAndFill(),
-                            ])),
-                            schema.nodes.table_row.create(undefined, Fragment.fromArray([
-                                schema.nodes.table_cell.createAndFill(),
-                                schema.nodes.table_cell.createAndFill(),
-                            ])),
-                        ])))
-                            .scrollIntoView();
+                        Table = schema.nodes[nodeNames.table];
+                        Row = schema.nodes[nodeNames.table_row];
+                        header = schema.nodes[nodeNames.table_header].createAndFill();
+                        cell = schema.nodes[nodeNames.table_cell].createAndFill();
+                        figure = createFigure(schema, Table.create({}, Fragment.fromArray([
+                            Row.create({}, Fragment.fromArray([header, header])),
+                            Row.create({}, Fragment.fromArray([cell, cell])),
+                        ])));
+                        tr = view.state.tr.replaceSelectionWith(figure).scrollIntoView();
                         view.dispatch(tr);
                         view.focus();
                         return [2, true];

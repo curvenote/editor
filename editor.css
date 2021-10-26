@@ -545,7 +545,7 @@ img.placeholder {
   }
 }
 article {
-  counter-reset: h1_cnt eq_cnt fig_cnt footnote;
+  counter-reset: h1_cnt eq_cnt fig_cnt table_cnt code_cnt footnote;
 }
 article h1 {
   counter-reset: h2_cnt;
@@ -612,6 +612,7 @@ h6[numbered]:before {
 .ProseMirror .tableWrapper {
   overflow-x: auto;
   margin: 1em 0;
+  display: inline-block;
 }
 .ProseMirror table {
   border-collapse: collapse;
@@ -709,6 +710,41 @@ span.footnote .tooltip {
   width: calc(100% - 46px);
   left: 15px;
   z-index: 5;
+}
+
+.ProseMirror figure {
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+}
+.ProseMirror figcaption {
+  display: block;
+  overflow-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.2;
+  margin-top: 5px;
+  color: #686868;
+  font-family: var(--curvenote-font, sans-serif);
+  font-weight: 300;
+  cursor: auto;
+}
+.ProseMirror figcaption[kind=code] {
+  text-align: center;
+}
+.ProseMirror figure[numbered=""] figcaption::before {
+  padding-left: -5px;
+  font-weight: 700;
+}
+.ProseMirror figure[numbered=""] figcaption[kind=fig]::before {
+  counter-increment: fig_cnt;
+  content: "Figure " counter(fig_cnt) ":  ";
+}
+.ProseMirror figure[numbered=""] figcaption[kind=code]::before {
+  counter-increment: code_cnt;
+  content: "Program " counter(code_cnt) ":  ";
+}
+.ProseMirror figure[numbered=""] figcaption[kind=table]::before {
+  counter-increment: table_cnt;
+  content: "Table " counter(table_cnt) ":  ";
 }
 
 .hidden {

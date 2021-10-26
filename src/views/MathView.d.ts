@@ -1,6 +1,7 @@
 import { Node } from 'prosemirror-model';
 import { Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import { GetPos } from './types';
 export declare function renderMath(math: string, element: HTMLElement, inline: boolean): Promise<void>;
 declare class MathView {
     dom: HTMLElement;
@@ -10,8 +11,8 @@ declare class MathView {
     innerView: EditorView;
     node: Node;
     outerView: EditorView;
-    getPos: () => number;
-    constructor(node: Node, view: EditorView, getPos: () => number, inline: boolean);
+    getPos: GetPos;
+    constructor(node: Node, view: EditorView, getPos: GetPos, inline: boolean);
     selectNode(): void;
     deselectNode(): void;
     dispatchInner(tr: Transaction): void;

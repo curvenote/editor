@@ -13,7 +13,7 @@ import { NodeSelection, Selection, TextSelection, } from 'prosemirror-state';
 import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode, } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { Fragment, NodeRange } from 'prosemirror-model';
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, createId } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
@@ -21,7 +21,6 @@ import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChil
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
 import { getNodeIfSelected } from '../ui/utils';
-import { createId } from '../../utils';
 export function updateNodeAttrs(stateKey, viewId, node, attrs, select) {
     if (select === void 0) { select = true; }
     return function (dispatch, getState) {
@@ -36,9 +35,11 @@ export function updateNodeAttrs(stateKey, viewId, node, attrs, select) {
             var sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
             tr.setSelection(sel);
         }
-        var result = dispatch(applyProsemirrorTransaction(stateKey, viewId, tr));
-        if (result && viewId)
-            dispatch(focusEditorView(viewId, true));
+        if (select === 'inside') {
+            var sel = TextSelection.create(tr.doc, node.pos + 1);
+            tr.setSelection(sel);
+        }
+        var result = dispatch(applyProsemirrorTransaction(stateKey, viewId, tr, Boolean(select)));
         return result;
     };
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import { NodeViewProps } from './types';
+import { GetPos, NodeViewProps } from './types';
 export declare type Options = {
     wrapper: 'span' | 'div';
     className?: string;
@@ -9,7 +9,7 @@ export declare type Options = {
 export declare type ClassWrapperProps = {
     node: Node;
     view: EditorView;
-    getPos: () => number;
+    getPos: GetPos;
     Child: React.FunctionComponent<NodeViewProps>;
 };
 export declare class ReactWrapper {
@@ -17,11 +17,11 @@ export declare class ReactWrapper {
     node: Node;
     view: EditorView;
     editor: null | React.Component;
-    getPos: () => number;
+    getPos: GetPos;
     constructor(NodeView: React.FunctionComponent<NodeViewProps>, nodeViewPos: Omit<ClassWrapperProps, 'Child'>, options: Options);
     selectNode(): void;
     deselectNode(): void;
     update(node: Node): boolean;
 }
-declare function createNodeView(Editor: React.FunctionComponent<NodeViewProps>, options?: Options): (node: Node, view: EditorView, getPos: boolean | (() => number)) => ReactWrapper;
+declare function createNodeView(Editor: React.FunctionComponent<NodeViewProps>, options?: Options): (node: Node, view: EditorView, getPos: boolean | GetPos) => ReactWrapper;
 export default createNodeView;

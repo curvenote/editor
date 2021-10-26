@@ -9,7 +9,12 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+import { nodeNames, findChildrenWithName, CaptionKind, createId } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
+import { determineCaptionKind } from '@curvenote/schema/dist/process';
+import { Fragment } from 'prosemirror-model';
+import { opts } from '../../connect';
+export { findChildrenWithName };
 export var TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
@@ -46,6 +51,55 @@ export function updateNodeAttrsOnView(view, node, attrs, select) {
     }
     view.dispatch(tr);
     view.focus();
+}
+export function createFigureCaption(schema, kind, src) {
+    var FigcaptionNode = schema.nodes[nodeNames.figcaption];
+    var fragment = src ? opts.getCaptionFragment(schema, src) : Fragment.empty;
+    var captionAttrs = { kind: kind };
+    var caption = FigcaptionNode.create(captionAttrs, fragment);
+    return caption;
+}
+export function createFigure(schema, node, caption, initialFigureState) {
+    var _a;
+    if (caption === void 0) { caption = false; }
+    if (initialFigureState === void 0) { initialFigureState = {}; }
+    var Figure = schema.nodes[nodeNames.figure];
+    var kind = (_a = determineCaptionKind(node)) !== null && _a !== void 0 ? _a : CaptionKind.fig;
+    var attrs = __assign({ id: createId(), label: null, numbered: true, align: 'center' }, initialFigureState);
+    if (!caption) {
+        var figure_1 = Figure.createAndFill(attrs, Fragment.fromArray([node]));
+        return figure_1;
+    }
+    var captionNode = createFigureCaption(schema, kind, node.attrs.src);
+    var captionFirst = kind === CaptionKind.table;
+    var figure = Figure.createAndFill(attrs, Fragment.fromArray(captionFirst ? [captionNode, node] : [node, captionNode]));
+    return figure;
+}
+export function selectFirstNodeOfTypeInParent(nodeName, tr, parentPos) {
+    var pos = tr.doc.resolve(parentPos);
+    var parent = pos.nodeAfter;
+    if (!parent)
+        return tr;
+    var node = findChildrenWithName(parent, nodeName)[0];
+    if (!node)
+        return tr;
+    var start = parentPos + 1;
+    try {
+        var selected = tr
+            .setSelection(NodeSelection.create(tr.doc, start + node.pos))
+            .scrollIntoView();
+        return selected;
+    }
+    catch (error) {
+        console.error("Could not select the " + (typeof nodeName === 'string' ? nodeName : nodeName.join(', ')) + " node.");
+        return tr;
+    }
+}
+export function insertParagraphAndSelect(schema, tr, side) {
+    var paragraph = schema.nodes[nodeNames.paragraph].createAndFill();
+    var next = tr.insert(side, paragraph);
+    next.setSelection(TextSelection.create(next.doc, side + 1)).scrollIntoView();
+    return next;
 }
 function getLinkBounds(state, pos) {
     var $pos = state.doc.resolve(pos);

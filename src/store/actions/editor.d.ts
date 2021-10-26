@@ -5,7 +5,7 @@ import { ContentNodeWithPos } from 'prosemirror-utils';
 import { AppThunk } from '../types';
 export declare function updateNodeAttrs(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;
-}, select?: boolean | 'after'): AppThunk<boolean>;
+}, select?: boolean | 'after' | 'inside'): AppThunk<boolean>;
 export declare function deleteNode(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>): AppThunk<boolean>;
 export declare function liftContentOutOfNode(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>): AppThunk<boolean>;
 export declare function toggleMark(stateKey: any, viewId: string | null, mark?: MarkType, attrs?: {

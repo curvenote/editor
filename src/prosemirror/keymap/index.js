@@ -2,65 +2,57 @@ import { wrapIn, setBlockType, chainCommands, toggleMark, exitCode, joinUp, join
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
-import { store, opts } from '../connect';
-import { focusSelectedEditorView } from '../store/ui/actions';
-import { executeCommand } from '../store/actions';
-import { CommandNames } from '../store/suggestion/commands';
-import { createId } from '../utils';
+import { createId } from '@curvenote/schema';
+import { store, opts } from '../../connect';
+import { focusSelectedEditorView } from '../../store/ui/actions';
+import { executeCommand } from '../../store/actions';
+import { buildFigureKeymap } from './figure';
+import { CommandNames } from '../../store/suggestion/commands';
+import { createBind, flattenCommandList } from './utils';
 var mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
-export function buildBasicKeymap(schema, bind) {
-    var keys = {};
-    var ourBind = bind !== null && bind !== void 0 ? bind : (function (key, cmd) {
-        keys[key] = cmd;
-    });
+function basicMarkCommands(schema, bind) {
     if (schema.marks.strong) {
-        ourBind('Mod-b', toggleMark(schema.marks.strong));
-        ourBind('Mod-B', toggleMark(schema.marks.strong));
+        bind('Mod-b', toggleMark(schema.marks.strong));
+        bind('Mod-B', toggleMark(schema.marks.strong));
     }
     if (schema.marks.em) {
-        ourBind('Mod-i', toggleMark(schema.marks.em));
-        ourBind('Mod-I', toggleMark(schema.marks.em));
+        bind('Mod-i', toggleMark(schema.marks.em));
+        bind('Mod-I', toggleMark(schema.marks.em));
     }
     if (schema.marks.underline) {
-        ourBind('Mod-u', toggleMark(schema.marks.underline));
-        ourBind('Mod-U', toggleMark(schema.marks.underline));
+        bind('Mod-u', toggleMark(schema.marks.underline));
+        bind('Mod-U', toggleMark(schema.marks.underline));
     }
     if (schema.marks.code)
-        ourBind('Mod-C', toggleMark(schema.marks.code));
+        bind('Mod-C', toggleMark(schema.marks.code));
     if (schema.marks.link) {
         var addLink = function () {
             var viewId = store.getState().editor.ui.viewId;
             store.dispatch(executeCommand(CommandNames.link, viewId));
             return true;
         };
-        ourBind('Mod-k', addLink);
-        ourBind('Mod-K', addLink);
+        bind('Mod-k', addLink);
+        bind('Mod-K', addLink);
     }
-    return keys;
 }
-export function buildKeymap(stateKey, schema) {
-    var keys = {};
-    var bind = function (key, cmd) {
-        keys[key] = cmd;
-    };
-    var allUndo = chainCommands(undoInputRule, undo);
-    bind('Mod-z', allUndo);
-    bind('Backspace', undoInputRule);
+function addAllCommands(stateKey, schema, bind) {
+    bind('Mod-z', undoInputRule, undo);
     bind('Mod-Z', redo);
     if (!mac)
         bind('Mod-y', redo);
     bind('Alt-ArrowUp', joinUp);
     bind('Alt-ArrowDown', joinDown);
     bind('Mod-BracketLeft', lift);
-    bind('Escape', chainCommands(undoInputRule, selectParentNode, function () {
+    bind('Escape', undoInputRule);
+    bind('Escape', selectParentNode, function () {
         store.dispatch(focusSelectedEditorView(false));
         return true;
-    }));
-    bind('Shift-Escape', chainCommands(undoInputRule, function () {
+    });
+    bind('Shift-Escape', function () {
         store.dispatch(focusSelectedEditorView(false));
         return true;
-    }));
-    buildBasicKeymap(schema, bind);
+    });
+    basicMarkCommands(schema, bind);
     if (schema.nodes.blockquote)
         bind('Ctrl->', wrapIn(schema.nodes.blockquote));
     if (schema.nodes.hard_break) {
@@ -76,6 +68,7 @@ export function buildKeymap(stateKey, schema) {
         if (mac)
             bind('Ctrl-Enter', cmd);
     }
+    buildFigureKeymap(schema, bind);
     if (schema.nodes.list_item) {
         bind('Enter', splitListItem(schema.nodes.list_item));
         bind('Mod-Shift-7', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.ordered_list)));
@@ -105,7 +98,17 @@ export function buildKeymap(stateKey, schema) {
     }
     bind('Mod-Alt-c', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
     bind('Mod-Alt-m', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
-    return keys;
+    bind('Backspace', undoInputRule);
+}
+export function buildBasicKeymap(schema) {
+    var _a = createBind(), keys = _a.keys, bind = _a.bind;
+    basicMarkCommands(schema, bind);
+    return flattenCommandList(keys);
+}
+export function buildKeymap(stateKey, schema) {
+    var _a = createBind(), keys = _a.keys, bind = _a.bind;
+    addAllCommands(stateKey, schema, bind);
+    return flattenCommandList(keys);
 }
 export function captureTab() {
     var capture = function () { return true; };
@@ -115,4 +118,4 @@ export function captureTab() {
     };
     return keys;
 }
-//# sourceMappingURL=keymap.js.map
+//# sourceMappingURL=index.js.map

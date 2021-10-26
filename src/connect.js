@@ -1,4 +1,6 @@
 import * as sidenotes from 'sidenotes';
+import { Fragment } from 'prosemirror-model';
+import { process } from '@curvenote/schema';
 import setupComponents from './r-components';
 export var ref = {
     store: function () {
@@ -31,12 +33,22 @@ export var opts = {
         var _a, _b, _c;
         return (_c = (_b = (_a = ref.opts()).handlePaste) === null || _b === void 0 ? void 0 : _b.call(_a, view, event, slice)) !== null && _c !== void 0 ? _c : false;
     },
-    modifyTransaction: function (stateKey, viewId, state, transaction) {
+    modifyTransaction: function (stateKey, viewId, state, tr) {
         var modifyTransaction = ref.opts().modifyTransaction;
-        if (modifyTransaction) {
-            return modifyTransaction(stateKey, viewId, state, transaction);
+        var next = tr;
+        switch (tr.getMeta('uiEvent')) {
+            case 'cut':
+            case 'paste':
+            case 'drop':
+                next = process.modifyTransactionToValidDocState(tr);
+                break;
+            default:
+                break;
         }
-        return transaction;
+        if (modifyTransaction) {
+            return modifyTransaction(stateKey, viewId, state, next);
+        }
+        return next;
     },
     addComment: function (stateKey, state) {
         var _a, _b, _c;
@@ -54,6 +66,10 @@ export var opts = {
     },
     createLinkSearch: function () {
         return ref.opts().createLinkSearch();
+    },
+    getCaptionFragment: function (schema, src) {
+        var _a, _b, _c;
+        return (_c = (_b = (_a = ref.opts()).getCaptionFragment) === null || _b === void 0 ? void 0 : _b.call(_a, schema, src)) !== null && _c !== void 0 ? _c : Fragment.empty;
     },
     get theme() {
         return ref.opts().theme;

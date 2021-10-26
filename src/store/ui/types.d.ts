@@ -4,6 +4,7 @@ export declare const FOCUS_EDITOR_VIEW = "FOCUS_EDITOR_VIEW";
 export declare const INLINE_SELECTION = "INLINE_SELECTION";
 export declare enum SelectionKinds {
     link = "link",
+    figure = "figure",
     image = "image",
     iframe = "iframe",
     math = "math",

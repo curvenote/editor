@@ -34,11 +34,14 @@ export function updateEditorState(stateKey, viewId, editorState, tr) {
         },
     };
 }
-export function applyProsemirrorTransaction(stateKey, viewId, tr) {
+export function applyProsemirrorTransaction(stateKey, viewId, tr, focus) {
+    if (focus === void 0) { focus = false; }
     return function (dispatch, getState) {
         var view = getEditorView(getState(), viewId).view;
         if (view) {
             view.dispatch(tr);
+            if (focus)
+                view.focus();
             return true;
         }
         var editor = getEditorState(getState(), stateKey);

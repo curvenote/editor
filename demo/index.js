@@ -41,6 +41,7 @@ import { Provider } from 'react-redux';
 import { Button, createTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex, ReferenceKind, process, toText } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
+import { Fragment } from 'prosemirror-model';
 import { actions, Editor, EditorMenu, setup, Suggestions, Attributes, InlineActions, } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -116,6 +117,7 @@ var opts = {
     createLinkSearch: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2, ({ search: function () { return someLinks; } })];
     }); }); },
+    getCaptionFragment: function (schema) { return Fragment.fromArray([schema.text('Hello caption world!')]); },
     nodeViews: {},
 };
 setup(store, opts);

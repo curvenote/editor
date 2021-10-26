@@ -1,7 +1,7 @@
 import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } from 'prosemirror-inputrules';
+import { createId } from '@curvenote/schema';
 import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
 import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
-import { createId } from '../../utils';
 import { LanguageNames } from '../../views/types';
 export var quotes = function (schema) { return smartQuotes; };
 export var ellipsis = function (schema) { return [new InputRule(/\.\.\.$/, '…')]; };

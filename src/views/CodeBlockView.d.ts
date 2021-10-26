@@ -16,10 +16,11 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { TextSelection } from 'prosemirror-state';
+import { GetPos } from './types';
 export default class CodeBlockView implements NodeView {
     view: EditorView;
     node: Node;
-    getPos: () => number;
+    getPos: GetPos;
     incomingChanges: boolean;
     cm: any;
     dom: any;

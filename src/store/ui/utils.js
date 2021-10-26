@@ -28,8 +28,12 @@ export var getSelectionKind = function (state) {
     var pos = state.selection.from;
     switch (node === null || node === void 0 ? void 0 : node.type.name) {
         case nodeNames.image:
+            if (findParentNode(function (n) { return n.type.name === nodeNames.figure; })(state.selection))
+                break;
             return { kind: SelectionKinds.image, pos: pos };
         case nodeNames.iframe:
+            if (findParentNode(function (n) { return n.type.name === nodeNames.figure; })(state.selection))
+                break;
             return { kind: SelectionKinds.iframe, pos: pos };
         case nodeNames.math:
             return { kind: SelectionKinds.math, pos: pos };
@@ -43,6 +47,8 @@ export var getSelectionKind = function (state) {
             return { kind: SelectionKinds.callout, pos: pos };
         case nodeNames.heading:
             return { kind: SelectionKinds.heading, pos: pos };
+        case nodeNames.figure:
+            return { kind: SelectionKinds.figure, pos: pos };
         default:
             break;
     }
@@ -58,6 +64,8 @@ export var getSelectionKind = function (state) {
                 return true;
             case nodeNames.code_block:
                 return true;
+            case nodeNames.figure:
+                return true;
             default:
                 return false;
         }
@@ -71,8 +79,14 @@ export var getSelectionKind = function (state) {
             return { kind: SelectionKinds.callout, pos: parent.pos };
         case nodeNames.table:
             return { kind: SelectionKinds.table, pos: parent.pos };
-        case nodeNames.code_block:
+        case nodeNames.code_block: {
+            var figure = findParentNode(function (n) { return n.type.name === nodeNames.figure; })(state.selection);
+            if (figure)
+                return { kind: SelectionKinds.code, pos: figure.pos };
             return { kind: SelectionKinds.code, pos: parent.pos };
+        }
+        case nodeNames.figure:
+            return { kind: SelectionKinds.figure, pos: parent.pos };
         default:
             break;
     }

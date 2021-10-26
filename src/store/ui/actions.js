@@ -76,13 +76,12 @@ export function positionInlineActions() {
                 placement.anchorEl = getAnchorEl('iframe');
                 placement.placement = 'bottom';
                 break;
-            case SelectionKinds.callout:
-                placement.placement = 'bottom';
-                break;
             case SelectionKinds.table:
                 placement.anchorEl = getAnchorEl('table', true);
                 placement.placement = 'bottom';
                 break;
+            case SelectionKinds.figure:
+            case SelectionKinds.callout:
             case SelectionKinds.code:
                 placement.placement = 'bottom';
                 break;
