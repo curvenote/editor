@@ -674,6 +674,7 @@ h6[numbered]:before {
   height: auto;
   margin: 16px 0;
   border: 1px solid #eee;
+  text-align: left;
 }
 
 span.footnote {
