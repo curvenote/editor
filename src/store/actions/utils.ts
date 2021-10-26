@@ -66,7 +66,7 @@ export function createFigure(
   schema: Schema,
   node: Node,
   caption = false,
-  initialFigureState: Partial<Pick<Nodes.Figure.Attrs, 'align'>> = {},
+  initialFigureState: Partial<Nodes.Figure.Attrs> = {},
 ) {
   const Figure = schema.nodes[nodeNames.figure] as NodeType;
   const kind = determineCaptionKind(node) ?? CaptionKind.fig;
