@@ -20,7 +20,7 @@ export type Attrs = NumberedNode & {
 
 const image: MyNodeSpec<Attrs> = {
   attrs: {
-    ...getNumberedDefaultAttrs(),
+    ...getNumberedDefaultAttrs(), // Deprecated, use figure
     src: {},
     alt: { default: null },
     title: { default: null },
@@ -35,11 +35,11 @@ const image: MyNodeSpec<Attrs> = {
       tag: 'img[src]',
       getAttrs(dom) {
         return {
-          ...getNumberedAttrs(dom),
+          ...getNumberedAttrs(dom), // Deprecated, use figure
           src: dom.getAttribute('src'),
           title: dom.getAttribute('title'),
           alt: dom.getAttribute('alt'),
-          align: dom.getAttribute('align') ?? 'center',
+          align: dom.getAttribute('align') ?? 'center', // Deprecated, use figure
           width: getImageWidth(dom.getAttribute('width')),
           caption: readBooleanDomAttr(dom, 'caption'),
         };
@@ -47,12 +47,13 @@ const image: MyNodeSpec<Attrs> = {
     },
   ],
   toDOM(node) {
-    const { src, alt, title, width } = node.attrs;
+    const { src, alt, title, width, align } = node.attrs;
     return [
       'img',
       {
-        ...setNumberedAttrs(node.attrs),
+        ...setNumberedAttrs(node.attrs), // Deprecated, use figure
         src,
+        align,
         alt: alt || undefined,
         title: title || undefined,
         width: `${width}%`,
