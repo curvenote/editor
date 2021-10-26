@@ -1,5 +1,5 @@
 article {
-  counter-reset: h1_cnt eq_cnt fig_cnt footnote;
+  counter-reset: h1_cnt eq_cnt fig_cnt table_cnt code_cnt footnote;
   h1 {
     counter-reset: h2_cnt;
   }

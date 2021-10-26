@@ -2,9 +2,9 @@
 import { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
-import { Node, Slice } from 'prosemirror-model';
+import { Fragment, Node, Schema, Slice } from 'prosemirror-model';
 import { DirectEditorProps, EditorView } from 'prosemirror-view';
-import { Nodes } from '@curvenote/schema';
+import { Nodes, process } from '@curvenote/schema';
 import { Store } from './store/types';
 import setupComponents from './r-components';
 import { LinkResult } from './store/suggestion/types';
@@ -13,10 +13,12 @@ export type SearchContext = {
   search: (query?: string) => LinkResult[];
 };
 
+export type UploadImageState = string;
+
 export type Options = {
   transformKeyToId: (key: any) => string | null;
   handlePaste?: (view: EditorView, event: ClipboardEvent, slice: Slice) => boolean;
-  uploadImage: (file: File, node: Node | null) => Promise<string | null>;
+  uploadImage: (file: File, node: Node | null) => Promise<UploadImageState | null>;
   modifyTransaction?: (
     stateKey: any,
     viewId: string,
@@ -40,6 +42,7 @@ export type Options = {
   throttle: number;
   // nodeViews override any of the default nodeviews
   nodeViews?: DirectEditorProps['nodeViews'];
+  getCaptionFragment?: (schema: Schema, src: string) => Fragment;
 };
 
 type Ref<T> = {
@@ -80,12 +83,22 @@ export const opts: Required<Options> = {
   handlePaste(view: EditorView, event: ClipboardEvent, slice: Slice) {
     return ref.opts().handlePaste?.(view, event, slice) ?? false;
   },
-  modifyTransaction(stateKey: any, viewId: string, state: EditorState, transaction: Transaction) {
+  modifyTransaction(stateKey: any, viewId: string, state: EditorState, tr: Transaction) {
     const { modifyTransaction } = ref.opts();
-    if (modifyTransaction) {
-      return modifyTransaction(stateKey, viewId, state, transaction);
+    let next = tr;
+    switch (tr.getMeta('uiEvent')) {
+      case 'cut':
+      case 'paste':
+      case 'drop':
+        next = process.modifyTransactionToValidDocState(tr);
+        break;
+      default:
+        break;
     }
-    return transaction;
+    if (modifyTransaction) {
+      return modifyTransaction(stateKey, viewId, state, next);
+    }
+    return next;
   },
   addComment(stateKey: any, state: EditorState) {
     return ref.opts().addComment?.(stateKey, state) ?? false;
@@ -101,6 +114,9 @@ export const opts: Required<Options> = {
   },
   createLinkSearch() {
     return ref.opts().createLinkSearch();
+  },
+  getCaptionFragment(schema, src) {
+    return ref.opts().getCaptionFragment?.(schema, src) ?? Fragment.empty;
   },
   get theme() {
     return ref.opts().theme;

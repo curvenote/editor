@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
-import { Fragment } from 'prosemirror-model';
+import { Fragment, Node, Schema } from 'prosemirror-model';
 import {
   addColumnAfter,
   addColumnBefore,
@@ -18,17 +18,17 @@ import {
 } from 'prosemirror-tables';
 
 import { Transaction } from 'prosemirror-state';
+import { nodeNames, createId } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
 import { getSuggestion } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
-import { getLinkBoundsIfTheyExist } from '../../actions/utils';
+import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
-import { createId } from '../../../utils';
 import { addImagePrompt } from '../../../prosemirror/plugins/ImagePlaceholder';
 
 const options = {
@@ -93,7 +93,7 @@ export function executeCommand(
     } else {
       view = viewOrId;
     }
-    const { schema } = view.state;
+    const schema = view.state.schema as Schema;
     const replaceOrInsert = replace ? actions.replaceSelection : actions.insertNode;
 
     if (TABLE_ACTIONS[command] && isInTable(view.state)) {
@@ -125,29 +125,23 @@ export function executeCommand(
       }
       case CommandNames.insert_table: {
         removeText();
-        const tr = view.state.tr
-          .replaceSelectionWith(
-            schema.nodes.table.create(
-              undefined,
-              Fragment.fromArray([
-                schema.nodes.table_row.create(
-                  undefined,
-                  Fragment.fromArray([
-                    schema.nodes.table_header.createAndFill(),
-                    schema.nodes.table_header.createAndFill(),
-                  ]),
-                ),
-                schema.nodes.table_row.create(
-                  undefined,
-                  Fragment.fromArray([
-                    schema.nodes.table_cell.createAndFill(),
-                    schema.nodes.table_cell.createAndFill(),
-                  ]),
-                ),
-              ]),
-            ),
-          )
-          .scrollIntoView();
+        const Table = schema.nodes[nodeNames.table];
+        const Row = schema.nodes[nodeNames.table_row];
+
+        const header = schema.nodes[nodeNames.table_header].createAndFill() as Node;
+        const cell = schema.nodes[nodeNames.table_cell].createAndFill() as Node;
+
+        const figure = createFigure(
+          schema,
+          Table.create(
+            {},
+            Fragment.fromArray([
+              Row.create({}, Fragment.fromArray([header, header])),
+              Row.create({}, Fragment.fromArray([cell, cell])),
+            ]),
+          ),
+        );
+        const tr = view.state.tr.replaceSelectionWith(figure).scrollIntoView();
         view.dispatch(tr);
         // TODO: change selection to the first cell!!
         view.focus();

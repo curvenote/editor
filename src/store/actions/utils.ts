@@ -1,6 +1,12 @@
-import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
+import { nodeNames, findChildrenWithName, CaptionKind, createId, Nodes } from '@curvenote/schema';
+import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
+import { determineCaptionKind } from '@curvenote/schema/dist/process';
+import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
+import { opts } from '../../connect';
+
+export { findChildrenWithName };
 
 export const TEST_LINK =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
@@ -46,6 +52,74 @@ export function updateNodeAttrsOnView(
   }
   view.dispatch(tr);
   view.focus();
+}
+
+export function createFigureCaption(schema: Schema, kind: CaptionKind, src?: string) {
+  const FigcaptionNode = schema.nodes[nodeNames.figcaption];
+  const fragment = src ? opts.getCaptionFragment(schema, src) : Fragment.empty;
+  const captionAttrs: Nodes.Figcaption.Attrs = { kind };
+  const caption = FigcaptionNode.create(captionAttrs, fragment);
+  return caption;
+}
+
+export function createFigure(
+  schema: Schema,
+  node: Node,
+  caption = false,
+  initialFigureState: Partial<Nodes.Figure.Attrs> = {},
+) {
+  const Figure = schema.nodes[nodeNames.figure] as NodeType;
+  const kind = determineCaptionKind(node) ?? CaptionKind.fig;
+  const attrs: Nodes.Figure.Attrs = {
+    id: createId(),
+    label: null,
+    numbered: true,
+    align: 'center',
+    ...initialFigureState,
+  };
+  if (!caption) {
+    const figure = Figure.createAndFill(attrs, Fragment.fromArray([node])) as Node;
+    return figure;
+  }
+  const captionNode = createFigureCaption(schema, kind, node.attrs.src);
+  const captionFirst = kind === CaptionKind.table;
+  const figure = Figure.createAndFill(
+    attrs,
+    Fragment.fromArray(captionFirst ? [captionNode, node] : [node, captionNode]),
+  ) as Node;
+  return figure;
+}
+
+export function selectFirstNodeOfTypeInParent(
+  nodeName: nodeNames | nodeNames[],
+  tr: Transaction,
+  parentPos: number,
+): Transaction {
+  const pos = tr.doc.resolve(parentPos);
+  const parent = pos.nodeAfter;
+  if (!parent) return tr;
+  const node = findChildrenWithName(parent, nodeName)[0];
+  if (!node) return tr;
+  const start = parentPos + 1;
+  try {
+    const selected = tr
+      .setSelection(NodeSelection.create(tr.doc, start + node.pos))
+      .scrollIntoView();
+    return selected;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(
+      `Could not select the ${typeof nodeName === 'string' ? nodeName : nodeName.join(', ')} node.`,
+    );
+    return tr;
+  }
+}
+
+export function insertParagraphAndSelect(schema: Schema, tr: Transaction, side: number) {
+  const paragraph = schema.nodes[nodeNames.paragraph].createAndFill() as Node;
+  const next = tr.insert(side, paragraph);
+  next.setSelection(TextSelection.create(next.doc, side + 1)).scrollIntoView();
+  return next;
 }
 
 // https://discuss.prosemirror.net/t/expanding-the-selection-to-the-active-mark/478

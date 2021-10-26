@@ -1,12 +1,12 @@
 /* eslint-disable no-param-reassign */
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, createId } from '@curvenote/schema';
 import { Fragment, Node } from 'prosemirror-model';
 import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
-import { opts } from '../../connect';
+import { opts, UploadImageState } from '../../connect';
+import { createFigure } from '../../store/actions/utils';
 import { getNodeIfSelected } from '../../store/ui/utils';
-import { createId } from '../../utils';
 
 export const key = new PluginKey('placeholder');
 
@@ -15,7 +15,7 @@ export type ImagePlaceholderPlugin = Plugin<DecorationSet>;
 interface PromptProps {
   view: EditorView;
   remove: (targetId?: string) => void;
-  success: (urls: string[]) => void;
+  success: (state: UploadImageState[]) => void;
 }
 
 interface PromptActionProps extends PromptProps {
@@ -218,12 +218,13 @@ function createImageHandlers(
   function remove(targetId?: string) {
     view.dispatch(view.state.tr.setMeta(plugin, { remove: { id: targetId || id } }));
   }
-  function success(urls: string[]) {
+  function success(states: UploadImageState[]) {
     const pos = findImagePlaceholder(view.state, id);
     if (pos == null) return;
-    const images = urls.map((url) => {
+    const images = states.map((url) => {
       const attrs = { id: node?.attrs?.id ?? createId(), ...node?.attrs, src: url };
-      return view.state.schema.nodes.image.create(attrs);
+      const figure = createFigure(view.state.schema, view.state.schema.nodes.image.create(attrs));
+      return figure;
     });
     const fragment = Fragment.fromArray(images);
     view.dispatch(
@@ -293,7 +294,7 @@ async function uploadImageFiles(view: EditorView, images: File[]) {
     remove();
     return;
   }
-  const validUrls = urls.filter((url) => url) as string[];
+  const validUrls = urls.filter((url) => url) as UploadImageState[];
   if (validUrls.length === 0) {
     remove();
     return;

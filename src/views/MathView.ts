@@ -6,6 +6,7 @@ import { Transaction, EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
+import { GetPos } from './types';
 
 export async function renderMath(math: string, element: HTMLElement, inline: boolean) {
   // TODO: Change this to a Text call that includes the document, allows inclusion of displays! :)
@@ -45,9 +46,9 @@ class MathView {
 
   outerView: EditorView;
 
-  getPos: () => number;
+  getPos: GetPos;
 
-  constructor(node: Node, view: EditorView, getPos: () => number, inline: boolean) {
+  constructor(node: Node, view: EditorView, getPos: GetPos, inline: boolean) {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;

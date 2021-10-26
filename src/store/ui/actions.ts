@@ -81,14 +81,13 @@ export function positionInlineActions(): AppThunk<void> {
         placement.anchorEl = getAnchorEl('iframe');
         placement.placement = 'bottom';
         break;
-      case SelectionKinds.callout:
-        placement.placement = 'bottom';
-        break;
       case SelectionKinds.table:
         // Note: we are always looking for the table in this case
         placement.anchorEl = getAnchorEl('table', true);
         placement.placement = 'bottom';
         break;
+      case SelectionKinds.figure:
+      case SelectionKinds.callout:
       case SelectionKinds.code:
         placement.placement = 'bottom';
         break;

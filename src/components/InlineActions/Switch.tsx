@@ -5,13 +5,14 @@ import { State } from '../../store/types';
 import { SelectionKinds as Kinds } from '../../store/ui/types';
 import { getEditorUIStateAndViewIds, getInlineActionKind } from '../../store/ui/selectors';
 import LinkActions from './LinkActions';
-import AlignActions from './AlignActions';
 import CalloutActions from './CalloutActions';
 import TimeActions from './TimeActions';
 import HeadingActions from './HeadingActions';
 import EquationActions from './EquationActions';
 import TableActions from './TableActions';
 import CodeActions from './CodeActions';
+import FigureImageActions from './FigureActions';
+import ImageActions from './ImageActions';
 
 export function useInlineActionProps() {
   const { stateId, viewId } = useSelector(
@@ -31,8 +32,9 @@ const InlineActionSwitch: React.FC = () => {
   return (
     <>
       {kind === Kinds.link && <LinkActions {...{ stateId, viewId }} />}
-      {kind === Kinds.image && <AlignActions showCaption {...{ stateId, viewId }} />}
-      {kind === Kinds.iframe && <AlignActions {...{ stateId, viewId }} />}
+      {kind === Kinds.figure && <FigureImageActions {...{ stateId, viewId }} />}
+      {kind === Kinds.image && <ImageActions {...{ stateId, viewId }} />}
+      {kind === Kinds.iframe && <ImageActions {...{ stateId, viewId }} />}
       {kind === Kinds.callout && <CalloutActions {...{ stateId, viewId }} />}
       {kind === Kinds.heading && <HeadingActions {...{ stateId, viewId }} />}
       {/* {kind === Kinds.math && <AlignActions view={view} />} */}

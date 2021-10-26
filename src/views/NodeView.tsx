@@ -6,8 +6,7 @@ import { ThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { opts, ref } from '../connect';
-import { NodeViewProps } from './types';
-// import { NodeViewProps } from './types';
+import { GetPos, NodeViewProps } from './types';
 
 export type Options = {
   wrapper: 'span' | 'div';
@@ -17,7 +16,7 @@ export type Options = {
 export type ClassWrapperProps = {
   node: Node;
   view: EditorView;
-  getPos: () => number;
+  getPos: GetPos;
   Child: React.FunctionComponent<NodeViewProps>;
 };
 
@@ -61,7 +60,7 @@ export class ReactWrapper {
 
   editor: null | React.Component = null;
 
-  getPos: () => number;
+  getPos: GetPos;
 
   constructor(
     NodeView: React.FunctionComponent<NodeViewProps>,
@@ -123,8 +122,8 @@ function createNodeView(
   Editor: React.FunctionComponent<NodeViewProps>,
   options: Options = { wrapper: 'div' },
 ) {
-  return (node: Node, view: EditorView, getPos: boolean | (() => number)) =>
-    new ReactWrapper(Editor, { node, view, getPos: getPos as () => number }, options);
+  return (node: Node, view: EditorView, getPos: boolean | GetPos) =>
+    new ReactWrapper(Editor, { node, view, getPos: getPos as GetPos }, options);
 }
 
 export default createNodeView;

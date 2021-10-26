@@ -3,7 +3,7 @@
  */
 
 import CodeMirror from 'codemirror';
-import { exitCode } from 'prosemirror-commands';
+import { newlineInCode } from 'prosemirror-commands';
 import { EditorView, NodeView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
 import { undo, redo } from 'prosemirror-history';
@@ -21,10 +21,12 @@ import 'codemirror/mode/sql/sql';
 import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
-import { Selection, TextSelection } from 'prosemirror-state';
-import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
+import { EditorState, Selection, TextSelection, Transaction } from 'prosemirror-state';
+import { findParentNode } from 'prosemirror-utils';
+import { nodeNames } from '@curvenote/schema';
+import { GetPos, LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
-import { focusEditorView } from '../store/actions';
+import { focusEditorView, insertParagraphAndSelect } from '../store/actions';
 import { store } from '../connect';
 
 function computeChange(oldVal: any, newVal: any) {
@@ -61,12 +63,22 @@ function createMode(node: Node): ModeOption {
   return mode;
 }
 
+function exitCode(state: EditorState, dispatch?: (tr: Transaction) => void): boolean {
+  const parent =
+    findParentNode((n) => n.type.name === nodeNames.figure)(state.selection) ??
+    findParentNode((n) => n.type.name === nodeNames.code_block)(state.selection);
+  if (!parent) return false;
+  const tr = insertParagraphAndSelect(state.schema, state.tr, parent.pos + parent.node.nodeSize);
+  dispatch?.(tr);
+  return true;
+}
+
 export default class CodeBlockView implements NodeView {
   view: EditorView;
 
   node: Node;
 
-  getPos: () => number;
+  getPos: GetPos;
 
   incomingChanges: boolean;
 
@@ -182,6 +194,9 @@ export default class CodeBlockView implements NodeView {
         view.dispatch(selectedTr);
         view.focus();
         return true;
+      },
+      'Shift-Enter': () => {
+        this.cm.execCommand('newlineAndIndent');
       },
       [`${mod}-Enter`]: () => {
         if (exitCode(view.state, view.dispatch)) view.focus();

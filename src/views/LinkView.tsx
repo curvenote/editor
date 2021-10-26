@@ -1,5 +1,6 @@
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+import { GetPos } from './types';
 
 class LinkView {
   // The node's representation in the editor (empty, for now)
@@ -9,9 +10,9 @@ class LinkView {
 
   view: EditorView;
 
-  getPos?: () => number;
+  getPos?: GetPos;
 
-  constructor(node: Node, view: EditorView, getPos: (() => number) | undefined) {
+  constructor(node: Node, view: EditorView, getPos?: GetPos) {
     this.node = node;
     this.view = view;
     this.getPos = getPos;

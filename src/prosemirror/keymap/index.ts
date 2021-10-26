@@ -2,97 +2,74 @@ import {
   wrapIn,
   setBlockType,
   chainCommands,
+  Command,
   toggleMark,
   exitCode,
   joinUp,
   joinDown,
   lift,
   selectParentNode,
+  Keymap,
 } from 'prosemirror-commands';
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
-import { EditorState, Transaction } from 'prosemirror-state';
-import { store, opts } from '../connect';
-import { focusSelectedEditorView } from '../store/ui/actions';
-import { executeCommand } from '../store/actions';
-import { CommandNames } from '../store/suggestion/commands';
-import { createId } from '../utils';
-
-type KeyMap = (state: EditorState<Schema>, dispatch?: (p: Transaction<Schema>) => void) => boolean;
+import { createId } from '@curvenote/schema';
+import { store, opts } from '../../connect';
+import { focusSelectedEditorView } from '../../store/ui/actions';
+import { executeCommand } from '../../store/actions';
+import { buildFigureKeymap } from './figure';
+import { CommandNames } from '../../store/suggestion/commands';
+import { AddKey, createBind, flattenCommandList } from './utils';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
-export function buildBasicKeymap(schema: Schema, bind?: (key: string, cmd: KeyMap) => void) {
-  const keys: { [index: string]: KeyMap } = {};
-
-  const ourBind =
-    bind ??
-    ((key: string, cmd: KeyMap) => {
-      keys[key] = cmd;
-    });
-
+function basicMarkCommands(schema: Schema, bind: AddKey): void {
   if (schema.marks.strong) {
-    ourBind('Mod-b', toggleMark(schema.marks.strong));
-    ourBind('Mod-B', toggleMark(schema.marks.strong));
+    bind('Mod-b', toggleMark(schema.marks.strong));
+    bind('Mod-B', toggleMark(schema.marks.strong));
   }
   if (schema.marks.em) {
-    ourBind('Mod-i', toggleMark(schema.marks.em));
-    ourBind('Mod-I', toggleMark(schema.marks.em));
+    bind('Mod-i', toggleMark(schema.marks.em));
+    bind('Mod-I', toggleMark(schema.marks.em));
   }
   if (schema.marks.underline) {
-    ourBind('Mod-u', toggleMark(schema.marks.underline));
-    ourBind('Mod-U', toggleMark(schema.marks.underline));
+    bind('Mod-u', toggleMark(schema.marks.underline));
+    bind('Mod-U', toggleMark(schema.marks.underline));
   }
-  if (schema.marks.code) ourBind('Mod-C', toggleMark(schema.marks.code));
+  if (schema.marks.code) bind('Mod-C', toggleMark(schema.marks.code));
   if (schema.marks.link) {
     const addLink = () => {
       const { viewId } = store.getState().editor.ui;
       store.dispatch(executeCommand(CommandNames.link, viewId));
       return true;
     };
-    ourBind('Mod-k', addLink);
-    ourBind('Mod-K', addLink);
+    bind('Mod-k', addLink);
+    bind('Mod-K', addLink);
   }
-  return keys;
 }
 
-export function buildKeymap(stateKey: any, schema: Schema) {
-  const keys: { [index: string]: KeyMap } = {};
-
-  const bind = (key: string, cmd: KeyMap) => {
-    keys[key] = cmd;
-  };
-
-  const allUndo = chainCommands(undoInputRule, undo);
-  bind('Mod-z', allUndo);
-  bind('Backspace', undoInputRule);
+function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
+  bind('Mod-z', undoInputRule, undo);
   bind('Mod-Z', redo);
   if (!mac) bind('Mod-y', redo);
 
   bind('Alt-ArrowUp', joinUp);
   bind('Alt-ArrowDown', joinDown);
   bind('Mod-BracketLeft', lift);
-  bind(
-    'Escape',
-    chainCommands(undoInputRule, selectParentNode, () => {
-      store.dispatch(focusSelectedEditorView(false));
-      return true;
-    }),
-  );
+  bind('Escape', undoInputRule);
+  bind('Escape', selectParentNode, () => {
+    store.dispatch(focusSelectedEditorView(false));
+    return true;
+  });
   // Immediately select the parent
-  bind(
-    'Shift-Escape',
-    chainCommands(undoInputRule, () => {
-      store.dispatch(focusSelectedEditorView(false));
-      return true;
-    }),
-  );
+  bind('Shift-Escape', () => {
+    store.dispatch(focusSelectedEditorView(false));
+    return true;
+  });
 
-  buildBasicKeymap(schema, bind);
-
-  // if (schema.nodes.code_block) bind('Mod-M', setBlockType(schema.nodes.code_block));
+  basicMarkCommands(schema, bind);
 
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
   if (schema.nodes.hard_break) {
@@ -106,6 +83,9 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     bind('Shift-Enter', cmd);
     if (mac) bind('Ctrl-Enter', cmd);
   }
+
+  buildFigureKeymap(schema, bind);
+
   if (schema.nodes.list_item) {
     // TODO: Could improve this a bunch!!
     bind('Enter', splitListItem(schema.nodes.list_item));
@@ -125,6 +105,7 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     bind('Tab', cmdSink);
     bind('Mod-]', cmdSink);
   }
+
   if (schema.nodes.paragraph) bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
 
   if (schema.nodes.heading) {
@@ -153,12 +134,24 @@ export function buildKeymap(stateKey: any, schema: Schema) {
     (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
   );
 
-  return keys;
+  bind('Backspace', undoInputRule);
 }
 
-export function captureTab() {
+export function buildBasicKeymap(schema: Schema): Keymap {
+  const { keys, bind } = createBind();
+  basicMarkCommands(schema, bind);
+  return flattenCommandList(keys);
+}
+
+export function buildKeymap(stateKey: any, schema: Schema): Keymap {
+  const { keys, bind } = createBind();
+  addAllCommands(stateKey, schema, bind);
+  return flattenCommandList(keys);
+}
+
+export function captureTab(): Keymap {
   // Always capture the Tab.
-  const capture: KeyMap = () => true;
+  const capture: Command = () => true;
   const keys = {
     'Shift-Tab': capture,
     Tab: capture,

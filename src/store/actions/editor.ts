@@ -13,7 +13,7 @@ import {
 } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { MarkType, NodeType, Node, Fragment, Schema, NodeRange } from 'prosemirror-model';
-import { Nodes, nodeNames } from '@curvenote/schema';
+import { Nodes, nodeNames, createId } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
@@ -29,14 +29,13 @@ import {
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
 import { applyProsemirrorTransaction } from '../state/actions';
 import { getNodeIfSelected } from '../ui/utils';
-import { createId } from '../../utils';
 
 export function updateNodeAttrs(
   stateKey: any,
   viewId: string | null,
   node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
   attrs: { [index: string]: any },
-  select: boolean | 'after' = true,
+  select: boolean | 'after' | 'inside' = true,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editorState = getEditorState(getState(), stateKey)?.state;
@@ -47,8 +46,11 @@ export function updateNodeAttrs(
       const sel = TextSelection.create(tr.doc, node.pos + node.node.nodeSize);
       tr.setSelection(sel);
     }
-    const result = dispatch(applyProsemirrorTransaction(stateKey, viewId, tr));
-    if (result && viewId) dispatch(focusEditorView(viewId, true));
+    if (select === 'inside') {
+      const sel = TextSelection.create(tr.doc, node.pos + 1);
+      tr.setSelection(sel);
+    }
+    const result = dispatch(applyProsemirrorTransaction(stateKey, viewId, tr, Boolean(select)));
     return result;
   };
 }
