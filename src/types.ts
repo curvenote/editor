@@ -13,6 +13,8 @@ export enum nodeNames {
   blockquote = 'blockquote',
   code_block = 'code_block',
   image = 'image',
+  figure = 'figure',
+  figcaption = 'figcaption',
   horizontal_rule = 'horizontal_rule',
   hard_break = 'hard_break',
   time = 'time',

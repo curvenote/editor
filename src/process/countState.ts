@@ -5,6 +5,7 @@ import { NumberedNode, ReferenceKind } from '../nodes/types';
 import { nodeNames } from '../types';
 import { toText } from '../serialize/text';
 import { StateCounter, Reference, Counter, CounterMeta, WordCounter } from './types';
+import { findChildrenWithName } from '../utils';
 
 function push<K extends ReferenceKind, T extends CounterMeta>(
   counter: Counter<Reference<K, T>>,
@@ -28,6 +29,8 @@ function push<K extends ReferenceKind, T extends CounterMeta>(
   }
 }
 
+const NO_CAPTION: NumberedNode = { numbered: false, id: null, label: null };
+
 export function countState(state: EditorState): StateCounter {
   const counts: StateCounter = {
     [ReferenceKind.sec]: { kind: ReferenceKind.sec, total: 0, all: [] },
@@ -37,21 +40,18 @@ export function countState(state: EditorState): StateCounter {
     [ReferenceKind.table]: { kind: ReferenceKind.table, total: 0, all: [] },
     [ReferenceKind.link]: { kind: ReferenceKind.link, total: 0, all: [] },
   };
+  let tableCounted = false;
   state.doc.content.descendants((node) => {
     switch (node.type.name) {
       case nodeNames.image: {
-        const attrs = node.attrs as Nodes.Image.Attrs;
-        const { caption, alt, src } = attrs;
-        // Override the numbered prop if the caption is off
-        const modifiedAttrs = { ...attrs, numbered: caption ? attrs.numbered : false };
-        push(counts.fig, modifiedAttrs, alt, { src, caption });
+        const { src, alt } = node.attrs as Nodes.Image.Attrs;
+        push(counts.fig, NO_CAPTION, alt, { src, alt });
         return false;
       }
       case nodeNames.code_block: {
-        const attrs = node.attrs as Nodes.Code.Attrs;
-        const { title, language } = attrs;
+        const { title, language } = node.attrs as Nodes.Code.Attrs;
         const code = toText(node);
-        push(counts.code, attrs, title, { code, language });
+        push(counts.code, NO_CAPTION, title, { code, language });
         return false;
       }
       case nodeNames.equation: {
@@ -69,12 +69,63 @@ export function countState(state: EditorState): StateCounter {
         return false;
       }
       case nodeNames.table: {
-        const attrs: NumberedNode = { numbered: false, id: null, label: null };
-        push(counts.table, attrs, '', {});
+        if (!tableCounted) push(counts.table, NO_CAPTION, '', {});
+        tableCounted = false;
         // There are children of tables to be counted
         return true;
       }
       // Continue to search
+      case nodeNames.figure: {
+        const child = findChildrenWithName(node, [
+          nodeNames.image,
+          nodeNames.iframe,
+          nodeNames.table,
+          nodeNames.code_block,
+          nodeNames.equation,
+        ])[0];
+        if (!child) return false;
+        const caption = findChildrenWithName(node, nodeNames.figcaption)[0];
+        const { numbered: isNumbered, id, label } = node.attrs as Nodes.Figure.Attrs;
+        const numbered = caption && isNumbered;
+        const captionText = caption?.node ? toText(caption.node) : '';
+        switch (child.node.type.name) {
+          case nodeNames.image: {
+            const { alt, src } = child.node.attrs as Nodes.Image.Attrs;
+            push(counts.fig, { numbered, id, label }, captionText ?? alt, { src, alt });
+            return false;
+          }
+          case nodeNames.iframe: {
+            const { src } = child.node.attrs as Nodes.IFrame.Attrs;
+            push(counts.fig, { numbered, id, label }, captionText, { src, alt: '' });
+            return false;
+          }
+          case nodeNames.table: {
+            push(counts.table, { numbered, id, label }, captionText, {});
+            // There are children of tables to be counted
+            tableCounted = true;
+            return true;
+          }
+          case nodeNames.equation: {
+            const math = toText(child.node);
+            push(counts.eq, { numbered, id, label }, captionText, { math });
+            // There are children of tables to be counted
+            return false;
+          }
+          case nodeNames.code_block: {
+            const { title, language } = child.node.attrs as Nodes.Code.Attrs;
+            const code = toText(child.node);
+            push(counts.code, { numbered, id, label }, captionText ?? title, { code, language });
+            // There are children of tables to be counted
+            return false;
+          }
+          default:
+            break;
+        }
+        return false;
+      }
+      case nodeNames.table_row:
+      case nodeNames.table_header:
+      case nodeNames.table_cell:
       case nodeNames.aside:
       case nodeNames.callout:
         return true;

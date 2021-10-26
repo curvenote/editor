@@ -7,8 +7,11 @@ export enum TexFormatTypes {
 }
 
 export interface TexStatementOptions {
-  bracketOpts?: null | ((node: Node) => string | null);
+  command: string;
+  bracketOpts?: string;
   inline?: boolean;
+  before?: string;
+  after?: string;
 }
 
 export type MarkdownOptions = {
@@ -19,7 +22,9 @@ export type MarkdownOptions = {
 export type TexOptions = {
   tightLists?: boolean | null;
   format?: TexFormatTypes;
+  localizeId?: (id: string) => string;
   localizeImageSrc?: (src: string) => string;
+  indent?: string;
 };
 
 export interface MdSerializerState extends MarkdownSerializerState {

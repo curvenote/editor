@@ -1,10 +1,8 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { Node, NodeSpec, AttributeSpec } from 'prosemirror-model';
-import { NodeDef, Attr } from './nodes/types';
+import { NodeDef, Attr } from '../types';
 
 export const DEFAULT_FORMAT = '.1f';
-
-export const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
 
 export const createAttr = (
   name: string,

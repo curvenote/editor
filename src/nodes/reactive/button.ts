@@ -1,6 +1,6 @@
 import { NodeDef, NodeGroups } from '../types';
 import { MdFormatSerialize } from '../../serialize/types';
-import { createAttr as attr, nodeToMystRole, createSpec } from '../../utils';
+import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
 
 export type Attrs = {
   label?: string;

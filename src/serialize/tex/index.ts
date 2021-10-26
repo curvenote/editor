@@ -1,6 +1,6 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { blankTex, blankTexLines, createLatexStatement, TAB } from './utils';
+import { blankTex, blankTexLines, createLatexStatement, INDENT } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
@@ -57,24 +57,23 @@ export const texSerializer = new MarkdownSerializer(
       }
     },
     ordered_list: createLatexStatement(
-      'enumerate',
+      (opts, node) => ({
+        command: 'enumerate',
+        bracketOpts: node.attrs.order !== 1 ? 'resume' : undefined,
+      }),
       (state, node) => {
-        state.renderList(node, TAB, () => '\\item ');
-      },
-      {
-        bracketOpts: (node) => {
-          if (node.attrs.order !== 1) return 'resume';
-          return null;
-        },
+        state.renderList(node, state.options.indent ?? INDENT, () => '\\item ');
       },
     ),
     bullet_list: createLatexStatement('itemize', (state, node) => {
-      state.renderList(node, TAB, () => '\\item ');
+      state.renderList(node, state.options.indent ?? INDENT, () => '\\item ');
     }),
     list_item(state, node) {
       state.renderInline(node);
     },
     image: nodes.Image.toTex,
+    figure: nodes.Figure.toTex,
+    figcaption: nodes.Figcaption.toTex,
     footnote: nodes.Footnote.toTex,
     iframe: blankTexLines,
     time: nodes.Time.toTex,
@@ -133,6 +132,6 @@ export const texSerializer = new MarkdownSerializer(
 );
 
 export function toTex(doc: ProsemirrorNode, opts?: TexOptions) {
-  const defualtOpts = { tightLists: true, format: TexFormatTypes.tex };
+  const defualtOpts = { tightLists: true, format: TexFormatTypes.tex, indent: INDENT };
   return texSerializer.serialize(doc, { ...defualtOpts, ...opts });
 }

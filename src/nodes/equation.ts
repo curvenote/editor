@@ -53,14 +53,17 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex = createLatexStatement('equation', (state, node) => {
-  // TODO: export the label if it isn't inline!
-  const { numbered, id } = node.attrs;
-  if (numbered && id) {
-    state.write(`\\label{${id}}`);
-  }
-  state.ensureNewLine();
-  state.text(node.textContent, false);
-});
+export const toTex = createLatexStatement(
+  () => ({ command: 'equation' }),
+  (state, node) => {
+    // TODO: export the label if it isn't inline!
+    const { numbered, id } = node.attrs;
+    if (numbered && id) {
+      state.write(`\\label{${id}}`);
+    }
+    state.ensureNewLine();
+    state.text(node.textContent, false);
+  },
+);
 
 export default equation;

@@ -22,7 +22,7 @@ export type SectionReference = Reference<
   ReferenceKind.sec,
   { level: number; section: string | null }
 >;
-export type FigureReference = Reference<ReferenceKind.fig, { src: string; caption: boolean }>;
+export type FigureReference = Reference<ReferenceKind.fig, { src: string; alt: string }>;
 export type EquationReference = Reference<ReferenceKind.eq, { math: string }>;
 export type CodeReference = Reference<
   ReferenceKind.code,
@@ -30,6 +30,14 @@ export type CodeReference = Reference<
 >;
 export type TableReference = Reference<ReferenceKind.table>;
 export type LinkReference = Reference<ReferenceKind.link, { url: string }>;
+
+export type AnyReference =
+  | SectionReference
+  | FigureReference
+  | EquationReference
+  | CodeReference
+  | TableReference
+  | LinkReference;
 
 export type StateCounter = {
   [ReferenceKind.sec]: Counter<SectionReference>;

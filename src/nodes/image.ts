@@ -20,13 +20,13 @@ export type Attrs = NumberedNode & {
 
 const image: MyNodeSpec<Attrs> = {
   attrs: {
-    ...getNumberedDefaultAttrs(),
+    ...getNumberedDefaultAttrs(), // Deprecated, use figure
     src: {},
     alt: { default: null },
     title: { default: null },
-    align: { default: 'center' },
     width: { default: DEFAULT_IMAGE_WIDTH },
-    caption: { default: false },
+    align: { default: 'center' }, // Deprecated, use figure
+    caption: { default: false }, // Deprecated, use figcaption
   },
   group: NodeGroups.block,
   draggable: true,
@@ -35,11 +35,11 @@ const image: MyNodeSpec<Attrs> = {
       tag: 'img[src]',
       getAttrs(dom) {
         return {
-          ...getNumberedAttrs(dom),
+          ...getNumberedAttrs(dom), // Deprecated, use figure
           src: dom.getAttribute('src'),
           title: dom.getAttribute('title'),
           alt: dom.getAttribute('alt'),
-          align: dom.getAttribute('align') ?? 'center',
+          align: dom.getAttribute('align') ?? 'center', // Deprecated, use figure
           width: getImageWidth(dom.getAttribute('width')),
           caption: readBooleanDomAttr(dom, 'caption'),
         };
@@ -47,17 +47,16 @@ const image: MyNodeSpec<Attrs> = {
     },
   ],
   toDOM(node) {
-    const { src, alt, title, align, width, caption } = node.attrs;
+    const { src, alt, title, width, align } = node.attrs;
     return [
       'img',
       {
-        ...setNumberedAttrs(node.attrs),
+        ...setNumberedAttrs(node.attrs), // Deprecated, use figure
         src,
+        align,
         alt: alt || undefined,
         title: title || undefined,
-        align,
         width: `${width}%`,
-        caption: caption ? '' : undefined,
       },
     ];
   },
@@ -73,37 +72,30 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  const { caption, numbered, width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
+  const { width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
   const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
-  let align = 'center';
-  switch (nodeAlign?.toLowerCase()) {
-    case 'left':
-      align = 'flushleft';
-      break;
-    case 'right':
-      align = 'flushright';
-      break;
-    default:
-      break;
-  }
-  if (!caption) {
-    const template = `
-\\begin{${align}}
-  \\includegraphics[width=${width / 100}\\linewidth]{${src}}
-\\end{${align}}\n`;
-    state.write(template);
-    return;
-  }
-  const texLabel = `\n  \\label{${src}}`;
-  const star = numbered ? '' : '*';
-  const template = `
-\\begin{figure}[ht]
-  \\centering
-  \\includegraphics[width=${width / 100}\\linewidth]{${src}}
-  \\caption${star}{${src}.caption}${texLabel}
-\\end{figure}\n`;
-  state.write(template);
+  //   let align = 'center';
+  //   switch (nodeAlign?.toLowerCase()) {
+  //     case 'left':
+  //       align = 'flushleft';
+  //       break;
+  //     case 'right':
+  //       align = 'flushright';
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   if (!caption) {
+  //     const template = `
+  // \\begin{${align}}
+  //   \\includegraphics[width=${width / 100}\\linewidth]{${src}}
+  // \\end{${align}}\n`;
+  //     state.write(template);
+  //     return;
+  //   }
+  state.write(`\\includegraphics[width=${width / 100}\\linewidth]{${src}}`);
+  state.closeBlock(node);
 };
 
 export default image;

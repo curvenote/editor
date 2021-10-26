@@ -53,6 +53,8 @@ export const markdownSerializer = new MarkdownSerializer(
     },
     // Presentational
     image: nodes.Image.toMarkdown,
+    figure: nodes.Figure.toMarkdown,
+    figcaption: nodes.Figcaption.toMarkdown,
     footnote: nodes.Footnote.toMarkdown,
     iframe: nodes.IFrame.toMarkdown,
     time: nodes.Time.toMarkdown,
