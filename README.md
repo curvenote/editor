@@ -7,13 +7,15 @@
 
 A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions.
 
-![Autocomplete](./demo/autocomplete.gif)
+[![Autocomplete](./demo/autocomplete.gif)](https://curvenote.github.io/prosemirror-autocomplete/)
 
 ## Install
 
 ```bash
 npm install prosemirror-autocomplete
 ```
+
+Or see the [live demo here](https://curvenote.github.io/prosemirror-autocomplete/)!
 
 ## Overview
 
