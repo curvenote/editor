@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ProseMirror Autocomplete</title>
+    <link rel="stylesheet" href="https://prosemirror.net/css/editor.css" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P4Z3X7QKB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-4P4Z3X7QKB');
+    </script>
+    <style>
+      article,
+      .centered {
+        max-width: 800px;
+        margin: auto;
+      }
+      /* The default ID for the decoration, can override with decorationAttrs = { id: 'something' }  */
+      #autocomplete {
+        border: 1px solid #333;
+        border-radius: 2px 2px 0 0;
+        border-bottom-color: white;
+        padding: 2px 5px;
+        z-index: 2;
+      }
+      .autocomplete {
+        color: blue;
+      }
+      .command {
+        color: red;
+      }
+      #info {
+        margin-top: 15px;
+        background-color: transparent;
+        min-height: 2em;
+      }
+      code {
+        background-color: #eee;
+        padding: 2px;
+      }
+      #suggestion {
+        position: absolute;
+        border-radius: 2px;
+        border: 1px solid #333;
+        min-width: 300px;
+        background-color: white;
+        padding: 10px;
+        transform: translateY(-1px);
+      }
+      /* You actually should do the UI with a mouse enter event rather than css hover */
+      #suggestion:hover .selected {
+        background-color: white;
+      }
+      #suggestion:hover > div:hover,
+      #suggestion .selected {
+        background-color: wheat;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="centered">
+      <h1>prosemirror-autocomplete</h1>
+      <a
+        href="https://www.npmjs.com/package/prosemirror-autocomplete"
+        title="prosemirror-autocomplete on npm"
+        ><img src="https://img.shields.io/npm/v/prosemirror-autocomplete.svg"
+      /></a>
+      <a
+        href="https://github.com/curvenote/prosemirror-autocomplete/blob/main/LICENSE"
+        title="MIT License"
+        ><img src="https://img.shields.io/badge/license-MIT-blue.svg"
+      /></a>
+      <a href="https://github.com/curvenote/prosemirror-autocomplete" title="CI"
+        ><img src="https://github.com/curvenote/prosemirror-autocomplete/workflows/CI/badge.svg"
+      /></a>
+    </div>
+    <article>
+      <code id="info"></code>
+      <div id="editor"></div>
+    </article>
+    <div id="suggestion" style="display: none">
+      <div>Suggestion 1</div>
+      <div>Suggestion 2</div>
+      <div>Suggestion 3</div>
+    </div>
+    <div style="display: none" id="content">
+      <p>
+        Try typing mention <code>@</code> or a "slash-menu" <code>/</code>, or <code>[[</code> or
+        <code>{{</code>:
+      </p>
+      <p></p>
+      <p>
+        More complex autocompletes can be made with <code>RegExp</code> for the input trigger, try
+        "x = " on a new line or a hashtag <code>#</code> that isn't at the start of a line (that
+        should be a header)!
+      </p>
+      <p></p>
+      <p>You could also add suggestions on <code>object.</code> if you want!</p>
+      <p></p>
+    </div>
+  </body>
+</html>
