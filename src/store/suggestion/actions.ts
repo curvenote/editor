@@ -108,6 +108,9 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
       case SuggestionKind.link:
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
+      case SuggestionKind.person:
+        dispatch(command.chooseSelection(result as LinkResult));
+        return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return dispatch(variable.chooseSelection(kind, result as VariableResult));
@@ -126,6 +129,10 @@ export function filterResults(view: EditorView, search: string): AppThunk<void> 
           dispatch(updateResults(results)),
         );
       case SuggestionKind.command:
+        return command.filterResults(view, search, (results: CommandResult[]) =>
+          dispatch(updateResults(results)),
+        );
+      case SuggestionKind.person:
         return command.filterResults(view, search, (results: CommandResult[]) =>
           dispatch(updateResults(results)),
         );
@@ -164,6 +171,20 @@ function setStartingSuggestions(
       case SuggestionKind.command: {
         const starting = command.startingSuggestions(view);
         dispatch(updateResults(starting));
+        return;
+      }
+      case SuggestionKind.person: {
+        dispatch(
+          updateResults([
+            { avatar: '', email: 'test1@gmail.com', name: '' },
+            {
+              avatar:
+                'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/WeYvKUTFnSQOET5tyvW9TgLQLwb2?version=1629496337760',
+              email: 'yuxi@curvenote.com',
+              name: 'Yuxi',
+            },
+          ]),
+        );
         return;
       }
       case SuggestionKind.link: {

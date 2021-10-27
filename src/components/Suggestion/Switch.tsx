@@ -4,6 +4,7 @@ import { State } from '../../store/types';
 import EmojiSuggestions from './Emojis';
 import CommandSuggestions from './Commands';
 import VariableSuggestions from './Variables';
+import MentionSuggestions from './Mentions';
 import LinkSuggestions from './Links';
 import { SuggestionKind } from '../../store/suggestion/types';
 import { selectors } from '../../store';
@@ -14,6 +15,7 @@ const SuggestionSwitch = () => {
     <>
       {kind === SuggestionKind.emoji && <EmojiSuggestions />}
       {kind === SuggestionKind.command && <CommandSuggestions />}
+      {kind === SuggestionKind.person && <MentionSuggestions />}
       {kind === SuggestionKind.link && <LinkSuggestions />}
       {(kind === SuggestionKind.variable || kind === SuggestionKind.display) && (
         <VariableSuggestions />

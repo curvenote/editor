@@ -1,11 +1,20 @@
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import React, { useEffect, useRef } from 'react';
+import thunkMiddleware from 'redux-thunk';
 import ReactDOM from 'react-dom';
+import { applyMiddleware, createStore } from 'redux';
 import { DOMParser, NodeSpec, Node, Schema } from 'prosemirror-model';
-import { GetPos } from 'views/types';
-import { Chip } from '@material-ui/core';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
+import { Chip } from '@material-ui/core';
+import { Provider } from 'react-redux';
+import suggestion from '../src/prosemirror/plugins/suggestion';
+import rootReducer from './reducers';
+import { handleSuggestion } from '../src/store/actions';
+import middlewares from '../src/store/middleware';
+import { Suggestions, SuggestionSwitch } from '../src';
+
+const store = createStore(rootReducer, applyMiddleware(...[thunkMiddleware, ...middlewares]));
 
 function ChipWithIcon({ label }: { label: string }) {
   return <Chip icon={<FaceOutlined />} label={label} variant="outlined" />;
@@ -86,13 +95,31 @@ function createEditorState() {
     },
   };
 
-  const mentionInputSchema = new Schema({ nodes });
+  const mentionInputSchema = new Schema({
+    nodes,
+  });
   const contentNode = document.getElementById('componentContent') as HTMLElement;
   console.log('contentNode', contentNode);
 
   return EditorState.create({
     doc: DOMParser.fromSchema(mentionInputSchema).parse(contentNode),
     schema: mentionInputSchema,
+    plugins: [
+      ...suggestion(
+        (action) => {
+          console.log('handleSuggestion', action);
+          if (action.kind === 'close') {
+            console.log('select');
+            return false;
+          }
+          // return true;
+          return store.dispatch(handleSuggestion(action) as any);
+        },
+        /(?:^|\W)(@)$/,
+        // Cancel on space after some of the triggers
+        (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
+      ),
+    ],
   });
 }
 
@@ -133,4 +160,12 @@ function ComponentDemo() {
   );
 }
 
-ReactDOM.render(<ComponentDemo />, document.getElementById('components'));
+ReactDOM.render(
+  <Provider store={store}>
+    <ComponentDemo />
+    <Suggestions>
+      <SuggestionSwitch />
+    </Suggestions>
+  </Provider>,
+  document.getElementById('components'),
+);
