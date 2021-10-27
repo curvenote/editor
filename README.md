@@ -3,6 +3,7 @@
 [![prosemirror-autocomplete on npm](https://img.shields.io/npm/v/prosemirror-autocomplete.svg)](https://www.npmjs.com/package/prosemirror-autocomplete)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/prosemirror-autocomplete/blob/master/LICENSE)
 ![CI](https://github.com/curvenote/prosemirror-autocomplete/workflows/CI/badge.svg)
+[![demo](https://img.shields.io/badge/live-demo-blue)](https://curvenote.github.io/prosemirror-autocomplete/)
 
 A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions.
 
