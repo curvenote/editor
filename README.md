@@ -90,11 +90,17 @@ export function reducer(action: AutocompleteAction): boolean {
       // Or if you want to keep the suggestion open after selecting:
       return KEEP_OPEN;
     case ActionKind.close:
-    // Hit Escape or click outside of the suggestion
+      // Hit Escape or click outside of the suggestion
+      closeSuggestion();
+      return true;
     case ActionKind.previous:
-    // An up arrow
+      // An up arrow
+      selectSuggestion(-1);
+      return true;
     case ActionKind.next:
-    // A down arrow
+      // A down arrow
+      selectSuggestion(+1);
+      return true;
     default:
       return false;
   }
