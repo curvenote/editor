@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@curvenote/editor</title>
     <style>
-      article, .centered {
+      article, .centered, section {
         max-width: 800px;
         margin: auto;
+      }
+      section {
+        padding: 100px 0;
       }
       #tex, #html, #myst, #text {
         white-space: pre-wrap;
@@ -87,5 +90,15 @@
       <h2>HTML</h2>
       <pre id="html"></pre>
     </article>
+    <section id="componentsSection">
+      <h1>Compopnents</h1>
+      <h2>InputWithMention</h2>
+      <div style="display: none" id="componentContent">
+        <p>
+        <span class="mention" label="user1@gmail.com" />
+        </p>
+      </div>
+    <div id="components"></div>
+    </section>
   </body>
 </html>

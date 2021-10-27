@@ -11,6 +11,7 @@ module.exports = {
   },
   entry: {
     app: './demo/index.tsx',
+    components: './demo/components.tsx',
   },
   // externals: {
   //   katex: 'katex',
@@ -27,7 +28,7 @@ module.exports = {
     // }),
   ],
   output: {
-    filename: 'demo.min.js',
+    filename: '[name].min.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
@@ -43,17 +44,11 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader',
-        ],
+        use: ['file-loader'],
       },
     ],
   },
