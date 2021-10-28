@@ -99,7 +99,7 @@ Provide the trigger in the matched group and anything before in a non-capture gr
 
 ## Defining a Reducer
 
-The library does not come with any user interface, you will have to do that when you get an action from the autocomplete plugin. You can either use the handlers `onOpen`, `onClose`, `onFilter`, `onArrow`, and `onSelect` or you can define a single reducer that will take over these responsibilities. Note: you cannot use handlers and a reducer.
+The library does not provide a user interface beyond the [demo code](./demo/index.ts), you will have to do that when you get an action from the autocomplete plugin. You can _either_ use the handlers `onOpen`, `onClose`, `onFilter`, `onArrow`, and `onSelect` _or_ you can define a single reducer that will take over these responsibilities. Note: you cannot use handlers and a reducer.
 
 ```ts
 import { AutocompleteAction, KEEP_OPEN } from 'prosemirror-autocomplete';
@@ -134,9 +134,9 @@ export function reducer(action: AutocompleteAction): boolean {
 }
 ```
 
-## Positioning a Suggestion
+## Positioning & Styling
 
-You can use something like [popper.js](https://popper.js.org/) to ensure that the suggestion stays in the right place on scroll or simply an abolutely positioned `<div>`.
+You can use something like [popper.js](https://popper.js.org/) to ensure that the autocomplete suggestions stay in the right place on scroll or simply an abolutely positioned `<div>` in some cases is sufficient.
 
 ```ts
 import { DEFAULT_ID } from 'prosemirror-autocomplete';
@@ -164,7 +164,18 @@ const options: Options = {
 };
 ```
 
-This will allow you to specify styling of the wrapped decoration (which is a `<span>`). This can be different based on the trigger type.
+This will allow you to specify styling of the wrapped decoration (which is a `<span>`). This can be different based on the trigger type. For example, in the above example you can use a css rule to style the inline span, this is what is done in [the demo](./demo/index.html):
+
+```css
+/* The default ID for the decoration. Override with `decorationAttrs: { id: 'myId' }`  */
+#autocomplete {
+  border: 1px solid #333;
+  border-radius: 2px 2px 0 0;
+  border-bottom-color: white;
+  padding: 2px 5px;
+  color: blue;
+}
+```
 
 ## Triggering Autocomplete without an `InputRule`
 
