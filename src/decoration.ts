@@ -19,14 +19,14 @@ const inactiveSuggestionState: AutocompleteState = {
   decorations: DecorationSet.empty,
 };
 
-function actionFromEvent(event: KeyboardEvent) {
+function actionFromEvent(event: KeyboardEvent): ActionKind | null {
   switch (event.key) {
     case 'ArrowUp':
-      return ActionKind.previous;
     case 'ArrowDown':
-      return ActionKind.next;
+    case 'ArrowLeft':
+    case 'ArrowRight':
+      return event.key as ActionKind;
     case 'Tab':
-      return ActionKind.select;
     case 'Enter':
       return ActionKind.select;
     case 'Escape':
@@ -61,7 +61,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           const action: Omit<AutocompleteAction, 'kind'> = {
             view,
             trigger: next.trigger ?? (prev.trigger as string),
-            search: next.text ?? prev.text,
+            filter: next.text ?? prev.text,
             range: next.range ?? (prev.range as FromTo),
             type: next.type ?? prev.type,
           };
@@ -135,12 +135,12 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
         const text = view.state.doc.textBetween(from, to);
 
         // Be defensive, just in case the trigger doesn't exist
-        const search = text.slice(trigger?.length ?? 1);
+        const filter = text.slice(trigger?.length ?? 1);
 
         const checkCancelOnSpace = type?.cancelOnFirstSpace ?? true;
         if (
           checkCancelOnSpace &&
-          search.length === 0 &&
+          filter.length === 0 &&
           (event.key === ' ' || event.key === 'Spacebar')
         ) {
           closeAutocomplete(view);
@@ -148,7 +148,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           view.dispatch(view.state.tr.insertText(' ').scrollIntoView());
           return true;
         }
-        if (search.length === 0 && event.key === 'Backspace') {
+        if (filter.length === 0 && event.key === 'Backspace') {
           undoInputRule(view.state, view.dispatch);
           closeAutocomplete(view);
           return true;
@@ -158,7 +158,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
         const action: Omit<AutocompleteAction, 'kind'> = {
           view,
           trigger,
-          search,
+          filter,
           range: { from, to },
           type,
         };
@@ -173,10 +173,13 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
             if (result === KEEP_OPEN) return true;
             return result || closeAutocomplete(view);
           }
-          case ActionKind.previous:
-            return Boolean(reducer({ ...action, kind: ActionKind.previous }));
-          case ActionKind.next:
-            return Boolean(reducer({ ...action, kind: ActionKind.next }));
+          case ActionKind.up:
+          case ActionKind.down:
+            return Boolean(reducer({ ...action, kind }));
+          case ActionKind.left:
+          case ActionKind.right:
+            if (!type?.allArrowKeys) return false;
+            return Boolean(reducer({ ...action, kind }));
           default:
             break;
         }

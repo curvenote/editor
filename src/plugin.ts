@@ -1,19 +1,41 @@
 import { Plugin } from 'prosemirror-state';
 import { inputRules } from 'prosemirror-inputrules';
-import { Options } from './types';
+import { Options, AutocompleteAction } from './types';
 import { getDecorationPlugin } from './decoration';
 import { createInputRule } from './inputRules';
+import { ActionKind } from '.';
 
-const defaultOptions: Required<Options> = {
-  reducer: () => false,
-  triggers: [],
-};
+export function defaultReducer(options: Partial<Options>) {
+  return (action: AutocompleteAction): boolean => {
+    switch (action.kind) {
+      case ActionKind.open:
+        return options.onOpen?.(action) ?? false;
+      case ActionKind.close:
+        return options.onClose?.(action) ?? false;
+      case ActionKind.up:
+      case ActionKind.down:
+      case ActionKind.left:
+      case ActionKind.right:
+        return options.onArrow?.(action) ?? false;
+      case ActionKind.filter:
+        return options.onFilter?.(action) ?? false;
+      case ActionKind.select:
+        return options.onSelect?.(action) ?? false;
+      default:
+        return false;
+    }
+  };
+}
 
-export function autocomplete(opts: Options = {}) {
-  const options: Required<Options> = { ...defaultOptions, ...opts };
-  const { reducer: handler, triggers } = options;
+export function autocomplete(opts: Partial<Options> = {}) {
+  const options: Options = {
+    triggers: [],
+    reducer: defaultReducer(opts),
+    ...opts,
+  };
+  const { reducer, triggers } = options;
 
-  const plugin = getDecorationPlugin(handler);
+  const plugin = getDecorationPlugin(reducer);
 
   const rules: Plugin[] = [
     plugin,

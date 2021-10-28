@@ -15,7 +15,7 @@ const picker = {
 const NUM_SUGGESTIONS = suggestion.children.length;
 
 function setInfo(action: AutocompleteAction) {
-  info.innerText = `Action: ${action.kind}, Range: ${action.range.from}-${action.range.to}, Search: ${action.search}, Trigger: ${action.trigger}, Type: ${action.type?.name}`;
+  info.innerText = `Action: ${action.kind}, Range: ${action.range.from}-${action.range.to}, Filter: ${action.filter}, Trigger: ${action.trigger}, Type: ${action.type?.name}`;
 }
 
 function placeSuggestion() {
@@ -43,13 +43,13 @@ export function reducer(action: AutocompleteAction): boolean {
       picker.open = false;
       placeSuggestion();
       return true;
-    case ActionKind.previous:
+    case ActionKind.up:
       picker.current -= 1;
       picker.current += NUM_SUGGESTIONS; // negative modulus doesn't work
       picker.current %= NUM_SUGGESTIONS;
       placeSuggestion();
       return true;
-    case ActionKind.next:
+    case ActionKind.down:
       picker.current += 1;
       picker.current %= NUM_SUGGESTIONS;
       placeSuggestion();
@@ -57,7 +57,7 @@ export function reducer(action: AutocompleteAction): boolean {
     case ActionKind.select: {
       const tr = action.view.state.tr
         .deleteRange(action.range.from, action.range.to)
-        .insertText('You can define this!');
+        .insertText(`You can define this ${action.type ? `${action.type?.name} ` : ''}action!`);
       action.view.dispatch(tr);
       return true;
     }
