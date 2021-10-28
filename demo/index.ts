@@ -13,19 +13,19 @@ const content = document.querySelector('#content') as HTMLDivElement;
 const options: Options = {
   reducer,
   triggers: [
-    { name: 'hashtag', trigger: /(?:\s|\n|[^\d\w])(#)$/ },
+    // For demo purposes, make the `#` and `@` easier to create
+    { name: 'hashtag', trigger: /(#)$/ },
     { name: 'mention', trigger: /(@)$/ },
+    { name: 'emoji', trigger: ':' },
     { name: 'link', trigger: '[[', cancelOnFirstSpace: false },
     { name: 'jinja', trigger: '{{', cancelOnFirstSpace: false },
     { name: 'command', trigger: '/', decorationAttrs: { class: 'command' } },
-    { name: 'emoji', trigger: ':' },
     { name: 'variable', trigger: /((?:^[a-zA-Z0-9_]+)\s?=)$/, cancelOnFirstSpace: false },
     { name: 'code', trigger: /((?:[a-zA-Z0-9_]+)\.)$/ },
   ],
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const view = new EditorView(editor, {
+(window as any).view = new EditorView(editor, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(schema).parse(content),
     plugins: [...autocomplete(options), ...exampleSetup({ schema, menuBar: false })],

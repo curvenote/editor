@@ -5,7 +5,7 @@
 ![CI](https://github.com/curvenote/prosemirror-autocomplete/workflows/CI/badge.svg)
 [![demo](https://img.shields.io/badge/live-demo-blue)](https://curvenote.github.io/prosemirror-autocomplete/)
 
-A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions.
+A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions. The `prosemirror-autocomplete` library can be used to create suggestions similar to Notion, Google Docs or Confluence.
 
 [![Autocomplete](./demo/autocomplete.gif)](https://curvenote.github.io/prosemirror-autocomplete/)
 
@@ -109,20 +109,20 @@ export function reducer(action: AutocompleteAction): boolean {
 
 ## Positioning a Suggestion
 
-You can use something like (popper.js)[https://popper.js.org/] to ensure that the suggestion stays in the right place on scroll or simply an abolutely positioned div.
+You can use something like [popper.js](https://popper.js.org/) to ensure that the suggestion stays in the right place on scroll or simply an abolutely positioned `<div>`.
 
 ```ts
 import { DEFAULT_ID } from 'prosemirror-autocomplete';
 
 function placeSuggestion(open) {
   suggestion.style.display = open ? 'block' : 'none';
-  const rect = document.getElementById(DEFAULT_ID)?.getBoundingClientRect();
+  const rect = document.getElementById(DEFAULT_ID).getBoundingClientRect();
   suggestion.style.top = `${rect.top + rect.height}px`;
   suggestion.style.left = `${rect.left}px`;
 }
 ```
 
-If you don't want to use the `DEFAULT_ID` provided (`'autocomplete'`) then you can provide your own for any trigger:
+If you don't want to use the `DEFAULT_ID` provided (which is `'autocomplete'`) then you can provide your own for any trigger:
 
 ```ts
 const options: Options = {
@@ -147,6 +147,6 @@ There are a few other packages that offer similar functionality:
 - [prosemirror-mentions](https://github.com/joelewis/prosemirror-mentions)
 - [prosemirror-suggest](https://github.com/remirror/remirror/tree/next/packages/prosemirror-suggest)
 
-`prosemirror-suggestions` is similar in that it does not provide a UI, if you want a UI out of the box you can look at `prosemirror-mentions`. All three of these libraries trigger based on RegExp and leave the decorations in the state. This is similar to how twitter works, but is undesirable in writing longer documents where you want to dismiss the suggestions with an escape and not see them again in that area.
+`prosemirror-suggestions` is similar in that it does not provide a UI, if you want a UI out of the box you can look at `prosemirror-mentions`. All three of these libraries trigger based on RegExp and leave the decorations in the state. This is similar to how Twitter works, but is undesirable in writing longer documents where you want to dismiss the suggestions with an escape and not see them again in that area.
 
 This library, `prosemirror-autocomplete`, works based on an input rule and then a decoration around the chosen area meaning you can target the suggestion specifically and dismiss it with ease.

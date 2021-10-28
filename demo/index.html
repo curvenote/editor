@@ -15,10 +15,21 @@
       gtag('config', 'G-4P4Z3X7QKB');
     </script>
     <style>
-      article,
-      .centered {
+      article {
         max-width: 800px;
         margin: auto;
+      }
+      p {
+        display: block;
+        text-align: justify;
+        overflow-wrap: break-word;
+        font-size: 17px;
+        line-height: 1.8;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #4d4d4d;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
       }
       /* The default ID for the decoration, can override with decorationAttrs = { id: 'something' }  */
       #autocomplete {
@@ -35,13 +46,20 @@
         color: red;
       }
       #info {
-        margin-top: 15px;
+        margin-top: 1em;
         background-color: transparent;
-        min-height: 2em;
+        min-height: 1.5em;
+        display: block;
       }
       code {
-        background-color: #eee;
+        color: rgb(232, 62, 140);
         padding: 2px;
+        border-radius: 2px;
+        padding: 2px;
+        border: 1px solid rgba(192, 192, 192, 0.5);
+      }
+      a {
+        text-decoration: none;
       }
       #suggestion {
         position: absolute;
@@ -65,7 +83,7 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="centered">
+    <article>
       <h1>prosemirror-autocomplete</h1>
       <a
         href="https://www.npmjs.com/package/prosemirror-autocomplete"
@@ -80,10 +98,26 @@
       <a href="https://github.com/curvenote/prosemirror-autocomplete" title="CI"
         ><img src="https://github.com/curvenote/prosemirror-autocomplete/workflows/CI/badge.svg"
       /></a>
-    </div>
-    <article>
-      <code id="info"></code>
+      <p>
+        <code>prosemirror-autocomplete</code> is a plugin for
+        <a href="https://prosemirror.net/">ProseMirror</a> that adds triggers for
+        <code>#hashtags</code>, <code>@mentions</code>, <code>/menus</code>, and other more complex
+        autocompletions. The <code>prosemirror-autocomplete</code> library can be used to create
+        suggestions similar to Notion, Google Docs or Confluence.
+      </p>
+      <div><code id="info"></code></div>
       <div id="editor"></div>
+      <p>
+        Source code and documentation are
+        <a href="https://github.com/curvenote/prosemirror-autocomplete">on GitHub</a>.
+      </p>
+      <p style="clear: both; text-align: center; color: #aaa; padding-top: 50px">
+        Made with love by
+        <a href="https://curvenote.com" target="_blank" style="color: #aaa">
+          <img src="https://curvenote.dev/images/icon.png" style="height: 1em" /> Curvenote
+        </a>
+        <br />
+      </p>
     </article>
     <div id="suggestion" style="display: none">
       <div>Suggestion 1</div>
@@ -91,15 +125,15 @@
       <div>Suggestion 3</div>
     </div>
     <div style="display: none" id="content">
+      <strong>You can type in here!</strong>
       <p>
         Try typing mention <code>@</code> or a "slash-menu" <code>/</code>, or <code>[[</code> or
         <code>{{</code>:
       </p>
       <p></p>
       <p>
-        More complex autocompletes can be made with <code>RegExp</code> for the input trigger, try
-        "x = " on a new line or a hashtag <code>#</code> that isn't at the start of a line (that
-        should be a header)!
+        Complex autocompletes can use <code>RegExp</code> for the trigger, try <code>x =</code> on a
+        new line or a hashtag <code>#</code>!
       </p>
       <p></p>
       <p>You could also add suggestions on <code>object.</code> if you want!</p>
