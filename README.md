@@ -24,19 +24,29 @@ Or see the [live demo here](https://curvenote.github.io/prosemirror-autocomplete
 ```ts
 import autocomplete, { Options } from 'prosemirror-autocomplete';
 
+// Create autocomplete with triggers and specified handers:
 const options: Options = {
   triggers: [
     { name: 'hashtag', trigger: '#' },
     { name: 'mention', trigger: '@' },
   ],
   onOpen: ({ view, range, trigger, type }) => handleOpen(),
-  onClose: ({ view }) => handleClose(),
-  onFilter: ({ view, filter }) => handleFilter(),
   onArrow: ({ view, kind }) => handleArrow(kind),
-  onSelect: ({ view }) => handleSelect(),
-  // use `reducer` to handle these in a single function!
+  onFilter: ({ view, filter }) => handleFilter(),
+  onEnter: ({ view }) => handleSelect(),
+  onClose: ({ view }) => handleClose(),
 };
 
+// Alternatively, use a single reducer to handle all actions:
+const options: Options = {
+  triggers: [
+    { name: 'hashtag', trigger: '#' },
+    { name: 'mention', trigger: '@' },
+  ],
+  reducer: (action) => dispatch(action),
+};
+
+// Then add these plugins to the EditorView as normal in ProseMirror
 const view = new EditorView(editor, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(schema).parse(content),
@@ -54,12 +64,12 @@ All handlers take an `AutocompleteAction` as the first and only argument (same a
 
 - `onOpen({ view, range, trigger, filter, type })` — when the autocomplete should be opened
   - The `type` is the `Trigger` that cause this action
-- `onClose({ view })` — called on escape, click away, or paste
-- `onFilter({ view, filter })` — called when the user types, use this to filter the suggestions shown
+- `onEnter({ view, range, filter })` — called on `Enter` or `Tab`
 - `onArrow({ view, kind })`
   - `kind` is one or `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`
   - left/right are only called if `allArrowKeys = true` for the trigger
-- `onSelect({ view, range, filter })` — called on `Enter` or `Tab`
+- `onFilter({ view, filter })` — called when the user types, use this to filter the suggestions shown
+- `onClose({ view })` — called on escape, click away, or paste
 
 To use a `reducer` instead of distinct handlers, use the option `reducer: (action: AutocompleteAction) => boolean`, which will be used in place of the above handler functions.
 
@@ -99,7 +109,7 @@ Provide the trigger in the matched group and anything before in a non-capture gr
 
 ## Defining a Reducer
 
-The library does not provide a user interface beyond the [demo code](./demo/index.ts), you will have to do that when you get an action from the autocomplete plugin. You can _either_ use the handlers `onOpen`, `onClose`, `onFilter`, `onArrow`, and `onSelect` _or_ you can define a single reducer that will take over these responsibilities. Note: you cannot use handlers and a reducer.
+The library does not provide a user interface beyond the [demo code](./demo/index.ts), you will have to do that when you get an action from the autocomplete plugin. You can _either_ use the handlers `onOpen`, `onArrow`, `onFilter`, `onEnter`, and `onClose` _or_ you can define a single reducer that will take over these responsibilities. Note: you cannot use handlers and a reducer.
 
 ```ts
 import { AutocompleteAction, KEEP_OPEN } from 'prosemirror-autocomplete';
@@ -110,10 +120,21 @@ export function reducer(action: AutocompleteAction): boolean {
       handleSearch(action.search);
       placeSuggestion(true);
       return true;
-    case ActionKind.select:
+    case ActionKind.up:
+      selectSuggestion(-1);
+      return true;
+    case ActionKind.down:
+      selectSuggestion(+1);
+      return true;
+    case ActionKind.filter:
+      filterSuggestions(action.filter);
+      return true;
+    case ActionKind.enter:
       // This is on Enter or Tab
       const { from, to } = action.range;
-      const tr = action.view.state.tr.deleteRange(from, to).insertText('You can define this!');
+      const tr = action.view.state.tr
+        .deleteRange(from, to) // This is the full selection
+        .insertText('You can define this!'); // This can be a node view, or something else!
       action.view.dispatch(tr);
       return true;
       // To keep the suggestion open after selecting:
@@ -122,16 +143,23 @@ export function reducer(action: AutocompleteAction): boolean {
       // Hit Escape or Click outside of the suggestion
       closeSuggestion();
       return true;
-    case ActionKind.up:
-      selectSuggestion(-1);
-      return true;
-    case ActionKind.down:
-      selectSuggestion(+1);
-      return true;
     default:
       return false;
   }
 }
+```
+
+An `AutocompleteAction` is passed to both the reducer and each handler has the following structure:
+
+```ts
+export type AutocompleteAction = {
+  kind: ActionKind; // open, ArrowUp, ArrowDown, filter, enter, close
+  view: EditorView; // the view that the plugin came from
+  trigger: string; // This is the string that triggered the suggestion
+  filter?: string; // This is the search string
+  range: FromTo; // { from: number; to: number }, use to delete the selection
+  type: Trigger | null; // This is the trigger object passed in
+};
 ```
 
 ## Positioning & Styling
@@ -190,7 +218,7 @@ import { openAutocomplete, closeAutocomplete } from 'prosemirror-autocomplete';
 - `openAutocomplete(view: EditorView, trigger: string, filter?: string)`
 - `closeAutocomplete(view: EditorView)`
 
-If the above scenario, the user would trigger an input rule for the first action by typing `/emoji` and then the `onSelect` or `reducer` would call `closeAutocomplete(view)` and then `openAutocomplete(view, ':', 'rocket')`, optional 🚀 obviously!
+If the above scenario, the user would trigger an input rule for the first action by typing `/emoji` and then the `onEnter` or `reducer` would call `closeAutocomplete(view)` and then `openAutocomplete(view, ':', 'rocket')`, optional 🚀 obviously!
 
 ## Related Projects
 
