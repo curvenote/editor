@@ -22,7 +22,7 @@ Or see the [live demo here](https://curvenote.github.io/prosemirror-autocomplete
 `prosemirror-autocomplete` allows you to have fine-grained control over an autocomplete suggestion, similar to an IDE but simple enough for `@` or `#` mentions.
 
 ```ts
-import autocomplete, { Options, Arrow } from 'prosemirror-autocomplete';
+import autocomplete, { Options } from 'prosemirror-autocomplete';
 
 const options: Options = {
   triggers: [
