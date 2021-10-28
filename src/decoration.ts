@@ -28,7 +28,7 @@ function actionFromEvent(event: KeyboardEvent): ActionKind | null {
       return event.key as ActionKind;
     case 'Tab':
     case 'Enter':
-      return ActionKind.select;
+      return ActionKind.enter;
     case 'Escape':
       return ActionKind.close;
     default:
@@ -167,9 +167,9 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
             // The user action will be handled in the view code above
             // Allows clicking off to be handled in the same way
             return closeAutocomplete(view);
-          case ActionKind.select: {
+          case ActionKind.enter: {
             // Only trigger the cancel if it is not expliticly handled in the select
-            const result = reducer({ ...action, kind: ActionKind.select });
+            const result = reducer({ ...action, kind: ActionKind.enter });
             if (result === KEEP_OPEN) return true;
             return result || closeAutocomplete(view);
           }

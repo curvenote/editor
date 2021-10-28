@@ -54,7 +54,7 @@ export function reducer(action: AutocompleteAction): boolean {
       picker.current %= NUM_SUGGESTIONS;
       placeSuggestion();
       return true;
-    case ActionKind.select: {
+    case ActionKind.enter: {
       const tr = action.view.state.tr
         .deleteRange(action.range.from, action.range.to)
         .insertText(`You can define this ${action.type ? `${action.type?.name} ` : ''}action!`);

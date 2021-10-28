@@ -18,8 +18,8 @@ export function defaultReducer(options: Partial<Options>) {
         return options.onArrow?.(action) ?? false;
       case ActionKind.filter:
         return options.onFilter?.(action) ?? false;
-      case ActionKind.select:
-        return options.onSelect?.(action) ?? false;
+      case ActionKind.enter:
+        return options.onEnter?.(action) ?? false;
       default:
         return false;
     }

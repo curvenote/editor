@@ -31,7 +31,7 @@ export enum ActionKind {
   'down' = 'ArrowDown',
   'left' = 'ArrowLeft',
   'right' = 'ArrowRight',
-  'select' = 'select',
+  'enter' = 'enter',
 }
 
 export type AutocompleteAction = {
@@ -69,7 +69,7 @@ export type Options = {
   onClose?: (action: AutocompleteAction) => boolean;
   onFilter?: (action: AutocompleteAction) => boolean;
   onArrow?: (action: AutocompleteAction) => boolean;
-  onSelect?: (action: AutocompleteAction) => boolean;
+  onEnter?: (action: AutocompleteAction) => boolean;
   reducer: (action: AutocompleteAction) => boolean | typeof KEEP_OPEN;
   triggers: Trigger[];
 };
