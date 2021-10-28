@@ -166,6 +166,21 @@ const options: Options = {
 
 This will allow you to specify styling of the wrapped decoration (which is a `<span>`). This can be different based on the trigger type.
 
+## Triggering Autocomplete without an `InputRule`
+
+There are certain times when you want to open up an autocomplete suggestion without the user typing. For example, you might have a command menu under `/` that shows all commands for users to discover other triggers, where they can discover `/emoji` and then the UI should move them into an emoji selection or `:`.
+
+There are two actions:
+
+```ts
+import { openAutocomplete, closeAutocomplete } from 'prosemirror-autocomplete';
+```
+
+- `openAutocomplete(view: EditorView, trigger: string, filter?: string)`
+- `closeAutocomplete(view: EditorView)`
+
+If the above scenario, the user would trigger an input rule for the first action by typing `/emoji` and then the `onSelect` or `reducer` would call `closeAutocomplete(view)` and then `openAutocomplete(view, ':', 'rocket')`, optional 🚀 obviously!
+
 ## Related Projects
 
 There are a few other packages that offer similar functionality:
