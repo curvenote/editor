@@ -45,7 +45,12 @@ const view = new EditorView(editor, {
 });
 ```
 
-The function `autocomplete` takes handlers or a single `reducer` and a list of `triggers`, it returns a two plugins: (1) a decoration plugin that wraps the input, and (2) a `InputRule` plugin that has a series of triggers that are defined in the options. All handlers take an `AutocompleteAction` as the first and only argument (same as the `reducer`).
+The function `autocomplete` takes handlers or a single `reducer` and a list of `triggers`, it returns a two plugins:
+
+1. a decoration plugin that wraps the trigger and filter text (e.g. `[@][mention]`); and
+2. an `InputRule` plugin that has a series of triggers that are defined in the options.
+
+All handlers take an `AutocompleteAction` as the first and only argument (same as the `reducer`).
 
 - `onOpen({ view, range, trigger, filter, type })` — when the autocomplete should be opened
   - The `type` is the `Trigger` that cause this action
@@ -169,7 +174,7 @@ There are a few other packages that offer similar functionality:
 - [prosemirror-mentions](https://github.com/joelewis/prosemirror-mentions)
 - [prosemirror-suggest](https://github.com/remirror/remirror/tree/next/packages/prosemirror-suggest)
 
-`prosemirror-suggestions` is similar in that it does not provide a UI, if you want a UI out of the box you can look at `prosemirror-mentions`. All three of these libraries trigger based on RegExp and leave the decorations in the state. This is similar to how Twitter works, but is undesirable in writing longer documents where you want to dismiss the suggestions with an escape and not see them again in that area.
+`prosemirror-suggestions` is similar in that it does not provide a UI, if you want a simple UI out of the box you can look at `prosemirror-mentions`. All three of these libraries trigger based on RegExp and leave the decorations in the state. This is similar to how Twitter works, but is undesirable in writing longer documents where you want to dismiss the suggestions with an escape and not see them again in that area.
 
 This library, `prosemirror-autocomplete`, works based on an input rule and then a decoration around the chosen area meaning you can target the suggestion specifically and dismiss it with ease.
 
