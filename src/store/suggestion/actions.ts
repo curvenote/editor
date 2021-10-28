@@ -1,4 +1,5 @@
 import { EditorView } from 'prosemirror-view';
+import { AppThunk } from 'store/types';
 import {
   SuggestionActionTypes,
   SuggestionKind,
@@ -13,7 +14,7 @@ import {
 } from './types';
 import { CommandResult } from './commands';
 import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
-import { AppThunk } from '../types';
+import { MentionResult, chooseSelection as chooseMention } from './results/mention';
 import { getSuggestion } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';
@@ -109,7 +110,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
       case SuggestionKind.person:
-        dispatch(command.chooseSelection(result as LinkResult));
+        chooseMention(result as MentionResult);
         return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:

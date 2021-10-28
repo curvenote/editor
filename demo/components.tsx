@@ -108,10 +108,10 @@ function createEditorState() {
       ...suggestion(
         (action) => {
           console.log('handleSuggestion', action);
-          if (action.kind === 'close') {
-            console.log('select');
-            return false;
-          }
+          // if (action.kind === 'close') {
+          //   console.log('select');
+          //   return false;
+          // }
           // return true;
           return store.dispatch(handleSuggestion(action) as any);
         },
@@ -123,7 +123,7 @@ function createEditorState() {
   });
 }
 
-function InputWitMention() {
+function InputWithMention() {
   const editorViewRef = useRef<EditorView | null>(null);
   const editorDivRef = useRef<HTMLDivElement>(null);
 
@@ -155,7 +155,7 @@ function InputWitMention() {
 function ComponentDemo() {
   return (
     <div>
-      <InputWitMention />
+      <InputWithMention />
     </div>
   );
 }

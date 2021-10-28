@@ -1,6 +1,7 @@
 import { types } from '@curvenote/runtime';
 import { ReferenceKind } from '@curvenote/schema';
 import { EditorView } from 'prosemirror-view';
+import { MentionResult } from './results/mention';
 import { CommandResult } from './commands';
 
 export const UPDATE_SUGGESTION = 'UPDATE_SUGGESTION';
@@ -38,7 +39,12 @@ export type VariableResult = Partial<types.Variable>;
 
 export type { CommandResult };
 
-export type SuggestionResult = EmojiResult | CommandResult | VariableResult | LinkResult;
+export type SuggestionResult =
+  | EmojiResult
+  | CommandResult
+  | VariableResult
+  | LinkResult
+  | MentionResult;
 
 export type Location =
   | {

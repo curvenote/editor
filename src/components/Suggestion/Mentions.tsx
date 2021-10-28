@@ -6,9 +6,8 @@ import FaceOutlined from '@material-ui/icons/FaceOutlined';
 import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
-import { CommandResult } from '../../store/suggestion/commands';
-import Keyboard from '../Keyboard';
 import { positionPopper } from '../InlineActions/utils';
+import { MentionResult } from '../../store/suggestion/results/mention';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,12 +19,11 @@ const useStyles = makeStyles(() =>
 
 export default function CommandSuggestions() {
   const classes = useStyles();
-  const results = useSelector(
+  const results: MentionResult[] = useSelector(
     (state: State) => selectors.getSuggestionResults<any>(state),
     isEqual,
   );
   positionPopper();
-  // const classes = useStyles();
   if (results.length === 0) {
     return <Typography variant="subtitle2">No user found. Invite new handling TODO</Typography>;
   }
@@ -34,7 +32,7 @@ export default function CommandSuggestions() {
       {results.map((item, index) => (
         <Suggestion key={item.email} index={index}>
           <Box display="flex" flexDirection="row">
-            <Box width={40} display="flex" justifyContent="center" alignItems="center">
+            <Box width={40} height={40} display="flex" justifyContent="center" alignItems="center">
               {item.avatar ? (
                 <img
                   className={classes.img}
