@@ -1,9 +1,8 @@
 import { Plugin } from 'prosemirror-state';
 import { inputRules } from 'prosemirror-inputrules';
-import { Options, AutocompleteAction } from './types';
+import { Options, ActionKind, AutocompleteAction } from './types';
 import { getDecorationPlugin } from './decoration';
 import { createInputRule } from './inputRules';
-import { ActionKind } from '.';
 
 export function defaultReducer(options: Partial<Options>) {
   return (action: AutocompleteAction): boolean => {
