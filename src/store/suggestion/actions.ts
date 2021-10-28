@@ -11,10 +11,11 @@ import {
   variableTrigger,
   VariableResult,
   LinkResult,
+  MentionResult,
 } from './types';
 import { CommandResult } from './commands';
 import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
-import { MentionResult, chooseSelection as chooseMention } from './results/mention';
+import { chooseSelection as chooseMention } from './results/mention';
 import { getSuggestion } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';

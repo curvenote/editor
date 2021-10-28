@@ -1,7 +1,6 @@
 import { types } from '@curvenote/runtime';
 import { ReferenceKind } from '@curvenote/schema';
 import { EditorView } from 'prosemirror-view';
-import { MentionResult } from './results/mention';
 import { CommandResult } from './commands';
 
 export const UPDATE_SUGGESTION = 'UPDATE_SUGGESTION';
@@ -92,6 +91,12 @@ export interface UpdateSuggestionSelectionAction {
   payload: {
     selection: number;
   };
+}
+
+export interface MentionResult {
+  name: string;
+  email: string;
+  avatar: string;
 }
 
 export type SuggestionActionTypes =

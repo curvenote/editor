@@ -7,7 +7,7 @@ import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { positionPopper } from '../InlineActions/utils';
-import { MentionResult } from '../../store/suggestion/results/mention';
+import { MentionResult } from '../../store/suggestion/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
