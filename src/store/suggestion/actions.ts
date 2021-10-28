@@ -111,7 +111,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
       case SuggestionKind.person:
-        chooseMention(result as MentionResult);
+        dispatch(chooseMention(result as MentionResult));
         return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:

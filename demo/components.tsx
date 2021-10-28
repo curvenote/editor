@@ -10,14 +10,34 @@ import { Chip } from '@material-ui/core';
 import { Provider } from 'react-redux';
 import suggestion from '../src/prosemirror/plugins/suggestion';
 import rootReducer from './reducers';
-import { handleSuggestion } from '../src/store/actions';
+import { closeSuggestion, handleSuggestion } from '../src/store/actions';
 import middlewares from '../src/store/middleware';
 import { Suggestions, SuggestionSwitch } from '../src';
+import { getSuggestion } from '../src/store/selectors';
+import './components.css';
 
 const store = createStore(rootReducer, applyMiddleware(...[thunkMiddleware, ...middlewares]));
 
-function ChipWithIcon({ label }: { label: string }) {
-  return <Chip icon={<FaceOutlined />} label={label} variant="outlined" />;
+function ChipWithIcon({ label, avatar }: { label: string; avatar: string }) {
+  return (
+    <Chip
+      icon={
+        avatar ? (
+          <img
+            style={{ display: 'inline-block', borderRadius: 9999 }}
+            width={24}
+            height={24}
+            src={avatar}
+            alt={`${label} avatar`}
+          />
+        ) : (
+          <FaceOutlined />
+        )
+      }
+      label={label}
+      variant="outlined"
+    />
+  );
 }
 
 class MentionView {
@@ -30,7 +50,6 @@ class MentionView {
   dom: HTMLSpanElement;
 
   constructor(node: Node, view: EditorView, getPos: boolean | (() => number)) {
-    console.log('[MentionView] constructor', node, view, getPos);
     // We'll need these later
     this.node = node;
     this.view = view;
@@ -38,7 +57,7 @@ class MentionView {
 
     // The node's representation in the editor (empty, for now)
     const wrapper = document.createElement('span');
-    ReactDOM.render(<ChipWithIcon label={node.attrs.label} />, wrapper);
+    ReactDOM.render(<ChipWithIcon label={node.attrs.label} avatar={node.attrs.avatar} />, wrapper);
     this.dom = wrapper;
   }
 }
@@ -46,7 +65,7 @@ class MentionView {
 function createEditorState() {
   const nodes: Record<string, NodeSpec> = {
     doc: {
-      content: 'block+',
+      content: 'block*',
     },
     // :: NodeSpec A plain paragraph textblock. Represented in the DOM
     // as a `<p>` element.
@@ -65,30 +84,29 @@ function createEditorState() {
     },
 
     mention: {
-      attrs: { label: { default: '' } },
+      attrs: { label: { default: '' }, avatar: { default: '' } },
       inline: true,
+      atom: true,
       group: 'inline',
       draggable: true,
-      toDOM: (node: any) => [
-        'span',
-        {
-          class: 'mention',
-          label: node.attrs.label,
-        },
-        0,
-      ],
+      selectable: true,
+      toDOM(node: any) {
+        const { label, avatar } = node.attrs;
+        return ['span', { label, avatar, class: 'mention' }];
+      },
       parseDOM: [
         {
-          tag: 'span.mention',
+          tag: 'span.mention[label][avatar]',
           getAttrs(dom) {
             if (typeof dom !== 'string') {
               const label = (dom as HTMLSpanElement).getAttribute('label');
-              console.log('label', label);
+              const avatar = (dom as HTMLSpanElement).getAttribute('avatar');
               return {
                 label,
+                avatar,
               };
             }
-            return { label: '' };
+            return { label: '', avatar: '' };
           },
         },
       ],
@@ -99,7 +117,6 @@ function createEditorState() {
     nodes,
   });
   const contentNode = document.getElementById('componentContent') as HTMLElement;
-  console.log('contentNode', contentNode);
 
   return EditorState.create({
     doc: DOMParser.fromSchema(mentionInputSchema).parse(contentNode),
@@ -107,13 +124,30 @@ function createEditorState() {
     plugins: [
       ...suggestion(
         (action) => {
-          console.log('handleSuggestion', action);
-          // if (action.kind === 'close') {
-          //   console.log('select');
-          //   return false;
-          // }
-          // return true;
-          return store.dispatch(handleSuggestion(action) as any);
+          if (action.kind === 'close') {
+            // remove text
+            const {
+              view,
+              range: { from, to },
+            } = getSuggestion(store.getState());
+            if (!view) return true;
+            const { tr } = view.state;
+            tr.insertText('', from, to);
+            view.dispatch(tr);
+
+            // create mention component
+            const { selected: selectedIndex, results } = getSuggestion(store.getState());
+            const selected = results[selectedIndex] as any;
+            const mention = view.state.schema.nodes.mention.create({
+              label: selected.email,
+              avatar: selected.avatar || '',
+            } as any);
+            store.dispatch(closeSuggestion() as any);
+            view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
+            return true;
+          }
+          store.dispatch(handleSuggestion(action) as any);
+          return true;
         },
         /(?:^|\W)(@)$/,
         // Cancel on space after some of the triggers
@@ -136,6 +170,15 @@ function InputWithMention() {
       { mount: editorDivRef.current },
       {
         state,
+        clipboardTextSerializer: (slice) => {
+          let str = '';
+          slice.content.forEach((node) => {
+            if (node.type.name === 'mention') {
+              str += node.attrs.label;
+            }
+          });
+          return str;
+        },
         nodeViews: {
           mention(node, view, getPos) {
             return new MentionView(node, view, getPos);

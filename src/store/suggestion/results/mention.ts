@@ -1,4 +1,4 @@
-import { getSuggestion } from 'store/selectors';
+import { getSuggestion } from '../../selectors';
 import { AppThunk } from '../../types';
 import { MentionResult } from '../types';
 
@@ -15,6 +15,8 @@ export const chooseSelection = (result: MentionResult): AppThunk<boolean> => {
       view.dispatch(tr);
       return true;
     };
-    return dispatch((result.name, view, removeText, true));
+    console.log('select?', result);
+    removeText();
+    return true;
   };
 };
