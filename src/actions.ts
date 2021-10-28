@@ -3,12 +3,12 @@ import { EditorView } from 'prosemirror-view';
 import { AutocompleteTrMeta } from './types';
 import { pluginKey } from './utils';
 
-export function openAutocomplete(view: EditorView, trigger: string, search?: string) {
+export function openAutocomplete(view: EditorView, trigger: string, filter?: string) {
   // TODO: Can activate a type?
   const plugin = pluginKey.get(view.state) as Plugin;
-  const meta: AutocompleteTrMeta = { action: 'add', trigger, search, type: null };
+  const meta: AutocompleteTrMeta = { action: 'add', trigger, filter, type: null };
   const tr = view.state.tr
-    .insertText(`${trigger}${search ?? ''}`)
+    .insertText(`${trigger}${filter ?? ''}`)
     .scrollIntoView()
     .setMeta(plugin, meta);
   view.dispatch(tr);

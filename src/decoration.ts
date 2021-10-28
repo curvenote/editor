@@ -56,12 +56,12 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
 
           const started = !prev.active && next.active;
           const stopped = prev.active && !next.active;
-          const changed = next.active && !started && !stopped && prev.text !== next.text;
+          const changed = next.active && !started && !stopped && prev.filter !== next.filter;
 
           const action: Omit<AutocompleteAction, 'kind'> = {
             view,
             trigger: next.trigger ?? (prev.trigger as string),
-            filter: next.text ?? prev.text,
+            filter: next.filter ?? prev.filter,
             range: next.range ?? (prev.range as FromTo),
             type: next.type ?? prev.type,
           };
@@ -76,8 +76,8 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
       apply(tr, state): AutocompleteState {
         const meta = tr.getMeta(plugin) as AutocompleteTrMeta;
         if (meta?.action === 'add') {
-          const { trigger, search, type } = meta;
-          const from = tr.selection.from - trigger.length - (search?.length ?? 0);
+          const { trigger, filter, type } = meta;
+          const from = tr.selection.from - trigger.length - (filter?.length ?? 0);
           const to = tr.selection.from;
           const attrs = { ...DEFAULT_DECO_ATTRS, ...type?.decorationAttrs };
           const deco = Decoration.inline(from, to, attrs, {
@@ -88,7 +88,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
             active: true,
             trigger: meta.trigger,
             decorations: DecorationSet.create(tr.doc, [deco]),
-            text: search ?? '',
+            filter: filter ?? '',
             range: { from, to },
             type,
           };
@@ -114,7 +114,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           active,
           trigger,
           decorations: nextDecorations,
-          text: text.slice(trigger.length),
+          filter: text.slice(trigger.length),
           range: { from, to },
           type,
         };
