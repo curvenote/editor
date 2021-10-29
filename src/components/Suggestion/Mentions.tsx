@@ -31,8 +31,15 @@ export default function CommandSuggestions() {
     <div>
       {results.map((item, index) => (
         <Suggestion key={item.email} index={index}>
-          <Box display="flex" flexDirection="row">
-            <Box width={40} height={40} display="flex" justifyContent="center" alignItems="center">
+          <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+            <Box
+              width={40}
+              height={40}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              pl={0.25}
+            >
               {item.avatar ? (
                 <img
                   className={classes.img}

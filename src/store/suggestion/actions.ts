@@ -175,20 +175,6 @@ function setStartingSuggestions(
         dispatch(updateResults(starting));
         return;
       }
-      case SuggestionKind.person: {
-        dispatch(
-          updateResults([
-            { avatar: '', email: 'test1@gmail.com', name: '' },
-            {
-              avatar:
-                'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/WeYvKUTFnSQOET5tyvW9TgLQLwb2?version=1629496337760',
-              email: 'yuxi@curvenote.com',
-              name: 'Yuxi',
-            },
-          ]),
-        );
-        return;
-      }
       case SuggestionKind.link: {
         dispatch(updateResults([]));
         // TODO: this needs to be non-blocking, and show a loading indicator

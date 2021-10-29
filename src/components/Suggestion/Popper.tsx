@@ -25,7 +25,7 @@ function getNode() {
   return document.getElementById(SUGGESTION_ID);
 }
 
-const anchorEl: PopperProps['anchorEl'] = {
+export const anchorEl: PopperProps['anchorEl'] = {
   getBoundingClientRect() {
     return getNode()?.getBoundingClientRect() as ClientRect;
   },
