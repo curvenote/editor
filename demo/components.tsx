@@ -219,6 +219,7 @@ type Actions =
   | { type: 'open' }
   | { type: 'close' }
   | { type: 'incActive'; payload: { inc: number } }
+  | { type: 'setActive'; payload: { active: number } }
   | {
       type: 'updateAction';
       payload: { range: { from: number; to: number }; search: string | null };
@@ -248,6 +249,11 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
         ...state,
         active: constrainActive(state.active + action.payload.inc, state.suggestions.length),
       };
+    case 'setActive':
+      return {
+        ...state,
+        active: action.payload.active,
+      };
     case 'selectActiveSuggestion': {
       return {
         ...state,
@@ -274,6 +280,7 @@ const useStyles = makeStyles(() =>
       overflow: 'auto',
       margin: '10px 0',
     },
+    suggestionItem: { cursor: 'pointer' },
   }),
 );
 
@@ -360,12 +367,9 @@ function InputWithMention({
         return true;
       }
       if (action.kind === SuggestionActionKind.select) {
-        // remove text
         addActiveToMention();
-
         return true;
       }
-      // store.dispatch(handleSuggestion(action) as any);
       return true;
     });
 
@@ -406,8 +410,11 @@ function InputWithMention({
               <Box
                 key={key}
                 display="flex"
-                onMouseEnter={addActiveToMention}
+                onMouseEnter={() => {
+                  dispatch({ type: 'setActive', payload: { active: i } });
+                }}
                 onClick={addActiveToMention}
+                className={classes.suggestionItem}
                 flexDirection="row"
                 justifyContent="center"
                 alignItems="center"
@@ -441,9 +448,42 @@ function InputWithMention({
   );
 }
 
+function shuffle(array: any) {
+  let currentIndex = array.length;
+  let randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    // eslint-disable-next-line
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+function getRandomInt(l: number, h: number) {
+  const min = Math.ceil(l);
+  const max = Math.floor(h);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 function ComponentDemo() {
   const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
-  useEffect(() => {}, []);
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSuggestion((s) => [...shuffle(s)]);
+    }, getRandomInt(500, 1000));
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+
   return (
     <div>
       <InputWithMention
@@ -452,10 +492,8 @@ function ComponentDemo() {
           if (!update) {
             return;
           }
+          setSearch(update);
           console.log('onSearchChanged', update);
-          // setTimeout(() => {
-          //   setSuggestion();
-          // }, 200);
         }}
         onNewMention={(update) => {
           console.log('new mention', update);
