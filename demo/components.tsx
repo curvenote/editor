@@ -1,4 +1,5 @@
 import { EditorState } from 'prosemirror-state';
+import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
 import React, {
   KeyboardEventHandler,
@@ -173,30 +174,30 @@ interface PersonSuggestion {
 }
 
 const TEST_SUGGESTION_LIST: PersonSuggestion[] = [
+  { avatar: '', email: 'test3@gmail.com', name: '' },
   {
     avatar: 'https://lh3.googleusercontent.com/a-/AOh14Gg7MefXJ_MF1oDEiNThKLfOUwWy6p3P73ZrQkDq',
     email: 'stevejpurves@curvenote.com',
-    name: 'stevejpurves',
+    name: 'curvenote - stevejpurves',
   },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/vKndfPAZO7WeFxLH1GQcpnXPzfH3?version=1601936136496',
     email: 'rowanc1@curvenote.com',
-    name: 'rowanc1',
+    name: 'curvenote - rowanc1',
   },
   {
     avatar:
       'https://uploads-ssl.webflow.com/60ff0a25e3004400049dc542/611c16f84578e9136ea70668_1590515756464.jpg',
     email: 'liz@curvenote.com',
-    name: 'liz',
+    name: 'curvenote - liz',
   },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/WeYvKUTFnSQOET5tyvW9TgLQLwb2?version=1629496337760',
     email: 'yuxi@curvenote.com',
-    name: 'Yuxi',
+    name: 'curvenote - Yuxi',
   },
-  { avatar: '', email: 'test1@gmail.com', name: '' },
 ];
 
 const id = 'mention-popup';
@@ -300,19 +301,32 @@ function InputWithMention({
   const [state, dispatch] = useReducer(reducer, initialState);
   stateRef.current = state;
   const { active } = state;
+  const [fuse, setFuse] = useState<Fuse<PersonSuggestion> | null>(null);
   const paperRef = useRef<HTMLDivElement>(null);
-  useClickOutside(paperRef, () => {
-    dispatch({ type: 'close' });
-  });
 
   function incActive(v: number) {
     dispatch({ type: 'incActive', payload: { inc: v } });
   }
 
   useEffect(() => {
-    // TODO: load mentions?
-    dispatch({ type: 'updateSuggestions', payload: { suggestions } });
+    setFuse(new Fuse(suggestions, { keys: ['email', 'name'] }));
   }, [suggestions]);
+
+  useEffect(() => {
+    // TODO: load mentions?
+    console.log('suggestion update', suggestions);
+    if (!fuse) {
+      return;
+    }
+    if (!state.action.search) {
+      dispatch({ type: 'updateSuggestions', payload: { suggestions } });
+      return;
+    }
+    dispatch({
+      type: 'updateSuggestions',
+      payload: { suggestions: fuse.search(state.action.search).map((v) => v.item) },
+    });
+  }, [fuse]);
 
   useEffect(() => {
     onSearchChanged(state.action.search);
@@ -350,6 +364,7 @@ function InputWithMention({
     }
     const prosemirrorState = createEditorState((action: SuggestionAction) => {
       dispatch({ type: 'updateAction', payload: { range: action.range, search: action.search } });
+
       if (action.kind === SuggestionActionKind.open) {
         dispatch({ type: 'open' });
         return true;
@@ -360,6 +375,10 @@ function InputWithMention({
       }
       if (action.kind === SuggestionActionKind.next) {
         incActive(1);
+        return true;
+      }
+      if (action.kind === SuggestionActionKind.filter) {
+        setFuse(new Fuse(stateRef.current.suggestions, { keys: ['email', 'name'] }));
         return true;
       }
       if (action.kind === SuggestionActionKind.close) {
@@ -448,24 +467,6 @@ function InputWithMention({
   );
 }
 
-function shuffle(array: any) {
-  let currentIndex = array.length;
-  let randomIndex;
-
-  // While there remain elements to shuffle...
-  while (currentIndex !== 0) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    // eslint-disable-next-line
-    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-  }
-
-  return array;
-}
-
 function getRandomInt(l: number, h: number) {
   const min = Math.ceil(l);
   const max = Math.floor(h);
@@ -477,7 +478,7 @@ function ComponentDemo() {
   const [search, setSearch] = useState('');
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setSuggestion((s) => [...shuffle(s)]);
+      setSuggestion((s) => s.slice(1));
     }, getRandomInt(500, 1000));
     return () => {
       clearTimeout(timeout);
