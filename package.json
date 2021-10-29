@@ -26,6 +26,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn run clean && tsc -p .;mv dist/src/* dist; rm -r dist/src; rm -r dist/demo;",
+    "build:demo": "yarn run clean;webpack --config webpack.js; rm -r dist/src; rm -r dist/demo;",
     "build:watch": "tsc -w -p .",
     "prepublishOnly": "yarn build",
     "start": "webpack serve --open --config webpack.js",
