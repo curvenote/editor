@@ -1,14 +1,7 @@
 import { EditorState } from 'prosemirror-state';
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
-import React, {
-  KeyboardEventHandler,
-  useCallback,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import thunkMiddleware from 'redux-thunk';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
@@ -32,8 +25,6 @@ import suggestion, {
 import rootReducer from './reducers';
 import middlewares from '../src/store/middleware';
 import './components.css';
-import { anchorEl } from '../src/components/Suggestion/Popper';
-import useClickOutside from '../src/components/hooks/useClickOutside';
 
 const store = createStore(rootReducer, applyMiddleware(...[thunkMiddleware, ...middlewares]));
 
@@ -62,7 +53,10 @@ function AvatarWithFallback({
 }
 
 const Chip = withStyles({
-  label: { paddingLeft: 4, paddingRight: 8 },
+  root: {
+    height: 28,
+  },
+  label: { paddingLeft: 4, paddingRight: 8, fontSize: 12 },
 })(MuiChip);
 
 function ChipWithIcon({ label, avatar }: { label: string; avatar: string }) {
@@ -92,6 +86,7 @@ class MentionView {
 
     // The node's representation in the editor (empty, for now)
     const wrapper = document.createElement('span');
+    wrapper.classList.add('chip-container');
     ReactDOM.render(<ChipWithIcon label={node.attrs.label} avatar={node.attrs.avatar} />, wrapper);
     this.dom = wrapper;
   }
@@ -159,7 +154,7 @@ function createEditorState(actionHandler: any) {
     plugins: [
       ...suggestion(
         actionHandler,
-        /(?:^|\W)(@)$/,
+        /(?:^|\W)( )$/,
         // Cancel on space after some of the triggers
         (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
       ),
@@ -178,25 +173,25 @@ const TEST_SUGGESTION_LIST: PersonSuggestion[] = [
   {
     avatar: 'https://lh3.googleusercontent.com/a-/AOh14Gg7MefXJ_MF1oDEiNThKLfOUwWy6p3P73ZrQkDq',
     email: 'stevejpurves@curvenote.com',
-    name: 'curvenote - stevejpurves',
+    name: 'stevejpurves',
   },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/vKndfPAZO7WeFxLH1GQcpnXPzfH3?version=1601936136496',
     email: 'rowanc1@curvenote.com',
-    name: 'curvenote - rowanc1',
+    name: 'rowanc1',
   },
   {
     avatar:
       'https://uploads-ssl.webflow.com/60ff0a25e3004400049dc542/611c16f84578e9136ea70668_1590515756464.jpg',
     email: 'liz@curvenote.com',
-    name: 'curvenote - liz',
+    name: 'liz',
   },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/WeYvKUTFnSQOET5tyvW9TgLQLwb2?version=1629496337760',
     email: 'yuxi@curvenote.com',
-    name: 'curvenote - Yuxi',
+    name: 'Yuxi',
   },
 ];
 
@@ -274,14 +269,21 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
 }
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {
+    suggestionListContainer: {
       minWidth: 150,
-      maxWidth: 250,
       maxHeight: 350,
       overflow: 'auto',
       margin: '10px 0',
     },
     suggestionItem: { cursor: 'pointer' },
+    prosemirrorContainer: {
+      overflow: 'wrap',
+      backgroundColor: '#f8f9fa',
+      padding: 4,
+      '& p': {
+        margin: 0,
+      },
+    },
   }),
 );
 
@@ -419,71 +421,70 @@ function InputWithMention({
   }, []);
 
   return (
-    <>
-      <div ref={editorDivRef} />
-      <Popper id={id} open={state.isOpen} anchorEl={anchorEl} placement="bottom-start">
-        <Paper className={classes.root} elevation={10} ref={paperRef}>
-          {state.suggestions.map(({ email, name, avatar }, i) => {
-            const key = `${email || name}-suggestion-item`;
-            return (
-              <Box
-                key={key}
-                display="flex"
-                onMouseEnter={() => {
-                  dispatch({ type: 'setActive', payload: { active: i } });
-                }}
-                onClick={addActiveToMention}
-                className={classes.suggestionItem}
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ border: 1, py: 0.25, px: 0.5, bgcolor: 'background.paper', minWidth: 100 }}
-                style={active === i ? { backgroundColor: '#e8e8e8' } : {}}
-              >
+    <Box width={300}>
+      <Box className={classes.prosemirrorContainer}>
+        <div ref={editorDivRef} />
+      </Box>
+      {editorDivRef.current && (
+        <Popper
+          id={id}
+          open={state.isOpen}
+          anchorEl={editorDivRef.current}
+          placement="bottom-start"
+        >
+          <Paper
+            className={classes.suggestionListContainer}
+            elevation={10}
+            ref={paperRef}
+            style={{ width: 300 }}
+          >
+            {state.suggestions.map(({ email, name, avatar }, i) => {
+              const key = `${email || name}-suggestion-item`;
+              return (
                 <Box
-                  pr={0.5}
-                  width={24}
-                  height={24}
+                  key={key}
                   display="flex"
+                  onMouseEnter={() => {
+                    dispatch({ type: 'setActive', payload: { active: i } });
+                  }}
+                  onClick={addActiveToMention}
+                  className={classes.suggestionItem}
+                  flexDirection="row"
                   justifyContent="center"
                   alignItems="center"
+                  sx={{ border: 1, py: 0.25, px: 0.5, bgcolor: 'background.paper', minWidth: 100 }}
+                  style={active === i ? { backgroundColor: '#e8e8e8' } : {}}
                 >
-                  <AvatarWithFallback
-                    width={20}
-                    height={20}
-                    label={name || email}
-                    avatar={avatar}
-                  />
+                  <Box
+                    pr={0.5}
+                    width={24}
+                    height={24}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <AvatarWithFallback
+                      width={20}
+                      height={20}
+                      label={name || email}
+                      avatar={avatar}
+                    />
+                  </Box>
+                  <Box display="flex" flexDirection="column" flexGrow={3}>
+                    <Typography style={{ fontSize: 12 }}>{name || email}</Typography>
+                  </Box>
                 </Box>
-                <Box display="flex" flexDirection="column" flexGrow={3}>
-                  <Typography style={{ fontSize: 12 }}>{name || email}</Typography>
-                </Box>
-              </Box>
-            );
-          })}
-        </Paper>
-      </Popper>
-    </>
+              );
+            })}
+          </Paper>
+        </Popper>
+      )}
+    </Box>
   );
-}
-
-function getRandomInt(l: number, h: number) {
-  const min = Math.ceil(l);
-  const max = Math.floor(h);
-  return Math.floor(Math.random() * (max - min) + min);
 }
 
 function ComponentDemo() {
   const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
-  const [search, setSearch] = useState('');
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSuggestion((s) => s.slice(1));
-    }, getRandomInt(500, 1000));
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [search]);
 
   return (
     <div>
@@ -493,7 +494,6 @@ function ComponentDemo() {
           if (!update) {
             return;
           }
-          setSearch(update);
           console.log('onSearchChanged', update);
         }}
         onNewMention={(update) => {
