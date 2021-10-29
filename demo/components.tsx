@@ -159,13 +159,13 @@ function createEditorState(actionHandler: any) {
   });
 }
 
-interface MentionUser {
+interface PersonSuggestion {
   avatar: string;
   email: string;
   name: string;
 }
 
-const TEST_MENTION_LIST: MentionUser[] = [
+const TEST_SUGGESTION_LIST: PersonSuggestion[] = [
   { avatar: '', email: 'test1@gmail.com', name: '' },
   {
     avatar:
@@ -184,22 +184,22 @@ function constrainActive(v: number, length: number) {
 }
 
 const initialState = {
-  mentions: [] as MentionUser[],
+  suggestions: [] as PersonSuggestion[],
   active: 0,
   isOpen: false,
   range: null as { from: number; to: number } | null,
 };
-type MentionState = typeof initialState;
+type SuggestionState = typeof initialState;
 
 type Actions =
   | { type: 'open' }
   | { type: 'close' }
   | { type: 'incActive'; payload: { inc: number } }
   | { type: 'updateRange'; payload: { range: { from: number; to: number } } }
-  | { type: 'selectActiveMention' }
-  | { type: 'updateMentions'; payload: { mentions: MentionUser[] } };
+  | { type: 'selectActiveSuggestion' }
+  | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
-function reducer(state: MentionState, action: Actions) {
+function reducer(state: SuggestionState, action: Actions): SuggestionState {
   switch (action.type) {
     case 'open':
       return {
@@ -219,36 +219,35 @@ function reducer(state: MentionState, action: Actions) {
     case 'incActive':
       return {
         ...state,
-        active: constrainActive(state.active + action.payload.inc, state.mentions.length),
-        mentions: state.mentions,
+        active: constrainActive(state.active + action.payload.inc, state.suggestions.length),
       };
-    case 'selectActiveMention': {
+    case 'selectActiveSuggestion': {
       return {
         ...state,
         active: 0,
         isOpen: false,
       };
     }
-    case 'updateMentions':
+    case 'updateSuggestions':
       return {
         ...state,
         active: 0,
-        mentions: action.payload.mentions,
+        suggestions: action.payload.suggestions,
       };
     default:
       throw new Error();
   }
 }
 
-function getActiveMention(state: MentionState) {
-  return state.mentions[state.active];
+function getActiveMention(state: SuggestionState) {
+  return state.suggestions[state.active];
 }
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      minWidth: 200,
-      maxWidth: 500,
+      minWidth: 150,
+      maxWidth: 250,
       maxHeight: 350,
       overflow: 'auto',
       margin: '10px 0',
@@ -257,9 +256,9 @@ const useStyles = makeStyles(() =>
 );
 
 function InputWithMention({
-  onMentionAdded = () => {},
+  onNewMention = () => {},
 }: {
-  onMentionAdded?: (mention: MentionUser) => void;
+  onNewMention?: (mention: PersonSuggestion) => void;
 }) {
   const classes = useStyles();
   const editorViewRef = useRef<EditorView | null>(null);
@@ -267,7 +266,7 @@ function InputWithMention({
   const stateRef = useRef(initialState);
   const [state, dispatch] = useReducer(reducer, initialState);
   stateRef.current = state;
-  const { active, mentions } = state;
+  const { active, suggestions } = state;
   const paperRef = useRef<HTMLDivElement>(null);
   useClickOutside(paperRef, () => {
     dispatch({ type: 'close' });
@@ -279,7 +278,7 @@ function InputWithMention({
 
   useEffect(() => {
     // TODO: load mentions?
-    dispatch({ type: 'updateMentions', payload: { mentions: TEST_MENTION_LIST } });
+    dispatch({ type: 'updateSuggestions', payload: { suggestions: TEST_SUGGESTION_LIST } });
   }, []);
 
   const addActiveToMention = useCallback(function addActiveToMention() {
@@ -296,16 +295,16 @@ function InputWithMention({
     tr.insertText('', from, to);
     view.dispatch(tr);
 
-    dispatch({ type: 'selectActiveMention' });
+    dispatch({ type: 'selectActiveSuggestion' });
 
-    const selectedMention = current.mentions[current.active];
+    const selectedSuggestion = current.suggestions[current.active];
     // create mention component
     const mention = view.state.schema.nodes.mention.create({
-      label: selectedMention.name || selectedMention.email,
-      avatar: selectedMention.avatar || '',
+      label: selectedSuggestion.name || selectedSuggestion.email,
+      avatar: selectedSuggestion.avatar || '',
     } as any);
     view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
-    onMentionAdded(getActiveMention(state));
+    onNewMention(getActiveMention(state));
   }, []);
 
   useEffect(() => {
@@ -370,12 +369,14 @@ function InputWithMention({
     console.log(e.key);
   }, []);
 
+  console.log({ suggestions });
+
   return (
     <>
       <div ref={editorDivRef} />
       <Popper id={id} open={state.isOpen} anchorEl={anchorEl} placement="bottom-start">
         <Paper className={classes.root} elevation={10} ref={paperRef}>
-          {state.mentions.map(({ email, name, avatar }, i) => {
+          {state.suggestions.map(({ email, name, avatar }, i) => {
             const key = `${email || name}-suggestion-item`;
             return (
               <Box
@@ -391,7 +392,7 @@ function InputWithMention({
                 style={active === i ? { backgroundColor: '#e8e8e8' } : {}}
               >
                 <Box
-                  pr={1}
+                  pr={0.5}
                   width={24}
                   height={24}
                   display="flex"
@@ -399,8 +400,8 @@ function InputWithMention({
                   alignItems="center"
                 >
                   <AvatarWithFallback
-                    width={18}
-                    height={18}
+                    width={20}
+                    height={20}
                     label={name || email}
                     avatar={avatar}
                   />
