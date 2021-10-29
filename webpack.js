@@ -2,10 +2,18 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CopyPlugin = require('copy-webpack-plugin');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const express = require('express');
 
 module.exports = {
+  mode: 'development',
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: './dist',
+    port: process.env.PORT,
+    before(app) {
+      app.use('/images', express.static(path.resolve('images')));
+    },
+  },
   optimization: {
     usedExports: true,
   },

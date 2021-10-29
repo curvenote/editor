@@ -25,11 +25,10 @@
   "homepage": "https://github.com/curvenote/prosemirror-autocomplete",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn run clean && tsc -p .;webpack --config webpack.prod.js;",
+    "build": "yarn run clean && tsc -p .;mv dist/src/* dist; rm -r dist/src; rm -r dist/demo;",
     "build:watch": "tsc -w -p .",
     "prepublishOnly": "yarn build",
-    "start": "webpack serve --open --config webpack.dev.js",
-    "dev": "webpack --config webpack.dev.js",
+    "start": "webpack serve --open --config webpack.js",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
@@ -81,7 +80,6 @@
     "typescript": "^4.4.4",
     "webpack": "^5.40.0",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2",
-    "webpack-merge": "^5.8.0"
+    "webpack-dev-server": "^3.11.2"
   }
 }
