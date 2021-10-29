@@ -1,4 +1,4 @@
-import { EditorState } from 'prosemirror-state';
+import { EditorState, NodeSelection } from 'prosemirror-state';
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
@@ -25,6 +25,8 @@ import suggestion, {
 import rootReducer from './reducers';
 import middlewares from '../src/store/middleware';
 import './components.css';
+import { keymap } from 'prosemirror-keymap';
+import { findParentNode } from 'prosemirror-utils';
 
 const store = createStore(rootReducer, applyMiddleware(...[thunkMiddleware, ...middlewares]));
 
@@ -158,6 +160,28 @@ function createEditorState(actionHandler: any) {
         // Cancel on space after some of the triggers
         (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
       ),
+      keymap({
+        Backspace: (state, dispatch) => {
+          const { $head } = state.selection;
+          const { tr } = state;
+          if (
+            (state.selection as NodeSelection).node &&
+            (state.selection as NodeSelection).node.type.name === 'mention'
+          ) {
+            const { node } = state.selection as NodeSelection;
+            dispatch?.(tr.delete($head.pos - 1, $head.pos + node.nodeSize));
+            return true;
+          }
+          const possibleMention = state.selection.$head.nodeBefore;
+          if (!possibleMention) return false;
+          if (possibleMention.type.name !== 'mention') {
+            return false;
+          }
+          const figPos = state.selection.$head.pos - possibleMention.nodeSize;
+          dispatch?.(tr.setSelection(NodeSelection.create(tr.doc, figPos)).scrollIntoView());
+          return true;
+        },
+      }),
     ],
   });
 }
@@ -277,6 +301,7 @@ const useStyles = makeStyles(() =>
     },
     suggestionItem: { cursor: 'pointer' },
     prosemirrorContainer: {
+      borderBottom: '1px solid gray',
       overflow: 'wrap',
       backgroundColor: '#f8f9fa',
       padding: 4,

@@ -1,4 +1,4 @@
-.ProseMirror-selectednode {
+.ProseMirror-selectednode > div {
   outline: 2px solid #8cf;
 }
 
