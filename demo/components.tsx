@@ -1,6 +1,13 @@
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import React, { KeyboardEventHandler, useCallback, useEffect, useReducer, useRef } from 'react';
+import React, {
+  KeyboardEventHandler,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import thunkMiddleware from 'redux-thunk';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
@@ -49,7 +56,7 @@ function AvatarWithFallback({
       alt={`${label} avatar`}
     />
   ) : (
-    <FaceOutlined />
+    <FaceOutlined style={{ width, height }} />
   );
 }
 
@@ -166,13 +173,30 @@ interface PersonSuggestion {
 }
 
 const TEST_SUGGESTION_LIST: PersonSuggestion[] = [
-  { avatar: '', email: 'test1@gmail.com', name: '' },
+  {
+    avatar: 'https://lh3.googleusercontent.com/a-/AOh14Gg7MefXJ_MF1oDEiNThKLfOUwWy6p3P73ZrQkDq',
+    email: 'stevejpurves@curvenote.com',
+    name: 'stevejpurves',
+  },
+  {
+    avatar:
+      'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/vKndfPAZO7WeFxLH1GQcpnXPzfH3?version=1601936136496',
+    email: 'rowanc1@curvenote.com',
+    name: 'rowanc1',
+  },
+  {
+    avatar:
+      'https://uploads-ssl.webflow.com/60ff0a25e3004400049dc542/611c16f84578e9136ea70668_1590515756464.jpg',
+    email: 'liz@curvenote.com',
+    name: 'liz',
+  },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/WeYvKUTFnSQOET5tyvW9TgLQLwb2?version=1629496337760',
     email: 'yuxi@curvenote.com',
     name: 'Yuxi',
   },
+  { avatar: '', email: 'test1@gmail.com', name: '' },
 ];
 
 const id = 'mention-popup';
@@ -186,8 +210,8 @@ function constrainActive(v: number, length: number) {
 const initialState = {
   suggestions: [] as PersonSuggestion[],
   active: 0,
+  action: { range: null as { from: number; to: number } | null, search: null as string | null },
   isOpen: false,
-  range: null as { from: number; to: number } | null,
 };
 type SuggestionState = typeof initialState;
 
@@ -195,7 +219,10 @@ type Actions =
   | { type: 'open' }
   | { type: 'close' }
   | { type: 'incActive'; payload: { inc: number } }
-  | { type: 'updateRange'; payload: { range: { from: number; to: number } } }
+  | {
+      type: 'updateAction';
+      payload: { range: { from: number; to: number }; search: string | null };
+    }
   | { type: 'selectActiveSuggestion' }
   | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
@@ -211,10 +238,10 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
         ...state,
         isOpen: false,
       };
-    case 'updateRange':
+    case 'updateAction':
       return {
         ...state,
-        range: action.payload.range,
+        action: { range: action.payload.range, search: action.payload.search },
       };
     case 'incActive':
       return {
@@ -238,11 +265,6 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
       throw new Error();
   }
 }
-
-function getActiveMention(state: SuggestionState) {
-  return state.suggestions[state.active];
-}
-
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
@@ -256,9 +278,13 @@ const useStyles = makeStyles(() =>
 );
 
 function InputWithMention({
+  suggestions,
+  onSearchChanged,
   onNewMention = () => {},
 }: {
-  onNewMention?: (mention: PersonSuggestion) => void;
+  onNewMention: (mention: PersonSuggestion) => void;
+  onSearchChanged: (update: string | null) => void;
+  suggestions: PersonSuggestion[];
 }) {
   const classes = useStyles();
   const editorViewRef = useRef<EditorView | null>(null);
@@ -266,7 +292,7 @@ function InputWithMention({
   const stateRef = useRef(initialState);
   const [state, dispatch] = useReducer(reducer, initialState);
   stateRef.current = state;
-  const { active, suggestions } = state;
+  const { active } = state;
   const paperRef = useRef<HTMLDivElement>(null);
   useClickOutside(paperRef, () => {
     dispatch({ type: 'close' });
@@ -278,8 +304,12 @@ function InputWithMention({
 
   useEffect(() => {
     // TODO: load mentions?
-    dispatch({ type: 'updateSuggestions', payload: { suggestions: TEST_SUGGESTION_LIST } });
-  }, []);
+    dispatch({ type: 'updateSuggestions', payload: { suggestions } });
+  }, [suggestions]);
+
+  useEffect(() => {
+    onSearchChanged(state.action.search);
+  }, [state.action.search]);
 
   const addActiveToMention = useCallback(function addActiveToMention() {
     const { current: view } = editorViewRef;
@@ -287,10 +317,10 @@ function InputWithMention({
       return;
     }
     const { current } = stateRef;
-    if (!view || !current.range) {
+    if (!view || !current.action.range) {
       return;
     }
-    const { from, to } = current.range;
+    const { from, to } = current.action.range;
     const { tr } = view.state;
     tr.insertText('', from, to);
     view.dispatch(tr);
@@ -304,7 +334,7 @@ function InputWithMention({
       avatar: selectedSuggestion.avatar || '',
     } as any);
     view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
-    onNewMention(getActiveMention(state));
+    onNewMention(selectedSuggestion);
   }, []);
 
   useEffect(() => {
@@ -312,7 +342,7 @@ function InputWithMention({
       return () => {};
     }
     const prosemirrorState = createEditorState((action: SuggestionAction) => {
-      dispatch({ type: 'updateRange', payload: { range: action.range } });
+      dispatch({ type: 'updateAction', payload: { range: action.range, search: action.search } });
       if (action.kind === SuggestionActionKind.open) {
         dispatch({ type: 'open' });
         return true;
@@ -365,12 +395,6 @@ function InputWithMention({
     };
   }, []);
 
-  const onKeyDown: KeyboardEventHandler<HTMLElement> = useCallback(function onKeyDown(e) {
-    console.log(e.key);
-  }, []);
-
-  console.log({ suggestions });
-
   return (
     <>
       <div ref={editorDivRef} />
@@ -383,7 +407,6 @@ function InputWithMention({
                 key={key}
                 display="flex"
                 onMouseEnter={addActiveToMention}
-                onKeyDown={onKeyDown}
                 onClick={addActiveToMention}
                 flexDirection="row"
                 justifyContent="center"
@@ -419,9 +442,25 @@ function InputWithMention({
 }
 
 function ComponentDemo() {
+  const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
+  useEffect(() => {}, []);
   return (
     <div>
-      <InputWithMention />
+      <InputWithMention
+        suggestions={suggestions}
+        onSearchChanged={(update) => {
+          if (!update) {
+            return;
+          }
+          console.log('onSearchChanged', update);
+          // setTimeout(() => {
+          //   setSuggestion();
+          // }, 200);
+        }}
+        onNewMention={(update) => {
+          console.log('new mention', update);
+        }}
+      />
     </div>
   );
 }
