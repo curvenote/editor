@@ -19,6 +19,14 @@ npm install prosemirror-codemark
 
 Or see the [live demo here](https://curvenote.github.io/prosemirror-codemark/)!
 
+**Highlights:**
+
+- Create code matching backwards (simple `InputRule`) and forwards (which is a specialized rule)
+- Select a word and hit `` ` ``
+- Make sure the next charated makes sense (e.g. `removeStoredMarks`)
+- Show a visual cursor in the correct location if the next character will or will not be in the inline code
+- Allow arrow keys to enter/exit into the inline code
+
 ## Overview & Usage
 
 `codemark` is a specialized `InputRule` and a `Plugin` to display a fake-cursor as a decoration, which allows you to navigate inside and outside of inline code. This allows the user the ability to navigate out of a code-mark, and also ensures that the text-input `caret` indicates what will happen next. The plugin works with `undoInputRule` from `prosemirror-inputrules` to undo code mark creation.
