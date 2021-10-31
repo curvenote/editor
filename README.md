@@ -19,9 +19,24 @@ npm install prosemirror-codemark
 
 Or see the [live demo here](https://curvenote.github.io/prosemirror-codemark/)!
 
-## Overview
+## Overview & Usage
 
-Codemark is a specialized `InputRule` and a `Plugin` to display a fake-cursor as a decoration, which allows you to navigate inside and outside of inline code. This allows the user the ability to navigate out of a code-mark, and also ensures that the text-input `caret` indicates what will happen next. The plugin works with `undoInputRule` from `prosemirror-inputrules` to undo code mark creation.
+`codemark` is a specialized `InputRule` and a `Plugin` to display a fake-cursor as a decoration, which allows you to navigate inside and outside of inline code. This allows the user the ability to navigate out of a code-mark, and also ensures that the text-input `caret` indicates what will happen next. The plugin works with `undoInputRule` from `prosemirror-inputrules` to undo code mark creation.
+
+To use the plugins, supply your `MarkType` and use the plugins in your `EditorView`.
+
+```ts
+import codemark from 'prosemirror-codemark';
+
+const plugins = codemark({ markType: schema.marks.code });
+
+const view = new EditorView(editor, {
+  state: EditorState.create({
+    doc,
+    plugins: [...plugins, ...otherPlugins],
+  }),
+});
+```
 
 ## Why
 
