@@ -1,6 +1,5 @@
 import { Plugin, PluginSpec } from 'prosemirror-state';
-import { MarkType } from 'prosemirror-model';
-import { Decoration, DecorationSet } from 'prosemirror-view';
+import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { CodemarkState, CursorMetaTr, Options } from './types';
 import { pluginKey } from './utils';
 import { createInputRule } from './inputRules';
@@ -19,7 +18,11 @@ function toDom(): Node {
   return span;
 }
 
-export function getDecorationPlugin(markType: MarkType) {
+function getMarkType(view: EditorView, opts?: Options) {
+  return opts?.markType ?? view.state.schema.marks.code;
+}
+
+export function getDecorationPlugin(opts?: Options) {
   const plugin: Plugin<CodemarkState> = new Plugin({
     key: pluginKey,
     view() {
@@ -27,7 +30,7 @@ export function getDecorationPlugin(markType: MarkType) {
         update: (view) => {
           const state = plugin.getState(view.state) as CodemarkState;
           view.dom.classList[state?.decorations ? 'add' : 'remove']('no-cursor');
-          if (state?.check) stepOutside(view, plugin, markType);
+          if (state?.check) stepOutside(view, plugin, getMarkType(view, opts));
         },
       };
     },
@@ -62,13 +65,13 @@ export function getDecorationPlugin(markType: MarkType) {
       handleKeyDown(view, event) {
         switch (event.key) {
           case '`':
-            return onBacktick(view, plugin, event, markType);
+            return onBacktick(view, plugin, event, getMarkType(view, opts));
           case 'ArrowRight':
-            return onArrowRight(view, plugin, event, markType);
+            return onArrowRight(view, plugin, event, getMarkType(view, opts));
           case 'ArrowLeft':
-            return onArrowLeft(view, plugin, event, markType);
+            return onArrowLeft(view, plugin, event, getMarkType(view, opts));
           case 'Backspace':
-            return onBackspace(view, plugin, event, markType);
+            return onBackspace(view, plugin, event, getMarkType(view, opts));
           case 'ArrowUp':
           case 'ArrowDown':
           case 'Home':
@@ -87,9 +90,8 @@ export function getDecorationPlugin(markType: MarkType) {
   return plugin;
 }
 
-export function codemark(opts: Options) {
-  const { markType } = opts;
-  const cursorPlugin = getDecorationPlugin(markType);
+export function codemark(opts?: Options) {
+  const cursorPlugin = getDecorationPlugin(opts);
   const inputRule = createInputRule(cursorPlugin);
   const rules: Plugin[] = [cursorPlugin, inputRule];
   return rules;

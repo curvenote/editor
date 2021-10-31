@@ -2,7 +2,7 @@ import { MarkType } from 'prosemirror-model';
 import { DecorationSet } from 'prosemirror-view';
 
 export type Options = {
-  markType: MarkType;
+  markType?: MarkType;
 };
 
 export type CodemarkState = {
