@@ -74,6 +74,10 @@ export function getDecorationPlugin(markType: MarkType) {
           case 'Home':
           case 'End':
             return stepOutsideNextTrAndPass(view, plugin);
+          case 'e':
+          case 'a':
+            if (!event.ctrlKey) return false;
+            return stepOutsideNextTrAndPass(view, plugin);
           default:
             return false;
         }
