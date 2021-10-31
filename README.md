@@ -3,6 +3,7 @@
 [![prosemirror-codemark on npm](https://img.shields.io/npm/v/prosemirror-codemark.svg)](https://www.npmjs.com/package/prosemirror-codemark)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/prosemirror-codemark/blob/master/LICENSE)
 ![CI](https://github.com/curvenote/prosemirror-codemark/workflows/CI/badge.svg)
+[![demo](https://img.shields.io/badge/live-demo-blue)](https://curvenote.github.io/prosemirror-codemark/)
 
 A plugin for [ProseMirror](https://prosemirror.net/) that handles manipulating inline code marks.
 The plugin creates a fake cursor as necessary to show you if the next character you type will or will not be marked.
