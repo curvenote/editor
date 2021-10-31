@@ -94,14 +94,20 @@ function onArrowLeftInside(
   const nextCode = !!markType.isInSet(
     doc.resolve(selection.empty ? selection.from - 1 : selection.from + 1).marks() ?? [],
   );
-  if (inCode && pluginState?.side === -1) {
+  if (inCode && pluginState?.side === -1 && selection.$from.parentOffset === 0) {
     // New line!
     // ^|`code` --> |^`code`
     return false;
   }
-  if (inCode && pluginState?.decorations) {
+  if (inCode && nextCode && pluginState?.decorations) {
     // `code`| --> `code|`
     const meta: CursorMetaTr = { action: 'remove' };
+    view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    return true;
+  }
+  if (inCode && !nextCode && pluginState?.decorations && selection.$from.parentOffset === 0) {
+    // ^`|code` --> ^|`code`
+    const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
     view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
     return true;
   }
@@ -157,6 +163,24 @@ function onArrowLeftInside(
     // ^`|code` --> ^|`code`
     const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
     view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    return true;
+  }
+  if (inCode && !nextCode && pluginState?.decorations && pluginState.side !== -1) {
+    // `x`| --> `x|` - Single character
+    const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
+    view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    return true;
+  }
+  if (inCode && !nextCode && pluginState?.decorations) {
+    // `x|` --> `|x` - Single character inside
+    const pos = selection.from - 1;
+    const meta: CursorMetaTr = { action: 'add', pos };
+    view.dispatch(
+      view.state.tr
+        .setSelection(TextSelection.create(doc, pos))
+        .addStoredMark(markType.create())
+        .setMeta(plugin, meta),
+    );
     return true;
   }
   return false;
