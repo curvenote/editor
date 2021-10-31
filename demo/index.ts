@@ -5,6 +5,7 @@ import { DOMParser } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic';
 import { exampleSetup } from 'prosemirror-example-setup';
 import codemark from '../src';
+import '../src/codemark.css';
 
 const editor = document.querySelector('#editor') as HTMLDivElement;
 const content = document.querySelector('#content') as HTMLDivElement;
