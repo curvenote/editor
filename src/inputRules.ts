@@ -63,7 +63,10 @@ const markAfter: Rule = {
     const mark = markType.create();
     const code = match[1];
     const pos = from;
-    const tr = view.state.tr.delete(from, to).insertText(code).addMark(from, to, mark);
+    const tr = view.state.tr
+      .delete(from, to)
+      .insertText(code)
+      .addMark(from, from + code.length, mark);
     const selected = tr
       .setSelection(TextSelection.create(tr.doc, pos))
       .addStoredMark(markType.create())
