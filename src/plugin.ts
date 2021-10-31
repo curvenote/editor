@@ -85,6 +85,12 @@ export function getDecorationPlugin(opts?: Options) {
             return false;
         }
       },
+      handleClick(view) {
+        return stepOutsideNextTrAndPass(view, plugin);
+      },
+      handleClickOn(view) {
+        return stepOutsideNextTrAndPass(view, plugin);
+      },
     },
   } as PluginSpec);
   return plugin;
