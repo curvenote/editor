@@ -27,6 +27,7 @@ To use the plugins, supply your `MarkType` and use the plugins in your `EditorVi
 
 ```ts
 import codemark from 'prosemirror-codemark';
+import 'codemark/dist/codemark.css';
 
 const plugins = codemark({ markType: schema.marks.code });
 
@@ -38,9 +39,11 @@ const view = new EditorView(editor, {
 });
 ```
 
+The styles are necessary to show the `.fake-cursor`, they are simple if you want to [override them](./src/codemark.css). It does not provide styles for the `code` specifically. The plugin visually works best if the code mark has a border and a different color than the main text.
+
 ## Why
 
-One of the biggest frustrations in using what you see is what you get (WYSIWYG) editors when coming from knowing `Markdown` is how they deal with inline code. In Markdown this is easy, you simply wrap a word in back-ticks (e.g. `code`). In many ways, the other “marks”, like bold, italic, underline are all easier in applications like Word, Notion, Confluence, etc. because almost everyone knows the shortcut to make something stop being bold/italic/underlined. This is **not the case** for code-marks, which act similarly, however there is no common/shared shortcut to remove a code-mark, and every editor application does something subtly different.
+One of the biggest frustrations in using what you see is what you get (WYSIWYG) editors when coming from knowing `Markdown` is how they deal with inline code. In Markdown this is easy, you simply wrap a word in back-ticks (e.g. `` `code` ``). In many ways, the other “marks”, like bold, italic, underline are all easier in applications like Word, Notion, Confluence, etc. because almost everyone knows the shortcut to make something stop being bold/italic/underlined. This is **not the case** for code-marks, which act similarly, however there is no common/shared shortcut to remove a code-mark, and every editor application does something subtly different.
 
 If you are using Slack or Notion, try creating a code block and then adding something to the start or end **after** it is created. The behaviour is completely unintuitive, you often have no idea if the next character you type will be inside or outside of the code-mark, and in Notion, for example, this changes based on if you hit backspace!
 
@@ -50,9 +53,11 @@ In Slack, if you start a message with code, there is literally no way to exit th
 
 ![Slack](./demo/slack.gif)
 
-The ambiguity of whether the next thing that you type will be “marked” is something that we tolerate for bold/italics/underline — because we all know the escape hatch and don’t have to leave our keyboards. But if you learn the keyboard shortcut for code in Slack, you might be surprised when you use it in Notion that the developer tools in Chrome pop up. Or say you learn the shortcut in Confluence, and jump over to Slack you will open your Mentions — in Notion, it creates a comment! Notion as far as I can tell, doesn’t even have a shortcut for a code-mark.
+The ambiguity of whether the next character you type will be “marked” is something that we tolerate for bold/italics/underline — because we all know the escape hatch and don’t have to leave our keyboards. But if you learn the keyboard shortcut for code in Slack, you might be surprised when you use it in Notion that the developer tools in Chrome pop up. Or say you learn the shortcut in Confluence, and jump over to Slack you will open your Mentions — in Notion, it creates a comment! Notion as far as I can tell, doesn’t even have a shortcut for a code-mark.
 
-There are so many other quirks in these applications with regard to how the spacebar, or arrow keys work, how to deal with one-character of code. I have yet to see a WYSIWYG editor actually do it “right”. Our goal at [Curvenote](https://curvenote.com) is to make a best-in-class editing experience for technical content, and these are the types of details you either never notice because it just works, or they make people tear their hair out.
+There are so many other quirks in these applications with regard to how the spacebar, or arrow keys work, how to deal with one-character of code. I have yet to see a WYSIWYG editor actually do it “right”.
+
+Our goal at [Curvenote](https://curvenote.com) is to make a best-in-class editing experience for technical content, and these are the types of details you either never notice because it just works, or they make people tear their hair out.
 
 ## Why is this hard?
 
@@ -104,8 +109,8 @@ Holding down the arrow key or word/line modifiers should continue to work as exp
 
 ### Home & End
 
-Modifiers let `ctrl-a` / `cmd-left` / `Home` should jump to start, without mark
-Modifiers let `ctrl-e` / `cmd-right` / `End` should jump to end, without mark
+- Commands `ctrl-a`, `cmd-left`, and `Home` should jump to start, without mark
+- Commands `ctrl-e`, `cmd-right`, and `End` should jump to end, without mark
 
 ### Up & Down
 
