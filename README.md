@@ -9,6 +9,8 @@ A plugin for [ProseMirror](https://prosemirror.net/) that handles manipulating i
 The plugin creates a fake cursor as necessary to show you if the next character you type will or will not be marked.
 `prosemirror-codemark` is created and used by [Curvenote](https://curvenote.com).
 
+[![Codemark](./demo/codemark.gif)](https://curvenote.github.io/prosemirror-codemark/)
+
 ## Install
 
 ```bash
@@ -68,6 +70,10 @@ Or see the [live demo here](https://curvenote.github.io/prosemirror-codemark/)!
 ### Delete:
 
 - TODO!
+
+## Browser compatibility
+
+The plugin works great for Chrome at the moment and is pretty solid in Firefox, Safari has different display for where it puts the cursors before a span, so that needs some work.
 
 ---
 
