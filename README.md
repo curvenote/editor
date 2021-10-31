@@ -77,6 +77,8 @@ The plugin also provides specialized handling for navigation events (arrows, bac
 
 We have also added handlers for jumping between words, to the start & end of line, as well as between lines. These take you outside of the code mark if appropriate.
 
+# Handled Actions & Selection Events
+
 ## Code mark creation
 
 - `` `code| → `code`| `` (create remain outside)
@@ -106,6 +108,8 @@ Holding down the arrow key or word/line modifiers should continue to work as exp
 - `` `code`|██ → `code`|__ `` (selected remains outside)
 - `` `|██de` → `|code` `` (selected remains inside)
 - `` `code`$| → `code`|$ `` (enter line, remain outside)
+
+Note that for arrow modifiers, there is a bit of extra care that needs to happen for single characters of code.
 
 ### Home & End
 
