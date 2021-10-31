@@ -19,8 +19,12 @@
         max-width: 800px;
         margin: auto;
       }
-      h1 {
+      h1,
+      summary {
         font-family: 'Roboto', sans-serif;
+      }
+      summary {
+        cursor: pointer;
       }
       p {
         display: block;
@@ -93,6 +97,10 @@
         </a>
         <br />
       </p>
+      <details>
+        <summary>Click here for something that doesn't work well 👎:</summary>
+        <div id="editor1" class="editor"></div>
+      </details>
     </article>
     <div style="display: none" id="content">
       <strong>You can type in here!</strong>
@@ -100,6 +108,14 @@
       <p><code>code</code> at the start of a line!</p>
       <p>You can also select a word and press <code>`</code>, or create them backwards`!</p>
       <p>You can also have code at the <code>end</code></p>
+      <p></p>
+    </div>
+    <div style="display: none" id="content1">
+      <strong>You can type in here, but inline code will barely work!</strong>
+      <p>You can create <code>code</code> by using a `backtick</p>
+      <p><code>code</code> at the start of a line is sticky</p>
+      <p>You can't create them backwards`!</p>
+      <p>Good luck editing code at the <code>end</code></p>
       <p></p>
     </div>
   </body>
