@@ -4,9 +4,9 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/prosemirror-codemark/blob/master/LICENSE)
 ![CI](https://github.com/curvenote/prosemirror-codemark/workflows/CI/badge.svg)
 
-A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions. The `prosemirror-codemark` library can be used to create suggestions similar to Notion, Google Docs or Confluence; it is created and used by [Curvenote](https://curvenote.com). The library does not provide a user interface beyond the [demo code](./demo/index.ts).
-
-[![Autocomplete](./demo/codemark.gif)](https://curvenote.github.io/prosemirror-codemark/)
+A plugin for [ProseMirror](https://prosemirror.net/) that handles manipulating inline code marks.
+The plugin creates a fake cursor as necessary to show you if the next character you type will or will not be marked.
+`prosemirror-codemark` is created and used by [Curvenote](https://curvenote.com).
 
 ## Install
 
