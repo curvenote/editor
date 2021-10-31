@@ -128,6 +128,10 @@ When navigating between lines, default to outside of the codemark if there is a 
 
 - TODO!
 
+### Clicking
+
+- Default to outside of the code mark when clicking to a new location in the editor
+
 ## Browser compatibility
 
 The plugin works great for Chrome at the moment and is pretty solid in Firefox, Safari has different display for where it puts the cursors before a span, so that needs some work.
