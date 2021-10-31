@@ -23,7 +23,7 @@ Or see the [live demo here](https://curvenote.github.io/prosemirror-codemark/)!
 
 - Create code matching backwards (simple `InputRule`) and forwards (which is a specialized rule)
 - Select a word and hit `` ` ``
-- Make sure the next charated makes sense (e.g. `removeStoredMarks`)
+- Make sure the next character makes sense (e.g. `removeStoredMarks`)
 - Show a visual cursor in the correct location if the next character will or will not be in the inline code
 - Allow arrow keys to enter/exit into the inline code
 
