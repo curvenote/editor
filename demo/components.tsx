@@ -8,10 +8,14 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
 import { DOMParser, Fragment, Slice, Node, NodeSpec, Schema } from 'prosemirror-model';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
+import classnames from 'classnames';
 import {
   Box,
   Chip as MuiChip,
   createStyles,
+  FormControl,
+  FormHelperText,
+  InputLabel,
   makeStyles,
   Paper,
   Popper,
@@ -94,7 +98,10 @@ class MentionView {
   }
 }
 
-function createEditorState(actionHandler: any, onDelete: (deleted: PersonSuggestion) => void) {
+function createEditorState(
+  actionHandler: any,
+  onDelete: (deleted: { label: string; avatar: string }) => void,
+) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
       content: 'block*',
@@ -300,9 +307,7 @@ const useStyles = makeStyles(() =>
     },
     suggestionItem: { cursor: 'pointer' },
     prosemirrorContainer: {
-      borderBottom: '1px solid gray',
       overflow: 'wrap',
-      backgroundColor: '#f8f9fa',
       '& p': {
         margin: 0,
       },
@@ -317,23 +322,22 @@ function createMentionAttributeFromMentionState({ name, email, avatar }: PersonS
   };
 }
 
+function removeItemImmutable<T>(arr: T[], index: number): T[] {
+  return [...arr.slice(0, index), ...arr.slice(index + 1, arr.length - 1)];
+}
+
 function InputWithMention({
-  mentions,
   suggestions,
   onSearchChanged,
-  onNewMention = () => {},
   onChange,
-  onMentionDeleted,
 }: {
-  mentions: PersonSuggestion[];
-  onNewMention: (mention: PersonSuggestion) => void;
   onSearchChanged: (update: string | null) => void;
   suggestions: PersonSuggestion[];
   onChange: (update: PersonSuggestion[]) => void;
-  onMentionDeleted: (mention: PersonSuggestion) => void;
 }) {
   const classes = useStyles();
   const editorViewRef = useRef<EditorView | null>(null);
+  const [mentions, setMentions] = useState<PersonSuggestion[]>([]);
   const [editorReady, setEditorReady] = useState(false);
   const editorDivRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef(initialState);
@@ -348,28 +352,14 @@ function InputWithMention({
   }
 
   useEffect(() => {
-    if (!editorViewRef.current || !editorReady) {
-      return;
-    }
-    const { current: view } = editorViewRef;
-    const {
-      state: { tr, doc },
-    } = view;
-    const mentionNodes = mentions.map((m) => {
-      return view.state.schema.nodes.mention.create(
-        createMentionAttributeFromMentionState(m) as any,
-      );
-    });
-    const slice = new Slice(Fragment.from(mentionNodes), 0, 0);
-    view.dispatch(tr.replaceRange(0, doc.content.size, slice).scrollIntoView());
-  }, [mentions, editorReady]);
-
-  useEffect(() => {
     setFuse(new Fuse(suggestions, { keys: ['email', 'name'] }));
   }, [suggestions]);
 
   useEffect(() => {
-    // TODO: load mentions?
+    onChange(mentions);
+  }, [mentions]);
+
+  useEffect(() => {
     if (!fuse) {
       return;
     }
@@ -387,31 +377,34 @@ function InputWithMention({
     onSearchChanged(state.action.search);
   }, [state.action.search]);
 
-  const addActiveToMention = useCallback(function addActiveToMention() {
-    const { current: view } = editorViewRef;
-    if (!stateRef.current) {
-      return;
-    }
-    const { current } = stateRef;
-    if (!view || !current.action.range) {
-      return;
-    }
-    const { from, to } = current.action.range;
-    const { tr } = view.state;
-    tr.insertText('', from, to);
-    view.dispatch(tr);
+  const addActiveToMention = useCallback(
+    function addActiveToMention() {
+      const { current: view } = editorViewRef;
+      if (!stateRef.current) {
+        return;
+      }
+      const { current } = stateRef;
+      if (!view || !current.action.range) {
+        return;
+      }
+      const { from, to } = current.action.range;
+      const { tr } = view.state;
+      tr.insertText('', from, to);
+      view.dispatch(tr);
 
-    dispatch({ type: 'selectActiveSuggestion' });
+      dispatch({ type: 'selectActiveSuggestion' });
 
-    const selectedSuggestion = current.suggestions[current.active];
-    // create mention component
-    const mention = view.state.schema.nodes.mention.create({
-      label: selectedSuggestion.name || selectedSuggestion.email,
-      avatar: selectedSuggestion.avatar || '',
-    } as any);
-    view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
-    onNewMention(selectedSuggestion);
-  }, []);
+      const selectedSuggestion = current.suggestions[current.active];
+      // create mention component
+      const mention = view.state.schema.nodes.mention.create({
+        label: selectedSuggestion.name || selectedSuggestion.email,
+        avatar: selectedSuggestion.avatar || '',
+      } as any);
+      view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
+      setMentions((m) => m.concat([selectedSuggestion]));
+    },
+    [mentions],
+  );
 
   useEffect(() => {
     if (!editorDivRef.current) {
@@ -448,7 +441,16 @@ function InputWithMention({
         return true;
       },
       (deleted) => {
-        console.log(deleted);
+        // TODO: a more definitive dientification is preferred
+        setMentions((m) => {
+          const index = m.findIndex(
+            ({ name, email }) => name === deleted.label || email === deleted.label,
+          );
+          if (index === -1) {
+            return m;
+          }
+          return removeItemImmutable(m, index);
+        });
       },
     );
 
@@ -484,10 +486,19 @@ function InputWithMention({
   }, []);
 
   return (
-    <Box width={300}>
-      <Box className={classes.prosemirrorContainer}>
-        <div ref={editorDivRef} />
-      </Box>
+    <Box width={300} color="primary">
+      <FormControl fullWidth>
+        <InputLabel focused shrink>
+          Im input label
+        </InputLabel>
+        <Box
+          marginTop="15px"
+          className={classnames(classes.prosemirrorContainer, 'Mui-focused', 'MuiInput-underline')}
+        >
+          <div ref={editorDivRef} />
+        </Box>
+        <FormHelperText id="my-helper-text">Lovelife are you</FormHelperText>
+      </FormControl>
       {editorDivRef.current && (
         <Popper
           id={id}
@@ -563,21 +574,23 @@ function ComponentDemo() {
   const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
   const [mentions, setMentions] = useState(INITIAL_MENTION);
 
-  useEffect(() => {
-    const i = setInterval(() => {
-      setMentions((m) => [...m.reverse()]);
-    }, 1000);
-    return () => {
-      clearInterval(i);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const i = setInterval(() => {
+  //     setMentions((m) => [...m.reverse()]);
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(i);
+  //   };
+  // }, []);
 
   return (
     <div>
       <InputWithMention
-        mentions={mentions}
         suggestions={suggestions}
-        onChange={() => {}}
+        onChange={(v) => {
+          console.log('oncHnage', v);
+          setMentions(v);
+        }}
         onSearchChanged={(update) => {
           if (!update) {
             return;
@@ -585,13 +598,8 @@ function ComponentDemo() {
           // fetch('getsSuggestion')
           console.log('onSearchChanged', update);
         }}
-        onNewMention={(update) => {
-          console.log('new mention', update);
-        }}
-        onMentionDeleted={(update) => {
-          console.log('mention deleted', update);
-        }}
       />
+      <pre>{JSON.stringify(mentions, null, 2)}</pre>
     </div>
   );
 }
