@@ -3,9 +3,10 @@ import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import thunkMiddleware from 'redux-thunk';
+import { undo, redo } from 'prosemirror-history';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
-import { DOMParser, Fragment, Node, NodeSpec, Schema } from 'prosemirror-model';
+import { DOMParser, Fragment, Slice, Node, NodeSpec, Schema } from 'prosemirror-model';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
 import {
   Box,
@@ -352,14 +353,15 @@ function InputWithMention({
     }
     const { current: view } = editorViewRef;
     const {
-      state: { tr },
+      state: { tr, doc },
     } = view;
     const mentionNodes = mentions.map((m) => {
       return view.state.schema.nodes.mention.create(
         createMentionAttributeFromMentionState(m) as any,
       );
     });
-    view.dispatch(tr.insert(0, Fragment.from(mentionNodes)).scrollIntoView());
+    const slice = new Slice(Fragment.from(mentionNodes), 0, 0);
+    view.dispatch(tr.replaceRange(0, doc.content.size, slice).scrollIntoView());
   }, [mentions, editorReady]);
 
   useEffect(() => {
@@ -559,11 +561,21 @@ const INITIAL_MENTION: PersonSuggestion[] = [
 
 function ComponentDemo() {
   const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
+  const [mentions, setMentions] = useState(INITIAL_MENTION);
+
+  useEffect(() => {
+    const i = setInterval(() => {
+      setMentions((m) => [...m.reverse()]);
+    }, 1000);
+    return () => {
+      clearInterval(i);
+    };
+  }, []);
 
   return (
     <div>
       <InputWithMention
-        mentions={INITIAL_MENTION}
+        mentions={mentions}
         suggestions={suggestions}
         onChange={() => {}}
         onSearchChanged={(update) => {
