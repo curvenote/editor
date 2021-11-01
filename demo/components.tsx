@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 import thunkMiddleware from 'redux-thunk';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
-import { DOMParser, Node, NodeSpec, Schema } from 'prosemirror-model';
+import { DOMParser, Fragment, Node, NodeSpec, Schema } from 'prosemirror-model';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
 import {
   Box,
@@ -18,6 +18,7 @@ import {
   withStyles,
 } from '@material-ui/core';
 import { Provider } from 'react-redux';
+import { keymap } from 'prosemirror-keymap';
 import suggestion, {
   SuggestionAction,
   SuggestionActionKind,
@@ -25,8 +26,6 @@ import suggestion, {
 import rootReducer from './reducers';
 import middlewares from '../src/store/middleware';
 import './components.css';
-import { keymap } from 'prosemirror-keymap';
-import { findParentNode } from 'prosemirror-utils';
 
 const store = createStore(rootReducer, applyMiddleware(...[thunkMiddleware, ...middlewares]));
 
@@ -94,7 +93,7 @@ class MentionView {
   }
 }
 
-function createEditorState(actionHandler: any) {
+function createEditorState(actionHandler: any, onDelete: (deleted: PersonSuggestion) => void) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
       content: 'block*',
@@ -148,15 +147,13 @@ function createEditorState(actionHandler: any) {
   const mentionInputSchema = new Schema({
     nodes,
   });
-  const contentNode = document.getElementById('componentContent') as HTMLElement;
 
   return EditorState.create({
-    doc: DOMParser.fromSchema(mentionInputSchema).parse(contentNode),
     schema: mentionInputSchema,
     plugins: [
       ...suggestion(
         actionHandler,
-        /(?:^|\W)( )$/,
+        /(?:^|\W)([\s@a-zA-Z0-9])$/,
         // Cancel on space after some of the triggers
         (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
       ),
@@ -170,6 +167,7 @@ function createEditorState(actionHandler: any) {
           ) {
             const { node } = state.selection as NodeSelection;
             dispatch?.(tr.delete($head.pos - 1, $head.pos + node.nodeSize));
+            onDelete(node.attrs as any);
             return true;
           }
           const possibleMention = state.selection.$head.nodeBefore;
@@ -304,7 +302,6 @@ const useStyles = makeStyles(() =>
       borderBottom: '1px solid gray',
       overflow: 'wrap',
       backgroundColor: '#f8f9fa',
-      padding: 4,
       '& p': {
         margin: 0,
       },
@@ -312,17 +309,31 @@ const useStyles = makeStyles(() =>
   }),
 );
 
+function createMentionAttributeFromMentionState({ name, email, avatar }: PersonSuggestion) {
+  return {
+    label: name || email,
+    avatar: avatar || '',
+  };
+}
+
 function InputWithMention({
+  mentions,
   suggestions,
   onSearchChanged,
   onNewMention = () => {},
+  onChange,
+  onMentionDeleted,
 }: {
+  mentions: PersonSuggestion[];
   onNewMention: (mention: PersonSuggestion) => void;
   onSearchChanged: (update: string | null) => void;
   suggestions: PersonSuggestion[];
+  onChange: (update: PersonSuggestion[]) => void;
+  onMentionDeleted: (mention: PersonSuggestion) => void;
 }) {
   const classes = useStyles();
   const editorViewRef = useRef<EditorView | null>(null);
+  const [editorReady, setEditorReady] = useState(false);
   const editorDivRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef(initialState);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -336,12 +347,27 @@ function InputWithMention({
   }
 
   useEffect(() => {
+    if (!editorViewRef.current || !editorReady) {
+      return;
+    }
+    const { current: view } = editorViewRef;
+    const {
+      state: { tr },
+    } = view;
+    const mentionNodes = mentions.map((m) => {
+      return view.state.schema.nodes.mention.create(
+        createMentionAttributeFromMentionState(m) as any,
+      );
+    });
+    view.dispatch(tr.insert(0, Fragment.from(mentionNodes)).scrollIntoView());
+  }, [mentions, editorReady]);
+
+  useEffect(() => {
     setFuse(new Fuse(suggestions, { keys: ['email', 'name'] }));
   }, [suggestions]);
 
   useEffect(() => {
     // TODO: load mentions?
-    console.log('suggestion update', suggestions);
     if (!fuse) {
       return;
     }
@@ -389,35 +415,40 @@ function InputWithMention({
     if (!editorDivRef.current) {
       return () => {};
     }
-    const prosemirrorState = createEditorState((action: SuggestionAction) => {
-      dispatch({ type: 'updateAction', payload: { range: action.range, search: action.search } });
+    const prosemirrorState = createEditorState(
+      (action: SuggestionAction) => {
+        dispatch({ type: 'updateAction', payload: { range: action.range, search: action.search } });
 
-      if (action.kind === SuggestionActionKind.open) {
-        dispatch({ type: 'open' });
+        if (action.kind === SuggestionActionKind.open) {
+          dispatch({ type: 'open' });
+          return true;
+        }
+        if (action.kind === SuggestionActionKind.previous) {
+          incActive(-1);
+          return true;
+        }
+        if (action.kind === SuggestionActionKind.next) {
+          incActive(1);
+          return true;
+        }
+        if (action.kind === SuggestionActionKind.filter) {
+          setFuse(new Fuse(stateRef.current.suggestions, { keys: ['email', 'name'] }));
+          return true;
+        }
+        if (action.kind === SuggestionActionKind.close) {
+          dispatch({ type: 'close' });
+          return true;
+        }
+        if (action.kind === SuggestionActionKind.select) {
+          addActiveToMention();
+          return true;
+        }
         return true;
-      }
-      if (action.kind === SuggestionActionKind.previous) {
-        incActive(-1);
-        return true;
-      }
-      if (action.kind === SuggestionActionKind.next) {
-        incActive(1);
-        return true;
-      }
-      if (action.kind === SuggestionActionKind.filter) {
-        setFuse(new Fuse(stateRef.current.suggestions, { keys: ['email', 'name'] }));
-        return true;
-      }
-      if (action.kind === SuggestionActionKind.close) {
-        dispatch({ type: 'close' });
-        return true;
-      }
-      if (action.kind === SuggestionActionKind.select) {
-        addActiveToMention();
-        return true;
-      }
-      return true;
-    });
+      },
+      (deleted) => {
+        console.log(deleted);
+      },
+    );
 
     editorViewRef.current = new EditorView(
       { mount: editorDivRef.current },
@@ -440,8 +471,13 @@ function InputWithMention({
       },
     );
 
+    const timeout = setTimeout(() => {
+      setEditorReady(true);
+    }, 0);
+
     return () => {
       editorViewRef.current?.destroy();
+      clearTimeout(timeout);
     };
   }, []);
 
@@ -508,21 +544,40 @@ function InputWithMention({
   );
 }
 
+const INITIAL_MENTION: PersonSuggestion[] = [
+  {
+    avatar: 'https://i1.sndcdn.com/artworks-000252690755-nj538v-t500x500.jpg',
+    email: 'rick@rnm.com',
+    name: 'Tiny Tick',
+  },
+  {
+    avatar: 'https://avatarfiles.alphacoders.com/179/179288.jpg',
+    email: 'morty@rnm.com',
+    name: 'Morty',
+  },
+];
+
 function ComponentDemo() {
   const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
 
   return (
     <div>
       <InputWithMention
+        mentions={INITIAL_MENTION}
         suggestions={suggestions}
+        onChange={() => {}}
         onSearchChanged={(update) => {
           if (!update) {
             return;
           }
+          // fetch('getsSuggestion')
           console.log('onSearchChanged', update);
         }}
         onNewMention={(update) => {
           console.log('new mention', update);
+        }}
+        onMentionDeleted={(update) => {
+          console.log('mention deleted', update);
         }}
       />
     </div>
