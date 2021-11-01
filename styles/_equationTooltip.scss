@@ -44,7 +44,7 @@
 }
 // There is no span width, so the cursor gets lost :(
 .eqn-editor.inline.empty::before {
-  border-right: 1px #000 solid;
+  border-right: 1px solid black;
   animation: blink 1.2s;
   animation-iteration-count: infinite;
 }
