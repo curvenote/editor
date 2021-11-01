@@ -45,6 +45,12 @@ function onArrowRightInside(
   const pos = selection.$from;
   const inCode = !!markType.isInSet(pos.marks());
   const nextCode = !!markType.isInSet(pos.marksAcross(doc.resolve(selection.from + 1)) ?? []);
+  if (pos.pos === view.state.doc.nodeSize - 3 && pluginState?.decorations) {
+    // Behaviour stops: `code`| at the end of the document
+    const meta: CursorMetaTr = { action: 'add', pos: selection.from };
+    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    return true;
+  }
   if (inCode === nextCode && pos.parentOffset !== 0) return false;
   if (inCode && !pluginState?.decorations && pos.parentOffset !== 0) {
     // `code|` --> `code`|
