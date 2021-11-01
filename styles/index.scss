@@ -10,9 +10,10 @@
 @use 'imgPlaceholder';
 @use 'numbered';
 @use 'tables';
-@use 'codeblock';
+@use 'code';
 @use 'footnote';
 @use 'figure';
+@use 'codemark';
 
 .hidden {
   display: none;

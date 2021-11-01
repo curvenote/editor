@@ -45,6 +45,10 @@ const deleteBeforeFigure: Command = function deleteBeforeFigure(state, dispatch)
   if (!state.selection.empty || $head.parentOffset !== $head.parent.nodeSize - 2) return false;
   const parent = findParentNode(() => true)(state.selection);
   if (!parent) return false;
+  if (parent.pos + parent.node.nodeSize + 1 >= state.doc.nodeSize - 1) {
+    // Delete at the end of a document:
+    return false;
+  }
   const possibleFigure = state.doc.resolve(parent.pos + parent.node.nodeSize + 1);
   if (possibleFigure.parent.type.name !== nodeNames.figure) return false;
   let { tr } = state;

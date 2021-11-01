@@ -7,6 +7,7 @@ import { collab } from 'prosemirror-collab';
 import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames } from '@curvenote/schema';
+import { Plugin } from 'prosemirror-state';
 import suggestion from './suggestion';
 import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
@@ -33,7 +34,12 @@ function tablesPlugins(schema: Schema) {
   ];
 }
 
-export function getPlugins(schema: Schema, stateKey: any, version: number, startEditable: boolean) {
+export function getPlugins(
+  schema: Schema,
+  stateKey: any,
+  version: number,
+  startEditable: boolean,
+): Plugin[] {
   return [
     editablePlugin(startEditable),
     ...suggestion(
@@ -45,7 +51,7 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
     commentsPlugin(),
     getPromptPlugin(),
     getImagePlaceholderPlugin(),
-    inputrules(schema),
+    ...inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),
     keymap(baseKeymap),
     dropCursor(),
@@ -57,11 +63,11 @@ export function getPlugins(schema: Schema, stateKey: any, version: number, start
   ];
 }
 
-export function getInlinePlugins(schema: Schema) {
+export function getInlinePlugins(schema: Schema): Plugin[] {
   return [
     editablePlugin(true),
     commentsPlugin(),
-    inputrules(schema),
+    ...inputrules(schema),
     keymap(buildBasicKeymap(schema)),
     keymap(baseKeymap),
     dropCursor(),

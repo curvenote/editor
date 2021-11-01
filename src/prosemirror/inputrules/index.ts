@@ -1,10 +1,13 @@
 import { inputRules } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
+import codemark from 'prosemirror-codemark';
+
+import { Plugin } from 'prosemirror-state';
 import * as rules from './rules';
 
 export * from './rules';
 
-const inputrules = (schema: Schema) =>
+const inputrules = (schema: Schema): Plugin[] => [
   inputRules({
     rules: [
       ...rules.quotes(schema),
@@ -18,7 +21,6 @@ const inputrules = (schema: Schema) =>
       ...rules.link(schema),
       ...rules.lists(schema),
       ...rules.codeBlock(schema),
-      ...rules.codeInline(schema),
       ...rules.strong(schema),
       ...rules.em(schema),
       ...rules.hr(schema), // Comes above strikethrough!
@@ -28,6 +30,8 @@ const inputrules = (schema: Schema) =>
       ...rules.mathInline(schema),
       ...rules.slider(schema),
     ],
-  });
+  }),
+  ...codemark(),
+];
 
 export default inputrules;
