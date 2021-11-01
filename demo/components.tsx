@@ -371,7 +371,7 @@ function InputWithMention({
       type: 'updateSuggestions',
       payload: { suggestions: fuse.search(state.action.search).map((v) => v.item) },
     });
-  }, [fuse]);
+  }, [fuse, state.action.search]);
 
   useEffect(() => {
     onSearchChanged(state.action.search);
@@ -497,7 +497,6 @@ function InputWithMention({
         >
           <div ref={editorDivRef} />
         </Box>
-        <FormHelperText id="my-helper-text">Lovelife are you</FormHelperText>
       </FormControl>
       {editorDivRef.current && (
         <Popper
