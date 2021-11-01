@@ -14,7 +14,7 @@ import {
 } from './types';
 import { DEFAULT_DECO_ATTRS, inSuggestion, pluginKey } from './utils';
 
-const inactiveSuggestionState: AutocompleteState = {
+const inactiveAutocompleteState: AutocompleteState = {
   active: false,
   decorations: DecorationSet.empty,
 };
@@ -72,7 +72,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
       };
     },
     state: {
-      init: () => ({ ...inactiveSuggestionState } as AutocompleteState),
+      init: () => inactiveAutocompleteState,
       apply(tr, state): AutocompleteState {
         const meta = tr.getMeta(plugin) as AutocompleteTrMeta;
         if (meta?.action === 'add') {
@@ -102,13 +102,13 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           !inSuggestion(tr.selection, nextDecorations) ||
           !hasDecoration
         )
-          return inactiveSuggestionState;
+          return inactiveAutocompleteState;
 
         const { active, trigger, type } = state as ActiveAutocompleteState;
         // Ensure that the trigger is in the decoration
         const { from, to } = nextDecorations.find()[0];
         const text = tr.doc.textBetween(from, to);
-        if (!text.startsWith(trigger)) return inactiveSuggestionState;
+        if (!text.startsWith(trigger)) return inactiveAutocompleteState;
 
         return {
           active,
