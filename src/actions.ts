@@ -108,7 +108,7 @@ function onArrowLeftInside(
   if (inCode && !nextCode && pluginState?.decorations && selection.$from.parentOffset === 0) {
     // ^`|code` --> ^|`code`
     const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
-    view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
     return true;
   }
   if (!inCode && pluginState?.decorations) {
