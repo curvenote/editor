@@ -2,11 +2,8 @@ import { EditorState, NodeSelection } from 'prosemirror-state';
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import thunkMiddleware from 'redux-thunk';
-import { undo, redo } from 'prosemirror-history';
 import ReactDOM from 'react-dom';
-import { applyMiddleware, createStore } from 'redux';
-import { DOMParser, Fragment, Slice, Node, NodeSpec, Schema } from 'prosemirror-model';
+import { Node, NodeSpec, Schema } from 'prosemirror-model';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
 import classnames from 'classnames';
 import {
@@ -14,7 +11,6 @@ import {
   Chip as MuiChip,
   createStyles,
   FormControl,
-  FormHelperText,
   InputLabel,
   makeStyles,
   Paper,
@@ -22,17 +18,12 @@ import {
   Typography,
   withStyles,
 } from '@material-ui/core';
-import { Provider } from 'react-redux';
 import { keymap } from 'prosemirror-keymap';
 import suggestion, {
   SuggestionAction,
   SuggestionActionKind,
 } from '../src/prosemirror/plugins/suggestion';
-import rootReducer from './reducers';
-import middlewares from '../src/store/middleware';
 import './components.css';
-
-const store = createStore(rootReducer, applyMiddleware(...[thunkMiddleware, ...middlewares]));
 
 function AvatarWithFallback({
   avatar,
@@ -193,22 +184,25 @@ function createEditorState(
 }
 
 interface PersonSuggestion {
+  id: string;
   avatar: string;
   email: string;
   name: string;
 }
 
 const TEST_SUGGESTION_LIST: PersonSuggestion[] = [
-  { avatar: '', email: 'test3@gmail.com', name: '' },
+  { avatar: '', email: 'test3@gmail.com', name: '', id: 'test-1' },
   {
     avatar: 'https://lh3.googleusercontent.com/a-/AOh14Gg7MefXJ_MF1oDEiNThKLfOUwWy6p3P73ZrQkDq',
     email: 'stevejpurves@curvenote.com',
     name: 'stevejpurves',
+    id: 'test-2',
   },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/vKndfPAZO7WeFxLH1GQcpnXPzfH3?version=1601936136496',
     email: 'rowanc1@curvenote.com',
+    id: 'test-3',
     name: 'rowanc1',
   },
   {
@@ -216,12 +210,14 @@ const TEST_SUGGESTION_LIST: PersonSuggestion[] = [
       'https://uploads-ssl.webflow.com/60ff0a25e3004400049dc542/611c16f84578e9136ea70668_1590515756464.jpg',
     email: 'liz@curvenote.com',
     name: 'liz',
+    id: 'test-4',
   },
   {
     avatar:
       'https://storage.googleapis.com/iooxa-prod-1.appspot.com/photos/WeYvKUTFnSQOET5tyvW9TgLQLwb2?version=1629496337760',
     email: 'yuxi@curvenote.com',
     name: 'Yuxi',
+    id: 'test-5',
   },
 ];
 
@@ -247,9 +243,9 @@ type Actions =
   | { type: 'incActive'; payload: { inc: number } }
   | { type: 'setActive'; payload: { active: number } }
   | {
-      type: 'updateAction';
-      payload: { range: { from: number; to: number }; search: string | null };
-    }
+    type: 'updateAction';
+    payload: { range: { from: number; to: number }; search: string | null };
+  }
   | { type: 'selectActiveSuggestion' }
   | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
@@ -408,7 +404,7 @@ function InputWithMention({
 
   useEffect(() => {
     if (!editorDivRef.current) {
-      return () => {};
+      return () => { };
     }
     const prosemirrorState = createEditorState(
       (action: SuggestionAction) => {
@@ -485,11 +481,14 @@ function InputWithMention({
     };
   }, []);
 
+  const focused = editorViewRef.current?.hasFocus();
+  const nodeSize = editorViewRef.current?.state.doc.nodeSize;
+
   return (
     <Box width={300} color="primary">
       <FormControl fullWidth>
-        <InputLabel focused shrink>
-          Im input label
+        <InputLabel shrink={nodeSize !== 4 || focused} focused={focused}>
+          Collaborators
         </InputLabel>
         <Box
           marginTop="15px"
@@ -558,11 +557,13 @@ function InputWithMention({
 
 const INITIAL_MENTION: PersonSuggestion[] = [
   {
+    id: 'tiny-rick-id',
     avatar: 'https://i1.sndcdn.com/artworks-000252690755-nj538v-t500x500.jpg',
     email: 'rick@rnm.com',
     name: 'Tiny Tick',
   },
   {
+    id: 'morty-id',
     avatar: 'https://avatarfiles.alphacoders.com/179/179288.jpg',
     email: 'morty@rnm.com',
     name: 'Morty',
@@ -572,16 +573,6 @@ const INITIAL_MENTION: PersonSuggestion[] = [
 function ComponentDemo() {
   const [suggestions, setSuggestion] = useState(TEST_SUGGESTION_LIST);
   const [mentions, setMentions] = useState(INITIAL_MENTION);
-
-  // useEffect(() => {
-  //   const i = setInterval(() => {
-  //     setMentions((m) => [...m.reverse()]);
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(i);
-  //   };
-  // }, []);
-
   return (
     <div>
       <InputWithMention
@@ -603,9 +594,4 @@ function ComponentDemo() {
   );
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <ComponentDemo />
-  </Provider>,
-  document.getElementById('components'),
-);
+ReactDOM.render(<ComponentDemo />, document.getElementById('components'));
