@@ -10,6 +10,7 @@ import {
   Box,
   Chip as MuiChip,
   createStyles,
+  TextField,
   FormControl,
   InputLabel,
   makeStyles,
@@ -309,6 +310,9 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
 }
 const useStyles = makeStyles(() =>
   createStyles({
+    editor: {
+      padding: '6px 0',
+    },
     suggestionListContainer: {
       minWidth: 150,
       maxHeight: 350,
@@ -324,13 +328,6 @@ const useStyles = makeStyles(() =>
     },
   }),
 );
-
-function createMentionAttributeFromMentionState({ name, email, avatar }: PersonSuggestion) {
-  return {
-    label: name || email,
-    avatar: avatar || '',
-  };
-}
 
 function removeItemImmutable<T>(arr: T[], index: number): T[] {
   return [...arr.slice(0, index), ...arr.slice(index + 1, arr.length - 1)];
@@ -355,7 +352,6 @@ function InputWithMention({
   const classes = useStyles();
   const editorViewRef = useRef<EditorView | null>(null);
   const [mentions, setMentions] = useState<PersonSuggestion[]>([]);
-  const [editorReady, setEditorReady] = useState(false);
   const editorDivRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef(initialState);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -482,7 +478,7 @@ function InputWithMention({
       },
     );
 
-    editorViewRef.current = new EditorView(
+    const editorView = new EditorView(
       { mount: editorDivRef.current },
       {
         state: prosemirrorState,
@@ -503,13 +499,10 @@ function InputWithMention({
       },
     );
 
-    const timeout = setTimeout(() => {
-      setEditorReady(true);
-    }, 0);
+    editorViewRef.current = editorView;
 
     return () => {
       editorViewRef.current?.destroy();
-      clearTimeout(timeout);
     };
   }, []);
 
@@ -522,12 +515,13 @@ function InputWithMention({
         <InputLabel shrink={nodeSize !== 4 || focused} focused={focused}>
           Collaborators
         </InputLabel>
-        <Box
-          marginTop="15px"
-          className={classnames(classes.prosemirrorContainer, 'Mui-focused', 'MuiInput-underline')}
-        >
-          <div ref={editorDivRef} />
+        <Box marginTop="15px" className={classes.prosemirrorContainer}>
+          <div
+            ref={editorDivRef}
+            className={classnames(classes.editor, 'MuiInput-underline', { 'Mui-focused': focused })}
+          />
         </Box>
+        <TextField style={{ display: 'none' }} />
       </FormControl>
       {editorDivRef.current && (
         <Popper
@@ -617,7 +611,6 @@ function ComponentDemo() {
           if (!update) {
             return;
           }
-          // fetch('getsSuggestion')
           console.log('onSearchChanged', update);
         }}
       />

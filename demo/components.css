@@ -2,16 +2,14 @@
   outline: 2px solid #8cf;
 }
 
-.chip-container { 
+.chip-container {
   display: inline-block;
-  padding: 4px;
+  padding: 4px 2px 4px 0;
 }
 
 .ProseMirror {
   p {
-    /* display: flex; */
     align-items: center;
     flex-wrap: wrap;
   }
 }
-
