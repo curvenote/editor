@@ -1,0 +1,21 @@
+.mentions-input {
+  .chip-container {
+    display: inline-block;
+    padding: 2px 1px 2px 0;
+  }
+
+  .Mui-focused {
+    outline: none;
+  }
+
+  .ProseMirror-selectednode > div {
+    outline: 2px solid #8cf;
+  }
+
+  .ProseMirror {
+    p {
+      align-items: center;
+      flex-wrap: wrap;
+    }
+  }
+}
