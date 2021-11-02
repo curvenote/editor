@@ -43,13 +43,23 @@
   display: inline;
 }
 // There is no span width, so the cursor gets lost :(
-.eqn-editor.inline.empty::before {
-  border-right: 1px #000 solid;
-  animation: blink 1.2s;
+.eqn-editor.inline:empty:before {
+  border-right-width: 1px;
+  border-right-style: solid;
+  animation: blinkCursor 1s;
   animation-iteration-count: infinite;
 }
-@keyframes blink {
+@keyframes blinkCursor {
+  0% {
+    border-color: purple;
+  }
+  49% {
+    border-color: purple;
+  }
   50% {
+    border-color: #fff;
+  }
+  99% {
     border-color: #fff;
   }
 }

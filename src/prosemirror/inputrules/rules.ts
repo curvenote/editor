@@ -93,10 +93,6 @@ export const codeBlock = (schema: Schema) => [
   }),
 ];
 
-// TODO: Should have a look ahead as well
-// TODO: Should improve the quotes piece as well here
-export const codeInline = (schema: Schema) => [markInputRule(/`([\W\w]+)`$/, schema.marks.code)];
-
 export const strong = (schema: Schema) => [
   markInputRule(/\*\*([\W\w]+)\*\*$/, schema.marks.strong),
   markInputRule(/__([\W\w]+)__$/, schema.marks.strong),
