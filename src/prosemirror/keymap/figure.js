@@ -39,6 +39,9 @@ var deleteBeforeFigure = function deleteBeforeFigure(state, dispatch) {
     var parent = findParentNode(function () { return true; })(state.selection);
     if (!parent)
         return false;
+    if (parent.pos + parent.node.nodeSize + 1 >= state.doc.nodeSize - 1) {
+        return false;
+    }
     var possibleFigure = state.doc.resolve(parent.pos + parent.node.nodeSize + 1);
     if (possibleFigure.parent.type.name !== nodeNames.figure)
         return false;

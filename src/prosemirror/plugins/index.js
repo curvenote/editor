@@ -39,13 +39,13 @@ function tablesPlugins(schema) {
     ];
 }
 export function getPlugins(schema, stateKey, version, startEditable) {
-    return __spreadArray(__spreadArray(__spreadArray(__spreadArray([
+    return __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([
         editablePlugin(startEditable)
     ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), true), [
         commentsPlugin(),
         getPromptPlugin(),
-        getImagePlaceholderPlugin(),
-        inputrules(schema),
+        getImagePlaceholderPlugin()
+    ], false), inputrules(schema), true), [
         keymap(buildKeymap(stateKey, schema)),
         keymap(baseKeymap),
         dropCursor(),
@@ -57,14 +57,14 @@ export function getPlugins(schema, stateKey, version, startEditable) {
     ], false);
 }
 export function getInlinePlugins(schema) {
-    return [
+    return __spreadArray(__spreadArray([
         editablePlugin(true),
-        commentsPlugin(),
-        inputrules(schema),
+        commentsPlugin()
+    ], inputrules(schema), true), [
         keymap(buildBasicKeymap(schema)),
         keymap(baseKeymap),
         dropCursor(),
         gapCursor(),
-    ];
+    ], false);
 }
 //# sourceMappingURL=index.js.map

@@ -11,7 +11,6 @@ export declare const copyright: (schema: Schema) => InputRule<any>[];
 export declare const link: (schema: Schema) => InputRule<any>[];
 export declare const lists: (schema: Schema) => InputRule<Schema<any, any>>[];
 export declare const codeBlock: (schema: Schema) => InputRule<Schema<any, any>>[];
-export declare const codeInline: (schema: Schema) => InputRule<any>[];
 export declare const strong: (schema: Schema) => InputRule<any>[];
 export declare const strikethrough: (schema: Schema) => InputRule<any>[];
 export declare const em: (schema: Schema) => InputRule<any>[];

@@ -1,4 +1,5 @@
 import { Schema } from 'prosemirror-model';
+import { Plugin } from 'prosemirror-state';
 export * from './rules';
-declare const inputrules: (schema: Schema) => import("prosemirror-state").Plugin<unknown, any>;
+declare const inputrules: (schema: Schema) => Plugin[];
 export default inputrules;

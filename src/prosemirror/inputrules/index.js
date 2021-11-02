@@ -8,12 +8,13 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 import { inputRules } from 'prosemirror-inputrules';
+import codemark from 'prosemirror-codemark';
 import * as rules from './rules';
 export * from './rules';
-var inputrules = function (schema) {
-    return inputRules({
-        rules: __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], rules.quotes(schema), true), rules.ellipsis(schema), true), rules.blockquote(schema), true), rules.arrows(schema), true), rules.emojis(schema), true), rules.fractions(schema), true), rules.emdash(schema), true), rules.copyright(schema), true), rules.link(schema), true), rules.lists(schema), true), rules.codeBlock(schema), true), rules.codeInline(schema), true), rules.strong(schema), true), rules.em(schema), true), rules.hr(schema), true), rules.strikethrough(schema), true), rules.headings(schema), true), rules.equation(schema), true), rules.mathInline(schema), true), rules.slider(schema), true),
-    });
-};
+var inputrules = function (schema) { return __spreadArray([
+    inputRules({
+        rules: __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], rules.quotes(schema), true), rules.ellipsis(schema), true), rules.blockquote(schema), true), rules.arrows(schema), true), rules.emojis(schema), true), rules.fractions(schema), true), rules.emdash(schema), true), rules.copyright(schema), true), rules.link(schema), true), rules.lists(schema), true), rules.codeBlock(schema), true), rules.strong(schema), true), rules.em(schema), true), rules.hr(schema), true), rules.strikethrough(schema), true), rules.headings(schema), true), rules.equation(schema), true), rules.mathInline(schema), true), rules.slider(schema), true),
+    })
+], codemark(), true); };
 export default inputrules;
 //# sourceMappingURL=index.js.map

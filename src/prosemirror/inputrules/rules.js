@@ -68,7 +68,6 @@ export var codeBlock = function (schema) { return [
         language: LanguageNames.Python,
     }),
 ]; };
-export var codeInline = function (schema) { return [markInputRule(/`([\W\w]+)`$/, schema.marks.code)]; };
 export var strong = function (schema) { return [
     markInputRule(/\*\*([\W\w]+)\*\*$/, schema.marks.strong),
     markInputRule(/__([\W\w]+)__$/, schema.marks.strong),
