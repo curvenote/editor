@@ -229,10 +229,16 @@ function constrainActive(v: number, length: number) {
   return v % length;
 }
 
+interface SuggestionActionState {
+  range: { from: number; to: number } | null;
+  search: string;
+  trigger: string;
+}
+
 const initialState = {
   suggestions: [] as PersonSuggestion[],
   active: 0,
-  action: { range: null as { from: number; to: number } | null, search: null as string | null },
+  action: { range: null, search: '', trigger: '' } as SuggestionActionState,
   isOpen: false,
 };
 type SuggestionState = typeof initialState;
@@ -243,9 +249,13 @@ type Actions =
   | { type: 'incActive'; payload: { inc: number } }
   | { type: 'setActive'; payload: { active: number } }
   | {
-    type: 'updateAction';
-    payload: { range: { from: number; to: number }; search: string | null };
-  }
+      type: 'updateAction';
+      payload: {
+        range: { from: number; to: number };
+        search: string | null;
+        trigger: string | null;
+      };
+    }
   | { type: 'selectActiveSuggestion' }
   | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
@@ -264,7 +274,11 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
     case 'updateAction':
       return {
         ...state,
-        action: { range: action.payload.range, search: action.payload.search },
+        action: {
+          range: action.payload.range,
+          search: action.payload.search || '',
+          trigger: action.payload.trigger || '',
+        },
       };
     case 'incActive':
       return {
@@ -322,6 +336,13 @@ function removeItemImmutable<T>(arr: T[], index: number): T[] {
   return [...arr.slice(0, index), ...arr.slice(index + 1, arr.length - 1)];
 }
 
+function getFilterFromAction({ search, trigger }: SuggestionActionState) {
+  if (!trigger.match(/[a-zA-Z0-9]/)) {
+    return search;
+  }
+  return trigger + search;
+}
+
 function InputWithMention({
   suggestions,
   onSearchChanged,
@@ -348,7 +369,8 @@ function InputWithMention({
   }
 
   useEffect(() => {
-    setFuse(new Fuse(suggestions, { keys: ['email', 'name'] }));
+    const newFuse = new Fuse(suggestions, { keys: ['email', 'name'] });
+    setFuse(newFuse);
   }, [suggestions]);
 
   useEffect(() => {
@@ -359,19 +381,23 @@ function InputWithMention({
     if (!fuse) {
       return;
     }
-    if (!state.action.search) {
+    const searchStr = getFilterFromAction(state.action);
+    if (!state.action.trigger || !searchStr) {
       dispatch({ type: 'updateSuggestions', payload: { suggestions } });
       return;
     }
+    const result = fuse.search(searchStr).map((v) => v.item);
     dispatch({
       type: 'updateSuggestions',
-      payload: { suggestions: fuse.search(state.action.search).map((v) => v.item) },
+      payload: {
+        suggestions: result,
+      },
     });
-  }, [fuse, state.action.search]);
+  }, [fuse, state.action]);
 
   useEffect(() => {
-    onSearchChanged(state.action.search);
-  }, [state.action.search]);
+    onSearchChanged(getFilterFromAction(state.action));
+  }, [state.action]);
 
   const addActiveToMention = useCallback(
     function addActiveToMention() {
@@ -404,16 +430,19 @@ function InputWithMention({
 
   useEffect(() => {
     if (!editorDivRef.current) {
-      return () => { };
+      return () => {};
     }
     const prosemirrorState = createEditorState(
       (action: SuggestionAction) => {
-        dispatch({ type: 'updateAction', payload: { range: action.range, search: action.search } });
-
         if (action.kind === SuggestionActionKind.open) {
           dispatch({ type: 'open' });
+          dispatch({
+            type: 'updateAction',
+            payload: { range: action.range, search: action.search, trigger: action.trigger },
+          });
           return true;
         }
+
         if (action.kind === SuggestionActionKind.previous) {
           incActive(-1);
           return true;
@@ -423,7 +452,10 @@ function InputWithMention({
           return true;
         }
         if (action.kind === SuggestionActionKind.filter) {
-          setFuse(new Fuse(stateRef.current.suggestions, { keys: ['email', 'name'] }));
+          dispatch({
+            type: 'updateAction',
+            payload: { range: action.range, search: action.search, trigger: action.trigger },
+          });
           return true;
         }
         if (action.kind === SuggestionActionKind.close) {
