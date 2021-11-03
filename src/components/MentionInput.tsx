@@ -283,6 +283,7 @@ const useStyles = makeStyles(() =>
       padding: '5px 0',
     },
     suggestionListContainer: {
+      position: 'relative',
       minWidth: 150,
       maxHeight: 350,
       overflow: 'auto',
@@ -324,11 +325,15 @@ function getFilterFromAction({ search, trigger }: SuggestionActionState) {
 
 export default function InputWithMention({
   suggestions,
+  underlineClassName = 'MuiInput-underline',
   onSearchChanged,
+  dropdownZIndex = 'auto',
   onChange,
 }: {
   onSearchChanged: (update: string | null) => void;
   suggestions: PersonSuggestion[];
+  underlineClassName?: string;
+  dropdownZIndex?: 'auto' | number;
   onChange: (update: PersonSuggestion[]) => void;
 }) {
   const classes = useStyles();
@@ -512,13 +517,13 @@ export default function InputWithMention({
   return (
     <Box width={500} color="primary">
       <FormControl fullWidth>
-        <InputLabel shrink={nodeSize !== 4 || focused} focused={focused} style={{ zIndex: -1 }}>
+        <InputLabel shrink={nodeSize !== 4 || focused} focused={focused}>
           Collaborators
         </InputLabel>
         <Box marginTop="15px" className={classnames(classes.prosemirrorContainer)}>
           <div
             ref={editorDivRef}
-            className={classnames(classes.editor, 'MuiInput-underline', { 'Mui-focused': focused })}
+            className={classnames(classes.editor, underlineClassName, { 'Mui-focused': focused })}
           />
         </Box>
         <TextField style={{ display: 'none' }} />
@@ -534,7 +539,7 @@ export default function InputWithMention({
             className={classes.suggestionListContainer}
             elevation={10}
             ref={paperRef}
-            style={{ width: 500 }}
+            style={{ width: 500, zIndex: dropdownZIndex }}
           >
             {state.suggestions.map(({ email, name, avatar }, i) => {
               const key = `${email || name}-suggestion-item`;
