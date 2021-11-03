@@ -149,6 +149,7 @@ function createEditorState(
   });
 
   return EditorState.create({
+    doc: mentionInputSchema.node('doc', {}, mentionInputSchema.node('paragraph', {})), // to create a paragraph at the start, nodeSize will be 4 which is used to determin whether the content is empty
     schema: mentionInputSchema,
     plugins: [
       ...suggestion(
@@ -280,7 +281,7 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
 const useStyles = makeStyles(() =>
   createStyles({
     editor: {
-      padding: '2px 0',
+      padding: '5px 0',
     },
     suggestionListContainer: {
       minWidth: 150,
@@ -474,13 +475,31 @@ export default function InputWithMention({
     };
   }, []);
 
-  const focused = editorViewRef.current?.hasFocus();
+  const [focused, setFocus] = useState(false);
   const nodeSize = editorViewRef.current?.state.doc.nodeSize;
 
+  useEffect(() => {
+    if (editorDivRef.current) {
+      const focusListener = () => {
+        setFocus(true);
+      };
+      const onFocusoutListener = () => {
+        setFocus(false);
+      };
+      editorDivRef.current.addEventListener('focus', focusListener);
+      editorDivRef.current.addEventListener('focusout', onFocusoutListener);
+      return () => {
+        editorDivRef.current?.removeEventListener('focus', focusListener);
+        editorDivRef.current?.removeEventListener('focusout', onFocusoutListener);
+      };
+    }
+    return () => {};
+  }, [editorDivRef.current]);
+
   return (
-    <Box width={300} color="primary">
+    <Box width={500} color="primary">
       <FormControl fullWidth>
-        <InputLabel shrink={nodeSize !== 4 || focused} focused={focused}>
+        <InputLabel shrink={nodeSize !== 4 || focused} focused={focused} style={{ zIndex: -1 }}>
           Collaborators
         </InputLabel>
         <Box
@@ -505,7 +524,7 @@ export default function InputWithMention({
             className={classes.suggestionListContainer}
             elevation={10}
             ref={paperRef}
-            style={{ width: 300 }}
+            style={{ width: 500 }}
           >
             {state.suggestions.map(({ email, name, avatar }, i) => {
               const key = `${email || name}-suggestion-item`;
