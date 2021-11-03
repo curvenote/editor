@@ -24,7 +24,6 @@ import suggestion, {
   SuggestionAction,
   SuggestionActionKind,
 } from '../prosemirror/plugins/suggestion';
-import './MentionInput.scss';
 
 function AvatarWithFallback({
   avatar,
@@ -294,6 +293,20 @@ const useStyles = makeStyles(() =>
       '& p': {
         margin: 0,
       },
+      '& .chip-container': {
+        display: 'inline-block',
+        padding: '2px 2px 2px 0',
+      },
+      '& .Mui-focused': {
+        outline: 'none',
+      },
+      '& .ProseMirror-selectednode > div': {
+        outline: '2px solid #8cf',
+      },
+      '& .ProseMirror': {
+        alignItems: 'center',
+        flexWrap: 'wrap',
+      },
     },
   }),
 );
@@ -502,10 +515,7 @@ export default function InputWithMention({
         <InputLabel shrink={nodeSize !== 4 || focused} focused={focused} style={{ zIndex: -1 }}>
           Collaborators
         </InputLabel>
-        <Box
-          marginTop="15px"
-          className={classnames(classes.prosemirrorContainer, 'mentions-input')}
-        >
+        <Box marginTop="15px" className={classnames(classes.prosemirrorContainer)}>
           <div
             ref={editorDivRef}
             className={classnames(classes.editor, 'MuiInput-underline', { 'Mui-focused': focused })}
