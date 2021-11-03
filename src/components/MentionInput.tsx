@@ -326,12 +326,15 @@ function getFilterFromAction({ search, trigger }: SuggestionActionState) {
 export default function InputWithMention({
   suggestions,
   underlineClassName = 'MuiInput-underline',
+  popperClasses: popperclasses = '',
+
   onSearchChanged,
   dropdownZIndex = 'auto',
   onChange,
 }: {
   onSearchChanged: (update: string | null) => void;
   suggestions: PersonSuggestion[];
+  popperClasses?: string;
   underlineClassName?: string;
   dropdownZIndex?: 'auto' | number;
   onChange: (update: PersonSuggestion[]) => void;
@@ -533,6 +536,7 @@ export default function InputWithMention({
           id={id}
           open={state.isOpen}
           anchorEl={editorDivRef.current}
+          className={popperclasses}
           placement="bottom-start"
         >
           <Paper
