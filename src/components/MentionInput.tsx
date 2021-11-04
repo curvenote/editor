@@ -329,13 +329,14 @@ export default function InputWithMention({
   suggestions,
   underlineClassName = 'MuiInput-underline',
   popperClasses: popperclasses = '',
-
+  onBlur,
   onSearchChanged,
   dropdownZIndex = 'auto',
   onChange,
 }: {
   onSearchChanged: (update: string | null) => void;
   suggestions: PersonSuggestion[];
+  onBlur?: () => void;
   popperClasses?: string;
   underlineClassName?: string;
   dropdownZIndex?: 'auto' | number;
@@ -357,6 +358,7 @@ export default function InputWithMention({
   }
 
   useEffect(() => {
+    dispatch({ type: 'updateSuggestions', payload: { suggestions } });
     const newFuse = new Fuse(suggestions, { keys: ['email', 'name'] });
     setFuse(newFuse);
   }, [suggestions]);
@@ -507,6 +509,7 @@ export default function InputWithMention({
         setFocus(true);
       };
       const onFocusoutListener = () => {
+        onBlur?.();
         setFocus(false);
       };
       editorDivRef.current.addEventListener('focus', focusListener);
