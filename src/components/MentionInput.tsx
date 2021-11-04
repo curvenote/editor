@@ -291,8 +291,10 @@ const useStyles = makeStyles(() =>
     },
     suggestionItem: { cursor: 'pointer' },
     prosemirrorContainer: {
+      position: 'relative',
       '& p': {
         margin: 0,
+        lineHeight: 2, // 2 expecting icon to be thicker than text
       },
       '& .chip-container': {
         display: 'inline-block',
@@ -521,7 +523,7 @@ export default function InputWithMention({
     <Box width={500} color="primary">
       <FormControl fullWidth>
         <InputLabel shrink={nodeSize !== 4 || focused} focused={focused}>
-          Collaborators
+          Add people and groups
         </InputLabel>
         <Box marginTop="15px" className={classnames(classes.prosemirrorContainer)}>
           <div
