@@ -407,6 +407,9 @@ export default function InputWithMention({
       dispatch({ type: 'selectActiveSuggestion' });
 
       const selectedSuggestion = current.suggestions[current.active];
+      if (!selectedSuggestion) {
+        return;
+      }
       // create mention component
       const mention = view.state.schema.nodes.mention.create({
         label: selectedSuggestion.name || selectedSuggestion.email,
