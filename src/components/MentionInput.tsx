@@ -1,4 +1,4 @@
-import { EditorState, NodeSelection } from 'prosemirror-state';
+import { EditorState, NodeSelection, Plugin } from 'prosemirror-state';
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
@@ -64,6 +64,10 @@ function ChipWithIcon({ label, avatar }: { label: string; avatar: string }) {
       variant="outlined"
     />
   );
+}
+
+function isMention(node: Node) {
+  return node.type.name === 'mention';
 }
 
 class MentionView {
@@ -147,10 +151,25 @@ function createEditorState(
     nodes,
   });
 
+  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight'];
   return EditorState.create({
     doc: mentionInputSchema.node('doc', {}, mentionInputSchema.node('paragraph', {})), // to create a paragraph at the start, nodeSize will be 4 which is used to determin whether the content is empty
     schema: mentionInputSchema,
     plugins: [
+      new Plugin({
+        props: {
+          handleKeyDown(view: EditorView, event: KeyboardEvent) {
+            const { node } = view.state.selection as NodeSelection;
+            if (node && isMention(node)) {
+              if (allowedKeys.find((k) => event.key === k)) {
+                return false;
+              }
+              return true;
+            }
+            return false;
+          },
+        },
+      }),
       ...suggestion(
         actionHandler,
         /(?:^|\W)([\s@a-zA-Z0-9])$/,
