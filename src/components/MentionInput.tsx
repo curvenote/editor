@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 import ReactDOM from 'react-dom';
 import { Node, NodeSpec, Schema } from 'prosemirror-model';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import classnames from 'classnames';
 import {
   Box,
@@ -56,12 +57,22 @@ const Chip = withStyles({
   label: { paddingLeft: 4, paddingRight: 8, fontSize: 12 },
 })(MuiChip);
 
-function ChipWithIcon({ label, avatar }: { label: string; avatar: string }) {
+function Mention({
+  label,
+  avatar,
+  onDelete,
+}: {
+  label: string;
+  avatar: string;
+  onDelete: () => void;
+}) {
   return (
     <Chip
       icon={<AvatarWithFallback label={label} avatar={avatar} />}
       label={label}
       variant="outlined"
+      onDelete={onDelete}
+      deleteIcon={<CancelRoundedIcon />}
     />
   );
 }
@@ -75,11 +86,11 @@ class MentionView {
 
   view: EditorView;
 
-  getPos: boolean | (() => number);
+  getPos: () => number;
 
   dom: HTMLSpanElement;
 
-  constructor(node: Node, view: EditorView, getPos: boolean | (() => number)) {
+  constructor(node: Node, view: EditorView, getPos: () => number) {
     // We'll need these later
     this.node = node;
     this.view = view;
@@ -88,7 +99,21 @@ class MentionView {
     // The node's representation in the editor (empty, for now)
     const wrapper = document.createElement('span');
     wrapper.classList.add('chip-container');
-    ReactDOM.render(<ChipWithIcon label={node.attrs.label} avatar={node.attrs.avatar} />, wrapper);
+    ReactDOM.render(
+      <Mention
+        onDelete={() => {
+          const {
+            state: { tr },
+            dispatch,
+          } = this.view;
+          const pos = getPos();
+          dispatch(tr.delete(pos, pos + node.nodeSize));
+        }}
+        label={node.attrs.label}
+        avatar={node.attrs.avatar}
+      />,
+      wrapper,
+    );
     this.dom = wrapper;
   }
 }
