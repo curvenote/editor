@@ -27,7 +27,7 @@ const inactiveSuggestionState = {
 
 export const key = new PluginKey('suggestion');
 
-interface SuggestionMeta {
+export interface SuggestionMeta {
   action: 'add' | 'remove';
   trigger: string | null;
 }
@@ -101,6 +101,13 @@ export default function getPlugins(
   suggestionTrigger = /(?:^|\W)(@|#)$/,
   cancelOnFirstSpace: ((trigger: string | null) => boolean) | boolean = true,
   suggestionClass = 'suggestion',
+  {
+    triggersOnlyInSuggestion = false,
+  }: {
+    triggersOnlyInSuggestion: boolean; // to support mouse triggered suggestion. Probably split off to a sepserated piece of logic completely
+  } = {
+    triggersOnlyInSuggestion: false,
+  },
 ) {
   const plugin: Plugin<SuggestionState> = new Plugin({
     key,
@@ -112,7 +119,11 @@ export default function getPlugins(
 
           const started = !prev.active && next.active;
           const stopped = prev.active && !next.active;
-          const changed = next.active && !started && !stopped && prev.text !== next.text;
+          const changed =
+            next.active &&
+            !started &&
+            !stopped &&
+            (prev.text !== next.text || prev.trigger !== next.trigger);
 
           const action = {
             view,
@@ -120,6 +131,7 @@ export default function getPlugins(
             search: next.text ?? prev.text,
             range: next.range ?? (prev.range as Range),
           };
+
           if (started) onAction({ ...action, kind: SuggestionActionKind.open });
           if (changed) onAction({ ...action, kind: SuggestionActionKind.filter });
           if (stopped) onAction({ ...action, kind: SuggestionActionKind.close });
@@ -182,10 +194,20 @@ export default function getPlugins(
       handleDrop: (view) => cancelIfInsideAndPass(view),
       handleKeyDown(view, event) {
         const { trigger, active, decorations } = plugin.getState(view.state);
+        if (!active) return false;
+        if (triggersOnlyInSuggestion && !inSuggestion(view.state.selection, decorations))
+          return false;
 
-        if (!active || !inSuggestion(view.state.selection, decorations)) return false;
+        let from;
+        let to;
+        const [deco] = decorations.find();
+        if (deco) {
+          ({ from, to } = deco);
+        } else {
+          from = view.state.selection.from;
+          to = view.state.selection.to;
+        }
 
-        const { from, to } = decorations.find()[0];
         const text = view.state.doc.textBetween(from, to);
 
         const search = text.slice(trigger?.length ?? 1);
@@ -239,9 +261,9 @@ export default function getPlugins(
     inputRules({
       rules: [
         new InputRule(suggestionTrigger, (state, match) => {
-          const { decorations } = plugin.getState(state);
-          // If we are currently suggesting, don't activate
+          const { decorations, active } = plugin.getState(state);
           if (inSuggestion(state.selection, decorations)) return null;
+          // If we are currently suggesting, don't activate
           const tr = state.tr.insertText(match[1][match[1].length - 1]).scrollIntoView();
           tr.setMeta(plugin, { action: 'add', trigger: match[1] } as SuggestionMeta);
           return tr;

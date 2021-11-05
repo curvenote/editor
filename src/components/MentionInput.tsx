@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { EditorState, NodeSelection, Plugin } from 'prosemirror-state';
 import Fuse from 'fuse.js';
 import { EditorView } from 'prosemirror-view';
@@ -19,12 +20,16 @@ import {
   Popper,
   Typography,
   withStyles,
+  Fade,
 } from '@material-ui/core';
 import { keymap } from 'prosemirror-keymap';
 import suggestion, {
+  key as pluginKey,
   SuggestionAction,
   SuggestionActionKind,
+  triggerSuggestion,
 } from '../prosemirror/plugins/suggestion';
+import useClickOutside from './hooks/useClickOutside';
 
 function AvatarWithFallback({
   avatar,
@@ -54,7 +59,7 @@ const Chip = withStyles({
   root: {
     height: 28,
   },
-  label: { paddingLeft: 4, paddingRight: 8, fontSize: 12 },
+  label: { paddingLeft: 8, paddingRight: 8, fontSize: 14 },
 })(MuiChip);
 
 function Mention({
@@ -196,6 +201,12 @@ function createEditorState(
             }
             return false;
           },
+          handleDOMEvents: {
+            focus(view: EditorView, event: FocusEvent) {
+              triggerSuggestion(view, '');
+              return false;
+            },
+          },
         },
       }),
       ...suggestion(
@@ -222,9 +233,7 @@ function createEditorState(
           if (possibleMention.type.name !== 'mention') {
             return false;
           }
-          const figPos = state.selection.$head.pos - possibleMention.nodeSize;
-          dispatch?.(tr.setSelection(NodeSelection.create(tr.doc, figPos)).scrollIntoView());
-          return true;
+          return false;
         },
       }),
     ],
@@ -372,7 +381,7 @@ function getFilterFromAction({ search, trigger }: SuggestionActionState) {
   return trigger + search;
 }
 
-export default function InputWithMention({
+export default function MentionInput({
   suggestions,
   underlineClassName = 'MuiInput-underline',
   popperClasses: popperclasses = '',
@@ -572,6 +581,21 @@ export default function InputWithMention({
     return () => {};
   }, [editorDivRef.current]);
 
+  useClickOutside(editorDivRef, () => {
+    if (state.isOpen) {
+      const { current: view } = editorViewRef;
+      if (!view) {
+        return;
+      }
+      const {
+        state: { tr },
+      } = view;
+      const plugin = pluginKey.get(view.state) as Plugin;
+      tr.setMeta(plugin, { action: 'close' });
+      view.dispatch(tr);
+    }
+  });
+
   return (
     <Box width={500} color="primary">
       <FormControl fullWidth>
@@ -593,52 +617,63 @@ export default function InputWithMention({
           anchorEl={editorDivRef.current}
           className={popperclasses}
           placement="bottom-start"
+          transition
         >
-          <Paper
-            className={classes.suggestionListContainer}
-            elevation={10}
-            ref={paperRef}
-            style={{ width: 500, zIndex: dropdownZIndex }}
-          >
-            {state.suggestions.map(({ email, name, avatar }, i) => {
-              const key = `${email || name}-suggestion-item`;
-              return (
-                <Box
-                  key={key}
-                  display="flex"
-                  onMouseEnter={() => {
-                    dispatch({ type: 'setActive', payload: { active: i } });
-                  }}
-                  onClick={addActiveToMention}
-                  className={classes.suggestionItem}
-                  flexDirection="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  sx={{ border: 1, py: 0.25, px: 0.5, bgcolor: 'background.paper', minWidth: 100 }}
-                  style={active === i ? { backgroundColor: '#e8e8e8' } : {}}
-                >
-                  <Box
-                    pr={0.5}
-                    width={24}
-                    height={24}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <AvatarWithFallback
-                      width={20}
-                      height={20}
-                      label={name || email}
-                      avatar={avatar}
-                    />
-                  </Box>
-                  <Box display="flex" flexDirection="column" flexGrow={3}>
-                    <Typography style={{ fontSize: 12 }}>{name || email}</Typography>
-                  </Box>
-                </Box>
-              );
-            })}
-          </Paper>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={200}>
+              <Paper
+                className={classes.suggestionListContainer}
+                elevation={10}
+                ref={paperRef}
+                style={{ width: 500, zIndex: dropdownZIndex }}
+              >
+                {state.suggestions.map(({ email, name, avatar }, i) => {
+                  const key = `${email || name}-suggestion-item`;
+                  return (
+                    <Box
+                      key={key}
+                      display="flex"
+                      onMouseEnter={() => {
+                        dispatch({ type: 'setActive', payload: { active: i } });
+                      }}
+                      onClick={addActiveToMention}
+                      className={classes.suggestionItem}
+                      flexDirection="row"
+                      justifyContent="center"
+                      alignItems="center"
+                      sx={{
+                        border: 1,
+                        py: 0.25,
+                        px: 0.5,
+                        bgcolor: 'background.paper',
+                        minWidth: 100,
+                      }}
+                      style={active === i ? { backgroundColor: '#e8e8e8' } : {}}
+                    >
+                      <Box
+                        pr={0.5}
+                        width={24}
+                        height={24}
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <AvatarWithFallback
+                          width={20}
+                          height={20}
+                          label={name || email}
+                          avatar={avatar}
+                        />
+                      </Box>
+                      <Box display="flex" flexDirection="column" flexGrow={3}>
+                        <Typography style={{ fontSize: 12 }}>{name || email}</Typography>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Paper>
+            </Fade>
+          )}
         </Popper>
       )}
     </Box>
