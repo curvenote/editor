@@ -86,11 +86,11 @@ class MentionView {
 
   view: EditorView;
 
-  getPos: () => number;
+  getPos: boolean | (() => number);
 
   dom: HTMLSpanElement;
 
-  constructor(node: Node, view: EditorView, getPos: () => number) {
+  constructor(node: Node, view: EditorView, getPos: boolean | (() => number)) {
     // We'll need these later
     this.node = node;
     this.view = view;
@@ -106,7 +106,10 @@ class MentionView {
             state: { tr },
             dispatch,
           } = this.view;
-          const pos = getPos();
+          if (typeof getPos === 'boolean') {
+            return;
+          }
+          const pos = getPos() as number;
           dispatch(tr.delete(pos, pos + node.nodeSize));
         }}
         label={node.attrs.label}
