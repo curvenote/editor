@@ -126,10 +126,7 @@ class MentionView {
   }
 }
 
-function createEditorState(
-  actionHandler: any,
-  onDelete: (deleted: { label: string; avatar: string; id: string }) => void,
-) {
+function createEditorState(actionHandler: any, onDelete: (deleted: MentionNodeAttrState) => void) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
       content: 'block*',
@@ -164,17 +161,14 @@ function createEditorState(
       parseDOM: [
         {
           tag: 'span.mention[label][avatar][id]',
-          getAttrs(dom) {
+          getAttrs(dom): MentionNodeAttrState {
             if (typeof dom !== 'string') {
               const label = (dom as HTMLSpanElement).getAttribute('label');
               const avatar = (dom as HTMLSpanElement).getAttribute('avatar');
               const id = (dom as HTMLSpanElement).getAttribute('id');
-              return {
-                label,
-                avatar,
-              };
+              return { label: label || '', avatar: avatar || '', id: id || '' };
             }
-            return { label: '', avatar: '' };
+            return { label: '', avatar: '', id: '' };
           },
         },
       ],
@@ -219,7 +213,18 @@ function createEditorState(
       keymap({
         Backspace: (state, dispatch) => {
           const { $head } = state.selection;
-          const { tr } = state;
+          const {
+            tr,
+            selection: {
+              ranges: [range],
+            },
+          } = state;
+
+          // if it's a single selection
+          if (!range) {
+            return false;
+          }
+
           if (
             (state.selection as NodeSelection).node &&
             (state.selection as NodeSelection).node.type.name === 'mention'
@@ -229,14 +234,16 @@ function createEditorState(
             onDelete(node.attrs as any);
             return true;
           }
+          if (range.$from.pos !== range.$to.pos) {
+            return false;
+          }
           const possibleMention = state.selection.$head.nodeBefore;
-          console.log('nodebefore', possibleMention);
           if (!possibleMention) return false;
           if (possibleMention.type.name !== 'mention') {
             return false;
           }
-
-          return false;
+          dispatch?.(tr.setSelection(NodeSelection.create(state.doc, $head.pos - 1)));
+          return true;
         },
       }),
     ],
@@ -262,6 +269,12 @@ interface SuggestionActionState {
   range: { from: number; to: number } | null;
   search: string;
   trigger: string;
+}
+
+interface MentionNodeAttrState {
+  label: string;
+  avatar: string;
+  id: string;
 }
 
 const initialState = {
@@ -476,7 +489,6 @@ export default function MentionInput({
         id: selectedSuggestion.id,
       } as any);
       view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
-      setMentions((m) => m.concat([selectedSuggestion]));
     },
     [mentions],
   );
@@ -521,15 +533,7 @@ export default function MentionInput({
         }
         return true;
       },
-      (deleted) => {
-        setMentions((m) => {
-          const index = m.findIndex(({ id }) => id === deleted.id);
-          if (index === -1) {
-            return m;
-          }
-          return removeItemImmutable(m, index);
-        });
-      },
+      () => {},
     );
 
     const editorView = new EditorView(
@@ -548,24 +552,25 @@ export default function MentionInput({
         },
         dispatchTransaction: (tr) => {
           const newState = editorView.state.apply(tr);
+          editorView.updateState(newState);
+          // doc change flag is checked after doc change is applied for sideeffects
           if (!tr.docChanged) {
             return;
           }
-          editorView.updateState(newState);
-          // let updatedMentions = [];
-          console.log('current mentions', mentions);
+          const updatedMentions: PersonSuggestion[] = [];
           editorView.state.doc.content.forEach((node) => {
             if (node.type.name === 'paragraph') {
               node.content.forEach((n) => {
                 if (n.type.name === 'mention') {
-                  console.log('node', { ...n.attrs });
-                  // const index = mentions.findIndex(
-                  //   ({ name, email }) => name === deleted.label || email === deleted.label,
-                  // );
+                  const mention = suggestions.find(({ id }) => id === n.attrs.id);
+                  if (mention) {
+                    updatedMentions.push(mention);
+                  }
                 }
               });
             }
           });
+          setMentions(updatedMentions);
         },
         nodeViews: {
           mention(node, view, getPos) {
