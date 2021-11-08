@@ -20,7 +20,7 @@ import {
   Popper,
   Typography,
   withStyles,
-  Fade,
+  Grow,
 } from '@material-ui/core';
 import { keymap } from 'prosemirror-keymap';
 import suggestion, {
@@ -128,7 +128,7 @@ class MentionView {
 
 function createEditorState(
   actionHandler: any,
-  onDelete: (deleted: { label: string; avatar: string }) => void,
+  onDelete: (deleted: { label: string; avatar: string; id: string }) => void,
 ) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
@@ -151,23 +151,24 @@ function createEditorState(
     },
 
     mention: {
-      attrs: { label: { default: '' }, avatar: { default: '' } },
+      attrs: { label: { default: '' }, avatar: { default: '' }, id: { default: '' } },
       inline: true,
       atom: true,
       group: 'inline',
       draggable: true,
       selectable: true,
       toDOM(node: any) {
-        const { label, avatar } = node.attrs;
-        return ['span', { label, avatar, class: 'mention' }];
+        const { label, avatar, id } = node.attrs;
+        return ['span', { label, avatar, class: 'mention', id }];
       },
       parseDOM: [
         {
-          tag: 'span.mention[label][avatar]',
+          tag: 'span.mention[label][avatar][id]',
           getAttrs(dom) {
             if (typeof dom !== 'string') {
               const label = (dom as HTMLSpanElement).getAttribute('label');
               const avatar = (dom as HTMLSpanElement).getAttribute('avatar');
+              const id = (dom as HTMLSpanElement).getAttribute('id');
               return {
                 label,
                 avatar,
@@ -229,10 +230,12 @@ function createEditorState(
             return true;
           }
           const possibleMention = state.selection.$head.nodeBefore;
+          console.log('nodebefore', possibleMention);
           if (!possibleMention) return false;
           if (possibleMention.type.name !== 'mention') {
             return false;
           }
+
           return false;
         },
       }),
@@ -247,7 +250,7 @@ export interface PersonSuggestion {
   name: string;
 }
 
-const id = 'mention-popup';
+const mentionPopupId = 'mention-popup';
 function constrainActive(v: number, length: number) {
   if (v < 0) {
     return length - 1;
@@ -470,6 +473,7 @@ export default function MentionInput({
       const mention = view.state.schema.nodes.mention.create({
         label: selectedSuggestion.name || selectedSuggestion.email,
         avatar: selectedSuggestion.avatar || '',
+        id: selectedSuggestion.id,
       } as any);
       view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
       setMentions((m) => m.concat([selectedSuggestion]));
@@ -518,11 +522,8 @@ export default function MentionInput({
         return true;
       },
       (deleted) => {
-        // TODO: a more definitive dientification is preferred
         setMentions((m) => {
-          const index = m.findIndex(
-            ({ name, email }) => name === deleted.label || email === deleted.label,
-          );
+          const index = m.findIndex(({ id }) => id === deleted.id);
           if (index === -1) {
             return m;
           }
@@ -533,6 +534,7 @@ export default function MentionInput({
 
     const editorView = new EditorView(
       { mount: editorDivRef.current },
+
       {
         state: prosemirrorState,
         clipboardTextSerializer: (slice) => {
@@ -543,6 +545,27 @@ export default function MentionInput({
             }
           });
           return str;
+        },
+        dispatchTransaction: (tr) => {
+          const newState = editorView.state.apply(tr);
+          if (!tr.docChanged) {
+            return;
+          }
+          editorView.updateState(newState);
+          // let updatedMentions = [];
+          console.log('current mentions', mentions);
+          editorView.state.doc.content.forEach((node) => {
+            if (node.type.name === 'paragraph') {
+              node.content.forEach((n) => {
+                if (n.type.name === 'mention') {
+                  console.log('node', { ...n.attrs });
+                  // const index = mentions.findIndex(
+                  //   ({ name, email }) => name === deleted.label || email === deleted.label,
+                  // );
+                }
+              });
+            }
+          });
         },
         nodeViews: {
           mention(node, view, getPos) {
@@ -612,7 +635,7 @@ export default function MentionInput({
       </FormControl>
       {editorDivRef.current && (
         <Popper
-          id={id}
+          id={mentionPopupId}
           open={state.isOpen}
           anchorEl={editorDivRef.current}
           className={popperclasses}
@@ -620,7 +643,7 @@ export default function MentionInput({
           transition
         >
           {({ TransitionProps }) => (
-            <Fade {...TransitionProps} timeout={200}>
+            <Grow {...TransitionProps} timeout={200}>
               <Paper
                 className={classes.suggestionListContainer}
                 elevation={10}
@@ -643,8 +666,7 @@ export default function MentionInput({
                       alignItems="center"
                       sx={{
                         border: 1,
-                        py: 0.25,
-                        px: 0.5,
+                        py: 0.5,
                         bgcolor: 'background.paper',
                         minWidth: 100,
                       }}
@@ -672,7 +694,7 @@ export default function MentionInput({
                   );
                 })}
               </Paper>
-            </Fade>
+            </Grow>
           )}
         </Popper>
       )}
