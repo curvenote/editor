@@ -4543,6 +4543,15 @@ prop-types@^15.6.2, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+prosemirror-autocomplete@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/prosemirror-autocomplete/-/prosemirror-autocomplete-0.2.1.tgz#d46086d12bc00b1ec80648235ab855de38033e29"
+  integrity sha512-K9lgNmd9SmK4Fncnh4rgs77AoDmKhIzeb5A0jQgbKmfNrZBRDu1Sry86wdvecvsM7B1ZPBi6oRStyNcDKhhBQg==
+  dependencies:
+    prosemirror-inputrules "^1.1.3"
+    prosemirror-state "^1.3.4"
+    prosemirror-view "^1.20.3"
+
 prosemirror-codemark@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/prosemirror-codemark/-/prosemirror-codemark-0.2.2.tgz#38692be84da43f0c24de09d45f6034a3ecc663ba"

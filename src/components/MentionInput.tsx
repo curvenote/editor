@@ -23,12 +23,13 @@ import {
   Grow,
 } from '@material-ui/core';
 import { keymap } from 'prosemirror-keymap';
-import suggestion, {
-  key as pluginKey,
-  SuggestionAction,
-  SuggestionActionKind,
-  triggerSuggestion,
-} from '../prosemirror/plugins/suggestion';
+import autocomplete, {
+  Options,
+  AutocompleteAction,
+  openAutocomplete,
+  closeAutocomplete,
+  ActionKind,
+} from 'prosemirror-autocomplete';
 import useClickOutside from './hooks/useClickOutside';
 
 function AvatarWithFallback({
@@ -126,7 +127,10 @@ class MentionView {
   }
 }
 
-function createEditorState(actionHandler: any, onDelete: (deleted: MentionNodeAttrState) => void) {
+function createEditorState(
+  actionHandler: (action: AutocompleteAction) => boolean,
+  onDelete: (deleted: MentionNodeAttrState) => void,
+) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
       content: 'block*',
@@ -180,6 +184,17 @@ function createEditorState(actionHandler: any, onDelete: (deleted: MentionNodeAt
   });
 
   const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight'];
+  const options: Options = {
+    triggers: [
+      {
+        name: 'input',
+        trigger: /(?:^|\W)([\w\W]*)$/,
+        cancelOnFirstSpace: true,
+      },
+    ],
+    reducer: actionHandler,
+  };
+
   return EditorState.create({
     doc: mentionInputSchema.node('doc', {}, mentionInputSchema.node('paragraph', {})), // to create a paragraph at the start, nodeSize will be 4 which is used to determin whether the content is empty
     schema: mentionInputSchema,
@@ -197,19 +212,14 @@ function createEditorState(actionHandler: any, onDelete: (deleted: MentionNodeAt
             return false;
           },
           handleDOMEvents: {
-            focus(view: EditorView, event: FocusEvent) {
-              triggerSuggestion(view, '');
+            focus(view: EditorView) {
+              openAutocomplete(view, '');
               return false;
             },
           },
         },
       }),
-      ...suggestion(
-        actionHandler,
-        /(?:^|\W)([\s@a-zA-Z0-9])$/,
-        // Cancel on space after some of the triggers
-        (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-      ),
+      ...autocomplete(options),
       keymap({
         Backspace: (state, dispatch) => {
           const { $head } = state.selection;
@@ -448,6 +458,7 @@ export default function MentionInput({
       dispatch({ type: 'updateSuggestions', payload: { suggestions } });
       return;
     }
+    console.log('searchStr', searchStr);
     const result = fuse.search(searchStr).map((v) => v.item);
     dispatch({
       type: 'updateSuggestions',
@@ -498,36 +509,41 @@ export default function MentionInput({
       return () => {};
     }
     const prosemirrorState = createEditorState(
-      (action: SuggestionAction) => {
-        if (action.kind === SuggestionActionKind.open) {
+      (action: AutocompleteAction) => {
+        console.log('action', action);
+        if (action.kind === ActionKind.open) {
           dispatch({ type: 'open' });
           dispatch({
             type: 'updateAction',
-            payload: { range: action.range, search: action.search, trigger: action.trigger },
+            payload: {
+              range: action.range,
+              search: action.filter || '',
+              trigger: action.trigger,
+            },
           });
           return true;
         }
 
-        if (action.kind === SuggestionActionKind.previous) {
+        if (action.kind === ActionKind.up) {
           incActive(-1);
           return true;
         }
-        if (action.kind === SuggestionActionKind.next) {
+        if (action.kind === ActionKind.down) {
           incActive(1);
           return true;
         }
-        if (action.kind === SuggestionActionKind.filter) {
+        if (action.kind === ActionKind.filter) {
           dispatch({
             type: 'updateAction',
-            payload: { range: action.range, search: action.search, trigger: action.trigger },
+            payload: { range: action.range, search: action.filter || '', trigger: action.trigger },
           });
           return true;
         }
-        if (action.kind === SuggestionActionKind.close) {
+        if (action.kind === ActionKind.close) {
           dispatch({ type: 'close' });
           return true;
         }
-        if (action.kind === SuggestionActionKind.select) {
+        if (action.kind === ActionKind.enter) {
           addActiveToMention();
           return true;
         }
@@ -615,12 +631,7 @@ export default function MentionInput({
       if (!view) {
         return;
       }
-      const {
-        state: { tr },
-      } = view;
-      const plugin = pluginKey.get(view.state) as Plugin;
-      tr.setMeta(plugin, { action: 'close' });
-      view.dispatch(tr);
+      closeAutocomplete(view);
     }
   });
 
