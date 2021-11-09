@@ -230,7 +230,7 @@ function createEditorState(actionHandler: any, onDelete: (deleted: MentionNodeAt
             (state.selection as NodeSelection).node.type.name === 'mention'
           ) {
             const { node } = state.selection as NodeSelection;
-            dispatch?.(tr.delete($head.pos - 1, $head.pos + node.nodeSize));
+            dispatch?.(tr.delete($head.pos - 1, $head.pos - 1 + node.nodeSize));
             onDelete(node.attrs as any);
             return true;
           }
