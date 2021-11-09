@@ -128,34 +128,31 @@ class MentionView {
 }
 
 function createEditorState(
+  dispatchA: any,
   actionHandler: (action: AutocompleteAction) => boolean,
   onDelete: (deleted: MentionNodeAttrState) => void,
 ) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
-      content: 'block*',
+      content: 'mention* autocomplete',
     },
-    // :: NodeSpec A plain paragraph textblock. Represented in the DOM
-    // as a `<p>` element.
-    paragraph: {
-      content: 'inline*',
-      group: 'block',
-      parseDOM: [{ tag: 'p' }],
-      toDOM() {
-        return ['p', 0];
-      },
-    },
-
     // :: NodeSpec The text node.
-    text: {
-      group: 'inline',
+    text: {},
+    autocomplete: {
+      content: 'text*',
+      toDOM() {
+        return ['span', { class: 'autocomplete' }, 0];
+      },
+      parseDOM: [
+        {
+          tag: 'span.autocomplete',
+        },
+      ],
     },
-
     mention: {
       attrs: { label: { default: '' }, avatar: { default: '' }, id: { default: '' } },
-      inline: true,
+      // inline: true,
       atom: true,
-      group: 'inline',
       draggable: true,
       selectable: true,
       toDOM(node: any) {
@@ -184,19 +181,9 @@ function createEditorState(
   });
 
   const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight'];
-  const options: Options = {
-    triggers: [
-      {
-        name: 'input',
-        trigger: /(?:^|\W)([\w\W]*)$/,
-        cancelOnFirstSpace: true,
-      },
-    ],
-    reducer: actionHandler,
-  };
 
   return EditorState.create({
-    doc: mentionInputSchema.node('doc', {}, mentionInputSchema.node('paragraph', {})), // to create a paragraph at the start, nodeSize will be 4 which is used to determin whether the content is empty
+    doc: mentionInputSchema.node('doc', {}, mentionInputSchema.node('autocomplete')), // to create a paragraph at the start, nodeSize will be 4 which is used to determin whether the content is empty
     schema: mentionInputSchema,
     plugins: [
       new Plugin({
@@ -209,17 +196,44 @@ function createEditorState(
               }
               return true;
             }
+            console.log(event.key);
+            if (event.key === 'Enter' || event.key === 'Tab') {
+              dispatchA({ type: 'selectActiveSuggestion' });
+              return true;
+            }
+            if (event.key === 'ArrowUp') {
+              dispatchA({ type: 'incActive', payload: { inc: -1 } });
+              return true;
+            }
+            if (event.key === 'ArrowDown') {
+              dispatchA({ type: 'incActive', payload: { inc: 1 } });
+              return true;
+            }
+            view.state.doc.descendants((n, pos) => {
+              if (n.type.name === 'autocomplete') {
+                console.log(n.textContent, n);
+                dispatchA({ type: 'open' });
+                dispatchA({
+                  type: 'updateAction',
+                  payload: {
+                    range: { from: pos, to: pos + n.nodeSize },
+                    search: n.textContent,
+                    trigger: '',
+                  },
+                });
+              }
+            });
             return false;
           },
           handleDOMEvents: {
-            focus(view: EditorView) {
-              openAutocomplete(view, '');
-              return false;
-            },
+            // focus(view: EditorView) {
+            //   openAutocomplete(view, '');
+            //   return false;
+            // },
           },
         },
       }),
-      ...autocomplete(options),
+      // ...autocomplete(options),
       keymap({
         Backspace: (state, dispatch) => {
           const { $head } = state.selection;
@@ -312,6 +326,7 @@ type Actions =
   | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
 function reducer(state: SuggestionState, action: Actions): SuggestionState {
+  console.log(action);
   switch (action.type) {
     case 'open':
       return {
@@ -509,6 +524,7 @@ export default function MentionInput({
       return () => {};
     }
     const prosemirrorState = createEditorState(
+      dispatch,
       (action: AutocompleteAction) => {
         console.log('action', action);
         if (action.kind === ActionKind.open) {
