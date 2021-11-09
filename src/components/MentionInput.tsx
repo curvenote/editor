@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 import ReactDOM from 'react-dom';
 import { Node, NodeSpec, Schema } from 'prosemirror-model';
 import FaceOutlined from '@material-ui/icons/FaceOutlined';
-import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
+import CloseIcon from '@material-ui/icons/Close';
 import classnames from 'classnames';
 import {
   Box,
@@ -78,7 +78,7 @@ function Mention({
       label={label}
       variant="outlined"
       onDelete={onDelete}
-      deleteIcon={<CancelRoundedIcon />}
+      deleteIcon={<CloseIcon />}
     />
   );
 }
@@ -197,7 +197,6 @@ function createEditorState(
               }
               return true;
             }
-            console.log(event.key);
             if (event.key === 'Enter' || event.key === 'Tab') {
               dispatchA({ type: 'selectActiveSuggestion' });
               addActiveToMention();
@@ -213,7 +212,6 @@ function createEditorState(
             }
             view.state.doc.descendants((n, pos) => {
               if (n.type.name === 'autocomplete') {
-                console.log(n.textContent, n);
                 dispatchA({ type: 'open' });
                 dispatchA({
                   type: 'updateAction',
@@ -227,12 +225,7 @@ function createEditorState(
             });
             return false;
           },
-          handleDOMEvents: {
-            // focus(view: EditorView) {
-            //   openAutocomplete(view, '');
-            //   return false;
-            // },
-          },
+          handleDOMEvents: {},
         },
       }),
       // ...autocomplete(options),
@@ -263,13 +256,14 @@ function createEditorState(
           if (range.$from.pos !== range.$to.pos) {
             return false;
           }
-          const possibleMention = state.selection.$head.nodeBefore;
-          if (!possibleMention) return false;
-          if (possibleMention.type.name !== 'mention') {
+
+          if (state.selection.$from.parent.type.name === 'autocomplete') {
+            console.warn(
+              'TODO handle autocomplete parent when its at the beginning, $head.start()',
+            );
             return false;
           }
-          dispatch?.(tr.setSelection(NodeSelection.create(state.doc, $head.pos - 1)));
-          return true;
+          return false;
         },
       }),
     ],
@@ -380,6 +374,9 @@ const useStyles = makeStyles(() =>
   createStyles({
     editor: {
       padding: '5px 0',
+      '& .ProseMirror-trailingBreak': {
+        display: 'none', // hide trailing break
+      },
     },
     suggestionListContainer: {
       position: 'relative',
