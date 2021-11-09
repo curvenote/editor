@@ -129,6 +129,7 @@ class MentionView {
 
 function createEditorState(
   dispatchA: any,
+  addActiveToMention: any,
   actionHandler: (action: AutocompleteAction) => boolean,
   onDelete: (deleted: MentionNodeAttrState) => void,
 ) {
@@ -199,6 +200,7 @@ function createEditorState(
             console.log(event.key);
             if (event.key === 'Enter' || event.key === 'Tab') {
               dispatchA({ type: 'selectActiveSuggestion' });
+              addActiveToMention();
               return true;
             }
             if (event.key === 'ArrowUp') {
@@ -525,6 +527,7 @@ export default function MentionInput({
     }
     const prosemirrorState = createEditorState(
       dispatch,
+      addActiveToMention,
       (action: AutocompleteAction) => {
         console.log('action', action);
         if (action.kind === ActionKind.open) {
