@@ -23,13 +23,7 @@ import {
   Grow,
 } from '@material-ui/core';
 import { keymap } from 'prosemirror-keymap';
-import autocomplete, {
-  Options,
-  AutocompleteAction,
-  openAutocomplete,
-  closeAutocomplete,
-  ActionKind,
-} from 'prosemirror-autocomplete';
+import { findParentNodeOfType } from 'prosemirror-utils';
 import useClickOutside from './hooks/useClickOutside';
 
 function AvatarWithFallback({
@@ -127,12 +121,7 @@ class MentionView {
   }
 }
 
-function createEditorState(
-  dispatchA: any,
-  addActiveToMention: any,
-  actionHandler: (action: AutocompleteAction) => boolean,
-  onDelete: (deleted: MentionNodeAttrState) => void,
-) {
+function createEditorState(dispatchA: any, addActiveToMention: any) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
       content: 'mention* autocomplete',
@@ -209,19 +198,7 @@ function createEditorState(
               dispatchA({ type: 'incActive', payload: { inc: 1 } });
               return true;
             }
-            view.state.doc.descendants((n, pos) => {
-              if (n.type.name === 'autocomplete') {
-                dispatchA({ type: 'open' });
-                dispatchA({
-                  type: 'updateAction',
-                  payload: {
-                    range: { from: pos, to: pos + n.nodeSize },
-                    search: n.textContent,
-                    trigger: '',
-                  },
-                });
-              }
-            });
+
             return false;
           },
           handleDOMEvents: {},
@@ -249,19 +226,24 @@ function createEditorState(
           ) {
             const { node } = state.selection as NodeSelection;
             dispatch?.(tr.delete($head.pos - 1, $head.pos - 1 + node.nodeSize));
-            onDelete(node.attrs as any);
             return true;
           }
+
           if (range.$from.pos !== range.$to.pos) {
             return false;
           }
 
           if (state.selection.$from.parent.type.name === 'autocomplete') {
-            console.warn(
-              'TODO handle autocomplete parent when its at the beginning, $head.start()',
-            );
+            if ($head.start() === $head.pos) {
+              const parent = findParentNodeOfType(state.schema.nodes.autocomplete)(state.selection);
+              if (parent) {
+                dispatch?.(tr.setSelection(NodeSelection.create(state.doc, parent.pos - 1)));
+                return true;
+              }
+            }
             return false;
           }
+
           return false;
         },
       }),
@@ -287,7 +269,6 @@ function constrainActive(v: number, length: number) {
 interface SuggestionActionState {
   range: { from: number; to: number } | null;
   search: string;
-  trigger: string;
 }
 
 interface MentionNodeAttrState {
@@ -299,7 +280,7 @@ interface MentionNodeAttrState {
 const initialState = {
   suggestions: [] as PersonSuggestion[],
   active: 0,
-  action: { range: null, search: '', trigger: '' } as SuggestionActionState,
+  action: { range: null, search: '' } as SuggestionActionState,
   isOpen: false,
 };
 type SuggestionState = typeof initialState;
@@ -314,14 +295,12 @@ type Actions =
       payload: {
         range: { from: number; to: number };
         search: string | null;
-        trigger: string | null;
       };
     }
   | { type: 'selectActiveSuggestion' }
   | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
 function reducer(state: SuggestionState, action: Actions): SuggestionState {
-  console.log(action);
   switch (action.type) {
     case 'open':
       return {
@@ -339,7 +318,6 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
         action: {
           range: action.payload.range,
           search: action.payload.search || '',
-          trigger: action.payload.trigger || '',
         },
       };
     case 'incActive':
@@ -373,6 +351,9 @@ const useStyles = makeStyles(() =>
   createStyles({
     editor: {
       padding: '5px 0',
+      '& .autocomplete': {
+        verticalAlign: 'middle',
+      },
       '& .ProseMirror-trailingBreak': {
         display: 'none', // hide trailing break
       },
@@ -408,17 +389,6 @@ const useStyles = makeStyles(() =>
     },
   }),
 );
-
-function removeItemImmutable<T>(arr: T[], index: number): T[] {
-  return [...arr.slice(0, index), ...arr.slice(index + 1, arr.length - 1)];
-}
-
-function getFilterFromAction({ search, trigger }: SuggestionActionState) {
-  if (!trigger.match(/[a-zA-Z0-9]/)) {
-    return search;
-  }
-  return trigger + search;
-}
 
 export default function MentionInput({
   suggestions,
@@ -466,8 +436,8 @@ export default function MentionInput({
     if (!fuse) {
       return;
     }
-    const searchStr = getFilterFromAction(state.action);
-    if (!state.action.trigger || !searchStr) {
+    const searchStr = state.action.search;
+    if (!searchStr) {
       dispatch({ type: 'updateSuggestions', payload: { suggestions } });
       return;
     }
@@ -479,11 +449,11 @@ export default function MentionInput({
         suggestions: result,
       },
     });
-  }, [fuse, state.action]);
+  }, [fuse, state.action.search]);
 
   useEffect(() => {
-    onSearchChanged(getFilterFromAction(state.action));
-  }, [state.action]);
+    onSearchChanged(state.action.search);
+  }, [state.action.search]);
 
   const addActiveToMention = useCallback(
     function addActiveToMention() {
@@ -521,52 +491,8 @@ export default function MentionInput({
     if (!editorDivRef.current) {
       return () => {};
     }
-    const prosemirrorState = createEditorState(
-      dispatch,
-      addActiveToMention,
-      (action: AutocompleteAction) => {
-        console.log('action', action);
-        if (action.kind === ActionKind.open) {
-          dispatch({ type: 'open' });
-          dispatch({
-            type: 'updateAction',
-            payload: {
-              range: action.range,
-              search: action.filter || '',
-              trigger: action.trigger,
-            },
-          });
-          return true;
-        }
 
-        if (action.kind === ActionKind.up) {
-          incActive(-1);
-          return true;
-        }
-        if (action.kind === ActionKind.down) {
-          incActive(1);
-          return true;
-        }
-        if (action.kind === ActionKind.filter) {
-          dispatch({
-            type: 'updateAction',
-            payload: { range: action.range, search: action.filter || '', trigger: action.trigger },
-          });
-          return true;
-        }
-        if (action.kind === ActionKind.close) {
-          dispatch({ type: 'close' });
-          return true;
-        }
-        if (action.kind === ActionKind.enter) {
-          addActiveToMention();
-          return true;
-        }
-        return true;
-      },
-      () => {},
-    );
-
+    const prosemirrorState = createEditorState(dispatch, addActiveToMention);
     const editorView = new EditorView(
       { mount: editorDivRef.current },
 
@@ -602,6 +528,27 @@ export default function MentionInput({
             }
           });
           setMentions(updatedMentions);
+
+          // input
+          const view = editorView;
+          view.state.doc.descendants((n, pos) => {
+            if (n.type.name === 'autocomplete') {
+              if (n.textContent) {
+                if (!state.isOpen) {
+                  dispatch({ type: 'open' });
+                }
+                dispatch({
+                  type: 'updateAction',
+                  payload: {
+                    range: { from: pos, to: pos + n.nodeSize },
+                    search: n.textContent,
+                  },
+                });
+              } else {
+                dispatch({ type: 'close' });
+              }
+            }
+          });
         },
         nodeViews: {
           mention(node, view, getPos) {
@@ -642,11 +589,7 @@ export default function MentionInput({
 
   useClickOutside(editorDivRef, () => {
     if (state.isOpen) {
-      const { current: view } = editorViewRef;
-      if (!view) {
-        return;
-      }
-      closeAutocomplete(view);
+      dispatch({ type: 'close' });
     }
   });
 
