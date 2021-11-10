@@ -198,7 +198,6 @@ function createEditorState(
               return true;
             }
             if (event.key === 'Enter' || event.key === 'Tab') {
-              dispatchA({ type: 'selectActiveSuggestion' });
               addActiveToMention();
               return true;
             }
