@@ -21,10 +21,24 @@ import {
   Typography,
   withStyles,
   Grow,
+  Theme,
 } from '@material-ui/core';
 import { keymap } from 'prosemirror-keymap';
 import { findParentNodeOfType } from 'prosemirror-utils';
+import { v4 } from 'uuid';
 import useClickOutside from './hooks/useClickOutside';
+
+const newUserIdPrefix = 'new';
+function generateNewUserId() {
+  return `${newUserIdPrefix}-${v4()}`;
+}
+
+// https://stackoverflow.com/a/46181
+function validateEmail(email: string) {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 
 function AvatarWithFallback({
   avatar,
@@ -45,9 +59,7 @@ function AvatarWithFallback({
       src={avatar}
       alt={`${label} avatar`}
     />
-  ) : (
-    <FaceOutlined style={{ width, height }} />
-  );
+  ) : null;
 }
 
 const Chip = withStyles({
@@ -57,18 +69,33 @@ const Chip = withStyles({
   label: { paddingLeft: 8, paddingRight: 8, fontSize: 14 },
 })(MuiChip);
 
+const useChipStyle = makeStyles<Theme, { backgroundColor: string }>(
+  createStyles({
+    root: {
+      border: ({ backgroundColor }) => `1px solid ${backgroundColor}`,
+    },
+  }),
+);
+
 function Mention({
   label,
   avatar,
+  mentionId,
   onDelete,
 }: {
   label: string;
   avatar: string;
+  mentionId: string;
   onDelete: () => void;
 }) {
+  const newMentionBg = validateEmail(label) ? '#60A5FA' : '#FCA5A5';
+  const classes = useChipStyle({
+    backgroundColor: mentionId.startsWith(newUserIdPrefix) ? newMentionBg : '#d7d7d7',
+  });
   return (
     <Chip
       icon={<AvatarWithFallback label={label} avatar={avatar} />}
+      className={classes.root}
       label={label}
       variant="outlined"
       onDelete={onDelete}
@@ -114,6 +141,7 @@ class MentionView {
         }}
         label={node.attrs.label}
         avatar={node.attrs.avatar}
+        mentionId={node.attrs.id}
       />,
       wrapper,
     );
@@ -121,7 +149,25 @@ class MentionView {
   }
 }
 
-function createEditorState(dispatchA: any, addActiveToMention: any) {
+const COMPLETION_KEY = [',', 'Tab', ' '];
+const ENABLED_KEYS_FOR_MENTION_NODE = ['Backspace', 'ArrowLeft', 'ArrowRight'];
+function getAutoCompleteState(view: EditorView): AutoCompleteState | undefined {
+  const { $from } = view.state.selection;
+  const { nodeBefore, pos } = $from;
+  if (nodeBefore?.text) {
+    return { str: nodeBefore.text, range: [$from.start(), pos] };
+  }
+}
+
+interface AutoCompleteState {
+  str: string;
+  range: [number, number];
+}
+function createEditorState(
+  dispatchA: any,
+  onSelect: (key: 'Enter' | 'Tab', autoCompleteState: AutoCompleteState | undefined) => void,
+  onComplete: (arg: AutoCompleteState | undefined) => void,
+) {
   const nodes: Record<string, NodeSpec> = {
     doc: {
       content: 'mention* autocomplete',
@@ -170,8 +216,6 @@ function createEditorState(dispatchA: any, addActiveToMention: any) {
     nodes,
   });
 
-  const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight'];
-
   return EditorState.create({
     doc: mentionInputSchema.node('doc', {}, mentionInputSchema.node('autocomplete')), // to create a paragraph at the start, nodeSize will be 4 which is used to determin whether the content is empty
     schema: mentionInputSchema,
@@ -181,21 +225,29 @@ function createEditorState(dispatchA: any, addActiveToMention: any) {
           handleKeyDown(view: EditorView, event: KeyboardEvent) {
             const { node } = view.state.selection as NodeSelection;
             if (node && isMention(node)) {
-              if (allowedKeys.find((k) => event.key === k)) {
+              if (ENABLED_KEYS_FOR_MENTION_NODE.find((k) => event.key === k)) {
                 return false;
               }
               return true;
             }
+
             if (event.key === 'Enter' || event.key === 'Tab') {
-              addActiveToMention();
+              onSelect(event.key, getAutoCompleteState(view));
               return true;
             }
+
             if (event.key === 'ArrowUp') {
               dispatchA({ type: 'incActive', payload: { inc: -1 } });
               return true;
             }
+
             if (event.key === 'ArrowDown') {
               dispatchA({ type: 'incActive', payload: { inc: 1 } });
+              return true;
+            }
+
+            if (COMPLETION_KEY.includes(event.key)) {
+              onComplete(getAutoCompleteState(view));
               return true;
             }
 
@@ -297,7 +349,7 @@ type Actions =
         search: string | null;
       };
     }
-  | { type: 'selectActiveSuggestion' }
+  | { type: 'resetActive' }
   | { type: 'updateSuggestions'; payload: { suggestions: PersonSuggestion[] } };
 
 function reducer(state: SuggestionState, action: Actions): SuggestionState {
@@ -330,11 +382,10 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
         ...state,
         active: action.payload.active,
       };
-    case 'selectActiveSuggestion': {
+    case 'resetActive': {
       return {
         ...state,
         active: 0,
-        isOpen: false,
       };
     }
     case 'updateSuggestions':
@@ -347,6 +398,7 @@ function reducer(state: SuggestionState, action: Actions): SuggestionState {
       throw new Error();
   }
 }
+
 const useStyles = makeStyles(() =>
   createStyles({
     editor: {
@@ -441,7 +493,6 @@ export default function MentionInput({
       dispatch({ type: 'updateSuggestions', payload: { suggestions } });
       return;
     }
-    console.log('searchStr', searchStr);
     const result = fuse.search(searchStr).map((v) => v.item);
     dispatch({
       type: 'updateSuggestions',
@@ -455,6 +506,19 @@ export default function MentionInput({
     onSearchChanged(state.action.search);
   }, [state.action.search]);
 
+  function clearText(view: EditorView, range: { from: number; to: number }) {
+    const { from, to } = range;
+    const { tr } = view.state;
+    tr.insertText('', from, to);
+    view.dispatch(tr);
+  }
+
+  function addMention(view: EditorView, mentionAttrState: MentionNodeAttrState, pos: number) {
+    // create mention component
+    const mention = view.state.schema.nodes.mention.create(mentionAttrState);
+    view.dispatch(view.state.tr.insert(pos, mention).scrollIntoView());
+  }
+
   const addActiveToMention = useCallback(
     function addActiveToMention() {
       const { current: view } = editorViewRef;
@@ -465,24 +529,26 @@ export default function MentionInput({
       if (!view || !current.action.range) {
         return;
       }
-      const { from, to } = current.action.range;
-      const { tr } = view.state;
-      tr.insertText('', from, to);
-      view.dispatch(tr);
 
-      dispatch({ type: 'selectActiveSuggestion' });
+      clearText(view, current.action.range);
+      dispatch({ type: 'resetActive' });
+      dispatch({ type: 'close' });
 
       const selectedSuggestion = current.suggestions[current.active];
       if (!selectedSuggestion) {
         return;
       }
-      // create mention component
-      const mention = view.state.schema.nodes.mention.create({
-        label: selectedSuggestion.name || selectedSuggestion.email,
-        avatar: selectedSuggestion.avatar || '',
-        id: selectedSuggestion.id,
-      } as any);
-      view.dispatch(view.state.tr.insert(from, mention).scrollIntoView());
+
+      const { from } = current.action.range;
+      addMention(
+        view,
+        {
+          label: selectedSuggestion.name || selectedSuggestion.email,
+          avatar: selectedSuggestion.avatar || '',
+          id: selectedSuggestion.id,
+        },
+        from,
+      );
     },
     [mentions],
   );
@@ -492,7 +558,42 @@ export default function MentionInput({
       return () => {};
     }
 
-    const prosemirrorState = createEditorState(dispatch, addActiveToMention);
+    function clearAndInsertMention(autoCompleteState: AutoCompleteState) {
+      if (!editorViewRef.current) {
+        return;
+      }
+      const {
+        str,
+        range: [from, to],
+      } = autoCompleteState;
+      clearText(editorViewRef.current, { from, to });
+      const label = str;
+      addMention(
+        editorViewRef.current,
+        { label, avatar: '', id: generateNewUserId() }, // TODO: hash id
+        editorViewRef.current.state.selection.$from.start() - 1,
+      );
+    }
+
+    const prosemirrorState = createEditorState(
+      dispatch,
+      (key, autocompleteState) => {
+        if (!stateRef.current || !autocompleteState) {
+          return;
+        }
+        if (stateRef.current.suggestions.length === 0) {
+          clearAndInsertMention(autocompleteState);
+          return;
+        }
+        addActiveToMention();
+      },
+      (autocompleteState) => {
+        if (!editorViewRef.current || !autocompleteState) {
+          return;
+        }
+        clearAndInsertMention(autocompleteState);
+      },
+    );
     const editorView = new EditorView(
       { mount: editorDivRef.current },
 
@@ -515,21 +616,24 @@ export default function MentionInput({
             return;
           }
           const updatedMentions: PersonSuggestion[] = [];
-          editorView.state.doc.content.forEach((node) => {
-            if (node.type.name === 'paragraph') {
-              node.content.forEach((n) => {
-                if (n.type.name === 'mention') {
-                  const mention = suggestions.find(({ id }) => id === n.attrs.id);
-                  if (mention) {
-                    updatedMentions.push(mention);
-                  }
-                }
-              });
+          editorView.state.doc.content.forEach((n) => {
+            if (n.type.name === 'mention') {
+              const mention = suggestions.find(({ id }) => id === n.attrs.id);
+              if (mention) {
+                updatedMentions.push(mention);
+              } else {
+                updatedMentions.push({
+                  email: n.attrs.label,
+                  name: 'new user',
+                  id: n.attrs.id,
+                  avatar: '',
+                });
+              }
             }
           });
           setMentions(updatedMentions);
 
-          // input
+          // input handling
           const view = editorView;
           view.state.doc.descendants((n, pos) => {
             if (n.type.name === 'autocomplete') {
@@ -639,7 +743,6 @@ export default function MentionInput({
                       justifyContent="center"
                       alignItems="center"
                       sx={{
-                        border: 1,
                         py: 0.5,
                         bgcolor: 'background.paper',
                         minWidth: 100,
