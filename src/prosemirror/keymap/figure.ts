@@ -118,6 +118,10 @@ const deleteInFigure: Command = function deleteInFigure(state, dispatch) {
 
 export function buildFigureKeymap(schema: Schema, bind: AddKey) {
   if (schema.nodes.figure) {
+    // TODO: These should be smaller functions for mod/shift
+    // TODO: Allow insertion of hard-break (return false)
+    bind('Shift-Enter', handleEnter);
+    bind('Mod-Enter', handleEnter);
     bind('Enter', handleEnter);
     bind('Backspace', backspaceAfterFigure, backspaceInFigure);
     bind('Delete', deleteBeforeFigure, deleteInFigure);
