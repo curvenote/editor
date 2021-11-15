@@ -70,6 +70,9 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
   });
 
   basicMarkCommands(schema, bind);
+  bind('Backspace', undoInputRule);
+  // Figure handles Enter, which should come before Mod-Enter Shift-Enter below:
+  buildFigureKeymap(schema, bind);
 
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
   if (schema.nodes.hard_break) {
@@ -83,8 +86,6 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     bind('Shift-Enter', cmd);
     if (mac) bind('Ctrl-Enter', cmd);
   }
-
-  bind('Backspace', undoInputRule);
 
   if (schema.nodes.list_item) {
     // TODO: Could improve this a bunch!!
@@ -105,8 +106,6 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     bind('Tab', cmdSink);
     bind('Mod-]', cmdSink);
   }
-
-  buildFigureKeymap(schema, bind);
 
   if (schema.nodes.paragraph) bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
 
