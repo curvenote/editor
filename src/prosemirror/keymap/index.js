@@ -68,18 +68,25 @@ function addAllCommands(stateKey, schema, bind) {
         if (mac)
             bind('Ctrl-Enter', cmd);
     }
-    buildFigureKeymap(schema, bind);
+    bind('Backspace', undoInputRule);
     if (schema.nodes.list_item) {
         bind('Enter', splitListItem(schema.nodes.list_item));
         bind('Mod-Shift-7', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.ordered_list)));
         bind('Mod-Shift-8', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.bullet_list)));
-        var cmdLift = liftListItem(schema.nodes.list_item);
+        var cmdLift_1 = liftListItem(schema.nodes.list_item);
         var cmdSink = sinkListItem(schema.nodes.list_item);
-        bind('Shift-Tab', cmdLift);
-        bind('Mod-[', cmdLift);
+        bind('Shift-Tab', cmdLift_1);
+        bind('Mod-[', cmdLift_1);
         bind('Tab', cmdSink);
         bind('Mod-]', cmdSink);
+        bind('Backspace', function (state, dispatch) {
+            if (state.selection.empty) {
+                return cmdLift_1(state, dispatch);
+            }
+            return false;
+        });
     }
+    buildFigureKeymap(schema, bind);
     if (schema.nodes.paragraph)
         bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
     if (schema.nodes.heading) {
@@ -98,7 +105,6 @@ function addAllCommands(stateKey, schema, bind) {
     }
     bind('Mod-Alt-c', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
     bind('Mod-Alt-m', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
-    bind('Backspace', undoInputRule);
 }
 export function buildBasicKeymap(schema) {
     var _a = createBind(), keys = _a.keys, bind = _a.bind;
