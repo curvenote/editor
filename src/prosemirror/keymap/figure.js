@@ -101,6 +101,8 @@ var deleteInFigure = function deleteInFigure(state, dispatch) {
 };
 export function buildFigureKeymap(schema, bind) {
     if (schema.nodes.figure) {
+        bind('Shift-Enter', handleEnter);
+        bind('Mod-Enter', handleEnter);
         bind('Enter', handleEnter);
         bind('Backspace', backspaceAfterFigure, backspaceInFigure);
         bind('Delete', deleteBeforeFigure, deleteInFigure);
