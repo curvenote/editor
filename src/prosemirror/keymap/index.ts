@@ -84,7 +84,7 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     if (mac) bind('Ctrl-Enter', cmd);
   }
 
-  buildFigureKeymap(schema, bind);
+  bind('Backspace', undoInputRule);
 
   if (schema.nodes.list_item) {
     // TODO: Could improve this a bunch!!
@@ -104,7 +104,15 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     bind('Mod-[', cmdLift);
     bind('Tab', cmdSink);
     bind('Mod-]', cmdSink);
+    bind('Backspace', (state, dispatch) => {
+      if (state.selection.empty) {
+        return cmdLift(state, dispatch);
+      }
+      return false;
+    });
   }
+
+  buildFigureKeymap(schema, bind);
 
   if (schema.nodes.paragraph) bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
 
@@ -133,8 +141,6 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     'Mod-Alt-m',
     (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
   );
-
-  bind('Backspace', undoInputRule);
 }
 
 export function buildBasicKeymap(schema: Schema): Keymap {
