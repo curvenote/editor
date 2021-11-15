@@ -53,6 +53,8 @@ function addAllCommands(stateKey, schema, bind) {
         return true;
     });
     basicMarkCommands(schema, bind);
+    bind('Backspace', undoInputRule);
+    buildFigureKeymap(schema, bind);
     if (schema.nodes.blockquote)
         bind('Ctrl->', wrapIn(schema.nodes.blockquote));
     if (schema.nodes.hard_break) {
@@ -68,7 +70,6 @@ function addAllCommands(stateKey, schema, bind) {
         if (mac)
             bind('Ctrl-Enter', cmd);
     }
-    bind('Backspace', undoInputRule);
     if (schema.nodes.list_item) {
         bind('Enter', splitListItem(schema.nodes.list_item));
         bind('Mod-Shift-7', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.ordered_list)));
@@ -80,7 +81,6 @@ function addAllCommands(stateKey, schema, bind) {
         bind('Tab', cmdSink);
         bind('Mod-]', cmdSink);
     }
-    buildFigureKeymap(schema, bind);
     if (schema.nodes.paragraph)
         bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
     if (schema.nodes.heading) {
