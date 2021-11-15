@@ -73,18 +73,12 @@ function addAllCommands(stateKey, schema, bind) {
         bind('Enter', splitListItem(schema.nodes.list_item));
         bind('Mod-Shift-7', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.ordered_list)));
         bind('Mod-Shift-8', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.bullet_list)));
-        var cmdLift_1 = liftListItem(schema.nodes.list_item);
+        var cmdLift = liftListItem(schema.nodes.list_item);
         var cmdSink = sinkListItem(schema.nodes.list_item);
-        bind('Shift-Tab', cmdLift_1);
-        bind('Mod-[', cmdLift_1);
+        bind('Shift-Tab', cmdLift);
+        bind('Mod-[', cmdLift);
         bind('Tab', cmdSink);
         bind('Mod-]', cmdSink);
-        bind('Backspace', function (state, dispatch) {
-            if (state.selection.empty) {
-                return cmdLift_1(state, dispatch);
-            }
-            return false;
-        });
     }
     buildFigureKeymap(schema, bind);
     if (schema.nodes.paragraph)
