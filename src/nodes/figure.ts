@@ -13,6 +13,7 @@ export type Attrs = NumberedNode & {
 const figure: MyNodeSpec<Attrs> = {
   group: NodeGroups.block,
   content: NodeGroups.insideFigure,
+  isolating: true,
   attrs: {
     ...getNumberedDefaultAttrs(),
     align: { default: 'center' },
