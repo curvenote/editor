@@ -104,12 +104,6 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     bind('Mod-[', cmdLift);
     bind('Tab', cmdSink);
     bind('Mod-]', cmdSink);
-    bind('Backspace', (state, dispatch) => {
-      if (state.selection.empty) {
-        return cmdLift(state, dispatch);
-      }
-      return false;
-    });
   }
 
   buildFigureKeymap(schema, bind);
