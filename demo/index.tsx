@@ -188,7 +188,7 @@ function Demo() {
           <div className="sidenotes">
             {comments.map(({ id, content, color }) => {
               return (
-                <Sidenote key={id} sidenote={id} base="anchor" top={Math.random() * 500}>
+                <Sidenote key={id} sidenote={id} base="anchor">
                   <div
                     style={{
                       width: 280,
