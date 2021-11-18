@@ -70,13 +70,12 @@ export function dispatchCommentAction(view: EditorView, action: CommentAction) {
 //   return decorations.find(selection.from, selection.to).length > 0;
 // }
 
-const reducer = (
-  state: CommentState,
-  tr: Transaction,
-  action?: CommentAction,
-): CommentState['decorations'] => {
+function reducer(state: CommentState, tr: Transaction): CommentState['decorations'] {
   const { decorations } = state;
+  // Always update the decorations with the mapping
   const nextDecorations = decorations.map(tr.mapping, tr.doc);
+  const action = tr.getMeta(key) as CommentAction | undefined;
+  if (!action) return nextDecorations;
   switch (action?.type) {
     case 'add': {
       const { from, to } = tr.selection;
@@ -104,9 +103,9 @@ const reducer = (
       return nextDecorations.remove(deco);
     }
     default:
-      return nextDecorations;
+      throw new Error(`Unhandled comment plugin action of type "${(action as any).type}"`);
   }
-};
+}
 
 const getCommentsPlugin = (): Plugin<CommentState> => {
   const commentsPlugin: Plugin<CommentState> = new Plugin({
@@ -114,9 +113,8 @@ const getCommentsPlugin = (): Plugin<CommentState> => {
     state: {
       init: () => ({ ...emptyCommentState } as CommentState),
       apply(tr, state: CommentState): CommentState {
-        const action = tr.getMeta(commentsPlugin) as CommentAction | undefined;
         const docId = opts.getDocId();
-        const decorations = reducer(state, tr, action);
+        const decorations = reducer(state, tr);
         // Check if we are in a comment!
         const around = decorations.find(tr.selection.from, tr.selection.to);
         if (around.length === 0) {
