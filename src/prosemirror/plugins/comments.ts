@@ -51,6 +51,8 @@ export function getCommentInfo(view: EditorView, id?: string): CommentInfo | nul
 interface CommentAddAction {
   type: 'add';
   commentId: string;
+  from?: number;
+  to?: number;
 }
 
 interface CommentRemoveAction {
@@ -78,7 +80,8 @@ function reducer(state: CommentState, tr: Transaction): CommentState['decoration
   if (!action) return nextDecorations;
   switch (action?.type) {
     case 'add': {
-      const { from, to } = tr.selection;
+      const from = action.from ?? tr.selection.from;
+      const to = action.to ?? tr.selection.to;
       let deco: Decoration;
       const params = {
         nodeName: 'span',
@@ -113,6 +116,8 @@ const getCommentsPlugin = (): Plugin<CommentState> => {
     state: {
       init: () => ({ ...emptyCommentState } as CommentState),
       apply(tr, state: CommentState): CommentState {
+        // TODO: This docId should come in through the plugin init, it won't ever change
+        //       Then I think that we can delete it from the connect
         const docId = opts.getDocId();
         const decorations = reducer(state, tr);
         // Check if we are in a comment!
@@ -121,10 +126,10 @@ const getCommentsPlugin = (): Plugin<CommentState> => {
           const hasSelectedComment = selectors.selectedSidenote(store.getState(), docId);
           if (hasSelectedComment) store.dispatch(actions.deselectSidenote(docId));
         } else {
-          const commentId = around[0].spec.comment;
-          const isSelected = selectors.isSidenoteSelected(store.getState(), docId, commentId);
+          const { id } = around[0].spec as DecorationSpec;
+          const isSelected = selectors.isSidenoteSelected(store.getState(), docId, id);
           if (!isSelected) {
-            store.dispatch(actions.selectSidenote(docId, commentId));
+            store.dispatch(actions.selectSidenote(docId, id));
           }
         }
         return {

@@ -126,14 +126,8 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
   }
 
   // Confluence and Google Docs comment shortcuts
-  bind(
-    'Mod-Alt-c',
-    (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
-  );
-  bind(
-    'Mod-Alt-m',
-    (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
-  );
+  bind('Mod-Alt-c', (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey));
+  bind('Mod-Alt-m', (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey));
 }
 
 export function buildBasicKeymap(schema: Schema): Keymap {

@@ -18,7 +18,7 @@ class SelectionControl {
           color="primary"
           aria-label="add comment"
           onClick={() => {
-            opts.addComment(stateKey, view.state);
+            opts.addComment(stateKey, view);
           }}
         >
           <CommentIcon />
