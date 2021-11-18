@@ -13,6 +13,34 @@ const emptyCommentState = {
 
 export const key = new PluginKey('comments');
 
+export interface CommentInfo {
+  id: string;
+  from: number;
+  to: number;
+  text: string;
+}
+
+interface DecorationSpec {
+  id: string;
+  inclusiveStart: boolean;
+  inclusiveEnd: boolean;
+}
+
+export function getCommentInfo(view: EditorView, id?: string): CommentInfo | null {
+  const plugin = key.get(view.state);
+  const { decorations } = (plugin?.getState(view.state) ?? {}) as { decorations: DecorationSet };
+  if (!decorations || !id) return null;
+  const deco = decorations.find(
+    undefined,
+    undefined,
+    (spec) => (spec as DecorationSpec).id === id,
+  )[0];
+  if (!deco) return null;
+  const { from, to } = deco;
+  const text = view.state.doc.textBetween(from, to);
+  return { id, from, to, text };
+}
+
 interface CommentAddAction {
   type: 'add';
   commentId: string;
@@ -48,11 +76,11 @@ const reducer = (
       let deco: Decoration;
       const params = {
         nodeName: 'span',
-        comment: action.commentId,
         class: 'anchor',
-      };
-      const spec = {
         comment: action.commentId,
+      };
+      const spec: DecorationSpec = {
+        id: action.commentId,
         inclusiveStart: false,
         inclusiveEnd: false,
       };
