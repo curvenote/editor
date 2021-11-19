@@ -85,9 +85,6 @@ const opts: Options = {
     console.log('Double click', stateId, viewId);
     return false;
   },
-  getDocId() {
-    return docId;
-  },
   theme,
   throttle: 0,
   citationPrompt: async () => [

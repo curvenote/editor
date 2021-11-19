@@ -3,6 +3,7 @@ import { EditorView } from 'prosemirror-view';
 import { useDispatch, useSelector } from 'react-redux';
 import throttle from 'lodash.throttle';
 import { EditorState, Transaction } from 'prosemirror-state';
+import { actions as sidenotes } from 'sidenotes';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
 import { Dispatch, State, actions, selectors } from '../store';
@@ -81,7 +82,7 @@ const Editor = (props: Props) => {
     editorView.current?.focus();
   }, [focused]);
 
-  return <div ref={editorEl} />;
+  return <div ref={editorEl} onClickCapture={sidenotes.disableNextDeselectSidenote} />;
 };
 
 Editor.defaultProps = {
