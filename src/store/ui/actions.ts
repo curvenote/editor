@@ -133,10 +133,21 @@ export function resetAllSidenotes(): AppThunk<void> {
   };
 }
 
-export function deselectSidenote(docId: string): SidenotesUIActions {
-  return {
-    type: UI_DESELECT_SIDENOTE,
-    payload: { docId },
+const toggle = { active: false };
+export function disableNextDeselectSidenote() {
+  toggle.active = true;
+}
+
+export function deselectSidenote(docId: string): AppThunk {
+  return (dispatch) => {
+    if (toggle.active) {
+      toggle.active = false;
+      return;
+    }
+    dispatch({
+      type: UI_DESELECT_SIDENOTE,
+      payload: { docId },
+    });
   };
 }
 
