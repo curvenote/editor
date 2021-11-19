@@ -30,20 +30,22 @@ export function connectSidenote(
 export function connectAnchor(
   docId?: string,
   sidenoteId?: string,
-  element?: HTMLElement,
+  element?: string | HTMLElement,
 ): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || sidenoteId == null || element == null) return;
-    const anchorId = uuid();
-    // eslint-disable-next-line no-param-reassign
-    (element as any).anchorId = anchorId;
+    const anchorId = typeof element === 'string' ? element : uuid();
+    if (typeof element !== 'string') {
+      // eslint-disable-next-line no-param-reassign
+      (element as any).anchorId = anchorId;
+    }
     dispatch({
       type: UI_CONNECT_ANCHOR,
       payload: {
         docId,
         sidenoteId,
         anchorId,
-        element,
+        element: typeof element === 'string' ? undefined : element,
       },
     } as SidenotesUIActions);
   };
@@ -85,11 +87,11 @@ export function selectSidenote(docId?: string, sidenoteId?: string): AppThunk<vo
   };
 }
 
-export function selectAnchor(docId?: string, anchor?: HTMLElement | null): AppThunk<void> {
+export function selectAnchor(docId?: string, anchor?: string | HTMLElement | null): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || anchor == null) return;
-    const { anchorId } = (anchor as any) ?? {};
-    if (anchorId == null) return;
+    const anchorId = typeof anchor === 'string' ? anchor : (anchor as any).anchorId;
+    if (!anchorId) return;
     dispatch({
       type: UI_SELECT_ANCHOR,
       payload: { docId, anchorId },
@@ -107,11 +109,14 @@ export function disconnectSidenote(docId?: string, sidenoteId?: string): AppThun
   };
 }
 
-export function disconnectAnchor(docId?: string, anchor?: HTMLElement | null): AppThunk<void> {
+export function disconnectAnchor(
+  docId?: string,
+  anchor?: string | HTMLElement | null,
+): AppThunk<void> {
   return (dispatch) => {
     if (docId == null || anchor == null) return;
-    const { anchorId } = (anchor as any) ?? {};
-    if (anchorId == null) return;
+    const anchorId = typeof anchor === 'string' ? anchor : (anchor as any).anchorId;
+    if (!anchorId) return;
     dispatch({
       type: UI_DISCONNECT_ANCHOR,
       payload: { docId, anchorId },

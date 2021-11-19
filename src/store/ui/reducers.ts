@@ -26,7 +26,7 @@ function getHeight(id: string) {
 }
 function getTopLeft(anchor?: Anchor) {
   // Recurse up the tree until you find the article (nested relative offsets)
-  let el = anchor?.element as HTMLElement | null;
+  let el: HTMLElement | null = anchor?.element ?? document.getElementById(anchor?.id ?? '');
   let top = 0;
   let left = 0;
   do {
