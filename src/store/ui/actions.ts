@@ -12,6 +12,7 @@ import {
   UI_RESET_ALL_SIDENOTES,
 } from './types';
 import { AppThunk, SidenotesUIActions } from '../types';
+import { selectedSidenote } from './selectors';
 
 export function connectSidenote(
   docId?: string,
@@ -126,10 +127,7 @@ export function disconnectAnchor(
 
 export function resetAllSidenotes(): AppThunk<void> {
   return (dispatch) => {
-    dispatch({
-      type: UI_RESET_ALL_SIDENOTES,
-      payload: {},
-    } as SidenotesUIActions);
+    dispatch({ type: UI_RESET_ALL_SIDENOTES, payload: {} } as SidenotesUIActions);
   };
 }
 
@@ -139,21 +137,18 @@ export function disableNextDeselectSidenote() {
 }
 
 export function deselectSidenote(docId: string): AppThunk {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     if (toggle.active) {
       toggle.active = false;
       return;
     }
-    dispatch({
-      type: UI_DESELECT_SIDENOTE,
-      payload: { docId },
-    });
+    const selected = selectedSidenote(getState(), docId);
+    if (selected) {
+      dispatch({ type: UI_DESELECT_SIDENOTE, payload: { docId } });
+    }
   };
 }
 
 export function repositionSidenotes(docId: string): SidenotesUIActions {
-  return {
-    type: UI_REPOSITION_SIDENOTES,
-    payload: { docId },
-  };
+  return { type: UI_REPOSITION_SIDENOTES, payload: { docId } };
 }
