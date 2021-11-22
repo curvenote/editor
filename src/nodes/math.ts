@@ -19,6 +19,10 @@ const math: MyNodeSpec<Attrs> = {
     },
   ],
 };
+export const mathNoDisplay: MyNodeSpec<Attrs> = {
+  ...math,
+  content: `${NodeGroups.text}*`,
+};
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write('$');

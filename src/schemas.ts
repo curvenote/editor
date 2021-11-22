@@ -26,6 +26,10 @@ export const mathNodes = {
   math: Nodes.Math.default,
   equation: Nodes.Equation.default,
 };
+export const mathNodesNoDisplay = {
+  math: Nodes.Math.mathNoDisplay,
+  equation: Nodes.Equation.equationNoDisplay,
+};
 
 export const reactiveDisplayNodes = {
   // Does NOT include variable definitions
@@ -96,6 +100,24 @@ export const presets = {
     },
     marks,
   },
+  comment: {
+    nodes: {
+      doc: basic.docComment,
+      paragraph: basic.paragraph,
+      heading: Nodes.Heading.default,
+      text: basic.text,
+      blockquote: basic.blockquote,
+      footnote: Nodes.Footnote.default,
+      code_block: Nodes.Code.default,
+      horizontal_rule: basic.horizontal_rule,
+      hard_break: basic.hard_break,
+      time: Nodes.Time.default,
+      ...listNodes,
+      ...citationNodes,
+      ...mathNodesNoDisplay,
+    },
+    marks,
+  },
 };
 
 export type PresetSchemas = keyof typeof presets;
@@ -108,6 +130,8 @@ export function getSchema(useSchema: UseSchema) {
         return new Schema(presets.full);
       case 'paragraph':
         return new Schema(presets.paragraph);
+      case 'comment':
+        return new Schema(presets.comment);
       default:
         throw new Error(`Schema '${useSchema}' is not defined.`);
     }
