@@ -98,12 +98,13 @@ export const presets = {
   },
   comment: {
     nodes: {
-      doc: basic.docParagraph,
+      doc: basic.commentDoc,
       paragraph: basic.paragraph,
       text: basic.text,
       hard_break: basic.hard_break,
       time: Nodes.Time.default,
       footnote: Nodes.Footnote.default,
+      ...listNodes,
       ...citationNodes,
       math: mathNodes.math,
       ...reactiveDisplayNodes,
