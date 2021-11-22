@@ -11,8 +11,8 @@ export const docParagraph: NodeSpec = {
   content: 'paragraph',
 };
 
-export const commentDoc: NodeSpec = {
-  content: `(paragraph | ${NodeGroups.block})+`, // browsers will completely collapse the node when it's empty `+` is necessary
+export const docComment: NodeSpec = {
+  content: `(${NodeGroups.block} | ${NodeGroups.heading})+`, // browsers will completely collapse the node when it's empty `+` is necessary
 };
 
 export const paragraph: NodeSpec = {
