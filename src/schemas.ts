@@ -100,6 +100,7 @@ export const presets = {
     nodes: {
       doc: basic.commentDoc,
       paragraph: basic.paragraph,
+      code_block: Nodes.Code.default,
       text: basic.text,
       hard_break: basic.hard_break,
       time: Nodes.Time.default,
