@@ -19,13 +19,13 @@ article {
       z-index: 1;
     }
   }
-  .anchor {
-    background-color: var(--sidenoteAnchorColor, #f8e4b1);
-  }
   .anchor:hover {
     background-color: var(--sidenoteAnchorColorHover, #f7cf69b6);
   }
   .anchor.selected {
     background-color: var(--sidenoteAnchorColorSelected, #f5c955);
+  }
+  .anchor {
+    background-color: var(--sidenoteAnchorColor, #f8e4b1);
   }
 }
