@@ -5,11 +5,6 @@ import { useDispatch } from 'react-redux';
 import { v4 } from 'uuid';
 import { actions, Editor } from '../src';
 
-interface CommentProps {
-  value: string;
-  onChange: (content: string) => void;
-}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -28,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function Comment({ value, onChange }: CommentProps) {
+export default function Comment() {
   const classes = useStyles();
   const [identity, updateIdentity] = React.useState<
     { stateKey: string; viewKey: string; docKey: string } | undefined
