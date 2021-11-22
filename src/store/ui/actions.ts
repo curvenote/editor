@@ -8,7 +8,7 @@ import {
   SelectionKinds,
 } from './types';
 import { AppThunk } from '../types';
-import { getEditorUI, getSelectedEditorAndViews } from './selectors';
+import { getEditorUI, getSelectedEditorAndViews, isInlineActionOpen } from './selectors';
 import { getEditorView } from '../state/selectors';
 import { getSelectionKind } from './utils';
 
@@ -49,9 +49,10 @@ export function setInlineSelection(selection: InlineSelection | null): UIActionT
 export function positionInlineActions(): AppThunk<void> {
   return (dispatch, getState) => {
     const { viewId, view, state } = getSelectedEditorAndViews(getState());
+    const currentSelectionOpen = isInlineActionOpen(getState());
     const selection = getSelectionKind(state);
     if (viewId == null || state == null || view == null || !selection) {
-      dispatch(setInlineSelection(null));
+      if (currentSelectionOpen) dispatch(setInlineSelection(null));
       return;
     }
     const placement = {
