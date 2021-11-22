@@ -134,6 +134,7 @@ When navigating between lines, default to outside of the codemark if there is a 
 - `` `code`|██ → `code`| `` (delete selected, remain outside)
 - `` `c|ode` → `|ode` `` (delete, remain inside)
 - `` `|██de` → `|de` `` (delete selected, remain inside)
+- `` `code`$| → `code`|$ `` (delete start of line, remain outside)
 - TODO: `` `|████` → | `` (delete full mark, next insertion normal)
 
 ### Delete:

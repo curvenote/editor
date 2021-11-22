@@ -218,15 +218,26 @@ export function onBackspace(
   const { selection, doc } = view.state;
   if (selection.empty && selection.$from.parentOffset === 0) {
     // No override at the start of the line!
-    return false;
+    return stepOutsideNextTrAndPass(view, plugin);
   }
   const inCode = !!markType.isInSet(selection.$from.marks());
-  const nextCode = !!markType.isInSet(
-    doc.resolve(selection.empty ? selection.from - 1 : selection.from + 1).marks() ?? [],
-  );
-  const plusCode = !!markType.isInSet(
-    doc.resolve(selection.empty ? selection.from + 1 : selection.to + 1).marks() ?? [],
-  );
+  // Index can be out of bounds in some schemas
+  let nextCode;
+  let plusCode;
+  try {
+    nextCode = !!markType.isInSet(
+      doc.resolve(selection.empty ? selection.from - 1 : selection.from + 1).marks() ?? [],
+    );
+  } catch (error) {
+    nextCode = false;
+  }
+  try {
+    plusCode = !!markType.isInSet(
+      doc.resolve(selection.empty ? selection.from + 1 : selection.to + 1).marks() ?? [],
+    );
+  } catch (error) {
+    plusCode = false;
+  }
   if (inCode === nextCode && (inCode === plusCode || !plusCode)) return false;
   let { tr } = view.state;
   if (selection.empty) {
