@@ -65,6 +65,7 @@ interface CommentAddAction {
   commentId: string;
   from?: number;
   to?: number;
+  selected?: boolean;
 }
 
 interface CommentRemoveAction {
@@ -172,9 +173,14 @@ function reducer(tr: Transaction, state: CommentState): CommentState {
     case 'add': {
       const from = action.from ?? tr.selection.from;
       const to = action.to ?? tr.selection.to;
-      const deco = createDecoration(action.commentId, selectedComment, from, to, null);
+      const nextSelected = action.selected ? action.commentId : selectedComment;
+      const deco = createDecoration(action.commentId, nextSelected, from, to, null);
       store.dispatch(actions.connectAnchor(docId, action.commentId, deco.spec.domId));
-      return { docId, selectedComment, decorations: nextDecorations.add(tr.doc, [deco]) };
+      return {
+        docId,
+        selectedComment: nextSelected,
+        decorations: nextDecorations.add(tr.doc, [deco]),
+      };
     }
     case 'remove': {
       const { commentId } = action;
