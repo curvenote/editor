@@ -19,7 +19,7 @@ import {
   LinkResult,
 } from '../src';
 import rootReducer from './reducers';
-import middleware from './middleware';
+import createMiddleware from './middleware';
 import 'codemirror/lib/codemirror.css';
 import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
@@ -35,12 +35,12 @@ declare global {
   }
 }
 
-const store: Store = createStore(rootReducer, applyMiddleware(...middleware));
-const theme = createTheme({});
-
 const stateKey = 'myEditor';
 const viewId1 = 'view1';
 const docId = 'docId';
+
+const store: Store = createStore(rootReducer, applyMiddleware(...createMiddleware(viewId1)));
+const theme = createTheme({});
 
 interface Comment {
   id: string;

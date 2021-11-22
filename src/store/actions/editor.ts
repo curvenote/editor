@@ -303,6 +303,18 @@ export function removeComment(
   };
 }
 
+export function selectComment(
+  viewIn: string | EditorView | null,
+  commentId: string,
+): AppThunk<boolean> {
+  return (dispatch, getState) => {
+    const view = typeof viewIn === 'string' ? getEditorView(getState(), viewIn).view : viewIn;
+    if (!view) return false;
+    dispatchCommentAction(view, { type: 'select', commentId });
+    return true;
+  };
+}
+
 export function toggleCitationBrackets(): AppThunk<boolean> {
   return (dispatch, getState) => {
     const editor = getSelectedEditorAndViews(getState());
