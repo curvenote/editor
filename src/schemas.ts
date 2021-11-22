@@ -96,6 +96,20 @@ export const presets = {
     },
     marks,
   },
+  comment: {
+    nodes: {
+      doc: basic.docParagraph,
+      paragraph: basic.paragraph,
+      text: basic.text,
+      hard_break: basic.hard_break,
+      time: Nodes.Time.default,
+      footnote: Nodes.Footnote.default,
+      ...citationNodes,
+      math: mathNodes.math,
+      ...reactiveDisplayNodes,
+    },
+    marks,
+  },
 };
 
 export type PresetSchemas = keyof typeof presets;
@@ -108,6 +122,8 @@ export function getSchema(useSchema: UseSchema) {
         return new Schema(presets.full);
       case 'paragraph':
         return new Schema(presets.paragraph);
+      case 'comment':
+        return new Schema(presets.comment);
       default:
         throw new Error(`Schema '${useSchema}' is not defined.`);
     }
