@@ -1,6 +1,7 @@
 import OrderedMap from 'orderedmap';
 import { NodeSpec } from 'prosemirror-model';
 import { addListNodes } from 'prosemirror-schema-list';
+import { nodeNames } from '../types';
 import { NodeGroups } from './types';
 
 export const doc: NodeSpec = {
@@ -12,7 +13,7 @@ export const docParagraph: NodeSpec = {
 };
 
 export const docComment: NodeSpec = {
-  content: `(${NodeGroups.block} | ${NodeGroups.heading})+`, // browsers will completely collapse the node when it's empty `+` is necessary
+  content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${nodeNames.equation})+`, // browsers will completely collapse the node when it's empty `+` is necessary
 };
 
 export const paragraph: NodeSpec = {

@@ -26,6 +26,10 @@ export const mathNodes = {
   math: Nodes.Math.default,
   equation: Nodes.Equation.default,
 };
+export const mathNodesNoDisplay = {
+  math: Nodes.Math.mathNoDisplay,
+  equation: Nodes.Equation.equationNoDisplay,
+};
 
 export const reactiveDisplayNodes = {
   // Does NOT include variable definitions
@@ -110,7 +114,7 @@ export const presets = {
       time: Nodes.Time.default,
       ...listNodes,
       ...citationNodes,
-      ...mathNodes,
+      ...mathNodesNoDisplay,
     },
     marks,
   },

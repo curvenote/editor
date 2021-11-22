@@ -36,6 +36,11 @@ const equation: MyNodeSpec<Attrs> = {
   ],
 };
 
+export const equationNoDisplay: MyNodeSpec<Attrs> = {
+  ...equation,
+  content: `${NodeGroups.text}*`,
+};
+
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { numbered, id } = node.attrs;
   state.ensureNewLine();
