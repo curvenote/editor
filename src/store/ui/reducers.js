@@ -9,11 +9,10 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW, INLINE_SELECTION, } from './types';
+import { SELECT_EDITOR_VIEW, INLINE_SELECTION } from './types';
 export var initialState = {
     stateId: null,
     viewId: null,
-    focused: false,
     selection: null,
 };
 var uiReducer = function (state, action) {
@@ -25,13 +24,6 @@ var uiReducer = function (state, action) {
                 return state;
             }
             return __assign(__assign({}, state), { stateId: stateId, viewId: viewId });
-        }
-        case FOCUS_EDITOR_VIEW: {
-            var _b = action.payload, stateId = _b.stateId, viewId = _b.viewId, focused = _b.focused;
-            if (state.stateId === stateId && state.viewId === viewId && state.focused === focused) {
-                return state;
-            }
-            return __assign(__assign({}, state), { stateId: stateId, viewId: viewId, focused: focused && viewId != null && stateId != null });
         }
         case INLINE_SELECTION: {
             return __assign(__assign({}, state), { selection: action.payload });

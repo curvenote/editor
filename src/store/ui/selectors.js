@@ -9,7 +9,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { opts } from '../../connect';
 import { getEditorState, getEditorView } from '../state/selectors';
 export function getEditorUI(state) {
     return state.editor.ui;
@@ -45,11 +44,8 @@ export function getSelectedViewId(state) {
     var _a = getEditorUI(state), stateId = _a.stateId, viewId = _a.viewId;
     return { stateId: stateId, viewId: viewId };
 }
-export function isEditorViewFocused(state, stateKey, viewId) {
-    if (stateKey == null)
-        return null;
-    var stateId = opts.transformKeyToId(stateKey);
-    var ui = state.editor.ui;
-    return ui.stateId === stateId && ui.viewId === viewId && ui.focused;
+export function isEditorViewFocused(state, viewId) {
+    var _a, _b;
+    return (_b = (_a = getEditorView(state, viewId).view) === null || _a === void 0 ? void 0 : _a.hasFocus()) !== null && _b !== void 0 ? _b : false;
 }
 //# sourceMappingURL=selectors.js.map

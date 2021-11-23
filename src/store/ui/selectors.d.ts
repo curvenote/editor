@@ -55,4 +55,4 @@ export declare function getSelectedViewId(state: State): {
     stateId: string | null;
     viewId: string | null;
 };
-export declare function isEditorViewFocused(state: State, stateKey: any | null, viewId: string): boolean | null;
+export declare function isEditorViewFocused(state: State, viewId: string | null): boolean;

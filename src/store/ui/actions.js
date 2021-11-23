@@ -9,7 +9,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { SELECT_EDITOR_VIEW, FOCUS_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds, } from './types';
+import { SELECT_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds, } from './types';
 import { getEditorUI, getSelectedEditorAndViews } from './selectors';
 import { getEditorView } from '../state/selectors';
 import { getSelectionKind } from './utils';
@@ -24,11 +24,15 @@ export function selectEditorView(viewId) {
 }
 export function focusEditorView(viewId, focused) {
     return function (dispatch, getState) {
-        var stateId = getEditorView(getState(), viewId).stateId;
-        dispatch({
-            type: FOCUS_EDITOR_VIEW,
-            payload: { stateId: stateId, viewId: viewId, focused: focused },
-        });
+        var view = getEditorView(getState(), viewId).view;
+        if (!view)
+            return;
+        if (focused) {
+            view.focus();
+        }
+        else {
+            view.dom.blur();
+        }
     };
 }
 export function focusSelectedEditorView(focused) {
