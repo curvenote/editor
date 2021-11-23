@@ -8,13 +8,13 @@ import {
   UI_CONNECT_ANCHOR,
   UI_SELECT_ANCHOR,
   DocState,
-  Anchor,
   UI_DISCONNECT_ANCHOR,
   UI_DESELECT_SIDENOTE,
   UI_CONNECT_ANCHOR_BASE,
   UI_REPOSITION_SIDENOTES,
   UI_RESET_ALL_SIDENOTES,
   UI_DISCONNECT_SIDENOTE,
+  Sidenote,
 } from './types';
 
 export const initialState: UIState = {
@@ -24,9 +24,23 @@ export const initialState: UIState = {
 function getHeight(id: string) {
   return document.getElementById(id)?.offsetHeight ?? 0;
 }
-function getTopLeft(anchor?: Anchor) {
+
+function getAnchorElement(state: DocState, sidenote: Sidenote): HTMLElement | null {
+  // Iterate through all of the inline, and then work towards base anchors
+  // This should return fast, usually the first element is defined!
+  // If an ID is removed from the DOM, this falls back to any other anchors
+  const allAnchors = [...(sidenote.inlineAnchors ?? []), ...(sidenote.baseAnchors ?? [])];
+  for (let index = 0; index < allAnchors.length; index += 1) {
+    const anchor = state.anchors[allAnchors[index]];
+    const element = anchor?.element ?? document.getElementById(anchor?.id ?? '');
+    if (element) return element;
+  }
+  return null;
+}
+
+function getTopLeft(anchor: HTMLElement | null) {
   // Recurse up the tree until you find the article (nested relative offsets)
-  let el: HTMLElement | null = anchor?.element ?? document.getElementById(anchor?.id ?? '');
+  let el: HTMLElement | null = anchor;
   let top = 0;
   let left = 0;
   do {
@@ -43,9 +57,9 @@ function placeSidenotes(state: DocState, actionType: string): DocState {
   type Loc = [string, { top: number; left: number; height: number }];
   let findMe: Loc | undefined;
   const sorted = Object.entries(state.sidenotes)
-    .map(([id, cmt]) => {
-      const anchor = state.anchors[cmt.inlineAnchors?.[0]] ?? state.anchors[cmt.baseAnchors?.[0]];
-      const loc: Loc = [id, { ...getTopLeft(anchor), height: getHeight(id) }];
+    .map(([id, sidenote]) => {
+      const element = getAnchorElement(state, sidenote);
+      const loc: Loc = [id, { ...getTopLeft(element), height: getHeight(id) }];
       if (id === state.selectedSidenote) {
         findMe = loc;
       }
