@@ -23,8 +23,8 @@ export type Sidenote = {
 
 export type Anchor = {
   id: string;
-  element: HTMLElement;
   sidenote: typeof ANCHOR_BASE | string;
+  element?: HTMLElement;
 };
 
 export type DocState = {
@@ -66,7 +66,7 @@ export interface ConnectAnchorAction {
     docId: string;
     sidenoteId: string;
     anchorId: string;
-    element: HTMLElement;
+    element?: HTMLElement;
   };
 }
 

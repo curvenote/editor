@@ -1,4 +1,5 @@
 # sidenotes
+
 [![sidenotes on npm](https://img.shields.io/npm/v/sidenotes.svg)](https://www.npmjs.com/package/sidenotes)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/sidenotes/main/LICENSE)
 ![CI](https://github.com/curvenote/sidenotes/workflows/CI/badge.svg)
@@ -7,29 +8,34 @@
 **Position floating sidenotes/comments next to a document with inline references.**
 
 ## Goals
-* Place notes/comments to the side of one or more documents with inline references.
-* When an inline reference is clicked, animate the relevant sidenote to be as close as possible and move non-relevant sidenotes out of the way without overlapping.
-* Do not provide UI or impose any styling, **only placement**.
+
+- Place notes/comments to the side of one or more documents with inline references.
+- When an inline reference is clicked, animate the relevant sidenote to be as close as possible and move non-relevant sidenotes out of the way without overlapping.
+- Do not provide UI or impose any styling, **only placement**.
 
 ## Use cases
 
-* Comment streams next to a document. This is showing [Curvenote](https://curvenote.com), which is a scientific writing platform that connects to Jupyter.
-[![Comments Using Sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/comments.gif)](https://curvenote.com)
+- Comment streams next to a document. This is showing [Curvenote](https://curvenote.com), which is a scientific writing platform that connects to Jupyter.
+  [![Comments Using Sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/comments.gif)](https://curvenote.com)
 
 ## Choices
-* Use React, Redux & Typescript
-* Used Redux rather than a hook approach (open to discussion if people are passionate!)
+
+- Use React, Redux & Typescript
+- Used Redux rather than a hook approach (open to discussion if people are passionate!)
 
 ## Constraints
-* Multiple documents on the page, currently based on the wrapping `<article>` ID
-* Multiple inline references per sidenote, wrapped in `<InlineAnchor>`; `InlineAnchor` is a `span`
-* Have fallback placements to a `<AnchorBase>`; `AnchorBase` is a `div`
-* Provide actions to attach non-react bases, anchors or reposition sidenotes
-* All positioning is based on the article, and works with `relative`, `fixed` or `absolute` positioning.
+
+- Multiple documents on the page, currently based on the wrapping `<article>` ID
+- Multiple inline references per sidenote, wrapped in `<InlineAnchor>`; `InlineAnchor` is a `span`
+- Have fallback placements to a `<AnchorBase>`; `AnchorBase` is a `div`
+- Provide actions to attach non-react bases, anchors or reposition sidenotes
+- All positioning is based on the article, and works with `relative`, `fixed` or `absolute` positioning.
 
 ## Demo
+
 The demo is pretty basic, and not nearly as pretty as the gif above, just blue, green and red divs floating around.
 See [index.tsx](/demo/index.tsx) for full the code/setup.
+
 ```
 yarn install
 yarn start
@@ -38,6 +44,7 @@ yarn start
 ![sidenotes](https://github.com/curvenote/sidenotes/raw/main/images/sidenotes.gif)
 
 ## Getting Started:
+
 ```
 yarn add sidenotes
 ```
@@ -45,14 +52,12 @@ yarn add sidenotes
 ## React Setup:
 
 ```html
-<article id={docId} onClick={deselect}>
-  <AnchorBase anchor={baseId}>
-    Content with <InlineAnchor sidenote={sidenoteId}>inline reference</InlineAnchor>
+<article id="{docId}" onClick="{deselect}">
+  <AnchorBase anchor="{baseId}">
+    Content with <InlineAnchor sidenote="{sidenoteId}">inline reference</InlineAnchor>
   </AnchorBase>
   <div className="sidenotes">
-    <Sidenote sidenote={sidenoteId} base={baseId}>
-      Your custom UI, e.g. a comment
-    </Sidenote>
+    <Sidenote sidenote="{sidenoteId}" base="{baseId}"> Your custom UI, e.g. a comment </Sidenote>
   </div>
 </article>
 ```
@@ -61,6 +66,29 @@ The `sidenotes` class is the only CSS that is recommended. You can import it dir
 
 ```javascript
 import 'sidenotes/dist/sidenotes.css';
+```
+
+## Simple Javascript
+
+You can also use sidenotes from vanilla javascript, this is done by first connecting the ID.
+
+```tsx
+// First dispatch the action to connect to any ID in the dom
+store.dispatch(actions.connectAnchor(docId, sidenoteId, anchorId));
+
+// Then setup your handlers to select that anchor on click
+<span
+  id={anchorId}
+  onClickCapture={(event) => {
+    event.stopPropagation();
+    store.dispatch(actions.selectAnchor(docId, anchorId));
+  }}
+>
+  Select a Sidenote with JavaScript! 🚀
+</span>;
+
+// To clean up later, disconnect the anchor
+store.dispatch(actions.disconnectAnchor(docId, anchorId));
 ```
 
 ## Redux state
@@ -84,6 +112,7 @@ sidenotes.setup(store as sidenotes.Store, { padding: 10 })
 ```
 
 ## Redux State
+
 The `sidenotes.ui` state has the following structure:
 
 ```
@@ -100,6 +129,11 @@ sidenotes:
         selectedNote: string
 ```
 
+## Actions
+
+It is common to put a click handler on the body (or similar) to deselect any sidenotes. This can be difficult to stop in some cases, but can be anticipated with a `onClickCapture` that fires the
+`disableNextDeselectSidenote` action. This intercepts the redux action and stops it from happening for one time.
 
 ## Roadmap
-* Have a better mobile solution that places notes at the bottom.
+
+- Have a better mobile solution that places notes at the bottom.
