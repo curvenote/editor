@@ -38,6 +38,7 @@ export function getSelectedViewId(state: State) {
   const { stateId, viewId } = getEditorUI(state);
   return { stateId, viewId };
 }
-export function isEditorViewFocused(state: State, viewId: string): boolean {
+
+export function isEditorViewFocused(state: State, viewId: string | null): boolean {
   return getEditorView(state, viewId).view?.hasFocus() ?? false;
 }
