@@ -19,4 +19,6 @@ span:focus .fake-cursor {
   border-left-style: solid;
   animation: blink 1s;
   animation-iteration-count: infinite;
+  position: relative;
+  z-index: 1;
 }
