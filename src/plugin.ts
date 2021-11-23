@@ -8,6 +8,7 @@ import {
   onArrowRight,
   onBackspace,
   onBacktick,
+  onDelete,
   stepOutside,
   stepOutsideNextTrAndPass,
 } from './actions';
@@ -33,7 +34,7 @@ export function getDecorationPlugin(opts?: Options) {
       const prev = plugin.getState(oldState) as CodemarkState;
       const meta = trs[0]?.getMeta(plugin) as CursorMetaTr | null;
       if (prev?.next || meta?.action === 'click') {
-        return stepOutside(newState.tr, getMarkType(newState, opts));
+        return stepOutside(newState, getMarkType(newState, opts));
       }
       return null;
     },
@@ -87,6 +88,8 @@ export function getDecorationPlugin(opts?: Options) {
             return onArrowLeft(view, plugin, event, getMarkType(view, opts));
           case 'Backspace':
             return onBackspace(view, plugin, event, getMarkType(view, opts));
+          case 'Delete':
+            return onDelete(view, plugin, event, getMarkType(view, opts));
           case 'ArrowUp':
           case 'ArrowDown':
           case 'Home':

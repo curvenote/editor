@@ -128,19 +128,11 @@ Note that for arrow modifiers, there is a bit of extra care that needs to happen
 
 When navigating between lines, default to outside of the codemark if there is a choice.
 
-### Backspace:
+### Backspace & Delete:
 
-- `` `code`x| → `code`| `` (delete, remain outside)
-- `` `code`|██ → `code`| `` (delete selected, remain outside)
-- `` `c|ode` → `|ode` `` (delete, remain inside)
-- `` `|██de` → `|de` `` (delete selected, remain inside)
-- `` `code`$| → `code`|$ `` (delete into line, remain outside)
-- `` ^███`code` --> ^|`code` `` (delete to start of line, remain outside)
-- TODO: `` `|████` → | `` (delete full mark, next insertion normal)
-
-### Delete:
-
-- TODO!
+- `` `x|` → | `` (delete text, next insertion normal)
+- `` `|████` → | `` (delete full mark, next insertion normal)
+- `` `|███`█ → | `` (delete full mark, next insertion normal)
 
 ### Clicking
 

@@ -1,5 +1,5 @@
 import { MarkType } from 'prosemirror-model';
-import { Plugin, TextSelection, Transaction } from 'prosemirror-state';
+import { EditorState, Plugin, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { CodemarkState, CursorMetaTr } from './types';
 import { MAX_MATCH } from './utils';
@@ -193,65 +193,55 @@ export function onBackspace(
 ): boolean {
   if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) return false;
   const { selection, doc } = view.state;
-  if (selection.empty && selection.$from.parentOffset === 0) {
-    // No override at the start of the line!
+  const from = doc.resolve(selection.from - 1);
+  const fromCode = !!markType.isInSet(from.marks());
+  const startOfLine = from.parentOffset === 0;
+  const toCode = !!markType.isInSet(doc.resolve(selection.to + 1).marks());
+  if ((!fromCode || startOfLine) && !toCode) {
+    // `x|`    → |
+    // `|████` → |
+    // `|███`█ → |
     return stepOutsideNextTrAndPass(view, plugin);
   }
-  const inCode = !!markType.isInSet(selection.$from.marks());
-  // Index can be out of bounds in some schemas
-  let nextCode;
-  let plusCode;
-  try {
-    nextCode = !!markType.isInSet(
-      doc.resolve(selection.empty ? selection.from - 1 : selection.from + 1).marks() ?? [],
-    );
-  } catch (error) {
-    nextCode = false;
-  }
-  try {
-    plusCode = !!markType.isInSet(
-      doc.resolve(selection.empty ? selection.from + 1 : selection.to + 1).marks() ?? [],
-    );
-  } catch (error) {
-    plusCode = false;
-  }
-  if (inCode === nextCode && (inCode === plusCode || !plusCode)) return false;
-  let { tr } = view.state;
-  if (selection.empty) {
-    tr = tr.delete(selection.from - 1, selection.from);
-  } else {
-    tr = tr.delete(selection.from, selection.to);
-  }
-  if ((nextCode && selection.empty) || (inCode && !selection.empty)) {
-    // `code`_|_ --> `code`|     nextCode && selection.empty
-    // `code`███ --> `code`|     inCode && !selection.empty
-    view.dispatch(tr.removeStoredMark(markType));
-    return true;
-  }
-  if (tr.selection.$from.parentOffset === 0) {
-    // ^███`code` --> ^|`code`
-    view.dispatch(tr.removeStoredMark(markType));
-    return true;
-  }
-  if (inCode || nextCode) {
-    // `c|ode` --> `|ode`
-    // `██de` --> `|de`
-    view.dispatch(tr.addStoredMark(markType.create()));
+  // Firefox has difficulty with the decorations on -1.
+  const pluginState = plugin.getState(view.state) as CodemarkState;
+  if (selection.empty && pluginState?.side === -1) {
+    const tr = view.state.tr.delete(selection.from - 1, selection.from);
+    view.dispatch(tr);
     return true;
   }
   return false;
 }
 
-export function stepOutside(tr: Transaction, markType: MarkType): Transaction | null {
-  if (!tr) return null;
-  const { selection, doc } = tr;
+export function onDelete(
+  view: EditorView,
+  plugin: Plugin,
+  event: KeyboardEvent,
+  markType: MarkType,
+): boolean {
+  if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) return false;
+  const { selection, doc } = view.state;
+  const fromCode = !!markType.isInSet(selection.$from.marks());
+  const startOfLine = selection.$from.parentOffset === 0;
+  const toCode = !!markType.isInSet(doc.resolve(selection.to + 2).marks());
+  if ((!fromCode || startOfLine) && !toCode) {
+    return stepOutsideNextTrAndPass(view, plugin);
+  }
+  return false;
+}
+
+export function stepOutside(state: EditorState, markType: MarkType): Transaction | null {
+  if (!state) return null;
+  const { selection, doc } = state;
   if (!selection.empty) return null;
+  const stored = !!markType.isInSet(state.storedMarks ?? []);
   const inCode = !!markType.isInSet(selection.$from.marks());
   const nextCode = !!markType.isInSet(doc.resolve(selection.from + 1).marks() ?? []);
   const startOfLine = selection.$from.parentOffset === 0;
   // `code|` --> `code`|
   // `|code` --> |`code`
   // ^`|code` --> ^|`code`
-  if (inCode !== nextCode || (inCode && startOfLine)) return tr.removeStoredMark(markType);
+  if (inCode !== nextCode || (!inCode && stored !== inCode) || (inCode && startOfLine))
+    return state.tr.removeStoredMark(markType);
   return null;
 }
