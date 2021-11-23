@@ -12,7 +12,8 @@
 .no-cursor {
   caret-color: transparent;
 }
-.fake-cursor {
+div:focus .fake-cursor,
+span:focus .fake-cursor {
   margin-right: -1px;
   border-left-width: 1px;
   border-left-style: solid;

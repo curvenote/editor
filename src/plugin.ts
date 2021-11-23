@@ -1,7 +1,7 @@
 import { Plugin, PluginSpec } from 'prosemirror-state';
-import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
+import { Decoration, DecorationSet } from 'prosemirror-view';
 import { CodemarkState, CursorMetaTr, Options } from './types';
-import { pluginKey } from './utils';
+import { getMarkType, pluginKey } from './utils';
 import { createInputRule } from './inputRules';
 import {
   onArrowLeft,
@@ -18,10 +18,6 @@ function toDom(): Node {
   return span;
 }
 
-function getMarkType(view: EditorView, opts?: Options) {
-  return opts?.markType ?? view.state.schema.marks.code;
-}
-
 export function getDecorationPlugin(opts?: Options) {
   const plugin: Plugin<CodemarkState> = new Plugin({
     key: pluginKey,
@@ -29,39 +25,58 @@ export function getDecorationPlugin(opts?: Options) {
       return {
         update: (view) => {
           const state = plugin.getState(view.state) as CodemarkState;
-          view.dom.classList[state?.decorations ? 'add' : 'remove']('no-cursor');
-          if (state?.check) stepOutside(view, plugin, getMarkType(view, opts));
+          view.dom.classList[state?.active ? 'add' : 'remove']('no-cursor');
         },
       };
     },
+    appendTransaction: (trs, oldState, newState) => {
+      const prev = plugin.getState(oldState) as CodemarkState;
+      const meta = trs[0]?.getMeta(plugin) as CursorMetaTr | null;
+      if (prev?.next || meta?.action === 'click') {
+        return stepOutside(newState.tr, getMarkType(newState, opts));
+      }
+      return null;
+    },
     state: {
       init: () => null,
-      apply(tr, value, oldState): CodemarkState | null {
+      apply(tr, value, oldState, state): CodemarkState | null {
         const meta = tr.getMeta(plugin) as CursorMetaTr | null;
-        const prev = plugin.getState(oldState) as CodemarkState;
-        // If the previous action told us to check, trigger the view to render
-        if (prev?.next) return { check: true };
-        switch (meta?.action) {
-          case 'add': {
-            const deco = Decoration.widget(meta.pos, toDom, { side: meta.side ?? 0 });
-            return {
-              decorations: DecorationSet.create(tr.doc, [deco]),
-              side: meta.side,
-            };
-          }
-          case 'next':
-            // The transaction puts a flag that we will check next
-            // On the next transaction this turns into { check: true }
-            // Used on complex cursor movements that are not overridden
-            return { next: true };
-          case 'remove':
-          default:
-            return null;
+        if (meta?.action === 'next') return { next: true };
+
+        const markType = getMarkType(state, opts);
+        const nextMark = markType.isInSet(
+          state.storedMarks ?? state.doc.resolve(tr.selection.from).marks(),
+        );
+        const inCode = markType.isInSet(state.doc.resolve(tr.selection.from).marks() ?? []);
+        const nextCode = markType.isInSet(state.doc.resolve(tr.selection.from + 1).marks() ?? []);
+        const startOfLine = tr.selection.$from.parentOffset === 0;
+        if (!tr.selection.empty) return null;
+        if (!nextMark && nextCode && (!inCode || startOfLine)) {
+          // |`code`
+          return { active: true, side: -1 };
         }
+        if (nextMark && (!inCode || startOfLine)) {
+          // `|code`
+          return { active: true, side: 0 };
+        }
+        if (!nextMark && inCode && !nextCode) {
+          // `code`|
+          return { active: true, side: 0 };
+        }
+        if (nextMark && inCode && !nextCode) {
+          // `code|`
+          return { active: true, side: -1 };
+        }
+        return null;
       },
     },
     props: {
-      decorations: (state) => plugin.getState(state)?.decorations ?? DecorationSet.empty,
+      decorations: (state) => {
+        const { active, side } = plugin.getState(state) ?? {};
+        if (!active) return DecorationSet.empty;
+        const deco = Decoration.widget(state.selection.from, toDom, { side });
+        return DecorationSet.create(state.doc, [deco]);
+      },
       handleKeyDown(view, event) {
         switch (event.key) {
           case '`':
@@ -86,10 +101,7 @@ export function getDecorationPlugin(opts?: Options) {
         }
       },
       handleClick(view) {
-        return stepOutsideNextTrAndPass(view, plugin);
-      },
-      handleClickOn(view) {
-        return stepOutsideNextTrAndPass(view, plugin);
+        return stepOutsideNextTrAndPass(view, plugin, 'click');
       },
     },
   } as PluginSpec);
@@ -98,7 +110,7 @@ export function getDecorationPlugin(opts?: Options) {
 
 export function codemark(opts?: Options) {
   const cursorPlugin = getDecorationPlugin(opts);
-  const inputRule = createInputRule(cursorPlugin);
+  const inputRule = createInputRule(cursorPlugin, opts);
   const rules: Plugin[] = [cursorPlugin, inputRule];
   return rules;
 }
