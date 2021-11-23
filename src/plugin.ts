@@ -1,7 +1,7 @@
 import { Plugin, PluginSpec } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { CodemarkState, CursorMetaTr, Options } from './types';
-import { getMarkType, pluginKey } from './utils';
+import { getMarkType, pluginKey, safeResolve } from './utils';
 import { createInputRule } from './inputRules';
 import {
   onArrowLeft,
@@ -48,8 +48,8 @@ export function getDecorationPlugin(opts?: Options) {
         const nextMark = markType.isInSet(
           state.storedMarks ?? state.doc.resolve(tr.selection.from).marks(),
         );
-        const inCode = markType.isInSet(state.doc.resolve(tr.selection.from).marks() ?? []);
-        const nextCode = markType.isInSet(state.doc.resolve(tr.selection.from + 1).marks() ?? []);
+        const inCode = markType.isInSet(state.doc.resolve(tr.selection.from).marks());
+        const nextCode = markType.isInSet(safeResolve(state.doc, tr.selection.from + 1).marks());
         const startOfLine = tr.selection.$from.parentOffset === 0;
         if (!tr.selection.empty) return null;
         if (!nextMark && nextCode && (!inCode || startOfLine)) {

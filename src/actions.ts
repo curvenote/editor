@@ -2,7 +2,7 @@ import { MarkType } from 'prosemirror-model';
 import { EditorState, Plugin, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { CodemarkState, CursorMetaTr } from './types';
-import { MAX_MATCH } from './utils';
+import { MAX_MATCH, safeResolve } from './utils';
 
 export function stepOutsideNextTrAndPass(
   view: EditorView,
@@ -44,7 +44,7 @@ function onArrowRightInside(
   const pluginState = plugin.getState(view.state) as CodemarkState;
   const pos = selection.$from;
   const inCode = !!markType.isInSet(pos.marks());
-  const nextCode = !!markType.isInSet(pos.marksAcross(doc.resolve(selection.from + 1)) ?? []);
+  const nextCode = !!markType.isInSet(pos.marksAcross(safeResolve(doc, selection.from + 1)) ?? []);
 
   if (pos.pos === view.state.doc.nodeSize - 3 && pluginState?.active) {
     // Behaviour stops: `code`| at the end of the document
@@ -93,7 +93,7 @@ function onArrowLeftInside(
   const pluginState = plugin.getState(view.state) as CodemarkState;
   const inCode = !!markType.isInSet(selection.$from.marks());
   const nextCode = !!markType.isInSet(
-    doc.resolve(selection.empty ? selection.from - 1 : selection.from + 1).marks() ?? [],
+    safeResolve(doc, selection.empty ? selection.from - 1 : selection.from + 1).marks() ?? [],
   );
   if (inCode && pluginState?.side === -1 && selection.$from.parentOffset === 0) {
     // New line!
@@ -193,10 +193,10 @@ export function onBackspace(
 ): boolean {
   if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) return false;
   const { selection, doc } = view.state;
-  const from = doc.resolve(selection.from - 1);
+  const from = safeResolve(doc, selection.from - 1);
   const fromCode = !!markType.isInSet(from.marks());
   const startOfLine = from.parentOffset === 0;
-  const toCode = !!markType.isInSet(doc.resolve(selection.to + 1).marks());
+  const toCode = !!markType.isInSet(safeResolve(doc, selection.to + 1).marks());
   if ((!fromCode || startOfLine) && !toCode) {
     // `x|`    → |
     // `|████` → |
@@ -223,7 +223,7 @@ export function onDelete(
   const { selection, doc } = view.state;
   const fromCode = !!markType.isInSet(selection.$from.marks());
   const startOfLine = selection.$from.parentOffset === 0;
-  const toCode = !!markType.isInSet(doc.resolve(selection.to + 2).marks());
+  const toCode = !!markType.isInSet(safeResolve(doc, selection.to + 2).marks());
   if ((!fromCode || startOfLine) && !toCode) {
     return stepOutsideNextTrAndPass(view, plugin);
   }
@@ -236,7 +236,7 @@ export function stepOutside(state: EditorState, markType: MarkType): Transaction
   if (!selection.empty) return null;
   const stored = !!markType.isInSet(state.storedMarks ?? []);
   const inCode = !!markType.isInSet(selection.$from.marks());
-  const nextCode = !!markType.isInSet(doc.resolve(selection.from + 1).marks() ?? []);
+  const nextCode = !!markType.isInSet(safeResolve(doc, selection.from + 1).marks() ?? []);
   const startOfLine = selection.$from.parentOffset === 0;
   // `code|` --> `code`|
   // `|code` --> |`code`
