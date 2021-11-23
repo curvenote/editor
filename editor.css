@@ -782,12 +782,15 @@ span.footnote .tooltip {
   caret-color: transparent;
 }
 
-.fake-cursor {
+div:focus .fake-cursor,
+span:focus .fake-cursor {
   margin-right: -1px;
   border-left-width: 1px;
   border-left-style: solid;
   animation: blink 1s;
   animation-iteration-count: infinite;
+  position: relative;
+  z-index: 1;
 }
 
 .hidden {
