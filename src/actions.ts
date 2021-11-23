@@ -1,11 +1,15 @@
 import { MarkType } from 'prosemirror-model';
-import { Plugin, TextSelection } from 'prosemirror-state';
+import { Plugin, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { CodemarkState, CursorMetaTr } from './types';
 import { MAX_MATCH } from './utils';
 
-export function stepOutsideNextTrAndPass(view: EditorView, plugin: Plugin): boolean {
-  const meta: CursorMetaTr = { action: 'next' };
+export function stepOutsideNextTrAndPass(
+  view: EditorView,
+  plugin: Plugin,
+  action: 'click' | 'next' = 'next',
+): boolean {
+  const meta: CursorMetaTr = { action };
   view.dispatch(view.state.tr.setMeta(plugin, meta));
   return false;
 }
@@ -22,11 +26,7 @@ export function onBacktick(
   const { from, to } = view.state.selection;
   if (to - from >= MAX_MATCH || view.state.doc.rangeHasMark(from, to, markType)) return false;
   const tr = view.state.tr.addMark(from, to, markType.create());
-  const meta: CursorMetaTr = { action: 'add', pos: to };
-  const selected = tr
-    .setSelection(TextSelection.create(tr.doc, to))
-    .removeStoredMark(markType)
-    .setMeta(plugin, meta);
+  const selected = tr.setSelection(TextSelection.create(tr.doc, to)).removeStoredMark(markType);
   view.dispatch(selected);
   return true;
 }
@@ -45,26 +45,21 @@ function onArrowRightInside(
   const pos = selection.$from;
   const inCode = !!markType.isInSet(pos.marks());
   const nextCode = !!markType.isInSet(pos.marksAcross(doc.resolve(selection.from + 1)) ?? []);
-  if (pos.pos === view.state.doc.nodeSize - 3 && pluginState?.decorations) {
+
+  if (pos.pos === view.state.doc.nodeSize - 3 && pluginState?.active) {
     // Behaviour stops: `code`| at the end of the document
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from };
-    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.removeStoredMark(markType));
     return true;
   }
   if (inCode === nextCode && pos.parentOffset !== 0) return false;
-  if (inCode && !pluginState?.decorations && pos.parentOffset !== 0) {
+  if (inCode && (!pluginState?.active || pluginState.side === -1) && pos.parentOffset !== 0) {
     // `code|` --> `code`|
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from };
-    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.removeStoredMark(markType));
     return true;
   }
-  if (
-    (nextCode && !pluginState?.decorations && pos.parentOffset !== 0) ||
-    (pos.parentOffset === 0 && pluginState?.side === -1)
-  ) {
+  if (nextCode && pluginState?.side === -1) {
     // |`code` --> `|code`
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from };
-    view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.addStoredMark(markType.create()));
     return true;
   }
   return false;
@@ -105,34 +100,28 @@ function onArrowLeftInside(
     // ^|`code` --> |^`code`
     return false;
   }
-  if (inCode && nextCode && pluginState?.decorations) {
+  if (inCode && nextCode && pluginState?.active && pluginState?.side === 0) {
     // `code`| --> `code|`
-    const meta: CursorMetaTr = { action: 'remove' };
-    view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.addStoredMark(markType.create()));
     return true;
   }
-  if (inCode && !nextCode && pluginState?.decorations && selection.$from.parentOffset === 0) {
+  if (inCode && !nextCode && pluginState?.active && selection.$from.parentOffset === 0) {
     // ^`|code` --> ^|`code`
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
-    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.removeStoredMark(markType));
     return true;
   }
-  if (!inCode && pluginState?.decorations) {
+  if (!inCode && pluginState?.active && pluginState?.side === 0) {
     // `|code` --> |`code`
-    const meta: CursorMetaTr = { action: 'remove' };
-    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.removeStoredMark(markType));
     return true;
   }
   if (inCode === nextCode) return false;
-  if ((nextCode || (!selection.empty && inCode)) && !pluginState?.decorations) {
+  if (nextCode || (!selection.empty && inCode)) {
     // `code`_|_ --> `code`|   nextCode
     // `code`███ --> `code`|   !selection.empty && inCode
     // `██de`___ --> `|code`   !selection.empty && nextCode
     const from = selection.empty ? selection.from - 1 : selection.from;
-    const meta: CursorMetaTr = { action: 'add', pos: from };
-    const selected = view.state.tr
-      .setSelection(TextSelection.create(doc, from))
-      .setMeta(plugin, meta);
+    const selected = view.state.tr.setSelection(TextSelection.create(doc, from));
     if (!selection.empty && nextCode) {
       view.dispatch(selected.addStoredMark(markType.create()));
     } else {
@@ -140,52 +129,40 @@ function onArrowLeftInside(
     }
     return true;
   }
-  if ((nextCode || (!selection.empty && inCode)) && !pluginState?.decorations) {
+  if ((nextCode || (!selection.empty && inCode)) && !pluginState?.active) {
     // `code`_|_ --> `code`|
     // `code`███ --> `code`|
     const from = selection.empty ? selection.from - 1 : selection.from;
-    const meta: CursorMetaTr = { action: 'add', pos: from };
     view.dispatch(
-      view.state.tr
-        .setSelection(TextSelection.create(doc, from))
-        .removeStoredMark(markType)
-        .setMeta(plugin, meta),
+      view.state.tr.setSelection(TextSelection.create(doc, from)).removeStoredMark(markType),
     );
     return true;
   }
-  if (inCode && !pluginState?.decorations && selection.$from.parentOffset > 0) {
+  if (inCode && !pluginState?.active && selection.$from.parentOffset > 0) {
     // `c|ode` --> `|code`
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from - 1 };
     view.dispatch(
       view.state.tr
         .setSelection(TextSelection.create(doc, selection.from - 1))
-        .addStoredMark(markType.create())
-        .setMeta(plugin, meta),
+        .addStoredMark(markType.create()),
     );
     return true;
   }
-  if (inCode && !pluginState?.decorations && selection.$from.parentOffset === 0) {
+  if (inCode && !pluginState?.active && selection.$from.parentOffset === 0) {
     // Start of line
     // ^`|code` --> ^|`code`
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
-    view.dispatch(view.state.tr.removeStoredMark(markType).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.removeStoredMark(markType));
     return true;
   }
-  if (inCode && !nextCode && pluginState?.decorations && pluginState.side !== -1) {
+  if (inCode && !nextCode && pluginState?.active && pluginState.side !== -1) {
     // `x`| --> `x|` - Single character
-    const meta: CursorMetaTr = { action: 'add', pos: selection.from, side: -1 };
-    view.dispatch(view.state.tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    view.dispatch(view.state.tr.addStoredMark(markType.create()));
     return true;
   }
-  if (inCode && !nextCode && pluginState?.decorations) {
+  if (inCode && !nextCode && pluginState?.active) {
     // `x|` --> `|x` - Single character inside
     const pos = selection.from - 1;
-    const meta: CursorMetaTr = { action: 'add', pos };
     view.dispatch(
-      view.state.tr
-        .setSelection(TextSelection.create(doc, pos))
-        .addStoredMark(markType.create())
-        .setMeta(plugin, meta),
+      view.state.tr.setSelection(TextSelection.create(doc, pos)).addStoredMark(markType.create()),
     );
     return true;
   }
@@ -248,43 +225,33 @@ export function onBackspace(
   if ((nextCode && selection.empty) || (inCode && !selection.empty)) {
     // `code`_|_ --> `code`|     nextCode && selection.empty
     // `code`███ --> `code`|     inCode && !selection.empty
-    const meta: CursorMetaTr = { action: 'add', pos: tr.selection.from };
-    view.dispatch(tr.removeStoredMark(markType).setMeta(plugin, meta));
+    view.dispatch(tr.removeStoredMark(markType));
     return true;
   }
   if (tr.selection.$from.parentOffset === 0) {
-    // ^███`code` --> `|ode`
-    const meta: CursorMetaTr = { action: 'add', pos: tr.selection.from, side: -1 };
-    view.dispatch(tr.removeStoredMark(markType).setMeta(plugin, meta));
+    // ^███`code` --> ^|`code`
+    view.dispatch(tr.removeStoredMark(markType));
     return true;
   }
   if (inCode || nextCode) {
     // `c|ode` --> `|ode`
     // `██de` --> `|de`
-    const meta: CursorMetaTr = { action: 'add', pos: tr.selection.from };
-    view.dispatch(tr.addStoredMark(markType.create()).setMeta(plugin, meta));
+    view.dispatch(tr.addStoredMark(markType.create()));
     return true;
   }
   return false;
 }
 
-export function stepOutside(view: EditorView, plugin: Plugin, markType: MarkType): void {
-  const { selection, doc } = view.state;
-  if (!selection.empty) return;
+export function stepOutside(tr: Transaction, markType: MarkType): Transaction | null {
+  if (!tr) return null;
+  const { selection, doc } = tr;
+  if (!selection.empty) return null;
   const inCode = !!markType.isInSet(selection.$from.marks());
-  if (!inCode) return;
   const nextCode = !!markType.isInSet(doc.resolve(selection.from + 1).marks() ?? []);
-  const prevCode = !!markType.isInSet(doc.resolve(selection.from - 1).marks() ?? []);
-  let meta: CursorMetaTr | null = null;
-  if (!nextCode) {
-    // `code|` --> `code`|
-    meta = { action: 'add', pos: selection.from };
-  } else if (!prevCode) {
-    // `|code` --> |`code`
-    meta = { action: 'add', pos: selection.from, side: -1 };
-  }
-  if (meta) {
-    const tr = view.state.tr.removeStoredMark(markType).setMeta(plugin, meta);
-    view.dispatch(tr);
-  }
+  const startOfLine = selection.$from.parentOffset === 0;
+  // `code|` --> `code`|
+  // `|code` --> |`code`
+  // ^`|code` --> ^|`code`
+  if (inCode !== nextCode || (inCode && startOfLine)) return tr.removeStoredMark(markType);
+  return null;
 }

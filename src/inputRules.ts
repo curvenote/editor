@@ -1,7 +1,8 @@
 import { MarkType } from 'prosemirror-model';
 import { Plugin, PluginSpec, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { MAX_MATCH } from './utils';
+import { Options } from './types';
+import { getMarkType, MAX_MATCH } from './utils';
 
 type InputRuleState = {
   transform: Transaction;
@@ -13,6 +14,7 @@ type InputRuleState = {
 type Plugins = { input: Plugin; cursor: Plugin };
 
 type Handler = (
+  markType: MarkType,
   state: EditorView,
   text: string,
   match: RegExpExecArray,
@@ -26,23 +28,23 @@ type Rule = {
   handler: Handler;
 };
 
+function stopMatch(markType: MarkType, view: EditorView, from: number, to: number): boolean {
+  const stored = markType.isInSet(view.state.storedMarks ?? view.state.doc.resolve(from).marks());
+  const range = view.state.doc.rangeHasMark(from, to, markType);
+  // Don't create it if there is code in between!
+  if (stored || range) return true;
+  return false;
+}
+
 const markBefore: Rule = {
   match: /`((?:[^`\w]|[\w])+)`$/,
-  handler: (view, text, match, from, to, plugins) => {
-    const markType = view.state.schema.marks.code as MarkType;
-    // Don't create it if there is code in between!
-    if (view.state.doc.rangeHasMark(from, to, markType)) return false;
+  handler: (markType, view, text, match, from, to, plugins) => {
+    if (stopMatch(markType, view, from, to)) return false;
     const code = match[1];
     const mark = markType.create();
     const pos = from + code.length;
     const tr = view.state.tr.delete(from, to).insertText(code).addMark(from, pos, mark);
-    const selected = tr
-      .setSelection(TextSelection.create(tr.doc, pos))
-      .removeStoredMark(markType)
-      .setMeta(plugins.cursor, {
-        action: 'add',
-        pos,
-      });
+    const selected = tr.setSelection(TextSelection.create(tr.doc, pos)).removeStoredMark(markType);
     const withMeta = selected.setMeta(plugins.input, {
       transform: selected,
       from,
@@ -56,10 +58,8 @@ const markBefore: Rule = {
 
 const markAfter: Rule = {
   match: /^`((?:[^`\w]|[\w])+)`/,
-  handler: (view, text, match, from, to, plugins) => {
-    const markType = view.state.schema.marks.code as MarkType;
-    // Don't create it if there is code in between!
-    if (view.state.doc.rangeHasMark(from, to, markType)) return false;
+  handler: (markType, view, text, match, from, to, plugins) => {
+    if (stopMatch(markType, view, from, to)) return false;
     const mark = markType.create();
     const code = match[1];
     const pos = from;
@@ -69,11 +69,7 @@ const markAfter: Rule = {
       .addMark(from, from + code.length, mark);
     const selected = tr
       .setSelection(TextSelection.create(tr.doc, pos))
-      .addStoredMark(markType.create())
-      .setMeta(plugins.cursor, {
-        action: 'add',
-        pos,
-      });
+      .addStoredMark(markType.create());
     const withMeta = selected.setMeta(plugins.input, {
       transform: selected,
       from,
@@ -85,7 +81,14 @@ const markAfter: Rule = {
   },
 };
 
-function run(view: EditorView, from: number, to: number, text: string, plugins: Plugins) {
+function run(
+  markType: MarkType,
+  view: EditorView,
+  from: number,
+  to: number,
+  text: string,
+  plugins: Plugins,
+) {
   if (view.composing) return false;
   const { state } = view;
   const $from = state.doc.resolve(from);
@@ -111,6 +114,7 @@ function run(view: EditorView, from: number, to: number, text: string, plugins: 
   const matchA = markAfter.match.exec(textAfter);
   if (matchB) {
     const handled = markBefore.handler(
+      markType,
       view,
       text,
       matchB,
@@ -122,6 +126,7 @@ function run(view: EditorView, from: number, to: number, text: string, plugins: 
   }
   if (matchA)
     return markAfter.handler(
+      markType,
       view,
       text,
       matchA,
@@ -132,7 +137,7 @@ function run(view: EditorView, from: number, to: number, text: string, plugins: 
   return false;
 }
 
-export function createInputRule(cursorPlugin: Plugin) {
+export function createInputRule(cursorPlugin: Plugin, opts?: Options) {
   const plugin: Plugin<InputRuleState> = new Plugin({
     isInputRules: true,
     state: {
@@ -145,7 +150,8 @@ export function createInputRule(cursorPlugin: Plugin) {
     },
     props: {
       handleTextInput(view, from, to, text) {
-        return run(view, from, to, text, { input: plugin, cursor: cursorPlugin });
+        const markType = getMarkType(view, opts);
+        return run(markType, view, from, to, text, { input: plugin, cursor: cursorPlugin });
       },
     },
   } as PluginSpec);
