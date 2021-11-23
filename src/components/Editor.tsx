@@ -25,9 +25,6 @@ const Editor = (props: Props) => {
   const editorState = useSelector(
     (state: State) => selectors.getEditorState(state, stateKey)?.state,
   );
-  const focused = useSelector((state: State) =>
-    selectors.isEditorViewFocused(state, stateKey, viewId),
-  );
 
   // Create editorView
   useEffect(() => {
@@ -49,11 +46,7 @@ const Editor = (props: Props) => {
     if (className) editorView.current.dom.classList.add(...className.split(' '));
 
     (editorView.current.dom as HTMLElement).onfocus = () => {
-      dispatch(actions.focusEditorView(viewId, true));
-    };
-    (editorView.current.dom as HTMLElement).onblur = () => {
-      // TODO: The blur here may have sub-editors that *are* focused.
-      dispatch(actions.focusEditorView(viewId, false));
+      dispatch(actions.selectEditorView(viewId));
     };
     dispatch(actions.subscribeView(stateKey, viewId, editorView.current));
   }, [editorView.current == null, editorEl.current == null, editorState == null]);
@@ -67,20 +60,6 @@ const Editor = (props: Props) => {
     },
     [],
   );
-
-  // Handle an external focus event:
-  useEffect(() => {
-    if (editorEl.current == null) return;
-    if (editorView.current?.hasFocus() === focused) return;
-    if (!focused) {
-      (editorView.current?.dom as HTMLElement)?.blur();
-      return;
-    }
-    const subEditors = editorEl.current.getElementsByClassName('ProseMirror-focused');
-    if (subEditors.length > 0) return;
-    editorView.current?.focus();
-  }, [focused]);
-
   return <div ref={editorEl} />;
 };
 

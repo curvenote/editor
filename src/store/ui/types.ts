@@ -1,7 +1,6 @@
 import { PopperPlacementType } from '@material-ui/core';
 
 export const SELECT_EDITOR_VIEW = 'SELECT_EDITOR_VIEW';
-export const FOCUS_EDITOR_VIEW = 'FOCUS_EDITOR_VIEW';
 export const INLINE_SELECTION = 'INLINE_SELECTION';
 
 export enum SelectionKinds {
@@ -30,7 +29,6 @@ export type InlineSelection = {
 export type UIState = {
   stateId: string | null;
   viewId: string | null;
-  focused: boolean;
   selection: InlineSelection | null;
 };
 
@@ -42,18 +40,9 @@ export interface SelectEditorViewAction {
   };
 }
 
-export interface FocusEditorViewAction {
-  type: typeof FOCUS_EDITOR_VIEW;
-  payload: {
-    stateId: string | null;
-    viewId: string | null;
-    focused: boolean;
-  };
-}
-
 export interface InlineSelectionAction {
   type: typeof INLINE_SELECTION;
   payload: InlineSelection | null;
 }
 
-export type UIActionTypes = SelectEditorViewAction | FocusEditorViewAction | InlineSelectionAction;
+export type UIActionTypes = SelectEditorViewAction | InlineSelectionAction;

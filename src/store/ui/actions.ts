@@ -1,7 +1,6 @@
 import { PopperPlacementType } from '@material-ui/core';
 import {
   SELECT_EDITOR_VIEW,
-  FOCUS_EDITOR_VIEW,
   InlineSelection,
   UIActionTypes,
   INLINE_SELECTION,
@@ -24,11 +23,13 @@ export function selectEditorView(viewId: string | null): AppThunk<void> {
 
 export function focusEditorView(viewId: string | null, focused: boolean): AppThunk<void> {
   return (dispatch, getState) => {
-    const { stateId } = getEditorView(getState(), viewId);
-    dispatch({
-      type: FOCUS_EDITOR_VIEW,
-      payload: { stateId, viewId, focused },
-    });
+    const { view } = getEditorView(getState(), viewId);
+    if (!view) return;
+    if (focused) {
+      view.focus();
+    } else {
+      (view.dom as HTMLElement).blur();
+    }
   };
 }
 
