@@ -46,7 +46,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",
-    "prosemirror-codemark": "^0.2.2",
+    "prosemirror-codemark": "^0.3.4",
     "prosemirror-commands": "^1.1.12",
     "prosemirror-dropcursor": "^1.4.0",
     "prosemirror-gapcursor": "^1.2.0",

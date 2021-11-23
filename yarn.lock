@@ -4526,10 +4526,10 @@ prop-types@^15.6.2, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-prosemirror-codemark@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/prosemirror-codemark/-/prosemirror-codemark-0.2.2.tgz#38692be84da43f0c24de09d45f6034a3ecc663ba"
-  integrity sha512-ftFfQ29AMCMnARI9gAqmAaTTzhJ4FHMFgxilCLPYwpTzQ+LP2RAWyNKp2aAdr2QSWvUQCDlubURDcc3HXQXpDQ==
+prosemirror-codemark@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/prosemirror-codemark/-/prosemirror-codemark-0.3.4.tgz#4b8a1bb02088ae6dc3dd9e61cb4f8a2d0a84407c"
+  integrity sha512-KnXfYM6E+HF02jzkz4fHZiETJErpnQlbYezS/yajDp4vxADQc3q1/+1J09Kfzm1gdawqGgeCNuokyYFqCiHVng==
 
 prosemirror-collab@^1.2.2:
   version "1.2.2"
