@@ -1,6 +1,5 @@
 import { PopperPlacementType } from '@material-ui/core';
 import { State } from '../types';
-import { opts } from '../../connect';
 import { getEditorState, getEditorView } from '../state/selectors';
 
 export function getEditorUI(state: State) {
@@ -40,9 +39,6 @@ export function getSelectedViewId(state: State) {
   return { stateId, viewId };
 }
 
-export function isEditorViewFocused(state: State, stateKey: any | null, viewId: string) {
-  if (stateKey == null) return null;
-  const stateId = opts.transformKeyToId(stateKey);
-  const { ui } = state.editor;
-  return ui.stateId === stateId && ui.viewId === viewId && ui.focused;
+export function isEditorViewFocused(state: State, viewId: string | null): boolean {
+  return getEditorView(state, viewId).view?.hasFocus() ?? false;
 }
