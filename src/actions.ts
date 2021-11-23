@@ -46,7 +46,11 @@ function onArrowRightInside(
   const inCode = !!markType.isInSet(pos.marks());
   const nextCode = !!markType.isInSet(pos.marksAcross(safeResolve(doc, selection.from + 1)) ?? []);
 
-  if (pos.pos === view.state.doc.nodeSize - 3 && pluginState?.active) {
+  if (
+    pos.pos === view.state.doc.nodeSize - 3 &&
+    pos.parentOffset === pos.parent.nodeSize - 2 &&
+    pluginState?.active
+  ) {
     // Behaviour stops: `code`| at the end of the document
     view.dispatch(view.state.tr.removeStoredMark(markType));
     return true;
@@ -100,7 +104,13 @@ function onArrowLeftInside(
     // ^|`code` --> |^`code`
     return false;
   }
-  if (inCode && nextCode && pluginState?.active && pluginState?.side === 0) {
+  if (pluginState?.side === 0 && selection.$from.parentOffset === 0) {
+    // New line!
+    // ^`|code` --> ^|`code`
+    view.dispatch(view.state.tr.removeStoredMark(markType));
+    return true;
+  }
+  if (inCode && nextCode && pluginState?.side === 0) {
     // `code`| --> `code|`
     view.dispatch(view.state.tr.addStoredMark(markType.create()));
     return true;
@@ -147,12 +157,6 @@ function onArrowLeftInside(
     );
     return true;
   }
-  if (inCode && !pluginState?.active && selection.$from.parentOffset === 0) {
-    // Start of line
-    // ^`|code` --> ^|`code`
-    view.dispatch(view.state.tr.removeStoredMark(markType));
-    return true;
-  }
   if (inCode && !nextCode && pluginState?.active && pluginState.side !== -1) {
     // `x`| --> `x|` - Single character
     view.dispatch(view.state.tr.addStoredMark(markType.create()));
@@ -179,6 +183,10 @@ export function onArrowLeft(
   if (handled) return true;
   const { selection } = view.state;
   const pos = selection.$from;
+  const pluginState = plugin.getState(view.state) as CodemarkState;
+  if (pos.pos === 1 && pos.parentOffset === 0 && pluginState?.side === -1) {
+    return true;
+  }
   if (selection.empty && pos.parentOffset === 0) {
     return stepOutsideNextTrAndPass(view, plugin);
   }
