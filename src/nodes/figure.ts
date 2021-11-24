@@ -81,6 +81,8 @@ export const toTex = createLatexStatement(
     const localId = state.options.localizeId?.(id ?? '') ?? id;
     const star = numbered ? '' : '*';
     // TODO: Based on align attr
+    // may have to modify string returned by state.renderContent(node);
+    // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
     state.write('\\centering');
     const captionFirst = node.firstChild?.type.name === nodeNames.figcaption;
     if (localId && captionFirst) {
