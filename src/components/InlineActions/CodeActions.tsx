@@ -153,6 +153,8 @@ const CodeActions: React.FC<ActionProps> = (props) => {
     dispatch(updateNodeAttrs(stateId, viewId, figcaption, {}, 'inside'));
   };
 
+  const hasFigure = !!editorState.schema.nodes.figure;
+
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
       <div className={classes.dropdownContainer}>
@@ -178,11 +180,15 @@ const CodeActions: React.FC<ActionProps> = (props) => {
         }}
         active={node.attrs.linenumbers}
       />
-      <MenuIcon kind="divider" />
-
-      <MenuIcon kind="caption" active={Boolean(figcaption)} onClick={onCaption} />
-      {figcaption && <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />}
-
+      {hasFigure && (
+        <>
+          <MenuIcon kind="divider" />
+          <MenuIcon kind="caption" active={Boolean(figcaption)} onClick={onCaption} />
+        </>
+      )}
+      {hasFigure && figcaption && (
+        <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />
+      )}
       <MenuIcon kind="divider" />
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
