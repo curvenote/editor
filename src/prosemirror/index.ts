@@ -18,7 +18,7 @@ export function createEditorState(
   startEditable: boolean,
 ) {
   const schema = schemas.getSchema(useSchema);
-  const plugins = getPlugins(schema, stateKey, version, startEditable);
+  const plugins = getPlugins(useSchema, schema, stateKey, version, startEditable);
   let state: EditorState;
   try {
     const data = JSON.parse(content);
@@ -88,14 +88,20 @@ export function createEditorView(
       handlePaste: (view, event, slice) => {
         if (shiftKey) return false;
         if (!view.hasFocus()) return true;
+        const imageInSchema = view.state.schema.nodes.image;
+        const uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : () => false;
         return (
           opts.handlePaste(view, event, slice) ||
           addLink(view, event.clipboardData) ||
-          uploadAndInsertImages(view, event.clipboardData)
+          uploadIfImagesInSchema(view, event.clipboardData)
         );
       },
       // clipboardTextSerializer: (slice) => {},
-      handleDrop: (view, event) => uploadAndInsertImages(view, (event as DragEvent).dataTransfer),
+      handleDrop: (view, event) => {
+        const imageInSchema = view.state.schema.nodes.image;
+        const uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : () => false;
+        return uploadIfImagesInSchema(view, (event as DragEvent).dataTransfer);
+      },
       handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
         const { viewId, stateId } = getSelectedViewId(store.getState());
         return opts.onDoubleClick(stateId, viewId, view, pos, event);

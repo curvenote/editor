@@ -47,7 +47,7 @@ export interface UpdateEditorState {
     viewId: string | null;
     editorState: EditorState;
     counts: types.StateCounter | null;
-    tr: Transaction;
+    tr?: Transaction;
   };
 }
 

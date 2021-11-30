@@ -63,11 +63,15 @@ export const ref: Ref<Store> = {
   },
 };
 
-export function setup(store: Store, opts: Options) {
+export function setup(
+  store: Store,
+  opts: Options,
+  options = { setupComponents: true, setupSidenotes: true },
+) {
   ref._store = store;
   ref._opts = opts;
-  setupComponents(store);
-  sidenotes.setup(store as unknown as sidenotes.Store, { padding: 10 });
+  if (options.setupComponents) setupComponents(store);
+  if (options.setupSidenotes) sidenotes.setup(store as unknown as sidenotes.Store, { padding: 10 });
 }
 
 export const store: Pick<Store, 'getState' | 'dispatch'> = {

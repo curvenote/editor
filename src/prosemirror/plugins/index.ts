@@ -6,10 +6,10 @@ import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
 import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
 import suggestion from './suggestion';
-import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
+import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -35,11 +35,29 @@ function tablesPlugins(schema: Schema) {
 }
 
 export function getPlugins(
+  schemaPreset: schemas.UseSchema,
   schema: Schema,
   stateKey: any,
   version: number,
   startEditable: boolean,
 ): Plugin[] {
+  if (schemaPreset === 'comment') {
+    return [
+      editablePlugin(startEditable),
+      ...suggestion(
+        (action) => store.dispatch(handleSuggestion(action)),
+        NO_VARIABLE,
+        // Cancel on space after some of the triggers
+        (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
+      ),
+      ...inputrules(schema),
+      keymap(buildCommentKeymap(stateKey, schema)),
+      keymap(baseKeymap),
+      dropCursor(),
+      gapCursor(),
+      history(),
+    ];
+  }
   return [
     editablePlugin(startEditable),
     ...suggestion(
