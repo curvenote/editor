@@ -9,12 +9,12 @@ import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
 import suggestion from './suggestion';
-import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
+import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import getCommentsPlugin from './comments';
+import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
 
@@ -34,10 +34,6 @@ function tablesPlugins(schema: Schema) {
   ];
 }
 
-function commentPlugins(preset: schemas.UseSchema): Plugin[] {
-  return preset !== 'comment' ? [getCommentsPlugin()] : [];
-}
-
 export function getPlugins(
   schemaPreset: schemas.UseSchema,
   schema: Schema,
@@ -45,6 +41,23 @@ export function getPlugins(
   version: number,
   startEditable: boolean,
 ): Plugin[] {
+  if (schemaPreset === 'comment') {
+    return [
+      editablePlugin(startEditable),
+      ...suggestion(
+        (action) => store.dispatch(handleSuggestion(action)),
+        NO_VARIABLE,
+        // Cancel on space after some of the triggers
+        (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
+      ),
+      ...inputrules(schema),
+      keymap(buildCommentKeymap(stateKey, schema)),
+      keymap(baseKeymap),
+      dropCursor(),
+      gapCursor(),
+      history(),
+    ];
+  }
   return [
     editablePlugin(startEditable),
     ...suggestion(
@@ -53,7 +66,7 @@ export function getPlugins(
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
-    ...commentPlugins(schemaPreset),
+    commentsPlugin(),
     getPromptPlugin(),
     getImagePlaceholderPlugin(),
     ...inputrules(schema),
@@ -71,7 +84,7 @@ export function getPlugins(
 export function getInlinePlugins(schema: Schema): Plugin[] {
   return [
     editablePlugin(true),
-    getCommentsPlugin(),
+    commentsPlugin(),
     ...inputrules(schema),
     keymap(buildBasicKeymap(schema)),
     keymap(baseKeymap),

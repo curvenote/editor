@@ -50,7 +50,13 @@ function basicMarkCommands(schema: Schema, bind: AddKey): void {
   }
 }
 
-function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
+interface CommandOptions {
+  captureTab: boolean;
+  enableCommentShortcut: boolean;
+  figureCommands: boolean;
+}
+
+function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: CommandOptions) {
   bind('Mod-z', undoInputRule, undo);
   bind('Mod-Z', redo);
   if (!mac) bind('Mod-y', redo);
@@ -71,8 +77,10 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
 
   basicMarkCommands(schema, bind);
   bind('Backspace', undoInputRule);
-  // Figure handles Enter, which should come before Mod-Enter Shift-Enter below:
-  buildFigureKeymap(schema, bind);
+  if (options?.figureCommands ?? true) {
+    // Figure handles Enter, which should come before Mod-Enter Shift-Enter below:
+    buildFigureKeymap(schema, bind);
+  }
 
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
   if (schema.nodes.hard_break) {
@@ -101,10 +109,12 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
     );
     const cmdLift = liftListItem(schema.nodes.list_item);
     const cmdSink = sinkListItem(schema.nodes.list_item);
-    bind('Shift-Tab', cmdLift);
     bind('Mod-[', cmdLift);
-    bind('Tab', cmdSink);
     bind('Mod-]', cmdSink);
+    if (options?.captureTab ?? true) {
+      bind('Shift-Tab', cmdLift);
+      bind('Tab', cmdSink);
+    }
   }
 
   if (schema.nodes.paragraph) bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
@@ -124,21 +134,26 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey) {
       return true;
     });
   }
-
-  // Confluence and Google Docs comment shortcuts
-  bind(
-    'Mod-Alt-c',
-    (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
-  );
-  bind(
-    'Mod-Alt-m',
-    (state, dispatch) => dispatch !== undefined && opts.addComment(stateKey, state),
-  );
+  if (options?.enableCommentShortcut ?? true) {
+    // Confluence and Google Docs comment shortcuts
+    bind('Mod-Alt-c', (state, dispatch) => !!dispatch && opts.addComment(stateKey, state));
+    bind('Mod-Alt-m', (state, dispatch) => !!dispatch && opts.addComment(stateKey, state));
+  }
 }
 
 export function buildBasicKeymap(schema: Schema): Keymap {
   const { keys, bind } = createBind();
   basicMarkCommands(schema, bind);
+  return flattenCommandList(keys);
+}
+
+export function buildCommentKeymap(stateKey: any, schema: Schema): Keymap {
+  const { keys, bind } = createBind();
+  addAllCommands(stateKey, schema, bind, {
+    captureTab: false,
+    enableCommentShortcut: false,
+    figureCommands: false,
+  });
   return flattenCommandList(keys);
 }
 
