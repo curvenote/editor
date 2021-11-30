@@ -40,11 +40,11 @@ export function updateEditorState(
   stateKey: any,
   viewId: string | null,
   editorState: EditorState,
-  tr: Transaction,
+  tr?: Transaction,
 ): EditorActionTypes {
   const stateId = opts.transformKeyToId(stateKey);
   if (stateId == null) throw new Error('Must have a state ID');
-  const counts = tr.docChanged ? process.countState(editorState) : null;
+  const counts = tr?.docChanged ? process.countState(editorState) : null;
   return {
     type: UPDATE_EDITOR_STATE,
     payload: {
