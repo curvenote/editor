@@ -35,7 +35,8 @@ function basicMarkCommands(schema, bind) {
         bind('Mod-K', addLink);
     }
 }
-function addAllCommands(stateKey, schema, bind) {
+function addAllCommands(stateKey, schema, bind, options) {
+    var _a, _b, _c;
     bind('Mod-z', undoInputRule, undo);
     bind('Mod-Z', redo);
     if (!mac)
@@ -54,7 +55,9 @@ function addAllCommands(stateKey, schema, bind) {
     });
     basicMarkCommands(schema, bind);
     bind('Backspace', undoInputRule);
-    buildFigureKeymap(schema, bind);
+    if ((_a = options === null || options === void 0 ? void 0 : options.figureCommands) !== null && _a !== void 0 ? _a : true) {
+        buildFigureKeymap(schema, bind);
+    }
     if (schema.nodes.blockquote)
         bind('Ctrl->', wrapIn(schema.nodes.blockquote));
     if (schema.nodes.hard_break) {
@@ -76,10 +79,12 @@ function addAllCommands(stateKey, schema, bind) {
         bind('Mod-Shift-8', chainCommands(liftListItem(schema.nodes.list_item), wrapInList(schema.nodes.bullet_list)));
         var cmdLift = liftListItem(schema.nodes.list_item);
         var cmdSink = sinkListItem(schema.nodes.list_item);
-        bind('Shift-Tab', cmdLift);
         bind('Mod-[', cmdLift);
-        bind('Tab', cmdSink);
         bind('Mod-]', cmdSink);
+        if ((_b = options === null || options === void 0 ? void 0 : options.captureTab) !== null && _b !== void 0 ? _b : true) {
+            bind('Shift-Tab', cmdLift);
+            bind('Tab', cmdSink);
+        }
     }
     if (schema.nodes.paragraph)
         bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
@@ -97,12 +102,23 @@ function addAllCommands(stateKey, schema, bind) {
             return true;
         });
     }
-    bind('Mod-Alt-c', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
-    bind('Mod-Alt-m', function (state, dispatch) { return dispatch !== undefined && opts.addComment(stateKey, state); });
+    if ((_c = options === null || options === void 0 ? void 0 : options.enableCommentShortcut) !== null && _c !== void 0 ? _c : true) {
+        bind('Mod-Alt-c', function (state, dispatch) { return !!dispatch && opts.addComment(stateKey, state); });
+        bind('Mod-Alt-m', function (state, dispatch) { return !!dispatch && opts.addComment(stateKey, state); });
+    }
 }
 export function buildBasicKeymap(schema) {
     var _a = createBind(), keys = _a.keys, bind = _a.bind;
     basicMarkCommands(schema, bind);
+    return flattenCommandList(keys);
+}
+export function buildCommentKeymap(stateKey, schema) {
+    var _a = createBind(), keys = _a.keys, bind = _a.bind;
+    addAllCommands(stateKey, schema, bind, {
+        captureTab: false,
+        enableCommentShortcut: false,
+        figureCommands: false,
+    });
     return flattenCommandList(keys);
 }
 export function buildKeymap(stateKey, schema) {

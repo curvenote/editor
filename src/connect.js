@@ -14,11 +14,14 @@ export var ref = {
         return ref._opts;
     },
 };
-export function setup(store, opts) {
+export function setup(store, opts, options) {
+    if (options === void 0) { options = { setupComponents: true, setupSidenotes: true }; }
     ref._store = store;
     ref._opts = opts;
-    setupComponents(store);
-    sidenotes.setup(store, { padding: 10 });
+    if (options.setupComponents)
+        setupComponents(store);
+    if (options.setupSidenotes)
+        sidenotes.setup(store, { padding: 10 });
 }
 export var store = {
     getState: function () { return ref.store().getState(); },

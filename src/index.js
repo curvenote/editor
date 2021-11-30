@@ -6,4 +6,5 @@ export { default as views } from './views';
 export { setup, opts } from './connect';
 export { runtime, collab };
 export { isEditable, setEditable } from './prosemirror/plugins/editable';
+export { createEditorState } from './prosemirror';
 //# sourceMappingURL=index.js.map

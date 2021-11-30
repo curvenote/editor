@@ -21,7 +21,7 @@ import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 export function createEditorState(useSchema, stateKey, content, version, startEditable) {
     var schema = schemas.getSchema(useSchema);
-    var plugins = getPlugins(schema, stateKey, version, startEditable);
+    var plugins = getPlugins(useSchema, schema, stateKey, version, startEditable);
     var state;
     try {
         var data = JSON.parse(content);
@@ -65,11 +65,17 @@ export function createEditorView(dom, state, dispatch) {
                 return false;
             if (!view.hasFocus())
                 return true;
+            var imageInSchema = view.state.schema.nodes.image;
+            var uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : function () { return false; };
             return (opts.handlePaste(view, event, slice) ||
                 addLink(view, event.clipboardData) ||
-                uploadAndInsertImages(view, event.clipboardData));
+                uploadIfImagesInSchema(view, event.clipboardData));
         },
-        handleDrop: function (view, event) { return uploadAndInsertImages(view, event.dataTransfer); },
+        handleDrop: function (view, event) {
+            var imageInSchema = view.state.schema.nodes.image;
+            var uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : function () { return false; };
+            return uploadIfImagesInSchema(view, event.dataTransfer);
+        },
         handleDoubleClick: function (view, pos, event) {
             var _a = getSelectedViewId(store.getState()), viewId = _a.viewId, stateId = _a.stateId;
             return opts.onDoubleClick(stateId, viewId, view, pos, event);

@@ -16,7 +16,7 @@ import { collab } from 'prosemirror-collab';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames } from '@curvenote/schema';
 import suggestion from './suggestion';
-import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
+import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -38,7 +38,18 @@ function tablesPlugins(schema) {
         }),
     ];
 }
-export function getPlugins(schema, stateKey, version, startEditable) {
+export function getPlugins(schemaPreset, schema, stateKey, version, startEditable) {
+    if (schemaPreset === 'comment') {
+        return __spreadArray(__spreadArray(__spreadArray([
+            editablePlugin(startEditable)
+        ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), true), inputrules(schema), true), [
+            keymap(buildCommentKeymap(stateKey, schema)),
+            keymap(baseKeymap),
+            dropCursor(),
+            gapCursor(),
+            history(),
+        ], false);
+    }
     return __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([
         editablePlugin(startEditable)
     ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), true), [

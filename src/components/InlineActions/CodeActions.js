@@ -112,6 +112,7 @@ var CodeActions = function (props) {
         dispatch(updateNodeAttrs(stateId, viewId, figure, { numbered: !numbered }));
         dispatch(updateNodeAttrs(stateId, viewId, figcaption, {}, 'inside'));
     };
+    var hasFigure = !!editorState.schema.nodes.figure;
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement("div", { className: classes.dropdownContainer },
             React.createElement(LanguageSeletionDropdown, { value: node.attrs.language, onChanged: function (language) {
@@ -120,9 +121,10 @@ var CodeActions = function (props) {
         React.createElement(MenuIcon, { kind: "lineNumbers", onClick: function () {
                 dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { linenumbers: !node.attrs.linenumbers }, false));
             }, active: node.attrs.linenumbers }),
-        React.createElement(MenuIcon, { kind: "divider" }),
-        React.createElement(MenuIcon, { kind: "caption", active: Boolean(figcaption), onClick: onCaption }),
-        figcaption && React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered }),
+        hasFigure && (React.createElement(React.Fragment, null,
+            React.createElement(MenuIcon, { kind: "divider" }),
+            React.createElement(MenuIcon, { kind: "caption", active: Boolean(figcaption), onClick: onCaption }))),
+        hasFigure && figcaption && (React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered })),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
 };

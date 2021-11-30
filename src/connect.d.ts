@@ -31,7 +31,10 @@ declare type Ref<T> = {
     _opts?: Options;
 };
 export declare const ref: Ref<Store>;
-export declare function setup(store: Store, opts: Options): void;
+export declare function setup(store: Store, opts: Options, options?: {
+    setupComponents: boolean;
+    setupSidenotes: boolean;
+}): void;
 export declare const store: Pick<Store, 'getState' | 'dispatch'>;
 export declare const opts: Required<Options>;
 export {};

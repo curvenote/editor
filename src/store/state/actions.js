@@ -22,7 +22,7 @@ export function updateEditorState(stateKey, viewId, editorState, tr) {
     var stateId = opts.transformKeyToId(stateKey);
     if (stateId == null)
         throw new Error('Must have a state ID');
-    var counts = tr.docChanged ? process.countState(editorState) : null;
+    var counts = (tr === null || tr === void 0 ? void 0 : tr.docChanged) ? process.countState(editorState) : null;
     return {
         type: UPDATE_EDITOR_STATE,
         payload: {
