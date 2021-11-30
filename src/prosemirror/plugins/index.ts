@@ -6,7 +6,7 @@ import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
 import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
 import suggestion from './suggestion';
 import { buildBasicKeymap, buildKeymap, captureTab } from '../keymap';
@@ -14,7 +14,7 @@ import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import commentsPlugin from './comments';
+import getCommentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
 
@@ -34,7 +34,12 @@ function tablesPlugins(schema: Schema) {
   ];
 }
 
+function commentPlugins(preset: schemas.UseSchema): Plugin[] {
+  return preset !== 'comment' ? [getCommentsPlugin()] : [];
+}
+
 export function getPlugins(
+  schemaPreset: schemas.UseSchema,
   schema: Schema,
   stateKey: any,
   version: number,
@@ -48,7 +53,7 @@ export function getPlugins(
       // Cancel on space after some of the triggers
       (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
     ),
-    commentsPlugin(),
+    ...commentPlugins(schemaPreset),
     getPromptPlugin(),
     getImagePlaceholderPlugin(),
     ...inputrules(schema),
@@ -66,7 +71,7 @@ export function getPlugins(
 export function getInlinePlugins(schema: Schema): Plugin[] {
   return [
     editablePlugin(true),
-    commentsPlugin(),
+    getCommentsPlugin(),
     ...inputrules(schema),
     keymap(buildBasicKeymap(schema)),
     keymap(baseKeymap),
