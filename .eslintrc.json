@@ -9,7 +9,8 @@
     "airbnb-typescript",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "react-hooks"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -36,6 +37,8 @@
     "jsx-a11y/accessible-emoji": "off",
     "max-classes-per-file": "off",
     "no-multiple-empty-lines": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off"
   },
   "settings": {
