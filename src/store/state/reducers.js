@@ -9,6 +9,17 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -19,7 +30,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 import { process } from '@curvenote/schema';
-import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
+import { INIT_EDITOR_STATE, UPDATE_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, RESET_EDITOR_AND_VIEWS, } from './types';
 import { createEditorState } from '../../prosemirror';
 export var initialState = {
     editors: {},
@@ -48,7 +59,7 @@ var editorReducer = function (state, action) {
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
-            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_b = {}, _b[stateId] = __assign(__assign({}, editor), { viewIds: __spreadArray(__spreadArray([], editor.viewIds, true), [viewId], false) }), _b)), views: __assign(__assign({}, state.views), (_c = {}, _c[viewId] = { stateId: stateId, view: view }, _c)) });
+            return __assign(__assign({}, state), { editors: __assign(__assign({}, state.editors), (_b = {}, _b[stateId] = __assign(__assign({}, editor), { viewIds: Array.from(new Set(__spreadArray(__spreadArray([], editor.viewIds, true), [viewId], false))) }), _b)), views: __assign(__assign({}, state.views), (_c = {}, _c[viewId] = { stateId: stateId, view: view }, _c)) });
         }
         case RESET_ALL_EDITORS_AND_VIEWS: {
             return __assign(__assign({}, state), { editors: {}, views: {} });
@@ -59,8 +70,19 @@ var editorReducer = function (state, action) {
                     return [k, __assign(__assign({}, editor), { viewIds: [] })];
                 })), views: {} });
         }
+        case RESET_EDITOR_AND_VIEWS: {
+            var stateId = action.payload.stateId;
+            var _h = state.editors, _j = stateId, editor_1 = _h[_j], rest = __rest(_h, [typeof _j === "symbol" ? _j : _j + ""]);
+            if (editor_1 === undefined)
+                return state;
+            var views = Object.fromEntries(Object.entries(state.views).filter(function (_a) {
+                var k = _a[0];
+                return editor_1.viewIds.indexOf(k) === -1;
+            }));
+            return __assign(__assign({}, state), { editors: rest, views: views });
+        }
         case UNSUBSCRIBE_EDITOR_VIEW: {
-            var _h = action.payload, stateId = _h.stateId, viewId_1 = _h.viewId;
+            var _k = action.payload, stateId = _k.stateId, viewId_1 = _k.viewId;
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');
@@ -78,7 +100,7 @@ var editorReducer = function (state, action) {
             return newState_1;
         }
         case UPDATE_EDITOR_STATE: {
-            var _j = action.payload, stateId = _j.stateId, editorState = _j.editorState, counts = _j.counts;
+            var _l = action.payload, stateId = _l.stateId, editorState = _l.editorState, counts = _l.counts;
             var editor = state.editors[stateId];
             if (editor === undefined)
                 throw new Error('Editor state has not been setup.');

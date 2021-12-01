@@ -1,5 +1,5 @@
 import { process } from '@curvenote/schema';
-import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, } from './types';
+import { UPDATE_EDITOR_STATE, INIT_EDITOR_STATE, SUBSCRIBE_EDITOR_VIEW, UNSUBSCRIBE_EDITOR_VIEW, RESET_ALL_EDITORS_AND_VIEWS, RESET_ALL_VIEWS, RESET_EDITOR_AND_VIEWS, } from './types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
 export function initEditorState(useSchema, stateKey, editable, content, version) {
@@ -78,6 +78,17 @@ export function resetAllEditorsAndViews() {
 export function resetAllViews() {
     return {
         type: RESET_ALL_VIEWS,
+    };
+}
+export function resetEditorAndViews(stateKey) {
+    var stateId = opts.transformKeyToId(stateKey);
+    if (stateId == null)
+        throw new Error('Must have a state ID');
+    return {
+        type: RESET_EDITOR_AND_VIEWS,
+        payload: {
+            stateId: stateId,
+        },
     };
 }
 //# sourceMappingURL=actions.js.map

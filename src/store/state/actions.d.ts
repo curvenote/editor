@@ -10,3 +10,4 @@ export declare function subscribeView(stateKey: any, viewId: string, view: Edito
 export declare function unsubscribeView(stateKey: any, viewId: string): EditorActionTypes;
 export declare function resetAllEditorsAndViews(): EditorActionTypes;
 export declare function resetAllViews(): EditorActionTypes;
+export declare function resetEditorAndViews(stateKey: any): EditorActionTypes;
