@@ -9,6 +9,7 @@ import {
   UNSUBSCRIBE_EDITOR_VIEW,
   RESET_ALL_EDITORS_AND_VIEWS,
   RESET_ALL_VIEWS,
+  RESET_EDITOR_AND_VIEWS,
 } from './types';
 import { AppThunk } from '../types';
 import { getEditorState, getEditorView } from './selectors';
@@ -105,5 +106,16 @@ export function resetAllEditorsAndViews(): EditorActionTypes {
 export function resetAllViews(): EditorActionTypes {
   return {
     type: RESET_ALL_VIEWS,
+  };
+}
+
+export function resetEditorAndViews(stateKey: any): EditorActionTypes {
+  const stateId = opts.transformKeyToId(stateKey);
+  if (stateId == null) throw new Error('Must have a state ID');
+  return {
+    type: RESET_EDITOR_AND_VIEWS,
+    payload: {
+      stateId,
+    },
   };
 }
