@@ -75,6 +75,9 @@ export function createEditorView(
         dynamic: views.newWidgetView,
         range: views.newWidgetView,
         switch: views.newWidgetView,
+        mention(node, view, getPos) {
+          return new views.MentionView(node, view, getPos as GetPos);
+        },
         variable: views.newWidgetView,
         ...opts.nodeViews,
       },
