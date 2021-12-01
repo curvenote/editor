@@ -21,6 +21,7 @@ const uiReducer = (state = initialState, action: UIActionTypes): UIState => {
       };
     }
     case INLINE_SELECTION: {
+      if (state.selection === action.payload) return state;
       return {
         ...state,
         selection: action.payload,

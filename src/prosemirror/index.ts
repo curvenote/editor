@@ -9,6 +9,7 @@ import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 import { GetPos } from '../views/types';
+import { selectEditorView } from '../store/actions';
 
 export function createEditorState(
   useSchema: schemas.UseSchema,
@@ -101,6 +102,10 @@ export function createEditorView(
         const imageInSchema = view.state.schema.nodes.image;
         const uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : () => false;
         return uploadIfImagesInSchema(view, (event as DragEvent).dataTransfer);
+      },
+      handleClick: (view) => {
+        store.dispatch(selectEditorView(view.dom.id));
+        return false;
       },
       handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
         const { viewId, stateId } = getSelectedViewId(store.getState());
