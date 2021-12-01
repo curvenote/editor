@@ -45,7 +45,7 @@ const editorReducer = (state = initialState, action: EditorActionTypes): Editors
         ...state,
         editors: {
           ...state.editors,
-          [stateId]: { ...editor, viewIds: [...editor.viewIds, viewId] },
+          [stateId]: { ...editor, viewIds: Array.from(new Set([...editor.viewIds, viewId])) },
         },
         views: {
           ...state.views,
