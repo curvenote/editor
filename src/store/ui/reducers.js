@@ -26,6 +26,8 @@ var uiReducer = function (state, action) {
             return __assign(__assign({}, state), { stateId: stateId, viewId: viewId });
         }
         case INLINE_SELECTION: {
+            if (state.selection === action.payload)
+                return state;
             return __assign(__assign({}, state), { selection: action.payload });
         }
         default:

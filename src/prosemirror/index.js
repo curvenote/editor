@@ -19,6 +19,7 @@ import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
+import { selectEditorView } from '../store/actions';
 export function createEditorState(useSchema, stateKey, content, version, startEditable) {
     var schema = schemas.getSchema(useSchema);
     var plugins = getPlugins(useSchema, schema, stateKey, version, startEditable);
@@ -75,6 +76,10 @@ export function createEditorView(dom, state, dispatch) {
             var imageInSchema = view.state.schema.nodes.image;
             var uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : function () { return false; };
             return uploadIfImagesInSchema(view, event.dataTransfer);
+        },
+        handleClick: function (view) {
+            store.dispatch(selectEditorView(view.dom.id));
+            return false;
         },
         handleDoubleClick: function (view, pos, event) {
             var _a = getSelectedViewId(store.getState()), viewId = _a.viewId, stateId = _a.stateId;

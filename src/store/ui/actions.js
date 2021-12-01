@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { SELECT_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds, } from './types';
-import { getEditorUI, getSelectedEditorAndViews } from './selectors';
+import { getEditorUI, getInlineActionKind, getSelectedEditorAndViews } from './selectors';
 import { getEditorView } from '../state/selectors';
 import { getSelectionKind } from './utils';
 export function selectEditorView(viewId) {
@@ -53,7 +53,9 @@ export function positionInlineActions() {
         var _b = getSelectedEditorAndViews(getState()), viewId = _b.viewId, view = _b.view, state = _b.state;
         var selection = getSelectionKind(state);
         if (viewId == null || state == null || view == null || !selection) {
-            dispatch(setInlineSelection(null));
+            var open_1 = getInlineActionKind(getState());
+            if (open_1)
+                dispatch(setInlineSelection(null));
             return;
         }
         var placement = {
