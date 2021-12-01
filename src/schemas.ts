@@ -1,6 +1,7 @@
 import { Schema } from 'prosemirror-model';
 
 import * as basic from './nodes/basic';
+import { createMentionNodeSpecs } from './nodes/mention';
 import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
@@ -112,6 +113,7 @@ export const presets = {
       horizontal_rule: basic.horizontal_rule,
       hard_break: basic.hard_break,
       time: Nodes.Time.default,
+      ...createMentionNodeSpecs(),
       ...listNodes,
       ...citationNodes,
       ...mathNodesNoDisplay,
