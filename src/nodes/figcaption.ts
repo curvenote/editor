@@ -47,7 +47,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  () => ({ command: 'caption' }),
+  () => ({ command: 'caption', inline: true }),
   (state, node) => state.renderInline(node),
 );
 
