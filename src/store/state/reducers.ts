@@ -8,6 +8,7 @@ import {
   RESET_ALL_VIEWS,
   EditorActionTypes,
   EditorsState,
+  RESET_EDITOR_AND_VIEWS,
 } from './types';
 import { createEditorState } from '../../prosemirror';
 
@@ -44,7 +45,7 @@ const editorReducer = (state = initialState, action: EditorActionTypes): Editors
         ...state,
         editors: {
           ...state.editors,
-          [stateId]: { ...editor, viewIds: [...editor.viewIds, viewId] },
+          [stateId]: { ...editor, viewIds: Array.from(new Set([...editor.viewIds, viewId])) },
         },
         views: {
           ...state.views,
@@ -66,6 +67,19 @@ const editorReducer = (state = initialState, action: EditorActionTypes): Editors
           Object.entries(state.editors).map(([k, editor]) => [k, { ...editor, viewIds: [] }]),
         ),
         views: {},
+      };
+    }
+    case RESET_EDITOR_AND_VIEWS: {
+      const { stateId } = action.payload;
+      const { [stateId]: editor, ...rest } = state.editors;
+      if (editor === undefined) return state;
+      const views = Object.fromEntries(
+        Object.entries(state.views).filter(([k]) => editor.viewIds.indexOf(k) === -1),
+      );
+      return {
+        ...state,
+        editors: rest,
+        views,
       };
     }
     case UNSUBSCRIBE_EDITOR_VIEW: {

@@ -8,6 +8,7 @@ export const SUBSCRIBE_EDITOR_VIEW = 'SUBSCRIBE_EDITOR_VIEW';
 export const UNSUBSCRIBE_EDITOR_VIEW = 'UNSUBSCRIBE_EDITOR_VIEW';
 export const RESET_ALL_EDITORS_AND_VIEWS = 'RESET_ALL_EDITORS_AND_VIEWS';
 export const RESET_ALL_VIEWS = 'RESET_ALL_VIEWS';
+export const RESET_EDITOR_AND_VIEWS = 'RESET_EDITOR_AND_VIEWS';
 
 export const UPDATE_EDITOR_STATE = 'UPDATE_EDITOR_STATE';
 
@@ -76,10 +77,18 @@ export interface ResetAllViews {
   type: typeof RESET_ALL_VIEWS;
 }
 
+export interface ResetEditorAndViews {
+  type: typeof RESET_EDITOR_AND_VIEWS;
+  payload: {
+    stateId: string;
+  };
+}
+
 export type EditorActionTypes =
   | InitEditorState
   | UpdateEditorState
   | SubscribeEditorView
   | UnsubscribeEditorView
   | ResetAllEditorsAndViews
-  | ResetAllViews;
+  | ResetAllViews
+  | ResetEditorAndViews;
