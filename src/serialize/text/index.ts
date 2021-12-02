@@ -64,6 +64,7 @@ export const textSerializer = new MarkdownSerializer(
     math: simpleInlineRender,
     equation: simpleBlockRender,
     cite: nodes.Cite.toMarkdown, // TODO: fix this
+    mention: nodes.Mention.toMarkdown, // TODO: fix this
     cite_group: nodes.CiteGroup.toMarkdown, // TODO: fix this
     // Tables
     table: nodes.Table.toMarkdown,

@@ -35,9 +35,9 @@ export function createMentionNodeSpecs() {
 }
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
-  state.write('mention node to markdown not supported');
+  state.write(node.attrs.label);
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  state.write('mention node to tex not supported');
+  state.write(node.attrs.label);
 };
