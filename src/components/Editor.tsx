@@ -41,6 +41,20 @@ const Editor = (props: Props) => {
       // This is important for properly handling selections.
       // Cannot use react event loop here.
       editorView.current?.updateState(next);
+      if (!tr.docChanged) return;
+      // TODO: counting the number of mentions in the document
+      const mentions: string[] = [];
+      view.state.doc.content.forEach((j) => {
+        if (j.type.name === 'paragraph') {
+          j.content.forEach((k) => {
+            if (k.type.name === 'mention') {
+              const { user } = k.attrs;
+              mentions.push(user);
+            }
+          });
+        }
+      });
+      console.log('dispatchTransaction mentions:', mentions);
     });
     editorView.current.dom.id = viewId;
     if (className) editorView.current.dom.classList.add(...className.split(' '));
