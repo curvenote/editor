@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { EditorView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
@@ -17,9 +17,47 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-function Mention({ label, user }: { label: string; user: string }) {
+function useHover(): [React.MutableRefObject<HTMLElement | null>, boolean] {
+  const [value, setValue] = useState(false);
+  const ref = useRef<HTMLElement | null>(null);
+  const handleMouseOver = () => setValue(true);
+  const handleMouseOut = () => setValue(false);
+  useEffect(
+    () => {
+      const node = ref.current;
+      if (node) {
+        node.addEventListener('mouseover', handleMouseOver);
+        node.addEventListener('mouseout', handleMouseOut);
+        return () => {
+          node.removeEventListener('mouseover', handleMouseOver);
+          node.removeEventListener('mouseout', handleMouseOut);
+        };
+      }
+    },
+    [ref.current], // Recall only if ref changes
+  );
+  return [ref, value];
+}
+
+function Mention({
+  label,
+  user,
+  onHover,
+}: {
+  label: string;
+  user: string;
+  onHover: (user: string, isHover: boolean) => void;
+}) {
   const classes = useStyles();
-  return <span className={classes.root}>{`${label} user - ${user}`}</span>;
+  const [ref, isHover] = useHover();
+  useEffect(() => {
+    onHover(user, isHover);
+  }, [isHover, onHover]);
+  return <span ref={ref} className={classes.root}>{`${label} user - ${user}`}</span>;
+}
+
+function onHover(user: string, isHover: boolean) {
+  console.log('hover', { user, isHover });
 }
 
 export default class MentionView {
@@ -36,7 +74,11 @@ export default class MentionView {
     this.view = view;
     this.getPos = getPos;
     const wrapper = document.createElement('span');
-    ReactDOM.render(<Mention label={node.attrs.label} user={node.attrs.user} />, wrapper);
+
+    ReactDOM.render(
+      <Mention label={node.attrs.label} user={node.attrs.user} onHover={onHover} />,
+      wrapper,
+    );
     this.dom = wrapper;
   }
 }
