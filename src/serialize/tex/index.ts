@@ -57,7 +57,7 @@ export const texSerializer = new MarkdownSerializer(
       }
     },
     ordered_list: createLatexStatement(
-      (opts, node) => ({
+      (state, node) => ({
         command: 'enumerate',
         bracketOpts: node.attrs.order !== 1 ? 'resume' : undefined,
       }),

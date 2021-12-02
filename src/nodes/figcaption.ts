@@ -47,8 +47,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options) => ({
-    command: options.nextCaptionNumbered === false ? 'caption*' : 'caption',
+  (state) => ({
+    command: state.nextCaptionNumbered === false ? 'caption*' : 'caption',
     inline: true,
   }),
   (state, node) => state.renderInline(node),

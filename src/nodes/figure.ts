@@ -71,7 +71,7 @@ function nodeToCommand(node: Node) {
 }
 
 export const toTex = createLatexStatement(
-  (opts, node) => {
+  (state, node) => {
     return {
       command: nodeToCommand(node),
       bracketOpts: '!htbp',
@@ -90,10 +90,10 @@ export const toTex = createLatexStatement(
       state.write(`\\label{${localId}}`);
     }
     state.ensureNewLine();
-    const prev = state.options.nextCaptionNumbered;
-    state.options.nextCaptionNumbered = numbered;
+    const prev = state.nextCaptionNumbered;
+    state.nextCaptionNumbered = numbered;
     state.renderContent(node);
-    state.options.nextCaptionNumbered = prev;
+    state.nextCaptionNumbered = prev;
     if (localId && !captionFirst) {
       state.ensureNewLine();
       state.write(`\\label{${localId}}`);
