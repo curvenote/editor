@@ -1,7 +1,8 @@
-import { MarkType } from 'prosemirror-model';
-import { Plugin, PluginSpec, TextSelection, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { Options } from './types';
+import type { MarkType } from 'prosemirror-model';
+import { Plugin, TextSelection, Transaction } from 'prosemirror-state';
+import type { PluginSpec } from 'prosemirror-state';
+import type { EditorView } from 'prosemirror-view';
+import type { Options } from './types';
 import { getMarkType, MAX_MATCH } from './utils';
 
 type InputRuleState = {

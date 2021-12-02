@@ -1,7 +1,7 @@
-import { MarkType, Node } from 'prosemirror-model';
+import type { MarkType, Node } from 'prosemirror-model';
 import { EditorState, PluginKey } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { Options } from './types';
+import type { EditorView } from 'prosemirror-view';
+import type { Options } from './types';
 
 export const DEFAULT_ID = 'codemark';
 export const MAX_MATCH = 100;
