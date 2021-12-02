@@ -25,6 +25,7 @@ export type TexOptions = {
   localizeId?: (id: string) => string;
   localizeImageSrc?: (src: string) => string;
   indent?: string;
+  nextCaptionNumbered?: boolean;
 };
 
 export interface MdSerializerState extends MarkdownSerializerState {

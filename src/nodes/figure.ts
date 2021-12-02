@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { Node } from 'prosemirror-model';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
@@ -79,7 +80,6 @@ export const toTex = createLatexStatement(
   (state, node) => {
     const { numbered, id } = node.attrs as Attrs;
     const localId = state.options.localizeId?.(id ?? '') ?? id;
-    const star = numbered ? '' : '*';
     // TODO: Based on align attr
     // may have to modify string returned by state.renderContent(node);
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
@@ -87,13 +87,16 @@ export const toTex = createLatexStatement(
     const captionFirst = node.firstChild?.type.name === nodeNames.figcaption;
     if (localId && captionFirst) {
       state.ensureNewLine();
-      state.write(`\\label${star}{${localId}}`);
+      state.write(`\\label{${localId}}`);
     }
     state.ensureNewLine();
+    const prev = state.options.nextCaptionNumbered;
+    state.options.nextCaptionNumbered = numbered;
     state.renderContent(node);
+    state.options.nextCaptionNumbered = prev;
     if (localId && !captionFirst) {
       state.ensureNewLine();
-      state.write(`\\label${star}{${localId}}`);
+      state.write(`\\label{${localId}}`);
     }
   },
 );
