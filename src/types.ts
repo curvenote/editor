@@ -1,4 +1,4 @@
-import { MarkType } from 'prosemirror-model';
+import type { MarkType } from 'prosemirror-model';
 
 export type Options = {
   markType?: MarkType;

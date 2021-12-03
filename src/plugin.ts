@@ -1,6 +1,7 @@
-import { Plugin, PluginSpec } from 'prosemirror-state';
+import { Plugin } from 'prosemirror-state';
+import type { PluginSpec } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
-import { CodemarkState, CursorMetaTr, Options } from './types';
+import type { CodemarkState, CursorMetaTr, Options } from './types';
 import { getMarkType, pluginKey, safeResolve } from './utils';
 import { createInputRule } from './inputRules';
 import {

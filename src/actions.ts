@@ -1,7 +1,7 @@
-import { MarkType } from 'prosemirror-model';
+import type { MarkType } from 'prosemirror-model';
 import { EditorState, Plugin, TextSelection, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { CodemarkState, CursorMetaTr } from './types';
+import type { EditorView } from 'prosemirror-view';
+import type { CodemarkState, CursorMetaTr } from './types';
 import { MAX_MATCH, safeResolve } from './utils';
 
 export function stepOutsideNextTrAndPass(
