@@ -9,7 +9,6 @@ import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
 import { autocomplete } from 'prosemirror-autocomplete';
-import suggestion from './suggestion';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 
 import inputrules from '../inputrules';
@@ -46,12 +45,26 @@ export function getPlugins(
   if (schemaPreset === 'comment') {
     return [
       editablePlugin(startEditable),
-      // ...suggestion(
-      //   (action) => store.dispatch(handleSuggestion(action)),
-      //   NO_VARIABLE,
-      //   // Cancel on space after some of the triggers
-      //   (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-      // ),
+      ...autocomplete({
+        triggers: [
+          { name: 'mention', trigger: '@', cancelOnFirstSpace: false },
+          {
+            name: 'suggestion',
+            trigger: schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE,
+            cancelOnFirstSpace: true,
+          },
+        ],
+        reducer(action) {
+          if (action.type?.name === 'suggestion') {
+            console.log('suggestion', action);
+            return store.dispatch(handleSuggestion(action));
+          }
+          if (action.type?.name === 'mention') {
+            return true;
+          }
+          return false;
+        },
+      }),
       ...inputrules(schema),
       keymap(buildCommentKeymap(stateKey, schema)),
       keymap(baseKeymap),
@@ -83,7 +96,9 @@ export function getPlugins(
           console.log('suggestion', action);
           return store.dispatch(handleSuggestion(action));
         }
-        console.log('mention', action);
+        if (action.type?.name === 'mention') {
+          return true;
+        }
         return false;
       },
     }),
