@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-codemark",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Inline code mark for ProseMirror",
   "author": "Rowan Cockett <rowan@curvenote.com>",
   "license": "MIT",
