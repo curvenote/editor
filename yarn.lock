@@ -4526,15 +4526,6 @@ prop-types@^15.6.2, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-prosemirror-autocomplete@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/prosemirror-autocomplete/-/prosemirror-autocomplete-0.2.1.tgz#d46086d12bc00b1ec80648235ab855de38033e29"
-  integrity sha512-K9lgNmd9SmK4Fncnh4rgs77AoDmKhIzeb5A0jQgbKmfNrZBRDu1Sry86wdvecvsM7B1ZPBi6oRStyNcDKhhBQg==
-  dependencies:
-    prosemirror-inputrules "^1.1.3"
-    prosemirror-state "^1.3.4"
-    prosemirror-view "^1.20.3"
-
 prosemirror-codemark@^0.3.4:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/prosemirror-codemark/-/prosemirror-codemark-0.3.4.tgz#4b8a1bb02088ae6dc3dd9e61cb4f8a2d0a84407c"
@@ -4658,15 +4649,6 @@ prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.13.3, pros
   version "1.23.1"
   resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.23.1.tgz#ea84e685003fab655b835bf2fe834dba66d1798b"
   integrity sha512-ZB0GqRqqkGvh7ggk7asFyKl3mqu3M5URBg0tf578kuP326RqL7nbIS0jEix95Vfb/U43J1T8PV6OCWQ5fZPVjg==
-  dependencies:
-    prosemirror-model "^1.14.3"
-    prosemirror-state "^1.0.0"
-    prosemirror-transform "^1.1.0"
-
-prosemirror-view@^1.20.3:
-  version "1.23.3"
-  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.23.3.tgz#9ba85fefaf45e813c46562b694fc5f6f9a5cba9c"
-  integrity sha512-89icyMdXXwxmTxYj0TIuG5M/d0iKeu79tr+PVtC/4qtCOoHrPSPrblJcFOuOWcxGlA/Ei8PqJB4g5HkKR8jWvQ==
   dependencies:
     prosemirror-model "^1.14.3"
     prosemirror-state "^1.0.0"
