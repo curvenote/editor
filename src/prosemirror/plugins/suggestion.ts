@@ -1,7 +1,6 @@
-import { Plugin, PluginKey, Selection } from 'prosemirror-state';
-import { DEFAULT_ID } from 'prosemirror-autocomplete';
+import { Plugin, PluginKey } from 'prosemirror-state';
+import { DEFAULT_ID, closeAutocomplete, inSuggestion, KEEP_OPEN } from 'prosemirror-autocomplete';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
-import { closeAutocomplete, inSuggestion, KEEP_OPEN } from 'prosemirror-autocomplete';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 
 export const SUGGESTION_ID = DEFAULT_ID;
