@@ -1,3 +1,4 @@
+import { KEEP_OPEN, AutocompleteAction, ActionKind } from 'prosemirror-autocomplete';
 import { EditorView } from 'prosemirror-view';
 import {
   SuggestionActionTypes,
@@ -12,7 +13,6 @@ import {
   LinkResult,
 } from './types';
 import { CommandResult } from './commands';
-import { SuggestionAction, KEEP_SELECTION_ALIVE } from '../../prosemirror/plugins/suggestion';
 import { AppThunk } from '../types';
 import { getSuggestion } from './selectors';
 import * as emoji from './results/emoji';
@@ -94,7 +94,7 @@ export function selectSuggestion(selection: number): SuggestionActionTypes {
   };
 }
 
-export function chooseSelection(selected: number): AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
+export function chooseSelection(selected: number): AppThunk<boolean | typeof KEEP_OPEN> {
   return (dispatch, getState) => {
     const { kind, results } = getSuggestion(getState());
     const result = results[selected];
@@ -185,43 +185,40 @@ function setStartingSuggestions(
   };
 }
 
-export function handleSuggestion(
-  action: SuggestionAction,
-): AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
+export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean | typeof KEEP_OPEN> {
   return (dispatch, getState) => {
-    const kind = triggerToKind(action.trigger);
+    const suggestionKind = triggerToKind(action.trigger);
     dispatch(
       updateSuggestion(
         action.kind !== 'close',
-        kind,
-        action.search,
+        suggestionKind,
+        action.filter || null,
         action.view,
         action.range,
         action.trigger,
       ),
     );
-
     if (action.kind === 'open') {
-      dispatch(setStartingSuggestions(action.view, kind, action.search ?? '', true));
+      dispatch(setStartingSuggestions(action.view, suggestionKind, action.filter ?? '', true));
       dispatch(selectSuggestion(0));
     }
-    if (action.kind === 'previous' || action.kind === 'next') {
+    if (action.kind === ActionKind.up || action.kind === ActionKind.down) {
       const { results, selected } = getSuggestion(getState());
       dispatch(
         selectSuggestion(
-          positiveModulus(selected + (action.kind === 'previous' ? -1 : +1), results.length),
+          positiveModulus(selected + (action.kind === ActionKind.up ? -1 : +1), results.length),
         ),
       );
       return true;
     }
-    if (action.kind === 'filter') {
-      if (action.search === '' || action.search == null) {
-        dispatch(setStartingSuggestions(action.view, kind, '', false));
+    if (action.kind === ActionKind.filter) {
+      if (action.filter === '' || action.filter == null) {
+        dispatch(setStartingSuggestions(action.view, suggestionKind, '', false));
       } else {
-        dispatch(filterResults(action.view, action.search));
+        dispatch(filterResults(action.view, action.filter));
       }
     }
-    if (action.kind === 'select') {
+    if (action.kind === ActionKind.enter) {
       const { selected } = getSuggestion(getState());
       return dispatch(chooseSelection(selected));
     }

@@ -1,9 +1,11 @@
 import { Plugin, PluginKey, Selection } from 'prosemirror-state';
+import { DEFAULT_ID } from 'prosemirror-autocomplete';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
+import { closeAutocomplete, inSuggestion, KEEP_OPEN } from 'prosemirror-autocomplete';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 
-export const SUGGESTION_ID = 'suggestion';
-export const KEEP_SELECTION_ALIVE = 'KEEP_SELECTION_ALIVE';
+export const SUGGESTION_ID = DEFAULT_ID;
+export const KEEP_SELECTION_ALIVE = KEEP_OPEN;
 
 interface Range {
   from: number;
@@ -75,10 +77,6 @@ function actionFromEvent(event: KeyboardEvent) {
   }
 }
 
-function inSuggestion(selection: Selection, decorations: DecorationSet) {
-  return decorations.find(selection.from, selection.to).length > 0;
-}
-
 export function cancelSuggestion(view: EditorView) {
   const plugin = key.get(view.state) as Plugin;
   const { tr } = view.state;
@@ -91,7 +89,7 @@ function cancelIfInsideAndPass(view: EditorView) {
   const plugin = key.get(view.state) as Plugin;
   const { decorations } = plugin.getState(view.state);
   if (inSuggestion(view.state.selection, decorations)) {
-    cancelSuggestion(view);
+    closeAutocomplete(view);
   }
   return false;
 }
@@ -199,7 +197,7 @@ export default function getPlugins(
           search.length === 0 &&
           (event.key === ' ' || event.key === 'Spacebar')
         ) {
-          cancelSuggestion(view);
+          closeAutocomplete(view);
           return false;
         }
 
@@ -214,14 +212,14 @@ export default function getPlugins(
           case SuggestionActionKind.close:
             // The user action will be handled in the view code above
             // Allows clicking off to be handled in the same way
-            return cancelSuggestion(view);
+            return closeAutocomplete(view);
           case SuggestionActionKind.select: {
             // Only trigger the cancel if it is not expliticly handled in the select
             const result = onAction({ ...action, kind: SuggestionActionKind.select });
             if (result === KEEP_SELECTION_ALIVE) {
               return true;
             }
-            return result || cancelSuggestion(view);
+            return result || closeAutocomplete(view);
           }
           case SuggestionActionKind.previous:
             return Boolean(onAction({ ...action, kind: SuggestionActionKind.previous }));
