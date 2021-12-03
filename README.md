@@ -31,6 +31,8 @@ Or see the [live demo here](https://curvenote.github.io/prosemirror-codemark/)!
 
 `codemark` is a specialized `InputRule` and a `Plugin` to display a fake-cursor as a decoration, which allows you to navigate inside and outside of inline code. This allows the user the ability to navigate out of a code-mark, and also ensures that the text-input `caret` indicates what will happen next. The plugin works with `undoInputRule` from `prosemirror-inputrules` to undo code mark creation.
 
+### Basic ProseMirror
+
 To use the plugins, supply your `MarkType` and use the plugins in your `EditorView`.
 
 ```ts
@@ -47,13 +49,17 @@ const view = new EditorView(editor, {
 });
 ```
 
-Example use with [TipTap editor](https://tiptap.dev):
+### Usage with [TipTap](https://tiptap.dev)
+
+Create a [TipTap extention](https://tiptap.dev/api/extensions) and add a custom plugin.
+The schema can be accessed from `this.editor.schema.marks.code`.
+
 ```ts
 import codemark from 'prosemirror-codemark';
 import 'codemark/dist/codemark.css';
 
 const codemarkPlugin = Extension.create({
-  name: "codemarkPlugin",
+  name: 'codemarkPlugin',
   addProseMirrorPlugins() {
     return codemark({ markType: this.editor.schema.marks.code });
   },
@@ -61,7 +67,7 @@ const codemarkPlugin = Extension.create({
 
 this.editor = new Editor({
   extensions: [StarterKit, codemarkPlugin],
-  content: `this is <code>code</code> test`,
+  content: `This is a <code>code</code> test!`,
 });
 ```
 
