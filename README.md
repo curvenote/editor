@@ -47,6 +47,24 @@ const view = new EditorView(editor, {
 });
 ```
 
+Example use with [TipTap editor](https://tiptap.dev):
+```ts
+import codemark from 'prosemirror-codemark';
+import 'codemark/dist/codemark.css';
+
+const codemarkPlugin = Extension.create({
+  name: "codemarkPlugin",
+  addProseMirrorPlugins() {
+    return codemark({ markType: this.editor.schema.marks.code });
+  },
+});
+
+this.editor = new Editor({
+  extensions: [StarterKit, codemarkPlugin],
+  content: `this is <code>code</code> test`,
+});
+```
+
 The styles are necessary to show the `.fake-cursor`, they are simple if you want to [override them](./src/codemark.css). It does not provide styles for the `code` specifically. The plugin visually works best if the code mark has a border and a different color than the main text.
 
 ## Why
