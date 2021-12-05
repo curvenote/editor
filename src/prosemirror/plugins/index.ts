@@ -8,14 +8,15 @@ import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
-import { autocomplete } from 'prosemirror-autocomplete';
-import suggestion from './suggestion';
+import { autocomplete, DEFAULT_ID } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
+import { SuggestionKind } from '../../store/types';
+import { updateSuggestion } from '../../store/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
@@ -46,12 +47,6 @@ export function getPlugins(
   if (schemaPreset === 'comment') {
     return [
       editablePlugin(startEditable),
-      // ...suggestion(
-      //   (action) => store.dispatch(handleSuggestion(action)),
-      //   NO_VARIABLE,
-      //   // Cancel on space after some of the triggers
-      //   (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-      // ),
       ...inputrules(schema),
       keymap(buildCommentKeymap(stateKey, schema)),
       keymap(baseKeymap),
@@ -62,13 +57,6 @@ export function getPlugins(
   }
   return [
     editablePlugin(startEditable),
-    // ...suggestion(
-    //   (action) => store.dispatch(handleSuggestion(action)),
-    //   schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE,
-    //   // Cancel on space after some of the triggers
-    //   (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-    // ),
-    // TODO: move this to comment for first iteration
     ...autocomplete({
       triggers: [
         { name: 'mention', trigger: '@', cancelOnFirstSpace: false },
@@ -80,10 +68,18 @@ export function getPlugins(
       ],
       reducer(action) {
         if (action.type?.name === 'suggestion') {
-          console.log('suggestion', action);
           return store.dispatch(handleSuggestion(action));
         }
-        console.log('mention', action);
+        store.dispatch(
+          updateSuggestion(
+            action.kind !== 'close',
+            SuggestionKind.person,
+            action.filter || null,
+            action.view,
+            action.range,
+            action.trigger,
+          ),
+        );
         return false;
       },
     }),

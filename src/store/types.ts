@@ -27,6 +27,8 @@ export interface State {
   sidenotes: SidenotesState['sidenotes'];
 }
 
+export type { SuggestionState };
+
 export type EditorActions =
   | EditorActionTypes
   | UIActionTypes
