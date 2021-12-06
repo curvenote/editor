@@ -2,7 +2,7 @@ import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
 import { KEEP_OPEN, closeAutocomplete } from 'prosemirror-autocomplete';
 import { AppThunk, State, Dispatch } from '../../types';
-import { getSuggestion } from '../selectors';
+import { getSuggestionEditorState, selectSuggestionView } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, VariableResult, SuggestionKind } from '../types';
 
@@ -58,7 +58,7 @@ export function chooseSelection(
       range: { from, to },
       trigger,
       search,
-    } = getSuggestion(getState());
+    } = getSuggestionEditorState(getState());
     if (view == null || search == null) return false;
 
     if (result.id !== 'FINISHED') {
@@ -96,7 +96,7 @@ export function filterResults(
   callback: (results: VariableResult[]) => void,
 ): void {
   if (kind === SuggestionKind.display && search.endsWith('}}')) {
-    closeAutocomplete(getState().editor.suggestion.view as EditorView);
+    closeAutocomplete(selectSuggestionView(getState()) as EditorView);
     // Not sure why this needs to be async
     setTimeout(() => dispatch(chooseSelection(kind, getFirstSuggestion(kind))), 5);
     return;

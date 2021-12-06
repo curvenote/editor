@@ -6,6 +6,7 @@ import { CommandResult } from './commands';
 export const UPDATE_SUGGESTION = 'UPDATE_SUGGESTION';
 export const UPDATE_RESULTS = 'UPDATE_RESULTS';
 export const SELECT_SUGGESTION = 'SELECT_SUGGESTION';
+export const UPDATE_SUGGESTION_DATA = 'UPDATE_SUGGESTION_DATA';
 
 export const variableTrigger = /^([a-zA-Z0-9_]+)\s?=/;
 
@@ -51,7 +52,7 @@ export type Location =
 
 export type Range = { from: number; to: number };
 
-export type SuggestionState = {
+export type SuggestionEditorState = {
   view: EditorView | null;
   open: boolean;
   trigger: string;
@@ -61,6 +62,11 @@ export type SuggestionState = {
   selected: number;
   results: SuggestionResult[];
 };
+
+export interface SuggestionState {
+  editorState: SuggestionEditorState;
+  data: Partial<Record<SuggestionKind, any[]>>;
+}
 
 export interface UpdateSuggestionAction {
   type: typeof UPDATE_SUGGESTION;
@@ -88,7 +94,16 @@ export interface UpdateSuggestionSelectionAction {
   };
 }
 
+export interface UpdateSuggestionDataAction {
+  type: typeof UPDATE_SUGGESTION_DATA;
+  payload: {
+    kind: SuggestionKind;
+    data: any[];
+  };
+}
+
 export type SuggestionActionTypes =
   | UpdateSuggestionAction
   | UpdateSuggestionResultsAction
-  | UpdateSuggestionSelectionAction;
+  | UpdateSuggestionSelectionAction
+  | UpdateSuggestionDataAction;

@@ -8,15 +8,13 @@ import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
-import { autocomplete, DEFAULT_ID } from 'prosemirror-autocomplete';
+import { autocomplete } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
-import { SuggestionKind } from '../../store/types';
-import { updateSuggestion } from '../../store/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
@@ -67,20 +65,7 @@ export function getPlugins(
         },
       ],
       reducer(action) {
-        if (action.type?.name === 'suggestion') {
-          return store.dispatch(handleSuggestion(action));
-        }
-        store.dispatch(
-          updateSuggestion(
-            action.kind !== 'close',
-            SuggestionKind.person,
-            action.filter || null,
-            action.view,
-            action.range,
-            action.trigger,
-          ),
-        );
-        return false;
+        return store.dispatch(handleSuggestion(action));
       },
     }),
     getPromptPlugin(),
