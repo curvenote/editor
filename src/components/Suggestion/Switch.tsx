@@ -9,7 +9,7 @@ import { SuggestionKind } from '../../store/suggestion/types';
 import { selectors } from '../../store';
 
 const SuggestionSwitch = () => {
-  const kind = useSelector((state: State) => selectors.getSuggestion(state).kind);
+  const kind = useSelector((state: State) => selectors.getSuggestionEditorState(state).kind);
   return (
     <>
       {kind === SuggestionKind.emoji && <EmojiSuggestions />}

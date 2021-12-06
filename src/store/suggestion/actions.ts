@@ -11,10 +11,12 @@ import {
   variableTrigger,
   VariableResult,
   LinkResult,
+  UpdateSuggestionDataAction,
+  UPDATE_SUGGESTION_DATA,
 } from './types';
 import { CommandResult } from './commands';
 import { AppThunk } from '../types';
-import { getSuggestion } from './selectors';
+import { getSuggestionEditorState, selectSuggestionData } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';
 import * as variable from './results/variable';
@@ -85,6 +87,28 @@ export function updateResults(results: any[]): SuggestionActionTypes {
   };
 }
 
+export function updateResultsWithData(): AppThunk<void> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { kind } = getSuggestionEditorState(state);
+    if (!kind) return;
+    const data = selectSuggestionData(state, kind);
+    if (data) dispatch(updateResults(data));
+  };
+}
+export function updateSuggestionKindData(
+  kind: SuggestionKind,
+  data: any[],
+): UpdateSuggestionDataAction {
+  return {
+    type: UPDATE_SUGGESTION_DATA,
+    payload: {
+      kind,
+      data,
+    },
+  };
+}
+
 export function selectSuggestion(selection: number): SuggestionActionTypes {
   return {
     type: SELECT_SUGGESTION,
@@ -96,7 +120,7 @@ export function selectSuggestion(selection: number): SuggestionActionTypes {
 
 export function chooseSelection(selected: number): AppThunk<boolean | typeof KEEP_OPEN> {
   return (dispatch, getState) => {
-    const { kind, results } = getSuggestion(getState());
+    const { kind, results } = getSuggestionEditorState(getState());
     const result = results[selected];
     if (result == null) return false;
     switch (kind) {
@@ -119,7 +143,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
 
 export function filterResults(view: EditorView, search: string): AppThunk<void> {
   return (dispatch, getState) => {
-    const { kind } = getSuggestion(getState());
+    const { kind } = getSuggestionEditorState(getState());
     switch (kind) {
       case SuggestionKind.emoji:
         return emoji.filterResults(view.state.schema, search, (results: EmojiResult[]) =>
@@ -129,6 +153,11 @@ export function filterResults(view: EditorView, search: string): AppThunk<void> 
         return command.filterResults(view, search, (results: CommandResult[]) =>
           dispatch(updateResults(results)),
         );
+      case SuggestionKind.person: {
+        const people = selectSuggestionData(getState(), SuggestionKind.person);
+        if (!people) return false;
+        return people;
+      }
       case SuggestionKind.link:
         return link.filterResults(view.state.schema, search, (results: LinkResult[]) =>
           dispatch(updateResults(results)),
@@ -164,6 +193,10 @@ function setStartingSuggestions(
       case SuggestionKind.command: {
         const starting = command.startingSuggestions(view);
         dispatch(updateResults(starting));
+        return;
+      }
+      case SuggestionKind.person: {
+        dispatch(updateResultsWithData());
         return;
       }
       case SuggestionKind.link: {
@@ -202,8 +235,10 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
       dispatch(setStartingSuggestions(action.view, suggestionKind, action.filter ?? '', true));
       dispatch(selectSuggestion(0));
     }
+    console.log('new action', action);
     if (action.kind === ActionKind.up || action.kind === ActionKind.down) {
-      const { results, selected } = getSuggestion(getState());
+      const { results, selected } = getSuggestionEditorState(getState());
+      console.log('updown', selected + (action.kind === ActionKind.up ? -1 : +1), results.length);
       dispatch(
         selectSuggestion(
           positiveModulus(selected + (action.kind === ActionKind.up ? -1 : +1), results.length),
@@ -219,7 +254,7 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
       }
     }
     if (action.kind === ActionKind.enter) {
-      const { selected } = getSuggestion(getState());
+      const { selected } = getSuggestionEditorState(getState());
       return dispatch(chooseSelection(selected));
     }
     return false;

@@ -1,7 +1,7 @@
 import { Schema } from 'prosemirror-model';
 import { Nodes, ReferenceKind } from '@curvenote/schema';
 import { AppThunk } from '../../types';
-import { getSuggestion } from '../selectors';
+import { getSuggestionEditorState } from '../selectors';
 import { LinkResult } from '../types';
 import { opts, SearchContext } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
@@ -21,7 +21,7 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
     const {
       view,
       range: { from, to },
-    } = getSuggestion(getState());
+    } = getSuggestionEditorState(getState());
     if (view == null) return false;
     view.dispatch(view.state.tr.insertText('', from, to));
     switch (result.kind) {

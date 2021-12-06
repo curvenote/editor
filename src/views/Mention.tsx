@@ -16,9 +16,9 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-function Mention({ label, user }: { label: string; user: string }) {
+function Mention({ label }: { label: string }) {
   const classes = useStyles();
-  return <span className={classes.root}>{`${label} user - ${user}`}</span>;
+  return <span className={classes.root}>{`${label}`}</span>;
 }
 
 export default class MentionView {
@@ -36,7 +36,7 @@ export default class MentionView {
     this.getPos = getPos;
     const wrapper = document.createElement('span');
 
-    ReactDOM.render(<Mention label={node.attrs.label} user={node.attrs.user} />, wrapper);
+    ReactDOM.render(<Mention label={node.attrs.label} />, wrapper);
     this.dom = wrapper;
   }
 }

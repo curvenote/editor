@@ -21,7 +21,7 @@ import { Transaction } from 'prosemirror-state';
 import { nodeNames, createId } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
-import { getSuggestion } from '../selectors';
+import { getSuggestionEditorState } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
 import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
@@ -378,7 +378,7 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
     const {
       view,
       range: { from, to },
-    } = getSuggestion(getState());
+    } = getSuggestionEditorState(getState());
     if (view == null) return false;
     const removeText = () => {
       const { tr } = view.state;

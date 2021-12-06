@@ -16,6 +16,7 @@ import {
   Attributes,
   InlineActions,
   LinkResult,
+  SuggestionKind,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
@@ -105,6 +106,7 @@ setup(store, opts);
 
 window.store = store;
 store.dispatch(actions.initEditorState('full', stateKey, true, snippet, 0));
+store.dispatch(actions.updateSuggestionKindData(SuggestionKind.person, []));
 
 store.subscribe(() => {
   const myst = document.getElementById('myst');
