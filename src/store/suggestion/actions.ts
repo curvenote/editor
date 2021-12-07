@@ -163,6 +163,10 @@ export function filterResults(view: EditorView, search: string): AppThunk<void> 
         return link.filterResults(view.state.schema, search, (results: LinkResult[]) =>
           dispatch(updateResults(results)),
         );
+      case SuggestionKind.person:
+        return () => {
+          // TODO: a default behavior for this?
+        };
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return variable.filterResults(
