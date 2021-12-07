@@ -45,8 +45,14 @@ export function getPlugins(
   if (schemaPreset === 'comment') {
     return [
       editablePlugin(startEditable),
-      ...inputrules(schema),
       keymap(buildCommentKeymap(stateKey, schema)),
+      ...autocomplete({
+        triggers: [{ name: 'mention', trigger: '@', cancelOnFirstSpace: false }],
+        reducer(action) {
+          return store.dispatch(handleSuggestion(action));
+        },
+      }),
+      ...inputrules(schema),
       keymap(baseKeymap),
       dropCursor(),
       gapCursor(),
@@ -55,9 +61,10 @@ export function getPlugins(
   }
   return [
     editablePlugin(startEditable),
+    getPromptPlugin(),
     ...autocomplete({
       triggers: [
-        { name: 'mention', trigger: '@', cancelOnFirstSpace: false },
+        // { name: 'mention', trigger: '@', cancelOnFirstSpace: false },
         {
           name: 'suggestion',
           trigger: schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE,
@@ -68,7 +75,6 @@ export function getPlugins(
         return store.dispatch(handleSuggestion(action));
       },
     }),
-    getPromptPlugin(),
     getImagePlaceholderPlugin(),
     ...inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),

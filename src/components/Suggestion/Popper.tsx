@@ -15,7 +15,7 @@ const useStyles = makeStyles(() =>
       minWidth: 300,
       maxWidth: 500,
       maxHeight: 350,
-      overflowY: 'scroll',
+      overflowY: 'auto',
       margin: '10px 0',
     },
   }),

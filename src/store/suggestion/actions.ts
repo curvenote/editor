@@ -1,5 +1,6 @@
 import { KEEP_OPEN, AutocompleteAction, ActionKind } from 'prosemirror-autocomplete';
 import { EditorView } from 'prosemirror-view';
+import { schemas } from '@curvenote/schema';
 import {
   SuggestionActionTypes,
   SuggestionKind,
@@ -21,6 +22,7 @@ import * as emoji from './results/emoji';
 import * as command from './results/command';
 import * as variable from './results/variable';
 import * as link from './results/link';
+import * as person from './results/person';
 
 export { executeCommand } from './results/command';
 
@@ -96,6 +98,7 @@ export function updateResultsWithData(): AppThunk<void> {
     if (data) dispatch(updateResults(data));
   };
 }
+
 export function updateSuggestionKindData(
   kind: SuggestionKind,
   data: any[],
@@ -132,6 +135,9 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
       case SuggestionKind.link:
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
+      case SuggestionKind.person:
+        dispatch(person.chooseSelection(result as schemas.MentionNodeAttrState));
+        return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:
         return dispatch(variable.chooseSelection(kind, result as VariableResult));
@@ -153,11 +159,6 @@ export function filterResults(view: EditorView, search: string): AppThunk<void> 
         return command.filterResults(view, search, (results: CommandResult[]) =>
           dispatch(updateResults(results)),
         );
-      case SuggestionKind.person: {
-        const people = selectSuggestionData(getState(), SuggestionKind.person);
-        if (!people) return false;
-        return people;
-      }
       case SuggestionKind.link:
         return link.filterResults(view.state.schema, search, (results: LinkResult[]) =>
           dispatch(updateResults(results)),
@@ -213,7 +214,7 @@ function setStartingSuggestions(
         return;
       }
       default:
-        throw new Error('Unknown suggestion kind.');
+        throw new Error(`Unknown suggestion kind - ${kind}`);
     }
   };
 }
@@ -235,10 +236,8 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
       dispatch(setStartingSuggestions(action.view, suggestionKind, action.filter ?? '', true));
       dispatch(selectSuggestion(0));
     }
-    console.log('new action', action);
     if (action.kind === ActionKind.up || action.kind === ActionKind.down) {
       const { results, selected } = getSuggestionEditorState(getState());
-      console.log('updown', selected + (action.kind === ActionKind.up ? -1 : +1), results.length);
       dispatch(
         selectSuggestion(
           positiveModulus(selected + (action.kind === ActionKind.up ? -1 : +1), results.length),
