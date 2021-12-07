@@ -201,7 +201,6 @@ function setStartingSuggestions(
         return;
       }
       case SuggestionKind.person: {
-        dispatch(updateResultsWithData());
         return;
       }
       case SuggestionKind.link: {
