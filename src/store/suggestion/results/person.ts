@@ -13,7 +13,6 @@ export function chooseSelection(result: schemas.MentionNodeAttrState): AppThunk<
 
     const schema = view.state.schema as Schema;
     const { tr } = view.state;
-    console.log('choose select', { schema, result });
     view.dispatch(
       tr.replaceRangeWith(
         from,
