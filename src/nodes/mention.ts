@@ -16,14 +16,14 @@ export function createMentionNodeSpecs() {
     selectable: true,
     toDOM(node: any) {
       const { label, user } = node.attrs;
-      return ['span', { label, user, class: 'mention' }];
+      return ['span', { title: label, 'data-user': user, class: 'mention' }];
     },
     parseDOM: [
       {
         tag: 'span.mention',
         getAttrs(dom: HTMLSpanElement): MentionNodeAttrState {
-          const label = (dom as HTMLSpanElement).getAttribute('label') || '';
-          const user = (dom as HTMLSpanElement).getAttribute('user') || '';
+          const label = dom.getAttribute('title') || '';
+          const user = dom.getAttribute('data-user') || '';
           return { label, user };
         },
       },
