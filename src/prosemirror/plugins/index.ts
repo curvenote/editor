@@ -19,9 +19,6 @@ import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
 
-const ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
-const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
-
 function tablesPlugins(schema: Schema) {
   // Don't add plugins if they are not in the schema
   if (!schema.nodes[nodeNames.table]) return [];
@@ -64,11 +61,34 @@ export function getPlugins(
     getPromptPlugin(),
     ...autocomplete({
       triggers: [
-        // { name: 'mention', trigger: '@', cancelOnFirstSpace: false },
         {
-          name: 'suggestion',
-          trigger: schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE,
+          name: 'emoji',
+          trigger: ':',
           cancelOnFirstSpace: true,
+        },
+        {
+          name: 'command',
+          trigger: '/',
+          cancelOnFirstSpace: true,
+        },
+        ...(schema.nodes.variable
+          ? [
+              {
+                name: 'variable',
+                trigger: /(?:^|\s|\n|[^\d\w])((?:^[a-zA-Z0-9_]+)\s?=)/,
+                cancelOnFirstSpace: false,
+              },
+            ]
+          : []),
+        {
+          name: 'insert',
+          trigger: '{{',
+          cancelOnFirstSpace: false,
+        },
+        {
+          name: 'link',
+          trigger: '[[',
+          cancelOnFirstSpace: false,
         },
       ],
       reducer(action) {
