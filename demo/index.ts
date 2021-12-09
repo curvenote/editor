@@ -4,7 +4,7 @@ import { EditorView } from 'prosemirror-view';
 import { DOMParser } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic';
 import { exampleSetup } from 'prosemirror-example-setup';
-import autocomplete, { Options } from '../src';
+import { autocomplete, Options } from '../src';
 import { reducer } from './reducer';
 
 const editor = document.querySelector('#editor') as HTMLDivElement;

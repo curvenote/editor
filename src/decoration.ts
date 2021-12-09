@@ -12,7 +12,7 @@ import {
   ActionKind,
   AutocompleteState,
 } from './types';
-import { DEFAULT_DECO_ATTRS, inSuggestion, pluginKey } from './utils';
+import { inSuggestion, pluginKey } from './utils';
 
 const inactiveAutocompleteState: AutocompleteState = {
   active: false,
@@ -79,7 +79,10 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           const { trigger, filter, type } = meta;
           const from = tr.selection.from - trigger.length - (filter?.length ?? 0);
           const to = tr.selection.from;
-          const attrs = { ...DEFAULT_DECO_ATTRS, ...type?.decorationAttrs };
+          const className = type?.decorationAttrs?.class
+            ? ['autocomplete', type?.decorationAttrs?.class].join(' ')
+            : 'autocomplete';
+          const attrs = { ...type?.decorationAttrs, class: className };
           const deco = Decoration.inline(from, to, attrs, {
             inclusiveStart: false,
             inclusiveEnd: true,
