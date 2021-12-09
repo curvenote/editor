@@ -12,7 +12,7 @@ import {
   ActionKind,
   AutocompleteState,
 } from './types';
-import { DEFAULT_DECO_ATTRS, inSuggestion, pluginKey } from './utils';
+import { inSuggestion, pluginKey, AUTOCOMPLETE } from './utils';
 
 const inactiveAutocompleteState: AutocompleteState = {
   active: false,
@@ -51,13 +51,13 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
     view() {
       return {
         update: (view, prevState) => {
-          // Add a blur handler to close the autocomplete
-          const dom = view.dom as Element & { autocompleteFocusAdded: boolean };
+          // Add a focus handler to close the autocomplete decoration
+          // Handles the case when coming back to an editor
+          const dom = view.dom as Element & { autocompleteFocusAdded: true };
           if (!dom.autocompleteFocusAdded) {
             view.dom.addEventListener('focus', () => {
-              if (plugin.getState(view.state).active) {
-                closeAutocomplete(view);
-              }
+              if (!plugin.getState(view.state).active) return;
+              closeAutocomplete(view);
             });
             dom.autocompleteFocusAdded = true;
           }
@@ -90,7 +90,10 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           const { trigger, filter, type } = meta;
           const from = tr.selection.from - trigger.length - (filter?.length ?? 0);
           const to = tr.selection.from;
-          const attrs = { ...DEFAULT_DECO_ATTRS, ...type?.decorationAttrs };
+          const className = type?.decorationAttrs?.class
+            ? [AUTOCOMPLETE, type?.decorationAttrs?.class].join(' ')
+            : AUTOCOMPLETE;
+          const attrs = { ...type?.decorationAttrs, class: className };
           const deco = Decoration.inline(from, to, attrs, {
             inclusiveStart: false,
             inclusiveEnd: true,

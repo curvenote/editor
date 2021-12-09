@@ -1,5 +1,5 @@
 import { EditorView } from 'prosemirror-view';
-import { ActionKind, AutocompleteAction, DEFAULT_ID, FromTo } from '../src';
+import { ActionKind, AutocompleteAction, AUTOCOMPLETE, FromTo } from '../src';
 import { closeAutocomplete } from '../src/actions';
 
 const suggestion = document.querySelector('#suggestion') as HTMLDivElement;
@@ -20,7 +20,7 @@ function setInfo(action: AutocompleteAction) {
 
 function placeSuggestion() {
   suggestion.style.display = picker.open ? 'block' : 'none';
-  const rect = document.getElementById(DEFAULT_ID)?.getBoundingClientRect();
+  const rect = document.getElementsByClassName(AUTOCOMPLETE)[0]?.getBoundingClientRect();
   if (!rect) return;
   suggestion.style.top = `${rect.top + rect.height}px`;
   suggestion.style.left = `${rect.left}px`;
