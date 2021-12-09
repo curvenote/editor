@@ -225,6 +225,7 @@ There are a few other packages that offer similar functionality:
 - [prosemirror-suggestions](https://github.com/quartzy/prosemirror-suggestions)
 - [prosemirror-mentions](https://github.com/joelewis/prosemirror-mentions)
 - [prosemirror-suggest](https://github.com/remirror/remirror/tree/next/packages/prosemirror-suggest)
+- [@tiptap/suggestion](https://www.npmjs.com/package/@tiptap/suggestion)
 
 `prosemirror-suggestions` is similar in that it does not provide a UI, if you want a simple UI out of the box you can look at `prosemirror-mentions`. All three of these libraries trigger based on RegExp and leave the decorations in the state. This is similar to how Twitter works, but is undesirable in writing longer documents where you want to dismiss the suggestions with an escape and not see them again in that area.
 
