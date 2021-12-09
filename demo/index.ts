@@ -8,6 +8,7 @@ import autocomplete, { Options } from '../src';
 import { reducer } from './reducer';
 
 const editor = document.querySelector('#editor') as HTMLDivElement;
+const editor2 = document.querySelector('#editor2') as HTMLDivElement;
 const content = document.querySelector('#content') as HTMLDivElement;
 
 const options: Options = {
@@ -26,6 +27,13 @@ const options: Options = {
 };
 
 (window as any).view = new EditorView(editor, {
+  state: EditorState.create({
+    doc: DOMParser.fromSchema(schema).parse(content),
+    plugins: [...autocomplete(options), ...exampleSetup({ schema, menuBar: false })],
+  }),
+});
+
+(window as any).view2 = new EditorView(editor2, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(schema).parse(content),
     plugins: [...autocomplete(options), ...exampleSetup({ schema, menuBar: false })],

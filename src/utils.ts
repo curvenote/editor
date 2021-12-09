@@ -2,7 +2,7 @@ import { PluginKey, Selection } from 'prosemirror-state';
 import { DecorationSet } from 'prosemirror-view';
 
 export const DEFAULT_ID = 'autocomplete';
-export const DEFAULT_DECO_ATTRS = { id: DEFAULT_ID, class: DEFAULT_ID };
+export const DEFAULT_DECO_ATTRS = { class: DEFAULT_ID };
 
 export const pluginKey = new PluginKey(DEFAULT_ID);
 

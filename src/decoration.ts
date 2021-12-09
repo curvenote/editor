@@ -51,6 +51,17 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
     view() {
       return {
         update: (view, prevState) => {
+          // Add a blur handler to close the autocomplete
+          const dom = view.dom as Element & { autocompleteFocusAdded: boolean };
+          if (!dom.autocompleteFocusAdded) {
+            view.dom.addEventListener('focus', () => {
+              if (plugin.getState(view.state).active) {
+                closeAutocomplete(view);
+              }
+            });
+            dom.autocompleteFocusAdded = true;
+          }
+
           const prev = plugin.getState(prevState) as ActiveAutocompleteState;
           const next = plugin.getState(view.state) as ActiveAutocompleteState;
 
