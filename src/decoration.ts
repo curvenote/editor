@@ -51,17 +51,6 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
     view() {
       return {
         update: (view, prevState) => {
-          // Add a focus handler to close the autocomplete decoration
-          // Handles the case when coming back to an editor
-          const dom = view.dom as Element & { autocompleteFocusAdded: true };
-          if (!dom.autocompleteFocusAdded) {
-            view.dom.addEventListener('focus', () => {
-              if (!plugin.getState(view.state).active) return;
-              closeAutocomplete(view);
-            });
-            dom.autocompleteFocusAdded = true;
-          }
-
           const prev = plugin.getState(prevState) as ActiveAutocompleteState;
           const next = plugin.getState(view.state) as ActiveAutocompleteState;
 
