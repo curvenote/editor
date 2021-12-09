@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { TexOptions, TexFormatTypes, MdFormatSerialize } from '../serialize/types';
+import { TexFormatTypes, MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { NodeGroups } from './types';
 
@@ -49,8 +49,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options: TexOptions) => ({
-    command: options.format === TexFormatTypes.tex_curvenote ? 'callout' : 'framed',
+  (state) => ({
+    command: state.options.format === TexFormatTypes.tex_curvenote ? 'callout' : 'framed',
   }),
   (state, node) => {
     state.renderContent(node);

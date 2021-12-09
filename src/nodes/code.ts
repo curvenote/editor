@@ -1,5 +1,5 @@
 import { createLatexStatement } from '../serialize/tex/utils';
-import { TexFormatTypes, TexOptions, MdFormatSerialize } from '../serialize/types';
+import { TexFormatTypes, MdFormatSerialize } from '../serialize/types';
 import { NodeGroups, NumberedNode, MyNodeSpec } from './types';
 import {
   convertToBooleanAttribute,
@@ -66,8 +66,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (options: TexOptions) => ({
-    command: options.format === TexFormatTypes.tex_curvenote ? 'code' : 'verbatim',
+  (state) => ({
+    command: state.options.format === TexFormatTypes.tex_curvenote ? 'code' : 'verbatim',
   }),
   (state, node) => {
     state.renderContent(node);

@@ -34,6 +34,7 @@ export interface MdSerializerState extends MarkdownSerializerState {
 export interface TexSerializerState extends MarkdownSerializerState {
   options: TexOptions;
   delim?: string;
+  nextCaptionNumbered?: boolean;
 }
 
 export type MdFormatSerialize<S extends Schema<any, any> = any> = (

@@ -1,18 +1,16 @@
 /* eslint-disable no-param-reassign */
 import { Node } from 'prosemirror-model';
-import { TexStatementOptions, TexFormatSerialize, TexOptions, TexSerializerState } from '../types';
+import { TexStatementOptions, TexFormatSerialize, TexSerializerState } from '../types';
 
 export const INDENT = '  ';
 
 export function createLatexStatement(
-  opts: string | ((options: TexOptions, node: Node) => TexStatementOptions),
+  opts: string | ((state: TexSerializerState, node: Node) => TexStatementOptions),
   f: TexFormatSerialize,
 ): TexFormatSerialize {
   return (state: TexSerializerState, node, p, i) => {
     const { command, bracketOpts, inline, before, after } =
-      typeof opts === 'string'
-        ? ({ command: opts } as TexStatementOptions)
-        : opts(state.options, node);
+      typeof opts === 'string' ? ({ command: opts } as TexStatementOptions) : opts(state, node);
     if (before) (state as any).out += `\n${state.delim}${before}`;
     const optsInBrackets = bracketOpts ? `[${bracketOpts}]` : '';
     state.write(inline ? `\\${command}{\n` : `\\begin{${command}}${optsInBrackets}\n`);
