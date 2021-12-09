@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { EditorView } from 'prosemirror-view';
 import { makeStyles, createStyles, Paper, Popper, PopperProps } from '@material-ui/core';
 import { State } from '../../store/types';
 import { selectors } from '../../store';
@@ -8,6 +9,7 @@ import useClickOutside from '../hooks/useClickOutside';
 import { SUGGESTION_ID } from '../../prosemirror/plugins/suggestion';
 import { registerPopper } from '../InlineActions';
 import { closeSuggestion } from '../../store/actions';
+import { getSelectedView } from '../../store/selectors';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -21,8 +23,14 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-function getNode() {
-  return document.getElementById(SUGGESTION_ID);
+const cache = {
+  viewDom: null as Element | null,
+};
+
+function getNode(view?: EditorView | null) {
+  cache.viewDom = view?.dom ?? cache.viewDom;
+  if (!cache.viewDom) return null;
+  return cache.viewDom.querySelector(`.${SUGGESTION_ID}`);
 }
 
 const anchorEl: PopperProps['anchorEl'] = {
@@ -46,7 +54,8 @@ const Suggestion: React.FC = (props) => {
   useClickOutside(paperRef, () => {
     dispatch(closeSuggestion());
   });
-  if (!open || !getNode()) return null;
+  const { view } = useSelector(getSelectedView);
+  if (!open || !getNode(view)) return null;
   return (
     <Popper
       className="above-modals"
