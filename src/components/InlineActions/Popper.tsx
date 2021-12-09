@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
@@ -33,11 +33,11 @@ const useStyles = makeStyles(() =>
 );
 
 const alwaysShow = new Set([SelectionKinds.cite]);
-const cache = createPopperLocationCache();
 
 const InlineActions: React.FC = (props) => {
   const { children } = props;
   const classes = useStyles();
+  const cache = useMemo(createPopperLocationCache, []);
   const { viewId } = useSelector(getEditorUIStateAndViewIds, isEqual);
   const kind = useSelector(getInlineActionKind);
   const currentEl = useSelector(getInlineActionAnchorEl);
