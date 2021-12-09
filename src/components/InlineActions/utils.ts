@@ -35,6 +35,19 @@ export function getFigure(editorState: EditorState | null) {
 
 type NodeOrNodeFunction = (() => Element | null) | Element | null;
 
+/**
+ * createPopperLocationCache
+ *
+ * The react loop, prosemirror loop and popperjs loop can get out of sync.
+ * The worst parts are when we replace the figure --> figure[numbered], for example,
+ * the whole DOM node that is the anchor is removed and replaced.
+ *
+ * Without this cache there is a flicker of popper jumping all over the place.
+ * When you want it to stay up, and stay in the same place.
+ *
+ * The cache holds the most recent position of the intended node, and
+ * allows you to input it as a function.
+ */
 export function createPopperLocationCache() {
   const cache = {
     node: null as NodeOrNodeFunction,
