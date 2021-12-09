@@ -1,13 +1,13 @@
 import { MyNodeSpec, NodeGroups } from './types';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 
-export interface MentionNodeAttrState {
+export interface Attrs {
   label: string;
-  user: string; // Things not from suggestion will not have this
+  user: string;
 }
 
-export function createMentionNodeSpecs() {
-  const mentionNodeSpec: MyNodeSpec<MentionNodeAttrState> = {
+function createMentionNodeSpecs() {
+  const mentionNodeSpec: MyNodeSpec<Attrs> = {
     group: NodeGroups.inline,
     attrs: { label: { default: '' }, user: { default: '' } },
     inline: true,
@@ -21,7 +21,7 @@ export function createMentionNodeSpecs() {
     parseDOM: [
       {
         tag: 'span.mention',
-        getAttrs(dom: HTMLSpanElement): MentionNodeAttrState {
+        getAttrs(dom: HTMLSpanElement): Attrs {
           const label = dom.getAttribute('title') || '';
           const user = dom.getAttribute('data-user') || '';
           return { label, user };

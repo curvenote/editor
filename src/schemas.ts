@@ -4,7 +4,6 @@ import * as basic from './nodes/basic';
 import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
-import { MentionNodeAttrState } from './nodes/mention';
 
 export const listNodes = {
   ordered_list: basic.ordered_list,
@@ -124,7 +123,6 @@ export const presets = {
 
 export type PresetSchemas = keyof typeof presets;
 export type UseSchema = PresetSchemas | { nodes: Record<string, Node> } | Schema;
-export type { MentionNodeAttrState };
 
 export function getSchema(useSchema: UseSchema) {
   if (typeof useSchema === 'string') {
