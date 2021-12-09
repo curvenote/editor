@@ -4526,10 +4526,10 @@ prop-types@^15.6.2, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-prosemirror-autocomplete@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/prosemirror-autocomplete/-/prosemirror-autocomplete-0.2.1.tgz#d46086d12bc00b1ec80648235ab855de38033e29"
-  integrity sha512-K9lgNmd9SmK4Fncnh4rgs77AoDmKhIzeb5A0jQgbKmfNrZBRDu1Sry86wdvecvsM7B1ZPBi6oRStyNcDKhhBQg==
+prosemirror-autocomplete@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/prosemirror-autocomplete/-/prosemirror-autocomplete-0.3.0.tgz#12916dae28d76146050ecdbcf96a629abc75ad65"
+  integrity sha512-lF/SObybJqY8sjcirJszf6RbraNX9pxNofEAv84TWmCwU1WNnZPv+OekNSWg8vBU/7TGZYeHWJ0EcUnhsbwZ7w==
   dependencies:
     prosemirror-inputrules "^1.1.3"
     prosemirror-state "^1.3.4"
