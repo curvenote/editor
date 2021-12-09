@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
 
@@ -20,13 +20,12 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const cache = createPopperLocationCache();
-
 const Suggestion: React.FC = (props) => {
   const { children } = props;
   const open = useSelector(selectors.isSuggestionOpen);
   const classes = useStyles();
   const paperRef = useRef<HTMLDivElement>(null);
+  const cache = useMemo(createPopperLocationCache, []);
   const dispatch = useDispatch();
   useClickOutside(paperRef, () => {
     dispatch(closeSuggestion());
