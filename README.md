@@ -167,17 +167,15 @@ export type AutocompleteAction = {
 You can use something like [popper.js](https://popper.js.org/) to ensure that the autocomplete suggestions stay in the right place on scroll or simply an abolutely positioned `<div>` in some cases is sufficient.
 
 ```ts
-import { DEFAULT_ID } from 'prosemirror-autocomplete';
-
 function placeSuggestion(open: boolean) {
   suggestion.style.display = open ? 'block' : 'none';
-  const rect = document.getElementById(DEFAULT_ID).getBoundingClientRect();
+  const rect = document.getElementsByClassName('autocomplete')[0].getBoundingClientRect();
   suggestion.style.top = `${rect.top + rect.height}px`;
   suggestion.style.left = `${rect.left}px`;
 }
 ```
 
-If you don't want to use the `DEFAULT_ID` provided (which is `'autocomplete'`) then you can provide your own for any trigger:
+If you don't want to use the class provided (which is `'autocomplete'`) or have multiple on the page, then you can provide your own for any trigger:
 
 ```ts
 const options: Options = {
@@ -195,8 +193,8 @@ const options: Options = {
 This will allow you to specify styling of the wrapped decoration (which is a `<span>`). This can be different based on the trigger type. For example, in the above example you can use a css rule to style the inline span, this is what is done in [the demo](./demo/index.html):
 
 ```css
-/* The default ID for the decoration. Override with `decorationAttrs: { id: 'myId' }`  */
-#autocomplete {
+/* The default decoration class. Override with `decorationAttrs: { class: 'myClass' }` */
+.autocomplete {
   border: 1px solid #333;
   border-radius: 2px 2px 0 0;
   border-bottom-color: white;
