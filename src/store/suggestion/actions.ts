@@ -1,6 +1,6 @@
 import { KEEP_OPEN, AutocompleteAction, ActionKind } from 'prosemirror-autocomplete';
 import { EditorView } from 'prosemirror-view';
-import { schemas } from '@curvenote/schema';
+import { Nodes } from '@curvenote/schema';
 import {
   SuggestionActionTypes,
   SuggestionKind,
@@ -136,7 +136,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
       case SuggestionKind.person:
-        dispatch(person.chooseSelection(result as schemas.MentionNodeAttrState));
+        dispatch(person.chooseSelection(result as Nodes.Mention.Attrs));
         return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:
@@ -227,7 +227,7 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
     const suggestionKind = triggerToKind(action.trigger);
     dispatch(
       updateSuggestion(
-        action.kind !== 'close',
+        action.kind !== ActionKind.close,
         suggestionKind,
         action.filter || null,
         action.view,
@@ -235,7 +235,7 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
         action.trigger,
       ),
     );
-    if (action.kind === 'open') {
+    if (action.kind === ActionKind.open) {
       dispatch(setStartingSuggestions(action.view, suggestionKind, action.filter ?? '', true));
       dispatch(selectSuggestion(0));
     }
