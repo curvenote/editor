@@ -38,7 +38,7 @@ function triggerToKind(trigger: string): SuggestionKind {
     case '/':
       return SuggestionKind.command;
     case '@':
-      return SuggestionKind.person;
+      return SuggestionKind.mention;
     case '[[':
       return SuggestionKind.link;
     case '{{':
@@ -135,7 +135,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
       case SuggestionKind.link:
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
-      case SuggestionKind.person:
+      case SuggestionKind.mention:
         dispatch(person.chooseSelection(result as Nodes.Mention.Attrs));
         return true;
       case SuggestionKind.variable:
@@ -163,7 +163,7 @@ export function filterResults(view: EditorView, search: string): AppThunk<void> 
         return link.filterResults(view.state.schema, search, (results: LinkResult[]) =>
           dispatch(updateResults(results)),
         );
-      case SuggestionKind.person:
+      case SuggestionKind.mention:
         return () => {
           // TODO: a default behavior for this?
         };
@@ -200,9 +200,8 @@ function setStartingSuggestions(
         dispatch(updateResults(starting));
         return;
       }
-      case SuggestionKind.person: {
+      case SuggestionKind.mention:
         return;
-      }
       case SuggestionKind.link: {
         dispatch(updateResults([]));
         // TODO: this needs to be non-blocking, and show a loading indicator

@@ -106,7 +106,7 @@ setup(store, opts);
 
 window.store = store;
 store.dispatch(actions.initEditorState('full', stateKey, true, snippet, 0));
-store.dispatch(actions.updateSuggestionKindData(SuggestionKind.person, []));
+store.dispatch(actions.updateSuggestionKindData(SuggestionKind.mention, []));
 
 store.subscribe(() => {
   const myst = document.getElementById('myst');
