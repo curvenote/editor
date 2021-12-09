@@ -35,6 +35,7 @@
     "start": "webpack serve --liveReload --open --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
     "dev:schema": "cd ../schema; yalc publish; cd ../editor; yalc link @curvenote/schema",
+    "dev:autocomplete": "cd ../prosemirror-autocomplete; yalc publish; cd ../editor; yalc link prosemirror-autocomplete",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
     "lint:format": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\"",
     "lint:format:fix": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { makeStyles, createStyles, Paper, Popper, PopperProps } from '@material-ui/core';
+import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
 import {
   getEditorUIStateAndViewIds,
@@ -13,7 +13,7 @@ import {
 import { State } from '../../store/types';
 import { SelectionKinds } from '../../store/ui/types';
 import { isEditable } from '../../prosemirror/plugins/editable';
-import { registerPopper } from './utils';
+import { createPopperLocationCache, registerPopper } from './utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,61 +33,23 @@ const useStyles = makeStyles(() =>
 );
 
 const alwaysShow = new Set([SelectionKinds.cite]);
-
-const cache: {
-  node: HTMLElement | Element | null;
-  clientRect: ClientRect | null;
-  clientWidth: number;
-  clientHeight: number;
-} = {
-  node: null,
-  clientRect: null,
-  clientWidth: 0,
-  clientHeight: 0,
-};
-
-function setNode(node: HTMLElement | Element | null) {
-  if (node && node.isConnected) {
-    cache.node = node;
-    cache.clientRect = node.getBoundingClientRect();
-    cache.clientWidth = node.clientWidth ?? 0;
-    cache.clientHeight = node.clientHeight ?? 0;
-  }
-}
-function getNode() {
-  return cache.node;
-}
-
-const anchorEl: PopperProps['anchorEl'] = {
-  getBoundingClientRect() {
-    setNode(cache.node);
-    return cache.clientRect as ClientRect;
-  },
-  get clientWidth() {
-    setNode(cache.node);
-    return cache.clientWidth;
-  },
-  get clientHeight() {
-    setNode(cache.node);
-    return cache.clientHeight;
-  },
-};
+const cache = createPopperLocationCache();
 
 const InlineActions: React.FC = (props) => {
   const { children } = props;
   const classes = useStyles();
-  const { viewId } = useSelector((state: State) => getEditorUIStateAndViewIds(state), isEqual);
-  const kind = useSelector((state: State) => getInlineActionKind(state));
-  const currentEl = useSelector((state: State) => getInlineActionAnchorEl(state));
-  const placement = useSelector((state: State) => getInlineActionPlacement(state));
-  const open = useSelector((state: State) => isInlineActionOpen(state));
+  const { viewId } = useSelector(getEditorUIStateAndViewIds, isEqual);
+  const kind = useSelector(getInlineActionKind);
+  const currentEl = useSelector(getInlineActionAnchorEl);
+  const placement = useSelector(getInlineActionPlacement);
+  const open = useSelector(isInlineActionOpen);
   const view = useSelector((state: State) => getEditorView(state, viewId).view);
   const edit = isEditable(view?.state);
   const showRegardless = kind && alwaysShow.has(kind);
 
-  setNode(currentEl);
+  cache.setNode(currentEl);
 
-  if (!open || !(edit || showRegardless) || !view || !getNode()?.isConnected) return null;
+  if (!open || !(edit || showRegardless) || !view || !cache.getNode()?.isConnected) return null;
 
   // This should only render on ui.selection change (on timeout),
   // the internals (if showing) render on state.selection changes (cursor, etc)
@@ -95,7 +57,7 @@ const InlineActions: React.FC = (props) => {
   return (
     <Popper
       open={open}
-      anchorEl={anchorEl}
+      anchorEl={cache.anchorEl}
       transition
       placement={placement}
       popperRef={(pop) => registerPopper(pop)}
