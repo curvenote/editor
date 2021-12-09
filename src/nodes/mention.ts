@@ -11,9 +11,9 @@ function createMentionNodeSpecs() {
     group: NodeGroups.inline,
     attrs: { label: { default: '' }, user: { default: '' } },
     inline: true,
-    atom: true,
     draggable: true,
     selectable: true,
+    marks: '',
     toDOM(node: any) {
       const { label, user } = node.attrs;
       return ['span', { title: label, 'data-user': user, class: 'mention' }];
