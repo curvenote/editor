@@ -26,6 +26,7 @@ export enum nodeNames {
   iframe = 'iframe',
   cite = 'cite',
   cite_group = 'cite_group',
+  mention = 'mention',
   math = 'math',
   equation = 'equation',
   footnote = 'footnote',
