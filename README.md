@@ -114,7 +114,7 @@ The library does not provide a user interface beyond the [demo code](./demo/inde
 ```ts
 import { AutocompleteAction, KEEP_OPEN } from 'prosemirror-autocomplete';
 
-export function reducer(action: AutocompleteAction): boolean {
+export function reducer(action: AutocompleteAction): boolean | KEEP_OPEN {
   switch (action.kind) {
     case ActionKind.open:
       handleSearch(action.search);
