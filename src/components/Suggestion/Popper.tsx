@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
-import { AUTOCOMPLETE } from 'prosemirror-autocomplete';
 
 import { selectors } from '../../store';
 import useClickOutside from '../hooks/useClickOutside';
@@ -33,7 +32,7 @@ const Suggestion: React.FC = (props) => {
     dispatch(closeSuggestion());
   });
   const { view } = useSelector(getSelectedView);
-  cache.setNode(() => view?.dom.querySelector(`.${AUTOCOMPLETE}`) ?? null);
+  cache.setNode(() => view?.dom.querySelector('.autocomplete') ?? null);
   if (!open || !cache.getNode()?.isConnected) return null;
   return (
     <Popper
