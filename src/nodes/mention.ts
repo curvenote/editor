@@ -34,6 +34,8 @@ export function createMentionNodeSpecs() {
   };
 }
 
+const mention = createMentionNodeSpecs();
+
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write(node.attrs.label);
 };
@@ -41,3 +43,5 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 export const toTex: TexFormatSerialize = (state, node) => {
   state.write(node.attrs.label);
 };
+
+export default mention;
