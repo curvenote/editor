@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { EditorView } from 'prosemirror-view';
 import { useDispatch, useSelector } from 'react-redux';
-import throttle from 'lodash.throttle';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
@@ -29,9 +28,8 @@ const Editor = (props: Props) => {
   // Create editorView
   useEffect(() => {
     if (editorView.current || !editorEl.current || !editorState) return;
-    const doUpdateState = (next: EditorState, tr: Transaction) =>
+    const updateState = (next: EditorState, tr: Transaction) =>
       dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
-    const updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
     editorView.current = createEditorView(editorEl.current, editorState, (tr) => {
       const view = editorView.current as EditorView;
       const mtr = opts.modifyTransaction(stateKey, viewId, view.state, tr);
