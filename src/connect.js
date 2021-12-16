@@ -77,9 +77,6 @@ export var opts = {
     get theme() {
         return ref.opts().theme;
     },
-    get throttle() {
-        return ref.opts().throttle;
-    },
     get nodeViews() {
         var _a;
         return (_a = ref.opts().nodeViews) !== null && _a !== void 0 ? _a : {};

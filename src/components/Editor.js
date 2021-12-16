@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import throttle from 'lodash.throttle';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
 import { actions, selectors } from '../store';
@@ -14,10 +13,9 @@ var Editor = function (props) {
         var _a;
         if (editorView.current || !editorEl.current || !editorState)
             return;
-        var doUpdateState = function (next, tr) {
+        var updateState = function (next, tr) {
             return dispatch(actions.updateEditorState(stateKey, viewId, next, tr));
         };
-        var updateState = opts.throttle > 0 ? throttle(doUpdateState, opts.throttle) : doUpdateState;
         editorView.current = createEditorView(editorEl.current, editorState, function (tr) {
             var _a;
             var view = editorView.current;

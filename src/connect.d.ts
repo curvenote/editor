@@ -20,7 +20,6 @@ export declare type Options = {
     theme: Theme;
     citationPrompt: () => Promise<Nodes.Cite.Attrs[] | null>;
     createLinkSearch: () => Promise<SearchContext>;
-    throttle: number;
     nodeViews?: DirectEditorProps['nodeViews'];
     getCaptionFragment?: (schema: Schema, src: string) => Fragment;
 };
