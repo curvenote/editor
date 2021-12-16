@@ -54,7 +54,7 @@ A [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor for technical content 
 - [`@curvenote/schema`](https://github.com/curvenote/schema) - the schema for this editor, focused on interactive content, also deals with translation and export.
 - [`prosemirror-autocomplete`](https://github.com/curvenote/prosemirror-autocomplete) - A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions.
 - [`prosemirror-codemark`](https://github.com/curvenote/prosemirror-codemark) - A plugin for [ProseMirror](https://prosemirror.net/) that handles manipulating and navigating inline code marks.
-- [`prosemirror-docx`](https://github.com/curvenote/prosemirror-codemark) - Export from a [ProseMirror](https://prosemirror.net/) schema to Microsoft Word.
+- [`prosemirror-docx`](https://github.com/curvenote/prosemirror-docx) - Export from a [ProseMirror](https://prosemirror.net/) schema to Microsoft Word.
 - [`sidenotes`](https://github.com/curvenote/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
 - [`@curvenote/article`](https://github.com/curvenote/article) - CSS and styling components and document layout
 - [`@curvenote/components`](https://github.com/curvenote/components) - interactive widgets and web-components
