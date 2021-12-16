@@ -39,7 +39,6 @@ export type Options = {
   theme: Theme;
   citationPrompt: () => Promise<Nodes.Cite.Attrs[] | null>;
   createLinkSearch: () => Promise<SearchContext>;
-  throttle: number;
   // nodeViews override any of the default nodeviews
   nodeViews?: DirectEditorProps['nodeViews'];
   getCaptionFragment?: (schema: Schema, src: string) => Fragment;
@@ -124,9 +123,6 @@ export const opts: Required<Options> = {
   },
   get theme() {
     return ref.opts().theme;
-  },
-  get throttle() {
-    return ref.opts().throttle;
   },
   get nodeViews() {
     return ref.opts().nodeViews ?? {};
