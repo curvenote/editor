@@ -5,7 +5,6 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
 import { Dispatch, State, actions, selectors } from '../store';
-import { Schema } from 'prosemirror-model';
 
 type Props = {
   stateKey: any;

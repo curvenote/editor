@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { EditorView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
 import { makeStyles, createStyles } from '@material-ui/core';
+import { GetPos } from './types';
 
 export type MentionResult = { id?: string; name?: string; email?: string; error?: boolean };
 
@@ -26,11 +27,11 @@ export default class MentionView {
 
   view: EditorView;
 
-  getPos: boolean | (() => number);
+  getPos: boolean | GetPos;
 
   dom: HTMLSpanElement;
 
-  constructor(node: Node, view: EditorView, getPos: boolean | (() => number)) {
+  constructor(node: Node, view: EditorView, getPos: boolean | GetPos) {
     this.node = node;
     this.view = view;
     this.getPos = getPos;

@@ -70,14 +70,14 @@ export function createEditorView(
         time(node, view, getPos) {
           return new views.TimeView(node, view, getPos as GetPos);
         },
+        mention(node, view, getPos) {
+          return new views.MentionView(node, view, getPos as GetPos);
+        },
         button: views.newWidgetView,
         display: views.newWidgetView,
         dynamic: views.newWidgetView,
         range: views.newWidgetView,
         switch: views.newWidgetView,
-        mention(node, view, getPos) {
-          return new views.MentionView(node, view, getPos as GetPos);
-        },
         variable: views.newWidgetView,
         ...opts.nodeViews,
       },
