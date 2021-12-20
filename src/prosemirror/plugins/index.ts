@@ -8,7 +8,7 @@ import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
-import { autocomplete } from 'prosemirror-autocomplete';
+import { autocomplete, Trigger } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 
 import inputrules from '../inputrules';
@@ -32,6 +32,43 @@ function tablesPlugins(schema: Schema) {
   ];
 }
 
+function getTriggers(schema: Schema, mention = false): Trigger[] {
+  const triggers: Trigger[] = [
+    {
+      name: 'emoji',
+      trigger: ':',
+      cancelOnFirstSpace: true,
+    },
+    {
+      name: 'command',
+      trigger: '/',
+      cancelOnFirstSpace: true,
+    },
+    {
+      name: 'link',
+      trigger: '[[',
+      cancelOnFirstSpace: false,
+    },
+  ];
+  if (mention) triggers.push({ name: 'mention', trigger: '@', cancelOnFirstSpace: false });
+  if (schema.nodes.variable)
+    triggers.push(
+      ...[
+        {
+          name: 'variable',
+          trigger: /(?:^|\s|\n|[^\d\w])((?:^[a-zA-Z0-9_]+)\s?=)/,
+          cancelOnFirstSpace: false,
+        },
+        {
+          name: 'insert',
+          trigger: '{{',
+          cancelOnFirstSpace: false,
+        },
+      ],
+    );
+  return triggers;
+}
+
 export function getPlugins(
   schemaPreset: schemas.UseSchema,
   schema: Schema,
@@ -44,7 +81,7 @@ export function getPlugins(
       editablePlugin(startEditable),
       keymap(buildCommentKeymap(stateKey, schema)),
       ...autocomplete({
-        triggers: [{ name: 'mention', trigger: '@', cancelOnFirstSpace: false }],
+        triggers: getTriggers(schema, true),
         reducer(action) {
           return store.dispatch(handleSuggestion(action));
         },
@@ -60,37 +97,7 @@ export function getPlugins(
     editablePlugin(startEditable),
     getPromptPlugin(),
     ...autocomplete({
-      triggers: [
-        {
-          name: 'emoji',
-          trigger: ':',
-          cancelOnFirstSpace: true,
-        },
-        {
-          name: 'command',
-          trigger: '/',
-          cancelOnFirstSpace: true,
-        },
-        ...(schema.nodes.variable
-          ? [
-              {
-                name: 'variable',
-                trigger: /(?:^|\s|\n|[^\d\w])((?:^[a-zA-Z0-9_]+)\s?=)/,
-                cancelOnFirstSpace: false,
-              },
-            ]
-          : []),
-        {
-          name: 'insert',
-          trigger: '{{',
-          cancelOnFirstSpace: false,
-        },
-        {
-          name: 'link',
-          trigger: '[[',
-          cancelOnFirstSpace: false,
-        },
-      ],
+      triggers: getTriggers(schema, false),
       reducer(action) {
         return store.dispatch(handleSuggestion(action));
       },
