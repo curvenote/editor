@@ -8,6 +8,7 @@ export * as IFrame from './iframe';
 export * as Time from './time';
 export * as Table from './table';
 export * as Footnote from './footnote';
+export * as Mention from './mention';
 
 // Figures and Captions
 export * as Figure from './figure';

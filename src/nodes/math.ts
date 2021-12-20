@@ -19,6 +19,7 @@ const math: MyNodeSpec<Attrs> = {
     },
   ],
 };
+
 export const mathNoDisplay: MyNodeSpec<Attrs> = {
   ...math,
   content: `${NodeGroups.text}*`,

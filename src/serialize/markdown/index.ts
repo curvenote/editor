@@ -65,6 +65,7 @@ export const markdownSerializer = new MarkdownSerializer(
     equation: nodes.Equation.toMarkdown,
     cite: nodes.Cite.toMarkdown,
     cite_group: nodes.CiteGroup.toMarkdown,
+    mention: nodes.Mention.toMarkdown,
     // Tables
     table: nodes.Table.toMarkdown,
     // Dynamic

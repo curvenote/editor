@@ -79,6 +79,7 @@ export const texSerializer = new MarkdownSerializer(
     time: nodes.Time.toTex,
     cite: nodes.Cite.toTex,
     cite_group: nodes.CiteGroup.toTex,
+    mention: nodes.Mention.toTex,
     math: nodes.Math.toTex,
     equation: nodes.Equation.toTex,
     table: nodes.Table.toTex,
