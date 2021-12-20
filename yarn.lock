@@ -45,10 +45,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@curvenote/article@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@curvenote/article/-/article-0.3.2.tgz#99bdd920d62df5976eb7b28f89b7a9bd503b493c"
-  integrity sha512-ygb0ZWYnc1FndvuESguZinzTbFrvVOCd1lkrkTzaIz0u3viZN+Z0WRfPBWLIuTVU8T/w2ModU8O1kBHG4chfKw==
+"@curvenote/article@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@curvenote/article/-/article-0.3.3.tgz#45fcb0d6c5d0b0e4fe1f5e6436a36cd95bf49a9a"
+  integrity sha512-jGgEWbEHjEGg5KMQWa6LLLgaVVM78VIWBk8kU+ZsvYnWSBmGTPHXp9a3G3n6w5/BjypEu0ODfz1wtXNASTlvuA==
   dependencies:
     "@curvenote/components" "^0.3.1"
     "@curvenote/runtime" "^0.2.8"
