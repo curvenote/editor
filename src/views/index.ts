@@ -6,6 +6,7 @@ import { TimeView } from './TimeView';
 import { MentionView } from './Mention';
 import { CodeBlockView } from './CodeBlockView';
 import { FootnoteView } from './FootnoteView';
+import HeadingView from './HeaderView';
 import createNodeView from './NodeView';
 import WidgetView, { newWidgetView } from './WidgetView';
 import { clickSelectFigure } from './utils';
@@ -26,5 +27,6 @@ export default {
   WidgetView,
   newWidgetView,
   CodeBlockView,
+  HeadingView,
   FootnoteView,
 };
