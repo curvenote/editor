@@ -87,7 +87,6 @@ const opts: Options = {
     return docId;
   },
   theme,
-  throttle: 0,
   citationPrompt: async () => [
     {
       key: 'simpeg2015',
