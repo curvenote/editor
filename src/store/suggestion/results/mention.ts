@@ -1,6 +1,6 @@
 import { Nodes } from '@curvenote/schema';
 import { Schema } from 'prosemirror-model';
-import { getSuggestionEditorState } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 import { AppThunk } from '../../types';
 
 export function chooseSelection(result: Nodes.Mention.Attrs): AppThunk<void> {
@@ -8,7 +8,7 @@ export function chooseSelection(result: Nodes.Mention.Attrs): AppThunk<void> {
     const {
       view,
       range: { from, to },
-    } = getSuggestionEditorState(getState());
+    } = selectSuggestionState(getState());
     if (!view) return;
 
     const schema = view.state.schema as Schema;

@@ -5,7 +5,6 @@ import { State as SidenotesState } from 'sidenotes';
 import { EditorsState, EditorActionTypes } from './state/types';
 import { UIState, UIActionTypes, SelectionKinds } from './ui/types';
 import {
-  SuggestionEditorState,
   SuggestionState,
   SuggestionActionTypes,
   SuggestionKind,
@@ -27,8 +26,6 @@ export interface State {
   runtime: runtimeTypes.State['runtime'];
   sidenotes: SidenotesState['sidenotes'];
 }
-
-export type { SuggestionEditorState as SuggestionState };
 
 export type EditorActions =
   | EditorActionTypes

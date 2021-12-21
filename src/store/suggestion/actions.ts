@@ -12,17 +12,15 @@ import {
   variableTrigger,
   VariableResult,
   LinkResult,
-  UpdateSuggestionDataAction,
-  UPDATE_SUGGESTION_DATA,
 } from './types';
 import { CommandResult } from './commands';
 import { AppThunk } from '../types';
-import { getSuggestionEditorState, selectSuggestionData } from './selectors';
+import { selectSuggestionState } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';
 import * as variable from './results/variable';
 import * as link from './results/link';
-import * as person from './results/person';
+import * as mention from './results/mention';
 
 export { executeCommand } from './results/command';
 
@@ -89,29 +87,6 @@ export function updateResults(results: any[]): SuggestionActionTypes {
   };
 }
 
-export function updateResultsWithData(): AppThunk<void> {
-  return (dispatch, getState) => {
-    const state = getState();
-    const { kind } = getSuggestionEditorState(state);
-    if (!kind) return;
-    const data = selectSuggestionData(state, kind);
-    if (data) dispatch(updateResults(data));
-  };
-}
-
-export function updateSuggestionKindData(
-  kind: SuggestionKind,
-  data: any[],
-): UpdateSuggestionDataAction {
-  return {
-    type: UPDATE_SUGGESTION_DATA,
-    payload: {
-      kind,
-      data,
-    },
-  };
-}
-
 export function selectSuggestion(selection: number): SuggestionActionTypes {
   return {
     type: SELECT_SUGGESTION,
@@ -123,7 +98,7 @@ export function selectSuggestion(selection: number): SuggestionActionTypes {
 
 export function chooseSelection(selected: number): AppThunk<boolean | typeof KEEP_OPEN> {
   return (dispatch, getState) => {
-    const { kind, results } = getSuggestionEditorState(getState());
+    const { kind, results } = selectSuggestionState(getState());
     const result = results[selected];
     if (result == null) return false;
     switch (kind) {
@@ -136,7 +111,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
         dispatch(link.chooseSelection(result as LinkResult));
         return true;
       case SuggestionKind.mention:
-        dispatch(person.chooseSelection(result as Nodes.Mention.Attrs));
+        dispatch(mention.chooseSelection(result as Nodes.Mention.Attrs));
         return true;
       case SuggestionKind.variable:
       case SuggestionKind.display:
@@ -149,7 +124,7 @@ export function chooseSelection(selected: number): AppThunk<boolean | typeof KEE
 
 export function filterResults(view: EditorView, search: string): AppThunk<void> {
   return (dispatch, getState) => {
-    const { kind } = getSuggestionEditorState(getState());
+    const { kind } = selectSuggestionState(getState());
     switch (kind) {
       case SuggestionKind.emoji:
         return emoji.filterResults(view.state.schema, search, (results: EmojiResult[]) =>
@@ -239,7 +214,7 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
       dispatch(selectSuggestion(0));
     }
     if (action.kind === ActionKind.up || action.kind === ActionKind.down) {
-      const { results, selected } = getSuggestionEditorState(getState());
+      const { results, selected } = selectSuggestionState(getState());
       dispatch(
         selectSuggestion(
           positiveModulus(selected + (action.kind === ActionKind.up ? -1 : +1), results.length),
@@ -255,7 +230,7 @@ export function handleSuggestion(action: AutocompleteAction): AppThunk<boolean |
       }
     }
     if (action.kind === ActionKind.enter) {
-      const { selected } = getSuggestionEditorState(getState());
+      const { selected } = selectSuggestionState(getState());
       return dispatch(chooseSelection(selected));
     }
     return false;

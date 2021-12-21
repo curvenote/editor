@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js';
 import { Schema } from 'prosemirror-model';
 import { AppThunk } from '../../types';
-import { getSuggestionEditorState } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 import { EmojiResult } from '../types';
 
 const options = {
@@ -99,7 +99,7 @@ export function chooseSelection(result: EmojiResult): AppThunk<boolean> {
     const {
       view,
       range: { from, to },
-    } = getSuggestionEditorState(getState());
+    } = selectSuggestionState(getState());
     if (view == null) return false;
     const { tr } = view.state;
     tr.insertText(`${result.c} `, from, to);

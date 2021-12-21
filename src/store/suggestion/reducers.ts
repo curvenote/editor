@@ -1,14 +1,12 @@
 import {
   SuggestionState,
-  SuggestionEditorState,
   SuggestionActionTypes,
   UPDATE_SUGGESTION,
   UPDATE_RESULTS,
   SELECT_SUGGESTION,
-  UPDATE_SUGGESTION_DATA,
 } from './types';
 
-const INITIAL_EDITOR_STATE: SuggestionEditorState = {
+const initialState: SuggestionState = {
   view: null,
   trigger: '',
   range: { from: 0, to: 0 },
@@ -19,13 +17,8 @@ const INITIAL_EDITOR_STATE: SuggestionEditorState = {
   results: [],
 };
 
-const suggestionState: SuggestionState = {
-  editorState: INITIAL_EDITOR_STATE,
-  data: {},
-};
-
 const suggestionReducer = (
-  state = suggestionState,
+  state = initialState,
   action: SuggestionActionTypes,
 ): SuggestionState => {
   switch (action.type) {
@@ -33,48 +26,29 @@ const suggestionReducer = (
       const { open, kind, search, range, view, trigger } = action.payload;
       return {
         ...state,
-        editorState: {
-          ...state.editorState,
-          open,
-          kind,
-          search,
-          range,
-          view,
-          trigger,
-          // Get rid of the previous results if closing!
-          results: !open ? [] : state.editorState.results,
-        },
+        open,
+        kind,
+        search,
+        range,
+        view,
+        trigger,
+        // Get rid of the previous results if closing!
+        results: !open ? [] : state.results,
       };
     }
     case UPDATE_RESULTS: {
       const { results } = action.payload;
       return {
         ...state,
-        editorState: {
-          ...state.editorState,
-          results,
-          selected: 0, // Math.min(state.selected, results.length - 1),
-        },
-      };
-    }
-    case UPDATE_SUGGESTION_DATA: {
-      const { kind, data } = action.payload;
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          [kind]: data,
-        },
+        results,
+        selected: 0, // Math.min(state.selected, results.length - 1),
       };
     }
     case SELECT_SUGGESTION: {
       const { selection } = action.payload;
       return {
         ...state,
-        editorState: {
-          ...state.editorState,
-          selected: selection,
-        },
+        selected: selection,
       };
     }
     default:

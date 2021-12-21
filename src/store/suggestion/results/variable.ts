@@ -2,7 +2,7 @@ import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
 import { KEEP_OPEN, closeAutocomplete } from 'prosemirror-autocomplete';
 import { AppThunk, State, Dispatch } from '../../types';
-import { getSuggestionEditorState, selectSuggestionView } from '../selectors';
+import { selectSuggestionState, selectSuggestionView } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, VariableResult, SuggestionKind } from '../types';
 
@@ -58,7 +58,7 @@ export function chooseSelection(
       range: { from, to },
       trigger,
       search,
-    } = getSuggestionEditorState(getState());
+    } = selectSuggestionState(getState());
     if (view == null || search == null) return false;
 
     if (result.id !== 'FINISHED') {

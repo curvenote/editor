@@ -22,7 +22,7 @@ import { openAutocomplete } from 'prosemirror-autocomplete';
 import { nodeNames, createId } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
-import { getSuggestionEditorState } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
 import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
@@ -378,7 +378,7 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
     const {
       view,
       range: { from, to },
-    } = getSuggestionEditorState(getState());
+    } = selectSuggestionState(getState());
     if (view == null) return false;
     const removeText = () => {
       const { tr } = view.state;
