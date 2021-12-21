@@ -59,9 +59,6 @@ export function createEditorView(
         dynamic: views.newWidgetView,
         range: views.newWidgetView,
         switch: views.newWidgetView,
-        heading(node, view, getPos) {
-          return new views.HeadingView(node, view, getPos as () => number);
-        },
         variable: views.newWidgetView,
         ...opts.nodeViews,
       },
