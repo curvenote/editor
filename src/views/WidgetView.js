@@ -8,7 +8,7 @@ var WidgetView = (function () {
         this.view = view;
         this.getPos = getPos;
         this.dom = document.createElement('div');
-        this.dom.classList.add('widget', "widget-" + node.type.name);
+        this.dom.classList.add('widget', "widget-".concat(node.type.name));
         this.dom.addEventListener('contextmenu', function (event) {
             store.dispatch(openAttributeEditor(true, (getPos === null || getPos === void 0 ? void 0 : getPos()) || 0, _this.dom));
             event.preventDefault();

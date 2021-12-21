@@ -3,6 +3,7 @@ import * as collab from './collab';
 export * from './store';
 export * from './components';
 export { default as views } from './views';
+export type { NodeViewProps } from './views';
 export { setup, opts } from './connect';
 export type { Options } from './connect';
 export { runtime, collab };

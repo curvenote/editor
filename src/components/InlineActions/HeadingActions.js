@@ -51,7 +51,7 @@ var HeadingActions = function (props) {
     }; };
     positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
-        React.createElement(MenuIcon, { kind: "expand", onClick: onOpen, "aria-controls": "insert-menu", text: "Heading " + level }),
+        React.createElement(MenuIcon, { kind: "expand", onClick: onOpen, "aria-controls": "insert-menu", text: "Heading ".concat(level) }),
         React.createElement(Menu, { id: "insert-menu", anchorEl: anchorEl, open: Boolean(anchorEl), onClose: onClose, style: ABOVE_MODALS },
             React.createElement(MenuAction, { action: onLevel(0), selected: level === 0, title: "Paragraph" },
                 React.createElement(Keyboard, { shortcut: "Mod-Alt-0" })),

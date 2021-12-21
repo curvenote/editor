@@ -1,5 +1,5 @@
-var LinkView = (function () {
-    function LinkView(node, view, getPos) {
+var LinkNodeView = (function () {
+    function LinkNodeView(node, view, getPos) {
         this.node = node;
         this.view = view;
         this.getPos = getPos;
@@ -10,7 +10,9 @@ var LinkView = (function () {
         this.dom.setAttribute('target', '_blank');
         this.dom.setAttribute('rel', 'noopener noreferrer');
     }
-    return LinkView;
+    return LinkNodeView;
 }());
-export default LinkView;
+export function LinkView(node, view, getPos) {
+    return new LinkNodeView(node, view, getPos);
+}
 //# sourceMappingURL=LinkView.js.map

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import Fuse from 'fuse.js';
-import { getSuggestion } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 var options = {
     shouldSort: true,
     threshold: 0.4,
@@ -133,11 +133,11 @@ export var startingSuggestions = [
 ];
 export function chooseSelection(result) {
     return function (dispatch, getState) {
-        var _a = getSuggestion(getState()), view = _a.view, _b = _a.range, from = _b.from, to = _b.to;
+        var _a = selectSuggestionState(getState()), view = _a.view, _b = _a.range, from = _b.from, to = _b.to;
         if (view == null)
             return false;
         var tr = view.state.tr;
-        tr.insertText(result.c + " ", from, to);
+        tr.insertText("".concat(result.c, " "), from, to);
         view.dispatch(tr);
         return true;
     };

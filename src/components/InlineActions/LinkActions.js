@@ -32,13 +32,13 @@ export function useLinkActions(stateId, viewId) {
     var onEdit = useCallback(function (newHref) {
         if (!newHref || !linkBounds || !state || !mark)
             return;
-        var link = mark.create({ href: testLink(newHref) ? newHref : "http://" + newHref });
+        var link = mark.create({ href: testLink(newHref) ? newHref : "http://".concat(newHref) });
         var tr = state.tr
             .removeMark(linkBounds.from, linkBounds.to, mark)
             .addMark(linkBounds.from, linkBounds.to, link);
         dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
     }, [stateId, viewId, linkBounds, mark]);
-    var tooltip = (attrs === null || attrs === void 0 ? void 0 : attrs.title) ? attrs.title + " <" + (attrs === null || attrs === void 0 ? void 0 : attrs.href) + ">" : attrs === null || attrs === void 0 ? void 0 : attrs.href;
+    var tooltip = (attrs === null || attrs === void 0 ? void 0 : attrs.title) ? "".concat(attrs.title, " <").concat(attrs === null || attrs === void 0 ? void 0 : attrs.href, ">") : attrs === null || attrs === void 0 ? void 0 : attrs.href;
     return {
         attrs: attrs !== null && attrs !== void 0 ? attrs : null,
         tooltip: tooltip !== null && tooltip !== void 0 ? tooltip : '',

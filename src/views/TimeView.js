@@ -1,24 +1,26 @@
 import { formatDatetime } from '@curvenote/schema/dist/nodes/time';
-var TimeView = (function () {
-    function TimeView(node, view, getPos) {
+var TimeNodeView = (function () {
+    function TimeNodeView(node, view, getPos) {
         this.node = node;
         this.view = view;
         this.getPos = getPos;
         this.dom = document.createElement('time');
         this.setDate();
     }
-    TimeView.prototype.update = function (node) {
+    TimeNodeView.prototype.update = function (node) {
         this.node = node;
         this.setDate();
         return true;
     };
-    TimeView.prototype.setDate = function () {
+    TimeNodeView.prototype.setDate = function () {
         var datetime = this.node.attrs.datetime;
         this.dom.setAttribute('datetime', datetime);
         var f = formatDatetime(datetime).f;
         this.dom.textContent = f;
     };
-    return TimeView;
+    return TimeNodeView;
 }());
-export default TimeView;
+export function TimeView(node, view, getPos) {
+    return new TimeNodeView(node, view, getPos);
+}
 //# sourceMappingURL=TimeView.js.map

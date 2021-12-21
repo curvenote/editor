@@ -49,12 +49,12 @@ var _a;
 import Fuse from 'fuse.js';
 import { Fragment } from 'prosemirror-model';
 import { addColumnAfter, addColumnBefore, deleteColumn, addRowAfter, addRowBefore, deleteRow, mergeCells, splitCell, toggleHeaderRow, toggleHeaderColumn, toggleHeaderCell, deleteTable, isInTable, } from 'prosemirror-tables';
+import { openAutocomplete } from 'prosemirror-autocomplete';
 import { nodeNames, createId } from '@curvenote/schema';
 import { LanguageNames } from '../../../views/types';
-import { getSuggestion } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandNames } from '../commands';
-import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
@@ -273,7 +273,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     return [2, true];
                 case 14:
                     removeText();
-                    triggerSuggestion(view, ':');
+                    openAutocomplete(view, ':');
                     return [2, true];
                 case 15:
                     removeText();
@@ -296,7 +296,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     return [2, true];
                 case 19:
                     removeText();
-                    triggerSuggestion(view, '{{');
+                    openAutocomplete(view, '{{');
                     return [2, true];
                 case 20:
                     {
@@ -304,7 +304,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         name_1 = (_d = prompt('Name of the variable:')) !== null && _d !== void 0 ? _d : 'myVar';
                         dispatch(actions.insertInlineNode(schema.nodes.range, {
                             valueFunction: name_1,
-                            changeFunction: "{" + name_1 + ": value}",
+                            changeFunction: "{".concat(name_1, ": value}"),
                         }));
                         return [2, true];
                     }
@@ -315,7 +315,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         name_2 = (_e = prompt('Name of the variable:')) !== null && _e !== void 0 ? _e : 'myVar';
                         dispatch(actions.insertInlineNode(schema.nodes.dynamic, {
                             valueFunction: name_2,
-                            changeFunction: "{" + name_2 + ": value}",
+                            changeFunction: "{".concat(name_2, ": value}"),
                         }));
                         return [2, true];
                     }
@@ -326,7 +326,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         name_3 = (_f = prompt('Name of the variable:')) !== null && _f !== void 0 ? _f : 'myVar';
                         dispatch(actions.insertInlineNode(schema.nodes.switch, {
                             valueFunction: name_3,
-                            changeFunction: "{" + name_3 + ": value}",
+                            changeFunction: "{".concat(name_3, ": value}"),
                         }));
                         return [2, true];
                     }
@@ -345,7 +345,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         if (!url)
                             return [2, true];
                         id = getYouTubeId(url);
-                        src = "https://www.youtube-nocookie.com/embed/" + id;
+                        src = "https://www.youtube-nocookie.com/embed/".concat(id);
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
@@ -357,7 +357,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         if (!url)
                             return [2, true];
                         id = getLoomId(url);
-                        src = "https://www.loom.com/embed/" + id;
+                        src = "https://www.loom.com/embed/".concat(id);
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
@@ -369,7 +369,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         if (!url)
                             return [2, true];
                         id = getVimeoId(url);
-                        src = "https://player.vimeo.com/video/" + id;
+                        src = "https://player.vimeo.com/video/".concat(id);
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
@@ -381,7 +381,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         if (!url)
                             return [2, true];
                         id = getMiroId(url);
-                        src = "https://miro.com/app/live-embed/" + id;
+                        src = "https://miro.com/app/live-embed/".concat(id);
                         dispatch(actions.insertNode(schema.nodes.iframe, { src: src }));
                         return [2, true];
                     }
@@ -398,35 +398,35 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                     _g.label = 29;
                 case 29:
                     removeText();
-                    triggerSuggestion(view, '[[', 'sec: ');
+                    openAutocomplete(view, '[[', 'sec: ');
                     return [2, true];
                 case 30:
                     removeText();
-                    triggerSuggestion(view, '[[', 'fig: ');
+                    openAutocomplete(view, '[[', 'fig: ');
                     return [2, true];
                 case 31:
                     removeText();
-                    triggerSuggestion(view, '[[', 'eq: ');
+                    openAutocomplete(view, '[[', 'eq: ');
                     return [2, true];
                 case 32:
                     removeText();
-                    triggerSuggestion(view, '[[', 'code: ');
+                    openAutocomplete(view, '[[', 'code: ');
                     return [2, true];
                 case 33:
                     removeText();
-                    triggerSuggestion(view, '[[', 'article: ');
+                    openAutocomplete(view, '[[', 'article: ');
                     return [2, true];
                 case 34:
                     removeText();
-                    triggerSuggestion(view, '[[', 'table: ');
+                    openAutocomplete(view, '[[', 'table: ');
                     return [2, true];
                 case 35:
                     removeText();
-                    triggerSuggestion(view, '[[', 'notebook: ');
+                    openAutocomplete(view, '[[', 'notebook: ');
                     return [2, true];
                 case 36:
                     removeText();
-                    triggerSuggestion(view, '[[', 'cite: ');
+                    openAutocomplete(view, '[[', 'cite: ');
                     return [2, true];
                 case 37:
                     removeText();
@@ -452,7 +452,7 @@ export function chooseSelection(result) {
     return function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
         var _a, view, _b, from, to, removeText;
         return __generator(this, function (_c) {
-            _a = getSuggestion(getState()), view = _a.view, _b = _a.range, from = _b.from, to = _b.to;
+            _a = selectSuggestionState(getState()), view = _a.view, _b = _a.range, from = _b.from, to = _b.to;
             if (view == null)
                 return [2, false];
             removeText = function () {

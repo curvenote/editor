@@ -82,8 +82,8 @@ export function renderMath(math, element, inline) {
         });
     });
 }
-var MathView = (function () {
-    function MathView(node, view, getPos, inline) {
+var MathOrEquationView = (function () {
+    function MathOrEquationView(node, view, getPos, inline) {
         var _this = this;
         this.node = node;
         this.outerView = view;
@@ -149,7 +149,7 @@ var MathView = (function () {
             },
         });
     }
-    MathView.prototype.selectNode = function () {
+    MathOrEquationView.prototype.selectNode = function () {
         var _this = this;
         var edit = isEditable(this.outerView.state);
         this.dom.classList.add('ProseMirror-selectednode');
@@ -158,11 +158,11 @@ var MathView = (function () {
         this.dom.classList.add('editing');
         setTimeout(function () { return _this.innerView.focus(); }, 1);
     };
-    MathView.prototype.deselectNode = function () {
+    MathOrEquationView.prototype.deselectNode = function () {
         this.dom.classList.remove('ProseMirror-selectednode');
         this.dom.classList.remove('editing');
     };
-    MathView.prototype.dispatchInner = function (tr) {
+    MathOrEquationView.prototype.dispatchInner = function (tr) {
         var _a = this.innerView.state.applyTransaction(tr), state = _a.state, transactions = _a.transactions;
         this.innerView.updateState(state);
         if (!tr.getMeta('fromOutside')) {
@@ -177,13 +177,13 @@ var MathView = (function () {
                 this.outerView.dispatch(outerTr);
         }
     };
-    MathView.prototype.addFakeCursor = function () {
+    MathOrEquationView.prototype.addFakeCursor = function () {
         if (!this.inline)
             return;
         var hasContent = this.node.textContent.length > 0;
         this.editor.classList[hasContent ? 'remove' : 'add']('empty');
     };
-    MathView.prototype.update = function (node) {
+    MathOrEquationView.prototype.update = function (node) {
         if (!node.sameMarkup(this.node))
             return false;
         this.node = node;
@@ -205,7 +205,7 @@ var MathView = (function () {
         this.renderMath();
         return true;
     };
-    MathView.prototype.renderMath = function () {
+    MathOrEquationView.prototype.renderMath = function () {
         if (this.node.attrs.numbered) {
             this.dom.setAttribute('numbered', '');
         }
@@ -214,18 +214,23 @@ var MathView = (function () {
         }
         renderMath(this.node.textContent, this.math, this.inline);
     };
-    MathView.prototype.destroy = function () {
+    MathOrEquationView.prototype.destroy = function () {
         this.innerView.destroy();
         this.dom.textContent = '';
     };
-    MathView.prototype.stopEvent = function (event) {
+    MathOrEquationView.prototype.stopEvent = function (event) {
         var _a;
         return (_a = (this.innerView && this.innerView.dom.contains(event.target))) !== null && _a !== void 0 ? _a : false;
     };
-    MathView.prototype.ignoreMutation = function () {
+    MathOrEquationView.prototype.ignoreMutation = function () {
         return true;
     };
-    return MathView;
+    return MathOrEquationView;
 }());
-export default MathView;
+export function MathView(node, view, getPos) {
+    return new MathOrEquationView(node, view, getPos, true);
+}
+export function EquationView(node, view, getPos) {
+    return new MathOrEquationView(node, view, getPos, false);
+}
 //# sourceMappingURL=MathView.js.map

@@ -39,23 +39,7 @@ export function createEditorView(dom, state, dispatch) {
     var editorView = new EditorView({ mount: dom }, {
         state: state,
         dispatchTransaction: dispatch,
-        nodeViews: __assign({ math: function (node, view, getPos) {
-                return new views.MathView(node, view, getPos, true);
-            }, equation: function (node, view, getPos) {
-                return new views.MathView(node, view, getPos, false);
-            }, code_block: function (node, view, getPos) {
-                return new views.CodeBlockView(node, view, getPos);
-            }, footnote: function (node, view, getPos) {
-                return new views.FootnoteView(node, view, getPos);
-            }, image: function (node, view, getPos) {
-                return new views.ImageView(node, view, getPos);
-            }, iframe: function (node, view, getPos) {
-                return new views.IFrameView(node, view, getPos);
-            }, link: function (node, view, getPos) {
-                return new views.LinkView(node, view, getPos);
-            }, time: function (node, view, getPos) {
-                return new views.TimeView(node, view, getPos);
-            }, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
+        nodeViews: __assign({ math: views.MathView, equation: views.EquationView, code_block: views.CodeBlockView, footnote: views.FootnoteView, image: views.ImageView, iframe: views.IFrameView, link: views.LinkView, time: views.TimeView, mention: views.MentionView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
         handleKeyDown: function (_, event) {
             shiftKey = event.shiftKey;

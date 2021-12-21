@@ -115,7 +115,7 @@ var EditorMenu = function (props) {
     var clickLoom = useCallback(function () { return command(CommandNames.loom); }, [command]);
     var clickMiro = useCallback(function () { return command(CommandNames.miro); }, [command]);
     var clickIframe = useCallback(function () { return command(CommandNames.iframe); }, [command]);
-    return (React.createElement(Grid, { container: true, alignItems: "center", className: classes.root + " " + (standAlone ? classes.center : classes.pad), wrap: "nowrap" },
+    return (React.createElement(Grid, { container: true, alignItems: "center", className: "".concat(classes.root, " ").concat(standAlone ? classes.center : classes.pad), wrap: "nowrap" },
         !standAlone && React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "bold", active: active.strong, disabled: off, onClick: clickBold }),
         React.createElement(MenuIcon, { kind: "italic", active: active.em, disabled: off, onClick: clickItalic }),

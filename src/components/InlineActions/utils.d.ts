@@ -12,4 +12,10 @@ export declare function getFigure(editorState: EditorState | null): {
     figure: import("prosemirror-utils").ContentNodeWithPos | undefined;
     figcaption: import("prosemirror-utils").NodeWithPos | undefined;
 };
+declare type NodeOrNodeFunction = (() => Element | null) | Element | null;
+export declare function createPopperLocationCache(): {
+    setNode: (nodeOrFunction: NodeOrNodeFunction) => void;
+    getNode: () => Element | null;
+    anchorEl: import("popper.js").default.ReferenceObject;
+};
 export {};

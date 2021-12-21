@@ -2,7 +2,7 @@ import { Node } from 'prosemirror-model';
 import { Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { GetPos } from './types';
-declare class FootnoteView {
+declare class FootnoteNodeView {
     dom: HTMLElement;
     editor: HTMLElement;
     innerView: EditorView;
@@ -19,4 +19,5 @@ declare class FootnoteView {
     stopEvent(event: any): boolean;
     ignoreMutation(): boolean;
 }
-export default FootnoteView;
+export declare function FootnoteView(node: Node, view: EditorView, getPos: GetPos): FootnoteNodeView;
+export {};

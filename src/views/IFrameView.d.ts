@@ -1,7 +1,7 @@
 import { Node } from 'prosemirror-model';
 import { EditorView, NodeView } from 'prosemirror-view';
 import { GetPos } from './types';
-declare class ImageView implements NodeView {
+declare class IFrameNodeView implements NodeView {
     dom: HTMLDivElement;
     div: HTMLDivElement;
     iframe: HTMLIFrameElement;
@@ -12,4 +12,5 @@ declare class ImageView implements NodeView {
     selectNode(): void;
     deselectNode(): void;
 }
-export default ImageView;
+export declare function IFrameView(node: Node, view: EditorView, getPos: GetPos): IFrameNodeView;
+export {};

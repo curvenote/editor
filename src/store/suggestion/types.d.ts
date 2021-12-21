@@ -7,12 +7,12 @@ export declare const UPDATE_RESULTS = "UPDATE_RESULTS";
 export declare const SELECT_SUGGESTION = "SELECT_SUGGESTION";
 export declare const variableTrigger: RegExp;
 export declare enum SuggestionKind {
-    'emoji' = 0,
-    'person' = 1,
-    'link' = 2,
-    'command' = 3,
-    'variable' = 4,
-    'display' = 5
+    'emoji' = "emoji",
+    'link' = "link",
+    'command' = "command",
+    'variable' = "variable",
+    'display' = "display",
+    'mention' = "mention"
 }
 export interface EmojiResult {
     c: string;

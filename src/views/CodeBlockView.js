@@ -57,8 +57,8 @@ function exitCode(state, dispatch) {
     dispatch === null || dispatch === void 0 ? void 0 : dispatch(tr);
     return true;
 }
-var CodeBlockView = (function () {
-    function CodeBlockView(node, view, getPos) {
+var CodeBlockNodeView = (function () {
+    function CodeBlockNodeView(node, view, getPos) {
         var _this = this;
         this.node = node;
         this.view = view;
@@ -90,7 +90,7 @@ var CodeBlockView = (function () {
         });
         this.cm.on('focus', function () { return _this.forwardSelection(); });
     }
-    CodeBlockView.prototype.forwardSelection = function () {
+    CodeBlockNodeView.prototype.forwardSelection = function () {
         if (!this.cm.hasFocus())
             return;
         store.dispatch(focusEditorView(this.view.dom.id, false));
@@ -99,19 +99,19 @@ var CodeBlockView = (function () {
         if (!selection.eq(state.selection))
             this.view.dispatch(state.tr.setSelection(selection));
     };
-    CodeBlockView.prototype.asProseMirrorSelection = function (doc) {
+    CodeBlockNodeView.prototype.asProseMirrorSelection = function (doc) {
         var offset = this.getPos() + 1;
         var anchor = this.cm.indexFromPos(this.cm.getCursor('anchor')) + offset;
         var head = this.cm.indexFromPos(this.cm.getCursor('head')) + offset;
         return TextSelection.create(doc, anchor, head);
     };
-    CodeBlockView.prototype.setSelection = function (anchor, head) {
+    CodeBlockNodeView.prototype.setSelection = function (anchor, head) {
         this.cm.focus();
         this.updating = true;
         this.cm.setSelection(this.cm.posFromIndex(anchor), this.cm.posFromIndex(head));
         this.updating = false;
     };
-    CodeBlockView.prototype.valueChanged = function () {
+    CodeBlockNodeView.prototype.valueChanged = function () {
         var change = computeChange(this.node.textContent, this.cm.getValue());
         if (change) {
             var start = this.getPos() + 1;
@@ -119,7 +119,7 @@ var CodeBlockView = (function () {
             this.view.dispatch(tr);
         }
     };
-    CodeBlockView.prototype.codeMirrorKeymap = function () {
+    CodeBlockNodeView.prototype.codeMirrorKeymap = function () {
         var _a;
         var _this = this;
         var view = this.view;
@@ -152,16 +152,16 @@ var CodeBlockView = (function () {
                     _this.cm.execCommand('newlineAndIndent');
                 }
             },
-            _a[mod + "-Enter"] = function () {
+            _a["".concat(mod, "-Enter")] = function () {
                 if (exitCode(view.state, view.dispatch))
                     view.focus();
             },
-            _a[mod + "-Z"] = function () { return undo(view.state, view.dispatch); },
-            _a["Shift-" + mod + "-Z"] = function () { return redo(view.state, view.dispatch); },
-            _a[mod + "-Y"] = function () { return redo(view.state, view.dispatch); },
+            _a["".concat(mod, "-Z")] = function () { return undo(view.state, view.dispatch); },
+            _a["Shift-".concat(mod, "-Z")] = function () { return redo(view.state, view.dispatch); },
+            _a["".concat(mod, "-Y")] = function () { return redo(view.state, view.dispatch); },
             _a));
     };
-    CodeBlockView.prototype.maybeEscape = function (unit, dir) {
+    CodeBlockNodeView.prototype.maybeEscape = function (unit, dir) {
         var pos = this.cm.getCursor();
         if (this.cm.somethingSelected() ||
             pos.line !== (dir < 0 ? this.cm.firstLine() : this.cm.lastLine()) ||
@@ -173,7 +173,7 @@ var CodeBlockView = (function () {
         this.view.dispatch(this.view.state.tr.setSelection(selection).scrollIntoView());
         this.view.focus();
     };
-    CodeBlockView.prototype.update = function (node) {
+    CodeBlockNodeView.prototype.update = function (node) {
         if (node.type !== this.node.type)
             return false;
         if (this.node.attrs.language !== node.attrs.language) {
@@ -191,17 +191,19 @@ var CodeBlockView = (function () {
         }
         return true;
     };
-    CodeBlockView.prototype.selectNode = function () {
+    CodeBlockNodeView.prototype.selectNode = function () {
         var edit = isEditable(this.view.state);
         this.cm.setOption('readOnly', edit ? false : 'nocursor');
         if (!edit)
             return;
         this.cm.focus();
     };
-    CodeBlockView.stopEvent = function () {
+    CodeBlockNodeView.stopEvent = function () {
         return true;
     };
-    return CodeBlockView;
+    return CodeBlockNodeView;
 }());
-export default CodeBlockView;
+export function CodeBlockView(node, view, getPos) {
+    return new CodeBlockNodeView(node, view, getPos);
+}
 //# sourceMappingURL=CodeBlockView.js.map

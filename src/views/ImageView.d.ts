@@ -1,7 +1,7 @@
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { GetPos } from './types';
-declare class ImageView {
+declare class ImageNodeView {
     dom: HTMLImageElement;
     node: Node;
     view: EditorView;
@@ -10,4 +10,5 @@ declare class ImageView {
     selectNode(): void;
     deselectNode(): void;
 }
-export default ImageView;
+export declare function ImageView(node: Node, view: EditorView, getPos: GetPos): ImageNodeView;
+export {};

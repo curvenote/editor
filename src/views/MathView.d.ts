@@ -3,7 +3,7 @@ import { Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { GetPos } from './types';
 export declare function renderMath(math: string, element: HTMLElement, inline: boolean): Promise<void>;
-declare class MathView {
+declare class MathOrEquationView {
     dom: HTMLElement;
     editor: HTMLElement;
     math: HTMLElement;
@@ -23,4 +23,6 @@ declare class MathView {
     stopEvent(event: any): boolean;
     ignoreMutation(): boolean;
 }
-export default MathView;
+export declare function MathView(node: Node, view: EditorView, getPos: GetPos): MathOrEquationView;
+export declare function EquationView(node: Node, view: EditorView, getPos: GetPos): MathOrEquationView;
+export {};

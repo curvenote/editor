@@ -17,7 +17,7 @@ import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { TextSelection } from 'prosemirror-state';
 import { GetPos } from './types';
-export default class CodeBlockView implements NodeView {
+declare class CodeBlockNodeView implements NodeView {
     view: EditorView;
     node: Node;
     getPos: GetPos;
@@ -25,7 +25,7 @@ export default class CodeBlockView implements NodeView {
     cm: any;
     dom: any;
     updating: boolean;
-    constructor(node: any, view: any, getPos: any);
+    constructor(node: Node, view: EditorView, getPos: GetPos);
     forwardSelection(): void;
     asProseMirrorSelection(doc: any): TextSelection<any>;
     setSelection(anchor: any, head: any): void;
@@ -38,3 +38,5 @@ export default class CodeBlockView implements NodeView {
     selectNode(): void;
     static stopEvent(): boolean;
 }
+export declare function CodeBlockView(node: Node, view: EditorView, getPos: GetPos): CodeBlockNodeView;
+export {};

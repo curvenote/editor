@@ -34,12 +34,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import { ActionKind } from 'prosemirror-autocomplete';
 import { SuggestionKind, UPDATE_SUGGESTION, UPDATE_RESULTS, SELECT_SUGGESTION, variableTrigger, } from './types';
-import { getSuggestion } from './selectors';
+import { selectSuggestionState } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';
 import * as variable from './results/variable';
 import * as link from './results/link';
+import * as mention from './results/mention';
 export { executeCommand } from './results/command';
 function positiveModulus(n, m) {
     return ((n % m) + m) % m;
@@ -52,7 +54,7 @@ function triggerToKind(trigger) {
         case '/':
             return SuggestionKind.command;
         case '@':
-            return SuggestionKind.person;
+            return SuggestionKind.mention;
         case '[[':
             return SuggestionKind.link;
         case '{{':
@@ -102,7 +104,7 @@ export function selectSuggestion(selection) {
 }
 export function chooseSelection(selected) {
     return function (dispatch, getState) {
-        var _a = getSuggestion(getState()), kind = _a.kind, results = _a.results;
+        var _a = selectSuggestionState(getState()), kind = _a.kind, results = _a.results;
         var result = results[selected];
         if (result == null)
             return false;
@@ -115,6 +117,9 @@ export function chooseSelection(selected) {
             case SuggestionKind.link:
                 dispatch(link.chooseSelection(result));
                 return true;
+            case SuggestionKind.mention:
+                dispatch(mention.chooseSelection(result));
+                return true;
             case SuggestionKind.variable:
             case SuggestionKind.display:
                 return dispatch(variable.chooseSelection(kind, result));
@@ -125,7 +130,7 @@ export function chooseSelection(selected) {
 }
 export function filterResults(view, search) {
     return function (dispatch, getState) {
-        var kind = getSuggestion(getState()).kind;
+        var kind = selectSuggestionState(getState()).kind;
         switch (kind) {
             case SuggestionKind.emoji:
                 return emoji.filterResults(view.state.schema, search, function (results) {
@@ -139,6 +144,9 @@ export function filterResults(view, search) {
                 return link.filterResults(view.state.schema, search, function (results) {
                     return dispatch(updateResults(results));
                 });
+            case SuggestionKind.mention:
+                return function () {
+                };
             case SuggestionKind.variable:
             case SuggestionKind.display:
                 return variable.filterResults(kind, view.state.schema, search, dispatch, getState, function (results) { return dispatch(updateResults(results)); });
@@ -159,11 +167,12 @@ function setStartingSuggestions(view, kind, search, create) {
                     switch (_a) {
                         case SuggestionKind.emoji: return [3, 1];
                         case SuggestionKind.command: return [3, 2];
-                        case SuggestionKind.link: return [3, 3];
-                        case SuggestionKind.variable: return [3, 5];
-                        case SuggestionKind.display: return [3, 5];
+                        case SuggestionKind.mention: return [3, 3];
+                        case SuggestionKind.link: return [3, 4];
+                        case SuggestionKind.variable: return [3, 6];
+                        case SuggestionKind.display: return [3, 6];
                     }
-                    return [3, 6];
+                    return [3, 7];
                 case 1:
                     {
                         dispatch(updateResults(emoji.startingSuggestions));
@@ -179,19 +188,22 @@ function setStartingSuggestions(view, kind, search, create) {
                     _b.label = 3;
                 case 3:
                     dispatch(updateResults([]));
-                    return [4, link.startingSuggestions(search, create)];
+                    return [2];
                 case 4:
+                    dispatch(updateResults([]));
+                    return [4, link.startingSuggestions(search, create)];
+                case 5:
                     suggestions = _b.sent();
                     dispatch(updateResults(suggestions));
                     return [2];
-                case 5:
+                case 6:
                     {
                         suggestions = variable.startingSuggestions(kind, getState);
                         dispatch(updateResults(suggestions));
                         return [2];
                     }
-                    _b.label = 6;
-                case 6: throw new Error('Unknown suggestion kind.');
+                    _b.label = 7;
+                case 7: throw new Error("Unknown suggestion kind - ".concat(kind));
             }
         });
     }); };
@@ -199,27 +211,27 @@ function setStartingSuggestions(view, kind, search, create) {
 export function handleSuggestion(action) {
     return function (dispatch, getState) {
         var _a;
-        var kind = triggerToKind(action.trigger);
-        dispatch(updateSuggestion(action.kind !== 'close', kind, action.search, action.view, action.range, action.trigger));
-        if (action.kind === 'open') {
-            dispatch(setStartingSuggestions(action.view, kind, (_a = action.search) !== null && _a !== void 0 ? _a : '', true));
+        var suggestionKind = triggerToKind(action.trigger);
+        dispatch(updateSuggestion(action.kind !== ActionKind.close, suggestionKind, action.filter || null, action.view, action.range, action.trigger));
+        if (action.kind === ActionKind.open) {
+            dispatch(setStartingSuggestions(action.view, suggestionKind, (_a = action.filter) !== null && _a !== void 0 ? _a : '', true));
             dispatch(selectSuggestion(0));
         }
-        if (action.kind === 'previous' || action.kind === 'next') {
-            var _b = getSuggestion(getState()), results = _b.results, selected = _b.selected;
-            dispatch(selectSuggestion(positiveModulus(selected + (action.kind === 'previous' ? -1 : +1), results.length)));
+        if (action.kind === ActionKind.up || action.kind === ActionKind.down) {
+            var _b = selectSuggestionState(getState()), results = _b.results, selected = _b.selected;
+            dispatch(selectSuggestion(positiveModulus(selected + (action.kind === ActionKind.up ? -1 : +1), results.length)));
             return true;
         }
-        if (action.kind === 'filter') {
-            if (action.search === '' || action.search == null) {
-                dispatch(setStartingSuggestions(action.view, kind, '', false));
+        if (action.kind === ActionKind.filter) {
+            if (action.filter === '' || action.filter == null) {
+                dispatch(setStartingSuggestions(action.view, suggestionKind, '', false));
             }
             else {
-                dispatch(filterResults(action.view, action.search));
+                dispatch(filterResults(action.view, action.filter));
             }
         }
-        if (action.kind === 'select') {
-            var selected = getSuggestion(getState()).selected;
+        if (action.kind === ActionKind.enter) {
+            var selected = selectSuggestionState(getState()).selected;
             return dispatch(chooseSelection(selected));
         }
         return false;

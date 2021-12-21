@@ -56,7 +56,7 @@ var MenuAction = function (props) {
     var Icon = kind && icons[kind];
     return (React.createElement(MenuItem, { onClick: action, disabled: disabled, selected: selected },
         React.createElement(Typography, { className: classes.root },
-            Icon && React.createElement(Icon, { fontSize: "small", className: classes.icon, color: "inherit" }), " " + title),
+            Icon && React.createElement(Icon, { fontSize: "small", className: classes.icon, color: "inherit" }), " ".concat(title)),
         children));
 };
 export default MenuAction;

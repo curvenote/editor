@@ -15,7 +15,7 @@ import { gapCursor } from 'prosemirror-gapcursor';
 import { collab } from 'prosemirror-collab';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames } from '@curvenote/schema';
-import suggestion from './suggestion';
+import { autocomplete } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 import inputrules from '../inputrules';
 import { store } from '../../connect';
@@ -24,8 +24,6 @@ import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
-var ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
-var NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
 function tablesPlugins(schema) {
     if (!schema.nodes[nodeNames.table])
         return [];
@@ -38,12 +36,53 @@ function tablesPlugins(schema) {
         }),
     ];
 }
+function getTriggers(schema, mention) {
+    if (mention === void 0) { mention = false; }
+    var triggers = [
+        {
+            name: 'emoji',
+            trigger: ':',
+            cancelOnFirstSpace: true,
+        },
+        {
+            name: 'command',
+            trigger: '/',
+            cancelOnFirstSpace: true,
+        },
+        {
+            name: 'link',
+            trigger: '[[',
+            cancelOnFirstSpace: false,
+        },
+    ];
+    if (mention)
+        triggers.push({ name: 'mention', trigger: '@', cancelOnFirstSpace: false });
+    if (schema.nodes.variable)
+        triggers.push.apply(triggers, [
+            {
+                name: 'variable',
+                trigger: /(?:^|\s|\n|[^\d\w])((?:^[a-zA-Z0-9_]+)\s?=)/,
+                cancelOnFirstSpace: false,
+            },
+            {
+                name: 'insert',
+                trigger: '{{',
+                cancelOnFirstSpace: false,
+            },
+        ]);
+    return triggers;
+}
 export function getPlugins(schemaPreset, schema, stateKey, version, startEditable) {
     if (schemaPreset === 'comment') {
         return __spreadArray(__spreadArray(__spreadArray([
-            editablePlugin(startEditable)
-        ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), true), inputrules(schema), true), [
-            keymap(buildCommentKeymap(stateKey, schema)),
+            editablePlugin(startEditable),
+            keymap(buildCommentKeymap(stateKey, schema))
+        ], autocomplete({
+            triggers: getTriggers(schema, true),
+            reducer: function (action) {
+                return store.dispatch(handleSuggestion(action));
+            },
+        }), true), inputrules(schema), true), [
             keymap(baseKeymap),
             dropCursor(),
             gapCursor(),
@@ -51,10 +90,14 @@ export function getPlugins(schemaPreset, schema, stateKey, version, startEditabl
         ], false);
     }
     return __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([
-        editablePlugin(startEditable)
-    ], suggestion(function (action) { return store.dispatch(handleSuggestion(action)); }, schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE, function (trigger) { return !(trigger === null || trigger === void 0 ? void 0 : trigger.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/)); }), true), [
-        commentsPlugin(),
-        getPromptPlugin(),
+        editablePlugin(startEditable),
+        getPromptPlugin()
+    ], autocomplete({
+        triggers: getTriggers(schema, false),
+        reducer: function (action) {
+            return store.dispatch(handleSuggestion(action));
+        },
+    }), true), [
         getImagePlaceholderPlugin()
     ], false), inputrules(schema), true), [
         keymap(buildKeymap(stateKey, schema)),

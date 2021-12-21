@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { ReferenceKind } from '@curvenote/schema';
-import { getSuggestion } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 import { opts } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
 var context = null;
@@ -62,7 +62,7 @@ export var startingSuggestions = function (search, create) {
 export function chooseSelection(result) {
     return function (dispatch, getState) {
         var _a, _b, _c, _d;
-        var _e = getSuggestion(getState()), view = _e.view, _f = _e.range, from = _f.from, to = _f.to;
+        var _e = selectSuggestionState(getState()), view = _e.view, _f = _e.range, from = _f.from, to = _f.to;
         if (view == null)
             return false;
         view.dispatch(view.state.tr.insertText('', from, to));
@@ -70,7 +70,7 @@ export function chooseSelection(result) {
             case ReferenceKind.link: {
                 var tr = view.state.tr;
                 var text = result.content;
-                tr.insertText(text + " ", from);
+                tr.insertText("".concat(text, " "), from);
                 var mark = view.state.schema.marks.link.create({
                     href: result.uid,
                     title: (_a = result.title) !== null && _a !== void 0 ? _a : '',

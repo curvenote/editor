@@ -91,7 +91,7 @@ export function selectFirstNodeOfTypeInParent(nodeName, tr, parentPos) {
         return selected;
     }
     catch (error) {
-        console.error("Could not select the " + (typeof nodeName === 'string' ? nodeName : nodeName.join(', ')) + " node.");
+        console.error("Could not select the ".concat(typeof nodeName === 'string' ? nodeName : nodeName.join(', '), " node."));
         return tr;
     }
 }

@@ -77,16 +77,16 @@ export var strikethrough = function (schema) { return [
 ]; };
 export var em = function (schema) { return [
     markInputRule(/(\s|^)\*(?!\*)([\W\w]+)\*$/, schema.marks.em, {
-        getText: function (match) { return (match[1] ? " " + match[2] : match[2]); },
+        getText: function (match) { return (match[1] ? " ".concat(match[2]) : match[2]); },
     }),
     markInputRule(/(\s|^)_(?!_)([\W\w]+)_$/, schema.marks.em, {
-        getText: function (match) { return (match[1] ? " " + match[2] : match[2]); },
+        getText: function (match) { return (match[1] ? " ".concat(match[2]) : match[2]); },
     }),
 ]; };
 export var headings = function (schema, maxLevel) {
     if (maxLevel === void 0) { maxLevel = 6; }
     return [
-        textblockTypeInputRule(new RegExp("^(#{1," + maxLevel + "})\\s$"), schema.nodes.heading, function (match) { return ({
+        textblockTypeInputRule(new RegExp("^(#{1,".concat(maxLevel, "})\\s$")), schema.nodes.heading, function (match) { return ({
             level: match[1].length,
             id: createId(),
         }); }),
@@ -112,7 +112,7 @@ export var hr = function (schema) { return [
 export var slider = function (schema) { return [
     replaceNodeRule(/==([a-zA-Z0-9_]+)==$/, schema.nodes.range, function (match) { return ({
         valueFunction: match[1],
-        changeFunction: "{" + match[1] + ": value}",
+        changeFunction: "{".concat(match[1], ": value}"),
     }); }),
 ]; };
 //# sourceMappingURL=rules.js.map

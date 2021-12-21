@@ -90,7 +90,7 @@ function addAllCommands(stateKey, schema, bind, options) {
         bind('Mod-Alt-0', setBlockType(schema.nodes.paragraph));
     if (schema.nodes.heading) {
         for (var i = 1; i <= 6; i += 1) {
-            bind("Mod-Alt-" + i, setBlockType(schema.nodes.heading, { level: i, id: createId() }));
+            bind("Mod-Alt-".concat(i), setBlockType(schema.nodes.heading, { level: i, id: createId() }));
         }
     }
     if (schema.nodes.horizontal_rule) {

@@ -18,4 +18,45 @@ export function getFigure(editorState) {
         : undefined;
     return { figure: figure, figcaption: figcaption };
 }
+export function createPopperLocationCache() {
+    var cache = {
+        node: null,
+        clientRect: null,
+        clientWidth: 0,
+        clientHeight: 0,
+    };
+    function setNode(nodeOrFunction) {
+        var _a, _b;
+        var node = typeof nodeOrFunction === 'function' ? nodeOrFunction() : nodeOrFunction;
+        cache.node = nodeOrFunction;
+        if (node && node.isConnected) {
+            cache.clientRect = node.getBoundingClientRect();
+            cache.clientWidth = (_a = node.clientWidth) !== null && _a !== void 0 ? _a : 0;
+            cache.clientHeight = (_b = node.clientHeight) !== null && _b !== void 0 ? _b : 0;
+        }
+    }
+    function getNode() {
+        var node = typeof cache.node === 'function' ? cache.node() : cache.node;
+        return node;
+    }
+    var anchorEl = {
+        getBoundingClientRect: function () {
+            setNode(cache.node);
+            return cache.clientRect;
+        },
+        get clientWidth() {
+            setNode(cache.node);
+            return cache.clientWidth;
+        },
+        get clientHeight() {
+            setNode(cache.node);
+            return cache.clientHeight;
+        },
+    };
+    return {
+        setNode: setNode,
+        getNode: getNode,
+        anchorEl: anchorEl,
+    };
+}
 //# sourceMappingURL=utils.js.map

@@ -7,10 +7,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-import { getSuggestion } from '../selectors';
+import { KEEP_OPEN, closeAutocomplete } from 'prosemirror-autocomplete';
+import { selectSuggestionState, selectSuggestionView } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, SuggestionKind } from '../types';
-import { KEEP_SELECTION_ALIVE, cancelSuggestion } from '../../../prosemirror/plugins/suggestion';
 var getFirstSuggestion = function (kind) {
     var _a;
     var title = (_a = {},
@@ -41,7 +41,7 @@ function createVariable(schema, dispatch, trigger, search) {
     var number = match[1].replace('$', '');
     var decimals = number.split('.');
     var numDecimals = decimals.length === 1 ? 0 : decimals[1].length;
-    dispatch(insertVariable(schema, { name: name, value: number, format: dollars + "." + numDecimals + "f" }));
+    dispatch(insertVariable(schema, { name: name, value: number, format: "".concat(dollars, ".").concat(numDecimals, "f") }));
     return true;
 }
 function createDisplay(schema, dispatch, search) {
@@ -52,14 +52,14 @@ function createDisplay(schema, dispatch, search) {
 export function chooseSelection(kind, result) {
     return function (dispatch, getState) {
         var _a;
-        var _b = getSuggestion(getState()), view = _b.view, _c = _b.range, from = _c.from, to = _c.to, trigger = _b.trigger, search = _b.search;
+        var _b = selectSuggestionState(getState()), view = _b.view, _c = _b.range, from = _c.from, to = _c.to, trigger = _b.trigger, search = _b.search;
         if (view == null || search == null)
             return false;
         if (result.id !== 'FINISHED') {
             var tr = view.state.tr;
             tr.insertText((_a = result.name) !== null && _a !== void 0 ? _a : '');
             view.dispatch(tr);
-            return KEEP_SELECTION_ALIVE;
+            return KEEP_OPEN;
         }
         var removeText = function () {
             var tr = view.state.tr;
@@ -81,7 +81,7 @@ export function chooseSelection(kind, result) {
 }
 export function filterResults(kind, schema, search, dispatch, getState, callback) {
     if (kind === SuggestionKind.display && search.endsWith('}}')) {
-        cancelSuggestion(getState().editor.suggestion.view);
+        closeAutocomplete(selectSuggestionView(getState()));
         setTimeout(function () { return dispatch(chooseSelection(kind, getFirstSuggestion(kind))); }, 5);
         return;
     }

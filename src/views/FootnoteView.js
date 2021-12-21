@@ -26,9 +26,9 @@ import { EditorView } from 'prosemirror-view';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { getInlinePlugins } from '../prosemirror/plugins';
-import MathView from './MathView';
-var FootnoteView = (function () {
-    function FootnoteView(node, view, getPos) {
+import { MathView } from './MathView';
+var FootnoteNodeView = (function () {
+    function FootnoteNodeView(node, view, getPos) {
         var _this = this;
         this.node = node;
         this.outerView = view;
@@ -83,17 +83,15 @@ var FootnoteView = (function () {
                 },
             },
             nodeViews: {
-                math: function (n, v, gP) {
-                    return new MathView(n, v, gP, true);
-                },
+                math: MathView,
             },
         });
     }
-    FootnoteView.prototype.positionTooltip = function () {
+    FootnoteNodeView.prototype.positionTooltip = function () {
         var _a = this.dom, offsetTop = _a.offsetTop, offsetHeight = _a.offsetHeight;
-        this.editor.style.top = offsetTop + offsetHeight + 8 + "px";
+        this.editor.style.top = "".concat(offsetTop + offsetHeight + 8, "px");
     };
-    FootnoteView.prototype.selectNode = function () {
+    FootnoteNodeView.prototype.selectNode = function () {
         var _this = this;
         this.dom.classList.add('ProseMirror-selectednode');
         this.dom.classList.add('open');
@@ -102,11 +100,11 @@ var FootnoteView = (function () {
             setTimeout(function () { return _this.innerView.focus(); }, 0);
         }
     };
-    FootnoteView.prototype.deselectNode = function () {
+    FootnoteNodeView.prototype.deselectNode = function () {
         this.dom.classList.remove('ProseMirror-selectednode');
         this.dom.classList.remove('open');
     };
-    FootnoteView.prototype.dispatchInner = function (tr) {
+    FootnoteNodeView.prototype.dispatchInner = function (tr) {
         var _a = this.innerView.state.applyTransaction(tr), state = _a.state, transactions = _a.transactions;
         this.innerView.updateState(state);
         if (!tr.getMeta('fromOutside')) {
@@ -121,7 +119,7 @@ var FootnoteView = (function () {
                 this.outerView.dispatch(outerTr);
         }
     };
-    FootnoteView.prototype.update = function (node) {
+    FootnoteNodeView.prototype.update = function (node) {
         if (!node.sameMarkup(this.node))
             return false;
         this.node = node;
@@ -141,18 +139,20 @@ var FootnoteView = (function () {
         }
         return true;
     };
-    FootnoteView.prototype.destroy = function () {
+    FootnoteNodeView.prototype.destroy = function () {
         this.innerView.destroy();
         this.dom.textContent = '';
     };
-    FootnoteView.prototype.stopEvent = function (event) {
+    FootnoteNodeView.prototype.stopEvent = function (event) {
         var _a;
         return (_a = (this.innerView && this.innerView.dom.contains(event.target))) !== null && _a !== void 0 ? _a : false;
     };
-    FootnoteView.prototype.ignoreMutation = function () {
+    FootnoteNodeView.prototype.ignoreMutation = function () {
         return true;
     };
-    return FootnoteView;
+    return FootnoteNodeView;
 }());
-export default FootnoteView;
+export function FootnoteView(node, view, getPos) {
+    return new FootnoteNodeView(node, view, getPos);
+}
 //# sourceMappingURL=FootnoteView.js.map

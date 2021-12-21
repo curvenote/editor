@@ -7,7 +7,7 @@ import LinkSuggestions from './Links';
 import { SuggestionKind } from '../../store/suggestion/types';
 import { selectors } from '../../store';
 var SuggestionSwitch = function () {
-    var kind = useSelector(function (state) { return selectors.getSuggestion(state).kind; });
+    var kind = useSelector(selectors.selectSuggestionKind);
     return (React.createElement(React.Fragment, null,
         kind === SuggestionKind.emoji && React.createElement(EmojiSuggestions, null),
         kind === SuggestionKind.command && React.createElement(CommandSuggestions, null),

@@ -52,7 +52,7 @@ var Attributes = function () {
     var onClose = useCallback(function () { return dispatch(closeAttributeEditor()); }, []);
     if (!editing || !location || node == null || keys.length === 0)
         return null;
-    var title = "" + node.type.name[0].toUpperCase() + node.type.name.slice(1) + " Settings";
+    var title = "".concat(node.type.name[0].toUpperCase()).concat(node.type.name.slice(1), " Settings");
     return (React.createElement(Popover, { open: show, anchorReference: "anchorPosition", anchorPosition: location, onClose: onClose },
         React.createElement(Paper, null,
             React.createElement("div", { className: classes.root },

@@ -158,13 +158,13 @@ store.subscribe(function () {
     var counts = process.countState(editor.state);
     var words = process.countWords(editor.state);
     var updates = {
-        'count-sec': counts.sec.all.length + " (" + counts.sec.total + ")",
-        'count-fig': counts.fig.all.length + " (" + counts.fig.total + ")",
-        'count-eq': counts.eq.all.length + " (" + counts.eq.total + ")",
-        'count-code': counts.code.all.length + " (" + counts.code.total + ")",
-        'count-table': counts.table.all.length + " (" + counts.table.total + ")",
-        'count-words': "" + words.words,
-        'count-char': words.characters_including_spaces + "  (" + words.characters_excluding_spaces + ")",
+        'count-sec': "".concat(counts.sec.all.length, " (").concat(counts.sec.total, ")"),
+        'count-fig': "".concat(counts.fig.all.length, " (").concat(counts.fig.total, ")"),
+        'count-eq': "".concat(counts.eq.all.length, " (").concat(counts.eq.total, ")"),
+        'count-code': "".concat(counts.code.all.length, " (").concat(counts.code.total, ")"),
+        'count-table': "".concat(counts.table.all.length, " (").concat(counts.table.total, ")"),
+        'count-words': "".concat(words.words),
+        'count-char': "".concat(words.characters_including_spaces, "  (").concat(words.characters_excluding_spaces, ")"),
     };
     Object.entries(updates).forEach(function (_a) {
         var key = _a[0], count = _a[1];
