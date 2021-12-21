@@ -44,5 +44,9 @@ export function applySteps(state: EditorState, stepsData: any[], client: string 
     clientIDs.push(client);
   });
   const tr = receiveTransaction(state, steps, clientIDs);
-  return state.apply(tr);
+  const nextState = state.apply(tr);
+  return {
+    state: nextState,
+    tr,
+  };
 }
