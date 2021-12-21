@@ -1,13 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles, createStyles, Paper, Popper, PopperProps } from '@material-ui/core';
-import { State } from '../../store/types';
+import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
+
 import { selectors } from '../../store';
 import useClickOutside from '../hooks/useClickOutside';
-
-import { SUGGESTION_ID } from '../../prosemirror/plugins/suggestion';
-import { registerPopper } from '../InlineActions';
+import { createPopperLocationCache, registerPopper } from '../InlineActions';
 import { closeSuggestion } from '../../store/actions';
+import { getSelectedView } from '../../store/selectors';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -15,43 +14,30 @@ const useStyles = makeStyles(() =>
       minWidth: 300,
       maxWidth: 500,
       maxHeight: 350,
-      overflowY: 'scroll',
+      overflowY: 'auto',
       margin: '10px 0',
     },
   }),
 );
 
-function getNode() {
-  return document.getElementById(SUGGESTION_ID);
-}
-
-const anchorEl: PopperProps['anchorEl'] = {
-  getBoundingClientRect() {
-    return getNode()?.getBoundingClientRect() as ClientRect;
-  },
-  get clientWidth() {
-    return getNode()?.clientWidth ?? 0;
-  },
-  get clientHeight() {
-    return getNode()?.clientHeight ?? 0;
-  },
-};
-
 const Suggestion: React.FC = (props) => {
   const { children } = props;
-  const open = useSelector((state: State) => selectors.isSuggestionOpen(state));
+  const open = useSelector(selectors.isSuggestionOpen);
   const classes = useStyles();
   const paperRef = useRef<HTMLDivElement>(null);
+  const cache = useMemo(createPopperLocationCache, []);
   const dispatch = useDispatch();
   useClickOutside(paperRef, () => {
     dispatch(closeSuggestion());
   });
-  if (!open || !getNode()) return null;
+  const { view } = useSelector(getSelectedView);
+  cache.setNode(() => view?.dom.querySelector('.autocomplete') ?? null);
+  if (!open || !cache.getNode()?.isConnected) return null;
   return (
     <Popper
       className="above-modals"
       open={open}
-      anchorEl={anchorEl}
+      anchorEl={cache.anchorEl}
       popperRef={(pop) => registerPopper(pop)}
       placement="bottom-start"
     >

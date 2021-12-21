@@ -10,12 +10,12 @@ export const SELECT_SUGGESTION = 'SELECT_SUGGESTION';
 export const variableTrigger = /^([a-zA-Z0-9_]+)\s?=/;
 
 export enum SuggestionKind {
-  'emoji',
-  'person',
-  'link',
-  'command',
-  'variable',
-  'display',
+  'emoji' = 'emoji',
+  'link' = 'link',
+  'command' = 'command',
+  'variable' = 'variable',
+  'display' = 'display',
+  'mention' = 'mention',
 }
 
 export interface EmojiResult {

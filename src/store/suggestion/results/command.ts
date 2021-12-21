@@ -18,13 +18,13 @@ import {
 } from 'prosemirror-tables';
 
 import { Transaction } from 'prosemirror-state';
+import { openAutocomplete } from 'prosemirror-autocomplete';
 import { nodeNames, createId } from '@curvenote/schema';
 import { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
-import { getSuggestion } from '../selectors';
+import { selectSuggestionState } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
-import { triggerSuggestion } from '../../../prosemirror/plugins/suggestion';
 import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
@@ -208,7 +208,7 @@ export function executeCommand(
         return true;
       case CommandNames.emoji:
         removeText();
-        triggerSuggestion(view, ':');
+        openAutocomplete(view, ':');
         return true;
       case CommandNames.math:
         removeText();
@@ -233,7 +233,7 @@ export function executeCommand(
         return true;
       case CommandNames.display:
         removeText();
-        triggerSuggestion(view, '{{');
+        openAutocomplete(view, '{{');
         return true;
       case CommandNames.range: {
         removeText();
@@ -326,35 +326,35 @@ export function executeCommand(
       }
       case CommandNames.link_section:
         removeText();
-        triggerSuggestion(view, '[[', 'sec: ');
+        openAutocomplete(view, '[[', 'sec: ');
         return true;
       case CommandNames.link_figure:
         removeText();
-        triggerSuggestion(view, '[[', 'fig: ');
+        openAutocomplete(view, '[[', 'fig: ');
         return true;
       case CommandNames.link_equation:
         removeText();
-        triggerSuggestion(view, '[[', 'eq: ');
+        openAutocomplete(view, '[[', 'eq: ');
         return true;
       case CommandNames.link_code:
         removeText();
-        triggerSuggestion(view, '[[', 'code: ');
+        openAutocomplete(view, '[[', 'code: ');
         return true;
       case CommandNames.link_article:
         removeText();
-        triggerSuggestion(view, '[[', 'article: ');
+        openAutocomplete(view, '[[', 'article: ');
         return true;
       case CommandNames.link_table:
         removeText();
-        triggerSuggestion(view, '[[', 'table: ');
+        openAutocomplete(view, '[[', 'table: ');
         return true;
       case CommandNames.link_notebook:
         removeText();
-        triggerSuggestion(view, '[[', 'notebook: ');
+        openAutocomplete(view, '[[', 'notebook: ');
         return true;
       case CommandNames.citation:
         removeText();
-        triggerSuggestion(view, '[[', 'cite: ');
+        openAutocomplete(view, '[[', 'cite: ');
         return true;
       case CommandNames.add_citation: {
         removeText();
@@ -378,7 +378,7 @@ export function chooseSelection(result: CommandResult): AppThunk<Promise<boolean
     const {
       view,
       range: { from, to },
-    } = getSuggestion(getState());
+    } = selectSuggestionState(getState());
     if (view == null) return false;
     const removeText = () => {
       const { tr } = view.state;

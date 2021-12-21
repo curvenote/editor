@@ -1,10 +1,11 @@
+import { DEFAULT_IMAGE_WIDTH, Nodes } from '@curvenote/schema';
 import { Node } from 'prosemirror-model';
 import { EditorView, NodeView } from 'prosemirror-view';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { GetPos } from './types';
 import { clickSelectFigure } from './utils';
 
-class ImageView implements NodeView {
+class IFrameNodeView implements NodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLDivElement;
 
@@ -25,7 +26,8 @@ class ImageView implements NodeView {
     this.dom = document.createElement('div');
     this.dom.addEventListener('mousedown', () => clickSelectFigure(view, getPos));
     this.dom.addEventListener('click', () => clickSelectFigure(view, getPos));
-    const { src, title, alt, width } = node.attrs;
+    const { src, width: widthIn } = node.attrs as Nodes.IFrame.Attrs;
+    const width = widthIn ?? DEFAULT_IMAGE_WIDTH;
     this.dom.style.margin = '1.5em 0';
     this.div = document.createElement('div');
     this.div.style.position = 'relative';
@@ -60,4 +62,6 @@ class ImageView implements NodeView {
   }
 }
 
-export default ImageView;
+export function IFrameView(node: Node, view: EditorView, getPos: GetPos) {
+  return new IFrameNodeView(node, view, getPos);
+}

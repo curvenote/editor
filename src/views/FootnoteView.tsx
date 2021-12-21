@@ -7,10 +7,10 @@ import { EditorView } from 'prosemirror-view';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { getInlinePlugins } from '../prosemirror/plugins';
-import MathView from './MathView';
+import { MathView } from './MathView';
 import { GetPos } from './types';
 
-class FootnoteView {
+class FootnoteNodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
 
@@ -102,9 +102,7 @@ class FootnoteView {
           },
         },
         nodeViews: {
-          math(n, v, gP) {
-            return new MathView(n, v, gP as GetPos, true);
-          },
+          math: MathView,
         },
       },
     );
@@ -181,4 +179,6 @@ class FootnoteView {
   }
 }
 
-export default FootnoteView;
+export function FootnoteView(node: Node, view: EditorView, getPos: GetPos) {
+  return new FootnoteNodeView(node, view, getPos);
+}

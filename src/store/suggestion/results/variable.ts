@@ -1,10 +1,10 @@
 import { EditorView } from 'prosemirror-view';
 import { Schema } from 'prosemirror-model';
+import { KEEP_OPEN, closeAutocomplete } from 'prosemirror-autocomplete';
 import { AppThunk, State, Dispatch } from '../../types';
-import { getSuggestion } from '../selectors';
+import { selectSuggestionState, selectSuggestionView } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
 import { variableTrigger, VariableResult, SuggestionKind } from '../types';
-import { KEEP_SELECTION_ALIVE, cancelSuggestion } from '../../../prosemirror/plugins/suggestion';
 
 type VarSuggestionKinds = SuggestionKind.variable | SuggestionKind.display;
 
@@ -51,21 +51,21 @@ function createDisplay(schema: Schema, dispatch: Dispatch, search: string) {
 export function chooseSelection(
   kind: VarSuggestionKinds,
   result: VariableResult,
-): AppThunk<boolean | typeof KEEP_SELECTION_ALIVE> {
+): AppThunk<boolean | typeof KEEP_OPEN> {
   return (dispatch, getState) => {
     const {
       view,
       range: { from, to },
       trigger,
       search,
-    } = getSuggestion(getState());
+    } = selectSuggestionState(getState());
     if (view == null || search == null) return false;
 
     if (result.id !== 'FINISHED') {
       const { tr } = view.state;
       tr.insertText(result.name ?? '');
       view.dispatch(tr);
-      return KEEP_SELECTION_ALIVE;
+      return KEEP_OPEN;
     }
 
     const removeText = () => {
@@ -96,7 +96,7 @@ export function filterResults(
   callback: (results: VariableResult[]) => void,
 ): void {
   if (kind === SuggestionKind.display && search.endsWith('}}')) {
-    cancelSuggestion(getState().editor.suggestion.view as EditorView);
+    closeAutocomplete(selectSuggestionView(getState()) as EditorView);
     // Not sure why this needs to be async
     setTimeout(() => dispatch(chooseSelection(kind, getFirstSuggestion(kind))), 5);
     return;

@@ -1,7 +1,7 @@
 // style.scss
 
 @use 'prosemirror';
-@use 'suggestion';
+@use 'autocomplete';
 @use 'equationTooltip';
 @use 'article/index.scss';
 @use 'selected';
@@ -14,6 +14,7 @@
 @use 'footnote';
 @use 'figure';
 @use 'codemark';
+@use 'mention';
 
 .hidden {
   display: none;

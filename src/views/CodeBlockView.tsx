@@ -3,7 +3,6 @@
  */
 
 import CodeMirror from 'codemirror';
-import { newlineInCode } from 'prosemirror-commands';
 import { EditorView, NodeView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
 import { undo, redo } from 'prosemirror-history';
@@ -73,7 +72,7 @@ function exitCode(state: EditorState, dispatch?: (tr: Transaction) => void): boo
   return true;
 }
 
-export default class CodeBlockView implements NodeView {
+class CodeBlockNodeView implements NodeView {
   view: EditorView;
 
   node: Node;
@@ -88,7 +87,7 @@ export default class CodeBlockView implements NodeView {
 
   updating: boolean;
 
-  constructor(node: any, view: any, getPos: any) {
+  constructor(node: Node, view: EditorView, getPos: GetPos) {
     // Store for later
     this.node = node;
     this.view = view;
@@ -256,4 +255,8 @@ export default class CodeBlockView implements NodeView {
   static stopEvent() {
     return true;
   }
+}
+
+export function CodeBlockView(node: Node, view: EditorView, getPos: GetPos) {
+  return new CodeBlockNodeView(node, view, getPos);
 }

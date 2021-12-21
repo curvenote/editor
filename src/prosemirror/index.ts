@@ -8,7 +8,6 @@ import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
-import { GetPos } from '../views/types';
 import { selectEditorView } from '../store/actions';
 
 export function createEditorState(
@@ -46,30 +45,15 @@ export function createEditorView(
       state,
       dispatchTransaction: dispatch,
       nodeViews: {
-        math(node, view, getPos) {
-          return new views.MathView(node, view, getPos as GetPos, true);
-        },
-        equation(node, view, getPos) {
-          return new views.MathView(node, view, getPos as GetPos, false);
-        },
-        code_block(node, view, getPos) {
-          return new views.CodeBlockView(node, view, getPos as GetPos);
-        },
-        footnote(node, view, getPos) {
-          return new views.FootnoteView(node, view, getPos as GetPos);
-        },
-        image(node, view, getPos) {
-          return new views.ImageView(node, view, getPos as GetPos);
-        },
-        iframe(node, view, getPos) {
-          return new views.IFrameView(node, view, getPos as GetPos);
-        },
-        link(node, view, getPos) {
-          return new views.LinkView(node, view, getPos as GetPos);
-        },
-        time(node, view, getPos) {
-          return new views.TimeView(node, view, getPos as GetPos);
-        },
+        math: views.MathView,
+        equation: views.EquationView,
+        code_block: views.CodeBlockView,
+        footnote: views.FootnoteView,
+        image: views.ImageView,
+        iframe: views.IFrameView,
+        link: views.LinkView,
+        time: views.TimeView,
+        mention: views.MentionView,
         button: views.newWidgetView,
         display: views.newWidgetView,
         dynamic: views.newWidgetView,

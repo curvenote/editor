@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { State } from '../../store/types';
 import EmojiSuggestions from './Emojis';
 import CommandSuggestions from './Commands';
 import VariableSuggestions from './Variables';
@@ -9,7 +8,7 @@ import { SuggestionKind } from '../../store/suggestion/types';
 import { selectors } from '../../store';
 
 const SuggestionSwitch = () => {
-  const kind = useSelector((state: State) => selectors.getSuggestion(state).kind);
+  const kind = useSelector(selectors.selectSuggestionKind);
   return (
     <>
       {kind === SuggestionKind.emoji && <EmojiSuggestions />}

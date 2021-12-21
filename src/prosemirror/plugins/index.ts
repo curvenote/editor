@@ -8,8 +8,9 @@ import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
-import suggestion from './suggestion';
+import { autocomplete, Trigger } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
+
 import inputrules from '../inputrules';
 import { store } from '../../connect';
 import { editablePlugin } from './editable';
@@ -17,9 +18,6 @@ import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
-
-const ALL_TRIGGERS = /(?:^|\s|\n|[^\d\w])(:|\/|(?:(?:^[a-zA-Z0-9_]+)\s?=)|(?:\{\{)|(?:\[\[))$/;
-const NO_VARIABLE = /(?:^|\s|\n|[^\d\w])(:|\/|(?:\{\{)|(?:\[\[))$/;
 
 function tablesPlugins(schema: Schema) {
   // Don't add plugins if they are not in the schema
@@ -34,6 +32,43 @@ function tablesPlugins(schema: Schema) {
   ];
 }
 
+function getTriggers(schema: Schema, mention = false): Trigger[] {
+  const triggers: Trigger[] = [
+    {
+      name: 'emoji',
+      trigger: ':',
+      cancelOnFirstSpace: true,
+    },
+    {
+      name: 'command',
+      trigger: '/',
+      cancelOnFirstSpace: true,
+    },
+    {
+      name: 'link',
+      trigger: '[[',
+      cancelOnFirstSpace: false,
+    },
+  ];
+  if (mention) triggers.push({ name: 'mention', trigger: '@', cancelOnFirstSpace: false });
+  if (schema.nodes.variable)
+    triggers.push(
+      ...[
+        {
+          name: 'variable',
+          trigger: /(?:^|\s|\n|[^\d\w])((?:^[a-zA-Z0-9_]+)\s?=)/,
+          cancelOnFirstSpace: false,
+        },
+        {
+          name: 'insert',
+          trigger: '{{',
+          cancelOnFirstSpace: false,
+        },
+      ],
+    );
+  return triggers;
+}
+
 export function getPlugins(
   schemaPreset: schemas.UseSchema,
   schema: Schema,
@@ -44,14 +79,14 @@ export function getPlugins(
   if (schemaPreset === 'comment') {
     return [
       editablePlugin(startEditable),
-      ...suggestion(
-        (action) => store.dispatch(handleSuggestion(action)),
-        NO_VARIABLE,
-        // Cancel on space after some of the triggers
-        (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-      ),
-      ...inputrules(schema),
       keymap(buildCommentKeymap(stateKey, schema)),
+      ...autocomplete({
+        triggers: getTriggers(schema, true),
+        reducer(action) {
+          return store.dispatch(handleSuggestion(action));
+        },
+      }),
+      ...inputrules(schema),
       keymap(baseKeymap),
       dropCursor(),
       gapCursor(),
@@ -60,14 +95,13 @@ export function getPlugins(
   }
   return [
     editablePlugin(startEditable),
-    ...suggestion(
-      (action) => store.dispatch(handleSuggestion(action)),
-      schema.nodes.variable ? ALL_TRIGGERS : NO_VARIABLE,
-      // Cancel on space after some of the triggers
-      (trigger) => !trigger?.match(/(?:(?:[a-zA-Z0-9_]+)\s?=)|(?:\{\{)/),
-    ),
-    commentsPlugin(),
     getPromptPlugin(),
+    ...autocomplete({
+      triggers: getTriggers(schema, false),
+      reducer(action) {
+        return store.dispatch(handleSuggestion(action));
+      },
+    }),
     getImagePlaceholderPlugin(),
     ...inputrules(schema),
     keymap(buildKeymap(stateKey, schema)),

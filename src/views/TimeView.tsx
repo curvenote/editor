@@ -3,7 +3,7 @@ import { EditorView } from 'prosemirror-view';
 import { formatDatetime } from '@curvenote/schema/dist/nodes/time';
 import { GetPos } from './types';
 
-class TimeView {
+class TimeNodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
 
@@ -35,4 +35,6 @@ class TimeView {
   }
 }
 
-export default TimeView;
+export function TimeView(node: Node, view: EditorView, getPos: GetPos) {
+  return new TimeNodeView(node, view, getPos);
+}

@@ -2,7 +2,7 @@ import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { GetPos } from './types';
 
-class LinkView {
+class LinkNodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
 
@@ -25,4 +25,6 @@ class LinkView {
   }
 }
 
-export default LinkView;
+export function LinkView(node: Node, view: EditorView, getPos: GetPos) {
+  return new LinkNodeView(node, view, getPos);
+}
