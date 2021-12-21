@@ -176,6 +176,7 @@ function setStartingSuggestions(
         return;
       }
       case SuggestionKind.mention:
+        dispatch(updateResults([]));
         return;
       case SuggestionKind.link: {
         dispatch(updateResults([]));

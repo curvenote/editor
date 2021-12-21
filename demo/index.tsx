@@ -16,7 +16,6 @@ import {
   Attributes,
   InlineActions,
   LinkResult,
-  SuggestionKind,
 } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
