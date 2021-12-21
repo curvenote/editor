@@ -4,7 +4,7 @@ import { isEditable } from '../prosemirror/plugins/editable';
 import { GetPos } from './types';
 import { clickSelectFigure } from './utils';
 
-class ImageView {
+class ImageNodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLImageElement;
 
@@ -38,4 +38,6 @@ class ImageView {
   }
 }
 
-export default ImageView;
+export function ImageView(node: Node, view: EditorView, getPos: GetPos) {
+  return new ImageNodeView(node, view, getPos);
+}

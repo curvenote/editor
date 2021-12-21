@@ -3,7 +3,7 @@ import { Node } from 'prosemirror-model';
 import { Nodes } from '@curvenote/schema';
 import { GetPos } from './types';
 
-export default class MentionView {
+class MentionNodeView {
   node: Node;
 
   view: EditorView;
@@ -31,4 +31,8 @@ export default class MentionView {
     const { label } = this.node.attrs as Nodes.Mention.Attrs;
     this.dom.innerText = label;
   }
+}
+
+export function MentionView(node: Node, view: EditorView, getPos: GetPos) {
+  return new MentionNodeView(node, view, getPos);
 }

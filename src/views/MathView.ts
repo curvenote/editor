@@ -29,7 +29,7 @@ export async function renderMath(math: string, element: HTMLElement, inline: boo
   }
 }
 
-class MathView {
+class MathOrEquationView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLElement;
 
@@ -223,4 +223,10 @@ class MathView {
   }
 }
 
-export default MathView;
+export function MathView(node: Node, view: EditorView, getPos: GetPos) {
+  return new MathOrEquationView(node, view, getPos, true);
+}
+
+export function EquationView(node: Node, view: EditorView, getPos: GetPos) {
+  return new MathOrEquationView(node, view, getPos, false);
+}
