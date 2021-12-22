@@ -120,7 +120,6 @@ export function getPlugins(
 export function getInlinePlugins(schema: Schema): Plugin[] {
   return [
     editablePlugin(true),
-    commentsPlugin(),
     ...inputrules(schema),
     keymap(buildBasicKeymap(schema)),
     keymap(baseKeymap),
