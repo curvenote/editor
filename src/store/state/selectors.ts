@@ -26,5 +26,6 @@ export function getEditorStateViews(state: State, stateKey: any | null): EditorV
   const stateId = opts.transformKeyToId(stateKey);
   if (!stateId) return [];
   const editor = state.editor.state.editors[stateId];
+  if (!editor) return [];
   return editor.viewIds.map((id) => state.editor.state.views[id].view).filter((v) => v != null);
 }
