@@ -9,7 +9,7 @@ import { FootnoteView } from './FootnoteView';
 import createNodeView from './NodeView';
 import WidgetView from './WidgetView';
 import { clickSelectFigure } from './utils';
-export type { NodeViewProps } from './types';
+export type { NodeViewProps, GetPos } from './types';
 declare const _default: {
     createNodeView: typeof createNodeView;
     MathView: typeof MathView;

@@ -555,52 +555,16 @@ img.placeholder {
   }
 }
 article {
-  counter-reset: h1_cnt eq_cnt fig_cnt table_cnt code_cnt footnote;
-}
-article h1 {
-  counter-reset: h2_cnt;
-}
-article h2 {
-  counter-reset: h3_cnt;
-}
-article h3 {
-  counter-reset: h4_cnt;
-}
-article h4 {
-  counter-reset: h5_cnt;
-}
-article h5 {
-  counter-reset: h6_cnt;
+  counter-reset: eq_cnt fig_cnt table_cnt code_cnt footnote;
 }
 
-h1[numbered]:before {
-  content: counter(h1_cnt) ".  ";
-  counter-increment: h1_cnt;
-}
-
-h2[numbered]:before {
-  content: counter(h1_cnt) "." counter(h2_cnt) ".  ";
-  counter-increment: h2_cnt;
-}
-
-h3[numbered]:before {
-  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) ".  ";
-  counter-increment: h3_cnt;
-}
-
-h4[numbered]:before {
-  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) "." counter(h4_cnt) ".  ";
-  counter-increment: h4_cnt;
-}
-
-h5[numbered]:before {
-  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) "." counter(h4_cnt) "." counter(h5_cnt) ".  ";
-  counter-increment: h5_cnt;
-}
-
+h1[numbered]:before,
+h2[numbered]:before,
+h3[numbered]:before,
+h4[numbered]:before,
+h5[numbered]:before,
 h6[numbered]:before {
-  content: counter(h1_cnt) "." counter(h2_cnt) "." counter(h3_cnt) "." counter(h4_cnt) "." counter(h5_cnt) "." counter(h6_cnt) ".  ";
-  counter-increment: h6_cnt;
+  content: attr(data-section) ".  ";
 }
 
 .eqn.display[numbered] {
