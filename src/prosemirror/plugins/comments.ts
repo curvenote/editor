@@ -1,4 +1,4 @@
-import { Plugin, PluginKey, Transaction, NodeSelection } from 'prosemirror-state';
+import { Plugin, PluginKey, Transaction } from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { createId } from '@curvenote/schema';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
@@ -8,7 +8,8 @@ export interface CommentState {
   docId: string;
   decorations: DecorationSet;
 }
-const emptyCommentState = {
+const emptyCommentState: CommentState = {
+  docId: '',
   decorations: DecorationSet.empty,
 };
 
@@ -142,7 +143,7 @@ const getCommentsPlugin = (): Plugin<CommentState> => {
   const commentsPlugin: Plugin<CommentState> = new Plugin({
     key,
     state: {
-      init: () => ({ docId: '', ...emptyCommentState } as CommentState),
+      init: (): CommentState => ({ ...emptyCommentState }),
       apply(tr, state: CommentState): CommentState {
         const { docId, decorations } = reducer(state, tr);
         // Check if we are in a comment!
