@@ -26,6 +26,13 @@ interface DecorationSpec {
   inclusiveEnd: boolean;
 }
 
+/**
+ * Get the current range information about a comment decoration.
+ *
+ * @param view The editor view
+ * @param id The id of the comment decoration
+ * @returns The current from/to and selected text if the ID exists
+ */
 export function getCommentInfo(view: EditorView, id?: string): CommentInfo | null {
   const plugin = key.get(view.state);
   const { decorations } = (plugin?.getState(view.state) ?? {}) as { decorations: DecorationSet };
