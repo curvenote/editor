@@ -152,17 +152,24 @@ function reducer(tr: Transaction, state: CommentState): CommentState {
   });
   const action = tr.getMeta(key) as (CommentAction & { docId?: string }) | undefined;
   const { selectedComment } = state;
+  // The docId might be updated by the action (unlikely)
   const docId = action?.docId ?? state.docId;
+  if (tr.getMeta('addToHistory') === false) {
+    // This is used in `prosemirror-collab`, other clients should not change our decoration state
+    // This early exits with only updating the mapped decorations
+    return { docId, selectedComment, decorations: nextDecorations };
+  }
   if (!action) {
     // Check if we are in a comment!
     const around = decorations.find(tr.selection.from, tr.selection.to);
-    if (around.length === 0) {
+    if (around.length === 0 || !tr.selection.empty) {
       // We are not in a comment, and the action to select does not exist
       const hasSelectedComment = selectors.selectedSidenote(store.getState(), docId);
       if (hasSelectedComment) store.dispatch(actions.deselectSidenote(docId));
       const selected = updateSelectedDecorations(nextDecorations, null, tr.doc);
       return { docId, selectedComment: null, decorations: selected };
     }
+    // Otherwise, send a select action to sidenotes as we change state.selection!
     const { id, domId } = around[0].spec as DecorationSpec;
     const isSelected = selectors.isSidenoteSelected(store.getState(), docId, id);
     if (!isSelected) store.dispatch(actions.selectAnchor(docId, domId));
