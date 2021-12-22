@@ -32,9 +32,7 @@ class SelectionControl {
 
   update(view: EditorView, lastState: EditorState | null) {
     const { state } = view;
-    // Don't do anything if the document/selection didn't change
-    if (lastState && lastState.doc.eq(state.doc) && lastState.selection.eq?.(state.selection))
-      return;
+    if (lastState && lastState.selection.eq?.(state.selection)) return;
 
     // Hide the tooltip if the selection is empty
     if (state.selection.empty) {
