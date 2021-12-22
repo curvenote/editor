@@ -28,6 +28,7 @@ import snippet from './snippet';
 import SuggestionSwitch from '../src/components/Suggestion/Switch';
 import InlineActionSwitch from '../src/components/InlineActions/Switch';
 import { addComment } from '../src/store/actions';
+import CommentEditor from './Comment';
 
 declare global {
   interface Window {
@@ -44,7 +45,7 @@ const theme = createTheme({});
 
 interface Comment {
   id: string;
-  content: '';
+  content: string;
   color: string;
 }
 
@@ -182,18 +183,26 @@ function Demo() {
           </AnchorBase>
           {/* <Editor stateKey={stateKey} viewId="two" /> */}
           <div className="sidenotes">
-            {comments.map(({ id, content, color }) => {
+            {comments.map(({ id, content, color }, index) => {
               return (
                 <Sidenote key={id} sidenote={id} base="anchor">
                   <div
                     style={{
-                      width: 280,
-                      height: 100,
-                      backgroundColor: color,
                       border: '1px grey solid',
                     }}
                   >
-                    {content}
+                    <CommentEditor
+                      value={content}
+                      onChange={(v) => {
+                        console.log('comment changed', v);
+                        updateComments((c) => {
+                          const updated = { ...c[index], content: v };
+                          const cloned = [...c];
+                          cloned[index] = updated;
+                          return cloned;
+                        });
+                      }}
+                    />
                   </div>
                 </Sidenote>
               );
