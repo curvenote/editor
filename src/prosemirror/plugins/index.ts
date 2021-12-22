@@ -114,6 +114,7 @@ export function getPlugins(
     history(),
     keymap(captureTab()),
     createSelectPlugin(stateKey),
+    commentsPlugin(),
   ];
 }
 
