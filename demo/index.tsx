@@ -76,7 +76,7 @@ const opts: Options = {
       setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000),
     );
   },
-  addComment(_key: any, _state: any) {
+  addComment(_key: any, _view: any) {
     newCommentFn();
     return true;
   },
