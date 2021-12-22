@@ -1,6 +1,6 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { blankTex, blankTexLines, createLatexStatement, INDENT } from './utils';
+import { blankTex, blankTexLines, createLatexStatement, INDENT, stringToLatex } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
@@ -13,26 +13,7 @@ export const texSerializer = new MarkdownSerializer(
         state.text(node.text ?? '', false);
         return;
       }
-      // Funky placeholders (unlikely to be written ...?!)
-      const backslashSpace = '💥🎯BACKSLASHSPACE🎯💥';
-      const backslash = '💥🎯BACKSLASH🎯💥';
-      const tilde = '💥🎯TILDE🎯💥';
-      // Latex escaped characters are: \ & % $ # _ { } ~ ^
-      const escaped = (node.text ?? '')
-        .replace(/\\ /g, backslashSpace)
-        .replace(/\\/g, backslash)
-        .replace(/~/g, tilde)
-        .replace(/&/g, '\\&')
-        .replace(/%/g, '\\%')
-        .replace(/\$/g, '\\$')
-        .replace(/#/g, '\\#')
-        .replace(/_/g, '\\_')
-        .replace(/\{/g, '\\{')
-        .replace(/\}/g, '\\}')
-        .replace(/\^/g, '\\^')
-        .replace(new RegExp(backslashSpace, 'g'), '{\\textbackslash}~')
-        .replace(new RegExp(backslash, 'g'), '{\\textbackslash}')
-        .replace(new RegExp(tilde, 'g'), '{\\textasciitilde}');
+      const escaped = stringToLatex(node.text ?? '');
       state.text(escaped, false);
     },
     paragraph(state, node) {
