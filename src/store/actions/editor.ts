@@ -282,11 +282,12 @@ export function addComment(
   viewIn: string | EditorView | null,
   commentId: string,
   range?: { from: number; to: number },
+  selected = false,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
     const view = typeof viewIn === 'string' ? getEditorView(getState(), viewIn).view : viewIn;
     if (!view) return false;
-    dispatchCommentAction(view, { type: 'add', commentId, ...range });
+    dispatchCommentAction(view, { type: 'add', commentId, ...range, selected });
     return true;
   };
 }
