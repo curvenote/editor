@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { EditorState, Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-import { IconButton } from '@material-ui/core';
+import { Card, IconButton } from '@material-ui/core';
 import CommentIcon from '@material-ui/icons/CommentOutlined';
 import { opts } from '../../connect';
 
@@ -13,7 +13,7 @@ class SelectionControl {
     this.dom = document.createElement('div');
     this.dom.className = 'selection-control';
     ReactDOM.render(
-      <div>
+      <Card style={{ borderRadius: '50%' }}>
         <IconButton
           color="primary"
           aria-label="add comment"
@@ -23,7 +23,7 @@ class SelectionControl {
         >
           <CommentIcon />
         </IconButton>
-      </div>,
+      </Card>,
       this.dom,
     );
     view.dom.parentNode?.appendChild(this.dom);
