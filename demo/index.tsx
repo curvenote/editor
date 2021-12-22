@@ -183,7 +183,7 @@ function Demo() {
           </AnchorBase>
           {/* <Editor stateKey={stateKey} viewId="two" /> */}
           <div className="sidenotes">
-            {comments.map(({ id, content, color }, index) => {
+            {comments.map(({ id }) => {
               return (
                 <Sidenote key={id} sidenote={id} base="anchor">
                   <div
@@ -191,18 +191,7 @@ function Demo() {
                       border: '1px grey solid',
                     }}
                   >
-                    <CommentEditor
-                      value={content}
-                      onChange={(v) => {
-                        console.log('comment changed', v);
-                        updateComments((c) => {
-                          const updated = { ...c[index], content: v };
-                          const cloned = [...c];
-                          cloned[index] = updated;
-                          return cloned;
-                        });
-                      }}
-                    />
+                    <CommentEditor />
                   </div>
                 </Sidenote>
               );
