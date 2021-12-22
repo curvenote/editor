@@ -10,7 +10,7 @@ import createNodeView from './NodeView';
 import WidgetView, { newWidgetView } from './WidgetView';
 import { clickSelectFigure } from './utils';
 
-export type { NodeViewProps } from './types';
+export type { NodeViewProps, GetPos } from './types';
 
 export default {
   createNodeView,
