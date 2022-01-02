@@ -6,6 +6,13 @@ import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
 import { TexFormatTypes, TexOptions } from '../types';
 
+function createMarkOpenClose(name?: string) {
+  return {
+    open: name ? `\\${name}{` : '',
+    close: name ? '}' : '',
+  };
+}
+
 export const texSerializer = new MarkdownSerializer(
   {
     text(state, node, parent) {
@@ -76,22 +83,18 @@ export const texSerializer = new MarkdownSerializer(
   },
   {
     em: {
-      open: '\\textit{',
-      close: '}',
+      ...createMarkOpenClose('textit'),
       mixable: true,
       expelEnclosingWhitespace: true,
     },
     strong: {
-      open: '\\textbf{',
-      close: '}',
+      ...createMarkOpenClose('textbf'),
       mixable: true,
       expelEnclosingWhitespace: true,
     },
     underline: {
-      open: '\\uline{',
-      close: '}',
+      ...createMarkOpenClose('uline'),
       mixable: true,
-      expelEnclosingWhitespace: true,
     },
     link: {
       open(_state, mark, parent, index) {
@@ -102,14 +105,14 @@ export const texSerializer = new MarkdownSerializer(
         return '}';
       },
     },
-    code: { open: '\\texttt{', close: '}' },
+    code: createMarkOpenClose('texttt'),
     // https://www.overleaf.com/learn/latex/glossaries
     // \newacronym{gcd}{GCD}{Greatest Common Divisor}
-    abbr: { open: '', close: '' },
-    subscript: { open: '\\textsubscript{', close: '}' },
-    superscript: { open: '\\textsuperscript{', close: '}' },
+    abbr: createMarkOpenClose(),
+    subscript: createMarkOpenClose('textsubscript'),
+    superscript: createMarkOpenClose('textsuperscript'),
     // \usepackage[normalem]{ulem}
-    strikethrough: { open: '\\sout{', close: '}' },
+    strikethrough: createMarkOpenClose('sout'),
   },
 );
 

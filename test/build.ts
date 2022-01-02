@@ -52,6 +52,7 @@ export const tnodes = builders(schema, {
   equation: { nodeType: 'equation' },
   abbr: { nodeType: 'abbr', title: 'Cascading Style Sheets' },
   aside: { nodeType: 'aside' },
+  underline: { nodeType: 'underline' },
   time: { nodeType: 'time', datetime: new Date('1759/09/22') }, // William Playfair's birthday!
 });
 

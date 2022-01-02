@@ -29,6 +29,7 @@ const {
   equation,
   callout,
   aside,
+  underline,
 } = tnodes;
 
 const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.tex) => {
@@ -45,6 +46,7 @@ const expectEnvironment = (
 
 describe('Tex', () => {
   it('serializes a paragraph', () => same('hello!', tdoc(p('hello!'))));
+  it('serializes underline', () => same('\\uline{hello! }', tdoc(p(underline('hello! ')))));
   it('serializes a callout', () => expectEnvironment('framed', tdoc(callout('hello!'))));
   it('serializes an ordered list', () =>
     same('\\begin{enumerate}\n  \\item hello\n\\end{enumerate}', tdoc(ol(li('hello')))));
