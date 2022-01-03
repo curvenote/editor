@@ -4,7 +4,6 @@ import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
 import { determineCaptionKind } from '../process/utils';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
-import { nodeNames } from '../types';
 
 export type Attrs = NumberedNode & {
   align: AlignOptions;
@@ -78,25 +77,16 @@ export const toTex = createLatexStatement(
   },
   (state, node) => {
     const { numbered, id } = node.attrs as Attrs;
-    const localId = state.options.localizeId?.(id ?? '') ?? id;
+    const localId = state.options.localizeId?.(id ?? '') ?? id ?? undefined;
     // TODO: Based on align attr
     // may have to modify string returned by state.renderContent(node);
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
     state.write('\\centering');
-    const captionFirst = node.firstChild?.type.name === nodeNames.figcaption;
-    if (localId && captionFirst) {
-      state.ensureNewLine();
-      state.write(`\\label{${localId}}`);
-    }
     state.ensureNewLine();
-    const prev = state.nextCaptionNumbered;
+    // Pass the relevant information to the figcaption
     state.nextCaptionNumbered = numbered;
+    state.nextCaptionId = localId;
     state.renderContent(node);
-    state.nextCaptionNumbered = prev;
-    if (localId && !captionFirst) {
-      state.ensureNewLine();
-      state.write(`\\label{${localId}}`);
-    }
   },
 );
 
