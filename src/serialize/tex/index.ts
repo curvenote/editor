@@ -4,7 +4,7 @@ import { blankTex, blankTexLines, createLatexStatement, INDENT, stringToLatex } 
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
-import { TexFormatTypes, TexOptions } from '../types';
+import { TexFormatTypes, TexOptions, TexSerializerState } from '../types';
 
 function createMarkOpenClose(name?: string) {
   return {
@@ -97,8 +97,10 @@ export const texSerializer = new MarkdownSerializer(
       mixable: true,
     },
     link: {
-      open(_state, mark, parent, index) {
-        return isPlainURL(mark, parent, index, 1) ? '\\url{' : `\\href{${mark.attrs.href}}{`;
+      open(state, mark, parent, index) {
+        const { options } = state as TexSerializerState;
+        const href = options.localizeLink?.(mark.attrs.href) ?? mark.attrs.href;
+        return isPlainURL(mark, href, parent, index, 1) ? '\\url{' : `\\href{${href}}{`;
       },
       close() {
         // TODO: no title? mark.attrs.title

@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { Node } from 'prosemirror-model';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';

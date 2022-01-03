@@ -2,7 +2,7 @@ import { MarkdownSerializer } from 'prosemirror-markdown';
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { isPlainURL, backticksFor, wrapMark } from './utils';
 import * as nodes from '../../nodes';
-import { MarkdownOptions } from '../types';
+import { MarkdownOptions, MdSerializerState } from '../types';
 
 export function mdPostProcess(md: string): string {
   // Replace trailing newlines in code fences
@@ -90,11 +90,15 @@ export const markdownSerializer = new MarkdownSerializer(
       expelEnclosingWhitespace: true,
     },
     link: {
-      open(_state, mark, parent, index) {
-        return isPlainURL(mark, parent, index, 1) ? '<' : '[';
+      open(state, mark, parent, index) {
+        const { options } = state as MdSerializerState;
+        const href = options.localizeLink?.(mark.attrs.href) ?? mark.attrs.href;
+        return isPlainURL(mark, href, parent, index, 1) ? '<' : '[';
       },
       close(state, mark, parent, index) {
-        return isPlainURL(mark, parent, index, -1)
+        const { options } = state as MdSerializerState;
+        const href = options.localizeLink?.(mark.attrs.href) ?? mark.attrs.href;
+        return isPlainURL(mark, href, parent, index, -1)
           ? '>'
           : `](${state.esc(mark.attrs.href)}${
               mark.attrs.title ? ` ${state.quote(mark.attrs.title)}` : ''
@@ -102,10 +106,10 @@ export const markdownSerializer = new MarkdownSerializer(
       },
     },
     code: {
-      open(_state, _mark, parent, index) {
+      open(state, mark, parent, index) {
         return backticksFor(parent.child(index), -1);
       },
-      close(_state, _mark, parent, index) {
+      close(state, mark, parent, index) {
         return backticksFor(parent.child(index - 1), 1);
       },
       escape: false,

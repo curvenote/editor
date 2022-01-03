@@ -14,26 +14,37 @@ export interface TexStatementOptions {
   after?: string;
 }
 
-export type MarkdownOptions = {
+export interface SharedOptions {
   tightLists?: boolean | null;
-  localizeImageSrc?: (src: string) => string;
-};
-
-export type TexOptions = {
-  tightLists?: boolean | null;
-  format?: TexFormatTypes;
+  /**
+   * Localize a reference, e.g. take an ID and create a local ID
+   */
   localizeId?: (id: string) => string;
+  /**
+   * Localize a citation from a key to a local ID
+   */
+  localizeCitation?: (id: string) => string;
   localizeImageSrc?: (src: string) => string;
-  indent?: string;
-};
-
-export interface MdSerializerState extends MarkdownSerializerState {
-  options: MarkdownOptions;
-  delim?: string;
+  localizeLink?: (src: string) => string;
 }
-export interface TexSerializerState extends MarkdownSerializerState {
-  options: TexOptions;
+
+export type MarkdownOptions = SharedOptions;
+
+export interface TexOptions extends SharedOptions {
+  format?: TexFormatTypes;
+  indent?: string;
+}
+
+export interface SharedSerializerState extends MarkdownSerializerState {
   delim?: string;
+  nextCitationInGroup?: number;
+}
+
+export interface MdSerializerState extends SharedSerializerState {
+  options: MarkdownOptions;
+}
+export interface TexSerializerState extends SharedSerializerState {
+  options: TexOptions;
   nextCaptionNumbered?: boolean;
 }
 

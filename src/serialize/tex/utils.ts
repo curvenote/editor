@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { Node } from 'prosemirror-model';
 import { TexStatementOptions, TexFormatSerialize, TexSerializerState } from '../types';
 

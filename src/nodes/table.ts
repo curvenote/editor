@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
@@ -15,7 +14,7 @@ export const nodes = tableNodes({
         return dom.style.backgroundColor || null;
       },
       setDOMAttr(value: any, attrs: any) {
-        // eslint-disable-next-line no-param-reassign, prefer-template
+        // eslint-disable-next-line prefer-template
         if (value) attrs.style = (attrs.style || '') + `background-color: ${value};`;
       },
     },

@@ -1,4 +1,3 @@
-import { Node } from 'prosemirror-model';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
 
@@ -25,18 +24,20 @@ const citeGroup: MyNodeSpec<Attrs> = {
   },
 };
 
-const getKeys = (node: Node) => {
-  const keys: string[] = [];
-  node.content.forEach((n) => keys.push(n.attrs.key));
-  return keys;
-};
-
 export const toMarkdown: MdFormatSerialize = (state, node) => {
-  state.write(`{citep}\`${getKeys(node).join(', ')}\``);
+  state.nextCitationInGroup = node.childCount;
+  state.write('{citep}`');
+  state.renderInline(node);
+  state.write('`');
+  state.nextCitationInGroup = 0;
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  state.write(`\\citep{${getKeys(node).join(', ')}}`);
+  state.nextCitationInGroup = node.childCount;
+  state.write('\\citep{');
+  state.renderInline(node);
+  state.write('}');
+  state.nextCitationInGroup = 0;
 };
 
 export default citeGroup;

@@ -18,14 +18,16 @@ export function backticksFor(node: ProsemirrorNode, side: number) {
   return result;
 }
 
-export function isPlainURL(link: Mark, parent: Fragment, index: number, side: number) {
-  if (link.attrs.title || !/^\w+:/.test(link.attrs.href)) return false;
+export function isPlainURL(
+  link: Mark,
+  href: string,
+  parent: Fragment,
+  index: number,
+  side: number,
+) {
+  if (link.attrs.title || !/^\w+:/.test(href)) return false;
   const content = parent.child(index + (side < 0 ? -1 : 0));
-  if (
-    !content.isText ||
-    content.text !== link.attrs.href ||
-    content.marks[content.marks.length - 1] !== link
-  )
+  if (!content.isText || content.text !== href || content.marks[content.marks.length - 1] !== link)
     return false;
   if (index === (side < 0 ? 1 : parent.childCount - 1)) return true;
   const next = parent.child(index + (side < 0 ? -2 : 1));

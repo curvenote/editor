@@ -30,6 +30,8 @@ const {
   callout,
   aside,
   underline,
+  cite,
+  citep,
 } = tnodes;
 
 const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.tex) => {
@@ -54,6 +56,10 @@ describe('Tex', () => {
     same('\\begin{enumerate}[resume]\n  \\item hello\n\\end{enumerate}', tdoc(ol3(li('hello')))));
   it('serializes an aside', () => same('\\marginpar{\n  hello!\n}', tdoc(aside('hello!'))));
   it('serializes a code_block', () => expectEnvironment('verbatim', tdoc(pre('hello!'))));
+  it('serializes a citation', () => same('\\cite{SimPEG2015}', tdoc(p(cite()))));
+  it('serializes a citation', () => same('\\citep{SimPEG2015}', tdoc(p(citep(cite())))));
+  it('serializes a citation', () =>
+    same('\\citep{SimPEG2015, SimPEG2015}', tdoc(p(citep(cite(), cite())))));
 });
 
 describe('Tex:curvenote', () => {
