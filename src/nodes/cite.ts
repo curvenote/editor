@@ -62,11 +62,20 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { kind, key, text } = node.attrs as Attrs;
   switch (kind) {
-    case ReferenceKind.cite:
-      state.write(`{cite}\`${key}\``);
+    case ReferenceKind.cite: {
+      const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
+      state.write(`{cite}\`${citeKey}\``);
       return;
-    default:
-      state.write(`{numref}\`${text} %s <${key}>\``);
+    }
+    case ReferenceKind.sec:
+    case ReferenceKind.fig:
+    case ReferenceKind.eq:
+    case ReferenceKind.table:
+    case ReferenceKind.code:
+    default: {
+      const id = state.options.localizeId?.(key ?? '') ?? key;
+      state.write(`{numref}\`${text} %s <${id}>\``);
+    }
   }
 };
 
