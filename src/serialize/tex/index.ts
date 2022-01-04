@@ -1,10 +1,17 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { blankTex, blankTexLines, createLatexStatement, INDENT } from './utils';
+import { blankTex, blankTexLines, createLatexStatement, INDENT, stringToLatex } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
-import { TexFormatTypes, TexOptions } from '../types';
+import { TexFormatTypes, TexOptions, TexSerializerState } from '../types';
+
+function createMarkOpenClose(name?: string) {
+  return {
+    open: name ? `\\${name}{` : '',
+    close: name ? '}' : '',
+  };
+}
 
 export const texSerializer = new MarkdownSerializer(
   {
@@ -13,26 +20,7 @@ export const texSerializer = new MarkdownSerializer(
         state.text(node.text ?? '', false);
         return;
       }
-      // Funky placeholders (unlikely to be written ...?!)
-      const backslashSpace = '💥🎯BACKSLASHSPACE🎯💥';
-      const backslash = '💥🎯BACKSLASH🎯💥';
-      const tilde = '💥🎯TILDE🎯💥';
-      // Latex escaped characters are: \ & % $ # _ { } ~ ^
-      const escaped = (node.text ?? '')
-        .replace(/\\ /g, backslashSpace)
-        .replace(/\\/g, backslash)
-        .replace(/~/g, tilde)
-        .replace(/&/g, '\\&')
-        .replace(/%/g, '\\%')
-        .replace(/\$/g, '\\$')
-        .replace(/#/g, '\\#')
-        .replace(/_/g, '\\_')
-        .replace(/\{/g, '\\{')
-        .replace(/\}/g, '\\}')
-        .replace(/\^/g, '\\^')
-        .replace(new RegExp(backslashSpace, 'g'), '{\\textbackslash}~')
-        .replace(new RegExp(backslash, 'g'), '{\\textbackslash}')
-        .replace(new RegExp(tilde, 'g'), '{\\textasciitilde}');
+      const escaped = stringToLatex(node.text ?? '');
       state.text(escaped, false);
     },
     paragraph(state, node) {
@@ -95,40 +83,38 @@ export const texSerializer = new MarkdownSerializer(
   },
   {
     em: {
-      open: '\\textit{',
-      close: '}',
+      ...createMarkOpenClose('textit'),
       mixable: true,
       expelEnclosingWhitespace: true,
     },
     strong: {
-      open: '\\textbf{',
-      close: '}',
+      ...createMarkOpenClose('textbf'),
       mixable: true,
       expelEnclosingWhitespace: true,
     },
     underline: {
-      open: '\\uline{',
-      close: '}',
+      ...createMarkOpenClose('uline'),
       mixable: true,
-      expelEnclosingWhitespace: true,
     },
     link: {
-      open(_state, mark, parent, index) {
-        return isPlainURL(mark, parent, index, 1) ? '\\url{' : `\\href{${mark.attrs.href}}{`;
+      open(state, mark, parent, index) {
+        const { options } = state as TexSerializerState;
+        const href = options.localizeLink?.(mark.attrs.href) ?? mark.attrs.href;
+        return isPlainURL(mark, href, parent, index, 1) ? '\\url{' : `\\href{${href}}{`;
       },
       close() {
         // TODO: no title? mark.attrs.title
         return '}';
       },
     },
-    code: { open: '\\texttt{', close: '}' },
+    code: createMarkOpenClose('texttt'),
     // https://www.overleaf.com/learn/latex/glossaries
     // \newacronym{gcd}{GCD}{Greatest Common Divisor}
-    abbr: { open: '', close: '' },
-    subscript: { open: '\\textsubscript{', close: '}' },
-    superscript: { open: '\\textsuperscript{', close: '}' },
+    abbr: createMarkOpenClose(),
+    subscript: createMarkOpenClose('textsubscript'),
+    superscript: createMarkOpenClose('textsuperscript'),
     // \usepackage[normalem]{ulem}
-    strikethrough: { open: '\\sout{', close: '}' },
+    strikethrough: createMarkOpenClose('sout'),
   },
 );
 

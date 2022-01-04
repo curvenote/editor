@@ -62,11 +62,20 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { kind, key, text } = node.attrs as Attrs;
   switch (kind) {
-    case ReferenceKind.cite:
-      state.write(`{cite}\`${key}\``);
+    case ReferenceKind.cite: {
+      const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
+      state.write(`{cite}\`${citeKey}\``);
       return;
-    default:
-      state.write(`{numref}\`${text} %s <${key}>\``);
+    }
+    case ReferenceKind.sec:
+    case ReferenceKind.fig:
+    case ReferenceKind.eq:
+    case ReferenceKind.table:
+    case ReferenceKind.code:
+    default: {
+      const id = state.options.localizeId?.(key ?? '') ?? key;
+      state.write(`{numref}\`${text} %s <${id}>\``);
+    }
   }
 };
 
@@ -74,9 +83,16 @@ export const toTex: TexFormatSerialize = (state, node) => {
   const { kind, text, key } = node.attrs as Attrs;
   let prepend = '';
   switch (kind) {
-    case ReferenceKind.cite:
-      state.write(`\\cite{${key}}`);
+    case ReferenceKind.cite: {
+      const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
+      if (state.nextCitationInGroup) {
+        state.write(state.nextCitationInGroup > 1 ? `${citeKey}, ` : citeKey);
+        state.nextCitationInGroup -= 1;
+      } else {
+        state.write(`\\cite{${citeKey}}`);
+      }
       return;
+    }
     case ReferenceKind.sec:
       prepend = 'Section~';
       break;
@@ -95,7 +111,7 @@ export const toTex: TexFormatSerialize = (state, node) => {
     default:
       prepend = `${text}~`;
   }
-  const id = key?.split('#')[1] ?? key;
+  const id = state.options.localizeId?.(key ?? '') ?? key;
   if (id) state.write(`${prepend}\\ref{${id}}`);
 };
 

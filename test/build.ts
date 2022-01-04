@@ -52,7 +52,10 @@ export const tnodes = builders(schema, {
   equation: { nodeType: 'equation' },
   abbr: { nodeType: 'abbr', title: 'Cascading Style Sheets' },
   aside: { nodeType: 'aside' },
+  underline: { nodeType: 'underline' },
   time: { nodeType: 'time', datetime: new Date('1759/09/22') }, // William Playfair's birthday!
+  cite: { nodeType: 'cite', kind: src.ReferenceKind.cite, key: 'SimPEG2015' },
+  citep: { nodeType: src.nodeNames.cite_group },
 });
 
 export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);

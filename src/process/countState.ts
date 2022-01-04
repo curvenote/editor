@@ -24,7 +24,6 @@ function push<K extends ReferenceKind, T extends CounterMeta>(
     meta,
   });
   if (number) {
-    // eslint-disable-next-line no-param-reassign
     counter.total += 1;
   }
 }

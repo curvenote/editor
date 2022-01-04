@@ -47,10 +47,14 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (state) => ({
-    command: state.nextCaptionNumbered === false ? 'caption*' : 'caption',
-    inline: true,
-  }),
+  (state) => {
+    const { nextCaptionNumbered: numbered, nextCaptionId: id } = state;
+    return {
+      command: numbered === false ? 'caption*' : 'caption',
+      inline: true,
+      after: numbered && id ? `\\label{${id}}` : '',
+    };
+  },
   (state, node) => state.renderInline(node),
 );
 
