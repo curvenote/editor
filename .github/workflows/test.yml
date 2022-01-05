@@ -22,3 +22,6 @@ jobs:
       - run: yarn install
       - run: yarn run lint
       - run: yarn run lint:format
+      # Ensure that the app & demo builds!
+      - run: yarn build
+      - run: yarn build:demo

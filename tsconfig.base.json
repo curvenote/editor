@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "lib": ["es2019", "DOM"],
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "dist/cjs",
     "baseUrl": "src",
     "paths": {
       "*": ["node_modules/*", "types/*"]
