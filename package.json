@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-autocomplete",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Autocomplete suggestions for prosemirror",
   "author": "Rowan Cockett <rowan@curvenote.com>",
   "license": "MIT",
