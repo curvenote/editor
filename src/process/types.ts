@@ -30,6 +30,7 @@ export type CodeReference = Reference<
 >;
 export type TableReference = Reference<ReferenceKind.table>;
 export type LinkReference = Reference<ReferenceKind.link, { url: string }>;
+export type CiteReference = Reference<ReferenceKind.cite, { key: string }>;
 
 export type AnyReference =
   | SectionReference
@@ -37,6 +38,7 @@ export type AnyReference =
   | EquationReference
   | CodeReference
   | TableReference
+  | CiteReference
   | LinkReference;
 
 export type StateCounter = {
@@ -46,6 +48,7 @@ export type StateCounter = {
   [ReferenceKind.code]: Counter<CodeReference>;
   [ReferenceKind.table]: Counter<TableReference>;
   [ReferenceKind.link]: Counter<LinkReference>;
+  [ReferenceKind.cite]: Counter<CiteReference>;
 };
 
 export type WordCounter = {
