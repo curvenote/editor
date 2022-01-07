@@ -59,29 +59,26 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
   },
 };
 
-export const toMarkdown: MdFormatSerialize = (state, node) => {
-  const { kind, key, text } = node.attrs as Attrs;
+function getPrependedText(kind: ReferenceKind): string {
   switch (kind) {
-    case ReferenceKind.cite: {
-      const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
-      state.write(`{cite}\`${citeKey}\``);
-      return;
-    }
     case ReferenceKind.sec:
+      return 'Section';
     case ReferenceKind.fig:
+      return 'Figure';
     case ReferenceKind.eq:
+      return 'Equation';
     case ReferenceKind.table:
+      return 'Table';
     case ReferenceKind.code:
-    default: {
-      const id = state.options.localizeId?.(key ?? '') ?? key;
-      state.write(`{numref}\`${text} %s <${id}>\``);
-    }
+      return 'Program';
+    default:
+      return '';
   }
-};
+}
 
-export const toTex: TexFormatSerialize = (state, node) => {
-  const { kind, text, key } = node.attrs as Attrs;
-  let prepend = '';
+export const toMarkdown: MdFormatSerialize = (state, node) => {
+  const { kind, key } = node.attrs as Attrs;
+  const id = state.options.localizeId?.(key ?? '') ?? key;
   switch (kind) {
     case ReferenceKind.cite: {
       const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
@@ -89,28 +86,36 @@ export const toTex: TexFormatSerialize = (state, node) => {
         state.write(state.nextCitationInGroup > 1 ? `${citeKey}, ` : citeKey);
         state.nextCitationInGroup -= 1;
       } else {
-        state.write(`\\cite{${citeKey}}`);
+        state.write(`{cite:t}\`${citeKey}\``);
       }
       return;
     }
-    case ReferenceKind.sec:
-      prepend = 'Section~';
-      break;
-    case ReferenceKind.fig:
-      prepend = 'Figure~';
-      break;
     case ReferenceKind.eq:
-      prepend = 'Equation~';
-      break;
+      state.write(`{eq}\`${id}\``);
+      return;
+    case ReferenceKind.sec:
+    case ReferenceKind.fig:
     case ReferenceKind.table:
-      prepend = 'Table~';
-      break;
     case ReferenceKind.code:
-      prepend = 'Program~';
-      break;
     default:
-      prepend = `${text}~`;
+      state.write(`{numref}\`${getPrependedText(kind)} %s <${id}>\``);
   }
+};
+
+export const toTex: TexFormatSerialize = (state, node) => {
+  const { kind, key } = node.attrs as Attrs;
+  let prepend = getPrependedText(kind);
+  if (kind === ReferenceKind.cite) {
+    const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
+    if (state.nextCitationInGroup) {
+      state.write(state.nextCitationInGroup > 1 ? `${citeKey}, ` : citeKey);
+      state.nextCitationInGroup -= 1;
+    } else {
+      state.write(`\\cite{${citeKey}}`);
+    }
+    return;
+  }
+  prepend = prepend ? `${prepend}~` : prepend;
   const id = state.options.localizeId?.(key ?? '') ?? key;
   if (id) state.write(`${prepend}\\ref{${id}}`);
 };

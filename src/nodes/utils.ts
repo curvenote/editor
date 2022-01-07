@@ -1,4 +1,6 @@
+import { Node } from 'prosemirror-model';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
+import { nodeNames } from '../types';
 import { clamp } from '../utils';
 import { NodeSpecAttrs, NumberedNode } from './types';
 
@@ -43,4 +45,26 @@ export function setNumberedAttrs(
     numbered: convertToBooleanAttribute(attrs.numbered),
     label: attrs.label || undefined,
   };
+}
+
+/**
+ * @param node ProsemirrorNode
+ * @param name Name of the node(s) to find
+ * @param descend go through all children of the node, default=false is only direct children
+ * @returns The first node with the name found
+ */
+export function getFirstChildWithName(
+  node: Node,
+  name: nodeNames | nodeNames[],
+  descend = false,
+): Node | null {
+  const names = typeof name === 'string' ? new Set([name]) : new Set(name);
+  let child: Node | null = null;
+  node.descendants((n) => {
+    if (!child && names.has(n.type.name as nodeNames)) {
+      child = n;
+    }
+    return descend;
+  });
+  return child;
 }

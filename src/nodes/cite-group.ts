@@ -26,7 +26,7 @@ const citeGroup: MyNodeSpec<Attrs> = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.nextCitationInGroup = node.childCount;
-  state.write('{citep}`');
+  state.write('{cite:p}`');
   state.renderInline(node);
   state.write('`');
   state.nextCitationInGroup = 0;
