@@ -16,6 +16,7 @@ export interface TexStatementOptions {
 
 export interface SharedOptions {
   tightLists?: boolean | null;
+  indent?: string;
   /**
    * Localize a reference, e.g. take an ID and create a local ID
    */
@@ -32,21 +33,22 @@ export type MarkdownOptions = SharedOptions;
 
 export interface TexOptions extends SharedOptions {
   format?: TexFormatTypes;
-  indent?: string;
 }
 
 export interface SharedSerializerState extends MarkdownSerializerState {
+  options: SharedOptions;
   delim?: string;
   nextCitationInGroup?: number;
+  nextCaptionId?: string;
 }
 
 export interface MdSerializerState extends SharedSerializerState {
   options: MarkdownOptions;
+  nextTableCaption?: Node | null;
 }
 export interface TexSerializerState extends SharedSerializerState {
   options: TexOptions;
   nextCaptionNumbered?: boolean;
-  nextCaptionId?: string;
 }
 
 export type MdFormatSerialize<S extends Schema<any, any> = any> = (

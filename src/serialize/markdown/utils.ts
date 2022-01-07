@@ -1,5 +1,6 @@
 import { Node as ProsemirrorNode, Mark, Fragment } from 'prosemirror-model';
 import { MarkSerializerConfig, MarkSerializerMethod } from 'prosemirror-markdown';
+import { MdSerializerState } from '../types';
 
 // Taken from https://github.com/ProseMirror/prosemirror-markdown/blob/master/src/to_markdown.js
 // MIT License https://github.com/ProseMirror/prosemirror-markdown/blob/master/LICENSE
@@ -44,4 +45,13 @@ export function wrapMark(token: string, close?: MarkSerializerMethod): MarkSeria
       return `${extra}${backticksFor(parent.child(index - 1), 1)}`;
     },
   };
+}
+
+export function writeDirectiveOptions(state: MdSerializerState, options: Record<string, any>) {
+  const entries = Object.entries(options)
+    .filter(([, v]) => v)
+    .map(([k, v]) => `:${k}: ${v}\n`);
+  entries.forEach((opt, index) => {
+    state.write(index === entries.length - 1 ? `${opt}\n` : opt);
+  });
 }

@@ -25,7 +25,18 @@ const {
   superscript,
   math,
   equation,
+  equationNumbered,
   callout,
+  figureF,
+  figureT,
+  figcaptionF,
+  figcaptionT,
+  figcaptionE,
+  figcaptionC,
+  table,
+  table_row,
+  table_header,
+  table_cell,
 } = tnodes;
 
 const same = compare((c) => fromMarkdown(c, 'full'), toMarkdown);
@@ -92,6 +103,44 @@ describe('Markdown', () => {
       },
       tdoc(callout('', p('This is ', em('directive'), ' content'))),
     ));
+  it('serializes figures with images', () => {
+    const f = toMarkdown(tdoc(figureF(img(), figcaptionF('This is an image ', em('caption')))));
+    expect(f).toBe('```{figure} img.png\n  :name: my-figure\n\n  This is an image *caption*\n```');
+  });
+  it('serializes figures with tables', () => {
+    const f = toMarkdown(
+      tdoc(
+        figureT(
+          figcaptionT('This is a table ', em('caption')),
+          table(
+            table_row(table_header(p('Training')), table_header(p('Validation'))),
+            table_row(table_cell(p('0')), table_cell(p('5'))),
+            table_row(table_cell(p('13720')), table_cell(p('2744'))),
+          ),
+        ),
+      ),
+    );
+    expect(f).toBe(`\`\`\`{list-table} This is a table *caption*
+:header-rows: 1
+:name: my-table
+
+* - Training
+  - Validation
+* - 0
+  - 5
+* - 13720
+  - 2744
+\`\`\``);
+  });
+
+  it('serializes equations', () => {
+    const f = toMarkdown(tdoc(equationNumbered('Ax = b')));
+    expect(f).toBe(`\`\`\`{math}
+:label: my-equation
+
+Ax = b
+\`\`\``);
+  });
   it.skip('parses images', () =>
     same('This is an inline image: ![x](img.png)', tdoc(p('This is an inline image: ', img('')))));
 });

@@ -2,6 +2,7 @@ import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { getAttr, getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
+import { writeDirectiveOptions } from '../serialize/markdown/utils';
 
 export type Attrs = NumberedNode & {
   title: string;
@@ -43,18 +44,29 @@ export const equationNoDisplay: MyNodeSpec<Attrs> = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { numbered, id } = node.attrs;
-  state.ensureNewLine();
+  const localId = state.options.localizeId?.(id ?? '') ?? id;
   const amsBegin = node.textContent.startsWith('\\begin{');
   const amsEnd = node.textContent.match(/\\end{([a-z*]+)}$/);
   const ams = amsBegin && amsEnd;
-  if (!ams) state.write('$$');
-  // TODO: export the label if it is AMS math mode
-  if (!ams && numbered && id) {
-    state.write(`\\label{${id}}`);
+  if (ams) {
+    state.text(node.textContent, false);
+  } else if (numbered) {
+    state.write('```{math}\n');
+    writeDirectiveOptions(state, { label: localId });
+    state.text(node.textContent, false);
     state.ensureNewLine();
+    state.write('```');
+  } else if (node.textContent.includes('\n')) {
+    // New lines in the $$
+    state.write('$$\n');
+    state.text(node.textContent, false);
+    state.ensureNewLine();
+    state.write('$$');
+  } else {
+    state.write('$$');
+    state.text(node.textContent, false);
+    state.write('$$');
   }
-  state.text(node.textContent, false);
-  if (!ams) state.write('$$');
   state.closeBlock(node);
 };
 

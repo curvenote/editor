@@ -2,7 +2,8 @@ import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
 import { NodeGroups } from './types';
-import { INDENT } from '../serialize/tex/utils';
+import { writeDirectiveOptions } from '../serialize/markdown/utils';
+import { indent } from '../serialize/indent';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -21,6 +22,44 @@ export const nodes = tableNodes({
   },
 });
 
+/**
+ * Create a "row" using a list-table
+ * ```text
+ * * - Col1
+ *   - Col2
+ * ```
+ */
+const renderListTableRow: MdFormatSerialize = (state, row) => {
+  state.write('* ');
+  const dedent = indent(state);
+  row.content.forEach((cell) => {
+    cell.content.forEach((content) => {
+      indent(state);
+      state.write('- ');
+      state.renderInline(content);
+      state.ensureNewLine();
+      dedent();
+    });
+  });
+  dedent();
+};
+
+export const toListTable: MdFormatSerialize = (state, node, figure, index) => {
+  state.write('```{list-table}');
+  if (state.nextTableCaption) {
+    state.write(' ');
+    state.renderInline(state.nextTableCaption);
+    state.ensureNewLine();
+  }
+  const opts = { 'header-rows': 1, name: state.nextCaptionId };
+  writeDirectiveOptions(state, opts);
+  node.content.forEach((row) => {
+    renderListTableRow(state, row, figure, index);
+  });
+  state.write('```');
+  state.closeBlock(node);
+};
+
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   let rowIndex = 0;
 
@@ -37,7 +76,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
             isHeader = true;
           } else {
             // Creates placeholder header with header seperator
-            // `| Column 1 | Column 2 | etc.`
+            // | Column 1 | Column 2 |
+            // |---|---|
             let headerStr = '|';
             let counter = 0;
             child.content.forEach(() => {
@@ -56,6 +96,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
         if (cell.type.name === nodeNames.table_cell || cell.type.name === nodeNames.table_header) {
           const columnCount = Number(cell.attrs.colspan);
           if (columnCount > 1) {
+            // Duplicate the content across columns
             for (let i = 0; i < columnCount; i += 1) {
               cell.content.forEach((content) => {
                 state.renderInline(content);
@@ -103,8 +144,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
   state.write(`\\begin{tabular}{*{${numColumns}}{c}}`);
   state.ensureNewLine();
-  const old = state.delim;
-  state.delim += state.options.indent ?? INDENT;
+  const dedent = indent(state);
   state.write(`\\hline`);
   state.ensureNewLine();
 
@@ -135,7 +175,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   });
   state.write('\\hline');
   state.ensureNewLine();
-  state.delim = old;
+  dedent();
   state.write('\\end{tabular}');
   state.closeBlock(node);
 }

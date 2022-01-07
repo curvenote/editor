@@ -36,13 +36,7 @@ const figcaption: MyNodeSpec<Attrs> = {
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
-  state.ensureNewLine();
-  const { kind } = node.attrs;
-  // TODO: Translate between callout/admonition
-  state.write(`\`\`\`{${kind || 'note'}}`);
-  state.ensureNewLine();
-  state.renderContent(node);
-  state.write('```');
+  state.renderInline(node);
   state.closeBlock(node);
 };
 

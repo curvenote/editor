@@ -1,10 +1,11 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { blankTex, blankTexLines, createLatexStatement, INDENT, stringToLatex } from './utils';
+import { blankTex, blankTexLines, createLatexStatement, stringToLatex } from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
 import { TexFormatTypes, TexOptions, TexSerializerState } from '../types';
+import { getIndent } from '../indent';
 
 function createMarkOpenClose(name?: string) {
   return {
@@ -50,11 +51,11 @@ export const texSerializer = new MarkdownSerializer(
         bracketOpts: node.attrs.order !== 1 ? 'resume' : undefined,
       }),
       (state, node) => {
-        state.renderList(node, state.options.indent ?? INDENT, () => '\\item ');
+        state.renderList(node, getIndent(state), () => '\\item ');
       },
     ),
     bullet_list: createLatexStatement('itemize', (state, node) => {
-      state.renderList(node, state.options.indent ?? INDENT, () => '\\item ');
+      state.renderList(node, getIndent(state), () => '\\item ');
     }),
     list_item(state, node) {
       state.renderInline(node);
@@ -119,6 +120,6 @@ export const texSerializer = new MarkdownSerializer(
 );
 
 export function toTex(doc: ProsemirrorNode, opts?: TexOptions) {
-  const defualtOpts = { tightLists: true, format: TexFormatTypes.tex, indent: INDENT };
+  const defualtOpts = { tightLists: true, format: TexFormatTypes.tex };
   return texSerializer.serialize(doc, { ...defualtOpts, ...opts });
 }

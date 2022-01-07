@@ -1,7 +1,6 @@
 import { Node } from 'prosemirror-model';
+import { indent } from '../indent';
 import { TexStatementOptions, TexFormatSerialize, TexSerializerState } from '../types';
-
-export const INDENT = '  ';
 
 export function createLatexStatement(
   opts: string | ((state: TexSerializerState, node: Node) => TexStatementOptions),
@@ -13,10 +12,9 @@ export function createLatexStatement(
     if (before) (state as any).out += `\n${state.delim}${before}`;
     const optsInBrackets = bracketOpts ? `[${bracketOpts}]` : '';
     state.write(inline ? `\\${command}{\n` : `\\begin{${command}}${optsInBrackets}\n`);
-    const old = state.delim;
-    state.delim += state.options.indent ?? INDENT;
+    const dedent = indent(state);
     f(state, node, p, i);
-    state.delim = old;
+    dedent();
     (state as any).out += inline ? `\n${state.delim}}` : `\n${state.delim}\\end{${command}}`;
     if (after) (state as any).out += `\n${state.delim}${after}`;
     state.closeBlock(node);
