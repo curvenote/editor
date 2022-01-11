@@ -46,7 +46,6 @@ export function countState(state: EditorState): StateCounter {
       case nodeNames.cite: {
         const { kind, key } = node.attrs as Nodes.Cite.Attrs;
         if (kind === ReferenceKind.cite) {
-          console.log('found cite', key, node.attrs);
           const attrs = node.attrs as Nodes.Cite.Attrs;
           push(counts.cite, { numbered: true, id: null, label: null }, attrs.title || '', {
             key,
