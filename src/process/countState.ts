@@ -4,7 +4,7 @@ import * as Nodes from '../nodes';
 import { NumberedNode, ReferenceKind } from '../nodes/types';
 import { nodeNames } from '../types';
 import { toText } from '../serialize/text';
-import { StateCounter, Reference, Counter, CounterMeta, WordCounter } from './types';
+import { Counter, CounterMeta, Reference, StateCounter, WordCounter } from './types';
 import { findChildrenWithName } from '../utils';
 
 function push<K extends ReferenceKind, T extends CounterMeta>(
@@ -38,10 +38,21 @@ export function countState(state: EditorState): StateCounter {
     [ReferenceKind.code]: { kind: ReferenceKind.code, total: 0, all: [] },
     [ReferenceKind.table]: { kind: ReferenceKind.table, total: 0, all: [] },
     [ReferenceKind.link]: { kind: ReferenceKind.link, total: 0, all: [] },
+    [ReferenceKind.cite]: { kind: ReferenceKind.cite, total: 0, all: [] },
   };
   let tableCounted = false;
   state.doc.content.descendants((node) => {
     switch (node.type.name) {
+      case nodeNames.cite: {
+        const { kind, key } = node.attrs as Nodes.Cite.Attrs;
+        if (kind === ReferenceKind.cite) {
+          const attrs = node.attrs as Nodes.Cite.Attrs;
+          push(counts.cite, { numbered: true, id: null, label: null }, attrs.title || '', {
+            key,
+          });
+        }
+        return false;
+      }
       case nodeNames.image: {
         const { src, alt } = node.attrs as Nodes.Image.Attrs;
         push(counts.fig, NO_CAPTION, alt, { src, alt });
@@ -65,7 +76,7 @@ export function countState(state: EditorState): StateCounter {
         const { level } = node.attrs;
         const title = toText(node);
         push(counts.sec, attrs, title, { level, section: '' });
-        return false;
+        return true;
       }
       case nodeNames.table: {
         if (!tableCounted) push(counts.table, NO_CAPTION, '', {});
@@ -90,12 +101,18 @@ export function countState(state: EditorState): StateCounter {
         switch (child.node.type.name) {
           case nodeNames.image: {
             const { alt, src } = child.node.attrs as Nodes.Image.Attrs;
-            push(counts.fig, { numbered, id, label }, captionText ?? alt, { src, alt });
+            push(counts.fig, { numbered, id, label }, captionText ?? alt, {
+              src,
+              alt,
+            });
             return false;
           }
           case nodeNames.iframe: {
             const { src } = child.node.attrs as Nodes.IFrame.Attrs;
-            push(counts.fig, { numbered, id, label }, captionText, { src, alt: '' });
+            push(counts.fig, { numbered, id, label }, captionText, {
+              src,
+              alt: '',
+            });
             return false;
           }
           case nodeNames.table: {
@@ -113,7 +130,10 @@ export function countState(state: EditorState): StateCounter {
           case nodeNames.code_block: {
             const { title, language } = child.node.attrs as Nodes.Code.Attrs;
             const code = toText(child.node);
-            push(counts.code, { numbered, id, label }, captionText ?? title, { code, language });
+            push(counts.code, { numbered, id, label }, captionText ?? title, {
+              code,
+              language,
+            });
             // There are children of tables to be counted
             return false;
           }
@@ -122,14 +142,8 @@ export function countState(state: EditorState): StateCounter {
         }
         return false;
       }
-      case nodeNames.table_row:
-      case nodeNames.table_header:
-      case nodeNames.table_cell:
-      case nodeNames.aside:
-      case nodeNames.callout:
-        return true;
       default:
-        return false;
+        return true;
     }
   });
   return counts;
