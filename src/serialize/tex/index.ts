@@ -17,7 +17,11 @@ function createMarkOpenClose(name?: string) {
 export const texSerializer = new MarkdownSerializer(
   {
     text(state, node, parent) {
-      if (parent.type.name === nodeNames.equation || parent.type.name === nodeNames.math) {
+      if (
+        parent.type.name === nodeNames.equation ||
+        parent.type.name === nodeNames.math ||
+        parent.type.name === nodeNames.code_block
+      ) {
         state.text(node.text ?? '', false);
         return;
       }
