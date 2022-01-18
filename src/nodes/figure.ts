@@ -124,8 +124,8 @@ function nodeToLaTeXOptions(node: Node) {
   const kind = determineCaptionKind(node);
   switch (kind) {
     case CaptionKind.fig:
-      return '!htbp';
     case CaptionKind.table:
+      return '!htbp';
     case CaptionKind.code:
     case CaptionKind.eq:
     default:
