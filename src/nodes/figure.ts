@@ -120,11 +120,24 @@ function nodeToCommand(node: Node) {
   }
 }
 
+function nodeToLaTeXOptions(node: Node) {
+  const kind = determineCaptionKind(node);
+  switch (kind) {
+    case CaptionKind.fig:
+      return '!htbp';
+    case CaptionKind.table:
+    case CaptionKind.code:
+    case CaptionKind.eq:
+    default:
+      return undefined;
+  }
+}
+
 export const toTex = createLatexStatement(
   (state, node) => {
     return {
       command: nodeToCommand(node),
-      bracketOpts: '!htbp',
+      bracketOpts: nodeToLaTeXOptions(node),
     };
   },
   (state, node) => {
