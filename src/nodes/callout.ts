@@ -49,8 +49,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (state) => ({
-    command: state.options.format === TexFormatTypes.tex_curvenote ? 'callout' : 'framed',
+  () => ({
+    command: 'callout',
   }),
   (state, node) => {
     state.renderContent(node);

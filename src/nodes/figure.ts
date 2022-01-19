@@ -127,6 +127,7 @@ function nodeToLaTeXOptions(node: Node) {
     case CaptionKind.table:
       return '!htbp';
     case CaptionKind.code:
+      return 'H';
     case CaptionKind.eq:
     default:
       return undefined;
