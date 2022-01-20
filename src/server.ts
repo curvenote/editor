@@ -1,6 +1,7 @@
 import { Step as PMStep } from 'prosemirror-transform';
 import { EditorState } from 'prosemirror-state';
 import { collab, receiveTransaction } from 'prosemirror-collab';
+import { Node } from 'prosemirror-model';
 import { fromHTML } from './parse';
 
 import { Parser } from './parse/types';
@@ -10,6 +11,13 @@ export { EditorState };
 
 function serverPlugins(version: number) {
   return [collab({ version })];
+}
+
+export function docToEditorState(doc: Node, version: number) {
+  return EditorState.create({
+    doc,
+    plugins: serverPlugins(version),
+  });
 }
 
 export function getEditorState(
@@ -28,10 +36,7 @@ export function getEditorState(
     );
   } catch (error) {
     const doc = fromHTML(content, useSchema, document, DOMParser);
-    return EditorState.create({
-      doc,
-      plugins: serverPlugins(version),
-    });
+    return docToEditorState(doc, version);
   }
 }
 
