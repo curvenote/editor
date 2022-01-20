@@ -1,5 +1,5 @@
 import { NodeSpec } from 'prosemirror-model';
-import { TexFormatTypes, MdFormatSerialize } from '../serialize/types';
+import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { NodeGroups } from './types';
 
@@ -10,6 +10,10 @@ export enum CalloutKinds {
   'warning' = 'warning',
   'danger' = 'danger',
 }
+
+export type Attrs = {
+  kind: CalloutKinds;
+};
 
 const callout: NodeSpec = {
   group: NodeGroups.top,
@@ -37,11 +41,30 @@ const callout: NodeSpec = {
   ],
 };
 
+function calloutKindToAdmonition(kind: CalloutKinds): string {
+  // https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#directives
+  // attention, caution, danger, error, hint, important, note, tip, warning
+  switch (kind) {
+    case CalloutKinds.active:
+      return 'note';
+    case CalloutKinds.success:
+      return 'important';
+    case CalloutKinds.info:
+      return 'important';
+    case CalloutKinds.warning:
+      return 'warning';
+    case CalloutKinds.danger:
+      return 'danger';
+    default:
+      return 'note';
+  }
+}
+
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
-  const { kind } = node.attrs;
-  // TODO: Translate between callout/admonition
-  state.write(`\`\`\`{${kind || 'note'}}`);
+  const { kind } = node.attrs as Attrs;
+  const admonition = calloutKindToAdmonition(kind);
+  state.write(`\`\`\`{${admonition}}`);
   state.ensureNewLine();
   state.renderContent(node);
   state.write('```');

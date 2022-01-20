@@ -43,8 +43,18 @@ const iframe: MyNodeSpec<Attrs> = {
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
+  const { src, align, width } = node.attrs as Attrs;
   state.ensureNewLine();
-  state.write('```{iframe}');
+  state.write('```{raw} html\n');
+  state.write(`<figure id="${state.nextCaptionId}" align="${align}">\n`);
+  state.write(
+    `  <div style="position: relative; display: inline-block; padding-bottom: 39%; width: ${width}%;">\n`,
+  );
+  state.write(
+    `    <iframe width="100%" height="100%" src="${src}" allowfullscreen="" allow="autoplay" style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; border: none;"></iframe>\n`,
+  );
+  state.write(`  </div>\n`);
+  state.write(`</figure>\n`);
   state.ensureNewLine();
   state.write('```');
   state.closeBlock(node);

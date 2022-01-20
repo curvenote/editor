@@ -65,6 +65,10 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
       if (!image) return;
       const { src, width } = image?.attrs as ImageAttrs | IFrameAttrs;
       const href = state.options.localizeImageSrc?.(src) ?? src;
+      if (image.type.name === nodeNames.iframe) {
+        state.render(image);
+        return;
+      }
       state.write(`\`\`\`{figure} ${href}\n`);
       const dedent = indent(state);
       const opts = { name: state.nextCaptionId };
