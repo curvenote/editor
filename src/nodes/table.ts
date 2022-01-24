@@ -141,6 +141,8 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
     throw new Error('invalid table format, no columns');
   }
 
+  state.isInTable = true;
+
   // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
   state.write(`\\begin{tabular}{*{${numColumns}}{c}}`);
   state.ensureNewLine();
@@ -155,10 +157,17 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
         attrs: { colspan },
       } = cell;
       if (colspan > 1) state.write(`\\multicolumn{${colspan}}{c}{`);
-      cell.content.forEach((content) => {
-        // NOTE: this doesn't work well for multi-paragraphs
-        state.renderInline(content);
-      });
+      if (
+        cell.content.childCount === 1 &&
+        cell.content.child(0).type.name === nodeNames.paragraph
+      ) {
+        // Render simple things inline, otherwise render a block
+        state.renderInline(cell.content.child(0));
+      } else {
+        cell.content.forEach((content) => {
+          state.render(content);
+        });
+      }
       if (colspan > 1) state.write('}');
       if (i < rowContent.childCount - 1) {
         state.write(' & ');
@@ -178,6 +187,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   dedent();
   state.write('\\end{tabular}');
   state.closeBlock(node);
+  state.isInTable = false;
 }
 
 export const toTex: TexFormatSerialize = (state, node) => {

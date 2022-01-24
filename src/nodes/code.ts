@@ -1,5 +1,5 @@
 import { createLatexStatement } from '../serialize/tex/utils';
-import { TexFormatTypes, MdFormatSerialize } from '../serialize/types';
+import { MdFormatSerialize } from '../serialize/types';
 import { NodeGroups, NumberedNode, MyNodeSpec } from './types';
 import {
   convertToBooleanAttribute,

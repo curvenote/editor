@@ -3,36 +3,7 @@ import { TexFormatTypes } from '../src/serialize/types';
 import { tnodes, tdoc } from './build';
 import { toTex } from '../src';
 
-const {
-  blockquote,
-  h1,
-  h2,
-  p,
-  hr,
-  li,
-  ol,
-  ol3,
-  ul,
-  pre,
-  em,
-  strong,
-  code,
-  code_block,
-  a,
-  link,
-  br,
-  img,
-  abbr,
-  subscript,
-  superscript,
-  math,
-  equation,
-  callout,
-  aside,
-  underline,
-  cite,
-  citep,
-} = tnodes;
+const { p, li, ol, ol3, pre, callout, aside, underline, cite, citep } = tnodes;
 
 const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.tex) => {
   expect(toTex(doc, { format })).toEqual(text);
