@@ -1,6 +1,5 @@
 import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
-import { MdFormatSerialize } from '../serialize/types';
-import { createLatexStatement } from '../serialize/tex/utils';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { getAttr, getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 
@@ -70,17 +69,31 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-export const toTex = createLatexStatement(
-  () => ({ command: 'equation' }),
-  (state, node) => {
-    // TODO: export the label if it isn't inline!
-    const { numbered, id } = node.attrs;
+export const toTex: TexFormatSerialize = (state, node) => {
+  const { numbered, id } = node.attrs;
+  const localId = state.options.localizeId?.(id ?? '') ?? id;
+  const text = node.textContent.trim();
+  const amsBegin = text.startsWith('\\begin{');
+  const amsEnd = text.match(/\\end{([a-z*]+)}$/);
+  const ams = amsBegin && amsEnd;
+  if (state.isInTable) {
+    // NOTE: if this is also AMS, this will likely fail.
+    state.write('\\(\\displaystyle ');
+    state.renderInline(node);
+    state.write(' \\)');
+  } else if (ams) {
+    state.renderInline(node);
+  } else {
+    state.write('\\begin{equation}\n');
     if (numbered && id) {
-      state.write(`\\label{${id}}`);
+      state.write(`\\label{${localId}}`);
     }
     state.ensureNewLine();
-    state.text(node.textContent, false);
-  },
-);
+    state.renderInline(node);
+    state.ensureNewLine();
+    state.write('\\end{equation}');
+  }
+  if (!state.isInTable) state.closeBlock(node);
+};
 
 export default equation;

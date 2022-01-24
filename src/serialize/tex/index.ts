@@ -1,6 +1,12 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
-import { blankTex, blankTexLines, createLatexStatement, stringToLatex } from './utils';
+import {
+  blankTex,
+  blankTexLines,
+  createLatexStatement,
+  stringToLatexText,
+  stringToLatexMath,
+} from './utils';
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
@@ -17,15 +23,16 @@ function createMarkOpenClose(name?: string) {
 export const texSerializer = new MarkdownSerializer(
   {
     text(state, node, parent) {
+      let escaped: string;
       if (
         parent.type.name === nodeNames.equation ||
         parent.type.name === nodeNames.math ||
         parent.type.name === nodeNames.code_block
       ) {
-        state.text(node.text ?? '', false);
-        return;
+        escaped = stringToLatexMath(node.text ?? '');
+      } else {
+        escaped = stringToLatexText(node.text ?? '');
       }
-      const escaped = stringToLatex(node.text ?? '');
       state.text(escaped, false);
     },
     paragraph(state, node) {

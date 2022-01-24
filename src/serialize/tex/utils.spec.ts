@@ -1,19 +1,19 @@
-import { stringToLatex } from './utils';
+import { stringToLatexText } from './utils';
 
 describe('stringToLatex', () => {
   it('Escape!', () => {
-    expect(stringToLatex('\\')).toBe('{\\textbackslash}');
-    expect(stringToLatex('\\ ')).toBe('{\\textbackslash}~');
+    expect(stringToLatexText('\\')).toBe('{\\textbackslash}');
+    expect(stringToLatexText('\\ ')).toBe('{\\textbackslash}~');
   });
   it('Quotes!', () => {
-    expect(stringToLatex('‘quote’')).toBe("`quote'");
-    expect(stringToLatex('“quote”')).toBe("``quote''");
+    expect(stringToLatexText('‘quote’')).toBe("`quote'");
+    expect(stringToLatexText('“quote”')).toBe("``quote''");
   });
   it('Fractions!', () => {
-    expect(stringToLatex('⅒')).toBe('$\\frac{1}{10}$');
+    expect(stringToLatexText('⅒')).toBe('$\\frac{1}{10}$');
   });
   it('Many things!', () => {
-    expect(stringToLatex('#\\%')).toBe('\\#{\\textbackslash}\\%');
-    expect(stringToLatex('……')).toBe('\\dots\\dots');
+    expect(stringToLatexText('#\\%')).toBe('\\#{\\textbackslash}\\%');
+    expect(stringToLatexText('……')).toBe('\\dots\\dots');
   });
 });
