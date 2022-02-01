@@ -85,7 +85,7 @@
     "use-inline-memo": "^0.2.0"
   },
   "devDependencies": {
-    "@curvenote/article": "^0.3.4",
+    "@curvenote/article": "^0.3.5",
     "@curvenote/components": "^0.3.3",
     "@curvenote/runtime": "^0.2.8",
     "@curvenote/schema": "^0.10.0",
