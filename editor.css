@@ -131,6 +131,7 @@ article h4,
 article h5,
 article h6 {
   font-family: var(--curvenote-font-headers, serif);
+  font-weight: "Regular";
 }
 article h1 {
   font-size: 1.6em;
