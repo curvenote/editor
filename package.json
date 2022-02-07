@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@wordpress/wordcount": "^3.2.2",
+    "js-yaml": "^4.1.0",
     "markdown-it": "^12.2.0",
     "markdown-it-myst": "^0.0.9",
     "nanoid": "^3.1.30",
@@ -53,6 +54,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@types/jest": "^26.0.23",
+    "@types/js-yaml": "^4.0.5",
     "@types/jsdom": "^16.2.12",
     "@types/markdown-it": "^12.2.3",
     "@types/mocha": "^8.2.3",
