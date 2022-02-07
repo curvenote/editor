@@ -1,4 +1,5 @@
 import { Node } from 'prosemirror-model';
+import { cleanWhitespaceChars } from '../clean';
 import { indent } from '../indent';
 import { TexFormatSerialize, TexSerializerState, TexStatementOptions } from '../types';
 
@@ -142,7 +143,8 @@ const mathReplacements: Record<string, string> = {
   Υ: '\\Upsilon',
   υ: '\\upsilon',
   Φ: '\\Phi',
-  φ: '\\phi',
+  ϕ: '\\phi',
+  φ: '\\varphi',
   Χ: 'X',
   χ: '\\chi',
   Ψ: '\\Psi',
@@ -188,7 +190,7 @@ export function stringToLatexText(text: string) {
     .replace(new RegExp(BACKSLASH_SPACE, 'g'), '{\\textbackslash}~')
     .replace(new RegExp(BACKSLASH, 'g'), '{\\textbackslash}')
     .replace(new RegExp(TILDE, 'g'), '{\\textasciitilde}');
-  return final;
+  return cleanWhitespaceChars(final, '~');
 }
 
 export function stringToLatexMath(text: string) {
@@ -199,5 +201,6 @@ export function stringToLatexMath(text: string) {
     }
     return s + char;
   }, '');
-  return replaced.trim();
+  const final = replaced.trim();
+  return cleanWhitespaceChars(final);
 }

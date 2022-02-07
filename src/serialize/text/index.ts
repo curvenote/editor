@@ -1,6 +1,7 @@
 import { MarkdownSerializer, MarkdownSerializerState } from 'prosemirror-markdown';
 import { Node as ProsemirrorNode } from 'prosemirror-model';
 import * as nodes from '../../nodes';
+import { cleanWhitespaceChars } from '../clean';
 
 function simpleInlineRender(state: MarkdownSerializerState, node: ProsemirrorNode) {
   state.renderInline(node);
@@ -28,7 +29,7 @@ const noMarks = {
 export const textSerializer = new MarkdownSerializer(
   {
     text(state, node) {
-      state.text(node.text ?? '', false);
+      state.text(cleanWhitespaceChars(node.text ?? ''), false);
     },
     paragraph: simpleBlockRender,
     heading: simpleBlockRender,
