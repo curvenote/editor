@@ -3,6 +3,7 @@ import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { isPlainURL, backticksFor, wrapMark } from './utils';
 import * as nodes from '../../nodes';
 import { MarkdownOptions, MdSerializerState } from '../types';
+import { cleanWhitespaceChars } from '../clean';
 
 export function mdPostProcess(md: string): string {
   // Replace trailing newlines in code fences
@@ -13,7 +14,7 @@ export function mdPostProcess(md: string): string {
 export const markdownSerializer = new MarkdownSerializer(
   {
     text(state, node) {
-      state.text(node.text ?? '');
+      state.text(cleanWhitespaceChars(node.text ?? ''));
     },
     paragraph(state, node) {
       state.renderInline(node);

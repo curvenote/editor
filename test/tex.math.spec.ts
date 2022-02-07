@@ -18,8 +18,8 @@ describe('Tex Math', () => {
     same('\\begin{equation}\n\\delta here\n\\end{equation}', tdoc(equation('δ here'))));
   it('serializes greek', () => {
     same(
-      '$A \\alpha B \\beta \\beta \\Gamma \\gamma \\Delta \\delta E \\epsilon Z \\zeta H \\eta \\Theta \\theta I \\iota K \\kappa \\Lambda \\lambda M \\mu N \\nu \\Xi \\xi O o \\Pi \\pi P \\rho \\Sigma \\sigma T \\tau \\Upsilon \\upsilon \\Phi \\phi X \\chi \\Psi \\psi \\Omega \\omega$',
-      tdoc(math('ΑαΒβßΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω')),
+      '$A \\alpha B \\beta \\beta \\Gamma \\gamma \\Delta \\delta E \\epsilon Z \\zeta H \\eta \\Theta \\theta I \\iota K \\kappa \\Lambda \\lambda M \\mu N \\nu \\Xi \\xi O o \\Pi \\pi P \\rho \\Sigma \\sigma T \\tau \\Upsilon \\upsilon \\Phi \\phi \\varphi X \\chi \\Psi \\psi \\Omega \\omega$',
+      tdoc(math('ΑαΒβßΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦϕφΧχΨψΩω')),
     );
   });
   it('serializes <>', () => same('Hello \\textless $< >$', tdoc(p('Hello < ', math('< >')))));
