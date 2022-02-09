@@ -38,12 +38,13 @@ export function chooseSelection(result: LinkResult): AppThunk<boolean> {
         return true;
       }
       default: {
+        const text = ReferenceKind.cite === result.kind ? result.content : '';
         const citeAttrs: Nodes.Cite.Attrs = {
           key: result.uid,
           title: result.title ?? '',
           label: result.label ?? null,
           kind: result.kind,
-          text: result.content,
+          text,
         };
         return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
       }

@@ -5,9 +5,11 @@ import MenuIcon from '../Menu/Icon';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      width: 'fit-content',
       fontSize: 20,
       flexWrap: 'nowrap',
+    },
+    input: {
+      flexGrow: 1,
     },
   }),
 );
@@ -44,12 +46,13 @@ const TextAction: React.FC<Props> = (props) => {
   }, []);
 
   return (
-    <Grid container alignItems="center" justifyContent="center" className={classes.root}>
+    <Grid container alignItems="center" justifyContent="space-between" className={classes.root}>
       <MenuIcon kind="cancel" onClick={onCancel} />
       <Input
         autoFocus
         disableUnderline
         value={current}
+        className={classes.input}
         onChange={updateText}
         onKeyDownCapture={(e) => {
           if (e.key === 'Enter') {
