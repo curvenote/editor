@@ -35,6 +35,12 @@ export function getFigure(editorState: EditorState | null) {
 
 type NodeOrNodeFunction = (() => Element | null) | Element | null;
 
+export type AnchorCache = {
+  anchorEl: PopperProps['anchorEl'];
+  setNode: (node: NodeOrNodeFunction) => void;
+  getNode: () => Element | null;
+};
+
 /**
  * createPopperLocationCache
  *
@@ -48,11 +54,7 @@ type NodeOrNodeFunction = (() => Element | null) | Element | null;
  * The cache holds the most recent position of the intended node, and
  * allows you to input it as a function.
  */
-export function createPopperLocationCache(): {
-  setNode: (arg: NodeOrNodeFunction) => void;
-  getNode: () => Element | null;
-  anchorEl: PopperProps['anchorEl'];
-} {
+export function createPopperLocationCache(): AnchorCache {
   const cache = {
     node: null as NodeOrNodeFunction,
     clientRect: null as DOMRect | null,
