@@ -1,0 +1,15 @@
+article r-outline.popout {
+  position: fixed;
+  top: 53px;
+  left: calc(50vw + 530px);
+}
+article.centered r-outline.popout {
+  left: calc(50vw + 420px);
+}
+@media screen and (max-width: 1500px) {
+  article r-outline.popout {
+    position: initial;
+    top: unset;
+    left: unset;
+  }
+}
