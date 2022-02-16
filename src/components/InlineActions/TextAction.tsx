@@ -22,7 +22,7 @@ type Props = {
   onCancel: () => void;
 };
 
-const TextAction: React.FC<Props> = (props) => {
+function TextAction(props: Props) {
   const { text: initial, help, validate, onSubmit, onCancel } = props;
   const classes = useStyles();
   const [text, setText] = useState(initial);
@@ -77,6 +77,6 @@ const TextAction: React.FC<Props> = (props) => {
       />
     </Grid>
   );
-};
+}
 
 export default TextAction;

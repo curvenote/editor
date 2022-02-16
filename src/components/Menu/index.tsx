@@ -87,7 +87,7 @@ function TableMenu({
   );
 }
 
-const EditorMenu: React.FC<Props> = (props) => {
+function EditorMenu(props: Props) {
   const { standAlone, disabled } = props;
 
   const classes = useStyles();
@@ -328,7 +328,7 @@ const EditorMenu: React.FC<Props> = (props) => {
       )}
     </Grid>
   );
-};
+}
 
 EditorMenu.defaultProps = {
   standAlone: false,

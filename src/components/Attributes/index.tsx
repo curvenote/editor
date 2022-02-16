@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
 
-const Attributes: React.FC = () => {
+function Attributes() {
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
 
@@ -107,6 +107,6 @@ const Attributes: React.FC = () => {
       </Paper>
     </Popover>
   );
-};
+}
 
 export default Attributes;

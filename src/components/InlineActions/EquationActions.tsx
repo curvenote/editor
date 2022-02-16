@@ -21,7 +21,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const EquationActions: React.FC<ActionProps> = (props) => {
+function EquationActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
@@ -47,6 +47,6 @@ const EquationActions: React.FC<ActionProps> = (props) => {
       <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />
     </Grid>
   );
-};
+}
 
 export default EquationActions;

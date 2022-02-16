@@ -89,7 +89,7 @@ function LanguageSeletionDropdown({
   );
 }
 
-const CodeActions: React.FC<ActionProps> = (props) => {
+function CodeActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
@@ -193,6 +193,6 @@ const CodeActions: React.FC<ActionProps> = (props) => {
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
   );
-};
+}
 
 export default CodeActions;

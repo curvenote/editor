@@ -63,7 +63,7 @@ export type MenuActionProps = {
   selected?: boolean;
 };
 
-const MenuAction: React.FC<MenuActionProps> = (props) => {
+function MenuAction(props: MenuActionProps) {
   const { kind, title, action, disabled, children, selected } = props;
   const classes = useStyles();
   const Icon = kind && icons[kind];
@@ -76,6 +76,6 @@ const MenuAction: React.FC<MenuActionProps> = (props) => {
       {children}
     </MenuItem>
   );
-};
+}
 
 export default MenuAction;

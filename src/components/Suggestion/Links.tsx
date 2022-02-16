@@ -8,7 +8,7 @@ import Suggestion from './Suggestion';
 import { LinkResult } from '../../store/suggestion/types';
 import { positionPopper } from '../InlineActions/utils';
 
-const LinkSuggestions: React.FC = () => {
+function LinkSuggestions() {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<LinkResult>(state),
     isEqual,
@@ -34,6 +34,6 @@ const LinkSuggestions: React.FC = () => {
       ))}
     </div>
   );
-};
+}
 
 export default LinkSuggestions;

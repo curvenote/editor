@@ -65,7 +65,7 @@ export function useLinkActions(stateId: any, viewId: string | null) {
   };
 }
 
-const LinkActions: React.FC<ActionProps> = (props) => {
+function LinkActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const [labelOpen, setLabelOpen] = useState(false);
   const classes = useStyles();
@@ -106,6 +106,6 @@ const LinkActions: React.FC<ActionProps> = (props) => {
       <MenuIcon kind="unlink" onClick={onDelete ?? undefined} dangerous />
     </Grid>
   );
-};
+}
 
 export default LinkActions;
