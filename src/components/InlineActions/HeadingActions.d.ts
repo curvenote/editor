@@ -1,4 +1,4 @@
-import React from 'react';
+/// <reference types="react" />
 import { ActionProps } from './utils';
-declare const HeadingActions: React.FC<ActionProps>;
+declare function HeadingActions(props: ActionProps): JSX.Element | null;
 export default HeadingActions;

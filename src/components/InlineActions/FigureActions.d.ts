@@ -1,5 +1,5 @@
-import React from 'react';
+/// <reference types="react" />
 import { ActionProps } from './utils';
 declare type Props = ActionProps;
-declare const FigureImageActions: React.FC<Props>;
+declare function FigureImageActions(props: Props): JSX.Element | null;
 export default FigureImageActions;

@@ -1,4 +1,4 @@
-import React from 'react';
+/// <reference types="react" />
 import { ActionProps } from './utils';
-declare const TableActions: React.FC<ActionProps>;
+declare function TableActions(props: ActionProps): JSX.Element | null;
 export default TableActions;

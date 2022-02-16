@@ -21,5 +21,5 @@ export declare type MenuActionProps = {
     disabled?: boolean;
     selected?: boolean;
 };
-declare const MenuAction: React.FC<MenuActionProps>;
+declare function MenuAction(props: MenuActionProps): JSX.Element;
 export default MenuAction;

@@ -17,7 +17,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var EquationActions = function (props) {
+function EquationActions(props) {
     var _a, _b, _c;
     var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
@@ -36,6 +36,6 @@ var EquationActions = function (props) {
     positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered })));
-};
+}
 export default EquationActions;
 //# sourceMappingURL=EquationActions.js.map

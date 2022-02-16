@@ -20,7 +20,7 @@ var useStyles = makeStyles(function () {
     });
 });
 var ABOVE_MODALS = { zIndex: 1301 };
-var HeadingActions = function (props) {
+function HeadingActions(props) {
     var _a, _b, _c;
     var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
@@ -68,6 +68,6 @@ var HeadingActions = function (props) {
             React.createElement(MenuAction, { action: onLevel(6), selected: level === 6, title: "Heading 6" },
                 React.createElement(Keyboard, { shortcut: "Mod-Alt-6" }))),
         React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered })));
-};
+}
 export default HeadingActions;
 //# sourceMappingURL=HeadingActions.js.map

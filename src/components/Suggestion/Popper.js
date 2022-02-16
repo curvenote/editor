@@ -17,7 +17,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var Suggestion = function (props) {
+function Suggestion(props) {
     var _a;
     var children = props.children;
     var open = useSelector(selectors.isSuggestionOpen);
@@ -34,6 +34,6 @@ var Suggestion = function (props) {
         return null;
     return (React.createElement(Popper, { className: "above-modals", open: open, anchorEl: cache.anchorEl, popperRef: function (pop) { return registerPopper(pop); }, placement: "bottom-start" },
         React.createElement(Paper, { className: classes.root, elevation: 10, ref: paperRef }, children)));
-};
+}
 export default Suggestion;
 //# sourceMappingURL=Popper.js.map

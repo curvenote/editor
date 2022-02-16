@@ -20,7 +20,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var CalloutActions = function (props) {
+function CalloutActions(props) {
     var _a, _b;
     var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
@@ -48,6 +48,6 @@ var CalloutActions = function (props) {
         React.createElement(MenuIcon, { kind: "lift", onClick: onLift }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
-};
+}
 export default CalloutActions;
 //# sourceMappingURL=CalloutActions.js.map

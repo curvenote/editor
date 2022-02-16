@@ -18,7 +18,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var Suggestion = function (props) {
+function Suggestion(props) {
     var _a;
     var index = props.index, children = props.children, className = props.className;
     positionPopper();
@@ -42,6 +42,6 @@ var Suggestion = function (props) {
             _a[className !== null && className !== void 0 ? className : ''] = className,
             _a[classes.selected] = selected,
             _a)), onClick: onClick, onMouseEnter: onHover, ref: ref }, children));
-};
+}
 export default Suggestion;
 //# sourceMappingURL=Suggestion.js.map

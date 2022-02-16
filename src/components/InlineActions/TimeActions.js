@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
-var TimeActions = function (props) {
+function TimeActions(props) {
     var stateId = props.stateId, viewId = props.viewId;
     var dispatch = useDispatch();
     var selection = useSelector(function (state) { var _a, _b; return (_b = (_a = getEditorState(state, stateId)) === null || _a === void 0 ? void 0 : _a.state) === null || _b === void 0 ? void 0 : _b.selection; });
@@ -23,6 +23,6 @@ var TimeActions = function (props) {
     };
     return (React.createElement(MuiPickersUtilsProvider, { utils: DateFnsUtils },
         React.createElement(DatePicker, { variant: "static", format: "MM/dd/yyyy", margin: "normal", id: "date-picker-inline", label: "Date", value: date, onChange: onChange })));
-};
+}
 export default TimeActions;
 //# sourceMappingURL=TimeActions.js.map

@@ -1,7 +1,7 @@
-import React from 'react';
+/// <reference types="react" />
 declare type Props = {
     width: number | null;
     onWidth: (width: number) => void;
 };
-declare const SelectWidth: React.FC<Props>;
+declare function SelectWidth(props: Props): JSX.Element;
 export default SelectWidth;

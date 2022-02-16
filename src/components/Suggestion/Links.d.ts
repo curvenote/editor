@@ -1,3 +1,3 @@
-import React from 'react';
-declare const LinkSuggestions: React.FC;
+/// <reference types="react" />
+declare function LinkSuggestions(): JSX.Element;
 export default LinkSuggestions;

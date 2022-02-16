@@ -23,7 +23,7 @@ var useStyles = makeStyles(function () {
     });
 });
 var alwaysShow = new Set([SelectionKinds.cite]);
-var InlineActions = function (props) {
+function InlineActions(props) {
     var _a;
     var children = props.children;
     var classes = useStyles();
@@ -42,6 +42,6 @@ var InlineActions = function (props) {
     return (React.createElement(Popper, { open: open, anchorEl: cache.anchorEl, transition: true, placement: placement, popperRef: function (pop) { return registerPopper(pop); }, className: "noprint above-modals" },
         React.createElement(Paper, { className: classes.paper, elevation: 10 },
             React.createElement("div", { className: classes.div }, children))));
-};
+}
 export default InlineActions;
 //# sourceMappingURL=Popper.js.map

@@ -48,7 +48,7 @@ export function useLinkActions(stateId, viewId) {
         onEdit: onEdit,
     };
 }
-var LinkActions = function (props) {
+function LinkActions(props) {
     var _a;
     var stateId = props.stateId, viewId = props.viewId;
     var _b = useState(false), labelOpen = _b[0], setLabelOpen = _b[1];
@@ -70,6 +70,6 @@ var LinkActions = function (props) {
         React.createElement(MenuIcon, { kind: "open", onClick: onOpen }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "unlink", onClick: onDelete !== null && onDelete !== void 0 ? onDelete : undefined, dangerous: true })));
-};
+}
 export default LinkActions;
 //# sourceMappingURL=LinkActions.js.map

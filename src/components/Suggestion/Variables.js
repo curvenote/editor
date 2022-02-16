@@ -31,7 +31,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var VariableSuggestions = function () {
+function VariableSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
     positionPopper();
     var classes = useStyles();
@@ -39,6 +39,6 @@ var VariableSuggestions = function () {
         item.current !== undefined && React.createElement("div", null, String(item.current)),
         React.createElement(Typography, { variant: "subtitle1" }, item.name),
         React.createElement(Typography, { variant: "caption" }, item.description))); })));
-};
+}
 export default VariableSuggestions;
 //# sourceMappingURL=Variables.js.map

@@ -12,7 +12,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var TextAction = function (props) {
+function TextAction(props) {
     var initial = props.text, help = props.help, validate = props.validate, onSubmit = props.onSubmit, onCancel = props.onCancel;
     var classes = useStyles();
     var _a = useState(initial), text = _a[0], setText = _a[1];
@@ -52,6 +52,6 @@ var TextAction = function (props) {
             } }),
         loading && React.createElement(CircularProgress, { size: 18 }),
         React.createElement(MenuIcon, { kind: "enterSave", title: valid ? 'Save' : help, disabled: loading || !valid, error: !valid, onClick: function () { return onSubmit(text); } })));
-};
+}
 export default TextAction;
 //# sourceMappingURL=TextAction.js.map

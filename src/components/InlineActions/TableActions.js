@@ -23,7 +23,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var TableActions = function (props) {
+function TableActions(props) {
     var _a, _b, _c, _d;
     var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
@@ -84,6 +84,6 @@ var TableActions = function (props) {
         figcaption && React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
-};
+}
 export default TableActions;
 //# sourceMappingURL=TableActions.js.map

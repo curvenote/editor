@@ -1,3 +1,6 @@
 import React from 'react';
-declare const InlineActions: React.FC;
+declare type Props = {
+    children: React.ReactNode;
+};
+declare function InlineActions(props: Props): JSX.Element | null;
 export default InlineActions;

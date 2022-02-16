@@ -1,4 +1,4 @@
-import React from 'react';
+/// <reference types="react" />
 import { ActionProps } from './utils';
-declare const TimeActions: React.FC<ActionProps>;
+declare function TimeActions(props: ActionProps): JSX.Element | null;
 export default TimeActions;

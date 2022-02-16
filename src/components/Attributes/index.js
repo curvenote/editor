@@ -24,7 +24,7 @@ var useStyles = makeStyles(function (theme) {
     });
 });
 export var NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
-var Attributes = function () {
+function Attributes() {
     var classes = useStyles();
     var dispatch = useDispatch();
     var stateKey = useSelector(function (state) { return getEditorUI(state).stateId; });
@@ -61,6 +61,6 @@ var Attributes = function () {
                     var value = attrs[key];
                     return (React.createElement(TextField, { label: key, key: key, value: value, onChange: function (event) { return onChange(key, event.target.value); }, onBlur: function (event) { return onChange(key, event.target.value); }, multiline: true }));
                 })))));
-};
+}
 export default Attributes;
 //# sourceMappingURL=index.js.map

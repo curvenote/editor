@@ -24,7 +24,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var CommandSuggestions = function () {
+function CommandSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
     positionPopper();
     var classes = useStyles();
@@ -36,6 +36,6 @@ var CommandSuggestions = function () {
             React.createElement(Keyboard, { shortcut: item.shortcut }))),
         React.createElement(Typography, { variant: "subtitle1" }, item.title),
         React.createElement(Typography, { variant: "caption" }, item.description))); })));
-};
+}
 export default CommandSuggestions;
 //# sourceMappingURL=Commands.js.map

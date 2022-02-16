@@ -163,7 +163,7 @@ var useStyles = makeStyles(function (theme) {
         },
     });
 });
-var MenuIcon = function (props) {
+function MenuIcon(props) {
     var kind = props.kind, active = props.active, dangerous = props.dangerous, error = props.error, disabled = props.disabled, onClick = props.onClick, title = props.title, text = props.text;
     var classes = useStyles();
     if (kind === 'divider')
@@ -186,7 +186,7 @@ var MenuIcon = function (props) {
                     onClick === null || onClick === void 0 ? void 0 : onClick(e);
                 }, disableRipple: true },
                 React.createElement(Icon, { fontSize: "small", className: classNames({ dangerous: dangerous, error: error }) })))));
-};
+}
 MenuIcon.defaultProps = {
     disabled: false,
     active: false,

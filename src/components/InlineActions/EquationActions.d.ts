@@ -1,4 +1,4 @@
-import React from 'react';
+/// <reference types="react" />
 import { ActionProps } from './utils';
-declare const EquationActions: React.FC<ActionProps>;
+declare function EquationActions(props: ActionProps): JSX.Element | null;
 export default EquationActions;

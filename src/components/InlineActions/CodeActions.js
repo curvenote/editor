@@ -54,7 +54,7 @@ function LanguageSeletionDropdown(_a) {
             return (React.createElement(MenuItem, { key: name, value: name }, label));
         }))));
 }
-var CodeActions = function (props) {
+function CodeActions(props) {
     var _a, _b;
     var stateId = props.stateId, viewId = props.viewId;
     var classes = useStyles();
@@ -127,6 +127,6 @@ var CodeActions = function (props) {
         hasFigure && figcaption && (React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered })),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
-};
+}
 export default CodeActions;
 //# sourceMappingURL=CodeActions.js.map

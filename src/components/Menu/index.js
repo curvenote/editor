@@ -48,7 +48,7 @@ function TableMenu(_a) {
     return (React.createElement(React.Fragment, null, isOpen && (React.createElement(Menu, { id: "table-menu", anchorEl: anchor, keepMounted: true, open: Boolean(anchor), onClose: onClose },
         React.createElement("div", { onClick: function () { return onClose(); } }, tableMenu)))));
 }
-var EditorMenu = function (props) {
+function EditorMenu(props) {
     var standAlone = props.standAlone, disabled = props.disabled;
     var classes = useStyles();
     var dispatch = useDispatch();
@@ -156,7 +156,7 @@ var EditorMenu = function (props) {
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && (React.createElement(MenuAction, { kind: "video", disabled: off, action: clickLoom, title: "Loom Video" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && (React.createElement(MenuAction, { kind: "iframe", disabled: off, action: clickMiro, title: "Miro Board" })),
                 (schema === null || schema === void 0 ? void 0 : schema.nodes.iframe) && (React.createElement(MenuAction, { kind: "iframe", disabled: off, action: clickIframe, title: "Embed an IFrame" })))))));
-};
+}
 EditorMenu.defaultProps = {
     standAlone: false,
     disabled: false,

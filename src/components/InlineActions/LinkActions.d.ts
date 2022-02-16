@@ -1,4 +1,4 @@
-import React from 'react';
+/// <reference types="react" />
 import { types } from '@curvenote/schema';
 import { ActionProps } from './utils';
 export declare function useLinkActions(stateId: any, viewId: string | null): {
@@ -13,5 +13,5 @@ export declare function useLinkActions(stateId: any, viewId: string | null): {
     onDelete: () => void;
     onEdit: (newHref: string) => void;
 };
-declare const LinkActions: React.FC<ActionProps>;
+declare function LinkActions(props: ActionProps): JSX.Element | null;
 export default LinkActions;

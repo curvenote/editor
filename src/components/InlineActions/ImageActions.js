@@ -17,7 +17,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var ImageActions = function (props) {
+function ImageActions(props) {
     var stateId = props.stateId, viewId = props.viewId;
     var dispatch = useDispatch();
     var classes = useStyles();
@@ -43,6 +43,6 @@ var ImageActions = function (props) {
         React.createElement(MenuIcon, { kind: "caption", onClick: onCaption }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
-};
+}
 export default ImageActions;
 //# sourceMappingURL=ImageActions.js.map

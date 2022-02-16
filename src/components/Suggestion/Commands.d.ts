@@ -1,3 +1,3 @@
-import React from 'react';
-declare const CommandSuggestions: React.FC;
+/// <reference types="react" />
+declare function CommandSuggestions(): JSX.Element;
 export default CommandSuggestions;

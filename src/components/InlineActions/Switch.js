@@ -32,7 +32,7 @@ export function useInlineActionProps() {
         kind: kind,
     };
 }
-var InlineActionSwitch = function () {
+function InlineActionSwitch() {
     var _a = useInlineActionProps(), stateId = _a.stateId, viewId = _a.viewId, kind = _a.kind;
     return (React.createElement(React.Fragment, null,
         kind === Kinds.link && React.createElement(LinkActions, __assign({}, { stateId: stateId, viewId: viewId })),
@@ -45,6 +45,6 @@ var InlineActionSwitch = function () {
         kind === Kinds.time && React.createElement(TimeActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.table && React.createElement(TableActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.code && React.createElement(CodeActions, { stateId: stateId, viewId: viewId })));
-};
+}
 export default InlineActionSwitch;
 //# sourceMappingURL=Switch.js.map

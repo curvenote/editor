@@ -19,7 +19,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var EmojiSuggestions = function () {
+function EmojiSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
     positionPopper();
     var classes = useStyles();
@@ -30,6 +30,6 @@ var EmojiSuggestions = function () {
         React.createElement(Typography, null,
             React.createElement("span", null, item.c),
             item.n))); })));
-};
+}
 export default EmojiSuggestions;
 //# sourceMappingURL=Emojis.js.map

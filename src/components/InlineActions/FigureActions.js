@@ -58,7 +58,7 @@ function toggleCaption(stateId, viewId, figurePos) {
         }
     };
 }
-var FigureImageActions = function (props) {
+function FigureImageActions(props) {
     var _a, _b, _c, _d, _e, _f;
     var stateId = props.stateId, viewId = props.viewId;
     var dispatch = useDispatch();
@@ -120,6 +120,6 @@ var FigureImageActions = function (props) {
         figcaption && React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered }),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "remove", onClick: onDelete, dangerous: true })));
-};
+}
 export default FigureImageActions;
 //# sourceMappingURL=FigureActions.js.map

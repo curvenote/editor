@@ -50,7 +50,7 @@ var useStyles = makeStyles(function () {
         },
     });
 });
-var MenuAction = function (props) {
+function MenuAction(props) {
     var kind = props.kind, title = props.title, action = props.action, disabled = props.disabled, children = props.children, selected = props.selected;
     var classes = useStyles();
     var Icon = kind && icons[kind];
@@ -58,6 +58,6 @@ var MenuAction = function (props) {
         React.createElement(Typography, { className: classes.root },
             Icon && React.createElement(Icon, { fontSize: "small", className: classes.icon, color: "inherit" }), " ".concat(title)),
         children));
-};
+}
 export default MenuAction;
 //# sourceMappingURL=Action.js.map

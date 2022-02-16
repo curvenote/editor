@@ -181,5 +181,17 @@ declare type Props = {
     text?: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
-declare const _default: React.NamedExoticComponent<Props>;
+declare function MenuIcon(props: Props): JSX.Element;
+declare namespace MenuIcon {
+    var defaultProps: {
+        disabled: boolean;
+        active: boolean;
+        dangerous: boolean;
+        error: boolean;
+        onClick: undefined;
+        title: undefined;
+        text: undefined;
+    };
+}
+declare const _default: React.MemoExoticComponent<typeof MenuIcon>;
 export default _default;

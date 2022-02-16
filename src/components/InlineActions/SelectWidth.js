@@ -2,7 +2,7 @@ import React from 'react';
 import { Popover, Slider } from '@material-ui/core';
 import { DEFAULT_IMAGE_WIDTH } from '@curvenote/schema';
 import MenuIcon from '../Menu/Icon';
-var SelectWidth = function (props) {
+function SelectWidth(props) {
     var width = props.width, onWidth = props.onWidth;
     var _a = React.useState(null), anchorEl = _a[0], setAnchorEl = _a[1];
     var handleClick = function (event) {
@@ -24,6 +24,6 @@ var SelectWidth = function (props) {
                         handleClose();
                         onWidth(v);
                     } })))));
-};
+}
 export default SelectWidth;
 //# sourceMappingURL=SelectWidth.js.map

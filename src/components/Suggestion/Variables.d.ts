@@ -1,3 +1,3 @@
-import React from 'react';
-declare const VariableSuggestions: React.FC;
+/// <reference types="react" />
+declare function VariableSuggestions(): JSX.Element;
 export default VariableSuggestions;
