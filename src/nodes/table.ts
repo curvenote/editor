@@ -144,6 +144,8 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   state.isInTable = true;
 
   // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
+  state.write('\\adjustbox{max width=\\textwidth}{%');
+  state.ensureNewLine();
   state.write(`\\begin{tabular}{*{${numColumns}}{c}}`);
   state.ensureNewLine();
   const dedent = indent(state);
@@ -186,6 +188,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   state.ensureNewLine();
   dedent();
   state.write('\\end{tabular}');
+  state.write('}');
   state.closeBlock(node);
   state.isInTable = false;
 }

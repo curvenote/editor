@@ -12,13 +12,14 @@ const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.t
 describe('Tex Tables', () => {
   it('serializes a simple table', () => {
     same(
-      `\\begin{tabular}{*{2}{c}}
+      `\\adjustbox{max width=\\textwidth}{%
+\\begin{tabular}{*{2}{c}}
   \\hline
   Col 1 & Col 1 \\\\
   \\hline
   data 1 & data 2 \\\\
   \\hline
-\\end{tabular}`,
+\\end{tabular}}`,
       tdoc(
         table(
           table_row(table_header(p('Col 1')), table_header(p('Col 1'))),
@@ -30,13 +31,14 @@ describe('Tex Tables', () => {
 
   it('serializes a simple table', () => {
     same(
-      `\\begin{tabular}{*{2}{c}}
+      `\\adjustbox{max width=\\textwidth}{%
+\\begin{tabular}{*{2}{c}}
   \\hline
   Col 1 & \\(\\displaystyle \\mu \\) \\\\
   \\hline
   data 1 & data 2 \\\\
   \\hline
-\\end{tabular}`,
+\\end{tabular}}`,
       tdoc(
         table(
           table_row(table_header(p('Col 1')), table_header(equation('\\mu'))),
