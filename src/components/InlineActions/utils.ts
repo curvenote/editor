@@ -1,5 +1,5 @@
 import { nodeNames } from '@curvenote/schema';
-import { findParentNode, findChildrenByType } from 'prosemirror-utils';
+import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { PopperProps } from '@material-ui/core';
@@ -35,6 +35,12 @@ export function getFigure(editorState: EditorState | null) {
 
 type NodeOrNodeFunction = (() => Element | null) | Element | null;
 
+export type AnchorCache = {
+  anchorEl: PopperProps['anchorEl'];
+  setNode: (node: NodeOrNodeFunction) => void;
+  getNode: () => Element | null;
+};
+
 /**
  * createPopperLocationCache
  *
@@ -48,7 +54,7 @@ type NodeOrNodeFunction = (() => Element | null) | Element | null;
  * The cache holds the most recent position of the intended node, and
  * allows you to input it as a function.
  */
-export function createPopperLocationCache() {
+export function createPopperLocationCache(): AnchorCache {
   const cache = {
     node: null as NodeOrNodeFunction,
     clientRect: null as DOMRect | null,

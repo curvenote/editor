@@ -1,0 +1,32 @@
+article aside.callout {
+  display: block;
+  padding: 5px 20px;
+  margin: 20px 0;
+  border: 1px solid #aaaaaa;
+  border-left-width: 5px;
+  border-radius: 1px;
+  border-left-color: #4285f4;
+}
+article aside.callout p {
+  margin: 0;
+  text-align: left;
+  display: block;
+  font-size: inherit;
+  color: #4d4d4d;
+}
+
+article aside.callout.active {
+  border-left-color: #aaaaaa;
+}
+article aside.callout.success {
+  border-left-color: #9ec667;
+}
+article aside.callout.info {
+  border-left-color: #4285f4;
+}
+article aside.callout.warning {
+  border-left-color: #f3b300;
+}
+article aside.callout.danger {
+  border-left-color: #ca4f44;
+}

@@ -1,0 +1,148 @@
+article {
+  position: relative;
+
+  a strong,
+  a {
+    color: #1e88e5;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  a strong {
+    font-weight: 700;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--curvenote-font-headers, serif);
+    font-weight: normal;
+  }
+
+  h1 {
+    font-size: 1.6em;
+  }
+  h2 {
+    font-size: 1.4em;
+  }
+  h3 {
+    font-size: 1.2em;
+  }
+  h4 {
+    font-size: 1em;
+  }
+  h5 {
+    font-size: 0.925em;
+  }
+  h6 {
+    font-size: 0.85em;
+  }
+
+  p code {
+    border-radius: 5px;
+    border: 1px solid #e4e4e4;
+    background-color: #fafafa;
+    padding: 0 3px;
+  }
+
+  pre {
+    border: 1px solid #e4e4e4;
+    background-color: #fafafa;
+    padding: 10px;
+  }
+
+  dl {
+    color: #4d4d4d;
+    font-family: var(--curvenote-font, sans-serif);
+    line-height: 1.4;
+  }
+  dl dt {
+    float: left;
+    width: 160px;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  dl dd {
+    margin-left: 180px;
+  }
+  @media screen and (max-width: 800px) {
+    dl dt {
+      float: unset;
+      width: unset;
+      overflow: unset;
+      clear: unset;
+      text-align: unset;
+      text-overflow: unset;
+      white-space: unset;
+    }
+    dl dd {
+      margin-left: 15px;
+    }
+  }
+
+  p {
+    display: block;
+    text-align: justify;
+    overflow-wrap: break-word;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #4d4d4d;
+    font-family: var(--curvenote-font, sans-serif);
+    font-weight: 300;
+  }
+  @media screen and (max-width: 800px) {
+    p {
+      text-align: left;
+    }
+  }
+
+  ol p,
+  ul p {
+    margin: 0;
+    text-align: left;
+  }
+  em {
+    font-style: italic;
+  }
+  strong {
+    color: black;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead {
+    font-size: 105%;
+    border-bottom: 1px solid #333;
+    color: black;
+  }
+  tbody {
+    border-left: 1px solid #333;
+  }
+  td {
+    padding-left: 8px;
+  }
+  hr {
+    width: 200px;
+    margin: 30px 0;
+    margin-left: calc(50% - 100px);
+    border-top: 1px solid #b2b2b2;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    clear: both;
+  }
+  img {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,36 @@
+article aside.margin {
+  position: relative; // Necessary to float over the background.
+  float: right;
+  z-index: 1; // Important when editing
+  width: 210px;
+  padding-left: 20px;
+  margin-top: -30px;
+  margin-right: -232px;
+  background-color: #fff;
+}
+article aside.margin,
+article aside.margin p {
+  font-size: 12px;
+  color: #aaa;
+  font-family: var(--curvenote-font, sans-serif);
+  text-align: left;
+}
+article.centered aside.margin {
+  float: right;
+  width: 33%;
+  margin: unset;
+  margin-left: 20px;
+}
+
+article.centered aside.callout {
+  clear: both; // Don't interfer with callouts
+}
+@media screen and (max-width: 800px) {
+  article aside.margin,
+  article.centered aside.margin {
+    float: unset;
+    width: unset;
+    margin: unset;
+    border-left: 5px solid #eee;
+  }
+}

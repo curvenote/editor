@@ -1,0 +1,35 @@
+article {
+  blockquote {
+    padding: 10px 20px;
+    margin: 20px 0;
+    border-left: 5px solid var(--theme-primary, #eee);
+
+    p {
+      color: #646464;
+      font-size: 1.5em;
+      line-height: 1.2;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    footer {
+      font-family: var(--curvenote-font, sans-serif);
+      color: #a7a7a7;
+      font-size: 1em;
+
+      cite {
+        text-transform: uppercase;
+        color: var(--theme-primary, #eee);
+        font-style: normal;
+        font-weight: 700;
+      }
+      time {
+        font-style: italic;
+        font-size: 0.9em;
+      }
+      time::before {
+        content: ' - ';
+      }
+    }
+  }
+}
