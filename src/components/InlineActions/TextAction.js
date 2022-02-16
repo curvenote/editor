@@ -36,7 +36,7 @@ function TextAction(props) {
     }, []);
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "space-between", className: classes.root },
         React.createElement(MenuIcon, { kind: "cancel", onClick: onCancel }),
-        React.createElement(Input, { autoFocus: true, disableUnderline: true, value: current, className: classes.input, onChange: updateText, onKeyDownCapture: function (e) {
+        React.createElement(Input, { autoFocus: true, disableUnderline: true, fullWidth: true, value: current, className: classes.input, onChange: updateText, onKeyDownCapture: function (e) {
                 if (e.key === 'Enter') {
                     if (!valid || loading)
                         return;
