@@ -51,6 +51,7 @@ function TextAction(props: Props) {
       <Input
         autoFocus
         disableUnderline
+        fullWidth
         value={current}
         className={classes.input}
         onChange={updateText}
