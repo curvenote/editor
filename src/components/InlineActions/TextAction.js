@@ -4,9 +4,11 @@ import MenuIcon from '../Menu/Icon';
 var useStyles = makeStyles(function () {
     return createStyles({
         root: {
-            width: 'fit-content',
             fontSize: 20,
             flexWrap: 'nowrap',
+        },
+        input: {
+            flexGrow: 1,
         },
     });
 });
@@ -32,9 +34,9 @@ var TextAction = function (props) {
             setValid(false);
         });
     }, []);
-    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
+    return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "space-between", className: classes.root },
         React.createElement(MenuIcon, { kind: "cancel", onClick: onCancel }),
-        React.createElement(Input, { autoFocus: true, disableUnderline: true, value: current, onChange: updateText, onKeyDownCapture: function (e) {
+        React.createElement(Input, { autoFocus: true, disableUnderline: true, value: current, className: classes.input, onChange: updateText, onKeyDownCapture: function (e) {
                 if (e.key === 'Enter') {
                     if (!valid || loading)
                         return;

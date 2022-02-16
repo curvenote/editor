@@ -1,5 +1,5 @@
 import { nodeNames } from '@curvenote/schema';
-import { findParentNode, findChildrenByType } from 'prosemirror-utils';
+import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 var popper = null;
 export function registerPopper(next) {
     popper = next;

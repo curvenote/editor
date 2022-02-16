@@ -65,7 +65,7 @@ export function renderMath(math, element, inline) {
                     return [4, import('katex')];
                 case 2:
                     katex_1 = _a.sent();
-                    katex_1.render(render, element, {
+                    katex_1.default.render(render, element, {
                         displayMode: !inline,
                         throwOnError: false,
                         macros: {

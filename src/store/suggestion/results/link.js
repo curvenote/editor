@@ -80,12 +80,13 @@ export function chooseSelection(result) {
                 return true;
             }
             default: {
+                var text = ReferenceKind.cite === result.kind ? result.content : '';
                 var citeAttrs = {
                     key: result.uid,
                     title: (_c = result.title) !== null && _c !== void 0 ? _c : '',
                     label: (_d = result.label) !== null && _d !== void 0 ? _d : null,
                     kind: result.kind,
-                    text: result.content,
+                    text: text,
                 };
                 return dispatch(insertInlineNode(view.state.schema.nodes.cite, citeAttrs));
             }

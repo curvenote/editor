@@ -1,4 +1,5 @@
 import { EditorState } from 'prosemirror-state';
+import { PopperProps } from '@material-ui/core';
 export declare type ActionProps = {
     stateId: any;
     viewId: string | null;
@@ -13,9 +14,10 @@ export declare function getFigure(editorState: EditorState | null): {
     figcaption: import("prosemirror-utils").NodeWithPos | undefined;
 };
 declare type NodeOrNodeFunction = (() => Element | null) | Element | null;
-export declare function createPopperLocationCache(): {
-    setNode: (nodeOrFunction: NodeOrNodeFunction) => void;
+export declare type AnchorCache = {
+    anchorEl: PopperProps['anchorEl'];
+    setNode: (node: NodeOrNodeFunction) => void;
     getNode: () => Element | null;
-    anchorEl: import("popper.js").default.ReferenceObject;
 };
+export declare function createPopperLocationCache(): AnchorCache;
 export {};
