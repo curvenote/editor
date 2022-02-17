@@ -4,6 +4,7 @@ declare type Props = {
     help: string;
     validate: (text: string) => boolean | Promise<boolean>;
     onSubmit: (text: string) => void;
+    onChange?: (text: string) => void;
     onCancel: () => void;
 };
 declare function TextAction(props: Props): JSX.Element;

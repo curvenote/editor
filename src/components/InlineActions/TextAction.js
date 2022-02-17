@@ -13,7 +13,7 @@ var useStyles = makeStyles(function () {
     });
 });
 function TextAction(props) {
-    var initial = props.text, help = props.help, validate = props.validate, onSubmit = props.onSubmit, onCancel = props.onCancel;
+    var initial = props.text, help = props.help, validate = props.validate, onSubmit = props.onSubmit, onCancel = props.onCancel, onChange = props.onChange;
     var classes = useStyles();
     var _a = useState(initial), text = _a[0], setText = _a[1];
     var _b = useState(initial), current = _b[0], setCurrent = _b[1];
@@ -23,6 +23,7 @@ function TextAction(props) {
         var t = e.currentTarget.value;
         setLoading(true);
         setCurrent(t);
+        onChange === null || onChange === void 0 ? void 0 : onChange(t);
         Promise.all([validate(t)]).then(function (_a) {
             var b = _a[0];
             setLoading(false);
@@ -33,7 +34,7 @@ function TextAction(props) {
             }
             setValid(false);
         });
-    }, []);
+    }, [onChange, validate]);
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "space-between", className: classes.root },
         React.createElement(MenuIcon, { kind: "cancel", onClick: onCancel }),
         React.createElement(Input, { autoFocus: true, disableUnderline: true, fullWidth: true, value: current, className: classes.input, onChange: updateText, onKeyDownCapture: function (e) {
