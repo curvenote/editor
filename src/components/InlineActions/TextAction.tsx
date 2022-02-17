@@ -19,31 +19,36 @@ type Props = {
   help: string;
   validate: (text: string) => boolean | Promise<boolean>;
   onSubmit: (text: string) => void;
+  onChange?: (text: string) => void; // eslint-disable-line
   onCancel: () => void;
 };
 
 const TextAction: React.FC<Props> = (props) => {
-  const { text: initial, help, validate, onSubmit, onCancel } = props;
+  const { text: initial, help, validate, onSubmit, onCancel, onChange } = props;
   const classes = useStyles();
   const [text, setText] = useState(initial);
   const [current, setCurrent] = useState(initial);
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(true);
 
-  const updateText: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    const t = e.currentTarget.value;
-    setLoading(true);
-    setCurrent(t);
-    Promise.all([validate(t)]).then(([b]) => {
-      setLoading(false);
-      if (b) {
-        setValid(true);
-        setText(t);
-        return;
-      }
-      setValid(false);
-    });
-  }, []);
+  const updateText: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      const t = e.currentTarget.value;
+      setLoading(true);
+      setCurrent(t);
+      onChange?.(t);
+      Promise.all([validate(t)]).then(([b]) => {
+        setLoading(false);
+        if (b) {
+          setValid(true);
+          setText(t);
+          return;
+        }
+        setValid(false);
+      });
+    },
+    [onChange, validate],
+  );
 
   return (
     <Grid container alignItems="center" justifyContent="space-between" className={classes.root}>
