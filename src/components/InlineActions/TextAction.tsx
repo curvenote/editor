@@ -23,7 +23,8 @@ type Props = {
   onCancel: () => void;
 };
 
-const TextAction: React.FC<Props> = (props) => {
+
+function TextAction(props: Props) {
   const { text: initial, help, validate, onSubmit, onCancel, onChange } = props;
   const classes = useStyles();
   const [text, setText] = useState(initial);
@@ -56,6 +57,7 @@ const TextAction: React.FC<Props> = (props) => {
       <Input
         autoFocus
         disableUnderline
+        fullWidth
         value={current}
         className={classes.input}
         onChange={updateText}
@@ -82,6 +84,6 @@ const TextAction: React.FC<Props> = (props) => {
       />
     </Grid>
   );
-};
+}
 
 export default TextAction;

@@ -27,7 +27,7 @@ const useStyles = makeStyles(() =>
 
 type Props = ActionProps;
 
-const ImageActions: React.FC<Props> = (props) => {
+function ImageActions(props: Props) {
   const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
@@ -58,6 +58,6 @@ const ImageActions: React.FC<Props> = (props) => {
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
   );
-};
+}
 
 export default ImageActions;

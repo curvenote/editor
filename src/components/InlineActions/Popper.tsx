@@ -34,7 +34,11 @@ const useStyles = makeStyles(() =>
 
 const alwaysShow = new Set([SelectionKinds.cite]);
 
-const InlineActions: React.FC = (props) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+function InlineActions(props: Props) {
   const { children } = props;
   const classes = useStyles();
   const cache = useMemo(createPopperLocationCache, []);
@@ -68,6 +72,6 @@ const InlineActions: React.FC = (props) => {
       </Paper>
     </Popper>
   );
-};
+}
 
 export default InlineActions;

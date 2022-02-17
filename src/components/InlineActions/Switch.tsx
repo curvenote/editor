@@ -27,7 +27,7 @@ export function useInlineActionProps() {
   };
 }
 
-const InlineActionSwitch: React.FC = () => {
+function InlineActionSwitch() {
   const { stateId, viewId, kind } = useInlineActionProps();
   return (
     <>
@@ -44,6 +44,6 @@ const InlineActionSwitch: React.FC = () => {
       {kind === Kinds.code && <CodeActions stateId={stateId} viewId={viewId} />}
     </>
   );
-};
+}
 
 export default InlineActionSwitch;

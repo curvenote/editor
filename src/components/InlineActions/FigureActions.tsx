@@ -80,7 +80,7 @@ function toggleCaption(stateId: any, viewId: string | null, figurePos: number): 
   };
 }
 
-const FigureImageActions: React.FC<Props> = (props) => {
+function FigureImageActions(props: Props) {
   const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
@@ -156,6 +156,6 @@ const FigureImageActions: React.FC<Props> = (props) => {
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
   );
-};
+}
 
 export default FigureImageActions;

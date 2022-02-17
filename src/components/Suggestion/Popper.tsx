@@ -20,7 +20,11 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const Suggestion: React.FC = (props) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+function Suggestion(props: Props) {
   const { children } = props;
   const open = useSelector(selectors.isSuggestionOpen);
   const classes = useStyles();
@@ -46,6 +50,6 @@ const Suggestion: React.FC = (props) => {
       </Paper>
     </Popper>
   );
-};
+}
 
 export default Suggestion;

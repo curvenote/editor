@@ -16,7 +16,7 @@ export async function renderMath(math: string, element: HTMLElement, inline: boo
   const render = math?.trim() || '...';
   try {
     const katex = await import('katex');
-    katex.render(render, element, {
+    katex.default.render(render, element, {
       displayMode: !inline,
       throwOnError: false,
       macros: {

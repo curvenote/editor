@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const TableActions: React.FC<ActionProps> = (props) => {
+function TableActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
@@ -103,6 +103,6 @@ const TableActions: React.FC<ActionProps> = (props) => {
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
   );
-};
+}
 
 export default TableActions;

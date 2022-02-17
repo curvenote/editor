@@ -23,10 +23,11 @@ const useStyles = makeStyles(() =>
 
 type Props = {
   index: number;
+  children: React.ReactNode;
   className?: string;
 };
 
-const Suggestion: React.FC<Props> = (props) => {
+function Suggestion(props: Props) {
   const { index, children, className } = props;
   positionPopper();
   const classes = useStyles();
@@ -59,6 +60,6 @@ const Suggestion: React.FC<Props> = (props) => {
       {children}
     </div>
   );
-};
+}
 
 export default Suggestion;

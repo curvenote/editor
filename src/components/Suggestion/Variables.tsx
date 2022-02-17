@@ -35,7 +35,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const VariableSuggestions: React.FC = () => {
+function VariableSuggestions() {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<VariableResult>(state),
     isEqual,
@@ -53,6 +53,6 @@ const VariableSuggestions: React.FC = () => {
       ))}
     </div>
   );
-};
+}
 
 export default VariableSuggestions;

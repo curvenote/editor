@@ -28,7 +28,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const CommandSuggestions: React.FC = () => {
+function CommandSuggestions() {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<CommandResult>(state),
     isEqual,
@@ -57,6 +57,6 @@ const CommandSuggestions: React.FC = () => {
       ))}
     </div>
   );
-};
+}
 
 export default CommandSuggestions;

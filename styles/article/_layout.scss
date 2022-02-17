@@ -1,0 +1,31 @@
+article {
+  margin: auto;
+  padding-left: 20px;
+  padding-right: 250px;
+  padding-bottom: 100px;
+  position: relative;
+  width: calc(max(min(100vw, 760px), 500px));
+}
+article.centered {
+  margin: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+  width: calc(max(min(100vw, 760px), 500px));
+}
+@media screen and (max-width: 1050px) {
+  article {
+    width: calc(100vw - 250px);
+  }
+  article.centered {
+    width: calc(100vw - 40px);
+  }
+}
+@media screen and (max-width: 800px) {
+  article,
+  article.centered {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(100vw - 40px);
+  }
+}

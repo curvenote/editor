@@ -24,7 +24,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const EmojiSuggestions: React.FC = () => {
+function EmojiSuggestions() {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<EmojiResult>(state),
     isEqual,
@@ -54,6 +54,6 @@ const EmojiSuggestions: React.FC = () => {
       ))}
     </div>
   );
-};
+}
 
 export default EmojiSuggestions;

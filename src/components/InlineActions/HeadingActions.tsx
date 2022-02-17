@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
 
 const ABOVE_MODALS = { zIndex: 1301 };
 
-const HeadingActions: React.FC<ActionProps> = (props) => {
+function HeadingActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
@@ -103,6 +103,6 @@ const HeadingActions: React.FC<ActionProps> = (props) => {
       <MenuIcon kind="numbered" active={numbered} onClick={onNumbered} />
     </Grid>
   );
-};
+}
 
 export default HeadingActions;

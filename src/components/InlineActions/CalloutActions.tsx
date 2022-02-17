@@ -24,7 +24,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const CalloutActions: React.FC<ActionProps> = (props) => {
+function CalloutActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const classes = useStyles();
   const dispatch = useDispatch<Dispatch>();
@@ -56,6 +56,6 @@ const CalloutActions: React.FC<ActionProps> = (props) => {
       <MenuIcon kind="remove" onClick={onDelete} dangerous />
     </Grid>
   );
-};
+}
 
 export default CalloutActions;

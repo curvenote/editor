@@ -10,7 +10,7 @@ import { getEditorState } from '../../store/selectors';
 import { ActionProps } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 
-const TimeActions: React.FC<ActionProps> = (props) => {
+function TimeActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const dispatch = useDispatch<Dispatch>();
   const selection = useSelector((state: State) => getEditorState(state, stateId)?.state?.selection);
@@ -44,6 +44,6 @@ const TimeActions: React.FC<ActionProps> = (props) => {
       />
     </MuiPickersUtilsProvider>
   );
-};
+}
 
 export default TimeActions;
