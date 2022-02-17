@@ -23,7 +23,6 @@ type Props = {
   onCancel: () => void;
 };
 
-
 function TextAction(props: Props) {
   const { text: initial, help, validate, onSubmit, onCancel, onChange } = props;
   const classes = useStyles();
