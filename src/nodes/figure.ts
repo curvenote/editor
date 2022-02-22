@@ -14,7 +14,6 @@ import type { Attrs as ImageAttrs } from './image';
 import type { Attrs as IFrameAttrs } from './iframe';
 import type { Attrs as CodeAttrs } from './code';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
-import { indent } from '../serialize/indent';
 
 export type Attrs = NumberedNode & {
   align: AlignOptions;
@@ -70,14 +69,12 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
         return;
       }
       state.write(`\`\`\`{figure} ${href}\n`);
-      const dedent = indent(state);
       const opts = { name: state.nextCaptionId };
       writeDirectiveOptions(state, opts);
       if (caption) {
         state.renderInline(caption);
         state.ensureNewLine();
       }
-      dedent();
       state.write('```');
       state.closeBlock(node);
       return;
