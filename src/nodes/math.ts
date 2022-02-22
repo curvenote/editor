@@ -1,4 +1,4 @@
-import { MdFormatSerialize } from '../serialize/types';
+import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
 
 export type Attrs = Record<string, never>;
@@ -27,10 +27,15 @@ export const mathNoDisplay: MyNodeSpec<Attrs> = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write('$');
-  state.renderInline(node);
+  state.text(node.textContent, false);
   state.write('$');
 };
 
-export const toTex = toMarkdown;
+export const toTex: TexFormatSerialize = (state, node) => {
+  state.write('$');
+  // The latex escaping happens in the serializer
+  state.renderInline(node);
+  state.write('$');
+};
 
 export default math;

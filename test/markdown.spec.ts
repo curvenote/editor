@@ -48,7 +48,10 @@ describe('Markdown', () => {
   // Add other test cases from here:
   // https://github.com/ProseMirror/prosemirror-markdown/blob/master/test/test-parse.js
   it('parses inline equations', () =>
-    same('A line is $y = mx + b$!', tdoc(p('A line is ', math('y = mx + b'), '!'))));
+    same(
+      'A line is $y = \\lambda x + b$!',
+      tdoc(p('A line is ', math('y = \\lambda x + b'), '!')),
+    ));
   it('parses equations', () =>
     same('A line is:\n\n$$y = mx + b$$', tdoc(p('A line is:'), equation('y = mx + b'))));
   it('parses amsmath', () =>
@@ -105,7 +108,7 @@ describe('Markdown', () => {
     ));
   it('serializes figures with images', () => {
     const f = toMarkdown(tdoc(figureF(img(), figcaptionF('This is an image ', em('caption')))));
-    expect(f).toBe('```{figure} img.png\n  :name: my-figure\n\n  This is an image *caption*\n```');
+    expect(f).toBe('```{figure} img.png\n:name: my-figure\n\nThis is an image *caption*\n```');
   });
   it('serializes figures with tables', () => {
     const f = toMarkdown(
