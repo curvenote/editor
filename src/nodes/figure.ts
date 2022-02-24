@@ -1,5 +1,5 @@
 import { Node } from 'prosemirror-model';
-import { MdFormatSerialize } from '../serialize/types';
+import { MdFormatSerialize, TexSerializerState } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
 import { determineCaptionKind } from '../process/utils';
@@ -137,16 +137,21 @@ function nodeToLaTeXOptions(node: Node) {
 
 export const toTex = createLatexStatement(
   (state, node) => {
+    if (state.isInTable) return null;
     return {
       command: nodeToCommand(node),
       bracketOpts: nodeToLaTeXOptions(node),
     };
   },
   (state, node) => {
+    if (state.isInTable) {
+      state.renderContent(node);
+      return;
+    }
     const { numbered, id } = node.attrs as Attrs;
     const localId = state.options.localizeId?.(id ?? '') ?? id ?? undefined;
     // TODO: Based on align attr
-    // may have to modify string returned by state.renderContent(node);
+    // may have to modify string returned by state.renderContent(n);
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
     state.write('\\centering');
     state.ensureNewLine();
