@@ -41,7 +41,10 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex = createLatexStatement(
-  (state) => {
+  (state, node) => {
+    if (state.isInTable && node.attrs.kind !== CaptionKind.table) {
+      return null;
+    }
     const { nextCaptionNumbered: numbered, nextCaptionId: id } = state;
     return {
       command: numbered === false ? 'caption*' : 'caption',

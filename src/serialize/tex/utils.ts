@@ -4,12 +4,18 @@ import { indent } from '../indent';
 import { TexFormatSerialize, TexSerializerState, TexStatementOptions } from '../types';
 
 export function createLatexStatement(
-  opts: string | ((state: TexSerializerState, node: Node) => TexStatementOptions),
+  opts: string | ((state: TexSerializerState, node: Node) => TexStatementOptions | null),
   f: TexFormatSerialize,
 ): TexFormatSerialize {
   return (state: TexSerializerState, node, p, i) => {
-    const { command, bracketOpts, inline, before, after } =
+    const options =
       typeof opts === 'string' ? ({ command: opts } as TexStatementOptions) : opts(state, node);
+    if (options == null) {
+      f(state, node, p, i);
+      state.closeBlock(node);
+      return;
+    }
+    const { command, bracketOpts, inline, before, after } = options;
     if (before) (state as any).out += `\n${state.delim}${before}`;
     const optsInBrackets = bracketOpts ? `[${bracketOpts}]` : '';
     state.write(inline ? `\\${command}{\n` : `\\begin{${command}}${optsInBrackets}\n`);
