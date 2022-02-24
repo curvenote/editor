@@ -1,5 +1,5 @@
 import { Node } from 'prosemirror-model';
-import { MdFormatSerialize, TexSerializerState } from '../serialize/types';
+import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
 import { determineCaptionKind } from '../process/utils';
