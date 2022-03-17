@@ -27,8 +27,12 @@ function createShortcut(str: string) {
     .replace('Enter', '↵ Enter')
     .replace('Backspace', '← Backspace')
     .replace('Tab', '↹ Tab')
-    .replace('Mod', mac ? '⌘ Cmd' : 'Ctrl')
-    .replace('Alt', mac ? '⌥ Opt' : 'Alt')
+    .replace('Mod', mac ? '⌘ Command' : 'Ctrl')
+    .replace('Alt', mac ? '⌥ Option' : 'Alt')
+    .replace('Up', '↑ Up')
+    .replace('Down', '↓ Down')
+    .replace('Left', '← Left')
+    .replace('Right', '→ Right')
     .split('-');
 }
 
