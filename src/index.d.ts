@@ -4,7 +4,7 @@ export * from './store';
 export * from './components';
 export { default as views } from './views';
 export type { NodeViewProps } from './views';
-export { setup, opts } from './connect';
+export { setup, opts, store } from './connect';
 export type { Options } from './connect';
 export { runtime, collab };
 export { isEditable, setEditable } from './prosemirror/plugins/editable';
