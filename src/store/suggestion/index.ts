@@ -1,0 +1,1 @@
+export { setSearchContext } from './results';
