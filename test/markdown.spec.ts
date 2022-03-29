@@ -101,8 +101,8 @@ describe('Markdown', () => {
   it('Directive content (warning)', () =>
     same(
       {
-        before: '```{warning}\nThis is *directive* content\n```',
-        after: '```{warning}\nThis is *directive* content\n```',
+        before: '````{warning}\nThis is *directive* content\n\n````',
+        after: '````{warning}\nThis is *directive* content\n\n````',
       },
       tdoc(callout('', p('This is ', em('directive'), ' content'))),
     ));
@@ -117,23 +117,31 @@ describe('Markdown', () => {
           figcaptionT('This is a table ', em('caption')),
           table(
             table_row(table_header(p('Training')), table_header(p('Validation'))),
-            table_row(table_cell(p('0')), table_cell(p('5'))),
+            table_row(table_cell(p('0'), p('1')), table_cell(p('5'))),
             table_row(table_cell(p('13720')), table_cell(p('2744'))),
           ),
         ),
       ),
     );
-    expect(f).toBe(`\`\`\`{list-table} This is a table *caption*
+    expect(f).toBe(`~~~{list-table} This is a table *caption*
 :header-rows: 1
 :name: my-table
 
 * - Training
+
   - Validation
+
 * - 0
+
+    1
+
   - 5
+
 * - 13720
+
   - 2744
-\`\`\``);
+
+~~~`);
   });
 
   it('serializes equations', () => {

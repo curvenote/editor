@@ -33,30 +33,25 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
   state.write('* ');
   const dedent = indent(state);
   row.content.forEach((cell) => {
-    cell.content.forEach((content) => {
-      indent(state);
-      state.write('- ');
-      state.renderInline(content);
-      state.ensureNewLine();
-      dedent();
-    });
+    state.wrapBlock('  ', '- ', cell, () => state.renderContent(cell));
   });
   dedent();
 };
 
 export const toListTable: MdFormatSerialize = (state, node, figure, index) => {
-  state.write('```{list-table}');
+  // Use ~~~ for fence, as tables often have captions with roles/citations
+  state.write('~~~{list-table}');
   if (state.nextTableCaption) {
     state.write(' ');
     state.renderInline(state.nextTableCaption);
-    state.ensureNewLine();
   }
+  state.ensureNewLine();
   const opts = { 'header-rows': 1, name: state.nextCaptionId };
   writeDirectiveOptions(state, opts);
   node.content.forEach((row) => {
     renderListTableRow(state, row, figure, index);
   });
-  state.write('```');
+  state.write('~~~');
   state.closeBlock(node);
 };
 
