@@ -10,11 +10,19 @@ let context: SearchContext | null = null;
 
 export const startingSuggestions = async (search: string, create = true) => {
   if (create) {
-    context = await opts.createLinkSearch();
+    const getContextPromise = opts.createLinkSearch().then((c) => {
+      context = c;
+    });
+    if (!context) {
+      await getContextPromise;
+    }
   }
-  const results = context?.search(search) ?? [];
-  return results;
+  return context?.search(search) ?? [];
 };
+
+export function setSearchContext(searchContext: SearchContext) {
+  context = searchContext;
+}
 
 export function chooseSelection(result: LinkResult): AppThunk<boolean> {
   return (dispatch, getState) => {

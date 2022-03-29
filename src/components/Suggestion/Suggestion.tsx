@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import { Theme } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import classNames from 'classnames';
@@ -8,12 +9,15 @@ import { Dispatch, State } from '../../store';
 import { chooseSelection, selectSuggestion } from '../../store/actions';
 import { positionPopper } from '../InlineActions/utils';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles<Theme, { selectOnHover: boolean }>(() =>
   createStyles({
     root: {
       padding: 10,
       cursor: 'pointer',
       clear: 'both',
+      '&:hover': {
+        backgroundColor: ({ selectOnHover }) => (selectOnHover ? 'transparent' : '#f5f5f5'),
+      },
     },
     selected: {
       backgroundColor: '#e8e8e8',
@@ -25,12 +29,15 @@ type Props = {
   index: number;
   children: React.ReactNode;
   className?: string;
+  disableSelectOnHover?: boolean;
 };
 
+const voidFn = () => {};
+
 function Suggestion(props: Props) {
-  const { index, children, className } = props;
+  const { index, children, className, disableSelectOnHover } = props;
   positionPopper();
-  const classes = useStyles();
+  const classes = useStyles({ selectOnHover: !disableSelectOnHover });
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<Dispatch>();
   const selected = useSelector((state: State) => isSuggestionSelected(state, index));
@@ -54,7 +61,7 @@ function Suggestion(props: Props) {
         [classes.selected]: selected,
       })}
       onClick={onClick}
-      onMouseEnter={onHover}
+      onMouseEnter={disableSelectOnHover ? voidFn : onHover}
       ref={ref}
     >
       {children}
