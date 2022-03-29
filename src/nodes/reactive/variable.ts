@@ -11,7 +11,7 @@ export type Attrs = {
 
 export const def: NodeDef = {
   tag: 'r-var',
-  name: 'variable',
+  name: 'r:var',
   attrs: [attr('name', false, false), attr('value'), attr('format', false, DEFAULT_FORMAT)],
   inline: false,
   group: NodeGroups.top,

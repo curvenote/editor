@@ -64,10 +64,11 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
   const { kind } = node.attrs as Attrs;
   const admonition = calloutKindToAdmonition(kind);
-  state.write(`\`\`\`{${admonition}}`);
+  // This is a bit of a hack, callouts often have other directives
+  state.write(`\`\`\`\`{${admonition}}`);
   state.ensureNewLine();
   state.renderContent(node);
-  state.write('```');
+  state.write('````');
   state.closeBlock(node);
 };
 

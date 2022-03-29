@@ -17,10 +17,11 @@ const aside: NodeSpec = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
-  state.write('```{margin}');
+  // This is a bit of a hack, callouts often have other directives
+  state.write('````{margin}');
   state.ensureNewLine();
   state.renderContent(node);
-  state.write('```');
+  state.write('````');
   state.closeBlock(node);
 };
 

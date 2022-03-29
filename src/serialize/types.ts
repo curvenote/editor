@@ -29,7 +29,11 @@ export interface SharedOptions {
   localizeLink?: (src: string) => string;
 }
 
-export type MarkdownOptions = SharedOptions;
+export interface MarkdownOptions extends SharedOptions {
+  renderers?: {
+    iframe?: 'html' | 'myst';
+  };
+}
 
 export interface TexOptions extends SharedOptions {
   format?: TexFormatTypes;

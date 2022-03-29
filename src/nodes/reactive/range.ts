@@ -17,7 +17,7 @@ export type Attrs = {
 
 export const def: NodeDef = {
   tag: 'r-range',
-  name: 'range',
+  name: 'r:range',
   attrs: [
     attr('value'),
     attr('change', 'only'),

@@ -68,22 +68,31 @@ export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttr
   return spec;
 };
 
+function encodeFunctionName(state: MarkdownSerializerState, name: string, value: string) {
+  const [first, ...rest] = name;
+  const encoded = `r${first.toUpperCase()}${rest.join('')}`;
+  return `${encoded}=${state.quote(value)}`;
+}
+
 export const nodeToMystRole = (state: MarkdownSerializerState, node: Node, def: NodeDef) => {
-  state.write(`{${def.name}}\`<`);
+  state.write(`{${def.name}}\``);
   const values = def.attrs.map((attr) => {
     if (attr.func) {
       const value = node.attrs[attr.name];
       const valueFunction = node.attrs[`${attr.name}Function`];
       const prop = `${attr.name}=${state.quote(value ?? '')}`;
-      const propFunction = `:${attr.name}=${state.quote(valueFunction)}`;
-      if (valueFunction || attr.func === 'only') return propFunction;
+      const propFunction = encodeFunctionName(state, attr.name, valueFunction);
+      if (valueFunction || attr.func === 'only') {
+        if (attr.func === 'only' && valueFunction === attr.default) return null;
+        return propFunction;
+      }
       return value === attr.default ? null : prop;
     }
     const value = node.attrs[attr.name];
     return value === attr.default ? null : `${attr.name}=${state.quote(value)}`;
   });
-  state.write(values.filter((v) => v !== null).join(' '));
-  state.write('>`');
+  state.write(values.filter((v) => !!v).join(', '));
+  state.write('`');
 };
 
 export const nodeToMystDirective = (state: MarkdownSerializerState, node: Node, def: NodeDef) => {
