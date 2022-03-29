@@ -12,17 +12,24 @@ var useStyles = makeStyles(function () {
             padding: 10,
             cursor: 'pointer',
             clear: 'both',
+            '&:hover': {
+                backgroundColor: function (_a) {
+                    var selectOnHover = _a.selectOnHover;
+                    return (selectOnHover ? 'transparent' : '#f5f5f5');
+                },
+            },
         },
         selected: {
             backgroundColor: '#e8e8e8',
         },
     });
 });
+var voidFn = function () { };
 function Suggestion(props) {
     var _a;
-    var index = props.index, children = props.children, className = props.className;
+    var index = props.index, children = props.children, className = props.className, disableSelectOnHover = props.disableSelectOnHover;
     positionPopper();
-    var classes = useStyles();
+    var classes = useStyles({ selectOnHover: !disableSelectOnHover });
     var ref = useRef(null);
     var dispatch = useDispatch();
     var selected = useSelector(function (state) { return isSuggestionSelected(state, index); });
@@ -41,7 +48,7 @@ function Suggestion(props) {
     return (React.createElement("div", { className: classNames(classes.root, (_a = {},
             _a[className !== null && className !== void 0 ? className : ''] = className,
             _a[classes.selected] = selected,
-            _a)), onClick: onClick, onMouseEnter: onHover, ref: ref }, children));
+            _a)), onClick: onClick, onMouseEnter: disableSelectOnHover ? voidFn : onHover, ref: ref }, children));
 }
 export default Suggestion;
 //# sourceMappingURL=Suggestion.js.map

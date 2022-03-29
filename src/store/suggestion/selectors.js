@@ -1,5 +1,6 @@
 export var selectSuggestionState = function (state) { return state.editor.suggestion; };
 export var selectSuggestionKind = function (state) { return state.editor.suggestion.kind; };
+export var selecteSelectedSuggestion = function (state) { return state.editor.suggestion.selected; };
 export var isSuggestionSelected = function (state, index) {
     return state.editor.suggestion.selected === index;
 };

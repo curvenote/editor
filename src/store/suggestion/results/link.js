@@ -42,23 +42,28 @@ var context = null;
 export var startingSuggestions = function (search, create) {
     if (create === void 0) { create = true; }
     return __awaiter(void 0, void 0, void 0, function () {
-        var results;
+        var getContextPromise;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     if (!create) return [3, 2];
-                    return [4, opts.createLinkSearch()];
+                    getContextPromise = opts.createLinkSearch().then(function (c) {
+                        context = c;
+                    });
+                    if (!!context) return [3, 2];
+                    return [4, getContextPromise];
                 case 1:
-                    context = _b.sent();
+                    _b.sent();
                     _b.label = 2;
-                case 2:
-                    results = (_a = context === null || context === void 0 ? void 0 : context.search(search)) !== null && _a !== void 0 ? _a : [];
-                    return [2, results];
+                case 2: return [2, (_a = context === null || context === void 0 ? void 0 : context.search(search)) !== null && _a !== void 0 ? _a : []];
             }
         });
     });
 };
+export function setSearchContext(searchContext) {
+    context = searchContext;
+}
 export function chooseSelection(result) {
     return function (dispatch, getState) {
         var _a, _b, _c, _d;
