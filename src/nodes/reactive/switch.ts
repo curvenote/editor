@@ -11,7 +11,7 @@ export type Attrs = {
 
 export const def: NodeDef = {
   tag: 'r-switch',
-  name: 'switch',
+  name: 'r:switch',
   attrs: [attr('value'), attr('change', 'only'), attr('label', false)],
   inline: true,
   group: NodeGroups.inline,

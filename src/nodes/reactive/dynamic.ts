@@ -17,7 +17,7 @@ export type Attrs = {
 
 export const def: NodeDef = {
   tag: 'r-dynamic',
-  name: 'dynamic',
+  name: 'r:dynamic',
   attrs: [
     attr('value'),
     attr('change', 'only'),
