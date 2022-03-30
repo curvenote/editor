@@ -1,24 +1,47 @@
 cases:
   - title: bold
+    description: '**strong**, _emphasis_, `literal text`, *escaped symbols*'
     curvenote:
       type: doc
       content:
         - type: paragraph
           content:
             - type: text
-              text: 'important - '
-            - type: text
+              text: strong
               marks:
                 - type: strong
-              text: hello!
+            - type: text
+              text: ', '
+            - type: text
+              text: emphasis
+              marks:
+                - type: emphasis
+            - type: text
+              text: ', '
+            - type: text
+              text: literal text
+              marks:
+                - type: code
+            - type: text
+              text: ', *escaped symbols*'
     mdast:
-      type: doc
-      content:
+      type: root
+      children:
         - type: paragraph
-          content:
+          children:
+            - type: strong
+              children:
+                - type: text
+                  value: strong
             - type: text
-              text: 'important - '
+              value: ', '
+            - type: emphasis
+              children:
+                - type: text
+                  value: emphasis
             - type: text
-              marks:
-                - type: strong
-              text: hello!
+              value: ', '
+            - type: inlineCode
+              value: literal text
+            - type: text
+              value: ', *escaped symbols*'
