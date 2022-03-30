@@ -84,7 +84,6 @@ export function renderPColumn(width: number) {
  * @returns
  */
 export function getColumnWidths(node: Node<any>) {
-  // TODO NOT working for colspans in the first row
   // TODO: unsure about rowspans
   let bestMaybeWidths = [];
   let mostNonNulls = 0;
@@ -105,13 +104,9 @@ export function getColumnWidths(node: Node<any>) {
       }
     }
   }
-  //
-  // TODO better space fitting https://tex.stackexchange.com/questions/62710/tabular-with-p-type-columns-to-fill-page-width
 
   let widths;
   if (mostNonNulls === bestMaybeWidths.length) {
-    // eslint-disable-next-line no-console
-    console.debug('using best widths', bestMaybeWidths);
     widths = bestMaybeWidths;
   } else {
     // need to fill in the null colwidths
@@ -123,8 +118,6 @@ export function getColumnWidths(node: Node<any>) {
     const nullCells = bestMaybeWidths.length - mostNonNulls;
     const defaultWidth = Math.floor(remainingSpace / nullCells);
     widths = bestMaybeWidths.map((w: number) => (w == null || w === 0 ? defaultWidth : w));
-    // eslint-disable-next-line no-console
-    console.debug('using some default widths', defaultWidth, widths);
   }
   const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
   const fractionalWidths = widths.map((w: number) => w / total);

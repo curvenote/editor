@@ -8,6 +8,7 @@ import {
   getFirstChildWithName,
   getNumberedAttrs,
   getNumberedDefaultAttrs,
+  readBooleanDomAttr,
   setNumberedAttrs,
 } from './utils';
 import { nodeNames } from '../types';
@@ -18,9 +19,9 @@ import { writeDirectiveOptions } from '../serialize/markdown/utils';
 
 export type Attrs = NumberedNode & {
   align: AlignOptions;
-  long: boolean;
+  multipage: boolean;
   landscape: boolean;
-  fullPage: boolean;
+  fullpage: boolean;
 };
 
 const figure: MyNodeSpec<Attrs> = {
@@ -30,20 +31,20 @@ const figure: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     align: { default: 'center' },
-    long: { default: false },
+    multipage: { default: false },
     landscape: { default: false },
-    fullPage: { default: false },
+    fullpage: { default: false },
   },
   toDOM(node) {
-    const { align, long, landscape, fullPage } = node.attrs;
+    const { align, multipage, landscape, fullpage } = node.attrs;
     return [
       'figure',
       {
         ...setNumberedAttrs(node.attrs),
         align,
-        long,
+        multipage,
         landscape,
-        fullPage,
+        fullpage,
       },
       0,
     ];
@@ -55,9 +56,9 @@ const figure: MyNodeSpec<Attrs> = {
         return {
           ...getNumberedAttrs(dom),
           align: dom.getAttribute('align') ?? 'center',
-          long: dom.getAttribute('long') ?? false,
-          landscape: dom.getAttribute('landscape') ?? false,
-          fullPage: dom.getAttribute('full-page') ?? false,
+          multipage: readBooleanDomAttr(dom, 'multipage'),
+          landscape: readBooleanDomAttr(dom, 'landscape'),
+          fullpage: readBooleanDomAttr(dom, 'fullpage'),
         };
       },
     },
@@ -122,9 +123,9 @@ function nodeToCommand(node: Node) {
   const kind = determineCaptionKind(node);
   switch (kind) {
     case CaptionKind.fig:
-      return node.attrs.fullPage ? 'figure*' : 'figure';
+      return node.attrs.fullpage ? 'figure*' : 'figure';
     case CaptionKind.table:
-      return node.attrs.fullPage ? 'table*' : 'table';
+      return node.attrs.fullpage ? 'table*' : 'table';
     case CaptionKind.code:
       // TODO full width code
       return 'code';
@@ -181,7 +182,7 @@ export const toTex = createLatexStatement(
     // Q: we can know if we are in a two column mode from the template we are using, but how is this made available at this level?
 
     return {
-      command: state.containsTable && node.attrs.long ? 'longtable' : nodeToCommand(node),
+      command: state.containsTable && node.attrs.multipage ? 'longtable' : nodeToCommand(node),
       commandOpts: state.containsTable && tableInfo ? tableInfo.columnSpec : undefined,
       bracketOpts: state.containsTable ? undefined : nodeToLaTeXOptions(node),
       before,
@@ -195,7 +196,7 @@ export const toTex = createLatexStatement(
       return;
     }
 
-    const { numbered, id, long } = node.attrs as Attrs;
+    const { numbered, id, multipage } = node.attrs as Attrs;
     const localId = state.options.localizeId?.(id ?? '') ?? id ?? undefined;
 
     // TODO: Based on align attr
@@ -203,12 +204,12 @@ export const toTex = createLatexStatement(
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
 
     // centering does not work in a longtable environment
-    if (!long || !state.containsTable) state.write('\\centering');
+    if (!multipage || !state.containsTable) state.write('\\centering');
     state.ensureNewLine();
     // Pass the relevant information to the child nodes
     state.nextCaptionNumbered = numbered;
     state.nextCaptionId = localId;
-    state.longFigure = long;
+    state.longFigure = multipage;
     state.renderContent(node);
     state.longFigure = undefined;
     state.containsTable = false;

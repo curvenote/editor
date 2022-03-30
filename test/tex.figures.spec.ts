@@ -26,7 +26,7 @@ describe('Tex Figure', () => {
       CASES.longtable.tex,
       tdoc(
         figureT(
-          { long: true } as any,
+          { multipage: true } as any,
           table(table_row(table_cell(p('Col 1')), table_cell(p('An Image Figure')))),
         ),
       ),
@@ -36,12 +36,12 @@ describe('Tex Figure', () => {
       CASES.longtable_with_caption.tex,
       tdoc(
         figureT(
-          { long: true } as any,
+          { multipage: true } as any,
           figcaptionT('This is a caption'),
           table(table_row(table_cell(p('Col 1')), table_cell(p('An Image Figure')))),
         ),
       ),
     ));
   test('serializes images as figures', () =>
-    same(CASES.images.tex, tdoc(figureF({ long: true } as any, img()))));
+    same(CASES.images.tex, tdoc(figureF({ multipage: true } as any, img()))));
 });

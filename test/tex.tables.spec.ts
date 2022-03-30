@@ -81,7 +81,7 @@ describe('tex.tables', () => {
         CASES.longtable.tex,
         tdoc(
           figureT(
-            { long: true } as any,
+            { multipage: true } as any,
             table(
               table_row(table_header(p('Col 1')), table_header(p('Col 2'))),
               table_row(table_cell(p('data 1')), table_cell(p('data 2'))),
@@ -95,7 +95,7 @@ describe('tex.tables', () => {
         CASES.longtable_multi_header.tex,
         tdoc(
           figureT(
-            { long: true } as any,
+            { multipage: true } as any,
             table(
               table_row(table_header(p('1')), table_header(p('2'))),
               table_row(table_header(p('A')), table_header(p('B'))),
@@ -110,7 +110,7 @@ describe('tex.tables', () => {
         CASES.longtable_multi_header_colspan.tex,
         tdoc(
           figureT(
-            { long: true } as any,
+            { multipage: true } as any,
             table(
               table_row({ colspan: 2 } as any, table_header(p('My Table'))),
               table_row(table_header(p('1')), table_header(p('2'))),
@@ -126,7 +126,7 @@ describe('tex.tables', () => {
         CASES.longtable_no_header.tex,
         tdoc(
           figureT(
-            { long: true } as any,
+            { multipage: true } as any,
             table(
               table_row(table_cell(p('data 1')), table_cell(p('data 2'))),
               table_row(table_cell(p('data 1')), table_cell(p('data 2'))),
