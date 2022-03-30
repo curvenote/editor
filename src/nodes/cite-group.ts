@@ -22,6 +22,7 @@ const citeGroup: MyNodeSpec<Attrs> = {
   toDOM() {
     return ['cite-group', 0];
   },
+  attrsFromMdastToken: () => ({}),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

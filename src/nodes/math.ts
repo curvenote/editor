@@ -18,6 +18,7 @@ const math: MyNodeSpec<Attrs> = {
       tag: 'r-equation[inline]',
     },
   ],
+  attrsFromMdastToken: () => ({}),
 };
 
 export const mathNoDisplay: MyNodeSpec<Attrs> = {

@@ -53,6 +53,7 @@ const time: MyNodeSpec<Attrs> = {
       },
     },
   ],
+  attrsFromMdastToken: () => ({ datetime: null }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

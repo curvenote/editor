@@ -63,6 +63,15 @@ const figure: MyNodeSpec<Attrs> = {
       },
     },
   ],
+  attrsFromMdastToken: (token) => {
+    const match = token.class?.match(/align-(left|right|center)/);
+    return {
+      id: token.identifier || null,
+      label: token.label || null,
+      numbered: token.numbered || false,
+      align: match ? match[1] : 'center',
+    };
+  },
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
@@ -76,7 +85,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     case CaptionKind.fig: {
       const image = getFirstChildWithName(node, [nodeNames.image, nodeNames.iframe]);
       if (!image) return;
-      const { src, width } = image?.attrs as ImageAttrs | IFrameAttrs;
+      const { src } = image?.attrs as ImageAttrs | IFrameAttrs;
       const href = state.options.localizeImageSrc?.(src) ?? src;
       if (image.type.name === nodeNames.iframe) {
         state.render(image);

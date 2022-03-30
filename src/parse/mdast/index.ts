@@ -1,8 +1,8 @@
 import { Fragment, Mark, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
 import { Root } from 'mdast';
 import { GenericNode } from 'mystjs';
-import { nodeNames } from '../..';
 import { getSchema, UseSchema } from '../../schemas';
+import { markNames, nodeNames } from '../../types';
 
 type Attrs = Record<string, any>;
 type ProtoNode = {
@@ -85,22 +85,50 @@ export class MarkdownParseState {
   }
 
   parseTokens(tokens?: GenericNode[] | null) {
-    tokens?.forEach((token, index) => {
+    tokens?.forEach((token) => {
       if (token.hidden) return;
       const handler = this.handlers[token.type];
       if (!handler)
         throw new Error(`Token type \`${token.type}\` not supported by tokensToMyst parser`);
-      handler(this, token, tokens, index);
+      const { name, children } = handler(token, tokens);
+      if (name === nodeNames.text) {
+        if (typeof children === 'string') {
+          this.addText(children);
+        } else {
+          throw new Error(`Invalid children of type ${typeof children} for node ${name}`);
+        }
+      } else if (name in nodeNames) {
+        const nodeType = this.schema.nodes[name];
+        const nodeAttrs = nodeType.spec.attrsFromMdastToken(token, tokens);
+        this.openNode(nodeType, nodeAttrs);
+        if (typeof children === 'string') {
+          this.addText(children);
+        } else {
+          this.parseTokens(children);
+        }
+        this.closeNode();
+      } else {
+        const markType = this.schema.marks[name];
+        const mark = markType.create(markType.spec.attrsFromMdastToken(token, tokens));
+        this.openMark(mark);
+        if (typeof children === 'string') {
+          this.addText(children);
+        } else {
+          this.parseTokens(children);
+        }
+        this.closeMark(mark);
+      }
     });
   }
 }
 
 type TokenHandler = (
-  state: MarkdownParseState,
   token: GenericNode,
   tokens: GenericNode[],
-  index: number,
-) => void;
+) => {
+  name: nodeNames | markNames;
+  children?: GenericNode[] | string;
+};
 
 // type MdastHandler = {
 //   block: string;
@@ -108,165 +136,109 @@ type TokenHandler = (
 // };
 
 const handlers: Record<string, TokenHandler> = {
-  text(state, token) {
-    state.addText(token.value);
-  },
-  paragraph(state, token) {
-    state.openNode(state.schema.nodes.paragraph, {});
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  abbreviation(state, token) {
-    const mark = state.schema.marks.abbr.create({ title: token.title });
-    state.openMark(mark);
-    state.parseTokens(token.children);
-    state.closeMark(mark);
-  },
-  thematicBreak(state) {
-    state.openNode(state.schema.nodes.horizontal_rule, {});
-    state.closeNode();
-  },
-  break(state) {
-    state.openNode(state.schema.nodes.hard_break, {});
-    state.closeNode();
-  },
-  heading(state, token) {
-    state.openNode(state.schema.nodes.heading, { level: token.depth });
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  link(state, token) {
-    const mark = state.schema.marks.link.create({ href: token.url, title: token.title });
-    state.openMark(mark);
-    state.parseTokens(token.children);
-    state.closeMark(mark);
-  },
-  emphasis(state, token) {
-    const mark = state.schema.marks.em.create({});
-    state.openMark(mark);
-    state.parseTokens(token.children);
-    state.closeMark(mark);
-  },
-  strong(state, token) {
-    const mark = state.schema.marks.strong.create({});
-    state.openMark(mark);
-    state.parseTokens(token.children);
-    state.closeMark(mark);
-  },
-  subscript(state, token) {
-    const mark = state.schema.marks.subscript.create({});
-    state.openMark(mark);
-    state.parseTokens(token.children);
-    state.closeMark(mark);
-  },
-  superscript(state, token) {
-    const mark = state.schema.marks.superscript.create({});
-    state.openMark(mark);
-    state.parseTokens(token.children);
-    state.closeMark(mark);
-  },
-  blockquote(state, token) {
-    state.openNode(state.schema.nodes.blockquote, {});
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  inlineCode(state, token) {
-    const mark = state.schema.marks.code.create({});
-    state.openMark(mark);
-    state.addText(token.value);
-    state.closeMark(mark);
-  },
-  code(state, token) {
-    state.openNode(state.schema.nodes.code_block, {
-      language: token.lang,
-      linenumbers: token.showLineNumbers,
-    });
-    state.addText(token.value);
-    state.closeNode();
-  },
-  list(state, token) {
-    if (token.ordered) {
-      state.openNode(state.schema.nodes.ordered_list, { order: token.start || 1 });
-    } else {
-      state.openNode(state.schema.nodes.bullet_list, {});
-    }
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  listItem(state, token) {
-    state.openNode(state.schema.nodes.list_item, {});
+  text: (token) => ({
+    name: nodeNames.text,
+    children: token.value,
+  }),
+  abbreviation: (token) => ({
+    name: markNames.abbr,
+    children: token.children,
+  }),
+  emphasis: (token) => ({
+    name: markNames.em,
+    children: token.children,
+  }),
+  inlineCode: (token) => ({
+    name: markNames.code,
+    children: token.value,
+  }),
+  link: (token) => ({
+    name: markNames.link,
+    children: token.children,
+  }),
+  strong: (token) => ({
+    name: markNames.strong,
+    children: token.children,
+  }),
+  subscript: (token) => ({
+    name: markNames.subscript,
+    children: token.children,
+  }),
+  superscript: (token) => ({
+    name: markNames.superscript,
+    children: token.children,
+  }),
+  paragraph: (token) => ({
+    name: nodeNames.paragraph,
+    children: token.children,
+  }),
+  thematicBreak: () => ({
+    name: nodeNames.horizontal_rule,
+  }),
+  break: () => ({
+    name: nodeNames.hard_break,
+  }),
+  heading: (token) => ({
+    name: nodeNames.heading,
+    children: token.children,
+  }),
+  blockquote: (token) => ({
+    name: nodeNames.blockquote,
+    children: token.children,
+  }),
+  code: (token) => ({
+    name: nodeNames.code_block,
+    children: token.value,
+  }),
+  list: (token) => ({
+    name: token.ordered ? nodeNames.ordered_list : nodeNames.bullet_list,
+    children: token.children,
+  }),
+  listItem: (token) => {
+    let { children } = token;
     if (token.children?.length === 1 && token.children[0].type === 'text') {
-      state.parseTokens([{ type: 'paragraph', children: token.children }]);
-    } else {
-      state.parseTokens(token.children);
+      children = [{ type: 'paragraph', children }];
     }
-    state.closeNode();
+    return {
+      name: nodeNames.list_item,
+      children,
+    };
   },
-  inlineMath(state, token) {
-    state.openNode(state.schema.nodes.math, {});
-    state.addText(token.value);
-    state.closeNode();
-  },
-  math(state, token) {
-    const id = token.label || undefined;
-    state.openNode(state.schema.nodes.equation, {
-      id,
-      numbered: Boolean(id),
-    });
-    state.addText(token.value);
-    state.closeNode();
-  },
-  container(state, token) {
-    const id = token.label || undefined;
-    const match = token.class?.match(/align-(left|right|center)/);
-    state.openNode(state.schema.nodes.figure, {
-      id,
-      numbered: Boolean(id),
-      align: match ? match[1] : undefined,
-    });
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  caption(state, token, tokens) {
-    const adjacentTypes = tokens.map((t) => t.type);
-    state.openNode(state.schema.nodes.figcaption, {
-      kind: adjacentTypes.includes(nodeNames.table) ? 'table' : 'fig',
-    });
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  image(state, token) {
-    state.openNode(state.schema.nodes.image, {
-      src: token.url,
-      alt: token.alt || undefined,
-      title: token.title || undefined,
-      width: token.width || undefined,
-    });
-    state.closeNode();
-  },
-  table(state, token) {
-    state.openNode(state.schema.nodes.table, {});
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  tableRow(state, token) {
-    state.openNode(state.schema.nodes.table_row, {});
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  tableCell(state, token) {
-    state.openNode(
-      token.header ? state.schema.nodes.table_header : state.schema.nodes.table_cell,
-      {},
-    );
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
-  admonition(state, token) {
-    state.openNode(state.schema.nodes.callout, { kind: token.kind });
-    state.parseTokens(token.children);
-    state.closeNode();
-  },
+  inlineMath: (token) => ({
+    name: nodeNames.math,
+    children: token.value,
+  }),
+  math: (token) => ({
+    name: nodeNames.equation,
+    children: token.value,
+  }),
+  container: (token) => ({
+    name: nodeNames.figure,
+    children: token.children,
+  }),
+  caption: (token) => ({
+    name: nodeNames.figcaption,
+    children: token.children,
+  }),
+  image: () => ({
+    name: nodeNames.image,
+  }),
+  table: (token) => ({
+    name: nodeNames.table,
+    children: token.children,
+  }),
+  tableRow: (token) => ({
+    name: nodeNames.table_row,
+    children: token.children,
+  }),
+  tableCell: (token) => ({
+    name: token.header ? nodeNames.table_header : nodeNames.table_cell,
+    children: token.children,
+  }),
+  admonition: (token) => ({
+    name: nodeNames.callout,
+    children: token.children,
+  }),
 };
 
 export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {

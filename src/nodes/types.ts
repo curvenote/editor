@@ -1,3 +1,4 @@
+import { GenericNode } from 'mystjs';
 import { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
 
 export enum CaptionKind {
@@ -50,6 +51,7 @@ export interface MyParseRule<T extends O> extends ParseRule {
 export interface MyNodeSpec<T extends O> extends NodeSpec {
   attrs: NodeSpecAttrs<T>;
   parseDOM?: MyParseRule<T>[];
+  attrsFromMdastToken: (t: GenericNode, ts: GenericNode[]) => T;
 }
 
 export type NumberedNode = {

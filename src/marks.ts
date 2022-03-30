@@ -1,5 +1,10 @@
+import { GenericNode } from 'mystjs';
 import { MarkSpec } from 'prosemirror-model';
 import { MarkGroups } from './nodes/types';
+
+export interface MyMarkSpec extends MarkSpec {
+  attrsFromMdastToken: (t: GenericNode) => Record<string, any>;
+}
 
 export type LinkAttrs = {
   href: string;
@@ -7,7 +12,7 @@ export type LinkAttrs = {
   kind: string;
 };
 
-export const link: MarkSpec = {
+export const link: MyMarkSpec = {
   attrs: {
     href: {},
     title: { default: null },
@@ -30,25 +35,33 @@ export const link: MarkSpec = {
     const { href, title, kind } = node.attrs;
     return ['a', { href, title, kind }, 0];
   },
+  attrsFromMdastToken(token) {
+    return { href: token.url, title: token.title };
+  },
 };
 
-export const code: MarkSpec = {
+export const code: MyMarkSpec = {
+  attrs: {},
   parseDOM: [{ tag: 'code' }],
   toDOM() {
     return ['code', 0];
   },
   excludes: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const em: MarkSpec = {
+export const em: MyMarkSpec = {
+  attrs: {},
   parseDOM: [{ tag: 'i' }, { tag: 'em' }, { style: 'font-style=italic' }],
   toDOM() {
     return ['em', 0];
   },
   group: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const strong: MarkSpec = {
+export const strong: MyMarkSpec = {
+  attrs: {},
   parseDOM: [
     { tag: 'strong' },
     // This works around a Google Docs misbehavior where
@@ -64,43 +77,52 @@ export const strong: MarkSpec = {
     return ['strong', 0];
   },
   group: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const superscript: MarkSpec = {
+export const superscript: MyMarkSpec = {
+  attrs: {},
   toDOM() {
     return ['sup', 0];
   },
   parseDOM: [{ tag: 'sup' }],
   excludes: 'subscript',
   group: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const subscript: MarkSpec = {
+export const subscript: MyMarkSpec = {
+  attrs: {},
   toDOM() {
     return ['sub', 0];
   },
   parseDOM: [{ tag: 'sub' }],
   excludes: 'superscript',
   group: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const strikethrough: MarkSpec = {
+export const strikethrough: MyMarkSpec = {
+  attrs: {},
   toDOM() {
     return ['s', 0];
   },
   parseDOM: [{ tag: 's' }],
   group: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const underline: MarkSpec = {
+export const underline: MyMarkSpec = {
+  attrs: {},
   toDOM() {
     return ['u', 0];
   },
   parseDOM: [{ tag: 'u' }],
   group: MarkGroups.format,
+  attrsFromMdastToken: () => ({}),
 };
 
-export const abbr: MarkSpec = {
+export const abbr: MyMarkSpec = {
   attrs: {
     title: { default: '' },
   },
@@ -116,5 +138,8 @@ export const abbr: MarkSpec = {
   toDOM(node) {
     const { title } = node.attrs;
     return ['abbr', { title }, 0];
+  },
+  attrsFromMdastToken(token: GenericNode) {
+    return { title: token.title };
   },
 };

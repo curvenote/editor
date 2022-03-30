@@ -34,6 +34,12 @@ const equation: MyNodeSpec<Attrs> = {
       },
     },
   ],
+  attrsFromMdastToken: (token) => ({
+    id: token.identifier || null,
+    label: token.label || null,
+    numbered: Boolean(token.identifier),
+    title: '',
+  }),
 };
 
 export const equationNoDisplay: MyNodeSpec<Attrs> = {

@@ -113,12 +113,13 @@ cases:
                 - type: text
                   value: This is an active.
   - title: seealso block
+    skip: c2m
     curvenote:
       type: doc
       content:
         - type: callout
           attrs:
-            kind: seealso
+            kind: info
           content:
             - type: paragraph
               content:
@@ -135,12 +136,13 @@ cases:
                 - type: text
                   value: This is a seealso.
   - title: error block
+    skip: c2m
     curvenote:
       type: doc
       content:
         - type: callout
           attrs:
-            kind: error
+            kind: danger
           content:
             - type: paragraph
               content:

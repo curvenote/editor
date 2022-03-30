@@ -54,6 +54,14 @@ const code: MyNodeSpec<Attrs> = {
       ['code', 0],
     ];
   },
+  attrsFromMdastToken: (token) => ({
+    id: token.identifier || null,
+    label: token.label || null,
+    numbered: token.numbered || false,
+    language: token.lang || null,
+    linenumbers: token.showLineNumbers || false,
+    title: '',
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

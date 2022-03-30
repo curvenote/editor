@@ -60,6 +60,17 @@ const image: MyNodeSpec<Attrs> = {
       },
     ];
   },
+  attrsFromMdastToken: (token) => ({
+    id: token.identifier || null,
+    label: token.label || null,
+    numbered: token.numbered,
+    src: token.url || '',
+    alt: token.alt || '',
+    title: token.title || '',
+    width: getImageWidth(token.width),
+    align: token.align || 'center',
+    caption: false,
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
@@ -72,7 +83,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  const { width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
+  const { width: nodeWidth } = node.attrs as Attrs;
   const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
   //   let align = 'center';

@@ -20,7 +20,7 @@ cases:
       type: root
       children: []
   - title: figure with caption
-    skip: m2c
+    skip: true
     curvenote:
       type: doc
       content:
@@ -66,8 +66,7 @@ cases:
           attrs:
             id: My-Figure
             label: null
-            # numbered: true
-            numbered: false
+            numbered: true
             align: center
           content:
             - type: image
@@ -92,7 +91,7 @@ cases:
           kind: figure
           identifier: my-figure
           label: My-Figure
-          # numbered: true
+          numbered: true
           class: align-center
           children:
             - type: image

@@ -132,8 +132,8 @@ cases:
       content:
         - type: figure
           attrs:
-            id: my-TABLE
-            label: null
+            id: my-table
+            label: my-TABLE
             numbered: true
             align: center
           content:
@@ -228,8 +228,7 @@ cases:
           kind: table
           identifier: my-table
           label: my-TABLE
-          # numbered: true
-          numbered: ''
+          numbered: true
           class: align-center
           children:
             - type: caption

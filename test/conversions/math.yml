@@ -56,8 +56,8 @@ cases:
       content:
         - type: equation
           attrs:
-            id: My-Equation
-            label: null
+            id: my-equation
+            label: My-Equation
             numbered: true
             title: ''
           content:
@@ -88,75 +88,3 @@ cases:
       children:
         - type: math
           value: \begin{equation}y = mx + b\end{equation}
-  - title: dynamic
-    skip: true
-    curvenote:
-      type: doc
-      content:
-        - type: paragraph
-          content:
-            - type: dynamic
-              attrs:
-                value: ''
-                valueFunction: v
-                changeFunction: '{v: value}'
-                format: .0f
-                min: '0'
-                minFunction: ''
-                max: '10'
-                maxFunction: ''
-                step: '0.1'
-                stepFunction: ''
-    mdast:
-      type: root
-      children: []
-  - title: range
-    skip: true
-    curvenote:
-      type: doc
-      content:
-        - type: paragraph
-          content:
-            - type: range
-              attrs:
-                value: ''
-                valueFunction: v
-                changeFunction: '{v: value}'
-                format: ''
-                min: '0'
-                minFunction: ''
-                max: '10'
-                maxFunction: ''
-                step: '0.1'
-                stepFunction: ''
-    mdast:
-      type: root
-      children: []
-  - title: static variable
-    skip: true
-    curvenote:
-      type: doc
-      content:
-        - type: variable
-          attrs:
-            name: x
-            value: '1'
-            valueFunction: ''
-            format: .0f
-    mdast:
-      type: root
-      children: []
-  - title: derived variable
-    skip: true
-    curvenote:
-      type: doc
-      content:
-        - type: variable
-          attrs:
-            name: 'y'
-            value: ''
-            valueFunction: x + 1
-            format: .0f
-    mdast:
-      type: root
-      children: []

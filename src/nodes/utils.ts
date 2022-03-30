@@ -9,11 +9,15 @@ export const getImageWidth = (width?: string | null) => {
   return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
 };
 
-export function readBooleanDomAttr(dom: HTMLElement, attr: string): boolean {
-  if (!dom.hasAttribute(attr)) return false;
-  const val = dom.getAttribute(attr);
+export function readBooleanAttr(val?: string | boolean | null): boolean {
+  if (val == null) return false;
+  if (typeof val === 'boolean') return val;
   if (val?.toLowerCase() === 'false') return false;
   return true;
+}
+
+export function readBooleanDomAttr(dom: HTMLElement, attr: string): boolean {
+  return readBooleanAttr(dom.getAttribute(attr));
 }
 
 export function convertToBooleanAttribute(value: boolean) {

@@ -12,6 +12,7 @@ const footnote: MyNodeSpec<any> = {
   atom: true,
   toDOM: () => ['span', { class: 'footnote' }, 0],
   parseDOM: [{ tag: 'span.footnote' }],
+  attrsFromMdastToken: () => ({}),
 };
 
 // TODO: add markdown support

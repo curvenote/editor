@@ -46,8 +46,8 @@ cases:
       content:
         - type: equation
           attrs:
-            id: SIGMA-δ
-            label: null
+            id: sigma-δ
+            label: SIGMA-δ
             numbered: true
             title: ''
           content:

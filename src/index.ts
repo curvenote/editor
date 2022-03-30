@@ -3,7 +3,7 @@ export * as Nodes from './nodes';
 export * as types from './types';
 export * from './utils';
 
-export { nodeNames } from './types';
+export { markNames, nodeNames } from './types';
 export { ReferenceKind, CaptionKind } from './nodes/types';
 
 export * from './parse';

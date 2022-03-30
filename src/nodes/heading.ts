@@ -30,6 +30,12 @@ const heading: MyNodeSpec<Attrs> = {
   toDOM(node) {
     return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
   },
+  attrsFromMdastToken: (token) => ({
+    id: null,
+    label: null,
+    numbered: token.numbered,
+    level: token.depth,
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

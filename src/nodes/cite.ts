@@ -57,6 +57,14 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
       text || '',
     ];
   },
+  attrsFromMdastToken: () => ({
+    key: null,
+    kind: ReferenceKind.cite,
+    label: null,
+    title: null,
+    inline: undefined,
+    text: '',
+  }),
 };
 
 function getPrependedText(kind: ReferenceKind): string {

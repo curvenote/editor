@@ -1,7 +1,6 @@
-import { NodeSpec } from 'prosemirror-model';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { NodeGroups } from './types';
+import { MyNodeSpec, NodeGroups } from './types';
 
 export enum CalloutKinds {
   'active' = 'active',
@@ -15,7 +14,23 @@ export type Attrs = {
   kind: CalloutKinds;
 };
 
-const callout: NodeSpec = {
+export function admonitionToCalloutKind(kind?: string): CalloutKinds {
+  switch (kind) {
+    case 'danger':
+    case 'error':
+      return CalloutKinds.danger;
+    case 'warning':
+      return CalloutKinds.warning;
+    case 'note':
+      return CalloutKinds.active;
+    case 'important':
+      return CalloutKinds.success;
+    default:
+      return CalloutKinds.info;
+  }
+}
+
+const callout: MyNodeSpec<Attrs> = {
   group: NodeGroups.top,
   content: NodeGroups.blockOrEquationOrHeading,
   attrs: {
@@ -39,6 +54,9 @@ const callout: NodeSpec = {
       priority: 60,
     },
   ],
+  attrsFromMdastToken: (token) => ({
+    kind: admonitionToCalloutKind(token.kind),
+  }),
 };
 
 export function calloutKindToAdmonition(kind: CalloutKinds): string {

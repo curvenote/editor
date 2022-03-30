@@ -28,6 +28,7 @@ function createMentionNodeSpecs() {
         },
       },
     ],
+    attrsFromMdastToken: () => ({ label: '', user: '' }),
   };
   return {
     mention: mentionNodeSpec,

@@ -40,6 +40,11 @@ const iframe: MyNodeSpec<Attrs> = {
       },
     ];
   },
+  attrsFromMdastToken: () => ({
+    src: '',
+    align: 'center',
+    width: DEFAULT_IMAGE_WIDTH,
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

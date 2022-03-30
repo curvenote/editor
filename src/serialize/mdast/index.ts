@@ -5,6 +5,7 @@ import { convertToMdast, normalizeLabel } from './convertToMdast';
 import { NodesAndMarks } from './types';
 import { CalloutKinds, calloutKindToAdmonition } from '../../nodes/callout';
 import { formatDatetime } from '../../nodes/time';
+import { readBooleanAttr } from '../../nodes/utils';
 
 export enum AdmonitionKinds {
   'attention' = 'attention',
@@ -69,7 +70,7 @@ const replacements: NodesAndMarks = {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
       return {
         type: 'math',
-        ...normalizeLabel(props.id),
+        ...normalizeLabel(props.label || props.id),
         value: props.children[0].value,
       };
     }
@@ -116,8 +117,8 @@ const replacements: NodesAndMarks = {
     return {
       type: 'container',
       kind: containerKind,
-      ...normalizeLabel(props.id),
-      numbered: props.numbered,
+      ...normalizeLabel(props.label || props.id),
+      numbered: readBooleanAttr(props.numbered),
       class: props.align ? `align-${props.align}` : undefined,
       children: props.children,
     };

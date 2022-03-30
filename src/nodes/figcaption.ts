@@ -1,6 +1,8 @@
+import { GenericNode } from 'mystjs';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MyNodeSpec, NodeGroups, CaptionKind } from './types';
+import { nodeNames } from '../types';
 
 export type Attrs = {
   kind: CaptionKind | null;
@@ -33,6 +35,10 @@ const figcaption: MyNodeSpec<Attrs> = {
       },
     },
   ],
+  attrsFromMdastToken: (token, tokens) => {
+    const adjacentTypes = tokens.map((t: GenericNode) => t.type);
+    return { kind: adjacentTypes.includes(nodeNames.table) ? CaptionKind.table : CaptionKind.fig };
+  },
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

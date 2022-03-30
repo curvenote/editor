@@ -23,6 +23,11 @@ export const nodes = tableNodes({
   },
 });
 
+nodes.table.attrsFromMdastToken = () => ({});
+nodes.table_row.attrsFromMdastToken = () => ({});
+nodes.table_header.attrsFromMdastToken = () => ({});
+nodes.table_cell.attrsFromMdastToken = () => ({});
+
 /**
  * Create a "row" using a list-table
  * ```text

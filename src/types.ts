@@ -42,3 +42,15 @@ export enum nodeNames {
   table_cell = 'table_cell',
   table_header = 'table_header',
 }
+
+export enum markNames {
+  link = 'link',
+  code = 'code',
+  em = 'em',
+  strong = 'strong',
+  superscript = 'superscript',
+  subscript = 'subscript',
+  strikethrough = 'strikethrough',
+  underline = 'underline',
+  abbr = 'abbr',
+}
