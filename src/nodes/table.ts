@@ -159,7 +159,6 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
         for (let j = 0; j < colspan; j += 1) {
           width += widths[spanIdx + j];
         }
-        console.log('colspan', spanIdx, colspan, width, renderPColumn(0.9, width), widths);
         state.write(`\\multicolumn{${colspan}}{|${renderPColumn(0.9, width)}|}{`);
         spanIdx += colspan;
       } else {

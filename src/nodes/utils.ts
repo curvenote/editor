@@ -72,7 +72,7 @@ export function getFirstChildWithName(
 const TOTAL_TABLE_WIDTH = 886;
 
 export function renderPColumn(factor: number, width: number) {
-  return `p{${(factor * width).toFixed(5)}\\textwidth}`;
+  return `p{${(factor * width).toFixed(5)}\\linewidth}`;
 }
 
 /**
