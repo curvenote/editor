@@ -41,7 +41,7 @@ const callout: NodeSpec = {
   ],
 };
 
-function calloutKindToAdmonition(kind: CalloutKinds): string {
+export function calloutKindToAdmonition(kind: CalloutKinds): string {
   // https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#directives
   // attention, caution, danger, error, hint, important, note, tip, warning
   switch (kind) {

@@ -1,30 +1,152 @@
 cases:
-  - title: bold
-    skip: true
-    description: '**strong**, _emphasis_, `literal text`, *escaped symbols*'
+  - title: emphasis
     curvenote:
       type: doc
       content:
         - type: paragraph
           content:
             - type: text
-              text: strong
+              text: 'emphasis: '
+            - type: text
+              marks:
+                - type: em
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'emphasis: '
+            - type: emphasis
+              children:
+                - type: text
+                  value: hello!
+  - title: strong
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'strong: '
+            - type: text
               marks:
                 - type: strong
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
             - type: text
-              text: ', '
+              value: 'strong: '
+            - type: strong
+              children:
+                - type: text
+                  value: hello!
+  - title: subscript
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
             - type: text
-              text: emphasis
+              text: 'subscript: '
+            - type: text
               marks:
-                - type: emphasis
+                - type: subscript
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
             - type: text
-              text: ', '
+              value: 'subscript: '
+            - type: subscript
+              children:
+                - type: text
+                  value: hello!
+  - title: superscript
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
             - type: text
-              text: literal text
+              text: 'superscript: '
+            - type: text
               marks:
-                - type: code
+                - type: superscript
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
             - type: text
-              text: ', *escaped symbols*'
+              value: 'superscript: '
+            - type: superscript
+              children:
+                - type: text
+                  value: hello!
+  - title: underline
+    skip: true
+  - title: emphasis -> strong
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: em
+              text: a
+            - type: text
+              marks:
+                - type: em
+                - type: strong
+              text: b
+            - type: text
+              marks:
+                - type: em
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: emphasis
+              children:
+                - type: text
+                  value: a
+                - type: strong
+                  children:
+                    - type: text
+                      value: b
+                - type: text
+                  value: c
+  - title: strong -> emphasis
+    description: mdast output could be streamlined here
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: strong
+              text: a
+            - type: text
+              marks:
+                - type: strong
+                - type: em
+              text: b
+            - type: text
+              marks:
+                - type: strong
+              text: c
     mdast:
       type: root
       children:
@@ -33,42 +155,101 @@ cases:
             - type: strong
               children:
                 - type: text
-                  value: strong
-            - type: text
-              value: ', '
+                  value: a
             - type: emphasis
               children:
+                - type: strong
+                  children:
+                    - type: text
+                      value: b
+            - type: strong
+              children:
                 - type: text
-                  value: emphasis
-            - type: text
-              value: ', '
-            - type: inlineCode
-              value: literal text
-            - type: text
-              value: ', *escaped symbols*'
-
-  - title: thematicBreak
-    curvenote:
-      type: doc
-      content:
-        - type: horizontal_rule
-    mdast:
-      type: root
-      children:
-        - type: thematicBreak
-
-  - title: paragraph
+                  value: c
+  - title: subscript -> emphasis
     curvenote:
       type: doc
       content:
         - type: paragraph
           content:
             - type: text
-              text: Hello World
+              marks:
+                - type: subscript
+              text: a
+            - type: text
+              marks:
+                - type: subscript
+                - type: em
+              text: b
+            - type: text
+              marks:
+                - type: subscript
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: subscript
+              children:
+                - type: text
+                  value: a
+            - type: emphasis
+              children:
+                - type: subscript
+                  children:
+                    - type: text
+                      value: b
+            - type: subscript
+              children:
+                - type: text
+                  value: c
+  - title: strong -> superscript
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: strong
+              text: a
+            - type: text
+              marks:
+                - type: strong
+                - type: superscript
+              text: b
+            - type: text
+              marks:
+                - type: strong
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: strong
+              children:
+                - type: text
+                  value: a
+                - type: superscript
+                  children:
+                    - type: text
+                      value: b
+                - type: text
+                  value: c
+  - title: escaped symbols
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: '*a*'
     mdast:
       type: root
       children:
         - type: paragraph
           children:
             - type: text
-              value: Hello World
+              value: '*a*'

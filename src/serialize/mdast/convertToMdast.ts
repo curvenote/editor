@@ -56,7 +56,7 @@ export function nodeToMdast(fragment: (Node | Text)[], replacements: NodesAndMar
       const custom = replacements[node.name as keyof NodesAndMarks] as Component | undefined;
       const children = nodeToMdast(node.children, replacements);
       if (custom) {
-        return custom({ key: node.id, ...node.attrs, children });
+        return custom({ key: node.id, tag: node.tag, name: node.name, ...node.attrs, children });
       }
       throw new Error(`Node for "${node.name}" is not defined.`);
     }
@@ -74,4 +74,16 @@ export function convertToMdast(
     document: createDocument(),
   }) as unknown as Fragment;
   return { type: 'root', children: nodeToMdast(dom.children, replacements) } as Root;
+}
+
+// TODO: this is directly from mystjs - we should export from there instead
+export function normalizeLabel(
+  label: string | undefined,
+): { identifier: string; label: string } | undefined {
+  if (!label) return undefined;
+  const identifier = label
+    .replace(/[\t\n\r ]+/g, ' ')
+    .trim()
+    .toLowerCase();
+  return { identifier, label };
 }

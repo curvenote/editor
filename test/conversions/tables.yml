@@ -1,0 +1,288 @@
+cases:
+  - title: plain table
+    curvenote:
+      type: doc
+      content:
+        - type: table
+          content:
+            - type: table_row
+              content:
+                - type: table_header
+                  attrs:
+                    colspan: 1
+                    rowspan: 1
+                    colwidth: null
+                    background: null
+                  content:
+                    - type: paragraph
+                      content:
+                        - type: text
+                          text: Training
+                - type: table_header
+                  attrs:
+                    colspan: 1
+                    rowspan: 1
+                    colwidth: null
+                    background: null
+                  content:
+                    - type: paragraph
+                      content:
+                        - type: text
+                          text: Validation
+            - type: table_row
+              content:
+                - type: table_cell
+                  attrs:
+                    colspan: 1
+                    rowspan: 1
+                    colwidth: null
+                    background: null
+                  content:
+                    - type: paragraph
+                      content:
+                        - type: text
+                          text: '0'
+                - type: table_cell
+                  attrs:
+                    colspan: 1
+                    rowspan: 1
+                    colwidth: null
+                    background: null
+                  content:
+                    - type: paragraph
+                      content:
+                        - type: text
+                          text: '5'
+            - type: table_row
+              content:
+                - type: table_cell
+                  attrs:
+                    colspan: 1
+                    rowspan: 1
+                    colwidth: null
+                    background: null
+                  content:
+                    - type: paragraph
+                      content:
+                        - type: text
+                          text: '13720'
+                - type: table_cell
+                  attrs:
+                    colspan: 1
+                    rowspan: 1
+                    colwidth: null
+                    background: null
+                  content:
+                    - type: paragraph
+                      content:
+                        - type: text
+                          text: '2744'
+    mdast:
+      type: root
+      children:
+        - type: table
+          children:
+            - type: tableRow
+              children:
+                - type: tableCell
+                  header: true
+                  children:
+                    - type: paragraph
+                      children:
+                        - type: text
+                          value: Training
+                - type: tableCell
+                  header: true
+                  children:
+                    - type: paragraph
+                      children:
+                        - type: text
+                          value: Validation
+            - type: tableRow
+              children:
+                - type: tableCell
+                  children:
+                    - type: paragraph
+                      children:
+                        - type: text
+                          value: '0'
+                - type: tableCell
+                  children:
+                    - type: paragraph
+                      children:
+                        - type: text
+                          value: '5'
+            - type: tableRow
+              children:
+                - type: tableCell
+                  children:
+                    - type: paragraph
+                      children:
+                        - type: text
+                          value: '13720'
+                - type: tableCell
+                  children:
+                    - type: paragraph
+                      children:
+                        - type: text
+                          value: '2744'
+  - title: table figure
+    curvenote:
+      type: doc
+      content:
+        - type: figure
+          attrs:
+            id: my-TABLE
+            label: null
+            numbered: false
+            align: center
+          content:
+            - type: figcaption
+              attrs:
+                kind: table
+              content:
+                - type: text
+                  text: 'This is a table '
+                - type: text
+                  marks:
+                    - type: em
+                  text: caption
+            - type: table
+              content:
+                - type: table_row
+                  content:
+                    - type: table_header
+                      attrs:
+                        colspan: 1
+                        rowspan: 1
+                        colwidth: null
+                        background: null
+                      content:
+                        - type: paragraph
+                          content:
+                            - type: text
+                              text: Training
+                    - type: table_header
+                      attrs:
+                        colspan: 1
+                        rowspan: 1
+                        colwidth: null
+                        background: null
+                      content:
+                        - type: paragraph
+                          content:
+                            - type: text
+                              text: Validation
+                - type: table_row
+                  content:
+                    - type: table_cell
+                      attrs:
+                        colspan: 1
+                        rowspan: 1
+                        colwidth: null
+                        background: null
+                      content:
+                        - type: paragraph
+                          content:
+                            - type: text
+                              text: '0'
+                    - type: table_cell
+                      attrs:
+                        colspan: 1
+                        rowspan: 1
+                        colwidth: null
+                        background: null
+                      content:
+                        - type: paragraph
+                          content:
+                            - type: text
+                              text: '5'
+                - type: table_row
+                  content:
+                    - type: table_cell
+                      attrs:
+                        colspan: 1
+                        rowspan: 1
+                        colwidth: null
+                        background: null
+                      content:
+                        - type: paragraph
+                          content:
+                            - type: text
+                              text: '13720'
+                    - type: table_cell
+                      attrs:
+                        colspan: 1
+                        rowspan: 1
+                        colwidth: null
+                        background: null
+                      content:
+                        - type: paragraph
+                          content:
+                            - type: text
+                              text: '2744'
+    mdast:
+      type: root
+      children:
+        - type: container
+          kind: table
+          identifier: my-table
+          label: my-TABLE
+          # numbered: false
+          class: align-center
+          children:
+            - type: caption
+              children:
+                - type: text
+                  value: 'This is a table '
+                - type: emphasis
+                  children:
+                    - type: text
+                      value: caption
+            - type: table
+              align: center
+              children:
+                - type: tableRow
+                  children:
+                    - type: tableCell
+                      header: true
+                      children:
+                        - type: paragraph
+                          children:
+                            - type: text
+                              value: Training
+                    - type: tableCell
+                      header: true
+                      children:
+                        - type: paragraph
+                          children:
+                            - type: text
+                              value: Validation
+                - type: tableRow
+                  children:
+                    - type: tableCell
+                      children:
+                        - type: paragraph
+                          children:
+                            - type: text
+                              value: '0'
+                    - type: tableCell
+                      children:
+                        - type: paragraph
+                          children:
+                            - type: text
+                              value: '5'
+                - type: tableRow
+                  children:
+                    - type: tableCell
+                      children:
+                        - type: paragraph
+                          children:
+                            - type: text
+                              value: '13720'
+                    - type: tableCell
+                      children:
+                        - type: paragraph
+                          children:
+                            - type: text
+                              value: '2744'

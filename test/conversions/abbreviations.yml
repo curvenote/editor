@@ -1,0 +1,58 @@
+cases:
+  - title: inline abbreviation
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'Well '
+            - type: text
+              marks:
+                - type: abbr
+                  attrs:
+                    title: Cascading Style Sheets
+              text: CSS
+            - type: text
+              text: ' is cool?'
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'Well '
+            - type: abbreviation
+              title: Cascading Style Sheets
+              children:
+                - type: text
+                  value: CSS
+            - type: text
+              value: ' is cool?'
+  - title: inline abbreviation without title
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'Well '
+            - type: text
+              marks:
+                - type: abbr
+              text: CSS
+            - type: text
+              text: ' is cool?'
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'Well '
+            - type: abbreviation
+              children:
+                - type: text
+                  value: CSS
+            - type: text
+              value: ' is cool?'
