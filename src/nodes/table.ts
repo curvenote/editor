@@ -136,7 +136,6 @@ function getColumnWidths(node: Node<any>) {
     },
     [],
   );
-  console.log('maybeWidths', maybeWidths);
   const nonNulls = maybeWidths.filter((w: number) => w != null).length;
   const avg =
     nonNulls === 0
@@ -144,21 +143,15 @@ function getColumnWidths(node: Node<any>) {
       : maybeWidths
           .map((w: number) => (w == null ? 0 : w))
           .reduce((a: number, b: number) => a + b, 0) / nonNulls;
-  console.log('avg', avg);
   const widths = maybeWidths.map((w: number) => (w == null ? avg : w));
-  console.log('widths', widths);
   const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
-  console.log('total', total);
   const fractionalWidths = widths.map((w: number) => w / total);
-  console.log('fractionalWidths', fractionalWidths);
   const factor = 0.9;
   const columnSpec = fractionalWidths
     .map((w: number) => `p{${(factor * w).toFixed(5)}\\textwidth}`)
     .join('|');
-  console.log('columnSpec', columnSpec);
   const numColumns =
     widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount;
-  console.log('numColumns', numColumns);
 
   return { widths, columnSpec, numColumns };
 }
@@ -167,7 +160,7 @@ function getColumnWidths(node: Node<any>) {
  * convert prosemirror table node into latex table
  */
 export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
-  const { widths, columnSpec, numColumns } = getColumnWidths(node);
+  const { columnSpec, numColumns } = getColumnWidths(node);
   if (!numColumns) {
     throw new Error('invalid table format, no columns');
   }
