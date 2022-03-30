@@ -20,6 +20,7 @@ cases:
       type: root
       children: []
   - title: figure with caption
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -57,6 +58,7 @@ cases:
                 - type: text
                   value: This is an image caption
   - title: figure with caption and metadata
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -64,6 +66,7 @@ cases:
           attrs:
             id: My-Figure
             label: null
+            # numbered: true
             numbered: false
             align: center
           content:
@@ -89,7 +92,7 @@ cases:
           kind: figure
           identifier: my-figure
           label: My-Figure
-          # numbered: false
+          # numbered: true
           class: align-center
           children:
             - type: image

@@ -1,5 +1,6 @@
 cases:
   - title: datetime
+    skip: m2c
     curvenote:
       type: doc
       content:

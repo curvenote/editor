@@ -8,7 +8,6 @@ cases:
       type: root
       children:
         - type: thematicBreak
-
   - title: paragraph
     curvenote:
       type: doc

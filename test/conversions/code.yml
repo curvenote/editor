@@ -54,7 +54,9 @@ cases:
             label: null
             numbered: false
             language: python
-            linenumbers: true
+            # linenumbers: true
+            linenumbers: false
+            title: ''
           content:
             - type: text
               text: |-

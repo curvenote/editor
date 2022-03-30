@@ -44,6 +44,7 @@ cases:
                 - type: text
                   value: This is a warning.
   - title: info block
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -66,6 +67,7 @@ cases:
                 - type: text
                   value: This is an info.
   - title: success block
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -88,6 +90,7 @@ cases:
                 - type: text
                   value: This is a success.
   - title: active block
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -154,6 +157,7 @@ cases:
                 - type: text
                   value: This is an error.
   - title: no kind block
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -174,6 +178,7 @@ cases:
                 - type: text
                   value: This is no kind.
   - title: junk block
+    skip: m2c
     curvenote:
       type: doc
       content:

@@ -1,6 +1,7 @@
 import { Fragment, Mark, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
 import { Root } from 'mdast';
 import { GenericNode } from 'mystjs';
+import { nodeNames } from '../..';
 import { getSchema, UseSchema } from '../../schemas';
 
 type Attrs = Record<string, any>;
@@ -110,7 +111,7 @@ const handlers: Record<string, TokenHandler> = {
   text(state, token) {
     state.addText(token.value);
   },
-  paragraph(state, token, tokens, index) {
+  paragraph(state, token) {
     state.openNode(state.schema.nodes.paragraph, {});
     state.parseTokens(token.children);
     state.closeNode();
@@ -120,6 +121,151 @@ const handlers: Record<string, TokenHandler> = {
     state.openMark(mark);
     state.parseTokens(token.children);
     state.closeMark(mark);
+  },
+  thematicBreak(state) {
+    state.openNode(state.schema.nodes.horizontal_rule, {});
+    state.closeNode();
+  },
+  break(state) {
+    state.openNode(state.schema.nodes.hard_break, {});
+    state.closeNode();
+  },
+  heading(state, token) {
+    state.openNode(state.schema.nodes.heading, { level: token.depth });
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  link(state, token) {
+    const mark = state.schema.marks.link.create({ href: token.url, title: token.title });
+    state.openMark(mark);
+    state.parseTokens(token.children);
+    state.closeMark(mark);
+  },
+  emphasis(state, token) {
+    const mark = state.schema.marks.em.create({});
+    state.openMark(mark);
+    state.parseTokens(token.children);
+    state.closeMark(mark);
+  },
+  strong(state, token) {
+    const mark = state.schema.marks.strong.create({});
+    state.openMark(mark);
+    state.parseTokens(token.children);
+    state.closeMark(mark);
+  },
+  subscript(state, token) {
+    const mark = state.schema.marks.subscript.create({});
+    state.openMark(mark);
+    state.parseTokens(token.children);
+    state.closeMark(mark);
+  },
+  superscript(state, token) {
+    const mark = state.schema.marks.superscript.create({});
+    state.openMark(mark);
+    state.parseTokens(token.children);
+    state.closeMark(mark);
+  },
+  blockquote(state, token) {
+    state.openNode(state.schema.nodes.blockquote, {});
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  inlineCode(state, token) {
+    const mark = state.schema.marks.code.create({});
+    state.openMark(mark);
+    state.addText(token.value);
+    state.closeMark(mark);
+  },
+  code(state, token) {
+    state.openNode(state.schema.nodes.code_block, {
+      language: token.lang,
+      linenumbers: token.showLineNumbers,
+    });
+    state.addText(token.value);
+    state.closeNode();
+  },
+  list(state, token) {
+    if (token.ordered) {
+      state.openNode(state.schema.nodes.ordered_list, { order: token.start || 1 });
+    } else {
+      state.openNode(state.schema.nodes.bullet_list, {});
+    }
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  listItem(state, token) {
+    state.openNode(state.schema.nodes.list_item, {});
+    if (token.children?.length === 1 && token.children[0].type === 'text') {
+      state.parseTokens([{ type: 'paragraph', children: token.children }]);
+    } else {
+      state.parseTokens(token.children);
+    }
+    state.closeNode();
+  },
+  inlineMath(state, token) {
+    state.openNode(state.schema.nodes.math, {});
+    state.addText(token.value);
+    state.closeNode();
+  },
+  math(state, token) {
+    const id = token.label || undefined;
+    state.openNode(state.schema.nodes.equation, {
+      id,
+      numbered: Boolean(id),
+    });
+    state.addText(token.value);
+    state.closeNode();
+  },
+  container(state, token) {
+    const id = token.label || undefined;
+    const match = token.class?.match(/align-(left|right|center)/);
+    state.openNode(state.schema.nodes.figure, {
+      id,
+      numbered: Boolean(id),
+      align: match ? match[1] : undefined,
+    });
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  caption(state, token, tokens) {
+    const adjacentTypes = tokens.map((t) => t.type);
+    state.openNode(state.schema.nodes.figcaption, {
+      kind: adjacentTypes.includes(nodeNames.table) ? 'table' : 'fig',
+    });
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  image(state, token) {
+    state.openNode(state.schema.nodes.image, {
+      src: token.url,
+      alt: token.alt || undefined,
+      title: token.title || undefined,
+      width: token.width || undefined,
+    });
+    state.closeNode();
+  },
+  table(state, token) {
+    state.openNode(state.schema.nodes.table, {});
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  tableRow(state, token) {
+    state.openNode(state.schema.nodes.table_row, {});
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  tableCell(state, token) {
+    state.openNode(
+      token.header ? state.schema.nodes.table_header : state.schema.nodes.table_cell,
+      {},
+    );
+    state.parseTokens(token.children);
+    state.closeNode();
+  },
+  admonition(state, token) {
+    state.openNode(state.schema.nodes.callout, { kind: token.kind });
+    state.parseTokens(token.children);
+    state.closeNode();
   },
 };
 

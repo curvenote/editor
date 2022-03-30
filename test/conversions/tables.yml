@@ -134,7 +134,7 @@ cases:
           attrs:
             id: my-TABLE
             label: null
-            numbered: false
+            numbered: true
             align: center
           content:
             - type: figcaption
@@ -228,7 +228,8 @@ cases:
           kind: table
           identifier: my-table
           label: my-TABLE
-          # numbered: false
+          # numbered: true
+          numbered: ''
           class: align-center
           children:
             - type: caption

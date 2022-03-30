@@ -40,6 +40,8 @@ cases:
             - type: text
               marks:
                 - type: abbr
+                  attrs:
+                    title: ''
               text: CSS
             - type: text
               text: ' is cool?'

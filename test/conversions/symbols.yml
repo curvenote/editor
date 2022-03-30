@@ -1,5 +1,6 @@
 cases:
   - title: symbols in paragraph
+    skip: m2c
     curvenote:
       type: doc
       content:
@@ -47,7 +48,7 @@ cases:
           attrs:
             id: SIGMA-δ
             label: null
-            numbered: false
+            numbered: true
             title: ''
           content:
             - type: text
