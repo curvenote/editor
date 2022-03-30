@@ -69,6 +69,8 @@ export function getFirstChildWithName(
   return child;
 }
 
+const TOTAL_TABLE_WIDTH = 886;
+
 /**
  * given a table node, return the column widths
  *
@@ -78,22 +80,44 @@ export function getFirstChildWithName(
 export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
   // should work for colspans in the first row, as a colspanned cell has an array of the widths it spans
   // TODO: unsure about rowspans
-  const maybeWidths = (node.content.firstChild?.content as any).content.reduce(
-    (acc: number[], cell: any) => {
+  let bestMaybeWidths = [];
+  let mostNonNulls = 0;
+  for (let i = 0; i < (node.content as any).content.length; i += 1) {
+    const row = (node.content as any).content[i];
+    const maybeWidths = row.content.content.reduce((acc: number[], cell: any) => {
       if (cell.attrs.colwidth == null) return [...acc, null];
       return [...acc, ...cell.attrs.colwidth];
-    },
-    [],
-  );
-  const nonNulls = maybeWidths.filter((w: number) => w != null).length;
-  const avg =
-    nonNulls === 0
-      ? 50
-      : maybeWidths
-          .map((w: number) => (w == null ? 0 : w))
-          .reduce((a: number, b: number) => a + b, 0) / nonNulls;
-  const widths = maybeWidths.map((w: number) => (w == null ? avg : w));
+    }, []);
+    const nonNulls = maybeWidths.filter((maybeWidth: number) => maybeWidth > 0).length;
+    if (i === 0 || nonNulls > mostNonNulls) {
+      mostNonNulls = nonNulls;
+      bestMaybeWidths = maybeWidths;
+      if (mostNonNulls === maybeWidths.length) {
+        break;
+      }
+    }
+  }
+
+  let widths;
+  if (mostNonNulls === bestMaybeWidths.length) {
+    // eslint-disable-next-line no-console
+    console.debug('using best widths', bestMaybeWidths);
+    widths = bestMaybeWidths;
+  } else {
+    // need to fill in the null colwidths
+    const totalDefinedWidths = bestMaybeWidths.reduce(
+      (acc: number, cur: number | null) => (cur == null ? acc : acc + cur),
+      0,
+    );
+    const remainingSpace = TOTAL_TABLE_WIDTH - totalDefinedWidths;
+    const nullCells = bestMaybeWidths.length - mostNonNulls;
+    const defaultWidth = Math.floor(remainingSpace / nullCells);
+    widths = bestMaybeWidths.map((w: number) => (w == null || w === 0 ? defaultWidth : w));
+    // eslint-disable-next-line no-console
+    console.debug('using some default widths', defaultWidth, widths);
+  }
   const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
+
   const fractionalWidths = widths.map((w: number) => w / total);
   const factor = 0.9;
   const columnSpec = fractionalWidths
