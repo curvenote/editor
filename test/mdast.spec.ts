@@ -44,7 +44,7 @@ describe(c2mKey, () => {
   });
   test.each(unskippedCases)('%s', (_, { curvenote, mdast }) => {
     const doc = fromJSON(curvenote, 'full');
-    const newMdastString = yaml.dump(toMdast(doc, 'full'));
+    const newMdastString = yaml.dump(toMdast(doc));
     const mdastString = yaml.dump(mdast);
     expect(newMdastString).toEqual(mdastString);
   });

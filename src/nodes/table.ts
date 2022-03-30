@@ -5,7 +5,12 @@ import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } 
 import { NodeGroups, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
-import { getColumnWidths, renderPColumn } from './utils';
+import { addMdastSnippet, getColumnWidths, isFancyTable, renderPColumn } from './utils';
+
+type TableSpans = {
+  colspan?: number;
+  rowspan?: number;
+};
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -39,18 +44,22 @@ nodes.table_row.toMyst = (props: Props): TableRow => ({
 });
 
 nodes.table_header.attrsFromMdastToken = () => ({});
-nodes.table_header.toMyst = (props: Props): TableCell => ({
+nodes.table_header.toMyst = (props: Props): TableCell & TableSpans => ({
   type: 'tableCell',
   header: true,
   align: props.align || undefined,
+  colspan: props.colspan || undefined,
+  rowspan: props.rowspan || undefined,
   children: (props.children || []) as PhrasingContent[],
 });
 
 nodes.table_cell.attrsFromMdastToken = () => ({});
-nodes.table_cell.toMyst = (props: Props): TableCell => ({
+nodes.table_cell.toMyst = (props: Props): TableCell & TableSpans => ({
   type: 'tableCell',
   header: undefined,
   align: props.align || undefined,
+  colspan: props.colspan || undefined,
+  rowspan: props.rowspan || undefined,
   children: (props.children || []) as PhrasingContent[],
 });
 
@@ -65,12 +74,30 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
   state.write('* ');
   const dedent = indent(state);
   row.content.forEach((cell) => {
+    // TODO: make the lists tight!
     state.wrapBlock('  ', '- ', cell, () => state.renderContent(cell));
+    // const atBlank = /(\n\n)$/.test(state.out as string);
+    // if (state.options.tightLists && atBlank && state.out) {
+    //   // Remove the trailing new line on `state.out` to make it tight
+    //   state.out = state.out.replace(/\n\n$/, '');
+    // }
   });
   dedent();
 };
 
 export const toListTable: MdFormatSerialize = (state, node, figure, index) => {
+  if (isFancyTable(node)) {
+    const id = addMdastSnippet(state, node);
+    if (id === false) {
+      state.write('Complex table unsupported');
+      state.closeBlock(node);
+      return;
+    }
+    state.write(`\`\`\`{mdast} ${id}`);
+    state.write('```');
+    state.closeBlock(node);
+    return;
+  }
   // Use ~~~ for fence, as tables often have captions with roles/citations
   state.write('~~~{list-table}');
   if (state.nextTableCaption) {

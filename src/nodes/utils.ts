@@ -1,7 +1,7 @@
 import { Node } from 'prosemirror-model';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import { nodeNames } from '../types';
-import { clamp } from '../utils';
+import { MdSerializerState, nodeNames } from '../types';
+import { clamp, createId } from '../utils';
 import { NodeSpecAttrs, NumberedNode } from './types';
 
 export const getImageWidth = (width?: string | null) => {
@@ -131,6 +131,31 @@ export function getColumnWidths(node: Node<any>) {
     widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount ?? 0;
 
   return { widths: fractionalWidths, columnSpec, numColumns };
+}
+
+/** Given a node, return true if there is a fancy table descendent
+ *
+ * "fancy" means there are table_cells or table_headers with
+ * colspan or rowspan > 1.
+ */
+export function isFancyTable(node: Node) {
+  let hasRowspan = false;
+  let hasColspan = false;
+  node.descendants((n) => {
+    if (n.type.name === nodeNames.table_cell || n.type.name === nodeNames.table_header) {
+      hasRowspan = hasRowspan || (n.attrs.rowspan && Number(n.attrs.rowspan) > 1);
+      hasColspan = hasColspan || (n.attrs.colspan && Number(n.attrs.colspan) > 1);
+    }
+  });
+  return hasRowspan || hasColspan;
+}
+
+export function addMdastSnippet(state: MdSerializerState, node: Node): string | false {
+  if (!state.mdastSnippets) state.mdastSnippets = {};
+  if (!state.options.mdastSerializer) return false;
+  const id = createId();
+  state.mdastSnippets[id] = state.options.mdastSerializer(node);
+  return id;
 }
 
 // TODO: this is directly from mystjs - we should export from there instead
