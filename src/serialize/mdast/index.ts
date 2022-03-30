@@ -105,16 +105,14 @@ const replacements: NodesAndMarks = {
   figcaption: (props) => ({ type: 'caption', children: props.children }),
   figure: (props) => {
     let containerKind = 'figure';
-    if (props.align) {
-      props.children?.forEach((child) => {
-        if (child.type === 'image' || child.type === 'table') {
-          child.align = props.align;
-        }
-        if (child.type === 'table') {
-          containerKind = 'table';
-        }
-      });
-    }
+    props.children?.forEach((child) => {
+      if (child.type === 'image' || child.type === 'table') {
+        child.align = props.align || undefined;
+      }
+      if (child.type === 'table') {
+        containerKind = 'table';
+      }
+    });
     return {
       type: 'container',
       kind: containerKind,
