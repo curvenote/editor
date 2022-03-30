@@ -4,6 +4,7 @@ import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
 import { determineCaptionKind } from '../process/utils';
 import {
+  getColumnWidths,
   getFirstChildWithName,
   getNumberedAttrs,
   getNumberedDefaultAttrs,
@@ -135,12 +136,25 @@ function nodeToLaTeXOptions(node: Node) {
   }
 }
 
+function figureContainsTable(node: Node<any>) {
+  const table = (node.content as any).content.find((n: any) => n.type.name === nodeNames.table);
+  return table;
+}
+
 export const toTex = createLatexStatement(
   (state, node) => {
     if (state.isInTable) return null;
+    state.containsTable = false;
+    const table = figureContainsTable(node);
+    let tableInfo;
+    if (table) {
+      state.containsTable = true;
+      tableInfo = getColumnWidths(table);
+    }
     return {
-      command: nodeToCommand(node),
-      bracketOpts: nodeToLaTeXOptions(node),
+      command: state.containsTable ? 'longtable' : nodeToCommand(node),
+      commandOpts: state.containsTable && tableInfo ? tableInfo.columnSpec : undefined,
+      bracketOpts: state.containsTable ? undefined : nodeToLaTeXOptions(node),
     };
   },
   (state, node) => {
@@ -153,12 +167,16 @@ export const toTex = createLatexStatement(
     // TODO: Based on align attr
     // may have to modify string returned by state.renderContent(n);
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
-    state.write('\\centering');
+    if (!state.containsTable) {
+      // centering does not work in a longtable environment
+      state.write('\\centering');
+    }
     state.ensureNewLine();
     // Pass the relevant information to the figcaption
     state.nextCaptionNumbered = numbered;
     state.nextCaptionId = localId;
     state.renderContent(node);
+    state.containsTable = false;
   },
 );
 

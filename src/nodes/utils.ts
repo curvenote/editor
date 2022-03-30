@@ -68,3 +68,39 @@ export function getFirstChildWithName(
   });
   return child;
 }
+
+/**
+ * given a table node, return the column widths
+ *
+ * @param node  - node.type.name === 'table'
+ * @returns
+ */
+export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
+  // should work for colspans in the first row, as a colspanned cell has an array of the widths it spans
+  // TODO: unsure about rowspans
+  const maybeWidths = (node.content.firstChild?.content as any).content.reduce(
+    (acc: number[], cell: any) => {
+      if (cell.attrs.colwidth == null) return [...acc, null];
+      return [...acc, ...cell.attrs.colwidth];
+    },
+    [],
+  );
+  const nonNulls = maybeWidths.filter((w: number) => w != null).length;
+  const avg =
+    nonNulls === 0
+      ? 50
+      : maybeWidths
+          .map((w: number) => (w == null ? 0 : w))
+          .reduce((a: number, b: number) => a + b, 0) / nonNulls;
+  const widths = maybeWidths.map((w: number) => (w == null ? avg : w));
+  const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
+  const fractionalWidths = widths.map((w: number) => w / total);
+  const factor = 0.9;
+  const columnSpec = fractionalWidths
+    .map((w: number) => `p{${(factor * w).toFixed(5)}\\textwidth}`)
+    .join(verticalSeparator ? '|' : '');
+  const numColumns =
+    widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount;
+
+  return { widths, columnSpec, numColumns };
+}

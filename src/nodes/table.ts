@@ -4,6 +4,7 @@ import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } 
 import { NodeGroups } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
+import { getColumnWidths } from './utils';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -126,56 +127,6 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
-const TOTAL_TABLE_WIDTH = 886;
-
-function getColumnWidths(node: Node<any>) {
-  // should work for colspans in the first row, as a colspanned cell has an array of the widths it spans
-  // TODO: unsure about rowspans
-  let bestMaybeWidths = [];
-  let mostNonNulls = 0;
-  for (let i = 0; i < (node.content as any).content.length; i += 1) {
-    const row = (node.content as any).content[i];
-    const maybeWidths = row.content.content.reduce((acc: number[], cell: any) => {
-      if (cell.attrs.colwidth == null) return [...acc, null];
-      return [...acc, ...cell.attrs.colwidth];
-    }, []);
-    const nonNulls = maybeWidths.filter((maybeWidth: number) => maybeWidth > 0).length;
-    if (i === 0 || nonNulls > mostNonNulls) {
-      mostNonNulls = nonNulls;
-      bestMaybeWidths = maybeWidths;
-      if (mostNonNulls === maybeWidths.length) {
-        break;
-      }
-    }
-  }
-
-  let widths;
-  if (mostNonNulls === bestMaybeWidths.length) {
-    widths = bestMaybeWidths;
-  } else {
-    // need to fill in the null colwidths
-    const totalDefinedWidths = bestMaybeWidths.reduce(
-      (acc: number, cur: number | null) => (cur == null ? acc : acc + cur),
-      0,
-    );
-    const remainingSpace = TOTAL_TABLE_WIDTH - totalDefinedWidths;
-    const nullCells = bestMaybeWidths.length - mostNonNulls;
-    const defaultWidth = Math.floor(remainingSpace / nullCells);
-    widths = bestMaybeWidths.map((w: number) => (w == null || w === 0 ? defaultWidth : w));
-  }
-  const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
-
-  const fractionalWidths = widths.map((w: number) => w / total);
-  const factor = 0.9;
-  const columnSpec = fractionalWidths
-    .map((w: number) => `p{${(factor * w).toFixed(5)}\\textwidth}`)
-    .join('|');
-  const numColumns =
-    widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount;
-
-  return { widths, columnSpec, numColumns };
-}
-
 /**
  * convert prosemirror table node into latex table
  */
@@ -188,7 +139,8 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
 
   // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
   state.ensureNewLine();
-  state.write(`\\begin{tabular}{${columnSpec}}`);
+  // TODO option if not long table
+  // state.write(`\\begin{tabular}{${columnSpec}}`);
   state.ensureNewLine();
   const dedent = indent(state);
   state.write(`\\hline`);
@@ -229,7 +181,8 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   state.write('\\hline');
   state.ensureNewLine();
   dedent();
-  state.write('\\end{tabular}');
+  // TODO option if not long table
+  // state.write('\\end{tabular}');
   state.closeBlock(node);
   state.isInTable = false;
 }
