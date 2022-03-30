@@ -69,10 +69,12 @@ export function getFirstChildWithName(
   return child;
 }
 
-const TOTAL_TABLE_WIDTH = 886;
+// TODO query the table node for it's width
+export const TOTAL_TABLE_WIDTH = 886;
 
-export function renderPColumn(factor: number, width: number) {
-  return `p{${(factor * width).toFixed(5)}\\linewidth}`;
+export function renderPColumn(width: number) {
+  if (width === 1) return `p{\\dimexpr \\linewidth-2\\tabcolsep}`;
+  return `p{\\dimexpr ${width.toFixed(3)}\\linewidth-2\\tabcolsep}`;
 }
 
 /**
@@ -81,7 +83,7 @@ export function renderPColumn(factor: number, width: number) {
  * @param node  - node.type.name === 'table'
  * @returns
  */
-export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
+export function getColumnWidths(node: Node<any>) {
   // TODO NOT working for colspans in the first row
   // TODO: unsure about rowspans
   let bestMaybeWidths = [];
@@ -89,11 +91,13 @@ export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
   for (let i = 0; i < (node.content as any).content.length; i += 1) {
     const row = (node.content as any).content[i];
     const maybeWidths = row.content.content.reduce((acc: number[], cell: any) => {
-      if (cell.attrs.colwidth == null) return [...acc, null];
-      return [...acc, ...cell.attrs.colwidth];
+      const colwidth = new Array(cell.attrs?.colspan ?? 1).fill(
+        cell.attrs?.colwidth ? cell.attrs.colwidth / cell.attrs.colspan : null,
+      );
+      return [...acc, ...colwidth];
     }, []);
     const nonNulls = maybeWidths.filter((maybeWidth: number) => maybeWidth > 0).length;
-    if (i === 0 || nonNulls > mostNonNulls) {
+    if (i === 0 || nonNulls >= mostNonNulls) {
       mostNonNulls = nonNulls;
       bestMaybeWidths = maybeWidths;
       if (mostNonNulls === maybeWidths.length) {
@@ -101,6 +105,8 @@ export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
       }
     }
   }
+  //
+  // TODO better space fitting https://tex.stackexchange.com/questions/62710/tabular-with-p-type-columns-to-fill-page-width
 
   let widths;
   if (mostNonNulls === bestMaybeWidths.length) {
@@ -121,17 +127,11 @@ export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
     console.debug('using some default widths', defaultWidth, widths);
   }
   const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
-
   const fractionalWidths = widths.map((w: number) => w / total);
-  const factor = 0.9;
-  let columnSpec = fractionalWidths
-    .map((w: number) => renderPColumn(factor, w))
-    .join(verticalSeparator ? '|' : '');
-  if (verticalSeparator) {
-    columnSpec = `|${columnSpec}|`;
-  }
+  const columnSpec = fractionalWidths.map((w: number) => renderPColumn(w)).join('');
+
   const numColumns =
-    widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount;
+    widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount ?? 0;
 
   return { widths: fractionalWidths, columnSpec, numColumns };
 }

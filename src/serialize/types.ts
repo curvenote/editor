@@ -56,6 +56,7 @@ export interface TexSerializerState extends SharedSerializerState {
   nextCaptionNumbered?: boolean;
   isInTable?: boolean;
   containsTable?: boolean;
+  longFigure?: boolean;
 }
 
 export type MdFormatSerialize<S extends Schema<any, any> = any> = (

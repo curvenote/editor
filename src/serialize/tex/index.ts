@@ -73,9 +73,10 @@ export const texSerializer = new MarkdownSerializer(
       (state, node) => {
         if (state.isInTable) {
           node.forEach((child) => {
-            state.wrapBlock('', '\\textbullet~~', node, () => {
-              state.renderInline(child);
-            });
+            state.write('\\textbullet~~');
+            state.renderInline(child);
+            state.write('\\newline');
+            state.ensureNewLine();
           });
         } else {
           state.renderList(node, getIndent(state), () => '\\item ');

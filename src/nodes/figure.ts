@@ -18,6 +18,9 @@ import { writeDirectiveOptions } from '../serialize/markdown/utils';
 
 export type Attrs = NumberedNode & {
   align: AlignOptions;
+  long: boolean;
+  landscape: boolean;
+  fullPage: boolean;
 };
 
 const figure: MyNodeSpec<Attrs> = {
@@ -27,14 +30,20 @@ const figure: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     align: { default: 'center' },
+    long: { default: false },
+    landscape: { default: false },
+    fullPage: { default: false },
   },
   toDOM(node) {
-    const { align } = node.attrs;
+    const { align, long, landscape, fullPage } = node.attrs;
     return [
       'figure',
       {
         ...setNumberedAttrs(node.attrs),
         align,
+        long,
+        landscape,
+        fullPage,
       },
       0,
     ];
@@ -46,6 +55,9 @@ const figure: MyNodeSpec<Attrs> = {
         return {
           ...getNumberedAttrs(dom),
           align: dom.getAttribute('align') ?? 'center',
+          long: dom.getAttribute('long') ?? false,
+          landscape: dom.getAttribute('landscape') ?? false,
+          fullPage: dom.getAttribute('full-page') ?? false,
         };
       },
     },
@@ -110,10 +122,11 @@ function nodeToCommand(node: Node) {
   const kind = determineCaptionKind(node);
   switch (kind) {
     case CaptionKind.fig:
-      return 'figure';
+      return node.attrs.fullPage ? 'figure*' : 'figure';
     case CaptionKind.table:
-      return 'table';
+      return node.attrs.fullPage ? 'table*' : 'table';
     case CaptionKind.code:
+      // TODO full width code
       return 'code';
     case CaptionKind.eq:
       return 'figure'; // not sure what to do here.
@@ -143,39 +156,61 @@ function figureContainsTable(node: Node<any>) {
 
 export const toTex = createLatexStatement(
   (state, node) => {
+    // if the figure is in a table, skip to child content
     if (state.isInTable) return null;
+
+    // if figure contains a table, we need find out which table environment to use
     state.containsTable = false;
     const table = figureContainsTable(node);
+
     let tableInfo;
     if (table) {
       state.containsTable = true;
       tableInfo = getColumnWidths(table);
     }
+
+    let before;
+    let after;
+    if (node.attrs.landscape) {
+      // requires pdflscape package to be loaded
+      before = '\\begin{landscape}';
+      after = '\\end{landscape}';
+    }
+    // TODO for longtable to work with two columns we need to flip out to single column first
+    // and then back to multi column, if we were in multicolumn mode
+    // Q: we can know if we are in a two column mode from the template we are using, but how is this made available at this level?
+
     return {
-      command: state.containsTable ? 'longtable' : nodeToCommand(node),
+      command: state.containsTable && node.attrs.long ? 'longtable' : nodeToCommand(node),
       commandOpts: state.containsTable && tableInfo ? tableInfo.columnSpec : undefined,
       bracketOpts: state.containsTable ? undefined : nodeToLaTeXOptions(node),
+      before,
+      after,
     };
   },
   (state, node) => {
+    // if the figure is in a table, skip to child content
     if (state.isInTable) {
       state.renderContent(node);
       return;
     }
-    const { numbered, id } = node.attrs as Attrs;
+
+    const { numbered, id, long } = node.attrs as Attrs;
     const localId = state.options.localizeId?.(id ?? '') ?? id ?? undefined;
+
     // TODO: Based on align attr
     // may have to modify string returned by state.renderContent(n);
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
-    if (!state.containsTable) {
-      // centering does not work in a longtable environment
-      state.write('\\centering');
-    }
+
+    // centering does not work in a longtable environment
+    if (!long || !state.containsTable) state.write('\\centering');
     state.ensureNewLine();
-    // Pass the relevant information to the figcaption
+    // Pass the relevant information to the child nodes
     state.nextCaptionNumbered = numbered;
     state.nextCaptionId = localId;
+    state.longFigure = long;
     state.renderContent(node);
+    state.longFigure = undefined;
     state.containsTable = false;
   },
 );

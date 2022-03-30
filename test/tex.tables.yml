@@ -1,0 +1,111 @@
+simple:
+  title: a simple table
+  tex: |-
+    \begin{tabular}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \toprule
+      Col 1 & Col 1 \\
+      \hline
+      data 1 & data 2 \\
+      \bottomrule
+    \end{tabular}
+equation:
+  title: table with an equation
+  tex: |-
+    \begin{tabular}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \toprule
+      Col 1 & \(\displaystyle \mu \) \\
+      \hline
+      data 1 & data 2 \\
+      \bottomrule
+    \end{tabular}
+bullets:
+  title: table with bullets
+  tex: |-
+    \begin{tabular}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \toprule
+      Col 1 & \(\displaystyle \mu \) \\
+      \hline
+      \textbullet~~hello\newline
+      \textbullet~~world\newline
+
+       & data 2 \\
+      \bottomrule
+    \end{tabular}
+figure:
+  title: table with an image has no figure environment
+  tex: |-
+    \begin{tabular}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \toprule
+      Col 1 & An Image Figure \\
+      \hline
+      data 1 & \includegraphics[width=0.7\linewidth]{img.png}
+
+      hello!
+
+       \\
+      \bottomrule
+    \end{tabular}
+longtable:
+  title: long table
+  tex: |-
+    \begin{longtable}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \hline
+      Col 1 & Col 2 \\
+      \hline
+      \endfirsthead
+      \hline
+      \multicolumn{2}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}}\\
+      Col 1 & Col 2 \\
+      \hline
+      \endhead
+      data 1 & data 2 \\
+      \hline
+    \end{longtable}
+longtable_multi_header:
+  title: long table with multlple header rows
+  tex: |-
+    \begin{longtable}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \hline
+      1 & 2 \\
+      A & B \\
+      \hline
+      \endfirsthead
+      \hline
+      \multicolumn{2}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}}\\
+      1 & 2 \\
+      A & B \\
+      \hline
+      \endhead
+      data 1 & data 2 \\
+      \hline
+    \end{longtable}
+longtable_multi_header_colspan:
+  title: long table with multlple header rows and colspan
+  tex: |-
+    \begin{longtable}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \hline
+      My Table \\
+      1 & 2 \\
+      A & B \\
+      \hline
+      \endfirsthead
+      \hline
+      \multicolumn{2}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}}\\
+      My Table \\
+      1 & 2 \\
+      A & B \\
+      \hline
+      \endhead
+      data 1 & data 2 \\
+      \hline
+    \end{longtable}
+longtable_no_header:
+  title: long table with no header
+  tex: |-
+    \begin{longtable}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \hline
+      data 1 & data 2 \\
+      data 1 & data 2 \\
+      data 1 & data 2 \\
+      \hline
+    \end{longtable}
