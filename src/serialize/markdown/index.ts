@@ -4,7 +4,7 @@ import { isPlainURL, backticksFor, wrapMark } from './utils';
 import * as nodes from '../../nodes';
 import { MarkdownOptions, MdSerializerState } from '../types';
 import { cleanWhitespaceChars } from '../clean';
-import { toMdast } from '../mdast';
+import { toMdastSnippet } from '../mdast';
 
 type MarkdownSerializerParameters = ConstructorParameters<typeof MarkdownSerializer>;
 
@@ -125,7 +125,7 @@ const mdMarks: MarkdownSerializerParameters[1] = {
 };
 
 export function toMyst(doc: ProsemirrorNode, opts?: MarkdownOptions) {
-  const defualtOpts: MarkdownOptions = { tightLists: true, mdastSerializer: toMdast };
+  const defualtOpts: MarkdownOptions = { tightLists: true, mdastSerializer: toMdastSnippet };
   const state = new (MarkdownSerializerState as any)(mdNodes, mdMarks, {
     ...defualtOpts,
     ...opts,

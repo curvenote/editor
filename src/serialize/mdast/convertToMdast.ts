@@ -83,3 +83,13 @@ export function convertToMdast(node: ProsemirrorNode, schema: Schema): Root {
   }) as unknown as Fragment;
   return { type: 'root', children: nodeToMdast(dom.children, schema) } as Root;
 }
+
+export function convertToMdastSnippet(node: ProsemirrorNode, schema: Schema): GenericNode {
+  if (node.type.name === 'doc') {
+    throw new Error('The requested mdast snippet is a document, use convertToMdast.');
+  }
+  // If the node is not a top level, wrap it in a document and return that!
+  const { doc } = schema.nodes;
+  const wrapped = doc.create({}, [node]);
+  return convertToMdast(wrapped, schema)?.children?.[0] as GenericNode;
+}
