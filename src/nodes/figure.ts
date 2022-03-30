@@ -4,9 +4,11 @@ import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
 import { determineCaptionKind } from '../process/utils';
 import {
+  getColumnWidths,
   getFirstChildWithName,
   getNumberedAttrs,
   getNumberedDefaultAttrs,
+  readBooleanDomAttr,
   setNumberedAttrs,
 } from './utils';
 import { nodeNames } from '../types';
@@ -17,6 +19,9 @@ import { writeDirectiveOptions } from '../serialize/markdown/utils';
 
 export type Attrs = NumberedNode & {
   align: AlignOptions;
+  multipage: boolean;
+  landscape: boolean;
+  fullpage: boolean;
 };
 
 const figure: MyNodeSpec<Attrs> = {
@@ -26,14 +31,20 @@ const figure: MyNodeSpec<Attrs> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     align: { default: 'center' },
+    multipage: { default: false },
+    landscape: { default: false },
+    fullpage: { default: false },
   },
   toDOM(node) {
-    const { align } = node.attrs;
+    const { align, multipage, landscape, fullpage } = node.attrs;
     return [
       'figure',
       {
         ...setNumberedAttrs(node.attrs),
         align,
+        multipage,
+        landscape,
+        fullpage,
       },
       0,
     ];
@@ -45,6 +56,9 @@ const figure: MyNodeSpec<Attrs> = {
         return {
           ...getNumberedAttrs(dom),
           align: dom.getAttribute('align') ?? 'center',
+          multipage: readBooleanDomAttr(dom, 'multipage'),
+          landscape: readBooleanDomAttr(dom, 'landscape'),
+          fullpage: readBooleanDomAttr(dom, 'fullpage'),
         };
       },
     },
@@ -109,10 +123,11 @@ function nodeToCommand(node: Node) {
   const kind = determineCaptionKind(node);
   switch (kind) {
     case CaptionKind.fig:
-      return 'figure';
+      return node.attrs.fullpage ? 'figure*' : 'figure';
     case CaptionKind.table:
-      return 'table';
+      return node.attrs.fullpage ? 'table*' : 'table';
     case CaptionKind.code:
+      // TODO full width code
       return 'code';
     case CaptionKind.eq:
       return 'figure'; // not sure what to do here.
@@ -135,30 +150,69 @@ function nodeToLaTeXOptions(node: Node) {
   }
 }
 
+function figureContainsTable(node: Node<any>) {
+  const table = (node.content as any).content.find((n: any) => n.type.name === nodeNames.table);
+  return table;
+}
+
 export const toTex = createLatexStatement(
   (state, node) => {
+    // if the figure is in a table, skip to child content
     if (state.isInTable) return null;
+
+    // if figure contains a table, we need find out which table environment to use
+    state.containsTable = false;
+    const table = figureContainsTable(node);
+
+    let tableInfo;
+    if (table) {
+      state.containsTable = true;
+      tableInfo = getColumnWidths(table);
+    }
+
+    let before;
+    let after;
+    if (node.attrs.landscape) {
+      // requires pdflscape package to be loaded
+      before = '\\begin{landscape}';
+      after = '\\end{landscape}';
+    }
+    // TODO for longtable to work with two columns we need to flip out to single column first
+    // and then back to multi column, if we were in multicolumn mode
+    // Q: we can know if we are in a two column mode from the template we are using, but how is this made available at this level?
+
     return {
-      command: nodeToCommand(node),
-      bracketOpts: nodeToLaTeXOptions(node),
+      command: state.containsTable && node.attrs.multipage ? 'longtable' : nodeToCommand(node),
+      commandOpts: state.containsTable && tableInfo ? tableInfo.columnSpec : undefined,
+      bracketOpts: state.containsTable ? undefined : nodeToLaTeXOptions(node),
+      before,
+      after,
     };
   },
   (state, node) => {
+    // if the figure is in a table, skip to child content
     if (state.isInTable) {
       state.renderContent(node);
       return;
     }
-    const { numbered, id } = node.attrs as Attrs;
+
+    const { numbered, id, multipage } = node.attrs as Attrs;
     const localId = state.options.localizeId?.(id ?? '') ?? id ?? undefined;
+
     // TODO: Based on align attr
     // may have to modify string returned by state.renderContent(n);
     // https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
-    state.write('\\centering');
+
+    // centering does not work in a longtable environment
+    if (!multipage || !state.containsTable) state.write('\\centering');
     state.ensureNewLine();
-    // Pass the relevant information to the figcaption
+    // Pass the relevant information to the child nodes
     state.nextCaptionNumbered = numbered;
     state.nextCaptionId = localId;
+    state.longFigure = multipage;
     state.renderContent(node);
+    state.longFigure = undefined;
+    state.containsTable = false;
   },
 );
 

@@ -3,7 +3,7 @@ import { TexFormatTypes } from '../src/serialize/types';
 import { tnodes, tdoc } from './build';
 import { toTex } from '../src';
 
-const { p, li, ol, ol3, pre, callout, aside, underline, cite, citep } = tnodes;
+const { p, li, ol, ol3, ul, pre, callout, aside, underline, cite, citep } = tnodes;
 
 const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.tex) => {
   expect(toTex(doc, { format })).toEqual(text);
@@ -21,6 +21,16 @@ describe('Tex', () => {
   it('serializes a paragraph', () => same('hello!', tdoc(p('hello!'))));
   it('serializes underline', () => same('\\uline{hello! }', tdoc(p(underline('hello! ')))));
   it('serializes a callout', () => expectEnvironment('callout', tdoc(callout('hello!'))));
+  it('serializes a bullet list', () =>
+    same(
+      '\\begin{itemize}\n  \\item hello\n  \\item world\n\\end{itemize}',
+      tdoc(ul(li('hello'), li('world'))),
+    ));
+  it('serializes a bullet list in a table', () =>
+    same(
+      '\\begin{itemize}\n  \\item hello\n  \\item world\n\\end{itemize}',
+      tdoc(ul(li('hello'), li('world'))),
+    ));
   it('serializes an ordered list', () =>
     same('\\begin{enumerate}\n  \\item hello\n\\end{enumerate}', tdoc(ol(li('hello')))));
   it('serializes an ordered list starting at "3"', () =>

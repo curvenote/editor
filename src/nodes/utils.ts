@@ -68,3 +68,63 @@ export function getFirstChildWithName(
   });
   return child;
 }
+
+// TODO query the table node for it's width
+export const TOTAL_TABLE_WIDTH = 886;
+
+export function renderPColumn(width: number) {
+  if (width === 1) return `p{\\dimexpr \\linewidth-2\\tabcolsep}`;
+  return `p{\\dimexpr ${width.toFixed(3)}\\linewidth-2\\tabcolsep}`;
+}
+
+/**
+ * given a table node, return the column widths
+ *
+ * @param node  - node.type.name === 'table'
+ * @returns
+ */
+export function getColumnWidths(node: Node<any>) {
+  // TODO: unsure about rowspans
+  let bestMaybeWidths = [];
+  let mostNonNulls = 0;
+  for (let i = 0; i < (node.content as any).content.length; i += 1) {
+    const row = (node.content as any).content[i];
+    const maybeWidths = row.content.content.reduce((acc: number[], cell: any) => {
+      const colwidth = new Array(cell.attrs?.colspan ?? 1).fill(
+        cell.attrs?.colwidth ? cell.attrs.colwidth / cell.attrs.colspan : null,
+      );
+      return [...acc, ...colwidth];
+    }, []);
+    const nonNulls = maybeWidths.filter((maybeWidth: number) => maybeWidth > 0).length;
+    if (i === 0 || nonNulls >= mostNonNulls) {
+      mostNonNulls = nonNulls;
+      bestMaybeWidths = maybeWidths;
+      if (mostNonNulls === maybeWidths.length) {
+        break;
+      }
+    }
+  }
+
+  let widths;
+  if (mostNonNulls === bestMaybeWidths.length) {
+    widths = bestMaybeWidths;
+  } else {
+    // need to fill in the null colwidths
+    const totalDefinedWidths = bestMaybeWidths.reduce(
+      (acc: number, cur: number | null) => (cur == null ? acc : acc + cur),
+      0,
+    );
+    const remainingSpace = TOTAL_TABLE_WIDTH - totalDefinedWidths;
+    const nullCells = bestMaybeWidths.length - mostNonNulls;
+    const defaultWidth = Math.floor(remainingSpace / nullCells);
+    widths = bestMaybeWidths.map((w: number) => (w == null || w === 0 ? defaultWidth : w));
+  }
+  const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
+  const fractionalWidths = widths.map((w: number) => w / total);
+  const columnSpec = fractionalWidths.map((w: number) => renderPColumn(w)).join('');
+
+  const numColumns =
+    widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount ?? 0;
+
+  return { widths: fractionalWidths, columnSpec, numColumns };
+}

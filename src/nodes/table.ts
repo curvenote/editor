@@ -4,6 +4,7 @@ import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } 
 import { NodeGroups } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
+import { getColumnWidths, renderPColumn } from './utils';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -126,50 +127,121 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
+function renderTableCell(
+  state: TexSerializerState,
+  cell: Node<any>,
+  i: number,
+  spanIdx: number,
+  widths: number[],
+  childCount: number,
+) {
+  let renderedSpan = 1;
+  const {
+    attrs: { colspan },
+  } = cell;
+  if (colspan > 1) {
+    let width = 0;
+    for (let j = 0; j < colspan; j += 1) {
+      width += widths[spanIdx + j];
+    }
+    state.write(`\\multicolumn{${colspan}}{${renderPColumn(width)}}{`);
+    renderedSpan = colspan;
+  }
+  if (cell.content.childCount === 1 && cell.content.child(0).type.name === nodeNames.paragraph) {
+    // Render simple things inline, otherwise render a block
+    state.renderInline(cell.content.child(0));
+  } else {
+    cell.content.forEach((content) => {
+      state.render(content);
+    });
+  }
+  if (colspan > 1) state.write('}');
+  if (i < childCount - 1) {
+    state.write(' & ');
+  }
+  return renderedSpan;
+}
+
 /**
  * convert prosemirror table node into latex table
  */
 export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
-  // TODO: this might not work with colspan in the first row?
-  const numColumns = node.content.firstChild?.content.childCount;
+  const { widths, columnSpec, numColumns } = getColumnWidths(node);
   if (!numColumns) {
     throw new Error('invalid table format, no columns');
   }
-
-  state.isInTable = true;
-
-  // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
-  state.write('\\adjustbox{max width=\\textwidth}{%');
-  state.ensureNewLine();
-  state.write(`\\begin{tabular}{*{${numColumns}}{c}}`);
-  state.ensureNewLine();
-  const dedent = indent(state);
-  state.write(`\\hline`);
+  state.isInTable = true; // this is cleared at the end of this function
   state.ensureNewLine();
 
-  node.content.forEach(({ content: rowContent }) => {
-    let i = 0;
-    rowContent.forEach((cell) => {
-      const {
-        attrs: { colspan },
-      } = cell;
-      if (colspan > 1) state.write(`\\multicolumn{${colspan}}{c}{`);
-      if (
-        cell.content.childCount === 1 &&
-        cell.content.child(0).type.name === nodeNames.paragraph
-      ) {
-        // Render simple things inline, otherwise render a block
-        state.renderInline(cell.content.child(0));
-      } else {
-        cell.content.forEach((content) => {
-          state.render(content);
+  // if not in a longtable environment already (these replace the figure environment)
+  let dedent;
+  // handle initial headers first
+  let numHeaderRowsFound = 0;
+  if (state.longFigure) {
+    state.ensureNewLine();
+    state.write('\\hline');
+    state.ensureNewLine();
+    let endHeader = false;
+    // write the first header section
+    node.content.forEach(({ content: rowContent }) => {
+      if (endHeader) return;
+      if (rowContent.firstChild?.type.name === nodeNames.table_header) {
+        numHeaderRowsFound += 1;
+        let spanIdx = 0;
+        rowContent.forEach((cell, i) => {
+          spanIdx += renderTableCell(state, cell, i, spanIdx, widths, rowContent.childCount);
         });
+        state.write(' \\\\');
+        state.ensureNewLine();
       }
-      if (colspan > 1) state.write('}');
-      if (i < rowContent.childCount - 1) {
-        state.write(' & ');
+      if (rowContent.firstChild?.type.name !== nodeNames.table_header) {
+        endHeader = true;
       }
-      i += 1;
+    });
+
+    if (numHeaderRowsFound > 0) {
+      state.ensureNewLine();
+      state.write('\\hline');
+      state.ensureNewLine();
+      state.write('\\endfirsthead');
+      state.ensureNewLine();
+
+      state.write('\\hline');
+      state.ensureNewLine();
+      // write the continuation header section
+      state.write(
+        `\\multicolumn{${numColumns}}{c}{\\tablename\\ \\thetable\\ -- \\textit{Continued from previous page}}\\\\`,
+      );
+      state.ensureNewLine();
+      node.content.forEach(({ content: rowContent }, offset, index) => {
+        if (index >= numHeaderRowsFound) return;
+        let spanIdx = 0;
+        rowContent.forEach((cell, i) => {
+          spanIdx += renderTableCell(state, cell, i, spanIdx, widths, rowContent.childCount);
+        });
+        state.write(' \\\\');
+        state.ensureNewLine();
+      });
+      state.ensureNewLine();
+      state.write('\\hline');
+      state.ensureNewLine();
+      state.write('\\endhead');
+      state.ensureNewLine();
+    }
+  } else {
+    state.write(`\\begin{tabular}{${columnSpec}}`);
+    state.ensureNewLine();
+    dedent = indent(state);
+    state.write(`\\toprule`);
+    state.ensureNewLine();
+  }
+
+  // todo: can we use offset and index to better handle row and column spans?
+  node.content.forEach(({ content: rowContent }, offset, index) => {
+    if (index < numHeaderRowsFound) return; // skip the header rows
+    let spanIdx = 0;
+    rowContent.forEach((cell, i) => {
+      spanIdx += renderTableCell(state, cell, i, spanIdx, widths, rowContent.childCount);
     });
     state.write(' \\\\');
     state.ensureNewLine();
@@ -179,11 +251,15 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
       state.ensureNewLine();
     }
   });
-  state.write('\\hline');
-  state.ensureNewLine();
-  dedent();
-  state.write('\\end{tabular}');
-  state.write('}');
+
+  if (state.longFigure) {
+    state.write('\\hline');
+  } else {
+    state.write('\\bottomrule');
+    state.ensureNewLine();
+    dedent?.();
+    state.write('\\end{tabular}');
+  }
   state.closeBlock(node);
   state.isInTable = false;
 }

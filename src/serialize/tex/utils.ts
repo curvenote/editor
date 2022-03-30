@@ -15,10 +15,13 @@ export function createLatexStatement(
       state.closeBlock(node);
       return;
     }
-    const { command, bracketOpts, inline, before, after } = options;
+    const { command, commandOpts, bracketOpts, inline, before, after } = options;
     if (before) (state as any).out += `\n${state.delim}${before}`;
+    const optsInCommand = commandOpts ? `{${commandOpts}}` : '';
     const optsInBrackets = bracketOpts ? `[${bracketOpts}]` : '';
-    state.write(inline ? `\\${command}{\n` : `\\begin{${command}}${optsInBrackets}\n`);
+    state.write(
+      inline ? `\\${command}{\n` : `\\begin{${command}}${optsInCommand}${optsInBrackets}\n`,
+    );
     const dedent = indent(state);
     f(state, node, p, i);
     dedent();

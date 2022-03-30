@@ -65,9 +65,24 @@ export const texSerializer = new MarkdownSerializer(
         state.renderList(node, getIndent(state), () => '\\item ');
       },
     ),
-    bullet_list: createLatexStatement('itemize', (state, node) => {
-      state.renderList(node, getIndent(state), () => '\\item ');
-    }),
+    bullet_list: createLatexStatement(
+      (state) => {
+        if (state.isInTable) return null;
+        return { command: 'itemize' };
+      },
+      (state, node) => {
+        if (state.isInTable) {
+          node.forEach((child) => {
+            state.write('\\textbullet~~');
+            state.renderInline(child);
+            state.write('\\newline');
+            state.ensureNewLine();
+          });
+        } else {
+          state.renderList(node, getIndent(state), () => '\\item ');
+        }
+      },
+    ),
     list_item(state, node) {
       state.renderInline(node);
     },
