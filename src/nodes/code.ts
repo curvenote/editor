@@ -1,3 +1,4 @@
+import { Code } from 'myst-spec';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MdFormatSerialize } from '../serialize/types';
 import { NodeGroups, NumberedNode, MyNodeSpec } from './types';
@@ -15,7 +16,8 @@ export type Attrs = NumberedNode & {
   linenumbers: boolean;
 };
 
-const code: MyNodeSpec<Attrs> = {
+// TODO: Can we rename this to code_block...?
+const code: MyNodeSpec<Attrs, Code> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     language: { default: null },
@@ -62,6 +64,17 @@ const code: MyNodeSpec<Attrs> = {
     linenumbers: token.showLineNumbers || false,
     title: '',
   }),
+  toMyst: (props): Code => {
+    if (props.children?.length === 1) {
+      return {
+        type: 'code',
+        lang: props.language || undefined,
+        showLineNumbers: props.linenumbers || undefined,
+        value: props.children[0].value || '',
+      };
+    }
+    throw new Error(`Code block node does not have one child`);
+  },
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

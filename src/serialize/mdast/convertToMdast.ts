@@ -5,10 +5,12 @@ import {
   Node as ProsemirrorNode,
   Schema,
 } from 'prosemirror-model';
-import { Root } from 'mdast';
+// import { Root } from 'mdast';
 import { GenericNode } from 'mystjs';
+import { Root, Text as MystText } from 'myst-spec';
 import { createDocument, Fragment, Node, Text } from './document';
-import { Component, NodesAndMarks } from './types';
+import { markNames, nodeNames } from '../../types';
+import { Props } from '../../nodes/types';
 
 type CreateNodeSpec = (node: ProsemirrorNode) => DOMOutputSpec;
 type CreateMarkSpec = (mark: Mark, inline: boolean) => DOMOutputSpec;
@@ -49,41 +51,35 @@ function getSerializer(schema: Schema): DOMSerializer {
   return new DOMSerializer(nodes, marks);
 }
 
-export function nodeToMdast(fragment: (Node | Text)[], replacements: NodesAndMarks): GenericNode[] {
+export function nodeToMdast(fragment: (Node | Text)[], schema: Schema): GenericNode[] {
   if (fragment.length === 0) return [];
   return fragment.map((node) => {
     if (node instanceof Node) {
-      const custom = replacements[node.name as keyof NodesAndMarks] as Component | undefined;
-      const children = nodeToMdast(node.children, replacements);
-      if (custom) {
-        return custom({ key: node.id, tag: node.tag, name: node.name, ...node.attrs, children });
+      const children: GenericNode[] = nodeToMdast(node.children, schema);
+      const props: Props = {
+        key: node.id,
+        tag: node.tag,
+        name: node.name,
+        ...node.attrs,
+        children,
+      };
+      if (node.name in nodeNames) {
+        return schema.nodes[node.name].spec.toMyst(props) as GenericNode;
+      }
+      if (node.name in markNames) {
+        return schema.marks[node.name].spec.toMyst(props) as GenericNode;
       }
       throw new Error(`Node for "${node.name}" is not defined.`);
     }
-    return { type: 'text', value: node.text };
+    const textNode: MystText = { type: 'text', value: node.text };
+    return textNode as GenericNode;
   });
 }
 
-export function convertToMdast(
-  node: ProsemirrorNode,
-  schema: Schema,
-  replacements: NodesAndMarks,
-): Root {
+export function convertToMdast(node: ProsemirrorNode, schema: Schema): Root {
   const serializer = getSerializer(schema);
   const dom = serializer.serializeFragment(node.content, {
     document: createDocument(),
   }) as unknown as Fragment;
-  return { type: 'root', children: nodeToMdast(dom.children, replacements) } as Root;
-}
-
-// TODO: this is directly from mystjs - we should export from there instead
-export function normalizeLabel(
-  label: string | undefined,
-): { identifier: string; label: string } | undefined {
-  if (!label) return undefined;
-  const identifier = label
-    .replace(/[\t\n\r ]+/g, ' ')
-    .trim()
-    .toLowerCase();
-  return { identifier, label };
+  return { type: 'root', children: nodeToMdast(dom.children, schema) } as Root;
 }

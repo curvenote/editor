@@ -11,7 +11,7 @@ export type Attrs = {
 
 type Legacy = { inline: undefined };
 
-const cite: MyNodeSpec<Attrs & Legacy> = {
+const cite: MyNodeSpec<Attrs & Legacy, any> = {
   attrs: {
     key: { default: null },
     title: { default: '' },
@@ -65,6 +65,7 @@ const cite: MyNodeSpec<Attrs & Legacy> = {
     inline: undefined,
     text: '',
   }),
+  toMyst: () => ({}),
 };
 
 function getPrependedText(kind: ReferenceKind): string {

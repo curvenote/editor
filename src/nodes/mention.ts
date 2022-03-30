@@ -7,7 +7,7 @@ export interface Attrs {
 }
 
 function createMentionNodeSpecs() {
-  const mentionNodeSpec: MyNodeSpec<Attrs> = {
+  const mentionNodeSpec: MyNodeSpec<Attrs, any> = {
     group: NodeGroups.inline,
     attrs: { label: { default: '' }, user: { default: '' } },
     inline: true,
@@ -29,6 +29,7 @@ function createMentionNodeSpecs() {
       },
     ],
     attrsFromMdastToken: () => ({ label: '', user: '' }),
+    toMyst: () => ({}),
   };
   return {
     mention: mentionNodeSpec,

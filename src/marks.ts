@@ -1,9 +1,23 @@
 import { GenericNode } from 'mystjs';
 import { MarkSpec } from 'prosemirror-model';
-import { MarkGroups } from './nodes/types';
+import {
+  Abbreviation,
+  Emphasis,
+  InlineCode,
+  Link,
+  Node as MystNode,
+  PhrasingContent,
+  StaticPhrasingContent,
+  Strong,
+  Subscript,
+  Superscript,
+  Underline,
+} from 'myst-spec';
+import { MarkGroups, Props } from './nodes/types';
 
-export interface MyMarkSpec extends MarkSpec {
+export interface MyMarkSpec<N extends MystNode> extends MarkSpec {
   attrsFromMdastToken: (t: GenericNode) => Record<string, any>;
+  toMyst: (props: Props) => N;
 }
 
 export type LinkAttrs = {
@@ -12,7 +26,7 @@ export type LinkAttrs = {
   kind: string;
 };
 
-export const link: MyMarkSpec = {
+export const link: MyMarkSpec<Link> = {
   attrs: {
     href: {},
     title: { default: null },
@@ -38,9 +52,15 @@ export const link: MyMarkSpec = {
   attrsFromMdastToken(token) {
     return { href: token.url, title: token.title };
   },
+  toMyst: (props): Link => ({
+    type: 'link',
+    url: props.href,
+    title: props.title || undefined,
+    children: (props.children || []) as StaticPhrasingContent[],
+  }),
 };
 
-export const code: MyMarkSpec = {
+export const code: MyMarkSpec<InlineCode> = {
   attrs: {},
   parseDOM: [{ tag: 'code' }],
   toDOM() {
@@ -48,9 +68,15 @@ export const code: MyMarkSpec = {
   },
   excludes: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: (props): InlineCode => {
+    if (props.children?.length === 1 && props.children[0].type === 'text') {
+      return { type: 'inlineCode', value: props.children[0].value || '' };
+    }
+    throw new Error(`Code node does not have one child`);
+  },
 };
 
-export const em: MyMarkSpec = {
+export const em: MyMarkSpec<Emphasis> = {
   attrs: {},
   parseDOM: [{ tag: 'i' }, { tag: 'em' }, { style: 'font-style=italic' }],
   toDOM() {
@@ -58,9 +84,13 @@ export const em: MyMarkSpec = {
   },
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: (props): Emphasis => ({
+    type: 'emphasis',
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
-export const strong: MyMarkSpec = {
+export const strong: MyMarkSpec<Strong> = {
   attrs: {},
   parseDOM: [
     { tag: 'strong' },
@@ -78,9 +108,13 @@ export const strong: MyMarkSpec = {
   },
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: (props): Strong => ({
+    type: 'strong',
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
-export const superscript: MyMarkSpec = {
+export const superscript: MyMarkSpec<Superscript> = {
   attrs: {},
   toDOM() {
     return ['sup', 0];
@@ -89,9 +123,13 @@ export const superscript: MyMarkSpec = {
   excludes: 'subscript',
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: (props): Superscript => ({
+    type: 'superscript',
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
-export const subscript: MyMarkSpec = {
+export const subscript: MyMarkSpec<Subscript> = {
   attrs: {},
   toDOM() {
     return ['sub', 0];
@@ -100,9 +138,13 @@ export const subscript: MyMarkSpec = {
   excludes: 'superscript',
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: (props): Subscript => ({
+    type: 'subscript',
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
-export const strikethrough: MyMarkSpec = {
+export const strikethrough: MyMarkSpec<any> = {
   attrs: {},
   toDOM() {
     return ['s', 0];
@@ -110,9 +152,10 @@ export const strikethrough: MyMarkSpec = {
   parseDOM: [{ tag: 's' }],
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: () => ({}),
 };
 
-export const underline: MyMarkSpec = {
+export const underline: MyMarkSpec<Underline> = {
   attrs: {},
   toDOM() {
     return ['u', 0];
@@ -120,9 +163,13 @@ export const underline: MyMarkSpec = {
   parseDOM: [{ tag: 'u' }],
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
+  toMyst: (props): Underline => ({
+    type: 'underline',
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
-export const abbr: MyMarkSpec = {
+export const abbr: MyMarkSpec<Abbreviation> = {
   attrs: {
     title: { default: '' },
   },
@@ -142,4 +189,9 @@ export const abbr: MyMarkSpec = {
   attrsFromMdastToken(token: GenericNode) {
     return { title: token.title };
   },
+  toMyst: (props): Abbreviation => ({
+    type: 'abbreviation',
+    title: props.title || undefined,
+    children: (props.children || []) as StaticPhrasingContent[],
+  }),
 };

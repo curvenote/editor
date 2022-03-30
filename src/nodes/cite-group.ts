@@ -3,7 +3,7 @@ import { NodeGroups, MyNodeSpec } from './types';
 
 export type Attrs = Record<string, never>;
 
-const citeGroup: MyNodeSpec<Attrs> = {
+const citeGroup: MyNodeSpec<Attrs, any> = {
   attrs: {},
   inline: true,
   atom: true,
@@ -23,6 +23,7 @@ const citeGroup: MyNodeSpec<Attrs> = {
     return ['cite-group', 0];
   },
   attrsFromMdastToken: () => ({}),
+  toMyst: () => ({}),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

@@ -1,3 +1,4 @@
+import { Image } from 'myst-spec';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { NodeGroups, NumberedNode, MyNodeSpec, AlignOptions } from './types';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
@@ -18,7 +19,7 @@ export type Attrs = NumberedNode & {
   caption: boolean;
 };
 
-const image: MyNodeSpec<Attrs> = {
+const image: MyNodeSpec<Attrs, Image> = {
   attrs: {
     ...getNumberedDefaultAttrs(), // Deprecated, use figure
     src: {},
@@ -70,6 +71,14 @@ const image: MyNodeSpec<Attrs> = {
     width: getImageWidth(token.width),
     align: token.align || 'center',
     caption: false,
+  }),
+  toMyst: (props): Image => ({
+    type: 'image',
+    url: props.src,
+    alt: props.alt || undefined,
+    title: props.title || undefined,
+    align: undefined,
+    width: props.width || undefined,
   }),
 };
 

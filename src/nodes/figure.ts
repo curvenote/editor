@@ -1,4 +1,5 @@
 import { Node } from 'prosemirror-model';
+import { Caption, Container, Image, Legend, Table } from 'myst-spec';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
@@ -9,6 +10,8 @@ import {
   getNumberedAttrs,
   getNumberedDefaultAttrs,
   readBooleanDomAttr,
+  normalizeLabel,
+  readBooleanAttr,
   setNumberedAttrs,
 } from './utils';
 import { nodeNames } from '../types';
@@ -24,7 +27,7 @@ export type Attrs = NumberedNode & {
   fullpage: boolean;
 };
 
-const figure: MyNodeSpec<Attrs> = {
+const figure: MyNodeSpec<Attrs, Container> = {
   group: NodeGroups.block,
   content: NodeGroups.insideFigure,
   isolating: true,
@@ -70,6 +73,28 @@ const figure: MyNodeSpec<Attrs> = {
       label: token.label || null,
       numbered: token.numbered || false,
       align: match ? match[1] : 'center',
+      multipage: false,
+      landscape: false,
+      fullpage: false,
+    };
+  },
+  toMyst: (props): Container => {
+    let containerKind: 'figure' | 'table' = 'figure';
+    props.children?.forEach((child) => {
+      if (child.type === 'image' || child.type === 'table') {
+        child.align = props.align || undefined;
+      }
+      if (child.type === 'table') {
+        containerKind = 'table';
+      }
+    });
+    return {
+      type: 'container',
+      kind: containerKind,
+      ...normalizeLabel(props.label || props.id),
+      numbered: readBooleanAttr(props.numbered),
+      class: props.align ? `align-${props.align}` : undefined,
+      children: (props.children || []) as (Caption | Legend | Image | Table)[],
     };
   },
 };

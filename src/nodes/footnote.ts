@@ -1,7 +1,7 @@
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { MyNodeSpec, NodeGroups } from './types';
 
-const footnote: MyNodeSpec<any> = {
+const footnote: MyNodeSpec<any, any> = {
   attrs: {},
   group: 'inline',
   content: `(${NodeGroups.text} | math)*`,
@@ -13,6 +13,7 @@ const footnote: MyNodeSpec<any> = {
   toDOM: () => ['span', { class: 'footnote' }, 0],
   parseDOM: [{ tag: 'span.footnote' }],
   attrsFromMdastToken: () => ({}),
+  toMyst: () => ({}),
 };
 
 // TODO: add markdown support

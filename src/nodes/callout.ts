@@ -1,3 +1,4 @@
+import { Admonition, FlowContent } from 'myst-spec';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MyNodeSpec, NodeGroups } from './types';
@@ -8,6 +9,38 @@ export enum CalloutKinds {
   'info' = 'info',
   'warning' = 'warning',
   'danger' = 'danger',
+}
+
+export enum AdmonitionKinds {
+  'attention' = 'attention',
+  'caution' = 'caution',
+  'danger' = 'danger',
+  'error' = 'error',
+  'hint' = 'hint',
+  'important' = 'important',
+  'note' = 'note',
+  'seealso' = 'seealso',
+  'tip' = 'tip',
+  'warning' = 'warning',
+}
+
+export function calloutKindToAdmonition(kind: CalloutKinds): string {
+  // https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#directives
+  // attention, caution, danger, error, hint, important, note, tip, warning
+  switch (kind) {
+    case CalloutKinds.active:
+      return 'note';
+    case CalloutKinds.success:
+      return 'important';
+    case CalloutKinds.info:
+      return 'important';
+    case CalloutKinds.warning:
+      return 'warning';
+    case CalloutKinds.danger:
+      return 'danger';
+    default:
+      return 'note';
+  }
 }
 
 export type Attrs = {
@@ -30,7 +63,7 @@ export function admonitionToCalloutKind(kind?: string): CalloutKinds {
   }
 }
 
-const callout: MyNodeSpec<Attrs> = {
+const callout: MyNodeSpec<Attrs, Admonition> = {
   group: NodeGroups.top,
   content: NodeGroups.blockOrEquationOrHeading,
   attrs: {
@@ -57,26 +90,18 @@ const callout: MyNodeSpec<Attrs> = {
   attrsFromMdastToken: (token) => ({
     kind: admonitionToCalloutKind(token.kind),
   }),
+  toMyst: (props): Admonition => {
+    let calloutKind = props.class.split(' ')[1];
+    if (!Object.values(AdmonitionKinds).includes(calloutKind as AdmonitionKinds)) {
+      calloutKind = calloutKindToAdmonition(calloutKind as CalloutKinds);
+    }
+    return {
+      type: 'admonition',
+      kind: calloutKind,
+      children: (props.children || []) as FlowContent[],
+    };
+  },
 };
-
-export function calloutKindToAdmonition(kind: CalloutKinds): string {
-  // https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#directives
-  // attention, caution, danger, error, hint, important, note, tip, warning
-  switch (kind) {
-    case CalloutKinds.active:
-      return 'note';
-    case CalloutKinds.success:
-      return 'important';
-    case CalloutKinds.info:
-      return 'important';
-    case CalloutKinds.warning:
-      return 'warning';
-    case CalloutKinds.danger:
-      return 'danger';
-    default:
-      return 'note';
-  }
-}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();

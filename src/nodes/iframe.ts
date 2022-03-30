@@ -9,7 +9,7 @@ export type Attrs = {
   width: number | null;
 };
 
-const iframe: MyNodeSpec<Attrs> = {
+const iframe: MyNodeSpec<Attrs, any> = {
   attrs: {
     src: {},
     align: { default: 'center' },
@@ -45,6 +45,7 @@ const iframe: MyNodeSpec<Attrs> = {
     align: 'center',
     width: DEFAULT_IMAGE_WIDTH,
   }),
+  toMyst: () => ({}),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

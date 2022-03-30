@@ -1,7 +1,8 @@
 import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
+import { PhrasingContent, Table, TableCell, TableRow } from 'myst-spec';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
-import { NodeGroups } from './types';
+import { NodeGroups, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
 import { getColumnWidths, renderPColumn } from './utils';
@@ -24,9 +25,34 @@ export const nodes = tableNodes({
 });
 
 nodes.table.attrsFromMdastToken = () => ({});
+nodes.table.toMyst = (props: Props): Table => {
+  if (props.children?.length === 1 && props.children[0].type === 'table') {
+    return props.children[0] as Table;
+  }
+  return { type: 'table', align: undefined, children: (props.children || []) as TableRow[] };
+};
+
 nodes.table_row.attrsFromMdastToken = () => ({});
+nodes.table_row.toMyst = (props: Props): TableRow => ({
+  type: 'tableRow',
+  children: (props.children || []) as TableCell[],
+});
+
 nodes.table_header.attrsFromMdastToken = () => ({});
+nodes.table_header.toMyst = (props: Props): TableCell => ({
+  type: 'tableCell',
+  header: true,
+  align: props.align || undefined,
+  children: (props.children || []) as PhrasingContent[],
+});
+
 nodes.table_cell.attrsFromMdastToken = () => ({});
+nodes.table_cell.toMyst = (props: Props): TableCell => ({
+  type: 'tableCell',
+  header: undefined,
+  align: props.align || undefined,
+  children: (props.children || []) as PhrasingContent[],
+});
 
 /**
  * Create a "row" using a list-table

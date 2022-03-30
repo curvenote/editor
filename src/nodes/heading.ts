@@ -1,3 +1,4 @@
+import { Heading, PhrasingContent } from 'myst-spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
@@ -11,7 +12,7 @@ export type Attrs = NumberedNode & {
   level: number;
 };
 
-const heading: MyNodeSpec<Attrs> = {
+const heading: MyNodeSpec<Attrs, Heading> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     level: { default: 1 },
@@ -35,6 +36,11 @@ const heading: MyNodeSpec<Attrs> = {
     label: null,
     numbered: token.numbered,
     level: token.depth,
+  }),
+  toMyst: (props): Heading => ({
+    type: 'heading',
+    depth: parseInt(props.tag.slice(1), 10),
+    children: (props.children || []) as PhrasingContent[],
   }),
 };
 

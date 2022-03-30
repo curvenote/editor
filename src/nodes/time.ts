@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { Text } from 'myst-spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
 
@@ -31,7 +32,7 @@ export type Attrs = {
   datetime: Date | null;
 };
 
-const time: MyNodeSpec<Attrs> = {
+const time: MyNodeSpec<Attrs, Text> = {
   group: NodeGroups.inline,
   inline: true,
   marks: '',
@@ -54,6 +55,7 @@ const time: MyNodeSpec<Attrs> = {
     },
   ],
   attrsFromMdastToken: () => ({ datetime: null }),
+  toMyst: (props): Text => ({ type: 'text', value: formatDatetime(props.datetime).f }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

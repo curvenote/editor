@@ -132,3 +132,15 @@ export function getColumnWidths(node: Node<any>) {
 
   return { widths: fractionalWidths, columnSpec, numColumns };
 }
+
+// TODO: this is directly from mystjs - we should export from there instead
+export function normalizeLabel(
+  label: string | undefined,
+): { identifier: string; label: string } | undefined {
+  if (!label) return undefined;
+  const identifier = label
+    .replace(/[\t\n\r ]+/g, ' ')
+    .trim()
+    .toLowerCase();
+  return { identifier, label };
+}
