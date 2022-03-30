@@ -4,7 +4,7 @@ import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } 
 import { NodeGroups } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
-import { getColumnWidths } from './utils';
+import { getColumnWidths, renderPColumn } from './utils';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -131,7 +131,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
  * convert prosemirror table node into latex table
  */
 export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
-  const { columnSpec, numColumns } = getColumnWidths(node);
+  const { widths, numColumns } = getColumnWidths(node);
   if (!numColumns) {
     throw new Error('invalid table format, no columns');
   }
@@ -148,11 +148,23 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
 
   node.content.forEach(({ content: rowContent }) => {
     let i = 0;
+    let spanIdx = 0;
     rowContent.forEach((cell) => {
       const {
         attrs: { colspan },
       } = cell;
-      if (colspan > 1) state.write(`\\multicolumn{${colspan}}{c}{`);
+      if (colspan > 1) {
+        let width = 0;
+
+        for (let j = 0; j < colspan; j += 1) {
+          width += widths[spanIdx + j];
+        }
+        console.log('colspan', spanIdx, colspan, width, renderPColumn(0.9, width), widths);
+        state.write(`\\multicolumn{${colspan}}{|${renderPColumn(0.9, width)}|}{`);
+        spanIdx += colspan;
+      } else {
+        spanIdx += 1;
+      }
       if (
         cell.content.childCount === 1 &&
         cell.content.child(0).type.name === nodeNames.paragraph

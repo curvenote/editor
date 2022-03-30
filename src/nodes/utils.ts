@@ -71,6 +71,10 @@ export function getFirstChildWithName(
 
 const TOTAL_TABLE_WIDTH = 886;
 
+export function renderPColumn(factor: number, width: number) {
+  return `p{${(factor * width).toFixed(5)}\\textwidth}`;
+}
+
 /**
  * given a table node, return the column widths
  *
@@ -78,7 +82,7 @@ const TOTAL_TABLE_WIDTH = 886;
  * @returns
  */
 export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
-  // should work for colspans in the first row, as a colspanned cell has an array of the widths it spans
+  // TODO NOT working for colspans in the first row
   // TODO: unsure about rowspans
   let bestMaybeWidths = [];
   let mostNonNulls = 0;
@@ -120,11 +124,14 @@ export function getColumnWidths(node: Node<any>, verticalSeparator = true) {
 
   const fractionalWidths = widths.map((w: number) => w / total);
   const factor = 0.9;
-  const columnSpec = fractionalWidths
-    .map((w: number) => `p{${(factor * w).toFixed(5)}\\textwidth}`)
+  let columnSpec = fractionalWidths
+    .map((w: number) => renderPColumn(factor, w))
     .join(verticalSeparator ? '|' : '');
+  if (verticalSeparator) {
+    columnSpec = `|${columnSpec}|`;
+  }
   const numColumns =
     widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount;
 
-  return { widths, columnSpec, numColumns };
+  return { widths: fractionalWidths, columnSpec, numColumns };
 }

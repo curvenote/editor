@@ -75,7 +75,6 @@ export const texSerializer = new MarkdownSerializer(
           node.forEach((child) => {
             state.wrapBlock('', '\\textbullet~~', node, () => {
               state.renderInline(child);
-              state.write('\\newline');
             });
           });
         } else {
