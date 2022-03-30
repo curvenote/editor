@@ -1,0 +1,24 @@
+cases:
+  - title: bold
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'important - '
+            - type: text
+              marks:
+                - type: strong
+              text: hello!
+    mdast:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'important - '
+            - type: text
+              marks:
+                - type: strong
+              text: hello!

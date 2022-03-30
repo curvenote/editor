@@ -1,3 +1,4 @@
+export { toMdast } from './mdast';
 export { toMarkdown } from './markdown';
 export { toTex } from './tex';
 export { toText } from './text';
