@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import { Root } from 'mdast';
-import { fromJSON, toMdast } from '../src';
+import { fromJSON, fromMdast, toMdast, toYAML } from '../src';
 
 type TestFile = {
   cases: TestCase[];
@@ -44,6 +44,15 @@ describe('Testing curvenote --> mdast conversions', () => {
     const newMdastString = yaml.dump(toMdast(doc, 'full'));
     const mdastString = yaml.dump(mdast);
     expect(newMdastString).toEqual(mdastString);
+  });
+});
+
+describe('Testing mdast --> curvenote conversions', () => {
+  test.skip.each(cases)('%s', (_, { curvenote, mdast }) => {
+    const doc = yaml.dump(curvenote);
+    const newDoc = fromMdast(mdast, 'full');
+    const newDocString = toYAML(newDoc);
+    expect(newDocString).toEqual(doc);
   });
 });
 
