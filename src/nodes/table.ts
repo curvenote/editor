@@ -126,22 +126,56 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.closeBlock(node);
 };
 
+function getColumnWidths(node: Node<any>) {
+  // should work for colspans in the first row, as a colspanned cell has an array of the widths it spans
+  // TODO: unsure about rowspans
+  const maybeWidths = (node.content.firstChild?.content as any).content.reduce(
+    (acc: number[], cell: any) => {
+      if (cell.attrs.colwidth == null) return [...acc, null];
+      return [...acc, ...cell.attrs.colwidth];
+    },
+    [],
+  );
+  console.log('maybeWidths', maybeWidths);
+  const nonNulls = maybeWidths.filter((w: number) => w != null).length;
+  const avg =
+    nonNulls === 0
+      ? 50
+      : maybeWidths
+          .map((w: number) => (w == null ? 0 : w))
+          .reduce((a: number, b: number) => a + b, 0) / nonNulls;
+  console.log('avg', avg);
+  const widths = maybeWidths.map((w: number) => (w == null ? avg : w));
+  console.log('widths', widths);
+  const total = widths.reduce((acc: number, cur: number) => acc + cur, 0);
+  console.log('total', total);
+  const fractionalWidths = widths.map((w: number) => w / total);
+  console.log('fractionalWidths', fractionalWidths);
+  const factor = 0.9;
+  const columnSpec = fractionalWidths
+    .map((w: number) => `p{${(factor * w).toFixed(5)}\\textwidth}`)
+    .join('|');
+  console.log('columnSpec', columnSpec);
+  const numColumns =
+    widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount;
+  console.log('numColumns', numColumns);
+
+  return { widths, columnSpec, numColumns };
+}
+
 /**
  * convert prosemirror table node into latex table
  */
 export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
-  // TODO: this might not work with colspan in the first row?
-  const numColumns = node.content.firstChild?.content.childCount;
+  const { widths, columnSpec, numColumns } = getColumnWidths(node);
   if (!numColumns) {
     throw new Error('invalid table format, no columns');
   }
-
   state.isInTable = true;
 
   // Note we can put borders in with `|*{3}{c}|` and similarly on the multicolumn below
-  state.write('\\adjustbox{max width=\\textwidth}{%');
   state.ensureNewLine();
-  state.write(`\\begin{tabular}{*{${numColumns}}{c}}`);
+  state.write(`\\begin{tabular}{${columnSpec}}`);
   state.ensureNewLine();
   const dedent = indent(state);
   state.write(`\\hline`);
@@ -183,7 +217,6 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   state.ensureNewLine();
   dedent();
   state.write('\\end{tabular}');
-  state.write('}');
   state.closeBlock(node);
   state.isInTable = false;
 }
