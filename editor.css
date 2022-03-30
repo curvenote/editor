@@ -652,7 +652,7 @@ h6[numbered]:before {
   text-align: left;
 }
 
-article code {
+article .ProseMirror code {
   color: #e83e8c;
   border-radius: 2px;
   padding: 2px;
