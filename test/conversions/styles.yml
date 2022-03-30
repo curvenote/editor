@@ -1,5 +1,6 @@
 cases:
   - title: bold
+    skip: true
     description: '**strong**, _emphasis_, `literal text`, *escaped symbols*'
     curvenote:
       type: doc
@@ -45,3 +46,29 @@ cases:
               value: literal text
             - type: text
               value: ', *escaped symbols*'
+
+  - title: thematicBreak
+    curvenote:
+      type: doc
+      content:
+        - type: horizontal_rule
+    mdast:
+      type: root
+      children:
+        - type: thematicBreak
+
+  - title: paragraph
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: Hello World
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: Hello World

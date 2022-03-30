@@ -36,7 +36,6 @@
     "@wordpress/wordcount": "^3.2.2",
     "js-yaml": "^4.1.0",
     "markdown-it": "^12.2.0",
-    "markdown-it-docutils": "file:.yalc/markdown-it-docutils",
     "markdown-it-myst": "^0.0.9",
     "mystjs": "file:.yalc/mystjs",
     "nanoid": "^3.1.30",
