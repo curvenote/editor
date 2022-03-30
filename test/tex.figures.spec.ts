@@ -3,8 +3,7 @@ import { TexFormatTypes } from '../src/serialize/types';
 import { tnodes, tdoc } from './build';
 import { toTex } from '../src';
 
-const { p, figureF, img, figcaptionF, figcaptionT, table, table_row, table_header, table_cell } =
-  tnodes;
+const { p, figureF, img, figcaptionF, table, table_row, table_header, table_cell } = tnodes;
 
 const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.tex) => {
   expect(toTex(doc, { format })).toEqual(text);
