@@ -136,6 +136,9 @@ cases:
             label: my-TABLE
             numbered: true
             align: center
+            multipage: false
+            landscape: false
+            fullpage: false
           content:
             - type: figcaption
               attrs:

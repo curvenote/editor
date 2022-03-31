@@ -11,6 +11,11 @@ type ProtoNode = {
   content: (ProtoNode | ProsemirrorNode)[];
 };
 
+export enum ignoreNames {
+  directive = 'directive',
+  role = 'role',
+}
+
 function maybeMerge(a?: ProsemirrorNode, b?: ProsemirrorNode) {
   if (!a || !b) return undefined;
   if (a.isText && b.isText && Mark.sameSet(a.marks, b.marks)) return undefined; // a.withText(a.text + b.text);
@@ -91,7 +96,9 @@ export class MarkdownParseState {
       if (!handler)
         throw new Error(`Token type \`${token.type}\` not supported by tokensToMyst parser`);
       const { name, children } = handler(token, tokens);
-      if (name === nodeNames.text) {
+      if (name in ignoreNames && children && typeof children !== 'string') {
+        this.parseTokens(children);
+      } else if (name === nodeNames.text) {
         if (typeof children === 'string') {
           this.addText(children);
         } else {
@@ -107,7 +114,7 @@ export class MarkdownParseState {
           this.parseTokens(children);
         }
         this.closeNode();
-      } else {
+      } else if (name in markNames) {
         const markType = this.schema.marks[name];
         const mark = markType.create(markType.spec.attrsFromMdastToken(token, tokens));
         this.openMark(mark);
@@ -126,7 +133,7 @@ type TokenHandler = (
   token: GenericNode,
   tokens: GenericNode[],
 ) => {
-  name: nodeNames | markNames;
+  name: nodeNames | markNames | ignoreNames;
   children?: GenericNode[] | string;
 };
 
@@ -237,6 +244,14 @@ const handlers: Record<string, TokenHandler> = {
   }),
   admonition: (token) => ({
     name: nodeNames.callout,
+    children: token.children,
+  }),
+  directive: (token) => ({
+    name: ignoreNames.directive,
+    children: token.children,
+  }),
+  role: (token) => ({
+    name: ignoreNames.role,
     children: token.children,
   }),
 };

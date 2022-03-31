@@ -63,6 +63,7 @@ export const tnodes = builders(schema, {
   time: { nodeType: 'time', datetime: new Date('1759/09/22') }, // William Playfair's birthday!
   cite: { nodeType: 'cite', kind: src.ReferenceKind.cite, key: 'SimPEG2015' },
   citep: { nodeType: src.nodeNames.cite_group },
+  code_block: { nodeType: 'code_block', language: 'python' },
 });
 
 export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);
