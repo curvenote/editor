@@ -13,6 +13,8 @@ import {
   normalizeLabel,
   readBooleanAttr,
   setNumberedAttrs,
+  isFancyTable,
+  addMdastSnippet,
 } from './utils';
 import { nodeNames } from '../types';
 import type { Attrs as ImageAttrs } from './image';
@@ -133,6 +135,19 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     }
     case CaptionKind.table: {
       const table = getFirstChildWithName(node, [nodeNames.table]);
+      if (table && isFancyTable(table)) {
+        const mdastId = addMdastSnippet(state, node);
+        if (mdastId === false) {
+          state.write('Complex table unsupported');
+          state.closeBlock(node);
+          return;
+        }
+        state.write(`\`\`\`{mdast} ${mdastId}`);
+        state.ensureNewLine();
+        state.write('```');
+        state.closeBlock(node);
+        return;
+      }
       state.nextTableCaption = caption;
       if (table) state.render(table);
       state.closeBlock(node);

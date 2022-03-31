@@ -35,7 +35,7 @@ export interface MarkdownOptions extends SharedOptions {
   renderers?: {
     iframe?: 'html' | 'myst';
   };
-  mdastSerializer?: (node: Node) => GenericNode;
+  createMdastImportId?: () => string;
 }
 
 export interface TexOptions extends SharedOptions {
@@ -53,6 +53,7 @@ export interface MdSerializerState extends SharedSerializerState {
   options: MarkdownOptions;
   nextTableCaption?: Node | null;
   mdastSnippets?: Record<string, GenericNode>;
+  mdastSerializer?: (node: Node) => GenericNode;
   out?: string;
 }
 export interface TexSerializerState extends SharedSerializerState {

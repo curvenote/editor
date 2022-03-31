@@ -152,9 +152,9 @@ export function isFancyTable(node: Node) {
 
 export function addMdastSnippet(state: MdSerializerState, node: Node): string | false {
   if (!state.mdastSnippets) state.mdastSnippets = {};
-  if (!state.options.mdastSerializer) return false;
-  const id = createId();
-  state.mdastSnippets[id] = state.options.mdastSerializer(node);
+  if (!state.mdastSerializer) return false;
+  const id = state.options.createMdastImportId?.() ?? createId();
+  state.mdastSnippets[id] = state.mdastSerializer(node);
   return id;
 }
 

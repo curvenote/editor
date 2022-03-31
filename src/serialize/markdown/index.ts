@@ -125,11 +125,12 @@ const mdMarks: MarkdownSerializerParameters[1] = {
 };
 
 export function toMyst(doc: ProsemirrorNode, opts?: MarkdownOptions) {
-  const defualtOpts: MarkdownOptions = { tightLists: true, mdastSerializer: toMdastSnippet };
+  const defualtOpts: MarkdownOptions = { tightLists: true };
   const state = new (MarkdownSerializerState as any)(mdNodes, mdMarks, {
     ...defualtOpts,
     ...opts,
   }) as MdSerializerState;
+  state.mdastSerializer = toMdastSnippet;
   state.renderContent(doc);
   const post = mdPostProcess(state.out as string);
   return { content: post, mdastSnippets: state.mdastSnippets ?? {} };

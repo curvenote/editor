@@ -5,7 +5,7 @@ import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } 
 import { NodeGroups, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
-import { addMdastSnippet, getColumnWidths, isFancyTable, renderPColumn } from './utils';
+import { getColumnWidths, renderPColumn } from './utils';
 
 type TableSpans = {
   colspan?: number;
@@ -86,18 +86,6 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
 };
 
 export const toListTable: MdFormatSerialize = (state, node, figure, index) => {
-  if (isFancyTable(node)) {
-    const id = addMdastSnippet(state, node);
-    if (id === false) {
-      state.write('Complex table unsupported');
-      state.closeBlock(node);
-      return;
-    }
-    state.write(`\`\`\`{mdast} ${id}`);
-    state.write('```');
-    state.closeBlock(node);
-    return;
-  }
   // Use ~~~ for fence, as tables often have captions with roles/citations
   state.write('~~~{list-table}');
   if (state.nextTableCaption) {
