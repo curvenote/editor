@@ -14,10 +14,11 @@ import {
   Underline,
 } from 'myst-spec';
 import { MarkGroups, Props } from './nodes/types';
+import { MdastOptions } from './serialize/types';
 
 export interface MyMarkSpec<N extends MystNode> extends MarkSpec {
   attrsFromMdastToken: (t: GenericNode) => Record<string, any>;
-  toMyst: (props: Props) => N;
+  toMyst: (props: Props, opts: MdastOptions) => N;
 }
 
 export type LinkAttrs = {
@@ -52,9 +53,9 @@ export const link: MyMarkSpec<Link> = {
   attrsFromMdastToken(token) {
     return { href: token.url, title: token.title };
   },
-  toMyst: (props): Link => ({
+  toMyst: (props, opts): Link => ({
     type: 'link',
-    url: props.href,
+    url: opts.localizeLink?.(props.href) ?? props.href,
     title: props.title || undefined,
     children: (props.children || []) as StaticPhrasingContent[],
   }),

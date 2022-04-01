@@ -47,7 +47,7 @@ cases:
         - type: equation
           attrs:
             id: sigma-δ
-            label: SIGMA-δ
+            label: null
             numbered: true
             title: ''
           content:
@@ -58,5 +58,5 @@ cases:
       children:
         - type: math
           identifier: sigma-δ
-          label: SIGMA-δ
+          label: sigma-δ
           value: δ here

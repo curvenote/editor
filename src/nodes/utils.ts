@@ -4,7 +4,10 @@ import { MdSerializerState, nodeNames } from '../types';
 import { clamp, createId } from '../utils';
 import { NodeSpecAttrs, NumberedNode } from './types';
 
-export const getImageWidth = (width?: string | null) => {
+export const getImageWidth = (width?: number | string | null) => {
+  if (typeof width === 'number') {
+    return clamp(width, 10, 100);
+  }
   const widthNum = Number.parseInt((width ?? String(DEFAULT_IMAGE_WIDTH)).replace('%', ''), 10);
   return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
 };
@@ -138,7 +141,7 @@ export function getColumnWidths(node: Node<any>) {
  * "fancy" means there are table_cells or table_headers with
  * colspan or rowspan > 1.
  */
-export function isFancyTable(node: Node) {
+export function hasFancyTable(node: Node) {
   let hasRowspan = false;
   let hasColspan = false;
   node.descendants((n) => {
@@ -158,9 +161,24 @@ export function addMdastSnippet(state: MdSerializerState, node: Node): string | 
   return id;
 }
 
+export function writeMdastSnippet(state: MdSerializerState, node: Node): boolean {
+  const mdastId = addMdastSnippet(state, node);
+  if (mdastId === false) {
+    // If the mdast writer isn't defined (it usually is!)
+    state.write('No mdast writer attached.');
+    state.closeBlock(node);
+    return false; // maybe better?
+  }
+  state.write(`\`\`\`{mdast} ${mdastId}`);
+  state.ensureNewLine();
+  state.write('```');
+  state.closeBlock(node);
+  return true;
+}
+
 // TODO: this is directly from mystjs - we should export from there instead
 export function normalizeLabel(
-  label: string | undefined,
+  label?: string | null,
 ): { identifier: string; label: string } | undefined {
   if (!label) return undefined;
   const identifier = label

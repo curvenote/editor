@@ -43,15 +43,16 @@ const equation: MyNodeSpec<Attrs, Math> = {
   ],
   attrsFromMdastToken: (token) => ({
     id: token.identifier || null,
-    label: token.label || null,
+    label: null,
     numbered: Boolean(token.identifier),
     title: '',
   }),
-  toMyst: (props): Math => {
+  toMyst: (props, options): Math => {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
+      const localizedId = options.localizeId?.(props.id ?? '') ?? props.id ?? '';
       return {
         type: 'math',
-        ...normalizeLabel(props.label || props.id),
+        ...normalizeLabel(localizedId),
         value: props.children[0].value || '',
       };
     }

@@ -70,7 +70,7 @@ const mdNodes: MarkdownSerializerParameters[0] = {
   cite_group: nodes.CiteGroup.toMarkdown,
   mention: nodes.Mention.toMarkdown,
   // Tables
-  table: nodes.Table.toListTable,
+  table: nodes.Table.toMarkdown,
   // Dynamic
   variable: nodes.Variable.toMarkdown,
   display: nodes.Display.toMarkdown,
@@ -130,7 +130,7 @@ export function toMyst(doc: ProsemirrorNode, opts?: MarkdownOptions) {
     ...defualtOpts,
     ...opts,
   }) as MdSerializerState;
-  state.mdastSerializer = toMdastSnippet;
+  state.mdastSerializer = (d) => toMdastSnippet(d, opts);
   state.renderContent(doc);
   const post = mdPostProcess(state.out as string);
   return { content: post, mdastSnippets: state.mdastSnippets ?? {} };

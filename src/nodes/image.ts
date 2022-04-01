@@ -72,13 +72,13 @@ const image: MyNodeSpec<Attrs, Image> = {
     align: token.align || 'center',
     caption: false,
   }),
-  toMyst: (props): Image => ({
+  toMyst: (props, opts): Image => ({
     type: 'image',
-    url: props.src,
+    url: opts.localizeImageSrc?.(props.src) || props.src,
     alt: props.alt || undefined,
     title: props.title || undefined,
     align: undefined,
-    width: props.width || undefined,
+    width: `${getImageWidth(props.width)}%` || undefined,
   }),
 };
 

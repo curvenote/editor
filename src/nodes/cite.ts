@@ -1,17 +1,25 @@
+import { CrossReference } from 'myst-spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';
+import { normalizeLabel } from './utils';
 
 export type Attrs = {
   key: string | null;
   kind: ReferenceKind;
-  label: string | null;
+  label: string | null; // This is maybe deprecated?
   text: string | null;
   title: string | null;
 };
 
 type Legacy = { inline: undefined };
 
-const cite: MyNodeSpec<Attrs & Legacy, any> = {
+export type CiteMystNode = {
+  type: 'cite';
+  identifier?: string;
+  label?: string;
+};
+
+const cite: MyNodeSpec<Attrs & Legacy, CiteMystNode | CrossReference> = {
   attrs: {
     key: { default: null },
     title: { default: '' },
@@ -39,6 +47,7 @@ const cite: MyNodeSpec<Attrs & Legacy, any> = {
           label: dom.getAttribute('label') || null,
           // inline is for legacy
           inline: undefined,
+          // `text` is the rendered text e.g. "Jon et. al, 2020" OR is "Table %s"
           text: dom.getAttribute('inline') ?? dom.textContent ?? '',
         };
       },
@@ -52,20 +61,51 @@ const cite: MyNodeSpec<Attrs & Legacy, any> = {
         key: key || undefined,
         kind: kind ?? 'cite',
         title: title || undefined,
-        label: label || undefined,
+        label: label || undefined, // Should we remove this?!?!
       },
       text || '',
     ];
   },
-  attrsFromMdastToken: () => ({
-    key: null,
-    kind: ReferenceKind.cite,
-    label: null,
-    title: null,
-    inline: undefined,
-    text: '',
-  }),
-  toMyst: () => ({}),
+  attrsFromMdastToken: (node) => {
+    if (node.type === 'crossReference') {
+      const crossRef = node as CrossReference;
+      return {
+        key: crossRef.identifier ?? null,
+        kind: ReferenceKind.fig, // we loose this information?!
+        label: null,
+        title: null,
+        inline: undefined,
+        text: node.children?.[0]?.value || node.label || node.identifier || '',
+      };
+    }
+    return {
+      key: node.identifier ?? null,
+      kind: ReferenceKind.cite,
+      label: null,
+      title: null,
+      inline: undefined,
+      text: '', // TODO: get this from children? `Jon et al., 2022`
+    };
+  },
+  toMyst: (props, options): CiteMystNode | CrossReference => {
+    if (props.kind === ReferenceKind.cite) {
+      const citeKey = options.localizeCitation?.(props.key ?? '') ?? props.key ?? '';
+      const { identifier, label } = normalizeLabel(citeKey) ?? {};
+      return {
+        type: 'cite',
+        identifier,
+        label,
+      };
+    }
+    const localizedId = options.localizeId?.(props.key ?? '') ?? props.key ?? '';
+    const { identifier, label } = normalizeLabel(localizedId) ?? {};
+    return {
+      type: 'crossReference',
+      identifier,
+      label,
+      children: [{ type: 'text', value: props.text || '' }],
+    };
+  },
 };
 
 function getPrependedText(kind: ReferenceKind): string {

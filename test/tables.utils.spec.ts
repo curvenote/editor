@@ -1,5 +1,5 @@
 import { toMyst, toMdast } from '../src/serialize';
-import { getColumnWidths, TOTAL_TABLE_WIDTH, isFancyTable } from '../src/nodes/utils';
+import { getColumnWidths, TOTAL_TABLE_WIDTH, hasFancyTable } from '../src/nodes/utils';
 import { tnodes, tdoc } from './build';
 
 const { p, table, table_row, table_header, table_cell } = tnodes;
@@ -12,7 +12,7 @@ describe('tables.utils - general table handling', () => {
       expect(numColumns).toEqual(0);
       expect(widths).toEqual([]);
       expect(columnSpec).toEqual('');
-      expect(isFancyTable(node)).toBe(false);
+      expect(hasFancyTable(node)).toBe(false);
     });
     test('one cell', () => {
       const node = table(table_row(table_cell(p('data 1'))));
@@ -98,7 +98,7 @@ describe('tables.utils - general table handling', () => {
       expect(columnSpec).toEqual(
         'p{\\dimexpr 0.333\\linewidth-2\\tabcolsep}p{\\dimexpr 0.333\\linewidth-2\\tabcolsep}p{\\dimexpr 0.333\\linewidth-2\\tabcolsep}',
       );
-      expect(isFancyTable(node)).toBe(true);
+      expect(hasFancyTable(node)).toBe(true);
     });
     test('three rows, three cols', () => {
       const node = table(

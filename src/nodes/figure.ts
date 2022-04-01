@@ -13,8 +13,8 @@ import {
   normalizeLabel,
   readBooleanAttr,
   setNumberedAttrs,
-  isFancyTable,
-  addMdastSnippet,
+  hasFancyTable,
+  writeMdastSnippet,
 } from './utils';
 import { nodeNames } from '../types';
 import type { Attrs as ImageAttrs } from './image';
@@ -72,7 +72,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
     const match = token.class?.match(/align-(left|right|center)/);
     return {
       id: token.identifier || null,
-      label: token.label || null,
+      label: null, // This is deprecated
       numbered: token.numbered || false,
       align: match ? match[1] : 'center',
       multipage: false,
@@ -80,7 +80,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
       fullpage: false,
     };
   },
-  toMyst: (props): Container => {
+  toMyst: (props, options): Container => {
     let containerKind: 'figure' | 'table' = 'figure';
     props.children?.forEach((child) => {
       if (child.type === 'image' || child.type === 'table') {
@@ -90,10 +90,11 @@ const figure: MyNodeSpec<Attrs, Container> = {
         containerKind = 'table';
       }
     });
+    const localizedId = options.localizeId?.(props.id ?? '') ?? props.id ?? '';
     return {
       type: 'container',
       kind: containerKind,
-      ...normalizeLabel(props.label || props.id),
+      ...normalizeLabel(localizedId),
       numbered: readBooleanAttr(props.numbered),
       class: props.align ? `align-${props.align}` : undefined,
       children: (props.children || []) as (Caption | Legend | Image | Table)[],
@@ -135,17 +136,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     }
     case CaptionKind.table: {
       const table = getFirstChildWithName(node, [nodeNames.table]);
-      if (table && isFancyTable(table)) {
-        const mdastId = addMdastSnippet(state, node);
-        if (mdastId === false) {
-          state.write('Complex table unsupported');
-          state.closeBlock(node);
-          return;
-        }
-        state.write(`\`\`\`{mdast} ${mdastId}`);
-        state.ensureNewLine();
-        state.write('```');
-        state.closeBlock(node);
+      if (table && hasFancyTable(table)) {
+        writeMdastSnippet(state, node);
         return;
       }
       state.nextTableCaption = caption;

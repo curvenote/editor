@@ -5,7 +5,7 @@ import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } 
 import { NodeGroups, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
-import { getColumnWidths, renderPColumn } from './utils';
+import { writeMdastSnippet, getColumnWidths, hasFancyTable, renderPColumn } from './utils';
 
 type TableSpans = {
   colspan?: number;
@@ -43,13 +43,18 @@ nodes.table_row.toMyst = (props: Props): TableRow => ({
   children: (props.children || []) as TableCell[],
 });
 
+function ifGreaterThanOne(num?: number): undefined | number {
+  if (!num) return undefined;
+  return num === 1 ? undefined : num;
+}
+
 nodes.table_header.attrsFromMdastToken = () => ({});
 nodes.table_header.toMyst = (props: Props): TableCell & TableSpans => ({
   type: 'tableCell',
   header: true,
   align: props.align || undefined,
-  colspan: props.colspan || undefined,
-  rowspan: props.rowspan || undefined,
+  colspan: ifGreaterThanOne(props.colspan),
+  rowspan: ifGreaterThanOne(props.rowspan),
   children: (props.children || []) as PhrasingContent[],
 });
 
@@ -58,8 +63,8 @@ nodes.table_cell.toMyst = (props: Props): TableCell & TableSpans => ({
   type: 'tableCell',
   header: undefined,
   align: props.align || undefined,
-  colspan: props.colspan || undefined,
-  rowspan: props.rowspan || undefined,
+  colspan: ifGreaterThanOne(props.colspan),
+  rowspan: ifGreaterThanOne(props.rowspan),
   children: (props.children || []) as PhrasingContent[],
 });
 
@@ -102,7 +107,7 @@ export const toListTable: MdFormatSerialize = (state, node, figure, index) => {
   state.closeBlock(node);
 };
 
-export const toMarkdown: MdFormatSerialize = (state, node) => {
+export const toGFMMarkdownTable: MdFormatSerialize = (state, node) => {
   let rowIndex = 0;
 
   node.content.forEach((child) => {
@@ -309,6 +314,14 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   state.closeBlock(node);
   state.isInTable = false;
 }
+
+export const toMarkdown: MdFormatSerialize = (state, node, figure, index) => {
+  if (node && hasFancyTable(node)) {
+    writeMdastSnippet(state, node);
+    return;
+  }
+  toListTable(state, node, figure, index);
+};
 
 export const toTex: TexFormatSerialize = (state, node) => {
   try {

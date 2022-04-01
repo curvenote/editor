@@ -11,6 +11,8 @@ import { Root, Text as MystText } from 'myst-spec';
 import { createDocument, Fragment, Node, Text } from './document';
 import { markNames, nodeNames } from '../../types';
 import { Props } from '../../nodes/types';
+import { getSchema } from '../../schemas';
+import { MdastOptions } from '../types';
 
 type CreateNodeSpec = (node: ProsemirrorNode) => DOMOutputSpec;
 type CreateMarkSpec = (mark: Mark, inline: boolean) => DOMOutputSpec;
@@ -51,11 +53,15 @@ function getSerializer(schema: Schema): DOMSerializer {
   return new DOMSerializer(nodes, marks);
 }
 
-export function nodeToMdast(fragment: (Node | Text)[], schema: Schema): GenericNode[] {
+export function nodeToMdast(
+  fragment: (Node | Text)[],
+  schema: Schema,
+  opts: MdastOptions,
+): GenericNode[] {
   if (fragment.length === 0) return [];
   return fragment.map((node) => {
     if (node instanceof Node) {
-      const children: GenericNode[] = nodeToMdast(node.children, schema);
+      const children: GenericNode[] = nodeToMdast(node.children, schema, opts);
       const props: Props = {
         key: node.id,
         tag: node.tag,
@@ -64,10 +70,10 @@ export function nodeToMdast(fragment: (Node | Text)[], schema: Schema): GenericN
         children,
       };
       if (node.name in nodeNames) {
-        return schema.nodes[node.name].spec.toMyst(props) as GenericNode;
+        return schema.nodes[node.name].spec.toMyst(props, opts) as GenericNode;
       }
       if (node.name in markNames) {
-        return schema.marks[node.name].spec.toMyst(props) as GenericNode;
+        return schema.marks[node.name].spec.toMyst(props, opts) as GenericNode;
       }
       throw new Error(`Node for "${node.name}" is not defined.`);
     }
@@ -76,20 +82,22 @@ export function nodeToMdast(fragment: (Node | Text)[], schema: Schema): GenericN
   });
 }
 
-export function convertToMdast(node: ProsemirrorNode, schema: Schema): Root {
+export function convertToMdast(node: ProsemirrorNode, opts: MdastOptions): Root {
+  const schema = getSchema('full');
   const serializer = getSerializer(schema);
   const dom = serializer.serializeFragment(node.content, {
     document: createDocument(),
   }) as unknown as Fragment;
-  return { type: 'root', children: nodeToMdast(dom.children, schema) } as Root;
+  return { type: 'root', children: nodeToMdast(dom.children, schema, opts) } as Root;
 }
 
-export function convertToMdastSnippet(node: ProsemirrorNode, schema: Schema): GenericNode {
+export function convertToMdastSnippet(node: ProsemirrorNode, opts: MdastOptions): GenericNode {
   if (node.type.name === 'doc') {
     throw new Error('The requested mdast snippet is a document, use convertToMdast.');
   }
   // If the node is not a top level, wrap it in a document and return that!
+  const schema = getSchema('full');
   const { doc } = schema.nodes;
   const wrapped = doc.create({}, [node]);
-  return convertToMdast(wrapped, schema)?.children?.[0] as GenericNode;
+  return convertToMdast(wrapped, opts)?.children?.[0] as GenericNode;
 }

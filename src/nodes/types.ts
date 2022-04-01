@@ -1,6 +1,7 @@
 import { GenericNode } from 'mystjs';
 import { Node as MystNode } from 'myst-spec';
 import { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
+import { MdastOptions } from '../serialize/types';
 
 export enum CaptionKind {
   fig = 'fig',
@@ -49,16 +50,17 @@ export interface MyParseRule<T extends O> extends ParseRule {
   getAttrs?: (p: any) => T;
 }
 
-export type Props = {
-  key: string;
-  children?: GenericNode[];
-} & O;
+export type Props<T extends O = O> = T &
+  O & {
+    key: string;
+    children?: GenericNode[];
+  };
 
 export interface MyNodeSpec<T extends O, N extends MystNode> extends NodeSpec {
   attrs: NodeSpecAttrs<T>;
   parseDOM?: MyParseRule<T>[];
   attrsFromMdastToken: (t: GenericNode, ts: GenericNode[]) => T;
-  toMyst: (props: Props) => N;
+  toMyst: (props: Props<T>, opts: MdastOptions) => N;
 }
 
 export type NumberedNode = {

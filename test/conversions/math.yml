@@ -57,7 +57,7 @@ cases:
         - type: equation
           attrs:
             id: my-equation
-            label: My-Equation
+            label: null
             numbered: true
             title: ''
           content:
@@ -68,7 +68,7 @@ cases:
       children:
         - type: math
           identifier: my-equation
-          label: My-Equation
+          label: my-equation
           value: y = mx + b
   - title: amsmath
     curvenote:

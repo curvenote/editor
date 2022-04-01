@@ -133,7 +133,7 @@ cases:
         - type: figure
           attrs:
             id: my-table
-            label: my-TABLE
+            label: null
             numbered: true
             align: center
             multipage: false
@@ -230,7 +230,7 @@ cases:
         - type: container
           kind: table
           identifier: my-table
-          label: my-TABLE
+          label: my-table
           numbered: true
           class: align-center
           children:

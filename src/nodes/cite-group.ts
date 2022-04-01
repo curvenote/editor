@@ -1,9 +1,16 @@
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
+import { CiteMystNode } from './cite';
 
 export type Attrs = Record<string, never>;
 
-const citeGroup: MyNodeSpec<Attrs, any> = {
+type CiteGroupMystNode = {
+  type: 'citeGroup';
+  kind: 'narrative' | 'parenthetical';
+  children: CiteMystNode[]; // can maybe have cross references?
+};
+
+const citeGroup: MyNodeSpec<Attrs, CiteGroupMystNode> = {
   attrs: {},
   inline: true,
   atom: true,
@@ -23,7 +30,11 @@ const citeGroup: MyNodeSpec<Attrs, any> = {
     return ['cite-group', 0];
   },
   attrsFromMdastToken: () => ({}),
-  toMyst: () => ({}),
+  toMyst: (props) => ({
+    type: 'citeGroup',
+    kind: 'parenthetical',
+    children: props.children as CiteMystNode[],
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
