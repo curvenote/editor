@@ -3845,10 +3845,10 @@ myst-spec@0.0.2, myst-spec@^0.0.2:
   resolved "https://registry.yarnpkg.com/myst-spec/-/myst-spec-0.0.2.tgz#472433ce6e7790487dbd76bbac76150d162ce947"
   integrity sha512-jGOFSDDdYip9JsW3KPHfq7v2AC9c4Pg7gM4HEtNX2bhsHQNqldU6nZv+QmXtxIwDlfYAGVIHgQL3XNfM+7QeEg==
 
-mystjs@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.4.tgz#6ef0c347a32c3220941f8732eb2eb5f69113b8c8"
-  integrity sha512-RHOmj4hZBJ6vdfCrSZKz49TAhKk2/d5DriVR/FayZ86csfkOlykCA391+rNgS6u67q8cgDxZyLB2jlv6UuEz4w==
+mystjs@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.5.tgz#68a8f6e4d2931bb9f0be5941de0fb5a83c560320"
+  integrity sha512-J+hYVwIyXN0H6/wwmANUc5rs9MdLJRcQ2ABm7sZPGidwwNSPSg105xlN4eFTxBksKh7PxIHkEWBJCxYPb42QuA==
   dependencies:
     classnames "^2.3.1"
     he "^1.2.0"
