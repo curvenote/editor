@@ -50,6 +50,7 @@ const iframe: MyNodeSpec<Attrs, any> = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const renderer = state.options.renderers?.iframe ?? 'html';
+  // TODO: I think that the caption is not rendered here?!
   const { src, align, width } = node.attrs as Attrs;
   if (renderer === 'myst') {
     state.ensureNewLine();
