@@ -6,8 +6,15 @@ export interface Attrs {
   user: string;
 }
 
+export type MentionMystNode = {
+  type: 'mention';
+  identifier: string;
+  label?: string;
+  value: string;
+};
+
 function createMentionNodeSpecs() {
-  const mentionNodeSpec: MyNodeSpec<Attrs, any> = {
+  const mentionNodeSpec: MyNodeSpec<Attrs, MentionMystNode> = {
     group: NodeGroups.inline,
     attrs: { label: { default: '' }, user: { default: '' } },
     inline: true,
@@ -28,8 +35,16 @@ function createMentionNodeSpecs() {
         },
       },
     ],
-    attrsFromMdastToken: () => ({ label: '', user: '' }),
-    toMyst: () => ({}),
+    attrsFromMdastToken: (token) => ({
+      user: token.identifier,
+      label: token.value || '',
+    }),
+    toMyst: (props) => ({
+      type: 'mention',
+      identifier: props['data-user'],
+      label: props['data-user'],
+      value: props.title,
+    }),
   };
   return {
     mention: mentionNodeSpec,

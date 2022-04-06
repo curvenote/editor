@@ -3,13 +3,19 @@ import { MdFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec, AlignOptions } from './types';
 import { getImageWidth } from './utils';
 
+type IframeMystNode = {
+  type: 'iframe';
+  src: string;
+  width: string | number | null;
+};
+
 export type Attrs = {
   src: string;
   align: AlignOptions;
   width: number | null;
 };
 
-const iframe: MyNodeSpec<Attrs, any> = {
+const iframe: MyNodeSpec<Attrs, IframeMystNode> = {
   attrs: {
     src: {},
     align: { default: 'center' },
@@ -40,12 +46,16 @@ const iframe: MyNodeSpec<Attrs, any> = {
       },
     ];
   },
-  attrsFromMdastToken: () => ({
-    src: '',
+  attrsFromMdastToken: (node) => ({
+    src: node.src,
     align: 'center',
-    width: DEFAULT_IMAGE_WIDTH,
+    width: getImageWidth(node.width),
   }),
-  toMyst: () => ({}),
+  toMyst: (node) => ({
+    type: 'iframe',
+    src: node.src,
+    width: node.width,
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
@@ -56,8 +66,10 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     state.ensureNewLine();
     state.write(`\`\`\`{iframe} ${src}\n`);
     state.write(`:label: ${state.nextCaptionId}\n`);
+    // TODO: Align should come from figure
     state.write(`:align: ${align}\n`);
     state.write(`:width: ${width}%\n`);
+    // TODO: If there is a caption, put it here
     state.write('```');
     state.closeBlock(node);
     return;

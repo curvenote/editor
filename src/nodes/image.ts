@@ -62,9 +62,9 @@ const image: MyNodeSpec<Attrs, Image> = {
     ];
   },
   attrsFromMdastToken: (token) => ({
-    id: token.identifier || null,
-    label: token.label || null,
-    numbered: token.numbered,
+    id: null, // Deprecated, use figure / container
+    label: null, // Deprecated, use figure / container
+    numbered: false, // Deprecated, use figure / container
     src: token.url || '',
     alt: token.alt || '',
     title: token.title || '',

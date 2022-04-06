@@ -14,5 +14,6 @@ cases:
       children:
         - type: paragraph
           children:
-            - type: text
+            - type: time
+              time: '1759-09-22T07:33:52.000Z'
               value: Sep 22, 1759

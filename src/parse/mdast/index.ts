@@ -254,6 +254,24 @@ const handlers: Record<string, TokenHandler> = {
     name: ignoreNames.role,
     children: token.children,
   }),
+  reactiveButton: () => ({
+    name: nodeNames.button,
+  }),
+  reactiveDisplay: () => ({
+    name: nodeNames.display,
+  }),
+  reactiveDynamic: () => ({
+    name: nodeNames.dynamic,
+  }),
+  reactiveRange: () => ({
+    name: nodeNames.range,
+  }),
+  reactiveSwitch: () => ({
+    name: nodeNames.switch,
+  }),
+  reactiveVariable: () => ({
+    name: nodeNames.variable,
+  }),
 };
 
 export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {

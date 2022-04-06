@@ -90,10 +90,6 @@ export const hard_break: MyNodeSpec<Attrs, Break> = {
   toMyst: (): Break => ({ type: 'break' }),
 };
 
-export type ListAttrs = {
-  order: number | null;
-};
-
 const listNodes = addListNodes(
   OrderedMap.from({}),
   `paragraph ${NodeGroups.block}*`,
@@ -109,6 +105,10 @@ ordered_list.attrsFromMdastToken = (token: GenericNode) => ({ order: token.start
 ordered_list.toMyst = (props: Props): List => ({
   type: 'list',
   ordered: true,
+  // This feels like it should be `start: props.order`, but it
+  // is in fact correct as is since we are grabbing these props
+  // off the HTML in `convertToMdast`, not the prosemirror node
+  // https://github.com/ProseMirror/prosemirror-schema-list/blob/master/src/schema-list.js#L17
   start: props.start || undefined,
   children: (props.children || []) as ListContent[],
 });

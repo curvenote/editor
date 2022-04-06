@@ -6,6 +6,7 @@ import {
   getNumberedAttrs,
   getNumberedDefaultAttrs,
   normalizeLabel,
+  readBooleanAttr,
   setNumberedAttrs,
 } from './utils';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
@@ -14,7 +15,12 @@ export type Attrs = NumberedNode & {
   title: string;
 };
 
-const equation: MyNodeSpec<Attrs, Math> = {
+export type NumberedMathMystNode = Math & {
+  numbered: boolean;
+  number?: string;
+};
+
+const equation: MyNodeSpec<Attrs, NumberedMathMystNode> = {
   group: NodeGroups.top,
   // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
@@ -44,15 +50,16 @@ const equation: MyNodeSpec<Attrs, Math> = {
   attrsFromMdastToken: (token) => ({
     id: token.identifier || null,
     label: null,
-    numbered: Boolean(token.identifier),
+    numbered: token.numbered,
     title: '',
   }),
-  toMyst: (props, options): Math => {
+  toMyst: (props, options) => {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
       const localizedId = options.localizeId?.(props.id ?? '') ?? props.id ?? '';
       return {
         type: 'math',
         ...normalizeLabel(localizedId),
+        numbered: readBooleanAttr(props.numbered),
         value: props.children[0].value || '',
       };
     }
@@ -60,7 +67,7 @@ const equation: MyNodeSpec<Attrs, Math> = {
   },
 };
 
-export const equationNoDisplay: MyNodeSpec<Attrs, Math> = {
+export const equationNoDisplay: MyNodeSpec<Attrs, NumberedMathMystNode> = {
   ...equation,
   content: `${NodeGroups.text}*`,
 };

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { Root } from 'mdast';
+import { Root } from 'myst-spec';
 import { fromJSON, fromMdast, toMdast, toYAML } from '../src';
 
 type TestFile = {

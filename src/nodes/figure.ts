@@ -74,7 +74,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
       id: token.identifier || null,
       label: null, // This is deprecated
       numbered: token.numbered || false,
-      align: match ? match[1] : 'center',
+      align: (match ? match[1] : 'center') as AlignOptions,
       multipage: false,
       landscape: false,
       fullpage: false,

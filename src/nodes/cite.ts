@@ -1,4 +1,5 @@
 import { CrossReference } from 'myst-spec';
+import { GenericNode } from 'mystjs';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';
 import { normalizeLabel } from './utils';
@@ -75,7 +76,7 @@ const cite: MyNodeSpec<Attrs & Legacy, CiteMystNode | CrossReference> = {
         label: null,
         title: null,
         inline: undefined,
-        text: node.children?.[0]?.value || node.label || node.identifier || '',
+        text: (node.children?.[0] as GenericNode)?.value || node.label || node.identifier || '',
       };
     }
     return {

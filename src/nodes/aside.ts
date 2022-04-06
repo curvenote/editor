@@ -1,9 +1,15 @@
-import { NodeSpec } from 'prosemirror-model';
+import { FlowContent } from 'myst-spec';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { NodeGroups } from './types';
+import { NodeGroups, MyNodeSpec } from './types';
 
-const aside: NodeSpec = {
+export type MarginMystNode = {
+  type: 'margin';
+  children: FlowContent[];
+};
+
+const aside: MyNodeSpec<Record<string, never>, MarginMystNode> = {
+  attrs: {},
   group: NodeGroups.top,
   content: NodeGroups.blockOrHeading,
   toDOM() {
@@ -13,6 +19,15 @@ const aside: NodeSpec = {
     { tag: 'aside' }, // This is legacy and should be removed!
     { tag: 'aside.margin' },
   ],
+  attrsFromMdastToken() {
+    return {};
+  },
+  toMyst(props) {
+    return {
+      type: 'margin',
+      children: (props.children || []) as FlowContent[],
+    };
+  },
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

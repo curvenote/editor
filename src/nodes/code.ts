@@ -59,7 +59,7 @@ const code: MyNodeSpec<Attrs, Code> = {
   attrsFromMdastToken: (token) => ({
     id: token.identifier || null,
     label: token.label || null,
-    numbered: token.numbered || false,
+    numbered: false,
     language: token.lang || null,
     linenumbers: token.showLineNumbers || false,
     title: '',

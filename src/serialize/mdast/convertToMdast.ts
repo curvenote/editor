@@ -5,7 +5,6 @@ import {
   Node as ProsemirrorNode,
   Schema,
 } from 'prosemirror-model';
-// import { Root } from 'mdast';
 import { GenericNode } from 'mystjs';
 import { Root, Text as MystText } from 'myst-spec';
 import { createDocument, Fragment, Node, Text } from './document';

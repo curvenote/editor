@@ -1,6 +1,6 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node, NodeSpec, AttributeSpec } from 'prosemirror-model';
-import { NodeDef, Attr } from '../types';
+import { Node, AttributeSpec } from 'prosemirror-model';
+import { NodeDef, Attr, MyNodeSpec } from '../types';
 
 export const DEFAULT_FORMAT = '.1f';
 
@@ -25,9 +25,12 @@ export const createAttr = (
   };
 };
 
-type DomAttrs = Record<string, string>;
+type O = Record<string, string>;
 
-export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttrs): NodeSpec => {
+export function createSpec<N extends O & { type: string }>(
+  def: NodeDef,
+  domAttrs?: (props: O) => O,
+): MyNodeSpec<O, N> {
   const attrs: Record<string, AttributeSpec> = {};
   def.attrs.forEach((attr) => {
     if (attr.func !== 'only') {
@@ -37,12 +40,12 @@ export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttr
       attrs[`${attr.name}Function`] = { default: '' };
     }
   });
-  const spec: NodeSpec = {
+  const spec: MyNodeSpec<O, N> = {
     inline: def.inline,
     group: def.group,
     attrs,
     toDOM(node) {
-      const props: DomAttrs = {};
+      const props: O = {};
       def.attrs.forEach((attr) => {
         const [value, valueFunction] = [node.attrs[attr.name], node.attrs[`${attr.name}Function`]];
         if (value && attr.func !== 'only') props[attr.name] = value;
@@ -64,9 +67,29 @@ export const createSpec = (def: NodeDef, domAttrs?: (props: DomAttrs) => DomAttr
         },
       },
     ],
+    attrsFromMdastToken(token) {
+      const props: O = {};
+      def.attrs.forEach((attr) => {
+        const [value, valueFunction] = [token[attr.name], token[`${attr.name}Function`]];
+        if (value && attr.func !== 'only') props[attr.name] = value;
+        if (attr.func && valueFunction) props[`${attr.name}Function`] = valueFunction;
+      });
+      return props;
+    },
+    toMyst(props) {
+      const node: any = {
+        type: def.mystType,
+      };
+      def.attrs.forEach((attr) => {
+        const [value, valueFunction] = [props[attr.name], props[`:${attr.name}`]];
+        if (value && attr.func !== 'only') node[attr.name] = value;
+        if (attr.func && valueFunction) node[`${attr.name}Function`] = valueFunction;
+      });
+      return node;
+    },
   };
   return spec;
-};
+}
 
 function encodeFunctionName(state: MarkdownSerializerState, name: string, value: string) {
   const [first, ...rest] = name;
