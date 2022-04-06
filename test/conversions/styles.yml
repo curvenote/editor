@@ -253,3 +253,26 @@ cases:
           children:
             - type: text
               value: '*a*'
+  - title: strikethrough
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'strikethrough: '
+            - type: text
+              marks:
+                - type: strikethrough
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'strikethrough: '
+            - type: delete
+              children:
+                - type: text
+                  value: hello!
