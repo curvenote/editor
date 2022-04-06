@@ -21,6 +21,11 @@ export interface MyMarkSpec<N extends MystNode> extends MarkSpec {
   toMyst: (props: Props, opts: MdastOptions) => N;
 }
 
+export type StrikethroughMystType = {
+  type: 'delete'; // https://github.com/syntax-tree/mdast#delete
+  children: PhrasingContent[];
+};
+
 export type LinkAttrs = {
   href: string;
   title: string | null;
@@ -153,7 +158,10 @@ export const strikethrough: MyMarkSpec<any> = {
   parseDOM: [{ tag: 's' }],
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: () => ({}),
+  toMyst: (props): StrikethroughMystType => ({
+    type: 'delete',
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
 export const underline: MyMarkSpec<Underline> = {

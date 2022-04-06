@@ -276,6 +276,10 @@ const handlers: Record<string, TokenHandler> = {
   reactiveVariable: () => ({
     name: nodeNames.variable,
   }),
+  delete: (token) => ({
+    name: markNames.strikethrough,
+    children: token.children,
+  }),
 };
 
 export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {
