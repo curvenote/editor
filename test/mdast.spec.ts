@@ -3,6 +3,7 @@ import path from 'path';
 import yaml from 'js-yaml';
 import { Root } from 'myst-spec';
 import { fromJSON, fromMdast, toMdast, toYAML } from '../src';
+import { transformNumericalFootnotes } from '../src/serialize/mdast/convertToMdast';
 
 type TestFile = {
   cases: TestCase[];
@@ -44,7 +45,7 @@ describe(c2mKey, () => {
   });
   test.each(unskippedCases)('%s', (_, { curvenote, mdast }) => {
     const doc = fromJSON(curvenote, 'full');
-    const newMdastString = yaml.dump(toMdast(doc));
+    const newMdastString = yaml.dump(transformNumericalFootnotes(toMdast(doc)));
     const mdastString = yaml.dump(mdast);
     expect(newMdastString).toEqual(mdastString);
   });

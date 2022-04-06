@@ -5,13 +5,20 @@ import {
   Node as ProsemirrorNode,
   Schema,
 } from 'prosemirror-model';
-import { GenericNode } from 'mystjs';
-import { Root, Text as MystText } from 'myst-spec';
+import { GenericNode, selectAll } from 'mystjs';
+import {
+  FootnoteReference,
+  FootnoteDefinition,
+  Root,
+  Text as MystText,
+  FlowContent,
+} from 'myst-spec';
 import { createDocument, Fragment, Node, Text } from './document';
 import { markNames, nodeNames } from '../../types';
 import { Props } from '../../nodes/types';
 import { getSchema } from '../../schemas';
 import { MdastOptions } from '../types';
+import { createId } from '../../utils';
 
 type CreateNodeSpec = (node: ProsemirrorNode) => DOMOutputSpec;
 type CreateMarkSpec = (mark: Mark, inline: boolean) => DOMOutputSpec;
@@ -87,7 +94,25 @@ export function convertToMdast(node: ProsemirrorNode, opts: MdastOptions): Root 
   const dom = serializer.serializeFragment(node.content, {
     document: createDocument(),
   }) as unknown as Fragment;
-  return { type: 'root', children: nodeToMdast(dom.children, schema, opts) } as Root;
+  const root = { type: 'root', children: nodeToMdast(dom.children, schema, opts) } as Root;
+  const footnotes = selectAll('inlineFootnote', root);
+  const footnoteDefinitions: FootnoteDefinition[] = [];
+  footnotes.forEach((footnote) => {
+    const id = createId();
+    footnoteDefinitions.push({
+      type: 'footnoteDefinition',
+      identifier: id,
+      label: id,
+      children: (footnote as GenericNode).children as FlowContent[],
+    });
+    delete (footnote as GenericNode).children;
+    const ref = footnote as FootnoteReference;
+    ref.type = 'footnoteReference';
+    ref.identifier = id;
+    ref.label = id;
+  });
+  root.children.push(...footnoteDefinitions);
+  return root;
 }
 
 export function convertToMdastSnippet(node: ProsemirrorNode, opts: MdastOptions): GenericNode {
@@ -99,4 +124,26 @@ export function convertToMdastSnippet(node: ProsemirrorNode, opts: MdastOptions)
   const { doc } = schema.nodes;
   const wrapped = doc.create({}, [node]);
   return convertToMdast(wrapped, opts)?.children?.[0] as GenericNode;
+}
+
+export function transformNumericalFootnotes(root: Root): Root {
+  const defLookup: Record<string, FootnoteDefinition> = {};
+  const defs = selectAll('footnoteDefinition', root) as FootnoteDefinition[];
+  defs.forEach((def) => {
+    defLookup[def.identifier as string] = def;
+  });
+  const refs = selectAll('footnoteReference', root) as FootnoteReference[];
+  refs.forEach((ref, index) => {
+    const refDef = defLookup[ref.identifier as string];
+    let id = String(index + 1);
+    if (refDef.identifier !== ref.identifier) {
+      id = refDef.identifier as string;
+    }
+    refDef.identifier = id;
+    refDef.label = id;
+    ref.identifier = id;
+    ref.label = id;
+  });
+
+  return root;
 }

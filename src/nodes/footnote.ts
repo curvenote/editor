@@ -1,5 +1,7 @@
+import { FlowContent } from 'myst-spec';
+
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { MyNodeSpec, NodeGroups } from './types';
+import { MyNodeSpec, NodeGroups, Props } from './types';
 
 const footnote: MyNodeSpec<any, any> = {
   attrs: {},
@@ -13,7 +15,10 @@ const footnote: MyNodeSpec<any, any> = {
   toDOM: () => ['span', { class: 'footnote' }, 0],
   parseDOM: [{ tag: 'span.footnote' }],
   attrsFromMdastToken: () => ({}),
-  toMyst: () => ({}),
+  toMyst: (props: Props) => ({
+    type: 'inlineFootnote',
+    children: [{ type: 'paragraph', children: props.children || [] }] as FlowContent[],
+  }),
 };
 
 // TODO: add markdown support

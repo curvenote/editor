@@ -1,6 +1,6 @@
 import { Fragment, Mark, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
-import { Root } from 'mdast';
-import { GenericNode } from 'mystjs';
+import { FootnoteDefinition, FootnoteReference, Root } from 'myst-spec';
+import { GenericNode, select, selectAll, remove } from 'mystjs';
 import { getSchema, UseSchema } from '../../schemas';
 import { markNames, nodeNames } from '../../types';
 
@@ -254,6 +254,10 @@ const handlers: Record<string, TokenHandler> = {
     name: ignoreNames.role,
     children: token.children,
   }),
+  inlineFootnote: (token) => ({
+    name: nodeNames.footnote,
+    children: token.children,
+  }),
   reactiveButton: () => ({
     name: nodeNames.button,
   }),
@@ -278,6 +282,29 @@ export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {
   const schema = getSchema(useSchema);
 
   const state = new MarkdownParseState(schema, handlers);
+
+  // Change the structure of footnotes:
+  const footnoteDefinitions = selectAll('footnoteDefinition', tree) as FootnoteDefinition[];
+  const footnotes: Record<string, FootnoteDefinition> = {};
+  footnoteDefinitions.forEach((node) => {
+    if (node.identifier) footnotes[node.identifier] = node;
+  });
+  // The any here is a typescript bug, that causes delays ...
+  remove(tree as any, 'footnoteDefinition');
+  const footnoteReferences = selectAll('footnoteReference', tree) as FootnoteReference[];
+  footnoteReferences.forEach((node) => {
+    const footnote = footnotes[node.identifier as string];
+    if (!footnote) {
+      (node as GenericNode).type = 'skip';
+      return;
+    }
+    const ourFootnote = node as GenericNode;
+    ourFootnote.type = 'inlineFootnote';
+    // Note: our footnotes only support content from a single paragraph
+    ourFootnote.children = (select('paragraph', footnote) as GenericNode).children;
+  });
+  remove(tree as any, 'skip');
+
   state.parseTokens(tree.children as GenericNode[]);
   let doc: ProsemirrorNode | undefined;
   do {
