@@ -16,7 +16,7 @@ import {
 import { createDocument, Fragment, Node, Text } from './document';
 import { markNames, nodeNames } from '../../types';
 import { Props } from '../../nodes/types';
-import { getSchema } from '../../schemas';
+import { getSchema, UseSchema } from '../../schemas';
 import { MdastOptions } from '../types';
 import { createId } from '../../utils';
 
@@ -89,7 +89,7 @@ export function nodeToMdast(
 }
 
 export function convertToMdast(node: ProsemirrorNode, opts: MdastOptions): Root {
-  const schema = getSchema('full');
+  const schema = getSchema((opts.useSchema as UseSchema) || 'full');
   const serializer = getSerializer(schema);
   const dom = serializer.serializeFragment(node.content, {
     document: createDocument(),
@@ -120,7 +120,7 @@ export function convertToMdastSnippet(node: ProsemirrorNode, opts: MdastOptions)
     throw new Error('The requested mdast snippet is a document, use convertToMdast.');
   }
   // If the node is not a top level, wrap it in a document and return that!
-  const schema = getSchema('full');
+  const schema = getSchema((opts.useSchema as UseSchema) || 'full');
   const { doc } = schema.nodes;
   const wrapped = doc.create({}, [node]);
   return convertToMdast(wrapped, opts)?.children?.[0] as GenericNode;

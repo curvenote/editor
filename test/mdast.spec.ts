@@ -12,6 +12,7 @@ type TestCase = {
   title: string;
   description?: string;
   skip?: boolean | 'm2c' | 'c2m';
+  schema?: 'comment' | 'full' | 'paragraph';
   curvenote: Record<string, any>;
   mdast: Root;
 };
@@ -43,9 +44,11 @@ describe(c2mKey, () => {
     if (skip) skipped[c2mKey].push([f, t]);
     return !skip;
   });
-  test.each(unskippedCases)('%s', (_, { curvenote, mdast }) => {
-    const doc = fromJSON(curvenote, 'full');
-    const newMdastString = yaml.dump(transformNumericalFootnotes(toMdast(doc)));
+  test.each(unskippedCases)('%s', (_, { curvenote, mdast, schema }) => {
+    const doc = fromJSON(curvenote, schema || 'full');
+    const newMdastString = yaml.dump(
+      transformNumericalFootnotes(toMdast(doc, { useSchema: schema || 'full' })),
+    );
     const mdastString = yaml.dump(mdast);
     expect(newMdastString).toEqual(mdastString);
   });
@@ -59,9 +62,9 @@ describe(m2cKey, () => {
     if (skip) skipped[m2cKey].push([f, t]);
     return !skip;
   });
-  test.each(unskippedCases)('%s', (_, { curvenote, mdast }) => {
+  test.each(unskippedCases)('%s', (_, { curvenote, mdast, schema }) => {
     const doc = yaml.dump(curvenote);
-    const newDoc = fromMdast(mdast, 'full');
+    const newDoc = fromMdast(mdast, schema || 'full');
     const newDocString = toYAML(newDoc);
     expect(newDocString).toEqual(doc);
   });

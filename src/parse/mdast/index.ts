@@ -280,6 +280,9 @@ const handlers: Record<string, TokenHandler> = {
     name: markNames.strikethrough,
     children: token.children,
   }),
+  mention: () => ({
+    name: nodeNames.mention,
+  }),
 };
 
 export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {

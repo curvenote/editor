@@ -42,7 +42,9 @@ export interface TexOptions extends SharedOptions {
   format?: TexFormatTypes;
 }
 
-export type MdastOptions = SharedOptions;
+export interface MdastOptions extends SharedOptions {
+  useSchema?: string;
+}
 
 export interface SharedSerializerState extends MarkdownSerializerState {
   options: SharedOptions;
