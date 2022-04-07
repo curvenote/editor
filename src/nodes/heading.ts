@@ -8,11 +8,16 @@ const getAttrs = (level: number) => (dom: HTMLElement) => ({
   level,
 });
 
+export type HeadingMystNode = Heading & {
+  numbered?: boolean;
+  number?: string;
+};
+
 export type Attrs = NumberedNode & {
   level: number;
 };
 
-const heading: MyNodeSpec<Attrs, Heading> = {
+const heading: MyNodeSpec<Attrs, HeadingMystNode> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     level: { default: 1 },
@@ -34,7 +39,7 @@ const heading: MyNodeSpec<Attrs, Heading> = {
   attrsFromMdastToken: (token) => ({
     id: null,
     label: null,
-    numbered: token.numbered,
+    numbered: token.numbered ?? false,
     level: token.depth,
   }),
   toMyst: (props): Heading => ({

@@ -5266,7 +5266,7 @@ unist-util-remove@^3.1.0:
 
 unist-util-select@^4.0.1:
   version "4.0.1"
-  resolved "https://registry.yarnpkg.com/unist-util-select/-/unist-util-select-4.0.1.tgz#d1913d7a0ab4e5d4b6dd1b33b3ea79b9f9645b0b"
+  resolved "https://registry.npmjs.org/unist-util-select/-/unist-util-select-4.0.1.tgz"
   integrity sha512-zPozyEo5vr1csbHf1TqlQrnuLVJ0tNMo63og3HrnINh2+OIDAgQpqHVr+0BMw1DIVHJV8ft/e6BZqtvD1Y5enw==
   dependencies:
     "@types/unist" "^2.0.0"
