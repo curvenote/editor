@@ -283,6 +283,23 @@ const handlers: Record<string, TokenHandler> = {
   mention: () => ({
     name: nodeNames.mention,
   }),
+  iframe: () => ({
+    name: nodeNames.iframe,
+  }),
+  citeGroup: (token) => ({
+    name: nodeNames.cite_group,
+    children: token.children,
+  }),
+  cite: () => ({
+    name: nodeNames.cite,
+  }),
+  margin: (token) => ({
+    name: nodeNames.aside,
+    children: token.children,
+  }),
+  time: () => ({
+    name: nodeNames.time,
+  }),
 };
 
 export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {

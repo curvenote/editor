@@ -48,7 +48,7 @@ cases:
           attrs:
             id: sigma-δ
             label: null
-            numbered: true
+            numbered: false
             title: ''
           content:
             - type: text
@@ -59,4 +59,5 @@ cases:
         - type: math
           identifier: sigma-δ
           label: sigma-δ
+          numbered: false
           value: δ here

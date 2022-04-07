@@ -1,0 +1,29 @@
+cases:
+  - title: citegroup
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: cite_group
+              content:
+                - type: cite
+                  attrs:
+                    key: auth
+                    title: null
+                    kind: cite
+                    label: null
+                    inline: null
+                    text: ''
+
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: citeGroup
+              kind: parenthetical
+              children:
+                - type: cite
+                  identifier: auth
+                  label: auth

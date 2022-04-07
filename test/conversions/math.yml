@@ -49,6 +49,7 @@ cases:
             - type: text
               value: 'A line is:'
         - type: math
+          numbered: false
           value: y = mx + b
   - title: numbered equation
     curvenote:
@@ -69,6 +70,7 @@ cases:
         - type: math
           identifier: my-equation
           label: my-equation
+          numbered: true
           value: y = mx + b
   - title: amsmath
     curvenote:
@@ -87,4 +89,5 @@ cases:
       type: root
       children:
         - type: math
+          numbered: false
           value: \begin{equation}y = mx + b\end{equation}
