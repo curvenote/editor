@@ -1,0 +1,106 @@
+cases:
+  - title: inline image
+    description: |-
+      e.g. ![x](img.png "my_image")
+      Not supported by curvenote schema
+    skip: true
+    curvenote:
+      - type: paragraph
+        content:
+          - type: image
+            attrs:
+              id: null
+              label: null
+              numbered: false
+              src: img.png
+              alt: x
+              title: my_image
+              width: 70
+    mdast:
+      type: root
+      children: []
+  - title: figure with caption
+    skip: true
+    curvenote:
+      type: doc
+      content:
+        - type: figure
+          attrs:
+            id: My-Figure
+            label: null
+          content:
+            - type: image
+              attrs:
+                id: null
+                label: null
+                src: img.png
+            - type: figcaption
+              attrs:
+                kind: fig
+              content:
+                - type: text
+                  text: This is an image caption
+    mdast:
+      type: root
+      children:
+        - type: container
+          kind: figure
+          identifier: my-figure
+          label: My-Figure
+          class: align-center
+          children:
+            - type: image
+              url: img.png
+              align: center
+              width: 70%
+            - type: caption
+              children:
+                - type: text
+                  value: This is an image caption
+  - title: figure with caption and metadata
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: figure
+          attrs:
+            id: My-Figure
+            label: null
+            numbered: true
+            align: center
+          content:
+            - type: image
+              attrs:
+                id: null
+                label: null
+                numbered: false
+                src: img.png
+                alt: x
+                title: my title
+                width: 50
+            - type: figcaption
+              attrs:
+                kind: fig
+              content:
+                - type: text
+                  text: This is an image caption
+    mdast:
+      type: root
+      children:
+        - type: container
+          kind: figure
+          identifier: my-figure
+          label: My-Figure
+          numbered: true
+          class: align-center
+          children:
+            - type: image
+              url: img.png
+              alt: x
+              title: my title
+              align: center
+              width: 50%
+            - type: caption
+              children:
+                - type: text
+                  value: This is an image caption

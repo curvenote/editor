@@ -1,9 +1,10 @@
+import { InlineMath } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
 
 export type Attrs = Record<string, never>;
 
-const math: MyNodeSpec<Attrs> = {
+const math: MyNodeSpec<Attrs, InlineMath> = {
   group: NodeGroups.inline,
   // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
@@ -18,9 +19,16 @@ const math: MyNodeSpec<Attrs> = {
       tag: 'r-equation[inline]',
     },
   ],
+  attrsFromMyst: () => ({}),
+  toMyst: (props) => {
+    if (props.children?.length === 1 && props.children[0].type === 'text') {
+      return { type: 'inlineMath', value: props.children[0].value || '' };
+    }
+    throw new Error(`Math node does not have one child`);
+  },
 };
 
-export const mathNoDisplay: MyNodeSpec<Attrs> = {
+export const mathNoDisplay: MyNodeSpec<Attrs, InlineMath> = {
   ...math,
   content: `${NodeGroups.text}*`,
 };

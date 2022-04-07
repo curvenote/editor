@@ -1,10 +1,11 @@
 import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
+import { PhrasingContent, Table, TableCell, TableRow } from '../spec';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
-import { NodeGroups } from './types';
+import { NodeGroups, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
-import { getColumnWidths, renderPColumn } from './utils';
+import { writeMdastSnippet, getColumnWidths, hasFancyTable, renderPColumn } from './utils';
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -23,6 +24,45 @@ export const nodes = tableNodes({
   },
 });
 
+nodes.table.attrsFromMyst = () => ({});
+nodes.table.toMyst = (props: Props): Table => {
+  if (props.children?.length === 1 && props.children[0].type === 'table') {
+    return props.children[0] as Table;
+  }
+  return { type: 'table', align: undefined, children: (props.children || []) as TableRow[] };
+};
+
+nodes.table_row.attrsFromMyst = () => ({});
+nodes.table_row.toMyst = (props: Props): TableRow => ({
+  type: 'tableRow',
+  children: (props.children || []) as TableCell[],
+});
+
+function ifGreaterThanOne(num?: number): undefined | number {
+  if (!num) return undefined;
+  return num === 1 ? undefined : num;
+}
+
+nodes.table_header.attrsFromMyst = () => ({});
+nodes.table_header.toMyst = (props: Props): TableCell => ({
+  type: 'tableCell',
+  header: true,
+  align: props.align || undefined,
+  colspan: ifGreaterThanOne(props.colspan),
+  rowspan: ifGreaterThanOne(props.rowspan),
+  children: (props.children || []) as PhrasingContent[],
+});
+
+nodes.table_cell.attrsFromMyst = () => ({});
+nodes.table_cell.toMyst = (props: Props): TableCell => ({
+  type: 'tableCell',
+  header: undefined,
+  align: props.align || undefined,
+  colspan: ifGreaterThanOne(props.colspan),
+  rowspan: ifGreaterThanOne(props.rowspan),
+  children: (props.children || []) as PhrasingContent[],
+});
+
 /**
  * Create a "row" using a list-table
  * ```text
@@ -34,7 +74,13 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
   state.write('* ');
   const dedent = indent(state);
   row.content.forEach((cell) => {
+    // TODO: make the lists tight!
     state.wrapBlock('  ', '- ', cell, () => state.renderContent(cell));
+    // const atBlank = /(\n\n)$/.test(state.out as string);
+    // if (state.options.tightLists && atBlank && state.out) {
+    //   // Remove the trailing new line on `state.out` to make it tight
+    //   state.out = state.out.replace(/\n\n$/, '');
+    // }
   });
   dedent();
 };
@@ -56,7 +102,7 @@ export const toListTable: MdFormatSerialize = (state, node, figure, index) => {
   state.closeBlock(node);
 };
 
-export const toMarkdown: MdFormatSerialize = (state, node) => {
+export const toGFMMarkdownTable: MdFormatSerialize = (state, node) => {
   let rowIndex = 0;
 
   node.content.forEach((child) => {
@@ -263,6 +309,14 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   state.closeBlock(node);
   state.isInTable = false;
 }
+
+export const toMarkdown: MdFormatSerialize = (state, node, figure, index) => {
+  if (node && hasFancyTable(node)) {
+    writeMdastSnippet(state, node);
+    return;
+  }
+  toListTable(state, node, figure, index);
+};
 
 export const toTex: TexFormatSerialize = (state, node) => {
   try {

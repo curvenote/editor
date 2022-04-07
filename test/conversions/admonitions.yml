@@ -1,0 +1,204 @@
+cases:
+  - title: danger block
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: danger
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is a danger.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: danger
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is a danger.
+  - title: warning block
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: warning
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is a warning.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: warning
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is a warning.
+  - title: info block
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: info
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is an info.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: important
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is an info.
+  - title: success block
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: success
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is a success.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: important
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is a success.
+  - title: active block
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: active
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is an active.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: note
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is an active.
+  - title: seealso block
+    skip: c2m
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: info
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is a seealso.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: seealso
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is a seealso.
+  - title: error block
+    skip: c2m
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: danger
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is an error.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: error
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is an error.
+  - title: no kind block
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is no kind.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: important
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is no kind.
+  - title: junk block
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: callout
+          attrs:
+            kind: junk
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: This is junk kind.
+    mdast:
+      type: root
+      children:
+        - type: admonition
+          kind: note
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: This is junk kind.

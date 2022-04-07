@@ -1,0 +1,21 @@
+cases:
+  - title: mention
+    schema: comment
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: mention
+              attrs:
+                label: User One
+                user: user1
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: mention
+              identifier: user1
+              label: user1
+              value: User One

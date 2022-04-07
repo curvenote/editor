@@ -1,7 +1,8 @@
+import { FlowContent, InlineFootnote, NoAttrs } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { MyNodeSpec, NodeGroups } from './types';
+import { MyNodeSpec, NodeGroups, Props } from './types';
 
-const footnote: MyNodeSpec<any> = {
+const footnote: MyNodeSpec<NoAttrs, InlineFootnote> = {
   attrs: {},
   group: 'inline',
   content: `(${NodeGroups.text} | math)*`,
@@ -12,6 +13,11 @@ const footnote: MyNodeSpec<any> = {
   atom: true,
   toDOM: () => ['span', { class: 'footnote' }, 0],
   parseDOM: [{ tag: 'span.footnote' }],
+  attrsFromMyst: () => ({}),
+  toMyst: (props: Props) => ({
+    type: 'inlineFootnote',
+    children: [{ type: 'paragraph', children: props.children || [] }] as FlowContent[],
+  }),
 };
 
 // TODO: add markdown support

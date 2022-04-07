@@ -1,0 +1,18 @@
+cases:
+  - title: datetime
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: time
+              attrs:
+                datetime: 1759-09-22T07:33:52.000Z
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: time
+              time: '1759-09-22T07:33:52.000Z'
+              value: Sep 22, 1759

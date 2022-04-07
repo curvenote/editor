@@ -1,0 +1,20 @@
+cases:
+  - title: blockquote
+    curvenote:
+      type: doc
+      content:
+        - type: blockquote
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: hello
+    mdast:
+      type: root
+      children:
+        - type: blockquote
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: hello

@@ -1,0 +1,142 @@
+cases:
+  - title: ordered list starting at 1
+    curvenote:
+      type: doc
+      content:
+        - type: ordered_list
+          attrs:
+            order: 1
+          content:
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 1
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 2
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 3
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 3 continued
+    mdast:
+      type: root
+      children:
+        - type: list
+          ordered: true
+          children:
+            - type: listItem
+              children:
+                - type: text
+                  value: point 1
+            - type: listItem
+              children:
+                - type: text
+                  value: point 2
+            - type: listItem
+              children:
+                - type: paragraph
+                  children:
+                    - type: text
+                      value: point 3
+                - type: paragraph
+                  children:
+                    - type: text
+                      value: point 3 continued
+  - title: ordered list starting at 3
+    curvenote:
+      type: doc
+      content:
+        - type: ordered_list
+          attrs:
+            order: 3
+          content:
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 1
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 2
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 3
+    mdast:
+      type: root
+      children:
+        - type: list
+          ordered: true
+          start: 3
+          children:
+            - type: listItem
+              children:
+                - type: text
+                  value: point 1
+            - type: listItem
+              children:
+                - type: text
+                  value: point 2
+            - type: listItem
+              children:
+                - type: text
+                  value: point 3
+  - title: unordered list
+    curvenote:
+      type: doc
+      content:
+        - type: bullet_list
+          content:
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 1
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 2
+            - type: list_item
+              content:
+                - type: paragraph
+                  content:
+                    - type: text
+                      text: point 3
+    mdast:
+      type: root
+      children:
+        - type: list
+          ordered: false
+          children:
+            - type: listItem
+              children:
+                - type: text
+                  value: point 1
+            - type: listItem
+              children:
+                - type: text
+                  value: point 2
+            - type: listItem
+              children:
+                - type: text
+                  value: point 3

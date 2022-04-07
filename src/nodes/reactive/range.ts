@@ -1,6 +1,7 @@
 import { NodeDef, NodeGroups } from '../types';
 import { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
+import { Range } from '../../spec';
 
 export type Attrs = {
   value?: string;
@@ -18,6 +19,7 @@ export type Attrs = {
 export const def: NodeDef = {
   tag: 'r-range',
   name: 'r:range',
+  mystType: 'reactiveRange',
   attrs: [
     attr('value'),
     attr('change', 'only'),
@@ -30,6 +32,6 @@ export const def: NodeDef = {
   group: NodeGroups.inline,
 };
 
-export const spec = createSpec(def);
+export const spec = createSpec<Range>(def);
 export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystRole(state, node, def);
 export default spec;

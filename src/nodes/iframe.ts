@@ -1,5 +1,6 @@
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { MdFormatSerialize } from '../serialize/types';
+import { Iframe } from '../spec';
 import { NodeGroups, MyNodeSpec, AlignOptions } from './types';
 import { getImageWidth } from './utils';
 
@@ -9,7 +10,7 @@ export type Attrs = {
   width: number | null;
 };
 
-const iframe: MyNodeSpec<Attrs> = {
+const iframe: MyNodeSpec<Attrs, Iframe> = {
   attrs: {
     src: {},
     align: { default: 'center' },
@@ -40,17 +41,30 @@ const iframe: MyNodeSpec<Attrs> = {
       },
     ];
   },
+  attrsFromMyst: (node) => ({
+    src: node.src,
+    align: 'center',
+    width: getImageWidth(node.width),
+  }),
+  toMyst: (node) => ({
+    type: 'iframe',
+    src: node.src,
+    width: node.width,
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const renderer = state.options.renderers?.iframe ?? 'html';
+  // TODO: I think that the caption is not rendered here?!
   const { src, align, width } = node.attrs as Attrs;
   if (renderer === 'myst') {
     state.ensureNewLine();
     state.write(`\`\`\`{iframe} ${src}\n`);
     state.write(`:label: ${state.nextCaptionId}\n`);
+    // TODO: Align should come from figure
     state.write(`:align: ${align}\n`);
     state.write(`:width: ${width}%\n`);
+    // TODO: If there is a caption, put it here
     state.write('```');
     state.closeBlock(node);
     return;

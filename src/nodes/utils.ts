@@ -1,19 +1,26 @@
 import { Node } from 'prosemirror-model';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import { nodeNames } from '../types';
-import { clamp } from '../utils';
+import { MdSerializerState, nodeNames } from '../types';
+import { clamp, createId } from '../utils';
 import { NodeSpecAttrs, NumberedNode } from './types';
 
-export const getImageWidth = (width?: string | null) => {
+export const getImageWidth = (width?: number | string | null) => {
+  if (typeof width === 'number') {
+    return clamp(width, 10, 100);
+  }
   const widthNum = Number.parseInt((width ?? String(DEFAULT_IMAGE_WIDTH)).replace('%', ''), 10);
   return clamp(widthNum || DEFAULT_IMAGE_WIDTH, 10, 100);
 };
 
-export function readBooleanDomAttr(dom: HTMLElement, attr: string): boolean {
-  if (!dom.hasAttribute(attr)) return false;
-  const val = dom.getAttribute(attr);
+export function readBooleanAttr(val?: string | boolean | null): boolean {
+  if (val == null) return false;
+  if (typeof val === 'boolean') return val;
   if (val?.toLowerCase() === 'false') return false;
   return true;
+}
+
+export function readBooleanDomAttr(dom: HTMLElement, attr: string): boolean {
+  return readBooleanAttr(dom.getAttribute(attr));
 }
 
 export function convertToBooleanAttribute(value: boolean) {
@@ -127,4 +134,56 @@ export function getColumnWidths(node: Node<any>) {
     widths.length > 0 ? widths.length : node?.content?.firstChild?.content.childCount ?? 0;
 
   return { widths: fractionalWidths, columnSpec, numColumns };
+}
+
+/** Given a node, return true if there is a fancy table descendent
+ *
+ * "fancy" means there are table_cells or table_headers with
+ * colspan or rowspan > 1.
+ */
+export function hasFancyTable(node: Node) {
+  let hasRowspan = false;
+  let hasColspan = false;
+  node.descendants((n) => {
+    if (n.type.name === nodeNames.table_cell || n.type.name === nodeNames.table_header) {
+      hasRowspan = hasRowspan || (n.attrs.rowspan && Number(n.attrs.rowspan) > 1);
+      hasColspan = hasColspan || (n.attrs.colspan && Number(n.attrs.colspan) > 1);
+    }
+  });
+  return hasRowspan || hasColspan;
+}
+
+export function addMdastSnippet(state: MdSerializerState, node: Node): string | false {
+  if (!state.mdastSnippets) state.mdastSnippets = {};
+  if (!state.mdastSerializer) return false;
+  const id = state.options.createMdastImportId?.() ?? createId();
+  state.mdastSnippets[id] = state.mdastSerializer(node);
+  return id;
+}
+
+export function writeMdastSnippet(state: MdSerializerState, node: Node): boolean {
+  const mdastId = addMdastSnippet(state, node);
+  if (mdastId === false) {
+    // If the mdast writer isn't defined (it usually is!)
+    state.write('No mdast writer attached.');
+    state.closeBlock(node);
+    return false; // maybe better?
+  }
+  state.write(`\`\`\`{mdast} ${mdastId}`);
+  state.ensureNewLine();
+  state.write('```');
+  state.closeBlock(node);
+  return true;
+}
+
+// TODO: this is directly from mystjs - we should export from there instead
+export function normalizeLabel(
+  label?: string | null,
+): { identifier: string; label: string } | undefined {
+  if (!label) return undefined;
+  const identifier = label
+    .replace(/[\t\n\r ]+/g, ' ')
+    .trim()
+    .toLowerCase();
+  return { identifier, label };
 }

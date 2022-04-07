@@ -1,3 +1,4 @@
+import { Heading, PhrasingContent } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
 import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
@@ -11,7 +12,7 @@ export type Attrs = NumberedNode & {
   level: number;
 };
 
-const heading: MyNodeSpec<Attrs> = {
+const heading: MyNodeSpec<Attrs, Heading> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     level: { default: 1 },
@@ -30,6 +31,18 @@ const heading: MyNodeSpec<Attrs> = {
   toDOM(node) {
     return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
   },
+  attrsFromMyst: (token) => ({
+    id: null,
+    label: null,
+    numbered: token.numbered ?? false,
+    level: token.depth,
+  }),
+  toMyst: (props) => ({
+    type: 'heading',
+    depth: parseInt(props.tag.slice(1), 10),
+    numbered: props.numbered,
+    children: (props.children || []) as PhrasingContent[],
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

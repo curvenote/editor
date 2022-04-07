@@ -1,3 +1,4 @@
+import { Image } from '../spec';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { NodeGroups, NumberedNode, MyNodeSpec, AlignOptions } from './types';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
@@ -18,7 +19,7 @@ export type Attrs = NumberedNode & {
   caption: boolean;
 };
 
-const image: MyNodeSpec<Attrs> = {
+const image: MyNodeSpec<Attrs, Image> = {
   attrs: {
     ...getNumberedDefaultAttrs(), // Deprecated, use figure
     src: {},
@@ -60,6 +61,25 @@ const image: MyNodeSpec<Attrs> = {
       },
     ];
   },
+  attrsFromMyst: (token) => ({
+    id: null, // Deprecated, use figure / container
+    label: null, // Deprecated, use figure / container
+    numbered: false, // Deprecated, use figure / container
+    src: token.url || '',
+    alt: token.alt || '',
+    title: token.title || '',
+    width: getImageWidth(token.width),
+    align: token.align || 'center',
+    caption: false,
+  }),
+  toMyst: (props, opts): Image => ({
+    type: 'image',
+    url: opts.localizeImageSrc?.(props.src) || props.src,
+    alt: props.alt || undefined,
+    title: props.title || undefined,
+    align: undefined,
+    width: `${getImageWidth(props.width)}%` || undefined,
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
@@ -72,7 +92,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  const { width: nodeWidth, align: nodeAlign } = node.attrs as Attrs;
+  const { width: nodeWidth } = node.attrs as Attrs;
   const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
   const width = Math.round(nodeWidth ?? DEFAULT_IMAGE_WIDTH);
   //   let align = 'center';

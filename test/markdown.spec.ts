@@ -91,11 +91,7 @@ describe('Markdown', () => {
     ));
   it('Code example', () =>
     same(
-      {
-        before: '```python\nimport numpy as np\nnp.array(5)\n```',
-        // TODO: Capture language
-        after: '```\nimport numpy as np\nnp.array(5)\n```',
-      },
+      '```python\nimport numpy as np\nnp.array(5)\n```',
       tdoc(code_block('import numpy as np\nnp.array(5)')),
     ));
   it('Directive content (warning)', () =>

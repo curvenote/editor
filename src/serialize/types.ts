@@ -1,5 +1,6 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
 import { Node, Schema } from 'prosemirror-model';
+import type { GenericNode } from 'mystjs';
 
 export enum TexFormatTypes {
   'tex' = 'tex',
@@ -34,10 +35,15 @@ export interface MarkdownOptions extends SharedOptions {
   renderers?: {
     iframe?: 'html' | 'myst';
   };
+  createMdastImportId?: () => string;
 }
 
 export interface TexOptions extends SharedOptions {
   format?: TexFormatTypes;
+}
+
+export interface MdastOptions extends SharedOptions {
+  useSchema?: string;
 }
 
 export interface SharedSerializerState extends MarkdownSerializerState {
@@ -50,6 +56,9 @@ export interface SharedSerializerState extends MarkdownSerializerState {
 export interface MdSerializerState extends SharedSerializerState {
   options: MarkdownOptions;
   nextTableCaption?: Node | null;
+  mdastSnippets?: Record<string, GenericNode>;
+  mdastSerializer?: (node: Node) => GenericNode;
+  out?: string;
 }
 export interface TexSerializerState extends SharedSerializerState {
   options: TexOptions;

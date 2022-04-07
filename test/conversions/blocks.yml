@@ -1,0 +1,17 @@
+cases:
+  - title: comment
+    skip: true
+    curvenote:
+    mdast:
+      type: root
+      children:
+        - type: comment
+          value: a comment
+  - title: block break
+    skip: true
+    curvenote:
+    mdast:
+      type: root
+      children:
+        - type: block
+          meta: '{"meta": "data"}'

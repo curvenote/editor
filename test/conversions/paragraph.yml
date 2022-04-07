@@ -1,0 +1,112 @@
+cases:
+  - title: thematicBreak
+    curvenote:
+      type: doc
+      content:
+        - type: horizontal_rule
+    mdast:
+      type: root
+      children:
+        - type: thematicBreak
+  - title: paragraph
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: Hello World
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: Hello World
+  - title: multiple paragraphs
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: hello
+        - type: paragraph
+          content:
+            - type: text
+              text: world
+        - type: paragraph
+          content:
+            - type: text
+              text: how are you?
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: hello
+        - type: paragraph
+          children:
+            - type: text
+              value: world
+        - type: paragraph
+          children:
+            - type: text
+              value: how are you?
+  - title: break
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: leading paragraph
+            - type: hard_break
+            - type: text
+              text: trailing paragraph
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: leading paragraph
+            - type: break
+            - type: text
+              value: trailing paragraph
+  - title: headings
+    curvenote:
+      type: doc
+      content:
+        - type: heading
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            level: 1
+          content:
+            - type: text
+              text: Heading one
+        - type: heading
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            level: 6
+          content:
+            - type: text
+              text: Heading six
+    mdast:
+      type: root
+      children:
+        - type: heading
+          depth: 1
+          children:
+            - type: text
+              value: Heading one
+        - type: heading
+          depth: 6
+          children:
+            - type: text
+              value: Heading six

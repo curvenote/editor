@@ -1,9 +1,10 @@
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
+import { Cite, CiteGroup } from '../spec';
 
 export type Attrs = Record<string, never>;
 
-const citeGroup: MyNodeSpec<Attrs> = {
+const citeGroup: MyNodeSpec<Attrs, CiteGroup> = {
   attrs: {},
   inline: true,
   atom: true,
@@ -22,6 +23,12 @@ const citeGroup: MyNodeSpec<Attrs> = {
   toDOM() {
     return ['cite-group', 0];
   },
+  attrsFromMyst: () => ({}),
+  toMyst: (props) => ({
+    type: 'citeGroup',
+    kind: 'parenthetical',
+    children: props.children as Cite[],
+  }),
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {

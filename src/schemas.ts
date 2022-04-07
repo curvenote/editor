@@ -112,7 +112,7 @@ export const presets = {
       horizontal_rule: basic.horizontal_rule,
       hard_break: basic.hard_break,
       time: Nodes.Time.default,
-      ...Nodes.Mention.default,
+      mention: Nodes.Mention.default,
       ...listNodes,
       ...citationNodes,
       ...mathNodesNoDisplay,

@@ -1,4 +1,5 @@
 import { Node } from 'prosemirror-model';
+import { Caption, Container, Image, Legend, Table } from '../spec';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
@@ -9,7 +10,11 @@ import {
   getNumberedAttrs,
   getNumberedDefaultAttrs,
   readBooleanDomAttr,
+  normalizeLabel,
+  readBooleanAttr,
   setNumberedAttrs,
+  hasFancyTable,
+  writeMdastSnippet,
 } from './utils';
 import { nodeNames } from '../types';
 import type { Attrs as ImageAttrs } from './image';
@@ -24,7 +29,7 @@ export type Attrs = NumberedNode & {
   fullpage: boolean;
 };
 
-const figure: MyNodeSpec<Attrs> = {
+const figure: MyNodeSpec<Attrs, Container> = {
   group: NodeGroups.block,
   content: NodeGroups.insideFigure,
   isolating: true,
@@ -63,6 +68,38 @@ const figure: MyNodeSpec<Attrs> = {
       },
     },
   ],
+  attrsFromMyst: (token) => {
+    const match = token.class?.match(/align-(left|right|center)/);
+    return {
+      id: token.identifier || null,
+      label: null, // This is deprecated
+      numbered: token.numbered || false,
+      align: (match ? match[1] : 'center') as AlignOptions,
+      multipage: false,
+      landscape: false,
+      fullpage: false,
+    };
+  },
+  toMyst: (props, options) => {
+    let containerKind: 'figure' | 'table' = 'figure';
+    props.children?.forEach((child) => {
+      if (child.type === 'image' || child.type === 'table') {
+        child.align = props.align || undefined;
+      }
+      if (child.type === 'table') {
+        containerKind = 'table';
+      }
+    });
+    const localizedId = options.localizeId?.(props.id ?? '') ?? props.id ?? '';
+    return {
+      type: 'container',
+      kind: containerKind,
+      ...normalizeLabel(localizedId),
+      numbered: readBooleanAttr(props.numbered),
+      class: props.align ? `align-${props.align}` : undefined,
+      children: (props.children || []) as (Caption | Legend | Image | Table)[],
+    };
+  },
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
@@ -76,7 +113,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     case CaptionKind.fig: {
       const image = getFirstChildWithName(node, [nodeNames.image, nodeNames.iframe]);
       if (!image) return;
-      const { src, width } = image?.attrs as ImageAttrs | IFrameAttrs;
+      const { src } = image?.attrs as ImageAttrs | IFrameAttrs;
       const href = state.options.localizeImageSrc?.(src) ?? src;
       if (image.type.name === nodeNames.iframe) {
         state.render(image);
@@ -99,6 +136,10 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     }
     case CaptionKind.table: {
       const table = getFirstChildWithName(node, [nodeNames.table]);
+      if (table && hasFancyTable(table)) {
+        writeMdastSnippet(state, node);
+        return;
+      }
       state.nextTableCaption = caption;
       if (table) state.render(table);
       state.closeBlock(node);
