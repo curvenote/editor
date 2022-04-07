@@ -16,8 +16,7 @@ export type Attrs = NumberedNode & {
   linenumbers: boolean;
 };
 
-// TODO: Can we rename this to code_block...?
-const code: MyNodeSpec<Attrs, Code> = {
+const code_block: MyNodeSpec<Attrs, Code> = {
   attrs: {
     ...getNumberedDefaultAttrs(),
     language: { default: null },
@@ -95,4 +94,4 @@ export const toTex = createLatexStatement(
   },
 );
 
-export default code;
+export default code_block;
