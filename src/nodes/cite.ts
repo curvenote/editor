@@ -1,6 +1,6 @@
-import { CrossReference } from 'myst-spec';
 import { GenericNode } from 'mystjs';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { Cite, CrossReference } from '../spec';
 import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';
 import { normalizeLabel } from './utils';
 
@@ -14,13 +14,7 @@ export type Attrs = {
 
 type Legacy = { inline: undefined };
 
-export type CiteMystNode = {
-  type: 'cite';
-  identifier?: string;
-  label?: string;
-};
-
-const cite: MyNodeSpec<Attrs & Legacy, CiteMystNode | CrossReference> = {
+const cite: MyNodeSpec<Attrs & Legacy, Cite | CrossReference> = {
   attrs: {
     key: { default: null },
     title: { default: '' },
@@ -88,7 +82,7 @@ const cite: MyNodeSpec<Attrs & Legacy, CiteMystNode | CrossReference> = {
       text: '', // TODO: get this from children? `Jon et al., 2022`
     };
   },
-  toMyst: (props, options): CiteMystNode | CrossReference => {
+  toMyst: (props, options): Cite | CrossReference => {
     if (props.kind === ReferenceKind.cite) {
       const citeKey = options.localizeCitation?.(props.key ?? '') ?? props.key ?? '';
       const { identifier, label } = normalizeLabel(citeKey) ?? {};

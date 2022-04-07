@@ -1,19 +1,13 @@
 import { MyNodeSpec, NodeGroups } from './types';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { Mention } from '../spec';
 
 export interface Attrs {
   label: string;
   user: string;
 }
 
-export type MentionMystNode = {
-  type: 'mention';
-  identifier: string;
-  label?: string;
-  value: string;
-};
-
-const mention: MyNodeSpec<Attrs, MentionMystNode> = {
+const mention: MyNodeSpec<Attrs, Mention> = {
   group: NodeGroups.inline,
   attrs: { label: { default: '' }, user: { default: '' } },
   inline: true,

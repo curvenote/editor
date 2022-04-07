@@ -1,16 +1,11 @@
 import { tableNodes } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
-import { PhrasingContent, Table, TableCell, TableRow } from 'myst-spec';
+import { PhrasingContent, Table, TableCell, TableRow } from '../spec';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
 import { NodeGroups, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
 import { writeMdastSnippet, getColumnWidths, hasFancyTable, renderPColumn } from './utils';
-
-type TableSpans = {
-  colspan?: number;
-  rowspan?: number;
-};
 
 export const nodes = tableNodes({
   tableGroup: NodeGroups.top,
@@ -49,7 +44,7 @@ function ifGreaterThanOne(num?: number): undefined | number {
 }
 
 nodes.table_header.attrsFromMdastToken = () => ({});
-nodes.table_header.toMyst = (props: Props): TableCell & TableSpans => ({
+nodes.table_header.toMyst = (props: Props): TableCell => ({
   type: 'tableCell',
   header: true,
   align: props.align || undefined,
@@ -59,7 +54,7 @@ nodes.table_header.toMyst = (props: Props): TableCell & TableSpans => ({
 });
 
 nodes.table_cell.attrsFromMdastToken = () => ({});
-nodes.table_cell.toMyst = (props: Props): TableCell & TableSpans => ({
+nodes.table_cell.toMyst = (props: Props): TableCell => ({
   type: 'tableCell',
   header: undefined,
   align: props.align || undefined,

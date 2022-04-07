@@ -1,4 +1,4 @@
-import { Admonition, FlowContent } from 'myst-spec';
+import { Admonition, FlowContent } from '../spec';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MyNodeSpec, NodeGroups } from './types';
@@ -90,7 +90,7 @@ const callout: MyNodeSpec<Attrs, Admonition> = {
   attrsFromMdastToken: (token) => ({
     kind: admonitionToCalloutKind(token.kind),
   }),
-  toMyst: (props): Admonition => {
+  toMyst: (props) => {
     let calloutKind = props.class.split(' ')[1];
     if (!Object.values(AdmonitionKinds).includes(calloutKind as AdmonitionKinds)) {
       calloutKind = calloutKindToAdmonition(calloutKind as CalloutKinds);

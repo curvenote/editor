@@ -1,4 +1,4 @@
-import { Image } from 'myst-spec';
+import { Image } from '../spec';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { NodeGroups, NumberedNode, MyNodeSpec, AlignOptions } from './types';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';

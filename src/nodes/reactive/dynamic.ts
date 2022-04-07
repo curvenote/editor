@@ -1,7 +1,7 @@
 import { NodeDef, NodeGroups } from '../types';
 import { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
-import { DynamicMystNode } from './myst-ext';
+import { Dynamic } from '../../spec';
 
 export type Attrs = {
   value?: string;
@@ -32,6 +32,6 @@ export const def: NodeDef = {
   group: NodeGroups.inline,
 };
 
-export const spec = createSpec<DynamicMystNode>(def);
+export const spec = createSpec<Dynamic>(def);
 export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystRole(state, node, def);
 export default spec;

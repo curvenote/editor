@@ -1,6 +1,12 @@
 import { Fragment, Mark, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
-import { FootnoteDefinition, FootnoteReference, Root } from 'myst-spec';
 import { GenericNode, select, selectAll, remove } from 'mystjs';
+import {
+  FlowContent,
+  FootnoteDefinition,
+  FootnoteReference,
+  Root,
+  InlineFootnote,
+} from '../../spec';
 import { getSchema, UseSchema } from '../../schemas';
 import { markNames, nodeNames } from '../../types';
 
@@ -136,11 +142,6 @@ type TokenHandler = (
   name: nodeNames | markNames | ignoreNames;
   children?: GenericNode[] | string;
 };
-
-// type MdastHandler = {
-//   block: string;
-//   getAttrs?: (node: GenericNode) => Record<string, any>;
-// };
 
 const handlers: Record<string, TokenHandler> = {
   text: (token) => ({
@@ -322,10 +323,10 @@ export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {
       (node as GenericNode).type = 'skip';
       return;
     }
-    const ourFootnote = node as GenericNode;
+    const ourFootnote = node as unknown as InlineFootnote;
     ourFootnote.type = 'inlineFootnote';
     // Note: our footnotes only support content from a single paragraph
-    ourFootnote.children = (select('paragraph', footnote) as GenericNode).children;
+    ourFootnote.children = (select('paragraph', footnote) as GenericNode).children as FlowContent[];
   });
   remove(tree as any, 'skip');
 

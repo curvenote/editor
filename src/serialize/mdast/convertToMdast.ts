@@ -12,7 +12,8 @@ import {
   Root,
   Text as MystText,
   FlowContent,
-} from 'myst-spec';
+  InlineFootnote,
+} from '../../spec';
 import { createDocument, Fragment, Node, Text } from './document';
 import { markNames, nodeNames } from '../../types';
 import { Props } from '../../nodes/types';
@@ -95,7 +96,7 @@ export function convertToMdast(node: ProsemirrorNode, opts: MdastOptions): Root 
     document: createDocument(),
   }) as unknown as Fragment;
   const root = { type: 'root', children: nodeToMdast(dom.children, schema, opts) } as Root;
-  const footnotes = selectAll('inlineFootnote', root);
+  const footnotes = selectAll('inlineFootnote', root) as InlineFootnote[];
   const footnoteDefinitions: FootnoteDefinition[] = [];
   footnotes.forEach((footnote) => {
     const id = createId();
@@ -106,7 +107,7 @@ export function convertToMdast(node: ProsemirrorNode, opts: MdastOptions): Root 
       children: (footnote as GenericNode).children as FlowContent[],
     });
     delete (footnote as GenericNode).children;
-    const ref = footnote as FootnoteReference;
+    const ref = footnote as unknown as FootnoteReference;
     ref.type = 'footnoteReference';
     ref.identifier = id;
     ref.label = id;

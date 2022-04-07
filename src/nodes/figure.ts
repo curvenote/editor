@@ -1,5 +1,5 @@
 import { Node } from 'prosemirror-model';
-import { Caption, Container, Image, Legend, Table } from 'myst-spec';
+import { Caption, Container, Image, Legend, Table } from '../spec';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
@@ -80,7 +80,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
       fullpage: false,
     };
   },
-  toMyst: (props, options): Container => {
+  toMyst: (props, options) => {
     let containerKind: 'figure' | 'table' = 'figure';
     props.children?.forEach((child) => {
       if (child.type === 'image' || child.type === 'table') {

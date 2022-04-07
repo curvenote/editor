@@ -1,13 +1,8 @@
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { MdFormatSerialize } from '../serialize/types';
+import { Iframe } from '../spec';
 import { NodeGroups, MyNodeSpec, AlignOptions } from './types';
 import { getImageWidth } from './utils';
-
-type IframeMystNode = {
-  type: 'iframe';
-  src: string;
-  width: string | number | null;
-};
 
 export type Attrs = {
   src: string;
@@ -15,7 +10,7 @@ export type Attrs = {
   width: number | null;
 };
 
-const iframe: MyNodeSpec<Attrs, IframeMystNode> = {
+const iframe: MyNodeSpec<Attrs, Iframe> = {
   attrs: {
     src: {},
     align: { default: 'center' },

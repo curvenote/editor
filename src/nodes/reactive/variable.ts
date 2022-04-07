@@ -1,7 +1,7 @@
 import { NodeGroups, NodeDef } from '../types';
 import { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, createSpec, DEFAULT_FORMAT, nodeToMystDirective } from './utils';
-import { VariableMystNode } from './myst-ext';
+import { Variable } from '../../spec';
 
 export type Attrs = {
   name: string;
@@ -19,6 +19,6 @@ export const def: NodeDef = {
   group: NodeGroups.top,
 };
 
-const spec = createSpec<VariableMystNode>(def);
+const spec = createSpec<Variable>(def);
 export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystDirective(state, node, def);
 export default spec;

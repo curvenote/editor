@@ -1,9 +1,8 @@
-import { FlowContent } from 'myst-spec';
-
+import { FlowContent, InlineFootnote, NoAttrs } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { MyNodeSpec, NodeGroups, Props } from './types';
 
-const footnote: MyNodeSpec<any, any> = {
+const footnote: MyNodeSpec<NoAttrs, InlineFootnote> = {
   attrs: {},
   group: 'inline',
   content: `(${NodeGroups.text} | math)*`,

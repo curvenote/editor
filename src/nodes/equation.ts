@@ -1,5 +1,5 @@
-import { Math } from 'myst-spec';
 import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
+import { Math } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import {
   getAttr,
@@ -15,12 +15,9 @@ export type Attrs = NumberedNode & {
   title: string;
 };
 
-export type NumberedMathMystNode = Math & {
-  numbered: boolean;
-  number?: string;
-};
+const DEFAULT_NUMBERED = false;
 
-const equation: MyNodeSpec<Attrs, NumberedMathMystNode> = {
+const equation: MyNodeSpec<Attrs, Math> = {
   group: NodeGroups.top,
   // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
@@ -50,7 +47,7 @@ const equation: MyNodeSpec<Attrs, NumberedMathMystNode> = {
   attrsFromMdastToken: (token) => ({
     id: token.identifier || null,
     label: null,
-    numbered: token.numbered,
+    numbered: token.numbered ?? DEFAULT_NUMBERED,
     title: '',
   }),
   toMyst: (props, options) => {
@@ -67,7 +64,7 @@ const equation: MyNodeSpec<Attrs, NumberedMathMystNode> = {
   },
 };
 
-export const equationNoDisplay: MyNodeSpec<Attrs, NumberedMathMystNode> = {
+export const equationNoDisplay: MyNodeSpec<Attrs, Math> = {
   ...equation,
   content: `${NodeGroups.text}*`,
 };

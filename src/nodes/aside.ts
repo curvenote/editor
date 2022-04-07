@@ -1,14 +1,9 @@
-import { FlowContent } from 'myst-spec';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { Margin, FlowContent } from '../spec';
 import { NodeGroups, MyNodeSpec } from './types';
 
-export type MarginMystNode = {
-  type: 'margin';
-  children: FlowContent[];
-};
-
-const aside: MyNodeSpec<Record<string, never>, MarginMystNode> = {
+const aside: MyNodeSpec<Record<string, never>, Margin> = {
   attrs: {},
   group: NodeGroups.top,
   content: NodeGroups.blockOrHeading,

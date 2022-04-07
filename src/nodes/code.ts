@@ -1,4 +1,4 @@
-import { Code } from 'myst-spec';
+import { Code } from '../spec';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MdFormatSerialize } from '../serialize/types';
 import { NodeGroups, NumberedNode, MyNodeSpec } from './types';
@@ -64,7 +64,7 @@ const code: MyNodeSpec<Attrs, Code> = {
     linenumbers: token.showLineNumbers || false,
     title: '',
   }),
-  toMyst: (props): Code => {
+  toMyst: (props) => {
     if (props.children?.length === 1) {
       return {
         type: 'code',

@@ -1,18 +1,19 @@
 import { GenericNode } from 'mystjs';
 import { MarkSpec } from 'prosemirror-model';
 import {
+  MystNode,
   Abbreviation,
   Emphasis,
   InlineCode,
   Link,
-  Node as MystNode,
   PhrasingContent,
   StaticPhrasingContent,
   Strong,
   Subscript,
   Superscript,
   Underline,
-} from 'myst-spec';
+  Strikethrough,
+} from './spec';
 import { MarkGroups, Props } from './nodes/types';
 import { MdastOptions } from './serialize/types';
 
@@ -20,11 +21,6 @@ export interface MyMarkSpec<N extends MystNode> extends MarkSpec {
   attrsFromMdastToken: (t: GenericNode) => Record<string, any>;
   toMyst: (props: Props, opts: MdastOptions) => N;
 }
-
-export type StrikethroughMystType = {
-  type: 'delete'; // https://github.com/syntax-tree/mdast#delete
-  children: PhrasingContent[];
-};
 
 export type LinkAttrs = {
   href: string;
@@ -74,7 +70,7 @@ export const code: MyMarkSpec<InlineCode> = {
   },
   excludes: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): InlineCode => {
+  toMyst: (props) => {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
       return { type: 'inlineCode', value: props.children[0].value || '' };
     }
@@ -90,7 +86,7 @@ export const em: MyMarkSpec<Emphasis> = {
   },
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Emphasis => ({
+  toMyst: (props) => ({
     type: 'emphasis',
     children: (props.children || []) as PhrasingContent[],
   }),
@@ -114,7 +110,7 @@ export const strong: MyMarkSpec<Strong> = {
   },
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Strong => ({
+  toMyst: (props) => ({
     type: 'strong',
     children: (props.children || []) as PhrasingContent[],
   }),
@@ -129,7 +125,7 @@ export const superscript: MyMarkSpec<Superscript> = {
   excludes: 'subscript',
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Superscript => ({
+  toMyst: (props) => ({
     type: 'superscript',
     children: (props.children || []) as PhrasingContent[],
   }),
@@ -144,13 +140,13 @@ export const subscript: MyMarkSpec<Subscript> = {
   excludes: 'superscript',
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Subscript => ({
+  toMyst: (props) => ({
     type: 'subscript',
     children: (props.children || []) as PhrasingContent[],
   }),
 };
 
-export const strikethrough: MyMarkSpec<any> = {
+export const strikethrough: MyMarkSpec<Strikethrough> = {
   attrs: {},
   toDOM() {
     return ['s', 0];
@@ -158,7 +154,7 @@ export const strikethrough: MyMarkSpec<any> = {
   parseDOM: [{ tag: 's' }],
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): StrikethroughMystType => ({
+  toMyst: (props) => ({
     type: 'delete',
     children: (props.children || []) as PhrasingContent[],
   }),
@@ -172,7 +168,7 @@ export const underline: MyMarkSpec<Underline> = {
   parseDOM: [{ tag: 'u' }],
   group: MarkGroups.format,
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Underline => ({
+  toMyst: (props) => ({
     type: 'underline',
     children: (props.children || []) as PhrasingContent[],
   }),
@@ -198,7 +194,7 @@ export const abbr: MyMarkSpec<Abbreviation> = {
   attrsFromMdastToken(token: GenericNode) {
     return { title: token.title };
   },
-  toMyst: (props): Abbreviation => ({
+  toMyst: (props) => ({
     type: 'abbreviation',
     title: props.title || undefined,
     children: (props.children || []) as StaticPhrasingContent[],

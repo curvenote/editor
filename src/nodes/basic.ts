@@ -1,5 +1,7 @@
 import OrderedMap from 'orderedmap';
 import { GenericNode } from 'mystjs';
+import { NodeSpec } from 'prosemirror-model';
+import { addListNodes } from 'prosemirror-schema-list';
 import {
   Blockquote,
   Break,
@@ -7,16 +9,13 @@ import {
   List,
   ListContent,
   ListItem,
+  NoAttrs,
   Paragraph,
   PhrasingContent,
   ThematicBreak,
-} from 'myst-spec';
-import { NodeSpec } from 'prosemirror-model';
-import { addListNodes } from 'prosemirror-schema-list';
+} from '../spec';
 import { MyNodeSpec, NodeGroups, Props } from './types';
 import { nodeNames } from '../types';
-
-export type Attrs = Record<string, never>;
 
 export const doc: NodeSpec = {
   content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
@@ -30,7 +29,7 @@ export const docComment: NodeSpec = {
   content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${nodeNames.equation})+`, // browsers will completely collapse the node when it's empty `+` is necessary
 };
 
-export const paragraph: MyNodeSpec<Attrs, Paragraph> = {
+export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {
   attrs: {},
   content: `${NodeGroups.inline}*`,
   group: NodeGroups.block,
@@ -39,13 +38,13 @@ export const paragraph: MyNodeSpec<Attrs, Paragraph> = {
     return ['p', 0];
   },
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Paragraph => ({
+  toMyst: (props) => ({
     type: 'paragraph',
     children: (props.children || []) as PhrasingContent[],
   }),
 };
 
-export const blockquote: MyNodeSpec<Attrs, Blockquote> = {
+export const blockquote: MyNodeSpec<NoAttrs, Blockquote> = {
   attrs: {},
   content: `${NodeGroups.block}+`,
   group: NodeGroups.block,
@@ -55,14 +54,14 @@ export const blockquote: MyNodeSpec<Attrs, Blockquote> = {
     return ['blockquote', 0];
   },
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): Blockquote => ({
+  toMyst: (props) => ({
     type: 'blockquote',
     children: (props.children || []) as FlowContent[],
   }),
 };
 
 /** Horizontal rule */
-export const horizontal_rule: MyNodeSpec<Attrs, ThematicBreak> = {
+export const horizontal_rule: MyNodeSpec<NoAttrs, ThematicBreak> = {
   attrs: {},
   group: NodeGroups.block,
   parseDOM: [{ tag: 'hr' }],
@@ -77,7 +76,7 @@ export const text: NodeSpec = {
   group: NodeGroups.inline,
 };
 
-export const hard_break: MyNodeSpec<Attrs, Break> = {
+export const hard_break: MyNodeSpec<NoAttrs, Break> = {
   attrs: {},
   inline: true,
   group: NodeGroups.inline,
@@ -102,7 +101,7 @@ export type OrderedListAttrs = {
 
 export const ordered_list = listNodes.get('ordered_list') as MyNodeSpec<OrderedListAttrs, List>;
 ordered_list.attrsFromMdastToken = (token: GenericNode) => ({ order: token.start || 1 });
-ordered_list.toMyst = (props: Props): List => ({
+ordered_list.toMyst = (props: Props) => ({
   type: 'list',
   ordered: true,
   // This feels like it should be `start: props.order`, but it
@@ -113,17 +112,17 @@ ordered_list.toMyst = (props: Props): List => ({
   children: (props.children || []) as ListContent[],
 });
 
-export const bullet_list = listNodes.get('bullet_list') as MyNodeSpec<Attrs, List>;
+export const bullet_list = listNodes.get('bullet_list') as MyNodeSpec<NoAttrs, List>;
 bullet_list.attrsFromMdastToken = () => ({});
-bullet_list.toMyst = (props: Props): List => ({
+bullet_list.toMyst = (props: Props) => ({
   type: 'list',
   ordered: false,
   children: (props.children || []) as ListContent[],
 });
 
-export const list_item = listNodes.get('list_item') as MyNodeSpec<Attrs, ListItem>;
+export const list_item = listNodes.get('list_item') as MyNodeSpec<NoAttrs, ListItem>;
 list_item.attrsFromMdastToken = () => ({});
-list_item.toMyst = (props: Props): ListItem => {
+list_item.toMyst = (props: Props) => {
   let { children } = props;
   if (children && children.length === 1 && children[0].type === 'paragraph') {
     children = children[0].children;

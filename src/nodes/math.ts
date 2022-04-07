@@ -1,4 +1,4 @@
-import { InlineMath } from 'myst-spec';
+import { InlineMath } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec } from './types';
 
@@ -20,7 +20,7 @@ const math: MyNodeSpec<Attrs, InlineMath> = {
     },
   ],
   attrsFromMdastToken: () => ({}),
-  toMyst: (props): InlineMath => {
+  toMyst: (props) => {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
       return { type: 'inlineMath', value: props.children[0].value || '' };
     }

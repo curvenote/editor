@@ -1,5 +1,5 @@
 import { GenericNode } from 'mystjs';
-import { Caption, FlowContent } from 'myst-spec';
+import { Caption, FlowContent } from '../spec';
 import { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import { MyNodeSpec, NodeGroups, CaptionKind } from './types';
@@ -40,7 +40,7 @@ const figcaption: MyNodeSpec<Attrs, Caption> = {
     const adjacentTypes = tokens.map((t: GenericNode) => t.type);
     return { kind: adjacentTypes.includes(nodeNames.table) ? CaptionKind.table : CaptionKind.fig };
   },
-  toMyst: (props): Caption => ({
+  toMyst: (props) => ({
     type: 'caption',
     children: (props.children || []) as FlowContent[],
   }),

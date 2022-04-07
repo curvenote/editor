@@ -1,7 +1,7 @@
 import { NodeDef, NodeGroups } from '../types';
 import { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
-import { ButtonMystNode } from './myst-ext';
+import { Button } from '../../spec';
 
 export type Attrs = {
   label?: string;
@@ -20,6 +20,6 @@ export const def: NodeDef = {
   group: NodeGroups.inline,
 };
 
-export const spec = createSpec<ButtonMystNode>(def);
+export const spec = createSpec<Button>(def);
 export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystRole(state, node, def);
 export default spec;
