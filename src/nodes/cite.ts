@@ -61,7 +61,7 @@ const cite: MyNodeSpec<Attrs & Legacy, Cite | CrossReference> = {
       text || '',
     ];
   },
-  attrsFromMdastToken: (node) => {
+  attrsFromMyst: (node) => {
     if (node.type === 'crossReference') {
       const crossRef = node as CrossReference;
       return {

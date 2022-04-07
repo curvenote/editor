@@ -54,7 +54,7 @@ const time: MyNodeSpec<Attrs, Time> = {
       },
     },
   ],
-  attrsFromMdastToken: (token) => ({ datetime: getDatetime(token.time) }),
+  attrsFromMyst: (token) => ({ datetime: getDatetime(token.time) }),
   toMyst: (props) => {
     const { d, f } = formatDatetime(props.datetime);
     return {

@@ -28,7 +28,7 @@ const mention: MyNodeSpec<Attrs, Mention> = {
       },
     },
   ],
-  attrsFromMdastToken: (token) => ({
+  attrsFromMyst: (token) => ({
     user: token.identifier,
     label: token.value || '',
   }),

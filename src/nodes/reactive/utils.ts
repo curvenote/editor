@@ -67,7 +67,7 @@ export function createSpec<N extends O & { type: string }>(
         },
       },
     ],
-    attrsFromMdastToken(token) {
+    attrsFromMyst(token) {
       const props: O = {};
       def.attrs.forEach((attr) => {
         const [value, valueFunction] = [token[attr.name], token[`${attr.name}Function`]];

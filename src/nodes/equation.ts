@@ -44,7 +44,7 @@ const equation: MyNodeSpec<Attrs, Math> = {
       },
     },
   ],
-  attrsFromMdastToken: (token) => ({
+  attrsFromMyst: (token) => ({
     id: token.identifier || null,
     label: null,
     numbered: token.numbered ?? DEFAULT_NUMBERED,

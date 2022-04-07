@@ -59,7 +59,7 @@ export type Props<T extends O = O> = T &
 export interface MyNodeSpec<T extends O, N extends MystNode> extends NodeSpec {
   attrs: NodeSpecAttrs<T>;
   parseDOM?: MyParseRule<T>[];
-  attrsFromMdastToken: (t: N, ts: GenericNode[]) => T;
+  attrsFromMyst: (t: N, ts: GenericNode[]) => T;
   toMyst: (props: Props<T>, opts: MdastOptions) => N;
 }
 

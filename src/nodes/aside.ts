@@ -14,7 +14,7 @@ const aside: MyNodeSpec<Record<string, never>, Margin> = {
     { tag: 'aside' }, // This is legacy and should be removed!
     { tag: 'aside.margin' },
   ],
-  attrsFromMdastToken() {
+  attrsFromMyst() {
     return {};
   },
   toMyst(props) {

@@ -24,7 +24,7 @@ export const nodes = tableNodes({
   },
 });
 
-nodes.table.attrsFromMdastToken = () => ({});
+nodes.table.attrsFromMyst = () => ({});
 nodes.table.toMyst = (props: Props): Table => {
   if (props.children?.length === 1 && props.children[0].type === 'table') {
     return props.children[0] as Table;
@@ -32,7 +32,7 @@ nodes.table.toMyst = (props: Props): Table => {
   return { type: 'table', align: undefined, children: (props.children || []) as TableRow[] };
 };
 
-nodes.table_row.attrsFromMdastToken = () => ({});
+nodes.table_row.attrsFromMyst = () => ({});
 nodes.table_row.toMyst = (props: Props): TableRow => ({
   type: 'tableRow',
   children: (props.children || []) as TableCell[],
@@ -43,7 +43,7 @@ function ifGreaterThanOne(num?: number): undefined | number {
   return num === 1 ? undefined : num;
 }
 
-nodes.table_header.attrsFromMdastToken = () => ({});
+nodes.table_header.attrsFromMyst = () => ({});
 nodes.table_header.toMyst = (props: Props): TableCell => ({
   type: 'tableCell',
   header: true,
@@ -53,7 +53,7 @@ nodes.table_header.toMyst = (props: Props): TableCell => ({
   children: (props.children || []) as PhrasingContent[],
 });
 
-nodes.table_cell.attrsFromMdastToken = () => ({});
+nodes.table_cell.attrsFromMyst = () => ({});
 nodes.table_cell.toMyst = (props: Props): TableCell => ({
   type: 'tableCell',
   header: undefined,

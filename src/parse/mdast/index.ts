@@ -112,7 +112,7 @@ export class MarkdownParseState {
         }
       } else if (name in nodeNames) {
         const nodeType = this.schema.nodes[name];
-        const nodeAttrs = nodeType.spec.attrsFromMdastToken(token, tokens);
+        const nodeAttrs = nodeType.spec.attrsFromMyst(token, tokens);
         this.openNode(nodeType, nodeAttrs);
         if (typeof children === 'string') {
           this.addText(children);
@@ -122,7 +122,7 @@ export class MarkdownParseState {
         this.closeNode();
       } else if (name in markNames) {
         const markType = this.schema.marks[name];
-        const mark = markType.create(markType.spec.attrsFromMdastToken(token, tokens));
+        const mark = markType.create(markType.spec.attrsFromMyst(token, tokens));
         this.openMark(mark);
         if (typeof children === 'string') {
           this.addText(children);

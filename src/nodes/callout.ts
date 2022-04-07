@@ -87,7 +87,7 @@ const callout: MyNodeSpec<Attrs, Admonition> = {
       priority: 60,
     },
   ],
-  attrsFromMdastToken: (token) => ({
+  attrsFromMyst: (token) => ({
     kind: admonitionToCalloutKind(token.kind),
   }),
   toMyst: (props) => {

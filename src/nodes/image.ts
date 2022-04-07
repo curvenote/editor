@@ -61,7 +61,7 @@ const image: MyNodeSpec<Attrs, Image> = {
       },
     ];
   },
-  attrsFromMdastToken: (token) => ({
+  attrsFromMyst: (token) => ({
     id: null, // Deprecated, use figure / container
     label: null, // Deprecated, use figure / container
     numbered: false, // Deprecated, use figure / container

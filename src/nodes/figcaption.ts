@@ -36,7 +36,7 @@ const figcaption: MyNodeSpec<Attrs, Caption> = {
       },
     },
   ],
-  attrsFromMdastToken: (token, tokens) => {
+  attrsFromMyst: (token, tokens) => {
     const adjacentTypes = tokens.map((t: GenericNode) => t.type);
     return { kind: adjacentTypes.includes(nodeNames.table) ? CaptionKind.table : CaptionKind.fig };
   },

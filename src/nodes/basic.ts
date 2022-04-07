@@ -37,7 +37,7 @@ export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {
   toDOM() {
     return ['p', 0];
   },
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'paragraph',
     children: (props.children || []) as PhrasingContent[],
@@ -53,7 +53,7 @@ export const blockquote: MyNodeSpec<NoAttrs, Blockquote> = {
   toDOM() {
     return ['blockquote', 0];
   },
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'blockquote',
     children: (props.children || []) as FlowContent[],
@@ -68,7 +68,7 @@ export const horizontal_rule: MyNodeSpec<NoAttrs, ThematicBreak> = {
   toDOM() {
     return ['hr', { class: 'break' }];
   },
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (): ThematicBreak => ({ type: 'thematicBreak' }),
 };
 
@@ -85,7 +85,7 @@ export const hard_break: MyNodeSpec<NoAttrs, Break> = {
   toDOM() {
     return ['br'];
   },
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (): Break => ({ type: 'break' }),
 };
 
@@ -100,7 +100,7 @@ export type OrderedListAttrs = {
 };
 
 export const ordered_list = listNodes.get('ordered_list') as MyNodeSpec<OrderedListAttrs, List>;
-ordered_list.attrsFromMdastToken = (token: GenericNode) => ({ order: token.start || 1 });
+ordered_list.attrsFromMyst = (token: GenericNode) => ({ order: token.start || 1 });
 ordered_list.toMyst = (props: Props) => ({
   type: 'list',
   ordered: true,
@@ -113,7 +113,7 @@ ordered_list.toMyst = (props: Props) => ({
 });
 
 export const bullet_list = listNodes.get('bullet_list') as MyNodeSpec<NoAttrs, List>;
-bullet_list.attrsFromMdastToken = () => ({});
+bullet_list.attrsFromMyst = () => ({});
 bullet_list.toMyst = (props: Props) => ({
   type: 'list',
   ordered: false,
@@ -121,7 +121,7 @@ bullet_list.toMyst = (props: Props) => ({
 });
 
 export const list_item = listNodes.get('list_item') as MyNodeSpec<NoAttrs, ListItem>;
-list_item.attrsFromMdastToken = () => ({});
+list_item.attrsFromMyst = () => ({});
 list_item.toMyst = (props: Props) => {
   let { children } = props;
   if (children && children.length === 1 && children[0].type === 'paragraph') {

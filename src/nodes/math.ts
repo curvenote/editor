@@ -19,7 +19,7 @@ const math: MyNodeSpec<Attrs, InlineMath> = {
       tag: 'r-equation[inline]',
     },
   ],
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
       return { type: 'inlineMath', value: props.children[0].value || '' };

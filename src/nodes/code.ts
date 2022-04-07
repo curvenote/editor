@@ -56,7 +56,7 @@ const code: MyNodeSpec<Attrs, Code> = {
       ['code', 0],
     ];
   },
-  attrsFromMdastToken: (token) => ({
+  attrsFromMyst: (token) => ({
     id: token.identifier || null,
     label: token.label || null,
     numbered: false,

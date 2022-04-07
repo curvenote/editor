@@ -41,7 +41,7 @@ const iframe: MyNodeSpec<Attrs, Iframe> = {
       },
     ];
   },
-  attrsFromMdastToken: (node) => ({
+  attrsFromMyst: (node) => ({
     src: node.src,
     align: 'center',
     width: getImageWidth(node.width),

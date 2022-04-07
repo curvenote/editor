@@ -68,7 +68,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
       },
     },
   ],
-  attrsFromMdastToken: (token) => {
+  attrsFromMyst: (token) => {
     const match = token.class?.match(/align-(left|right|center)/);
     return {
       id: token.identifier || null,

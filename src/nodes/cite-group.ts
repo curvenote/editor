@@ -23,7 +23,7 @@ const citeGroup: MyNodeSpec<Attrs, CiteGroup> = {
   toDOM() {
     return ['cite-group', 0];
   },
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'citeGroup',
     kind: 'parenthetical',

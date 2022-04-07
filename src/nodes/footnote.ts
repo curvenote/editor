@@ -13,7 +13,7 @@ const footnote: MyNodeSpec<NoAttrs, InlineFootnote> = {
   atom: true,
   toDOM: () => ['span', { class: 'footnote' }, 0],
   parseDOM: [{ tag: 'span.footnote' }],
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props: Props) => ({
     type: 'inlineFootnote',
     children: [{ type: 'paragraph', children: props.children || [] }] as FlowContent[],

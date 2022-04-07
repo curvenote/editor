@@ -18,7 +18,7 @@ import { MarkGroups, Props } from './nodes/types';
 import { MdastOptions } from './serialize/types';
 
 export interface MyMarkSpec<N extends MystNode> extends MarkSpec {
-  attrsFromMdastToken: (t: GenericNode) => Record<string, any>;
+  attrsFromMyst: (t: GenericNode) => Record<string, any>;
   toMyst: (props: Props, opts: MdastOptions) => N;
 }
 
@@ -51,7 +51,7 @@ export const link: MyMarkSpec<Link> = {
     const { href, title, kind } = node.attrs;
     return ['a', { href, title, kind }, 0];
   },
-  attrsFromMdastToken(token) {
+  attrsFromMyst(token) {
     return { href: token.url, title: token.title };
   },
   toMyst: (props, opts): Link => ({
@@ -69,7 +69,7 @@ export const code: MyMarkSpec<InlineCode> = {
     return ['code', 0];
   },
   excludes: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => {
     if (props.children?.length === 1 && props.children[0].type === 'text') {
       return { type: 'inlineCode', value: props.children[0].value || '' };
@@ -85,7 +85,7 @@ export const em: MyMarkSpec<Emphasis> = {
     return ['em', 0];
   },
   group: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'emphasis',
     children: (props.children || []) as PhrasingContent[],
@@ -109,7 +109,7 @@ export const strong: MyMarkSpec<Strong> = {
     return ['strong', 0];
   },
   group: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'strong',
     children: (props.children || []) as PhrasingContent[],
@@ -124,7 +124,7 @@ export const superscript: MyMarkSpec<Superscript> = {
   parseDOM: [{ tag: 'sup' }],
   excludes: 'subscript',
   group: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'superscript',
     children: (props.children || []) as PhrasingContent[],
@@ -139,7 +139,7 @@ export const subscript: MyMarkSpec<Subscript> = {
   parseDOM: [{ tag: 'sub' }],
   excludes: 'superscript',
   group: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'subscript',
     children: (props.children || []) as PhrasingContent[],
@@ -153,7 +153,7 @@ export const strikethrough: MyMarkSpec<Strikethrough> = {
   },
   parseDOM: [{ tag: 's' }],
   group: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'delete',
     children: (props.children || []) as PhrasingContent[],
@@ -167,7 +167,7 @@ export const underline: MyMarkSpec<Underline> = {
   },
   parseDOM: [{ tag: 'u' }],
   group: MarkGroups.format,
-  attrsFromMdastToken: () => ({}),
+  attrsFromMyst: () => ({}),
   toMyst: (props) => ({
     type: 'underline',
     children: (props.children || []) as PhrasingContent[],
@@ -191,7 +191,7 @@ export const abbr: MyMarkSpec<Abbreviation> = {
     const { title } = node.attrs;
     return ['abbr', { title }, 0];
   },
-  attrsFromMdastToken(token: GenericNode) {
+  attrsFromMyst(token: GenericNode) {
     return { title: token.title };
   },
   toMyst: (props) => ({

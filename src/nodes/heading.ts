@@ -31,7 +31,7 @@ const heading: MyNodeSpec<Attrs, Heading> = {
   toDOM(node) {
     return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
   },
-  attrsFromMdastToken: (token) => ({
+  attrsFromMyst: (token) => ({
     id: null,
     label: null,
     numbered: token.numbered ?? false,
