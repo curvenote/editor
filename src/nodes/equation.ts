@@ -72,10 +72,11 @@ export const equationNoDisplay: MyNodeSpec<Attrs, Math> = {
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { numbered, id } = node.attrs;
   const localId = state.options.localizeId?.(id ?? '') ?? id;
-  // TODO: this should be more specific, see amsmath
   const amsBegin = node.textContent.startsWith('\\begin{');
   const amsEnd = node.textContent.match(/\\end{([a-z*]+)}$/);
-  const ams = amsBegin && amsEnd;
+  // TODO: this should be more specific, see amsmath
+  const aligned = node.textContent.startsWith('\\begin{aligned}');
+  const ams = amsBegin && amsEnd && !aligned;
   if (ams) {
     state.text(node.textContent, false);
   } else if (numbered) {
