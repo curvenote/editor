@@ -35,6 +35,7 @@ export const textSerializer = new MarkdownSerializer(
     heading: simpleBlockRender,
     blockquote: simpleBlockRender,
     code_block: simpleBlockRender,
+    link_block: simpleBlockRender,
     footnote: simpleBlockRender,
     horizontal_rule: newLine,
     hard_break: newLine,
