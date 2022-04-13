@@ -5,6 +5,7 @@ import { EditorView } from 'prosemirror-view';
 import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';
+import { insertInlineNode } from './editor';
 
 export { findChildrenWithName };
 
@@ -76,6 +77,9 @@ export function createFigure(
     numbered: true,
     align: 'center',
     ...initialFigureState,
+    multipage: initialFigureState.multipage ?? false,
+    landscape: initialFigureState.landscape ?? false,
+    fullpage: initialFigureState.fullpage ?? false,
   };
   if (!caption) {
     const figure = Figure.createAndFill(attrs, Fragment.fromArray([node])) as Node;
