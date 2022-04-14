@@ -102,7 +102,7 @@ cases:
       content:
         - type: link_block
           attrs:
-            blockUrl: https://example.com
+            url: https://example.com
             title: my title
             description: my description
     mdast:

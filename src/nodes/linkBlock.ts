@@ -5,12 +5,12 @@ import { StaticPhrasingContent, LinkBlock } from '../spec';
 export interface Attrs {
   title: string;
   description: string;
-  blockUrl: string;
+  url: string;
 }
 
 const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   attrs: {
-    blockUrl: { default: '' },
+    url: { default: '' },
     title: { default: '' },
     description: { default: '' },
   },
@@ -18,12 +18,12 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   content: `${NodeGroups.text}*`,
   parseDOM: [
     {
-      tag: 'div[description][block-url]',
+      tag: 'div[title][block-url]',
       getAttrs(dom: any) {
         const attrs = {
-          blockUrl: dom.getAttribute('block-url') || null,
-          description: dom.getAttribute('description') || '',
-          title: dom.textContent || '',
+          url: dom.getAttribute('data-url') || null,
+          title: dom.getAttribute('title') || '',
+          description: dom.textContent || '',
         };
         console.log('parsing', dom, attrs);
         return attrs;
@@ -31,14 +31,14 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
     },
   ],
   toDOM(node: any) {
-    const { title, description, blockUrl } = node.attrs;
+    const { title, description, url } = node.attrs;
     return [
       'a',
       {
-        'block-url': blockUrl || undefined,
-        description,
+        'data-url': url || undefined,
+        title,
       },
-      title,
+      description,
     ];
   },
   attrsFromMyst: (token) => {
@@ -47,7 +47,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
       description = token.children[0].value;
     }
     return {
-      blockUrl: token.url,
+      url: token.url,
       title: token.title || '',
       description,
     };
@@ -55,7 +55,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   toMyst: (props) => {
     return {
       type: 'linkBlock',
-      url: props['block-url'],
+      url: props['data-url'],
       title: props.title || undefined,
       children: (props.children || []) as StaticPhrasingContent[],
     };
