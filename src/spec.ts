@@ -114,6 +114,7 @@ export type TableCell = SpecTableCell & {
 export type LinkBlock = {
   type: 'linkBlock';
   url: string;
+  thumbnail?: string;
   title?: string;
   children: StaticPhrasingContent[];
 };
