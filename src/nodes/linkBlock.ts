@@ -1,5 +1,6 @@
 import { MyNodeSpec, NodeGroups } from './types';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import { StaticPhrasingContent, LinkBlock } from '../spec';
 
 export interface Attrs {
   title: string;
@@ -7,8 +8,7 @@ export interface Attrs {
   blockUrl: string;
 }
 
-console.log('oh yeah');
-const spec: any = {
+const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   attrs: {
     blockUrl: { default: '' },
     title: { default: '' },
@@ -41,15 +41,35 @@ const spec: any = {
       title,
     ];
   },
-  // TODO: fun myst stuff
+  attrsFromMyst: (token) => {
+    let description = '';
+    if (token.children.length && token.children[0].type === 'text') {
+      description = token.children[0].value;
+    }
+    return {
+      blockUrl: token.url,
+      title: token.title || '',
+      description,
+    };
+  },
+  toMyst: (props) => {
+    return {
+      type: 'linkBlock',
+      url: props['block-url'],
+      title: props.title || undefined,
+      children: (props.children || []) as StaticPhrasingContent[],
+    };
+  },
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
-  state.write('TODO: translate linkblock markdown');
+  // TODO Replace with link block directive...?
+  state.ensureNewLine();
+  state.write(`\n[${node.attrs.description}](${node.attrs.url} ${node.attrs.title})\n\n`);
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
   state.write('TODO: translate linkblock tex');
 };
 
-export default spec;
+export default link_block;

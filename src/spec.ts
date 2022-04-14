@@ -4,6 +4,7 @@ import {
   Math as SpecMath,
   Heading as SpecHeading,
   TableCell as SpecTableCell,
+  StaticPhrasingContent,
 } from 'myst-spec';
 
 export {
@@ -108,6 +109,13 @@ export type Mention = {
 export type TableCell = SpecTableCell & {
   colspan?: number;
   rowspan?: number;
+};
+
+export type LinkBlock = {
+  type: 'linkBlock';
+  url: string;
+  title?: string;
+  children: StaticPhrasingContent[];
 };
 
 // Reactive nodes

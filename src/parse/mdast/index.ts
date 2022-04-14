@@ -301,6 +301,9 @@ const handlers: Record<string, TokenHandler> = {
   time: () => ({
     name: nodeNames.time,
   }),
+  linkBlock: () => ({
+    name: nodeNames.link_block,
+  }),
 };
 
 export function fromMdast(tree: Root, useSchema: UseSchema): ProsemirrorNode {
