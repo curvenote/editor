@@ -18,7 +18,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   content: `${NodeGroups.text}*`,
   parseDOM: [
     {
-      tag: 'div[title][block-url]',
+      tag: 'div[title][data-url]',
       getAttrs(dom: any) {
         const attrs = {
           url: dom.getAttribute('data-url') || null,
