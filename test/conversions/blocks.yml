@@ -5,7 +5,7 @@ cases:
     mdast:
       type: root
       children:
-        - type: comment
+        - type: mystComment
           value: a comment
   - title: block break
     skip: true

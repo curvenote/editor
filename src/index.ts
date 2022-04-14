@@ -9,7 +9,6 @@ export { ReferenceKind, CaptionKind } from './nodes/types';
 
 export * from './parse';
 export * from './serialize';
-console.log('any schema changes');
 
 export * as server from './server';
 export * as process from './process';

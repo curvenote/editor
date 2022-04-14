@@ -47,7 +47,7 @@ const equation: MyNodeSpec<Attrs, Math> = {
   attrsFromMyst: (token) => ({
     id: token.identifier || null,
     label: null,
-    numbered: token.numbered ?? DEFAULT_NUMBERED,
+    numbered: token.enumerated ?? DEFAULT_NUMBERED,
     title: '',
   }),
   toMyst: (props, options) => {
@@ -56,7 +56,7 @@ const equation: MyNodeSpec<Attrs, Math> = {
       return {
         type: 'math',
         ...normalizeLabel(localizedId),
-        numbered: readBooleanAttr(props.numbered),
+        enumerated: readBooleanAttr(props.numbered),
         value: props.children[0].value || '',
       };
     }
