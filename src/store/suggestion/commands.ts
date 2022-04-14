@@ -5,6 +5,7 @@ import { EditorView } from 'prosemirror-view';
 
 export enum CommandNames {
   'link' = 'link',
+  'link_block' = 'link block',
   'callout' = 'callout',
   'aside' = 'aside',
   'math' = 'math',
@@ -282,6 +283,11 @@ export const ALL_COMMANDS: CommandResult[] = [
   ORDERED_LIST_COMMAND,
   BULLET_LIST_COMMAND,
   CITATION_COMMAND,
+  {
+    name: CommandNames.link_block,
+    title: 'Link to block',
+    description: 'Add a link to block',
+  },
   {
     name: CommandNames.link_article,
     title: 'Link to Article',
