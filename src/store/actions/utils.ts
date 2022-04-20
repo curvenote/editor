@@ -1,4 +1,4 @@
-import { nodeNames, findChildrenWithName, CaptionKind, createId, Nodes } from '@curvenote/schema';
+import { nodeNames, CaptionKind, createId, Nodes, findChildrenWithName } from '@curvenote/schema';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
@@ -6,8 +6,6 @@ import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';
 import { insertInlineNode } from './editor';
-
-export { findChildrenWithName };
 
 export const TEST_LINK =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
