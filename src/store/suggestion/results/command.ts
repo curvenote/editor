@@ -126,7 +126,8 @@ export function executeCommand(
       case CommandNames.link_block: {
         removeText();
         // eslint-disable-next-line no-alert
-        const href = prompt('block url: ');
+        const href = prompt('url: ');
+        if (!href) return true;
         dispatch(replaceOrInsert(schema.nodes.link_block, { url: href }));
         return true;
       }

@@ -10,6 +10,7 @@ export { default as TableActions } from './TableActions';
 export { default as ImageActions } from './ImageActions';
 export { default as FigureActions } from './FigureActions';
 export { default as CodeActions } from './CodeActions';
+export { default as LinkBlockActions } from './LinkBlockActions';
 
 export * from './hooks';
 export * from './utils';

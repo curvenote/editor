@@ -11,6 +11,7 @@ import { GetPos, NodeViewProps } from './types';
 export type Options = {
   wrapper: 'span' | 'div';
   className?: string;
+  enableSelectionHighlight?: boolean;
 };
 
 export type ClassWrapperProps = {
@@ -62,6 +63,8 @@ export class ReactWrapper {
 
   getPos: GetPos;
 
+  isSelectionHighlightEnabled: boolean;
+
   constructor(
     NodeView: React.FunctionComponent<NodeViewProps>,
     nodeViewPos: Omit<ClassWrapperProps, 'Child'>,
@@ -71,6 +74,7 @@ export class ReactWrapper {
     this.node = node;
     this.view = view;
     this.getPos = getPos;
+    this.isSelectionHighlightEnabled = !!options.enableSelectionHighlight;
     this.dom = document.createElement(options.wrapper);
     if (options.className) this.dom.classList.add(options.className);
 
@@ -101,11 +105,15 @@ export class ReactWrapper {
   selectNode() {
     const edit = isEditable(this.view.state);
     this.editor?.setState({ open: true, edit });
+    if (!edit || !this.isSelectionHighlightEnabled) return;
+    this.dom.classList.add('ProseMirror-selectednode');
   }
 
   deselectNode() {
     const edit = isEditable(this.view.state);
     this.editor?.setState({ open: false, edit });
+    if (!this.isSelectionHighlightEnabled) return;
+    this.dom.classList.remove('ProseMirror-selectednode');
   }
 
   update(node: Node) {

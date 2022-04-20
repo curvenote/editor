@@ -14,4 +14,7 @@ function LinkBlock({ node }: NodeViewProps) {
   );
 }
 
-export const createLinkBlockView = createNodeView(LinkBlock, { wrapper: 'div' });
+export const createLinkBlockView = createNodeView(LinkBlock, {
+  wrapper: 'div',
+  enableSelectionHighlight: true,
+});
