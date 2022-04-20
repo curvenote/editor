@@ -16,16 +16,18 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   },
   group: NodeGroups.top,
   content: `${NodeGroups.text}*`,
+  selectable: true,
+  draggable: true,
+  atom: true,
   parseDOM: [
     {
-      tag: 'div[title][data-url]',
+      tag: 'div[title][data-url].link-block',
       getAttrs(dom: any) {
         const attrs = {
           url: dom.getAttribute('data-url') || null,
           title: dom.getAttribute('title') || '',
           description: dom.textContent || '',
         };
-        console.log('parsing', dom, attrs);
         return attrs;
       },
     },
@@ -33,10 +35,11 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   toDOM(node: any) {
     const { title, description, url } = node.attrs;
     return [
-      'a',
+      'div',
       {
         'data-url': url || undefined,
         title,
+        class: 'link-block',
       },
       description,
     ];
