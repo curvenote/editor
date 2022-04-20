@@ -5,7 +5,7 @@ import { getSelectedViewId } from '../store/selectors';
 import { store, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
-import { addLink } from '../store/actions/utils';
+import { addLink, addLinkBlock } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 import { selectEditorView } from '../store/actions';
@@ -79,6 +79,7 @@ export function createEditorView(
         return (
           opts.handlePaste(view, event, slice) ||
           addLink(view, event.clipboardData) ||
+          addLinkBlock(view, event.clipboardData) ||
           uploadIfImagesInSchema(view, event.clipboardData)
         );
       },

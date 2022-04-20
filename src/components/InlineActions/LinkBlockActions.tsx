@@ -34,9 +34,10 @@ export function useLinkBlockActions(stateId: any, viewId: string | null) {
   const state = useSelector((s: State) => getEditorState(s, stateId)?.state);
   const selection = useMemo(() => {
     try {
-      return state?.doc ? NodeSelection.create(state.doc as any, state.selection.from) : null;
+      return state?.doc && state.selection.$head.nodeAfter // guarding nodeAfter prop seem to fix a run time exception
+        ? NodeSelection.create(state.doc, state.selection.from)
+        : null;
     } catch (e) {
-      console.log('caught', e);
       return undefined;
     }
   }, [state]);
@@ -44,7 +45,6 @@ export function useLinkBlockActions(stateId: any, viewId: string | null) {
   const attrs = node?.attrs;
   const from = selection?.from;
   const url = selection?.node?.attrs?.url || '';
-  console.log('node selection', selection);
 
   const onOpen = useCallback(() => {
     if (!url) return;

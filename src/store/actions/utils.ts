@@ -36,6 +36,28 @@ export const addLink = (view: EditorView, data: DataTransfer | null) => {
   return true;
 };
 
+export const addLinkBlock = (view: EditorView, data: DataTransfer | null) => {
+  // TODO: This should allow html if it exists. And not match mutliple URLs.
+  const html = data?.getData('text/html') ?? '';
+  if (!html.includes('<a data-url')) return false;
+  const tempBoard = document.createElement('div');
+  tempBoard.innerHTML = html;
+  const anchor = tempBoard.querySelector('a');
+  if (!anchor) return false;
+  const url = anchor.getAttribute('data-url');
+  const title = anchor.getAttribute('title');
+  const description = anchor.innerText;
+  if (!url) return false;
+  const node = view.state.schema.nodes.link_block.createAndFill({
+    url,
+    title,
+    description,
+  }) as any;
+  const tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
+  view.dispatch(tr);
+  return true;
+};
+
 export function updateNodeAttrsOnView(
   view: EditorView | null,
   node: Pick<ContentNodeWithPos, 'node' | 'pos'>,
