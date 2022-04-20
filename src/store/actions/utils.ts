@@ -37,7 +37,6 @@ export const addLink = (view: EditorView, data: DataTransfer | null) => {
 };
 
 export const addLinkBlock = (view: EditorView, data: DataTransfer | null) => {
-  // TODO: This should allow html if it exists. And not match mutliple URLs.
   const html = data?.getData('text/html') ?? '';
   if (!html.includes('<a data-url')) return false;
   const tempBoard = document.createElement('div');
@@ -52,7 +51,7 @@ export const addLinkBlock = (view: EditorView, data: DataTransfer | null) => {
     url,
     title,
     description,
-  }) as any;
+  });
   const tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
   view.dispatch(tr);
   return true;
