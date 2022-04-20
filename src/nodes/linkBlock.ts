@@ -66,13 +66,18 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
 };
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
-  // TODO Replace with link block directive...?
   state.ensureNewLine();
-  state.write(`\n[${node.attrs.description}](${node.attrs.url} ${node.attrs.title})\n\n`);
+  state.write(`\`\`\`{link-block} ${node.attrs.url}\n`);
+  if (node.attrs.title) state.write(`:title: ${node.attrs.title}\n`);
+  if (node.attrs.thumbnail) state.write(`:thumbnail: ${node.attrs.thumbnail}\n`);
+  if (node.attrs.description) state.write(`${node.attrs.description}\n`);
+  state.ensureNewLine();
+  state.write('```');
+  state.closeBlock(node);
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  state.write('TODO: translate linkblock tex');
+  state.write(`\\href{${node.attrs.url}}{${node.attrs.title}}`);
 };
 
 export default link_block;
