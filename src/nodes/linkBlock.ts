@@ -79,7 +79,11 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
 };
 
 export const toTex: TexFormatSerialize = (state, node) => {
-  state.write(`\\href{${node.attrs.url}}{${node.attrs.title}}`);
+  if (node.attrs.title) {
+    state.write(`\\href{${node.attrs.url}}{${node.attrs.title}}`);
+  } else {
+    state.write(`\\url{${node.attrs.url}}`);
+  }
 };
 
 export default link_block;
