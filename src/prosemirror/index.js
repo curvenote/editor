@@ -16,7 +16,7 @@ import { getSelectedViewId } from '../store/selectors';
 import { store, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
-import { addLink, addLinkBlock } from '../store/actions/utils';
+import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 import { selectEditorView } from '../store/actions';
@@ -54,7 +54,6 @@ export function createEditorView(dom, state, dispatch) {
             var uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : function () { return false; };
             return (opts.handlePaste(view, event, slice) ||
                 addLink(view, event.clipboardData) ||
-                addLinkBlock(view, event.clipboardData) ||
                 uploadIfImagesInSchema(view, event.clipboardData));
         },
         handleDrop: function (view, event) {

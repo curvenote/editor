@@ -10,7 +10,6 @@ export declare const TEST_LINK_COMMON_SPACE: RegExp;
 export declare const testLink: (possibleLink: string) => boolean;
 export declare const testLinkWeak: (possibleLink: string) => boolean;
 export declare const addLink: (view: EditorView, data: DataTransfer | null) => boolean;
-export declare const addLinkBlock: (view: EditorView, data: DataTransfer | null) => boolean;
 export declare function updateNodeAttrsOnView(view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;
 }, select?: boolean | 'after'): void;

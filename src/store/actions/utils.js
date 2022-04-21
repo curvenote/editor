@@ -37,30 +37,6 @@ export var addLink = function (view, data) {
     view.dispatch(tr);
     return true;
 };
-export var addLinkBlock = function (view, data) {
-    var _a;
-    var html = (_a = data === null || data === void 0 ? void 0 : data.getData('text/html')) !== null && _a !== void 0 ? _a : '';
-    if (!html.includes('<a data-url'))
-        return false;
-    var tempBoard = document.createElement('div');
-    tempBoard.innerHTML = html;
-    var anchor = tempBoard.querySelector('a');
-    if (!anchor)
-        return false;
-    var url = anchor.getAttribute('data-url');
-    var title = anchor.getAttribute('title');
-    var description = anchor.innerText;
-    if (!url)
-        return false;
-    var node = view.state.schema.nodes.link_block.createAndFill({
-        url: url,
-        title: title,
-        description: description,
-    });
-    var tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
-    view.dispatch(tr);
-    return true;
-};
 export function updateNodeAttrsOnView(view, node, attrs, select) {
     if (select === void 0) { select = true; }
     if (view == null)
