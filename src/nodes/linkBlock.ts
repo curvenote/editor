@@ -21,6 +21,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   selectable: true,
   draggable: true,
   atom: true,
+  isolating: true,
   parseDOM: [
     {
       tag: `div.${LINK_BLOCK_CLASS}`,
