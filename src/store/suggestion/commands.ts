@@ -285,8 +285,8 @@ export const ALL_COMMANDS: CommandResult[] = [
   CITATION_COMMAND,
   {
     name: CommandNames.link_block,
-    title: 'Link to block',
-    description: 'Add a link to block',
+    title: 'Card',
+    description: 'Create a card from a URL or link',
   },
   {
     name: CommandNames.link_article,

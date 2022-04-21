@@ -12,7 +12,7 @@ const useStyles = makeStyles(() =>
 
 const LABELS: Record<LinkType, string> = {
   link: 'Link',
-  'link-block': 'Block',
+  'link-block': 'Card',
 };
 
 export function LinkTypeSelect({
