@@ -17,7 +17,7 @@ type TestCase = {
   mdast: Root;
 };
 
-const directory = 'test/conversions';
+const directory = path.join(__dirname, 'conversions');
 const files: string[] = fs.readdirSync(directory).filter((name) => name.endsWith('.yml'));
 
 // For prettier printing of test cases

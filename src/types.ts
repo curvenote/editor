@@ -18,6 +18,7 @@ export enum nodeNames {
   horizontal_rule = 'horizontal_rule',
   hard_break = 'hard_break',
   time = 'time',
+  link_block = 'link_block',
   ordered_list = 'ordered_list',
   bullet_list = 'bullet_list',
   list_item = 'list_item',

@@ -31,7 +31,6 @@ cases:
                   value: example
             - type: text
               value: ' link'
-
   - title: inline link with title
     curvenote:
       type: doc
@@ -65,7 +64,6 @@ cases:
                   value: example
             - type: text
               value: ' link'
-
   - title: auto link
     curvenote:
       type: doc
@@ -98,3 +96,21 @@ cases:
                   value: https://example.com
             - type: text
               value: ' link'
+  - title: block link
+    curvenote:
+      type: doc
+      content:
+        - type: link_block
+          attrs:
+            url: https://example.com
+            title: my title
+            description: my description
+    mdast:
+      type: root
+      children:
+        - type: linkBlock
+          url: https://example.com
+          title: my title
+          children:
+            - type: text
+              value: my description

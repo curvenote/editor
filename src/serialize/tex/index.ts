@@ -44,6 +44,7 @@ export const texSerializer = new MarkdownSerializer(
       state.renderContent(node);
     }),
     code_block: nodes.Code.toTex,
+    link_block: nodes.LinkBlock.toTex,
     horizontal_rule(state, node) {
       state.write('\n\\bigskip\n\\centerline{\\rule{13cm}{0.4pt}}\n\\bigskip');
       state.closeBlock(node);

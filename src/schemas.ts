@@ -14,6 +14,7 @@ export const listNodes = {
 export const presentationalNodes = {
   aside: Nodes.Aside.default,
   callout: Nodes.Callout.default,
+  link_block: Nodes.LinkBlock.default,
   iframe: Nodes.IFrame.default,
 };
 

@@ -247,11 +247,11 @@ const handlers: Record<string, TokenHandler> = {
     name: nodeNames.callout,
     children: token.children,
   }),
-  directive: (token) => ({
+  mystDirective: (token) => ({
     name: ignoreNames.directive,
     children: token.children,
   }),
-  role: (token) => ({
+  mystRole: (token) => ({
     name: ignoreNames.role,
     children: token.children,
   }),
@@ -300,6 +300,9 @@ const handlers: Record<string, TokenHandler> = {
   }),
   time: () => ({
     name: nodeNames.time,
+  }),
+  linkBlock: () => ({
+    name: nodeNames.link_block,
   }),
 };
 

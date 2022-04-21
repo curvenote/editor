@@ -231,7 +231,7 @@ cases:
           kind: table
           identifier: my-table
           label: my-table
-          numbered: true
+          enumerated: true
           class: align-center
           children:
             - type: caption

@@ -73,7 +73,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
     return {
       id: token.identifier || null,
       label: null, // This is deprecated
-      numbered: token.numbered || false,
+      numbered: token.enumerated || false,
       align: (match ? match[1] : 'center') as AlignOptions,
       multipage: false,
       landscape: false,
@@ -95,7 +95,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
       type: 'container',
       kind: containerKind,
       ...normalizeLabel(localizedId),
-      numbered: readBooleanAttr(props.numbered),
+      enumerated: readBooleanAttr(props.numbered),
       class: props.align ? `align-${props.align}` : undefined,
       children: (props.children || []) as (Caption | Legend | Image | Table)[],
     };

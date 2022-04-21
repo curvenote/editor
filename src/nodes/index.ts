@@ -9,6 +9,7 @@ export * as Time from './time';
 export * as Table from './table';
 export * as Footnote from './footnote';
 export * as Mention from './mention';
+export * as LinkBlock from './linkBlock';
 
 // Figures and Captions
 export * as Figure from './figure';

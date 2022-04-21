@@ -48,6 +48,7 @@ cases:
           identifier: my-figure
           label: My-Figure
           class: align-center
+          enumerated: true
           children:
             - type: image
               url: img.png
@@ -91,7 +92,7 @@ cases:
           kind: figure
           identifier: my-figure
           label: My-Figure
-          numbered: true
+          enumerated: true
           class: align-center
           children:
             - type: image

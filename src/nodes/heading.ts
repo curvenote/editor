@@ -1,7 +1,12 @@
 import { Heading, PhrasingContent } from '../spec';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
-import { getNumberedAttrs, getNumberedDefaultAttrs, setNumberedAttrs } from './utils';
+import {
+  getNumberedAttrs,
+  getNumberedDefaultAttrs,
+  readBooleanAttr,
+  setNumberedAttrs,
+} from './utils';
 
 const getAttrs = (level: number) => (dom: HTMLElement) => ({
   ...getNumberedAttrs(dom),
@@ -34,13 +39,13 @@ const heading: MyNodeSpec<Attrs, Heading> = {
   attrsFromMyst: (token) => ({
     id: null,
     label: null,
-    numbered: token.numbered ?? false,
+    numbered: token.enumerated ?? false,
     level: token.depth,
   }),
   toMyst: (props) => ({
     type: 'heading',
     depth: parseInt(props.tag.slice(1), 10),
-    numbered: props.numbered,
+    enumerated: readBooleanAttr(props.numbered),
     children: (props.children || []) as PhrasingContent[],
   }),
 };

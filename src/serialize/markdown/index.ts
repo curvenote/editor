@@ -63,6 +63,7 @@ const mdNodes: MarkdownSerializerParameters[0] = {
   time: nodes.Time.toMarkdown,
   callout: nodes.Callout.toMarkdown,
   aside: nodes.Aside.toMarkdown,
+  link_block: nodes.LinkBlock.toMarkdown,
   // Technical
   math: nodes.Math.toMarkdown,
   equation: nodes.Equation.toMarkdown,
