@@ -1,6 +1,4 @@
 import { PopperPlacementType } from '@material-ui/core';
-import { NodeSelection } from 'prosemirror-state';
-import { LinkType } from '../../components/types';
 import {
   SELECT_EDITOR_VIEW,
   InlineSelection,
@@ -10,9 +8,8 @@ import {
 } from './types';
 import { AppThunk } from '../types';
 import { getEditorUI, getInlineActionKind, getSelectedEditorAndViews } from './selectors';
-import { getEditorState, getEditorView } from '../state/selectors';
+import { getEditorView } from '../state/selectors';
 import { getSelectionKind } from './utils';
-import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist } from '../actions';
 
 export function selectEditorView(viewId: string | null): AppThunk<void> {
   return (dispatch, getState) => {
@@ -104,49 +101,5 @@ export function positionInlineActions(): AppThunk<void> {
         break;
     }
     dispatch(setInlineSelection({ ...selection, ...placement }));
-  };
-}
-
-export function switchLinkType({
-  linkType,
-  stateId,
-  viewId,
-  url,
-}: {
-  linkType: LinkType;
-  stateId: string;
-  viewId: string;
-  url: string;
-}): AppThunk<void> {
-  return (dispatch, getState) => {
-    const state = getEditorState(getState(), stateId)?.state;
-    if (!state) return;
-    const {
-      selection: { from },
-    } = state;
-    const selection = state?.doc ? NodeSelection.create(state.doc, state.selection.from) : null;
-    const node = selection?.node;
-    if (!selection || !node) return;
-
-    if (linkType === 'link') {
-      const mark = state?.schema.marks.link;
-      const link = mark.create({ href: url });
-      const tr = state.tr.replaceRangeWith(
-        from,
-        from + node.nodeSize,
-        state.schema.text(url, [link]),
-      );
-      dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
-    } else if (linkType === 'link-block') {
-      const linkBounds = getLinkBoundsIfTheyExist(state);
-      if (!linkBounds) return;
-      const newNode = state.schema.nodes.link_block.createAndFill({
-        title: '',
-        description: '',
-        url,
-      }) as any;
-      const tr = state.tr.replaceRangeWith(linkBounds.from, linkBounds.to, newNode);
-      dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
-    }
   };
 }

@@ -115,8 +115,6 @@ function LinkBlockActions(props: ActionProps) {
 
   if (!stateId || !viewId) return null;
 
-  console.log('[LinkBlockActions]', attrs);
-
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.grid}>
       <Box ml={2}>
