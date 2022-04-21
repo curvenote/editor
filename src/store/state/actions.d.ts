@@ -3,6 +3,7 @@ import { EditorView } from 'prosemirror-view';
 import { schemas } from '@curvenote/schema';
 import { EditorActionTypes } from './types';
 import { AppThunk } from '../types';
+import { LinkType } from '../../components/types';
 export declare function initEditorState(useSchema: schemas.UseSchema, stateKey: any, editable: boolean, content: string, version: number): EditorActionTypes;
 export declare function updateEditorState(stateKey: any, viewId: string | null, editorState: EditorState, tr?: Transaction): EditorActionTypes;
 export declare function applyProsemirrorTransaction(stateKey: any, viewId: string | null, tr: Transaction, focus?: boolean): AppThunk<boolean>;
@@ -11,3 +12,9 @@ export declare function unsubscribeView(stateKey: any, viewId: string): EditorAc
 export declare function resetAllEditorsAndViews(): EditorActionTypes;
 export declare function resetAllViews(): EditorActionTypes;
 export declare function resetEditorAndViews(stateKey: any): EditorActionTypes;
+export declare function switchLinkType({ linkType, stateId, viewId, url, }: {
+    linkType: LinkType;
+    stateId: string;
+    viewId: string;
+    url: string;
+}): AppThunk<void>;

@@ -16,7 +16,7 @@ import { getSelectedViewId } from '../store/selectors';
 import { store, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
-import { addLink } from '../store/actions/utils';
+import { addLink, addLinkBlock } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 import { selectEditorView } from '../store/actions';
@@ -39,7 +39,7 @@ export function createEditorView(dom, state, dispatch) {
     var editorView = new EditorView({ mount: dom }, {
         state: state,
         dispatchTransaction: dispatch,
-        nodeViews: __assign({ math: views.MathView, equation: views.EquationView, code_block: views.CodeBlockView, footnote: views.FootnoteView, image: views.ImageView, iframe: views.IFrameView, link: views.LinkView, time: views.TimeView, mention: views.MentionView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
+        nodeViews: __assign({ math: views.MathView, equation: views.EquationView, code_block: views.CodeBlockView, footnote: views.FootnoteView, image: views.ImageView, iframe: views.IFrameView, link: views.LinkView, link_block: views.createLinkBlockView, time: views.TimeView, mention: views.MentionView, button: views.newWidgetView, display: views.newWidgetView, dynamic: views.newWidgetView, range: views.newWidgetView, switch: views.newWidgetView, variable: views.newWidgetView }, opts.nodeViews),
         editable: function (s) { return isEditable(s); },
         handleKeyDown: function (_, event) {
             shiftKey = event.shiftKey;
@@ -54,6 +54,7 @@ export function createEditorView(dom, state, dispatch) {
             var uploadIfImagesInSchema = imageInSchema ? uploadAndInsertImages : function () { return false; };
             return (opts.handlePaste(view, event, slice) ||
                 addLink(view, event.clipboardData) ||
+                addLinkBlock(view, event.clipboardData) ||
                 uploadIfImagesInSchema(view, event.clipboardData));
         },
         handleDrop: function (view, event) {

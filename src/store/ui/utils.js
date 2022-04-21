@@ -37,6 +37,8 @@ export var getSelectionKind = function (state) {
             return { kind: SelectionKinds.iframe, pos: pos };
         case nodeNames.math:
             return { kind: SelectionKinds.math, pos: pos };
+        case nodeNames.link_block:
+            return { kind: SelectionKinds.link_block, pos: pos };
         case nodeNames.equation:
             return { kind: SelectionKinds.equation, pos: pos };
         case nodeNames.cite:

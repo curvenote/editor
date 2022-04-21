@@ -5,6 +5,7 @@ import { GetPos, NodeViewProps } from './types';
 export declare type Options = {
     wrapper: 'span' | 'div';
     className?: string;
+    enableSelectionHighlight?: boolean;
 };
 export declare type ClassWrapperProps = {
     node: Node;
@@ -18,6 +19,7 @@ export declare class ReactWrapper {
     view: EditorView;
     editor: null | React.Component;
     getPos: GetPos;
+    isSelectionHighlightEnabled: boolean;
     constructor(NodeView: React.FunctionComponent<NodeViewProps>, nodeViewPos: Omit<ClassWrapperProps, 'Child'>, options: Options);
     selectNode(): void;
     deselectNode(): void;

@@ -3,6 +3,7 @@ export var INLINE_SELECTION = 'INLINE_SELECTION';
 export var SelectionKinds;
 (function (SelectionKinds) {
     SelectionKinds["link"] = "link";
+    SelectionKinds["link_block"] = "link_block";
     SelectionKinds["figure"] = "figure";
     SelectionKinds["image"] = "image";
     SelectionKinds["iframe"] = "iframe";

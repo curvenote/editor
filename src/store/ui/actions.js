@@ -88,6 +88,7 @@ export function positionInlineActions() {
                 break;
             case SelectionKinds.figure:
             case SelectionKinds.callout:
+            case SelectionKinds.link_block:
             case SelectionKinds.code:
                 placement.placement = 'bottom';
                 break;

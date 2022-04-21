@@ -3,6 +3,7 @@ export declare const SELECT_EDITOR_VIEW = "SELECT_EDITOR_VIEW";
 export declare const INLINE_SELECTION = "INLINE_SELECTION";
 export declare enum SelectionKinds {
     link = "link",
+    link_block = "link_block",
     figure = "figure",
     image = "image",
     iframe = "iframe",

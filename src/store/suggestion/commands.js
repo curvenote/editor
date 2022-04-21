@@ -13,6 +13,7 @@ import { hasParentNode } from 'prosemirror-utils';
 export var CommandNames;
 (function (CommandNames) {
     CommandNames["link"] = "link";
+    CommandNames["link_block"] = "link block";
     CommandNames["callout"] = "callout";
     CommandNames["aside"] = "aside";
     CommandNames["math"] = "math";
@@ -271,6 +272,11 @@ export var ALL_COMMANDS = __spreadArray(__spreadArray(__spreadArray(__spreadArra
     ORDERED_LIST_COMMAND,
     BULLET_LIST_COMMAND,
     CITATION_COMMAND,
+    {
+        name: CommandNames.link_block,
+        title: 'Card',
+        description: 'Create a card from a URL or link',
+    },
     {
         name: CommandNames.link_article,
         title: 'Link to Article',

@@ -97,6 +97,7 @@ var ReactWrapper = (function () {
         this.node = node;
         this.view = view;
         this.getPos = getPos;
+        this.isSelectionHighlightEnabled = !!options.enableSelectionHighlight;
         this.dom = document.createElement(options.wrapper);
         if (options.className)
             this.dom.classList.add(options.className);
@@ -123,11 +124,17 @@ var ReactWrapper = (function () {
         var _a;
         var edit = isEditable(this.view.state);
         (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: true, edit: edit });
+        if (!edit || !this.isSelectionHighlightEnabled)
+            return;
+        this.dom.classList.add('ProseMirror-selectednode');
     };
     ReactWrapper.prototype.deselectNode = function () {
         var _a;
         var edit = isEditable(this.view.state);
         (_a = this.editor) === null || _a === void 0 ? void 0 : _a.setState({ open: false, edit: edit });
+        if (!this.isSelectionHighlightEnabled)
+            return;
+        this.dom.classList.remove('ProseMirror-selectednode');
     };
     ReactWrapper.prototype.update = function (node) {
         var _a;

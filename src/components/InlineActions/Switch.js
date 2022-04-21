@@ -15,6 +15,7 @@ import isEqual from 'lodash.isequal';
 import { SelectionKinds as Kinds } from '../../store/ui/types';
 import { getEditorUIStateAndViewIds, getInlineActionKind } from '../../store/ui/selectors';
 import LinkActions from './LinkActions';
+import LinkBlockActions from './LinkBlockActions';
 import CalloutActions from './CalloutActions';
 import TimeActions from './TimeActions';
 import HeadingActions from './HeadingActions';
@@ -36,6 +37,7 @@ function InlineActionSwitch() {
     var _a = useInlineActionProps(), stateId = _a.stateId, viewId = _a.viewId, kind = _a.kind;
     return (React.createElement(React.Fragment, null,
         kind === Kinds.link && React.createElement(LinkActions, __assign({}, { stateId: stateId, viewId: viewId })),
+        kind === Kinds.link_block && React.createElement(LinkBlockActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.figure && React.createElement(FigureImageActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.image && React.createElement(ImageActions, __assign({}, { stateId: stateId, viewId: viewId })),
         kind === Kinds.iframe && React.createElement(ImageActions, __assign({}, { stateId: stateId, viewId: viewId })),

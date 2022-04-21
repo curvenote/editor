@@ -9,12 +9,11 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { nodeNames, findChildrenWithName, CaptionKind, createId } from '@curvenote/schema';
+import { nodeNames, CaptionKind, createId, findChildrenWithName } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment } from 'prosemirror-model';
 import { opts } from '../../connect';
-export { findChildrenWithName };
 export var TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
@@ -34,6 +33,30 @@ export var addLink = function (view, data) {
         return false;
     var schema = view.state.schema;
     var node = schema.text(href, [schema.marks.link.create({ href: href })]);
+    var tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
+    view.dispatch(tr);
+    return true;
+};
+export var addLinkBlock = function (view, data) {
+    var _a;
+    var html = (_a = data === null || data === void 0 ? void 0 : data.getData('text/html')) !== null && _a !== void 0 ? _a : '';
+    if (!html.includes('<a data-url'))
+        return false;
+    var tempBoard = document.createElement('div');
+    tempBoard.innerHTML = html;
+    var anchor = tempBoard.querySelector('a');
+    if (!anchor)
+        return false;
+    var url = anchor.getAttribute('data-url');
+    var title = anchor.getAttribute('title');
+    var description = anchor.innerText;
+    if (!url)
+        return false;
+    var node = view.state.schema.nodes.link_block.createAndFill({
+        url: url,
+        title: title,
+        description: description,
+    });
     var tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
     view.dispatch(tr);
     return true;
@@ -60,12 +83,12 @@ export function createFigureCaption(schema, kind, src) {
     return caption;
 }
 export function createFigure(schema, node, caption, initialFigureState) {
-    var _a;
+    var _a, _b, _c, _d;
     if (caption === void 0) { caption = false; }
     if (initialFigureState === void 0) { initialFigureState = {}; }
     var Figure = schema.nodes[nodeNames.figure];
     var kind = (_a = determineCaptionKind(node)) !== null && _a !== void 0 ? _a : CaptionKind.fig;
-    var attrs = __assign({ id: createId(), label: null, numbered: true, align: 'center' }, initialFigureState);
+    var attrs = __assign(__assign({ id: createId(), label: null, numbered: true, align: 'center' }, initialFigureState), { multipage: (_b = initialFigureState.multipage) !== null && _b !== void 0 ? _b : false, landscape: (_c = initialFigureState.landscape) !== null && _c !== void 0 ? _c : false, fullpage: (_d = initialFigureState.fullpage) !== null && _d !== void 0 ? _d : false });
     if (!caption) {
         var figure_1 = Figure.createAndFill(attrs, Fragment.fromArray([node]));
         return figure_1;

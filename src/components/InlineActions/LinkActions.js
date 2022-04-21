@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
-import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist, removeMark, testLink, testLinkWeak, } from '../../store/actions';
+import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist, removeMark, switchLinkType, testLink, testLinkWeak, } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import TextAction from './TextAction';
+import { LinkTypeSelect } from './LinkTypeSelect';
 var useStyles = makeStyles(function () {
     return createStyles({
         grid: {
@@ -13,6 +14,9 @@ var useStyles = makeStyles(function () {
         },
         button: {
             marginLeft: 5,
+        },
+        menulist: {
+            maxHeight: '15rem',
         },
     });
 });
@@ -28,7 +32,7 @@ export function useLinkActions(stateId, viewId) {
         if (!linkBounds || !mark)
             return;
         dispatch(removeMark(stateId, viewId, mark, linkBounds.from, linkBounds.to));
-    }, [stateId, viewId, linkBounds, mark]);
+    }, [stateId, viewId, linkBounds, mark, dispatch]);
     var onEdit = useCallback(function (newHref) {
         if (!newHref || !linkBounds || !state || !mark)
             return;
@@ -37,7 +41,7 @@ export function useLinkActions(stateId, viewId) {
             .removeMark(linkBounds.from, linkBounds.to, mark)
             .addMark(linkBounds.from, linkBounds.to, link);
         dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
-    }, [stateId, viewId, linkBounds, mark]);
+    }, [stateId, viewId, linkBounds, mark, dispatch, state]);
     var tooltip = (attrs === null || attrs === void 0 ? void 0 : attrs.title) ? "".concat(attrs.title, " <").concat(attrs === null || attrs === void 0 ? void 0 : attrs.href, ">") : attrs === null || attrs === void 0 ? void 0 : attrs.href;
     return {
         attrs: attrs !== null && attrs !== void 0 ? attrs : null,
@@ -54,6 +58,7 @@ function LinkActions(props) {
     var _b = useState(false), labelOpen = _b[0], setLabelOpen = _b[1];
     var classes = useStyles();
     var link = useLinkActions(stateId, viewId);
+    var dispatch = useDispatch();
     if (!link)
         return null;
     var attrs = link.attrs, onEdit = link.onEdit, onOpen = link.onOpen, onDelete = link.onDelete;
@@ -63,7 +68,16 @@ function LinkActions(props) {
                 setLabelOpen(false);
             }, validate: testLinkWeak, help: "Please provide a valid URL" }));
     }
+    if (!viewId || !stateId || !attrs)
+        return null;
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.grid },
+        React.createElement(Box, { ml: 2 },
+            React.createElement(LinkTypeSelect, { value: "link", onChange: function (value) {
+                    if (value === 'link-block') {
+                        dispatch(switchLinkType({ linkType: 'link-block', stateId: stateId, viewId: viewId, url: attrs.href }));
+                    }
+                } })),
+        React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(Tooltip, { title: link.tooltip },
             React.createElement(Button, { className: classes.button, onClick: function () { return setLabelOpen(true); }, size: "small", disableElevation: true }, "Edit Link")),
         React.createElement(MenuIcon, { kind: "divider" }),

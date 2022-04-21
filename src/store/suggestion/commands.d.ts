@@ -1,6 +1,7 @@
 import { EditorView } from 'prosemirror-view';
 export declare enum CommandNames {
     'link' = "link",
+    'link_block' = "link block",
     'callout' = "callout",
     'aside' = "aside",
     'math' = "math",
