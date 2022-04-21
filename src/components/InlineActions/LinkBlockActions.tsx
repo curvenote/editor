@@ -27,9 +27,7 @@ export function useLinkBlockActions(stateId: any, viewId: string | null) {
   const state = useSelector((s: State) => getEditorState(s, stateId)?.state);
   const selection = useMemo(() => {
     try {
-      return state?.doc && state.selection.$head.nodeAfter // guarding nodeAfter prop seem to fix a run time exception
-        ? NodeSelection.create(state.doc, state.selection.from)
-        : null;
+      return state?.doc ? NodeSelection.create(state.doc, state.selection.from) : null;
     } catch (e) {
       return undefined;
     }
@@ -116,6 +114,8 @@ function LinkBlockActions(props: ActionProps) {
   }
 
   if (!stateId || !viewId) return null;
+
+  console.log('[LinkBlockActions]', attrs);
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.grid}>

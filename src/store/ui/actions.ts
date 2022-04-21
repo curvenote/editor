@@ -124,10 +124,7 @@ export function switchLinkType({
     const {
       selection: { from },
     } = state;
-    const selection =
-      state?.doc && state.selection.$head.nodeAfter // guarding nodeAfter prop seem to fix a run time exception
-        ? NodeSelection.create(state.doc, state.selection.from)
-        : null;
+    const selection = state?.doc ? NodeSelection.create(state.doc, state.selection.from) : null;
     const node = selection?.node;
     if (!selection || !node) return;
 
