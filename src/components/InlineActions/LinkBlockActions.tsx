@@ -1,21 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
-import { types } from '@curvenote/schema';
+import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { NodeSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
-import {
-  applyProsemirrorTransaction,
-  deleteNode,
-  getLinkBoundsIfTheyExist,
-  removeMark,
-  testLink,
-  testLinkWeak,
-} from '../../store/actions';
+import { applyProsemirrorTransaction, deleteNode, switchLinkType } from '../../store/actions';
 import { ActionProps } from './utils';
 import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
 import TextAction from './TextAction';
+import { LinkTypeSelect } from './LinkTypeSelect';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -97,6 +90,7 @@ function isValidUrl(str: string) {
 function LinkBlockActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const [labelOpen, setLabelOpen] = useState(false);
+  const dispatch = useDispatch();
   const classes = useStyles();
   const link = useLinkBlockActions(stateId, viewId);
   const { attrs, onEdit, onOpen, onDelete, node } = link;
@@ -121,8 +115,21 @@ function LinkBlockActions(props: ActionProps) {
     );
   }
 
+  if (!stateId || !viewId) return null;
+
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.grid}>
+      <Box ml={2}>
+        <LinkTypeSelect
+          value="link-block"
+          onChange={(value) => {
+            if (value === 'link') {
+              dispatch(switchLinkType({ linkType: 'link', stateId, viewId, url: node?.attrs.url }));
+            }
+          }}
+        />
+      </Box>
+      <MenuIcon kind="divider" />
       <Tooltip title={link.tooltip}>
         <Button
           className={classes.button}
