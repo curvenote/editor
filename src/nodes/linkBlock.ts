@@ -8,6 +8,8 @@ export interface Attrs {
   url: string;
 }
 
+const LINK_BLOCK_CLASS = 'link-block';
+
 const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   attrs: {
     url: { default: '' },
@@ -21,7 +23,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
   atom: true,
   parseDOM: [
     {
-      tag: 'div[title][data-url].link-block',
+      tag: `div.${LINK_BLOCK_CLASS}`,
       getAttrs(dom: any) {
         const attrs = {
           url: dom.getAttribute('data-url') || null,
@@ -39,7 +41,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
       {
         'data-url': url || undefined,
         title,
-        class: 'link-block',
+        class: LINK_BLOCK_CLASS,
       },
       description,
     ];

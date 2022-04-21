@@ -3840,15 +3840,15 @@ ms@^2.1.1:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-myst-spec@0.0.2, myst-spec@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/myst-spec/-/myst-spec-0.0.2.tgz"
-  integrity sha512-jGOFSDDdYip9JsW3KPHfq7v2AC9c4Pg7gM4HEtNX2bhsHQNqldU6nZv+QmXtxIwDlfYAGVIHgQL3XNfM+7QeEg==
+myst-spec@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/myst-spec/-/myst-spec-0.0.4.tgz#fb998ec09e330810b454f4643c0116a25a057b80"
+  integrity sha512-1j7184Wmg5lhgSXt6AXtG82E0PFJ7ULFPplfshQDzb4nIOLKruYFD0CYWheRPMM/eVqNbNZUzc/LLrhyubsK0Q==
 
-mystjs@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/mystjs/-/mystjs-0.0.5.tgz"
-  integrity sha512-J+hYVwIyXN0H6/wwmANUc5rs9MdLJRcQ2ABm7sZPGidwwNSPSg105xlN4eFTxBksKh7PxIHkEWBJCxYPb42QuA==
+mystjs@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.6.tgz#6f230d20123c93a19991aa21828dc6fb3ce276a1"
+  integrity sha512-pTeObgU77a3LUFqwy1W42Zxj8secaE3riK8sThQXLhQmQCvQTvqixxXZ5P5Kuda0+EjTM1sisZ9gQ0RoQr75Cg==
   dependencies:
     classnames "^2.3.1"
     he "^1.2.0"
@@ -3863,7 +3863,7 @@ mystjs@^0.0.5:
     markdown-it-task-lists "^2.1.1"
     mdast-util-find-and-replace "^2.1.0"
     mdast-util-to-hast "^12.1.1"
-    myst-spec "0.0.2"
+    myst-spec "^0.0.4"
     rehype-format "^4.0.1"
     rehype-stringify "^9.0.3"
     unified "^10.1.1"
