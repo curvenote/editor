@@ -5,6 +5,7 @@ import { State } from '../../store/types';
 import { SelectionKinds as Kinds } from '../../store/ui/types';
 import { getEditorUIStateAndViewIds, getInlineActionKind } from '../../store/ui/selectors';
 import LinkActions from './LinkActions';
+import LinkBlockActions from './LinkBlockActions';
 import CalloutActions from './CalloutActions';
 import TimeActions from './TimeActions';
 import HeadingActions from './HeadingActions';
@@ -32,6 +33,7 @@ function InlineActionSwitch() {
   return (
     <>
       {kind === Kinds.link && <LinkActions {...{ stateId, viewId }} />}
+      {kind === Kinds.link_block && <LinkBlockActions {...{ stateId, viewId }} />}
       {kind === Kinds.figure && <FigureImageActions {...{ stateId, viewId }} />}
       {kind === Kinds.image && <ImageActions {...{ stateId, viewId }} />}
       {kind === Kinds.iframe && <ImageActions {...{ stateId, viewId }} />}

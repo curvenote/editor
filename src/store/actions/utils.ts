@@ -1,12 +1,10 @@
-import { nodeNames, findChildrenWithName, CaptionKind, createId, Nodes } from '@curvenote/schema';
+import { nodeNames, CaptionKind, createId, Nodes, findChildrenWithName } from '@curvenote/schema';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';
-
-export { findChildrenWithName };
 
 export const TEST_LINK =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
@@ -32,6 +30,27 @@ export const addLink = (view: EditorView, data: DataTransfer | null) => {
   if (!testLink(href)) return false;
   const { schema } = view.state;
   const node = schema.text(href, [schema.marks.link.create({ href })]);
+  const tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
+  view.dispatch(tr);
+  return true;
+};
+
+export const addLinkBlock = (view: EditorView, data: DataTransfer | null) => {
+  const html = data?.getData('text/html') ?? '';
+  if (!html.includes('<a data-url')) return false;
+  const tempBoard = document.createElement('div');
+  tempBoard.innerHTML = html;
+  const anchor = tempBoard.querySelector('a');
+  if (!anchor) return false;
+  const url = anchor.getAttribute('data-url');
+  const title = anchor.getAttribute('title');
+  const description = anchor.innerText;
+  if (!url) return false;
+  const node = view.state.schema.nodes.link_block.createAndFill({
+    url,
+    title,
+    description,
+  });
   const tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
   view.dispatch(tr);
   return true;
@@ -76,6 +95,9 @@ export function createFigure(
     numbered: true,
     align: 'center',
     ...initialFigureState,
+    multipage: initialFigureState.multipage ?? false,
+    landscape: initialFigureState.landscape ?? false,
+    fullpage: initialFigureState.fullpage ?? false,
   };
   if (!caption) {
     const figure = Figure.createAndFill(attrs, Fragment.fromArray([node])) as Node;

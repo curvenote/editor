@@ -5,6 +5,7 @@ export const INLINE_SELECTION = 'INLINE_SELECTION';
 
 export enum SelectionKinds {
   link = 'link',
+  link_block = 'link_block',
   figure = 'figure',
   image = 'image',
   iframe = 'iframe',

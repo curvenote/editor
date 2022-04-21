@@ -123,6 +123,14 @@ export function executeCommand(
         addImagePrompt(view);
         return true;
       }
+      case CommandNames.link_block: {
+        removeText();
+        // eslint-disable-next-line no-alert
+        const href = prompt('url: ');
+        if (!href) return true;
+        dispatch(replaceOrInsert(schema.nodes.link_block, { url: href }));
+        return true;
+      }
       case CommandNames.insert_table: {
         removeText();
         const Table = schema.nodes[nodeNames.table];

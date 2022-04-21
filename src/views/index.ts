@@ -2,6 +2,7 @@ import { MathView, EquationView, renderMath } from './MathView';
 import { ImageView } from './ImageView';
 import { IFrameView } from './IFrameView';
 import { LinkView } from './LinkView';
+import { createLinkBlockView } from './LinkBlockView';
 import { TimeView } from './TimeView';
 import { MentionView } from './Mention';
 import { CodeBlockView } from './CodeBlockView';
@@ -22,6 +23,7 @@ export default {
   ImageView,
   IFrameView,
   LinkView,
+  createLinkBlockView,
   TimeView,
   WidgetView,
   newWidgetView,

@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import { Node } from 'prosemirror-model';
 import { findChildrenByType, findParentNode } from 'prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { nodeNames, Nodes, types, CaptionKind } from '@curvenote/schema';
+import { nodeNames, Nodes, types, CaptionKind, findChildrenWithName } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
 import {
@@ -11,7 +11,6 @@ import {
   deleteNode,
   updateNodeAttrs,
   selectFirstNodeOfTypeInParent,
-  findChildrenWithName,
   createFigureCaption,
 } from '../../store/actions';
 import SelectWidth from './SelectWidth';

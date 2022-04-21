@@ -1,4 +1,4 @@
-import { EditorState, Transaction } from 'prosemirror-state';
+import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { schemas, process } from '@curvenote/schema';
 import {
@@ -14,6 +14,8 @@ import {
 import { AppThunk } from '../types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
+import { LinkType } from '../../components/types';
+import { getLinkBoundsIfTheyExist } from '../actions/utils';
 
 export function initEditorState(
   useSchema: schemas.UseSchema,
@@ -117,5 +119,49 @@ export function resetEditorAndViews(stateKey: any): EditorActionTypes {
     payload: {
       stateId,
     },
+  };
+}
+
+export function switchLinkType({
+  linkType,
+  stateId,
+  viewId,
+  url,
+}: {
+  linkType: LinkType;
+  stateId: string;
+  viewId: string;
+  url: string;
+}): AppThunk<void> {
+  return (dispatch, getState) => {
+    const state = getEditorState(getState(), stateId)?.state;
+    if (!state) return;
+    const {
+      selection: { from },
+    } = state;
+    const selection = state?.doc ? NodeSelection.create(state.doc, state.selection.from) : null;
+    const node = selection?.node;
+    if (!selection || !node) return;
+
+    if (linkType === 'link') {
+      const mark = state?.schema.marks.link;
+      const link = mark.create({ href: url });
+      const tr = state.tr.replaceRangeWith(
+        from,
+        from + node.nodeSize,
+        state.schema.text(url, [link]),
+      );
+      dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
+    } else if (linkType === 'link-block') {
+      const linkBounds = getLinkBoundsIfTheyExist(state);
+      if (!linkBounds) return;
+      const newNode = state.schema.nodes.link_block.createAndFill({
+        title: '',
+        description: '',
+        url,
+      }) as any;
+      const tr = state.tr.replaceRangeWith(linkBounds.from, linkBounds.to, newNode);
+      dispatch(applyProsemirrorTransaction(stateId, viewId, tr));
+    }
   };
 }
