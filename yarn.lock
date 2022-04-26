@@ -639,6 +639,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/extend@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/extend/-/extend-3.0.1.tgz#923dc2d707d944382433e01d6cc0c69030ab2c75"
+  integrity sha512-R1g/VyKFFI2HLC1QGAeTtCBWCo6n75l41OnsVYNbmKG+kempOESaodf6BeJyUM3Q0rKa/NQcTHbB2+66lNnxLw==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz"
@@ -2561,6 +2566,35 @@ hast-util-to-html@^8.0.0:
     stringify-entities "^4.0.2"
     unist-util-is "^5.0.0"
 
+hast-util-to-mdast@^8.3.0, hast-util-to-mdast@^8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/hast-util-to-mdast/-/hast-util-to-mdast-8.3.1.tgz#b2e3b666968d3ab96a0e6ec991cca0ca5c79e3b2"
+  integrity sha512-nxLcom1oW5y/1CyaV24K16LOfYbAIS74BDbCPW6WduzAYTAVDp3g/DM1CY6Ngo+Dx5itLzvmCm7SnUHBZd3NVQ==
+  dependencies:
+    "@types/extend" "^3.0.0"
+    "@types/hast" "^2.0.0"
+    "@types/mdast" "^3.0.0"
+    "@types/unist" "^2.0.0"
+    extend "^3.0.0"
+    hast-util-has-property "^2.0.0"
+    hast-util-is-element "^2.0.0"
+    hast-util-to-text "^3.0.0"
+    mdast-util-phrasing "^3.0.0"
+    mdast-util-to-string "^3.0.0"
+    rehype-minify-whitespace "^5.0.0"
+    trim-trailing-lines "^2.0.0"
+    unist-util-is "^5.0.0"
+    unist-util-visit "^4.0.0"
+
+hast-util-to-text@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/hast-util-to-text/-/hast-util-to-text-3.1.1.tgz#b7699a75f7a61af6e0befb67660cd78460d96dc6"
+  integrity sha512-7S3mOBxACy8syL45hCn3J7rHqYaXkxRfsX6LXEU5Shz4nt4GxdjtMUtG+T6G/ZLUHd7kslFAf14kAN71bz30xA==
+  dependencies:
+    "@types/hast" "^2.0.0"
+    hast-util-is-element "^2.0.0"
+    unist-util-find-after "^4.0.0"
+
 hast-util-whitespace@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/hast-util-whitespace/-/hast-util-whitespace-2.0.0.tgz"
@@ -3693,6 +3727,14 @@ mdast-util-find-and-replace@^2.1.0:
     unist-util-is "^5.0.0"
     unist-util-visit-parents "^4.0.0"
 
+mdast-util-phrasing@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mdast-util-phrasing/-/mdast-util-phrasing-3.0.0.tgz#c44fcf6be61a3cb8da54ab2df22320e61d4537ce"
+  integrity sha512-S+QYsDRLkGi8U7o5JF1agKa/sdP+CNGXXLqC17pdTVL8FHHgQEiwFGa9yE5aYtUxNiFGYoaDy9V1kC85Sz86Gg==
+  dependencies:
+    "@types/mdast" "^3.0.0"
+    unist-util-is "^5.0.0"
+
 mdast-util-to-hast@^12.1.1:
   version "12.1.1"
   resolved "https://registry.npmjs.org/mdast-util-to-hast/-/mdast-util-to-hast-12.1.1.tgz"
@@ -3708,6 +3750,11 @@ mdast-util-to-hast@^12.1.1:
     unist-util-generated "^2.0.0"
     unist-util-position "^4.0.0"
     unist-util-visit "^4.0.0"
+
+mdast-util-to-string@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/mdast-util-to-string/-/mdast-util-to-string-3.1.0.tgz#56c506d065fbf769515235e577b5a261552d56e9"
+  integrity sha512-n4Vypz/DZgwo0iMHLQL49dJzlp7YtAJP+N07MZHpjPf/5XJuHUWstviF4Mn2jEiR/GNmtnRRqnwsXExk3igfFA==
 
 mdurl@^1.0.0, mdurl@^1.0.1:
   version "1.0.1"
@@ -3845,12 +3892,13 @@ myst-spec@^0.0.4:
   resolved "https://registry.yarnpkg.com/myst-spec/-/myst-spec-0.0.4.tgz#fb998ec09e330810b454f4643c0116a25a057b80"
   integrity sha512-1j7184Wmg5lhgSXt6AXtG82E0PFJ7ULFPplfshQDzb4nIOLKruYFD0CYWheRPMM/eVqNbNZUzc/LLrhyubsK0Q==
 
-mystjs@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.6.tgz#6f230d20123c93a19991aa21828dc6fb3ce276a1"
-  integrity sha512-pTeObgU77a3LUFqwy1W42Zxj8secaE3riK8sThQXLhQmQCvQTvqixxXZ5P5Kuda0+EjTM1sisZ9gQ0RoQr75Cg==
+mystjs@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.7.tgz#2ca872a16d1e2463229d8570c2409f6c3b8599d2"
+  integrity sha512-y9le930TO0FlqOS+rAfUwiFnlEgGoLuIU0G0sA75HDeQbc3a7s/bK5JtZlcJKOirj8tvL1fuzl500xwphOsVIw==
   dependencies:
     classnames "^2.3.1"
+    hast-util-to-mdast "^8.3.1"
     he "^1.2.0"
     markdown-it "^12.3.2"
     markdown-it-amsmath "^0.3.1"
@@ -3865,11 +3913,12 @@ mystjs@^0.0.6:
     mdast-util-to-hast "^12.1.1"
     myst-spec "^0.0.4"
     rehype-format "^4.0.1"
+    rehype-remark "^9.1.2"
     rehype-stringify "^9.0.3"
     unified "^10.1.1"
     unist-builder "^3.0.0"
     unist-util-find-after "^4.0.0"
-    unist-util-map "^3.0.0"
+    unist-util-map "^3.0.1"
     unist-util-remove "^3.1.0"
     unist-util-select "^4.0.1"
     unist-util-visit "^4.1.0"
@@ -4313,9 +4362,9 @@ prosemirror-keymap@^1.1.2:
     prosemirror-state "^1.0.0"
     w3c-keyname "^2.2.0"
 
-prosemirror-markdown@^1.6.0:
+prosemirror-markdown@^1.8.0:
   version "1.8.0"
-  resolved "https://registry.npmjs.org/prosemirror-markdown/-/prosemirror-markdown-1.8.0.tgz"
+  resolved "https://registry.yarnpkg.com/prosemirror-markdown/-/prosemirror-markdown-1.8.0.tgz#4ae430470f9e433d6fb9d1e981842d7e4f664f69"
   integrity sha512-RxGyM8dqdmlkYpM3PY/C5JBputv2xeKLNRqFpN04TtFlR9McN9Tmpf8DaP6HblfaZ8RofdUtQW+ghdArjANLvQ==
   dependencies:
     markdown-it "^12.0.0"
@@ -4496,6 +4545,16 @@ rehype-minify-whitespace@^5.0.0:
     hast-util-whitespace "^2.0.0"
     unified "^10.0.0"
     unist-util-is "^5.0.0"
+
+rehype-remark@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/rehype-remark/-/rehype-remark-9.1.2.tgz#b4ed84d7e692426c3269e72ec477906cec659c05"
+  integrity sha512-c0fG3/CrJ95zAQ07xqHSkdpZybwdsY7X5dNWvgL2XqLKZuqmG3+vk6kP/4miCnp+R+x/0uKKRSpfXb9aGR8Z5w==
+  dependencies:
+    "@types/hast" "^2.0.0"
+    "@types/mdast" "^3.0.0"
+    hast-util-to-mdast "^8.3.0"
+    unified "^10.0.0"
 
 rehype-stringify@^9.0.3:
   version "9.0.3"
@@ -5084,6 +5143,11 @@ tr46@^2.1.0:
   dependencies:
     punycode "^2.1.1"
 
+trim-trailing-lines@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/trim-trailing-lines/-/trim-trailing-lines-2.0.0.tgz#1fdfbc20db6651bed117bc5c736f6cf052bcf421"
+  integrity sha512-lyJ/STqmYO8k9aWZbodPTrVkRh/50yFwNZ/HxKp/30eM9zf898MgQCG/NxfMnx7fZSKbaEcuZ1V+QgWrXFH6rg==
+
 trough@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/trough/-/trough-2.1.0.tgz"
@@ -5241,9 +5305,9 @@ unist-util-is@^5.0.0:
   resolved "https://registry.npmjs.org/unist-util-is/-/unist-util-is-5.1.1.tgz"
   integrity sha512-F5CZ68eYzuSvJjGhCLPL3cYx45IxkqXSetCcRgUXtbcm50X2L9oOWQlfUfDdAf+6Pd27YDblBfdtmsThXmwpbQ==
 
-unist-util-map@^3.0.0:
+unist-util-map@^3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/unist-util-map/-/unist-util-map-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/unist-util-map/-/unist-util-map-3.0.1.tgz#95ceee79d898bc146084e460a9cdc7ff1cf73e94"
   integrity sha512-TOLoGOyT6pYI3JjTBZ1z76Rp7g+xcfgzuQDESuOUTZIkqpOIXsqZTvI25fKCYjMAmADbeulxusIgoB5IBPGZuQ==
   dependencies:
     "@types/unist" "^2.0.0"
