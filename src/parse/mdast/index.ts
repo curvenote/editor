@@ -99,7 +99,10 @@ export class MarkdownParseState {
     tokens?.forEach((token) => {
       if (token.hidden) return;
       const handler = this.handlers[token.type];
-      if (!handler) return;
+      if (!handler) {
+        console.warn(`Token type \`${token.type}\` not supported by myst parser`);
+        return;
+      }
       const { name, children } = handler(token, tokens);
       if (name in ignoreNames && children && typeof children !== 'string') {
         this.parseTokens(children);
