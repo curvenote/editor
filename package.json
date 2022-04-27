@@ -1,6 +1,6 @@
 {
   "name": "@curvenote/schema",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "Schema and markdown parser for @curvenote/editor",
   "author": "Rowan Cockett <rowan@curvenote.com>",
   "license": "MIT",
@@ -37,7 +37,7 @@
     "js-yaml": "^4.1.0",
     "markdown-it": "^12.2.0",
     "myst-spec": "^0.0.4",
-    "mystjs": "^0.0.7",
+    "mystjs": "^0.0.8",
     "nanoid": "^3.1.30",
     "orderedmap": "^1.1.1",
     "prosemirror-collab": "^1.2.2",
