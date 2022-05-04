@@ -1,5 +1,5 @@
 import { tableNodes } from 'prosemirror-tables';
-import { Node } from 'prosemirror-model';
+import { Fragment, Node } from 'prosemirror-model';
 import { PhrasingContent, Table, TableCell, TableRow } from '../spec';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
 import { NodeGroups, Props } from './types';
@@ -75,7 +75,23 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
   const dedent = indent(state);
   row.content.forEach((cell) => {
     // TODO: make the lists tight!
-    state.wrapBlock('  ', '- ', cell, () => state.renderContent(cell));
+    state.wrapBlock('  ', '- ', cell, () => {
+      // Delete empty paragraph nodes and trim leading newlines to single newline.
+      const children: Node[] = [];
+      cell.forEach((child: Node) => {
+        if (child.type.name === nodeNames.paragraph) {
+          if (child.childCount === 0) {
+            return;
+          }
+          if (child.firstChild?.type.name === nodeNames.text) {
+            child.firstChild.text = child.firstChild.text?.replace(/^\n+/, '\n');
+          }
+        }
+        children.push(child);
+      });
+      cell = cell.copy(Fragment.from(children));
+      return state.renderContent(cell);
+    });
     // const atBlank = /(\n\n)$/.test(state.out as string);
     // if (state.options.tightLists && atBlank && state.out) {
     //   // Remove the trailing new line on `state.out` to make it tight
