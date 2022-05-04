@@ -114,7 +114,7 @@ describe('Markdown', () => {
           table(
             table_row(table_header(p('\nTraining')), table_header(p('\n\n\n\nValidation'))),
             table_row(table_cell(p('0'), p('1')), table_cell(p('5'))),
-            table_row(table_cell(p('13720')), table_cell(p('2744'))),
+            table_row(table_cell(p(), p(), p(), p('13720')), table_cell(p('2744'))),
           ),
         ),
       ),

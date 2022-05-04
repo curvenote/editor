@@ -1,5 +1,5 @@
 import { tableNodes } from 'prosemirror-tables';
-import { Node } from 'prosemirror-model';
+import { Fragment, Node, Slice } from 'prosemirror-model';
 import { PhrasingContent, Table, TableCell, TableRow } from '../spec';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
 import { NodeGroups, Props } from './types';
@@ -76,10 +76,20 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
   row.content.forEach((cell) => {
     // TODO: make the lists tight!
     state.wrapBlock('  ', '- ', cell, () => {
-      const { firstChild } = cell.content;
-      if (firstChild?.type.name === 'paragraph' && firstChild.firstChild?.type.name === 'text') {
-        firstChild.firstChild.text = firstChild.firstChild.text?.replace(/^\n+/, '\n');
-      }
+      // Delete empty paragraph nodes and trim leading newlines to single newline.
+      const children: Node[] = [];
+      cell.forEach((child: Node) => {
+        if (child.type.name === nodeNames.paragraph) {
+          if (child.childCount === 0) {
+            return;
+          }
+          if (child.firstChild?.type.name === nodeNames.text) {
+            child.firstChild.text = child.firstChild.text?.replace(/^\n+/, '\n');
+          }
+        }
+        children.push(child);
+      });
+      cell = cell.copy(Fragment.from(children));
       return state.renderContent(cell);
     });
     // const atBlank = /(\n\n)$/.test(state.out as string);
