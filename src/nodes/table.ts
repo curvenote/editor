@@ -75,7 +75,13 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
   const dedent = indent(state);
   row.content.forEach((cell) => {
     // TODO: make the lists tight!
-    state.wrapBlock('  ', '- ', cell, () => state.renderContent(cell));
+    state.wrapBlock('  ', '- ', cell, () => {
+      const { firstChild } = cell.content;
+      if (firstChild?.type.name === 'paragraph' && firstChild.firstChild?.type.name === 'text') {
+        firstChild.firstChild.text = firstChild.firstChild.text?.replace(/^\n+/, '\n');
+      }
+      return state.renderContent(cell);
+    });
     // const atBlank = /(\n\n)$/.test(state.out as string);
     // if (state.options.tightLists && atBlank && state.out) {
     //   // Remove the trailing new line on `state.out` to make it tight
