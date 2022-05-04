@@ -1,5 +1,5 @@
 import { tableNodes } from 'prosemirror-tables';
-import { Fragment, Node, Slice } from 'prosemirror-model';
+import { Fragment, Node } from 'prosemirror-model';
 import { PhrasingContent, Table, TableCell, TableRow } from '../spec';
 import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
 import { NodeGroups, Props } from './types';
