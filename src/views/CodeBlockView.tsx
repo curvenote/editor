@@ -8,6 +8,7 @@ import { Node } from 'prosemirror-model';
 import { undo, redo } from 'prosemirror-history';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/swift/swift';
 import 'codemirror/mode/php/php';
@@ -48,6 +49,8 @@ function computeChange(oldVal: any, newVal: any) {
 interface ModeOption {
   name: LanguageNames;
   typescript?: boolean;
+  json?: boolean;
+  jsonld?: boolean;
 }
 
 function createMode(node: Node): ModeOption {
@@ -57,6 +60,14 @@ function createMode(node: Node): ModeOption {
     return {
       name: LanguageNames.Js,
       typescript: true,
+    };
+  }
+  if (name === LanguageNames.Json) {
+    return {
+      name: LanguageNames.Js,
+      typescript: false,
+      json: true,
+      jsonld: true,
     };
   }
   return mode;
