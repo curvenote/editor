@@ -12,7 +12,6 @@ const {
   figureT,
   img,
   figcaptionF,
-  figcaptionT,
   equation,
   table,
   table_row,
@@ -26,7 +25,7 @@ const same = (text: string, doc: Node, format: TexFormatTypes = TexFormatTypes.t
   expect(toTex(doc, { format })).toEqual(text);
 };
 
-describe('tex.tables', () => {
+describe.only('tex.tables', () => {
   let CASES: any;
   beforeAll(() => {
     CASES = YAML.load(fs.readFileSync(path.join(__dirname, 'tex.tables.yml'), 'utf8'));
@@ -39,6 +38,45 @@ describe('tex.tables', () => {
         table(
           table_row(table_header(p('Col 1')), table_header(p('Col 1'))),
           table_row(table_cell(p('data 1')), table_cell(p('data 2'))),
+        ),
+      ),
+    );
+  });
+  it.only('a table with 3 columns and 3 rows', () => {
+    same(
+      CASES.threes.tex,
+      tdoc(
+        table(
+          table_row(table_header(p('Col 1')), table_header(p('Col 2')), table_header(p('Col 3'))),
+          table_row(table_cell(p('data 1')), table_cell(p('data 2')), table_cell(p('data 3'))),
+          table_row(table_cell(p('data 1')), table_cell(p('data 2')), table_cell(p('data 3'))),
+        ),
+      ),
+    );
+  });
+  it('a table with 4 columns and 4 rows', () => {
+    same(
+      CASES.fours.tex,
+      tdoc(
+        table(
+          table_row(
+            table_header(p('Col 1')),
+            table_header(p('Col 2')),
+            table_header(p('Col 3')),
+            table_header(p('Col 4')),
+          ),
+          table_row(
+            table_cell(p('data 1')),
+            table_cell(p('data 2')),
+            table_cell(p('data 3')),
+            table_cell(p('data 4')),
+          ),
+          table_row(
+            table_cell(p('data 1')),
+            table_cell(p('data 2')),
+            table_cell(p('data 3')),
+            table_cell(p('data 4')),
+          ),
         ),
       ),
     );

@@ -16,6 +16,17 @@ images_with_caption:
         hello!
       }
     \end{figure}
+table:
+  title: tables as table environment
+  tex: |-
+    \begin{table}[!htbp]
+      \centering
+      \begin{tabular}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+        \toprule
+        Col 1 & An Image Figure \\
+        \bottomrule
+      \end{tabular}
+    \end{table}
 longtable:
   title: long tables as longtable environment
   tex: |-

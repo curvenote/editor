@@ -206,7 +206,7 @@ export const toTex = createLatexStatement(
     const table = figureContainsTable(node);
 
     let tableInfo;
-    if (table) {
+    if (table && node.attrs.multipage) {
       state.containsTable = true;
       tableInfo = getColumnWidths(table);
     }
