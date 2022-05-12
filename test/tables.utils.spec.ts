@@ -1,6 +1,5 @@
-import { toMyst, toMdast } from '../src/serialize';
-import { getColumnWidths, TOTAL_TABLE_WIDTH, hasFancyTable } from '../src/nodes/utils';
-import { tnodes, tdoc } from './build';
+import { getColumnWidths, hasFancyTable } from '../src/nodes/utils';
+import { tnodes } from './build';
 
 const { p, table, table_row, table_header, table_cell } = tnodes;
 

@@ -250,7 +250,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
       if (rowContent.firstChild?.type.name === nodeNames.table_header) {
         numHeaderRowsFound += 1;
         let spanIdx = 0;
-        rowContent.forEach((cell, i) => {
+        rowContent.forEach((cell, _, i) => {
           spanIdx += renderTableCell(state, cell, i, spanIdx, widths, rowContent.childCount);
         });
         state.write(' \\\\');
@@ -278,7 +278,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
       node.content.forEach(({ content: rowContent }, offset, index) => {
         if (index >= numHeaderRowsFound) return;
         let spanIdx = 0;
-        rowContent.forEach((cell, i) => {
+        rowContent.forEach((cell, _, i) => {
           spanIdx += renderTableCell(state, cell, i, spanIdx, widths, rowContent.childCount);
         });
         state.write(' \\\\');
@@ -302,7 +302,7 @@ export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
   node.content.forEach(({ content: rowContent }, offset, index) => {
     if (index < numHeaderRowsFound) return; // skip the header rows
     let spanIdx = 0;
-    rowContent.forEach((cell, i) => {
+    rowContent.forEach((cell, _, i) => {
       spanIdx += renderTableCell(state, cell, i, spanIdx, widths, rowContent.childCount);
     });
     state.write(' \\\\');
