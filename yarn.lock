@@ -64,10 +64,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.2"
 
-"@curvenote/schema@0.12.6":
-  version "0.12.6"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.12.6.tgz#46af34e8e4906f2ad8a2c2c6bbeba662de25e55d"
-  integrity sha512-FpwxfW8tiDzLq1ziSfSpJK4cNgovkgAWnB/+vZ6SHxBkhxUNFEneMmdPVY2YXGX81Lh2Dh0NqlNk7svBTj0pBA==
+"@curvenote/schema@0.12.7":
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.12.7.tgz#204d82cd5c5e9cb21f9797c683104ee5a8ae30b2"
+  integrity sha512-cqRSHypPD3LQd4mrwFF0vqEao9TuGU6nonvwJ2P+6V1Xyx+pZc74vWsQ/EePjrE8XY+F8owFHEEMjRD7bSG7/w==
   dependencies:
     "@wordpress/wordcount" "^3.2.2"
     js-yaml "^4.1.0"
