@@ -11,7 +11,9 @@ export type NodeViewProps = {
 
 // See languages modes names on https://codemirror.net/mode/index.html#
 export enum LanguageNames {
+  PlainText = 'text/plain', // null mode: https://github.com/codemirror/CodeMirror/issues/1267#issuecomment-247716434
   Js = 'javascript',
+  Json = 'Json',
   Jsx = 'jsx',
   Ts = 'typescript',
   Python = 'python',
@@ -31,12 +33,16 @@ export enum LanguageNames {
   Ruby = 'ruby',
   Rust = 'rust',
   Go = 'go',
+  Yaml = 'text/x-yaml',
 }
 
 export const SUPPORTED_LANGUAGES = [
   { name: LanguageNames.Python, label: 'Python' },
   { name: LanguageNames.R, label: 'R' },
   { name: LanguageNames.Julia, label: 'Julia' },
+  { name: LanguageNames.PlainText, label: 'Plain' },
+  { name: LanguageNames.Json, label: 'JSON' },
+  { name: LanguageNames.Yaml, label: 'YAML' },
   { name: LanguageNames.Shell, label: 'Shell' },
   { name: LanguageNames.Html, label: 'HTML' },
   { name: LanguageNames.Js, label: 'JavaScript' },
