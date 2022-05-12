@@ -21,6 +21,16 @@ describe('Tex Figure', () => {
   test('serializes images as figures', () => same(CASES.images.tex, tdoc(figureF(img()))));
   test('serializes images as figures with caption', () =>
     same(CASES.images_with_caption.tex, tdoc(figureF(img(), figcaptionF('hello!')))));
+  test('serializes tables as table environment', () =>
+    same(
+      CASES.table.tex,
+      tdoc(
+        figureT(
+          { multipage: false } as any,
+          table(table_row(table_cell(p('Col 1')), table_cell(p('An Image Figure')))),
+        ),
+      ),
+    ));
   test('serializes long tables as longtable environment', () =>
     same(
       CASES.longtable.tex,
