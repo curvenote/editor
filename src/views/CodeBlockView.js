@@ -2,6 +2,7 @@ import CodeMirror from 'codemirror';
 import { undo, redo } from 'prosemirror-history';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/swift/swift';
 import 'codemirror/mode/php/php';
@@ -44,6 +45,14 @@ function createMode(node) {
         return {
             name: LanguageNames.Js,
             typescript: true,
+        };
+    }
+    if (name === LanguageNames.Json) {
+        return {
+            name: LanguageNames.Js,
+            typescript: false,
+            json: true,
+            jsonld: true,
         };
     }
     return mode;

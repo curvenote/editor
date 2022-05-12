@@ -8,7 +8,9 @@ export declare type NodeViewProps = {
     edit: boolean;
 };
 export declare enum LanguageNames {
+    PlainText = "text/plain",
     Js = "javascript",
+    Json = "Json",
     Jsx = "jsx",
     Ts = "typescript",
     Python = "python",
@@ -27,7 +29,8 @@ export declare enum LanguageNames {
     Sql = "sql",
     Ruby = "ruby",
     Rust = "rust",
-    Go = "go"
+    Go = "go",
+    Yaml = "text/x-yaml"
 }
 export declare const SUPPORTED_LANGUAGES: {
     name: LanguageNames;

@@ -3,6 +3,7 @@ import { EditorView, NodeView } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/swift/swift';
 import 'codemirror/mode/php/php';

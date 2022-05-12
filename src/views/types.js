@@ -1,6 +1,8 @@
 export var LanguageNames;
 (function (LanguageNames) {
+    LanguageNames["PlainText"] = "text/plain";
     LanguageNames["Js"] = "javascript";
+    LanguageNames["Json"] = "Json";
     LanguageNames["Jsx"] = "jsx";
     LanguageNames["Ts"] = "typescript";
     LanguageNames["Python"] = "python";
@@ -20,11 +22,15 @@ export var LanguageNames;
     LanguageNames["Ruby"] = "ruby";
     LanguageNames["Rust"] = "rust";
     LanguageNames["Go"] = "go";
+    LanguageNames["Yaml"] = "text/x-yaml";
 })(LanguageNames || (LanguageNames = {}));
 export var SUPPORTED_LANGUAGES = [
     { name: LanguageNames.Python, label: 'Python' },
     { name: LanguageNames.R, label: 'R' },
     { name: LanguageNames.Julia, label: 'Julia' },
+    { name: LanguageNames.PlainText, label: 'Plain' },
+    { name: LanguageNames.Json, label: 'JSON' },
+    { name: LanguageNames.Yaml, label: 'YAML' },
     { name: LanguageNames.Shell, label: 'Shell' },
     { name: LanguageNames.Html, label: 'HTML' },
     { name: LanguageNames.Js, label: 'JavaScript' },
