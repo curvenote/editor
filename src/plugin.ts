@@ -23,14 +23,6 @@ function toDom(): Node {
 export function getDecorationPlugin(opts?: Options) {
   const plugin: Plugin<CodemarkState> = new Plugin({
     key: pluginKey,
-    view() {
-      return {
-        update: (view) => {
-          const state = plugin.getState(view.state) as CodemarkState;
-          view.dom.classList[state?.active ? 'add' : 'remove']('no-cursor');
-        },
-      };
-    },
     appendTransaction: (trs, oldState, newState) => {
       const prev = plugin.getState(oldState) as CodemarkState;
       const meta = trs[0]?.getMeta(plugin) as CursorMetaTr | null;
@@ -73,6 +65,12 @@ export function getDecorationPlugin(opts?: Options) {
       },
     },
     props: {
+      attributes: (state) => {
+        const { active = false } = plugin.getState(state) ?? {};
+        return {
+          ...(active ? { class: 'no-cursor' } : {}),
+        };
+      },
       decorations: (state) => {
         const { active, side } = plugin.getState(state) ?? {};
         if (!active) return DecorationSet.empty;
