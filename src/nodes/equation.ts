@@ -25,6 +25,7 @@ const equation: MyNodeSpec<Attrs, Math> = {
   marks: '',
   // The view treat the node as a leaf, even though it technically has content
   atom: true,
+  whitespace: 'pre',
   code: true,
   attrs: {
     ...getNumberedDefaultAttrs(),
