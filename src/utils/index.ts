@@ -1,6 +1,5 @@
 import { customAlphabet } from 'nanoid';
 import { Node } from 'prosemirror-model';
-import { findChildren } from 'prosemirror-utils';
 import { nodeNames } from '../types';
 
 export function clamp(val: number, min: number, max: number) {
@@ -17,11 +16,20 @@ export function createId() {
   return nanoidAZ() + nanoidAZ9();
 }
 
-export function findChildrenWithName(parent: Node, nodeName: nodeNames | nodeNames[]) {
+export type NodeWithPos = { pos: number; node: Node };
+
+export function findChildrenWithName(
+  parent: Node,
+  nodeName: nodeNames | nodeNames[],
+): NodeWithPos[] {
   const predicate =
     typeof nodeName === 'string'
       ? (n: Node) => n.type.name === nodeName
       : (n: Node) => nodeName.includes(n.type.name as nodeNames);
-  const nodes = findChildren(parent, predicate);
-  return nodes;
+  const result: NodeWithPos[] = [];
+  parent.descendants((child, pos) => {
+    if (predicate(child)) result.push({ node: child, pos });
+    return true;
+  });
+  return result;
 }
