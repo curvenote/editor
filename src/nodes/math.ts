@@ -9,6 +9,7 @@ const math: MyNodeSpec<Attrs, InlineMath> = {
   // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
   inline: true,
+  marks: '',
   draggable: false,
   // The view treat the node as a leaf, even though it technically has content
   atom: true,
