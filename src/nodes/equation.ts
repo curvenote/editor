@@ -22,6 +22,7 @@ const equation: MyNodeSpec<Attrs, Math> = {
   // Content can have display elements inside of it for dynamic equations
   content: `(${NodeGroups.text} | display)*`,
   draggable: false,
+  marks: '',
   // The view treat the node as a leaf, even though it technically has content
   atom: true,
   code: true,
