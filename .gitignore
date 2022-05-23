@@ -4,3 +4,4 @@ dist
 emoji.json
 .yalc/
 yalc.lock
+*.log
