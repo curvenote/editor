@@ -127,7 +127,7 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     case ReferenceKind.cite: {
       const citeKey = state.options.localizeCitation?.(key ?? '') ?? key ?? '';
       if (state.nextCitationInGroup) {
-        state.write(state.nextCitationInGroup > 1 ? `${citeKey}, ` : citeKey);
+        state.write(state.nextCitationInGroup > 1 ? `${citeKey}; ` : citeKey);
         state.nextCitationInGroup -= 1;
       } else {
         state.write(`{cite:t}\`${citeKey}\``);
