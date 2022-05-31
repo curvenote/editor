@@ -16,6 +16,7 @@ const {
   strong,
   code,
   code_block,
+  code_block_yaml,
   a,
   link,
   br,
@@ -29,6 +30,7 @@ const {
   callout,
   figureF,
   figureT,
+  figureC,
   figcaptionF,
   figcaptionT,
   figcaptionE,
@@ -94,6 +96,14 @@ describe('Markdown', () => {
       '```python\nimport numpy as np\nnp.array(5)\n```',
       tdoc(code_block('import numpy as np\nnp.array(5)')),
     ));
+  it('Code example - yaml', () =>
+    same('```yaml\nhello: []\n```', tdoc(code_block_yaml('hello: []'))));
+  it('serializes figures with code', () => {
+    const f = toMarkdown(
+      tdoc(figureC(figcaptionC('This is a code ', em('caption')), code_block_yaml('hello: []'))),
+    );
+    expect(f).toBe('```yaml\nhello: []\n```');
+  });
   it('Directive content (warning)', () =>
     same(
       {

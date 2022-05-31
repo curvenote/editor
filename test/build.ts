@@ -21,6 +21,7 @@ export const tnodes = builders(schema, {
   callout: { nodeType: 'callout', kind: 'warning' },
   figureF: { nodeType: 'figure', id: 'my-figure' },
   figureT: { nodeType: 'figure', id: 'my-table' },
+  figureC: { nodeType: 'figure', id: 'my-code' },
   figcaptionF: { nodeType: 'figcaption', kind: src.CaptionKind.fig },
   figcaptionT: { nodeType: 'figcaption', kind: src.CaptionKind.table },
   figcaptionE: { nodeType: 'figcaption', kind: src.CaptionKind.eq },
@@ -64,6 +65,7 @@ export const tnodes = builders(schema, {
   cite: { nodeType: 'cite', kind: src.ReferenceKind.cite, key: 'SimPEG2015' },
   citep: { nodeType: src.nodeNames.cite_group },
   code_block: { nodeType: 'code_block', language: 'python' },
+  code_block_yaml: { nodeType: 'code_block', language: 'text/x-yaml' },
 });
 
 export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);

@@ -19,7 +19,7 @@ import {
 import { nodeNames } from '../types';
 import type { Attrs as ImageAttrs } from './image';
 import type { Attrs as IFrameAttrs } from './iframe';
-import type { Attrs as CodeAttrs } from './code';
+import { toMarkdown as codeToMarkdown } from './code';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 
 export type Attrs = NumberedNode & {
@@ -102,7 +102,7 @@ const figure: MyNodeSpec<Attrs, Container> = {
   },
 };
 
-export const toMarkdown: MdFormatSerialize = (state, node) => {
+export const toMarkdown: MdFormatSerialize = (state, node, parent, index) => {
   state.ensureNewLine();
   const kind = determineCaptionKind(node);
   const { id } = node.attrs as Attrs;
@@ -147,11 +147,8 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
     }
     case CaptionKind.code: {
       const code = getFirstChildWithName(node, [nodeNames.code_block]);
-      const { language } = code?.attrs as CodeAttrs;
-      state.write(`\`\`\`${language}\n`);
-      if (code) state.renderContent(code);
-      state.ensureNewLine();
-      state.write('```');
+      // TODO: add a figure caption for code
+      if (code) codeToMarkdown(state, code, node, index);
       state.closeBlock(node);
       return;
     }

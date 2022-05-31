@@ -94,3 +94,43 @@ cases:
           lang: yaml
           value: |-
             hello: there
+  - title: yaml code block inside of figure
+    curvenote:
+      type: doc
+      content:
+        - type: figure
+          attrs:
+            id: my-figure
+            label: null
+            numbered: true
+            align: center
+            multipage: false
+            landscape: false
+            fullpage: false
+          content:
+            - type: code_block
+              attrs:
+                id: null
+                label: null
+                numbered: false
+                language: text/x-yaml
+                linenumbers: false
+                title: ''
+              content:
+                - type: text
+                  text: |-
+                    hello: []
+    mdast:
+      type: root
+      children:
+        - type: container
+          kind: figure
+          identifier: my-figure
+          label: my-figure
+          enumerated: true
+          class: align-center
+          children:
+            - type: code
+              lang: yaml
+              value: |-
+                hello: []
