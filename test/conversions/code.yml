@@ -71,3 +71,26 @@ cases:
           value: |-
             import numpy as np
             np.array([1, 2, 3])
+  - title: yaml code block
+    curvenote:
+      type: doc
+      content:
+        - type: code_block
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            language: text/x-yaml
+            linenumbers: false
+            title: ''
+          content:
+            - type: text
+              text: |-
+                hello: there
+    mdast:
+      type: root
+      children:
+        - type: code
+          lang: yaml
+          value: |-
+            hello: there
