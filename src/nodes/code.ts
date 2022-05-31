@@ -121,10 +121,12 @@ const code_block: MyNodeSpec<Attrs, Code> = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { language } = node.attrs;
-  state.write(`\`\`\`${languageToLang(language) || ''}\n`);
+  const numTicks = Math.max(node.textContent?.match(/([`]+)/)?.[1].length ?? 0, 2) + 1;
+  const fence = '`'.repeat(numTicks);
+  state.write(`${fence}${languageToLang(language) || ''}\n`);
   state.text(node.textContent, false);
   state.ensureNewLine();
-  state.write('```');
+  state.write(fence);
   state.closeBlock(node);
 };
 

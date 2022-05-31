@@ -66,6 +66,7 @@ export const tnodes = builders(schema, {
   citep: { nodeType: src.nodeNames.cite_group },
   code_block: { nodeType: 'code_block', language: 'python' },
   code_block_yaml: { nodeType: 'code_block', language: 'text/x-yaml' },
+  code_block_text: { nodeType: 'code_block', language: 'text/plain' },
 });
 
 export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);

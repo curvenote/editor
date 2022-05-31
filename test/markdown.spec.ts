@@ -17,6 +17,7 @@ const {
   code,
   code_block,
   code_block_yaml,
+  code_block_text,
   a,
   link,
   br,
@@ -98,6 +99,8 @@ describe('Markdown', () => {
     ));
   it('Code example - yaml', () =>
     same('```yaml\nhello: []\n```', tdoc(code_block_yaml('hello: []'))));
+  it('Code with ticks', () =>
+    same('````text\n```{directive}\n```\n````', tdoc(code_block_text('```{directive}\n```'))));
   it('serializes figures with code', () => {
     const f = toMarkdown(
       tdoc(figureC(figcaptionC('This is a code ', em('caption')), code_block_yaml('hello: []'))),
