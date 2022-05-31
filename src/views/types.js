@@ -28,7 +28,7 @@ export var SUPPORTED_LANGUAGES = [
     { name: LanguageNames.Python, label: 'Python' },
     { name: LanguageNames.R, label: 'R' },
     { name: LanguageNames.Julia, label: 'Julia' },
-    { name: LanguageNames.PlainText, label: 'Plain' },
+    { name: LanguageNames.PlainText, label: 'Plain Text' },
     { name: LanguageNames.Json, label: 'JSON' },
     { name: LanguageNames.Yaml, label: 'YAML' },
     { name: LanguageNames.Shell, label: 'Shell' },
