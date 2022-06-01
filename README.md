@@ -37,7 +37,7 @@ To use the plugins, supply your `MarkType` and use the plugins in your `EditorVi
 
 ```ts
 import codemark from 'prosemirror-codemark';
-import 'codemark/dist/codemark.css';
+import 'prosemirror-codemark/dist/codemark.css';
 
 const plugins = codemark({ markType: schema.marks.code });
 
@@ -56,7 +56,7 @@ The schema can be accessed from `this.editor.schema.marks.code`.
 
 ```ts
 import codemark from 'prosemirror-codemark';
-import 'codemark/dist/codemark.css';
+import 'prosemirror-codemark/dist/codemark.css';
 
 const codemarkPlugin = Extension.create({
   name: 'codemarkPlugin',
