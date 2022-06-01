@@ -1,6 +1,6 @@
 {
   "name": "@curvenote/editor",
-  "version": "0.16.16",
+  "version": "0.16.17",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "MIT",
