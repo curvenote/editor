@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
@@ -13,7 +13,8 @@ import {
 import { State } from '../../store/types';
 import { SelectionKinds } from '../../store/ui/types';
 import { isEditable } from '../../prosemirror/plugins/editable';
-import { createPopperLocationCache, registerPopper } from './utils';
+import { createPopperLocationCache, positionPopper, registerPopper } from './utils';
+import { getScrollParent } from '../../utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,6 +53,18 @@ function InlineActions(props: Props) {
   const showRegardless = kind && alwaysShow.has(kind);
 
   cache.setNode(currentEl);
+
+  const scrollParent = useMemo(() => getScrollParent(currentEl), [currentEl]);
+
+  // TODO: this is supposed to be handled by popperjs
+  useEffect(() => {
+    if (scrollParent) {
+      scrollParent.addEventListener('scroll', positionPopper);
+    }
+    return () => {
+      scrollParent?.removeEventListener('scroll', positionPopper);
+    };
+  }, [scrollParent]);
 
   if (!open || !(edit || showRegardless) || !view || !cache.getNode()?.isConnected) return null;
 
