@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useRef, useState } from 'react';
 import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
+import { useSelector } from 'react-redux';
 import {
   getEditorUIStateAndViewIds,
   getEditorView,
@@ -13,8 +13,7 @@ import {
 import { State } from '../../store/types';
 import { SelectionKinds } from '../../store/ui/types';
 import { isEditable } from '../../prosemirror/plugins/editable';
-import { createPopperLocationCache, positionPopper, registerPopper } from './utils';
-import { getScrollParent } from '../../utils';
+import { usePopper } from './hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,7 +41,6 @@ type Props = {
 function InlineActions(props: Props) {
   const { children } = props;
   const classes = useStyles();
-  const cache = useMemo(createPopperLocationCache, []);
   const { viewId } = useSelector(getEditorUIStateAndViewIds, isEqual);
   const kind = useSelector(getInlineActionKind);
   const currentEl = useSelector(getInlineActionAnchorEl);
@@ -52,21 +50,9 @@ function InlineActions(props: Props) {
   const edit = isEditable(view?.state);
   const showRegardless = kind && alwaysShow.has(kind);
 
-  cache.setNode(currentEl);
+  const [popperRef] = usePopper(currentEl);
 
-  const scrollParent = useMemo(() => getScrollParent(currentEl), [currentEl]);
-
-  // TODO: this is supposed to be handled by popperjs
-  useEffect(() => {
-    if (scrollParent) {
-      scrollParent.addEventListener('scroll', positionPopper);
-    }
-    return () => {
-      scrollParent?.removeEventListener('scroll', positionPopper);
-    };
-  }, [scrollParent]);
-
-  if (!open || !(edit || showRegardless) || !view || !cache.getNode()?.isConnected) return null;
+  if (!open || !(edit || showRegardless) || !view || !currentEl?.isConnected) return null;
 
   // This should only render on ui.selection change (on timeout),
   // the internals (if showing) render on state.selection changes (cursor, etc)
@@ -74,10 +60,10 @@ function InlineActions(props: Props) {
   return (
     <Popper
       open={open}
-      anchorEl={cache.anchorEl}
+      anchorEl={currentEl}
       transition
       placement={placement}
-      popperRef={(pop) => registerPopper(pop)}
+      popperRef={popperRef}
       className="noprint above-modals"
     >
       <Paper className={classes.paper} elevation={10}>

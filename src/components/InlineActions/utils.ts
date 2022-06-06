@@ -9,16 +9,6 @@ export type ActionProps = {
   viewId: string | null;
 };
 
-let popper: { update: () => void } | null = null;
-
-export function registerPopper(next: typeof popper) {
-  popper = next;
-}
-
-export function positionPopper() {
-  popper?.update();
-}
-
 export function getFigure(editorState: EditorState | null) {
   if (!editorState) {
     return { figure: undefined, figcaption: undefined };

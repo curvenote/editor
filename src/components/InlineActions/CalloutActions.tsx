@@ -8,7 +8,7 @@ import MenuIcon from '../Menu/Icon';
 import { deleteNode, liftContentOutOfNode, updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
@@ -35,7 +35,6 @@ function CalloutActions(props: ActionProps) {
   const node = parent?.node ?? getNodeFromSelection(selection);
   const pos = parent?.pos ?? selection?.from;
   if (!node || pos == null) return null;
-  positionPopper();
 
   const onKind = (value: string) => () =>
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { kind: value }, false));

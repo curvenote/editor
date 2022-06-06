@@ -6,14 +6,12 @@ import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { LinkResult } from '../../store/suggestion/types';
-import { positionPopper } from '../InlineActions/utils';
 
 function LinkSuggestions() {
   const results = useSelector(
     (state: State) => selectors.getSuggestionResults<LinkResult>(state),
     isEqual,
   );
-  positionPopper();
   if (results.length === 0) {
     return (
       <Suggestion index={0}>
