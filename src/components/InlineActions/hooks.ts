@@ -24,11 +24,12 @@ export function usePopper(currentEl: Element | null | undefined) {
         popper.update();
       }
     }, 0);
-  }, [popper]);
+  }, [popper]); // batch all updatePopper call in a call stack to avoid unnecessary render
 
   // updates popper when anchor size changes
   useEffect(() => {
     if (!currentEl || !updatePopper) return () => {};
+    updatePopper(); // make sure initial position is correct
     const observer = new ResizeObserver(() => {
       updatePopper();
     });
