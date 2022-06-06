@@ -8,7 +8,7 @@ import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
 import { Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
@@ -40,7 +40,6 @@ function EquationActions(props: ActionProps) {
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { numbered: !numbered }, false));
 
   // Reposition the popper
-  positionPopper();
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>

@@ -8,7 +8,7 @@ import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs, wrapInHeading } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
 import { Dispatch, State } from '../../store';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps } from './utils';
 import MenuAction from '../Menu/Action';
 import Keyboard from '../Keyboard';
 import { getNodeFromSelection } from '../../store/ui/utils';
@@ -60,8 +60,6 @@ function HeadingActions(props: ActionProps) {
     // This maintains the section label/number info
     dispatch(updateNodeAttrs(stateId, viewId, { node, pos }, { level: l }, false));
   };
-
-  positionPopper();
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>

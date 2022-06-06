@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isSuggestionSelected } from '../../store/selectors';
 import { Dispatch, State } from '../../store';
 import { chooseSelection, selectSuggestion } from '../../store/actions';
-import { positionPopper } from '../InlineActions/utils';
 
 const useStyles = makeStyles<Theme, { selectOnHover: boolean }>(() =>
   createStyles({
@@ -36,7 +35,6 @@ const voidFn = () => {};
 
 function Suggestion(props: Props) {
   const { index, children, className, disableSelectOnHover } = props;
-  positionPopper();
   const classes = useStyles({ selectOnHover: !disableSelectOnHover });
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<Dispatch>();

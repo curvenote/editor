@@ -7,7 +7,6 @@ import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { CommandResult } from '../../store/suggestion/commands';
 import Keyboard from '../Keyboard';
-import { positionPopper } from '../InlineActions/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,7 +32,6 @@ function CommandSuggestions() {
     (state: State) => selectors.getSuggestionResults<CommandResult>(state),
     isEqual,
   );
-  positionPopper();
   const classes = useStyles();
   if (results.length === 0) {
     return (

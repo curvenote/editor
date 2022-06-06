@@ -24,7 +24,7 @@ import {
 import { updateNodeAttrs } from '../../store/actions/editor';
 import { getEditorState } from '../../store/state/selectors';
 import { Dispatch, State } from '../../store';
-import { ActionProps, getFigure, positionPopper } from './utils';
+import { ActionProps, getFigure } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 
 const useStyles = makeStyles(() =>
@@ -117,7 +117,6 @@ function CodeActions(props: ActionProps) {
   }
 
   if (!editorState || !node || pos == null) return null;
-  positionPopper();
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
 

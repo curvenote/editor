@@ -6,7 +6,6 @@ import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { EmojiResult } from '../../store/suggestion/types';
-import { positionPopper } from '../InlineActions/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,8 +28,6 @@ function EmojiSuggestions() {
     (state: State) => selectors.getSuggestionResults<EmojiResult>(state),
     isEqual,
   );
-
-  positionPopper();
 
   const classes = useStyles();
 

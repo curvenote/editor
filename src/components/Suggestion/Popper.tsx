@@ -4,7 +4,7 @@ import { makeStyles, createStyles, Paper, Popper } from '@material-ui/core';
 
 import { selectors } from '../../store';
 import useClickOutside from '../hooks/useClickOutside';
-import { createPopperLocationCache, registerPopper } from '../InlineActions';
+import { usePopper } from '../InlineActions';
 import { closeSuggestion } from '../../store/actions';
 import { getSelectedView } from '../../store/selectors';
 
@@ -29,20 +29,21 @@ function Suggestion(props: Props) {
   const open = useSelector(selectors.isSuggestionOpen);
   const classes = useStyles();
   const paperRef = useRef<HTMLDivElement>(null);
-  const cache = useMemo(createPopperLocationCache, []);
   const dispatch = useDispatch();
   useClickOutside(paperRef, () => {
     dispatch(closeSuggestion());
   });
   const { view } = useSelector(getSelectedView);
-  cache.setNode(() => view?.dom.querySelector('.autocomplete') ?? null);
-  if (!open || !cache.getNode()?.isConnected) return null;
+  const autocomplete = view?.dom.querySelector('.autocomplete');
+  const [popperRef] = usePopper(autocomplete);
+
+  if (!open || !autocomplete?.isConnected) return null;
   return (
     <Popper
       className="above-modals"
       open={open}
-      anchorEl={cache.anchorEl}
-      popperRef={(pop) => registerPopper(pop)}
+      anchorEl={autocomplete}
+      popperRef={popperRef}
       placement="bottom-start"
     >
       <Paper className={classes.root} elevation={10} ref={paperRef}>

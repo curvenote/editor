@@ -6,7 +6,6 @@ import { State } from '../../store/types';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import { VariableResult } from '../../store/suggestion/types';
-import { positionPopper } from '../InlineActions/utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -40,7 +39,6 @@ function VariableSuggestions() {
     (state: State) => selectors.getSuggestionResults<VariableResult>(state),
     isEqual,
   );
-  positionPopper();
   const classes = useStyles();
   return (
     <div>

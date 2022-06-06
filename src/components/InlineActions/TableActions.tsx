@@ -15,7 +15,7 @@ import {
 } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { actions, Dispatch, State } from '../../store';
-import { ActionProps, getFigure, positionPopper } from './utils';
+import { ActionProps, getFigure } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 import { CommandNames } from '../../store/suggestion/commands';
 
@@ -51,7 +51,6 @@ function TableActions(props: ActionProps) {
     [stateId, viewId],
   );
   if (!editorState || !node || pos == null) return null;
-  positionPopper();
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, figure ?? { node, pos }));
   const onCaption = () => {

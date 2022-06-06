@@ -14,7 +14,7 @@ import {
   createFigureCaption,
 } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps } from './utils';
 import { AppThunk, Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
@@ -117,7 +117,6 @@ function FigureImageActions(props: Props) {
   const onWidth = (value: number) => {
     if (!child) return;
     dispatch(updateNodeAttrs(stateId, viewId, child, { width: value }));
-    positionPopper();
   };
   const onNumbered = () => {
     // TODO: this would be better in one transaction
@@ -126,12 +125,9 @@ function FigureImageActions(props: Props) {
   };
   const onCaption = () => {
     dispatch(toggleCaption(stateId, viewId, pos));
-    positionPopper();
   };
 
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node: figure, pos }));
-
-  positionPopper();
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>

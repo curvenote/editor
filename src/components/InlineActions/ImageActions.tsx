@@ -10,7 +10,7 @@ import {
   createFigure,
 } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { ActionProps, positionPopper } from './utils';
+import { ActionProps } from './utils';
 import { Dispatch, State } from '../../store';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
@@ -47,8 +47,6 @@ function ImageActions(props: Props) {
     dispatch(applyProsemirrorTransaction(stateId, viewId, tr, true));
   };
   const onDelete = () => dispatch(deleteNode(stateId, viewId, { node, pos }));
-
-  positionPopper();
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.root}>
