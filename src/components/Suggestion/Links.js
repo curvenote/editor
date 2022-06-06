@@ -4,10 +4,8 @@ import { Typography } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
-import { positionPopper } from '../InlineActions/utils';
 function LinkSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
-    positionPopper();
     if (results.length === 0) {
         return (React.createElement(Suggestion, { index: 0 },
             React.createElement(Typography, { variant: "subtitle2" }, "Start typing to search through your links and citations.")));

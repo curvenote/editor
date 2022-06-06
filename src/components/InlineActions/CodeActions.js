@@ -9,7 +9,7 @@ import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, createFigure, createFigureCaption, deleteNode, } from '../../store/actions';
 import { updateNodeAttrs } from '../../store/actions/editor';
 import { getEditorState } from '../../store/state/selectors';
-import { getFigure, positionPopper } from './utils';
+import { getFigure } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
@@ -83,7 +83,6 @@ function CodeActions(props) {
     }
     if (!editorState || !node || pos == null)
         return null;
-    positionPopper();
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: node, pos: pos })); };
     var onCaption = function () {
         if (!figure) {

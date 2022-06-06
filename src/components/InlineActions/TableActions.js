@@ -8,7 +8,7 @@ import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs, createFigureCaption, createFigure, } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import { actions } from '../../store';
-import { getFigure, positionPopper } from './utils';
+import { getFigure } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 import { CommandNames } from '../../store/suggestion/commands';
 var useStyles = makeStyles(function () {
@@ -39,7 +39,6 @@ function TableActions(props) {
     var command = useCallback(function (name) { return dispatch(actions.executeCommand(name, viewId)); }, [stateId, viewId]);
     if (!editorState || !node || pos == null)
         return null;
-    positionPopper();
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, figure !== null && figure !== void 0 ? figure : { node: node, pos: pos })); };
     var onCaption = function () {
         if (!figure) {

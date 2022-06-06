@@ -4,7 +4,6 @@ import { makeStyles, createStyles, Typography } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
-import { positionPopper } from '../InlineActions/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
         root: {
@@ -21,7 +20,6 @@ var useStyles = makeStyles(function () {
 });
 function EmojiSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
-    positionPopper();
     var classes = useStyles();
     if (results.length === 0) {
         return (React.createElement(Typography, { variant: "subtitle2", className: classes.none }, "No emoji found, try a different search!"));

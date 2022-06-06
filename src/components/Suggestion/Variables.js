@@ -4,7 +4,6 @@ import { Typography, makeStyles, createStyles } from '@material-ui/core';
 import isEqual from 'lodash.isequal';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
-import { positionPopper } from '../InlineActions/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
         root: {
@@ -33,7 +32,6 @@ var useStyles = makeStyles(function () {
 });
 function VariableSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
-    positionPopper();
     var classes = useStyles();
     return (React.createElement("div", null, results.map(function (item, index) { return (React.createElement(Suggestion, { key: item.id, index: index, className: classes.root },
         item.current !== undefined && React.createElement("div", null, String(item.current)),

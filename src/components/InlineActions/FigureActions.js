@@ -7,7 +7,6 @@ import { NodeSelection, TextSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs, selectFirstNodeOfTypeInParent, createFigureCaption, } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { positionPopper } from './utils';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
@@ -95,7 +94,6 @@ function FigureImageActions(props) {
         if (!child)
             return;
         dispatch(updateNodeAttrs(stateId, viewId, child, { width: value }));
-        positionPopper();
     };
     var onNumbered = function () {
         dispatch(updateNodeAttrs(stateId, viewId, { node: figure, pos: pos }, { numbered: !numbered }));
@@ -103,10 +101,8 @@ function FigureImageActions(props) {
     };
     var onCaption = function () {
         dispatch(toggleCaption(stateId, viewId, pos));
-        positionPopper();
     };
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: figure, pos: pos })); };
-    positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         hasAlign && (React.createElement(React.Fragment, null,
             React.createElement(MenuIcon, { kind: "left", active: align === 'left', onClick: onAlign('left') }),

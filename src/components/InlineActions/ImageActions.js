@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs, createFigure, } from '../../store/actions';
 import SelectWidth from './SelectWidth';
-import { positionPopper } from './utils';
 import { getEditorState } from '../../store/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
@@ -37,7 +36,6 @@ function ImageActions(props) {
         dispatch(applyProsemirrorTransaction(stateId, viewId, tr, true));
     };
     var onDelete = function () { return dispatch(deleteNode(stateId, viewId, { node: node, pos: pos })); };
-    positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(SelectWidth, { width: width, onWidth: onWidth }),
         React.createElement(MenuIcon, { kind: "caption", onClick: onCaption }),

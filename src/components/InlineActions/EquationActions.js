@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
-import { positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
@@ -33,7 +32,6 @@ function EquationActions(props) {
     var onNumbered = function () {
         return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { numbered: !numbered }, false));
     };
-    positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "numbered", active: numbered, onClick: onNumbered })));
 }

@@ -5,7 +5,6 @@ import isEqual from 'lodash.isequal';
 import { selectors } from '../../store';
 import Suggestion from './Suggestion';
 import Keyboard from '../Keyboard';
-import { positionPopper } from '../InlineActions/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
         root: {
@@ -26,7 +25,6 @@ var useStyles = makeStyles(function () {
 });
 function CommandSuggestions() {
     var results = useSelector(function (state) { return selectors.getSuggestionResults(state); }, isEqual);
-    positionPopper();
     var classes = useStyles();
     if (results.length === 0) {
         return (React.createElement(Typography, { variant: "subtitle2", className: classes.none }, "No command found, try a different search!"));

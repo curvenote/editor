@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { deleteNode, liftContentOutOfNode, updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
-import { positionPopper } from './utils';
 import { getNodeFromSelection } from '../../store/ui/utils';
 var useStyles = makeStyles(function () {
     return createStyles({
@@ -31,7 +30,6 @@ function CalloutActions(props) {
     var pos = (_b = parent === null || parent === void 0 ? void 0 : parent.pos) !== null && _b !== void 0 ? _b : selection === null || selection === void 0 ? void 0 : selection.from;
     if (!node || pos == null)
         return null;
-    positionPopper();
     var onKind = function (value) { return function () {
         return dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { kind: value }, false));
     }; };

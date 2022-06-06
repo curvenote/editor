@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs, wrapInHeading } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
-import { positionPopper } from './utils';
 import MenuAction from '../Menu/Action';
 import Keyboard from '../Keyboard';
 import { getNodeFromSelection } from '../../store/ui/utils';
@@ -49,7 +48,6 @@ function HeadingActions(props) {
         }
         dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { level: l }, false));
     }; };
-    positionPopper();
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.root },
         React.createElement(MenuIcon, { kind: "expand", onClick: onOpen, "aria-controls": "insert-menu", text: "Heading ".concat(level) }),
         React.createElement(Menu, { id: "insert-menu", anchorEl: anchorEl, open: Boolean(anchorEl), onClose: onClose, style: ABOVE_MODALS },
