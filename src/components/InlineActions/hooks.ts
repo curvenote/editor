@@ -12,7 +12,11 @@ export function useInlineActionNode(stateId: any) {
   return getNodeFromSelection(selection);
 }
 
-// handles oppper positioning
+/**
+ * Better Popper Management
+ * - update popper position on anchor resizing
+ * - batch popper update render
+ */
 export function usePopper(currentEl: Element | null | undefined) {
   const [popper, setPopper] = useState<any>(null);
   const popperRef = useCallback((popperInstance) => setPopper(popperInstance), []);
@@ -20,7 +24,7 @@ export function usePopper(currentEl: Element | null | undefined) {
   const updatePopper = useMemo(() => {
     if (!popper) return () => {};
     return debounce(() => {
-      if (popper) {
+      if (popper && popper.reference.isConnected) {
         popper.update();
       }
     }, 0);
