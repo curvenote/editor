@@ -1,4 +1,5 @@
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
+import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { MdFormatSerialize } from '../serialize/types';
 import { Iframe } from '../spec';
 import { NodeGroups, MyNodeSpec, AlignOptions } from './types';
@@ -60,10 +61,13 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   if (renderer === 'myst') {
     state.ensureNewLine();
     state.write(`\`\`\`{iframe} ${src}\n`);
-    state.write(`:label: ${state.nextCaptionId}\n`);
-    // TODO: Align should come from figure
-    state.write(`:align: ${align}\n`);
-    state.write(`:width: ${width}%\n`);
+    const opts = {
+      label: state.nextCaptionId,
+      // TODO: Align should come from figure
+      align,
+      width: `${width}%`,
+    };
+    writeDirectiveOptions(state, opts);
     // TODO: If there is a caption, put it here
     state.write('```');
     state.closeBlock(node);

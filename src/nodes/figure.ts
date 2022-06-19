@@ -113,14 +113,14 @@ export const toMarkdown: MdFormatSerialize = (state, node, parent, index) => {
     case CaptionKind.fig: {
       const image = getFirstChildWithName(node, [nodeNames.image, nodeNames.iframe]);
       if (!image) return;
-      const { src } = image?.attrs as ImageAttrs | IFrameAttrs;
+      const { src, align, width } = image?.attrs as ImageAttrs | IFrameAttrs;
       const href = state.options.localizeImageSrc?.(src) ?? src;
       if (image.type.name === nodeNames.iframe) {
         state.render(image);
         return;
       }
       state.write(`\`\`\`{figure} ${href}\n`);
-      const opts = { name: state.nextCaptionId };
+      const opts = { name: state.nextCaptionId, align, width: `${width}%` };
       writeDirectiveOptions(state, opts);
       if (caption) {
         state.renderInline(caption);

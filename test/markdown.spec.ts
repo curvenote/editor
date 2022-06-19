@@ -117,7 +117,9 @@ describe('Markdown', () => {
     ));
   it('serializes figures with images', () => {
     const f = toMarkdown(tdoc(figureF(img(), figcaptionF('This is an image ', em('caption')))));
-    expect(f).toBe('```{figure} img.png\n:name: my-figure\n\nThis is an image *caption*\n```');
+    expect(f).toBe(
+      '```{figure} img.png\n:name: my-figure\n:align: center\n:width: 70%\n\nThis is an image *caption*\n```',
+    );
   });
   it('serializes figures with tables', () => {
     const f = toMarkdown(
