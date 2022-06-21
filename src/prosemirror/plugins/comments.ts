@@ -1,21 +1,71 @@
 import { Plugin, PluginKey, Transaction } from 'prosemirror-state';
-import { isNodeSelection } from 'prosemirror-utils';
+import { createId } from '@curvenote/schema';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
-import { opts } from '../../connect';
+import { Node } from 'prosemirror-model';
 
 export interface CommentState {
+  docId: string;
+  selectedComment: string | null;
   decorations: DecorationSet;
 }
-const emptyCommentState = {
+const emptyCommentState: CommentState = {
+  docId: '',
+  selectedComment: null,
   decorations: DecorationSet.empty,
 };
 
 export const key = new PluginKey('comments');
 
+export interface DecorationRange {
+  from: number;
+  to: number;
+  text: string;
+}
+export interface CommentInfo {
+  id: string;
+  ranges: DecorationRange[];
+}
+
+interface DecorationSpec {
+  id: string;
+  domId: string;
+  selected: boolean;
+  inclusiveStart: boolean;
+  inclusiveEnd: boolean;
+}
+
+/**
+ * Get the current range information about a comment decoration.
+ *
+ * @param view The editor view
+ * @param id The id of the comment decoration
+ * @returns The current from/to and selected text if the ID exists
+ */
+export function getCommentInfo(view: EditorView, id: string): CommentInfo | null {
+  const plugin = key.get(view.state);
+  const { decorations } = (plugin?.getState(view.state) ?? {}) as { decorations: DecorationSet };
+  if (!decorations) return null;
+  const decos = decorations.find(
+    undefined,
+    undefined,
+    (spec) => (spec as DecorationSpec).id === id,
+  );
+  if (!decos.length) return null;
+  const ranges = decos.map((deco) => {
+    const { from, to } = deco;
+    const text = view.state.doc.textBetween(from, to);
+    return { from, to, text };
+  });
+  return { id, ranges };
+}
+
 interface CommentAddAction {
   type: 'add';
   commentId: string;
+  from?: number;
+  to?: number;
+  selected?: boolean;
 }
 
 interface CommentRemoveAction {
@@ -23,80 +73,152 @@ interface CommentRemoveAction {
   commentId: string;
 }
 
-type CommentAction = CommentAddAction | CommentRemoveAction;
+interface CommentSelectAction {
+  type: 'select';
+  commentId: string;
+}
+
+type CommentAction = CommentAddAction | CommentRemoveAction | CommentSelectAction;
 
 export function dispatchCommentAction(view: EditorView, action: CommentAction) {
   const plugin = key.get(view.state) as Plugin;
-  const tr = view.state.tr.setMeta(plugin, action);
+  const state = plugin.getState(view.state) as CommentState;
+  let { docId } = state;
+  if (!docId) {
+    // The docId is difficult to pass down to the state, just grab it from the articleId
+    let el = view.dom as HTMLElement | null;
+    do {
+      el = (el?.parentElement ?? null) as HTMLElement | null;
+    } while (el && el.tagName !== 'ARTICLE');
+    docId = el?.id ?? docId;
+  }
+  const tr = view.state.tr.setMeta(plugin, { ...action, docId });
   view.dispatch(tr);
 }
 
-// function inComment(selection: Selection, decorations: DecorationSet) {
-//   return decorations.find(selection.from, selection.to).length > 0;
-// }
+function createDecoration(
+  commentId: string,
+  selectedComment: string | null,
+  from: number,
+  to: number,
+  reuseDomId: string | null,
+) {
+  const domId = reuseDomId ?? createId();
+  const selected = selectedComment === commentId;
+  const params = {
+    nodeName: 'span',
+    class: selected ? 'anchor selected' : 'anchor',
+    id: domId, // Note, this ID might be split into many different dom nodes, but that is fine.
+  };
+  const spec: DecorationSpec = {
+    id: commentId,
+    domId,
+    selected,
+    inclusiveStart: false,
+    inclusiveEnd: false,
+  };
+  return Decoration.inline(from, to, params, spec);
+  // TODO: This has to be based on the actual from/to
+  // NodeSelection.create(tr.doc, from);
+  // if (isNodeSelection(tr.selection)) {
+  //   deco = Decoration.node(from, to, params, spec);
+  // }
+}
 
-const reducer = (
-  state: CommentState,
-  tr: Transaction,
-  action?: CommentAction,
-): CommentState['decorations'] => {
+function updateSelectedDecorations(
+  decorations: DecorationSet,
+  selectedId: string | null,
+  doc: Node,
+): DecorationSet {
+  const remove = decorations.find(undefined, undefined, (_spec) => {
+    const spec = _spec as DecorationSpec;
+    return (spec.selected && spec.id !== selectedId) || (!spec.selected && spec.id === selectedId);
+  });
+  if (remove.length === 0) return decorations;
+  const add = remove.map((deco) => {
+    const spec = deco.spec as DecorationSpec;
+    return createDecoration(spec.id, selectedId, deco.from, deco.to, spec.domId);
+  });
+  return decorations.remove(remove).add(doc, add);
+}
+
+function reducer(tr: Transaction, state: CommentState): CommentState {
   const { decorations } = state;
-  const nextDecorations = decorations.map(tr.mapping, tr.doc);
+  // Always update the decorations with the mapping
+  const nextDecorations = decorations.map(tr.mapping, tr.doc, {
+    onRemove: (spec) => {
+      store.dispatch(actions.disconnectAnchor(state.docId, (spec as DecorationSpec).domId));
+    },
+  });
+  const action = tr.getMeta(key) as (CommentAction & { docId?: string }) | undefined;
+  const { selectedComment } = state;
+  // The docId might be updated by the action (unlikely)
+  const docId = action?.docId ?? state.docId;
+  if (tr.getMeta('addToHistory') === false) {
+    // This is used in `prosemirror-collab`, other clients should not change our decoration state
+    // This early exits with only updating the mapped decorations
+    return { docId, selectedComment, decorations: nextDecorations };
+  }
+  if (!action) {
+    // Check if we are in a comment!
+    const around = decorations.find(tr.selection.from, tr.selection.to);
+    if (around.length === 0 || !tr.selection.empty) {
+      // We are not in a comment, and the action to select does not exist
+      const hasSelectedComment = selectors.selectedSidenote(store.getState(), docId);
+      if (hasSelectedComment) store.dispatch(actions.deselectSidenote(docId));
+      const selected = updateSelectedDecorations(nextDecorations, null, tr.doc);
+      return { docId, selectedComment: null, decorations: selected };
+    }
+    // Otherwise, send a select action to sidenotes as we change state.selection!
+    const { id, domId } = around[0].spec as DecorationSpec;
+    const isSelected = selectors.isSidenoteSelected(store.getState(), docId, id);
+    if (!isSelected) store.dispatch(actions.selectAnchor(docId, domId));
+    const selected = updateSelectedDecorations(nextDecorations, id, tr.doc);
+    return { docId, selectedComment: id, decorations: selected };
+  }
   switch (action?.type) {
     case 'add': {
-      const { from, to } = tr.selection;
-      let deco: Decoration;
-      const params = {
-        nodeName: 'span',
-        comment: action.commentId,
-        class: 'anchor',
+      const from = action.from ?? tr.selection.from;
+      const to = action.to ?? tr.selection.to;
+      const nextSelected = action.selected ? action.commentId : selectedComment;
+      const deco = createDecoration(action.commentId, nextSelected, from, to, null);
+      store.dispatch(actions.connectAnchor(docId, action.commentId, deco.spec.domId));
+      return {
+        docId,
+        selectedComment: nextSelected,
+        decorations: nextDecorations.add(tr.doc, [deco]),
       };
-      const spec = {
-        comment: action.commentId,
-        inclusiveStart: false,
-        inclusiveEnd: false,
-      };
-      if (isNodeSelection(tr.selection)) {
-        deco = Decoration.node(from, to, params, spec);
-      } else {
-        deco = Decoration.inline(from, to, params, spec);
-      }
-      return nextDecorations.add(tr.doc, [deco]);
     }
     case 'remove': {
       const { commentId } = action;
-      const deco = nextDecorations.find(undefined, undefined, (spec) => spec.comment === commentId);
-      return nextDecorations.remove(deco);
+      const decos = nextDecorations.find(
+        undefined,
+        undefined,
+        (spec) => (spec as DecorationSpec).id === commentId,
+      );
+      decos.forEach((deco) => {
+        const spec = deco.spec as DecorationSpec;
+        store.dispatch(actions.disconnectAnchor(docId, spec.domId));
+      });
+      return { docId, selectedComment, decorations: nextDecorations.remove(decos) };
+    }
+    case 'select': {
+      const { commentId: selectedId } = action;
+      const selected = updateSelectedDecorations(nextDecorations, action.commentId, tr.doc);
+      return { docId, selectedComment: selectedId, decorations: selected };
     }
     default:
-      return nextDecorations;
+      throw new Error(`Unhandled comment plugin action of type "${(action as any).type}"`);
   }
-};
+}
 
 const getCommentsPlugin = (): Plugin<CommentState> => {
   const commentsPlugin: Plugin<CommentState> = new Plugin({
     key,
     state: {
-      init: () => ({ ...emptyCommentState } as CommentState),
+      init: (): CommentState => ({ ...emptyCommentState }),
       apply(tr, state: CommentState): CommentState {
-        const action = tr.getMeta(commentsPlugin) as CommentAction | undefined;
-        const docId = opts.getDocId();
-        const decorations = reducer(state, tr, action);
-        // Check if we are in a comment!
-        const around = decorations.find(tr.selection.from, tr.selection.to);
-        if (around.length === 0) {
-          const hasSelectedComment = selectors.selectedSidenote(store.getState(), docId);
-          if (hasSelectedComment) store.dispatch(actions.deselectSidenote(docId));
-        } else {
-          const commentId = around[0].spec.comment;
-          const isSelected = selectors.isSidenoteSelected(store.getState(), docId, commentId);
-          if (!isSelected) {
-            store.dispatch(actions.selectSidenote(docId, commentId));
-          }
-        }
-        return {
-          decorations,
-        };
+        return reducer(tr, state);
       },
     },
     props: {

@@ -13,3 +13,4 @@ export { runtime, collab };
 
 export { isEditable, setEditable } from './prosemirror/plugins/editable';
 export { createEditorState } from './prosemirror';
+export { getCommentInfo } from './prosemirror/plugins/comments';

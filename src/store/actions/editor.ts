@@ -16,6 +16,7 @@ import { MarkType, NodeType, Node, Fragment, Schema, NodeRange } from 'prosemirr
 import { Nodes, nodeNames, createId } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
+import { EditorView } from 'prosemirror-view';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { AppThunk } from '../types';
 import {
@@ -23,7 +24,6 @@ import {
   getSelectedEditorAndViews,
   getEditorUI,
   selectionIsChildOf,
-  getSelectedView,
   getEditorView,
 } from '../selectors';
 import { focusEditorView, focusSelectedEditorView } from '../ui/actions';
@@ -278,29 +278,40 @@ export const insertVariable = (
   attrs: Nodes.Variable.Attrs = { name: 'myVar', value: '0', valueFunction: '' },
 ) => replaceSelection(schema.nodes.variable, attrs);
 
-export function addComment(viewId: string, commentId: string): AppThunk<boolean> {
+export function addComment(
+  viewIn: string | EditorView | null,
+  commentId: string,
+  range?: { from: number; to: number },
+  selected = false,
+): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const { view } = getEditorView(getState(), viewId);
+    const view = typeof viewIn === 'string' ? getEditorView(getState(), viewIn).view : viewIn;
     if (!view) return false;
-    dispatchCommentAction(view, { type: 'add', commentId });
+    dispatchCommentAction(view, { type: 'add', commentId, ...range, selected });
     return true;
   };
 }
 
-export function removeComment(viewId: string, commentId: string): AppThunk<boolean> {
+export function removeComment(
+  viewIn: string | EditorView | null,
+  commentId: string,
+): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const { view } = getEditorView(getState(), viewId);
+    const view = typeof viewIn === 'string' ? getEditorView(getState(), viewIn).view : viewIn;
     if (!view) return false;
     dispatchCommentAction(view, { type: 'remove', commentId });
     return true;
   };
 }
 
-export function addCommentToSelectedView(commentId: string): AppThunk<boolean> {
+export function selectComment(
+  viewIn: string | EditorView | null,
+  commentId: string,
+): AppThunk<boolean> {
   return (dispatch, getState) => {
-    const { viewId } = getSelectedView(getState());
-    if (!viewId) return false;
-    dispatch(addComment(viewId, commentId));
+    const view = typeof viewIn === 'string' ? getEditorView(getState(), viewIn).view : viewIn;
+    if (!view) return false;
+    dispatchCommentAction(view, { type: 'select', commentId });
     return true;
   };
 }

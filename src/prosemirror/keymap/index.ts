@@ -136,8 +136,8 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
   }
   if (options?.enableCommentShortcut ?? true) {
     // Confluence and Google Docs comment shortcuts
-    bind('Mod-Alt-c', (state, dispatch) => !!dispatch && opts.addComment(stateKey, state));
-    bind('Mod-Alt-m', (state, dispatch) => !!dispatch && opts.addComment(stateKey, state));
+    bind('Mod-Alt-c', (state, dispatch) => !!dispatch && opts.addComment(stateKey));
+    bind('Mod-Alt-m', (state, dispatch) => !!dispatch && opts.addComment(stateKey));
   }
 }
 

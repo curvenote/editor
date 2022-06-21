@@ -16,6 +16,7 @@ import { store } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
+import { createSelectPlugin } from './selection';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
 
@@ -112,13 +113,14 @@ export function getPlugins(
     ...tablesPlugins(schema), // put this plugin near the end of the array of plugins, since it handles mouse and arrow key events in tables rather broadly
     history(),
     keymap(captureTab()),
+    createSelectPlugin(stateKey),
+    commentsPlugin(),
   ];
 }
 
 export function getInlinePlugins(schema: Schema): Plugin[] {
   return [
     editablePlugin(true),
-    commentsPlugin(),
     ...inputrules(schema),
     keymap(buildBasicKeymap(schema)),
     keymap(baseKeymap),

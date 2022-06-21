@@ -25,10 +25,7 @@ export type Options = {
     state: EditorState,
     transaction: Transaction,
   ) => Transaction;
-  // This is used in the comments plugin to know which doc to refer to.
-  // Should be the current selected doc.
-  getDocId: () => string;
-  addComment?: (stateKey: any, state: EditorState) => boolean;
+  addComment?: (stateKey: any, view?: EditorView) => boolean;
   onDoubleClick?: (
     stateKey: any,
     viewId: string | null,
@@ -103,14 +100,11 @@ export const opts: Required<Options> = {
     }
     return next;
   },
-  addComment(stateKey: any, state: EditorState) {
-    return ref.opts().addComment?.(stateKey, state) ?? false;
+  addComment(stateKey: any, view?: EditorView) {
+    return ref.opts().addComment?.(stateKey, view) ?? false;
   },
   onDoubleClick(stateId, viewId, view, pos, event) {
     return ref.opts().onDoubleClick?.(stateId, viewId, view, pos, event) ?? false;
-  },
-  getDocId() {
-    return ref.opts().getDocId();
   },
   citationPrompt() {
     return ref.opts().citationPrompt();
