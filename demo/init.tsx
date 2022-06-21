@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore as createReduxStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Button, createTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex, ReferenceKind, process, toText } from '@curvenote/schema';
@@ -52,14 +52,19 @@ const someLinks: LinkResult[] = [
   },
 ];
 
-export function DemoEditor({ content }: { content: string }) {
+export function createStore(): Store {
+  return createReduxStore(rootReducer, applyMiddleware(...middleware));
+}
+
+export function DemoEditor({ content, store = createStore() }: { content: string; store?: Store }) {
   const [reduxStore, setStore] = useState<Store | null>(null);
   const [{ newCommentFn, removeCommentFn }, setFn] = useState<any>({
     newCommentFn: null,
     removeCommentFn: null,
   });
   useEffect(() => {
-    const store: Store = createStore(rootReducer, applyMiddleware(...middleware));
+    // TODO: handle contents update
+    if (reduxStore) return;
     const theme = createTheme({});
     const newComment = () => {
       store?.dispatch(actions.addCommentToSelectedView('sidenote1'));
@@ -155,7 +160,7 @@ export function DemoEditor({ content }: { content: string }) {
 
     setStore(store);
     setFn({ newCommentFn: newComment, removeCommentFn: removeComment });
-  }, []);
+  }, [content, reduxStore, store]);
 
   if (!reduxStore || !newCommentFn || !removeCommentFn) return <div>Setting up editor ...</div>;
 
