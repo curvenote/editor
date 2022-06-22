@@ -15,6 +15,15 @@ export const TEST_LINK_SPACE =
 export const TEST_LINK_COMMON_SPACE =
   /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 
+export function validateUrl(url: string) {
+  try {
+    const temp = new URL(url);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+
 export const testLink = (possibleLink: string) => {
   const match = TEST_LINK.exec(possibleLink);
   return Boolean(match);

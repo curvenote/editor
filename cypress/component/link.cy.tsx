@@ -1,11 +1,5 @@
-// describe('link.cy.ts', () => {
-//   it('playground', () => {
-//     // cy.mount()
-//   })
-// })
-
 import React from 'react';
-import { render, act, assertElExists, prettyDOM, delay } from './utils';
+import { render, act, assertElExists, delay } from './utils';
 import userEvent from '@testing-library/user-event';
 import { createStore, DemoEditor } from '../../demo/init';
 import {
@@ -14,15 +8,10 @@ import {
   selectEditorView,
 } from '../../src/store/actions';
 import { CommandNames } from '../../src/store/suggestion/commands';
-import { getEditorState, getEditorView } from '../../src/store/selectors';
-import { Selection, SelectionRange, TextSelection } from 'prosemirror-state';
+import { TextSelection } from 'prosemirror-state';
 import { setTextSelection } from 'prosemirror-utils';
-import { isEditable } from '../../src';
 
-// jest.useFakeTimers();
-// jest.mock('../src/store/suggestion/results/emoji.json', () => ({}));
-
-// TODO: abstract these
+// TODO: abstract these they are copy pasted from demo since the setup logic is shared
 const stateKey = 'myEditor';
 const viewId1 = 'view1';
 const docId = 'docId';
@@ -35,7 +24,6 @@ describe('links', () => {
       <DemoEditor content='<a href="https://curvenote.com">curvenote.com</a>"' />,
     );
     const [target] = getAllByText('curvenote.com');
-    console.log(target);
     expect(target).to.be.any;
     expect(target.getAttribute('href')).to.equal('https://curvenote.com');
     expect(target.getAttribute('target')).to.equal('_blank');
@@ -79,10 +67,10 @@ describe('links', () => {
     expect(queryByText('Edit Link')?.innerHTML).to.equal('Edit Link');
   });
   describe('edit link', () => {
-    async function selectLink() {
+    async function selectLink(url = TARGET_URL) {
       const store = createStore();
       const result = render(
-        <DemoEditor content={`<a href="${TARGET_URL}">${LINK_TEXT}</a>`} store={store} />,
+        <DemoEditor content={`<a href="${url}">${LINK_TEXT}</a>`} store={store} />,
       );
 
       await act(async () => {
@@ -98,8 +86,8 @@ describe('links', () => {
       assertElExists(link);
     });
 
-    async function focusOnUrlEdit() {
-      const { queryByLabelText, queryByRole, ...rest } = await selectLink();
+    async function focusOnUrlEdit(url?: string) {
+      const { queryByLabelText, queryByRole, ...rest } = await selectLink(url);
       const link = queryByLabelText('edit link inline');
       const linkExists = assertElExists(link);
       if (!linkExists) return;
@@ -119,33 +107,59 @@ describe('links', () => {
       input.focus();
       return { input, ...rest };
     }
-    it('should enable edit random url', async () => {
-      const result = await focusOnUrlEdit();
-      await userEvent.keyboard('random url hehe{Enter}');
-      cy.get('input').should('not.exist');
-    });
+    describe('handling random url', () => {
+      const RANDOM_URL_INPUT = 'random url hehe';
+      it('should show warning if url is invalid', async () => {
+        const result = await focusOnUrlEdit();
+        await userEvent.keyboard(`${RANDOM_URL_INPUT}`);
+        const saveButton = document
+          .querySelector('[title="URL may be invalid"]')
+          ?.querySelector('button')
+          ?.querySelector('svg');
+        const exists = assertElExists(saveButton);
+        if (!exists) return;
+        expect(getComputedStyle(saveButton).color).to.equal('rgb(244, 67, 54)'); // TODO: dig this up from theme colors
+      });
 
-    it('should update doc based on url change', async () => {
-      const result = await focusOnUrlEdit();
-      await userEvent.keyboard('random url here{Enter}');
+      it('should allow submit if input random url', async () => {
+        await focusOnUrlEdit();
+        await userEvent.keyboard(`${RANDOM_URL_INPUT}{Enter}`);
+        cy.get('input').should('not.exist');
+      });
 
-      expect(result?.container.querySelector('[href="http://testlink.comrandom url here"]')).to.be
-        .ok;
+      it('should update doc based on url change', async () => {
+        const result = await focusOnUrlEdit();
+        await userEvent.keyboard('random url here{Enter}');
+
+        assertElExists(
+          result?.container.querySelector('[href="http://testlink.comrandom url here"]'),
+        );
+      });
+
+      it('should handle mailto url ', async () => {
+        const result = await focusOnUrlEdit('');
+        await userEvent.keyboard('mailTo:test@hello.com{Enter}');
+
+        assertElExists(result?.container.querySelector('[href="mailTo:test@hello.com"]'));
+      });
     });
   });
-  it('should autogenerate link as typing', async () => {
-    const store = createStore();
-    const result = render(<DemoEditor content={`<p></p>`} store={store} />);
-    await act(async () => {
-      (result.container.querySelector('.ProseMirror') as HTMLDivElement).focus();
-      store.dispatch(selectEditorView(viewId1));
-      store.dispatch(applyProsemirrorTransaction(stateKey, viewId1, setTextSelection(1)));
-    });
 
-    await act(async () => {
-      await userEvent.keyboard('nah.com ');
-    });
+  describe('autho generate url as typing', () => {
+    it('should autogenerate link as typing', async () => {
+      const store = createStore();
+      const result = render(<DemoEditor content={`<p></p>`} store={store} />);
+      await act(async () => {
+        (result.container.querySelector('.ProseMirror') as HTMLDivElement).focus();
+        store.dispatch(selectEditorView(viewId1));
+        store.dispatch(applyProsemirrorTransaction(stateKey, viewId1, setTextSelection(1)));
+      });
 
-    expect(result.container.querySelector('a[href="nah.com"')).to.be.ok;
+      await act(async () => {
+        await userEvent.keyboard('nah.com ');
+      });
+
+      expect(result.container.querySelector('a[href="nah.com"')).to.be.ok;
+    });
   });
 });

@@ -23,7 +23,12 @@ export function delay(duration = 0) {
   });
 }
 
-export function assertElExists<T>(el: T): el is typeof el extends null ? never : T {
+export function assertElExists<T>(
+  el: T,
+): el is typeof el extends null ? never : typeof el extends undefined ? never : T {
   expect(el).to.be.ok;
+  if (el instanceof Element) {
+    expect(el.isConnected).to.be.true;
+  }
   return !!el;
 }

@@ -8,8 +8,7 @@ import {
   getLinkBoundsIfTheyExist,
   removeMark,
   switchLinkType,
-  testLink,
-  testLinkWeak,
+  validateUrl,
 } from '../../store/actions';
 import { ActionProps } from './utils';
 import { getEditorState } from '../../store/state/selectors';
@@ -32,6 +31,15 @@ const useStyles = makeStyles(() =>
   }),
 );
 
+function normalizeUrl(url: string) {
+  const target = url.toLowerCase();
+  if (target.startsWith('mailto:')) {
+    return url;
+  }
+  // prepend http if no protocol
+  return /^(?:ftp|https?|file)/.test(target) ? url : `http://${url}`;
+}
+
 export function useLinkActions(stateId: any, viewId: string | null) {
   const dispatch = useDispatch<Dispatch>();
   const state = useSelector((s: State) => getEditorState(s, stateId)?.state);
@@ -49,7 +57,7 @@ export function useLinkActions(stateId: any, viewId: string | null) {
   const onEdit = useCallback(
     (newHref: string) => {
       if (!newHref || !linkBounds || !state || !mark) return;
-      const link = mark.create({ href: testLink(newHref) ? newHref : `http://${newHref}` });
+      const link = mark.create({ href: normalizeUrl(newHref) });
       const tr = state.tr
         .removeMark(linkBounds.from, linkBounds.to, mark)
         .addMark(linkBounds.from, linkBounds.to, link);
@@ -83,12 +91,14 @@ function LinkActions(props: ActionProps) {
     return (
       <TextAction
         text={attrs?.href ?? ''}
+        enableSubmitIfInvalid
         onCancel={() => setLabelOpen(false)}
         onSubmit={(t) => {
           onEdit(t);
           setLabelOpen(false);
         }}
-        help="Please provide a valid URL"
+        validate={validateUrl}
+        help="URL may be invalid"
       />
     );
   }
