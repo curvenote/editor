@@ -6,3 +6,4 @@ emoji.json
 yalc.lock
 *.log
 cypress/videos
+cypress/screenshots
