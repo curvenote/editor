@@ -13,7 +13,7 @@ export const TEST_LINK_WEAK =
 export const TEST_LINK_SPACE =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 export const TEST_LINK_COMMON_SPACE =
-  /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+  /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|space|xyz|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 
 export function validateUrl(url: string) {
   try {
@@ -22,6 +22,23 @@ export function validateUrl(url: string) {
     return false;
   }
   return true;
+}
+// used by chromium: https://stackoverflow.com/a/46181/5465086
+export function validateEmail(url: string) {
+  return String(url)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+}
+
+export function normalizeUrl(url: string) {
+  const target = url.toLowerCase();
+  if (target.startsWith('mailto:')) {
+    return url;
+  }
+  // prepend http if no protocol
+  return /^(?:ftp|https?|file)/.test(target) ? url : `http://${url}`;
 }
 
 export const testLink = (possibleLink: string) => {

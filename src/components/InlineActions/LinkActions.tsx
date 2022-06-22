@@ -6,6 +6,7 @@ import MenuIcon from '../Menu/Icon';
 import {
   applyProsemirrorTransaction,
   getLinkBoundsIfTheyExist,
+  normalizeUrl,
   removeMark,
   switchLinkType,
   validateUrl,
@@ -30,15 +31,6 @@ const useStyles = makeStyles(() =>
     },
   }),
 );
-
-function normalizeUrl(url: string) {
-  const target = url.toLowerCase();
-  if (target.startsWith('mailto:')) {
-    return url;
-  }
-  // prepend http if no protocol
-  return /^(?:ftp|https?|file)/.test(target) ? url : `http://${url}`;
-}
 
 export function useLinkActions(stateId: any, viewId: string | null) {
   const dispatch = useDispatch<Dispatch>();
