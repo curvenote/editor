@@ -20,6 +20,9 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
       - run: yarn install
       - run: yarn run emoji
-      - run: yarn test
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          test: yarn test
       - run: yarn run lint
       - run: yarn run lint:format
