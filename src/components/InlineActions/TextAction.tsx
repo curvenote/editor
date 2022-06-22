@@ -17,7 +17,7 @@ const useStyles = makeStyles(() =>
 type Props = {
   text: string;
   help: string;
-  validate: (text: string) => boolean | Promise<boolean>;
+  validate?: (text: string) => boolean | Promise<boolean>;
   onSubmit: (text: string) => void;
   onChange?: (text: string) => void; // eslint-disable-line
   onCancel: () => void;
@@ -34,6 +34,12 @@ function TextAction(props: Props) {
   const updateText: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const t = e.currentTarget.value;
+      if (!validate) {
+        setValid(true);
+        setText(t);
+        onChange?.(t);
+        return;
+      }
       setLoading(true);
       setCurrent(t);
       onChange?.(t);
@@ -62,6 +68,7 @@ function TextAction(props: Props) {
         onChange={updateText}
         onKeyDownCapture={(e) => {
           if (e.key === 'Enter') {
+            console.log('Enter!!!!!!!!!!!!!!!!!!!!!!!!', e.key);
             if (!valid || loading) return;
             e.stopPropagation();
             e.preventDefault();

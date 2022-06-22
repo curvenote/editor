@@ -113,8 +113,11 @@ function LinkActions(props: ActionProps) {
       <MenuIcon kind="divider" />
       <Tooltip title={link.tooltip}>
         <Button
+          aria-label="edit link inline"
           className={classes.button}
-          onClick={() => setLabelOpen(true)}
+          onClick={() => {
+            setLabelOpen(true);
+          }}
           size="small"
           disableElevation
         >

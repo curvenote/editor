@@ -6,5 +6,6 @@ window.crypto = {
   },
 };
 window.ResizeObserver = jest.fn().mockImplementation(function MockedResixeObserver() {
-  this.obsever = jest.fn();
+  this.observe = jest.fn();
+  this.disconnect = jest.fn();
 });

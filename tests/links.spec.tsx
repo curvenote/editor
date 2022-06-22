@@ -1,20 +1,28 @@
 import React from 'react';
-// import { prettyDOM, render } from '@testing-library/react';
-import { render, act, prettyDOM, waitFor } from './utils';
+import { render, act, assertElExists, prettyDOM } from './utils';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { createStore, DemoEditor } from '../demo/init';
-import { applyProsemirrorTransaction, executeCommand } from '../src/store/actions';
+import {
+  applyProsemirrorTransaction,
+  executeCommand,
+  selectEditorView,
+} from '../src/store/actions';
 import { CommandNames } from '../src/store/suggestion/commands';
 import { getEditorState, getEditorView } from '../src/store/selectors';
 import { Selection, SelectionRange, TextSelection } from 'prosemirror-state';
 import { setTextSelection } from 'prosemirror-utils';
 import { isEditable } from '../src';
 
+jest.useFakeTimers();
+jest.mock('../src/store/suggestion/results/emoji.json', () => ({}));
+
 // TODO: abstract these
 const stateKey = 'myEditor';
 const viewId1 = 'view1';
 const docId = 'docId';
+const TARGET_URL = 'testlink.com';
+const LINK_TEXT = 'linktext';
 
 describe('links', () => {
   test('should render curvenote link with the correct attributes', () => {
@@ -33,13 +41,9 @@ describe('links', () => {
     // TODO: move this to render method?
     window.prompt = jest.fn();
 
-    const TARGET_URL = 'testlink.com';
-    const LINK_TEXT = 'linktext';
     (window.prompt as jest.Mock).mockReturnValue(TARGET_URL);
     const store = createStore();
-    const { container, getAllByText, findAllByAltText } = render(
-      <DemoEditor content={`<p>${LINK_TEXT}</p>`} store={store} />,
-    );
+    const { container } = render(<DemoEditor content={`<p>${LINK_TEXT}</p>`} store={store} />);
     act(() => {
       store.dispatch(
         applyProsemirrorTransaction(stateKey, viewId1, (tr, view) => {
@@ -59,5 +63,54 @@ describe('links', () => {
     expect(target?.innerHTML).toBe(LINK_TEXT);
 
     (window.prompt as any) = null;
+  });
+
+  test('should have edit link button when link is selected', async () => {
+    const store = createStore();
+    const { queryByText } = render(
+      <DemoEditor content={`<a href="${TARGET_URL}">${LINK_TEXT}</a>`} store={store} />,
+    );
+
+    await act(async () => {
+      store.dispatch(selectEditorView(viewId1));
+      store.dispatch(applyProsemirrorTransaction(stateKey, viewId1, setTextSelection(4)));
+      jest.runAllTimers();
+    });
+
+    expect(queryByText('Edit Link')).toBeInTheDocument();
+  });
+  describe('edit link', () => {
+    test('should enable edit link when click on edit link button', async () => {
+      const store = createStore();
+      const { container, queryByLabelText, queryByRole } = render(
+        <DemoEditor content={`<a href="${TARGET_URL}">${LINK_TEXT}</a>`} store={store} />,
+      );
+
+      await act(async () => {
+        store.dispatch(selectEditorView(viewId1));
+        store.dispatch(applyProsemirrorTransaction(stateKey, viewId1, setTextSelection(4)));
+        jest.runAllTimers();
+      });
+
+      const link = queryByLabelText('edit link inline');
+      if (!link) return;
+      console.log('link', prettyDOM(link));
+      await act(async () => {
+        await userEvent.click(link, { delay: null });
+      });
+
+      const tooltip = queryByRole('tooltip');
+      const tooltipExists = assertElExists(tooltip);
+      if (tooltipExists) {
+        console.log(prettyDOM(tooltip));
+        const input = tooltip.querySelector('input');
+        const inputExists = assertElExists(input);
+        if (inputExists) {
+          input.focus();
+          await userEvent.keyboard('random url hehe{Enter}', { delay: null });
+          expect(input).not.toBeInTheDocument();
+        }
+      }
+    });
   });
 });
