@@ -142,6 +142,13 @@ describe('links', () => {
 
         assertElExists(result?.container.querySelector('[href="mailTo:test@hello.com"]'));
       });
+
+      it('should handle mailto url ', async () => {
+        const result = await focusOnUrlEdit('');
+        await userEvent.keyboard('ftp:somewhere.com{Enter}');
+
+        assertElExists(result?.container.querySelector('[href="ftp:somewhere.com"]'));
+      });
     });
   });
 
