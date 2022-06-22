@@ -210,7 +210,7 @@ describe('generate link while typing', () => {
     await shouldGenerateLink('test.md', true);
   });
 
-  it('should pickup email address', async () => {
+  it('should pickup email address and prepend mailto: to href', async () => {
     const mailToUrl = 'mailto:someone@somewhere.com';
     await shouldGenerateLink('someone@somewhere.com', true, mailToUrl);
   });
