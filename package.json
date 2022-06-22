@@ -28,7 +28,7 @@
     "prepublishOnly": "yarn run build; yarn run css;",
     "css": "sass styles/index.scss dist/editor.css",
     "css:watch": "sass --watch styles/index.scss dist/editor.css",
-    "test:cy": "cypress run --component",
+    "test": "cypress run --component",
     "cy": "cypress open",
     "test:watch": "jest --watchAll",
     "test:clear": "jest --clearCache",
