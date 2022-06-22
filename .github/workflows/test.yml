@@ -26,5 +26,8 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           component: true
+          quiet: true
+          reporter: json
+          record: false
       - run: yarn run lint
       - run: yarn run lint:format
