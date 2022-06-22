@@ -6,10 +6,6 @@ import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';
 
-export const TEST_LINK =
-  /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
-export const TEST_LINK_WEAK =
-  /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export const TEST_LINK_SPACE =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 export const TEST_LINK_COMMON_SPACE =
@@ -41,19 +37,10 @@ export function normalizeUrl(url: string) {
   return /^(?:ftp|https?|file)/.test(target) ? url : `http://${url}`;
 }
 
-export const testLink = (possibleLink: string) => {
-  const match = TEST_LINK.exec(possibleLink);
-  return Boolean(match);
-};
-export const testLinkWeak = (possibleLink: string) => {
-  const match = TEST_LINK_WEAK.exec(possibleLink);
-  return Boolean(match);
-};
-
 export const addLink = (view: EditorView, data: DataTransfer | null) => {
   // TODO: This should allow html if it exists. And not match mutliple URLs.
   const href = data?.getData('text/plain') ?? '';
-  if (!testLink(href)) return false;
+  if (!validateUrl(href)) return false;
   const { schema } = view.state;
   const node = schema.text(href, [schema.marks.link.create({ href })]);
   const tr = view.state.tr.replaceSelectionWith(node, false).scrollIntoView();
