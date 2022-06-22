@@ -195,10 +195,10 @@ describe('generate link while typing', () => {
     await shouldGenerateLink('sub.test.xyz', true);
   });
 
-  it.skip('should pickup curve.space', async () => {
+  it('should pickup curve.space', async () => {
     await shouldGenerateLink('curve.space', true);
   });
-  it.skip('should not pickup index.md', async () => {
+  it('should not pickup index.md', async () => {
     await shouldGenerateLink('index.md', false);
   });
 
@@ -207,7 +207,7 @@ describe('generate link while typing', () => {
   });
 
   it('should pickup text starting with protocol event tho the link seems unacceptable http://test.md', async () => {
-    await shouldGenerateLink('test.md', true);
+    await shouldGenerateLink('http://test.md', true, 'http://test.md');
   });
 
   it('should pickup email address and prepend mailto: to href', async () => {
