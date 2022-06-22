@@ -20,6 +20,6 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
       - run: yarn install
       - run: yarn run emoji
-      - run: yarn test
+      - run: yarn test:cy
       - run: yarn run lint
       - run: yarn run lint:format
