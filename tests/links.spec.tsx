@@ -80,9 +80,9 @@ describe('links', () => {
     expect(queryByText('Edit Link')).toBeInTheDocument();
   });
   describe('edit link', () => {
-    test('should enable edit link when click on edit link button', async () => {
+    async function selectLink() {
       const store = createStore();
-      const { container, queryByLabelText, queryByRole } = render(
+      const result = render(
         <DemoEditor content={`<a href="${TARGET_URL}">${LINK_TEXT}</a>`} store={store} />,
       );
 
@@ -91,26 +91,48 @@ describe('links', () => {
         store.dispatch(applyProsemirrorTransaction(stateKey, viewId1, setTextSelection(4)));
         jest.runAllTimers();
       });
-
+      return result;
+    }
+    test('should enable edit link when click on edit link button', async () => {
+      const { queryByLabelText, queryByRole } = await selectLink();
       const link = queryByLabelText('edit link inline');
-      if (!link) return;
-      console.log('link', prettyDOM(link));
+      assertElExists(link);
+    });
+
+    async function focusOnUrlEdit() {
+      const { queryByLabelText, queryByRole, ...rest } = await selectLink();
+      const link = queryByLabelText('edit link inline');
+      const linkExists = assertElExists(link);
+      if (!linkExists) return;
+
       await act(async () => {
         await userEvent.click(link, { delay: null });
       });
 
       const tooltip = queryByRole('tooltip');
       const tooltipExists = assertElExists(tooltip);
-      if (tooltipExists) {
-        console.log(prettyDOM(tooltip));
-        const input = tooltip.querySelector('input');
-        const inputExists = assertElExists(input);
-        if (inputExists) {
-          input.focus();
-          await userEvent.keyboard('random url hehe{Enter}', { delay: null });
-          expect(input).not.toBeInTheDocument();
-        }
-      }
+      if (!tooltipExists) return;
+
+      const input = tooltip.querySelector('input');
+      const inputExists = assertElExists(input);
+      if (!inputExists) return;
+
+      input.focus();
+      return { input, ...rest };
+    }
+    test('should enable edit random url', async () => {
+      const result = await focusOnUrlEdit();
+      await userEvent.keyboard('random url hehe{Enter}', { delay: null });
+      expect(result?.input).not.toBeInTheDocument();
+    });
+
+    test('should update doc based on url change', async () => {
+      const result = await focusOnUrlEdit();
+      await userEvent.keyboard('random url here{Enter}', { delay: null });
+
+      expect(
+        result?.container.querySelector('[href="http://testlink.comrandom url here"]'),
+      ).toBeInTheDocument();
     });
   });
 });

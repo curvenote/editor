@@ -37,6 +37,7 @@ function TextAction(props: Props) {
       if (!validate) {
         setValid(true);
         setText(t);
+        setCurrent(t);
         onChange?.(t);
         return;
       }
@@ -68,7 +69,6 @@ function TextAction(props: Props) {
         onChange={updateText}
         onKeyDownCapture={(e) => {
           if (e.key === 'Enter') {
-            console.log('Enter!!!!!!!!!!!!!!!!!!!!!!!!', e.key);
             if (!valid || loading) return;
             e.stopPropagation();
             e.preventDefault();

@@ -88,7 +88,6 @@ function LinkActions(props: ActionProps) {
           onEdit(t);
           setLabelOpen(false);
         }}
-        validate={testLinkWeak}
         help="Please provide a valid URL"
       />
     );
