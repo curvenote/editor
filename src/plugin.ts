@@ -106,7 +106,7 @@ export function getDecorationPlugin(opts?: Options) {
         return stepOutsideNextTrAndPass(view, plugin, 'click');
       },
     },
-  } as PluginSpec);
+  } as PluginSpec<CodemarkState>);
   return plugin;
 }
 

@@ -6,7 +6,8 @@
   },
   "extends": [
     "eslint:recommended",
-    "airbnb-typescript",
+    "airbnb-base",
+    "airbnb-typescript/base",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
@@ -19,7 +20,7 @@
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
-    "project": ["./tsconfig.json"]
+    "project": ["./src/tsconfig.json"]
   },
   "plugins": ["@typescript-eslint", "no-skip-tests", "no-only-tests"],
   "rules": {

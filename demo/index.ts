@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { DOMParser } from 'prosemirror-model';
