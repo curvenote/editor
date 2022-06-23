@@ -8,11 +8,8 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './dist',
+    static: './dist',
     port: process.env.PORT,
-    before(app) {
-      app.use('/images', express.static(path.resolve('images')));
-    },
   },
   optimization: {
     usedExports: true,

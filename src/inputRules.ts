@@ -155,6 +155,6 @@ export function createInputRule(cursorPlugin: Plugin, opts?: Options) {
         return run(markType, view, from, to, text, { input: plugin, cursor: cursorPlugin });
       },
     },
-  } as PluginSpec);
+  } as PluginSpec<InputRuleState>);
   return plugin;
 }
