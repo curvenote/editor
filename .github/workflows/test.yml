@@ -25,7 +25,6 @@ jobs:
         with:
           component: true
           quiet: true
-          reporter: json
           record: false
       - run: yarn run lint
       - run: yarn run lint:format
