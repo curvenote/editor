@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
-import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist, removeMark, switchLinkType, testLink, testLinkWeak, } from '../../store/actions';
+import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist, normalizeUrl, removeMark, switchLinkType, validateUrl, } from '../../store/actions';
 import { getEditorState } from '../../store/state/selectors';
 import TextAction from './TextAction';
 import { LinkTypeSelect } from './LinkTypeSelect';
@@ -36,7 +36,7 @@ export function useLinkActions(stateId, viewId) {
     var onEdit = useCallback(function (newHref) {
         if (!newHref || !linkBounds || !state || !mark)
             return;
-        var link = mark.create({ href: testLink(newHref) ? newHref : "http://".concat(newHref) });
+        var link = mark.create({ href: normalizeUrl(newHref) });
         var tr = state.tr
             .removeMark(linkBounds.from, linkBounds.to, mark)
             .addMark(linkBounds.from, linkBounds.to, link);
@@ -63,10 +63,10 @@ function LinkActions(props) {
         return null;
     var attrs = link.attrs, onEdit = link.onEdit, onOpen = link.onOpen, onDelete = link.onDelete;
     if (labelOpen) {
-        return (React.createElement(TextAction, { text: (_a = attrs === null || attrs === void 0 ? void 0 : attrs.href) !== null && _a !== void 0 ? _a : '', onCancel: function () { return setLabelOpen(false); }, onSubmit: function (t) {
+        return (React.createElement(TextAction, { text: (_a = attrs === null || attrs === void 0 ? void 0 : attrs.href) !== null && _a !== void 0 ? _a : '', enableSubmitIfInvalid: true, onCancel: function () { return setLabelOpen(false); }, onSubmit: function (t) {
                 onEdit(t);
                 setLabelOpen(false);
-            }, validate: testLinkWeak, help: "Please provide a valid URL" }));
+            }, validate: validateUrl, help: "URL may be invalid" }));
     }
     if (!viewId || !stateId || !attrs)
         return null;
@@ -79,7 +79,9 @@ function LinkActions(props) {
                 } })),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(Tooltip, { title: link.tooltip },
-            React.createElement(Button, { className: classes.button, onClick: function () { return setLabelOpen(true); }, size: "small", disableElevation: true }, "Edit Link")),
+            React.createElement(Button, { "aria-label": "edit link inline", className: classes.button, onClick: function () {
+                    setLabelOpen(true);
+                }, size: "small", disableElevation: true }, "Edit Link")),
         React.createElement(MenuIcon, { kind: "divider" }),
         React.createElement(MenuIcon, { kind: "open", onClick: onOpen }),
         React.createElement(MenuIcon, { kind: "divider" }),

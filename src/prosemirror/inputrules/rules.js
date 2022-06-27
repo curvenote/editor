@@ -1,7 +1,7 @@
 import { InputRule, wrappingInputRule, textblockTypeInputRule, smartQuotes, } from 'prosemirror-inputrules';
 import { createId } from '@curvenote/schema';
 import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
-import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
+import { normalizeUrl, TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE, validateEmail, } from '../../store/actions/utils';
 import { LanguageNames } from '../../views/types';
 export var quotes = function (schema) { return smartQuotes; };
 export var ellipsis = function (schema) { return [new InputRule(/\.\.\.$/, '…')]; };
@@ -48,13 +48,20 @@ export var copyright = function (schema) { return [
     new InputRule(/(\(c\)\s)$/, '© '),
     new InputRule(/(\(r\)\s)$/, '® '),
 ]; };
+function normalize(match) {
+    var url = match[0].slice(0, -1);
+    if (validateEmail(url)) {
+        return { href: "mailto:".concat(url), text: url };
+    }
+    return { href: normalizeUrl(url) };
+}
 export var link = function (schema) { return [
     markInputRule(TEST_LINK_SPACE, schema.marks.link, {
-        getAttrs: function (match) { return ({ href: match[0].slice(0, -1) }); },
+        getAttrs: normalize,
         addSpace: true,
     }),
     markInputRule(TEST_LINK_COMMON_SPACE, schema.marks.link, {
-        getAttrs: function (match) { return ({ href: match[0].slice(0, -1) }); },
+        getAttrs: normalize,
         addSpace: true,
     }),
 ]; };

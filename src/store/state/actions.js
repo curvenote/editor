@@ -40,12 +40,15 @@ export function applyProsemirrorTransaction(stateKey, viewId, tr, focus) {
     if (focus === void 0) { focus = false; }
     return function (dispatch, getState) {
         var view = getEditorView(getState(), viewId).view;
-        if (view) {
-            view.dispatch(tr);
+        if (view && view.state) {
+            var transact = typeof tr === 'function' ? tr(view.state.tr, view) : tr;
+            view.dispatch(transact);
             if (focus)
                 view.focus();
             return true;
         }
+        if (typeof tr === 'function')
+            return true;
         var editor = getEditorState(getState(), stateKey);
         if (editor.state == null)
             return true;

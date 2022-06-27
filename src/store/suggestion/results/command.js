@@ -55,7 +55,7 @@ import { LanguageNames } from '../../../views/types';
 import { selectSuggestionState } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandNames } from '../commands';
-import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
+import { createFigure, getLinkBoundsIfTheyExist, normalizeUrl } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
@@ -241,7 +241,7 @@ export function executeCommand(command, viewOrId, removeText, replace) {
                         if (!href)
                             return [2, false];
                         _c = view.state.selection, from = _c.from, to = _c.to;
-                        view.dispatch(view.state.tr.addMark(from, to, schema.marks.link.create({ href: href })));
+                        view.dispatch(view.state.tr.addMark(from, to, schema.marks.link.create({ href: normalizeUrl(href) })));
                         return [2, true];
                     }
                     _g.label = 6;

@@ -2,10 +2,11 @@
 declare type Props = {
     text: string;
     help: string;
-    validate: (text: string) => boolean | Promise<boolean>;
+    validate?: (text: string) => boolean | Promise<boolean>;
     onSubmit: (text: string) => void;
     onChange?: (text: string) => void;
     onCancel: () => void;
+    enableSubmitIfInvalid?: boolean;
 };
 declare function TextAction(props: Props): JSX.Element;
 export default TextAction;

@@ -3,12 +3,12 @@ import { EditorState, Transaction } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 import { Node, Schema } from 'prosemirror-model';
-export declare const TEST_LINK: RegExp;
-export declare const TEST_LINK_WEAK: RegExp;
 export declare const TEST_LINK_SPACE: RegExp;
 export declare const TEST_LINK_COMMON_SPACE: RegExp;
-export declare const testLink: (possibleLink: string) => boolean;
-export declare const testLinkWeak: (possibleLink: string) => boolean;
+export declare const TEST_LINK_COMMON: RegExp;
+export declare function validateUrl(url: string): boolean;
+export declare function validateEmail(url: string): RegExpMatchArray | null;
+export declare function normalizeUrl(url: string): string;
 export declare const addLink: (view: EditorView, data: DataTransfer | null) => boolean;
 export declare function updateNodeAttrsOnView(view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;

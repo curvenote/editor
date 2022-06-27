@@ -14,22 +14,37 @@ import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment } from 'prosemirror-model';
 import { opts } from '../../connect';
-export var TEST_LINK = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
-export var TEST_LINK_WEAK = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))$/;
 export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
-export var TEST_LINK_COMMON_SPACE = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[com|org|app|dev|io|net|gov|edu]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
-export var testLink = function (possibleLink) {
-    var match = TEST_LINK.exec(possibleLink);
-    return Boolean(match);
-};
-export var testLinkWeak = function (possibleLink) {
-    var match = TEST_LINK_WEAK.exec(possibleLink);
-    return Boolean(match);
-};
+export var TEST_LINK_COMMON_SPACE = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+export var TEST_LINK_COMMON = /^[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
+export function validateUrl(url) {
+    try {
+        var temp = new URL(url);
+    }
+    catch (e) {
+        return false;
+    }
+    return true;
+}
+export function validateEmail(url) {
+    return String(url)
+        .toLowerCase()
+        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+}
+export function normalizeUrl(url) {
+    var target = url.toLowerCase();
+    if (target.startsWith('mailto:'))
+        return url;
+    if (/^(?:ftp|https?|file):\/\//.test(target))
+        return url;
+    if (TEST_LINK_COMMON.test(url))
+        return "http://".concat(url);
+    return url;
+}
 export var addLink = function (view, data) {
     var _a;
     var href = (_a = data === null || data === void 0 ? void 0 : data.getData('text/plain')) !== null && _a !== void 0 ? _a : '';
-    if (!testLink(href))
+    if (!validateUrl(href))
         return false;
     var schema = view.state.schema;
     var node = schema.text(href, [schema.marks.link.create({ href: href })]);
