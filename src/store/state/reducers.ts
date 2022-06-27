@@ -17,6 +17,7 @@ export const initialState: EditorsState = {
   views: {},
 };
 
+// eslint-disable-next-line @typescript-eslint/default-param-last
 const editorReducer = (state = initialState, action: EditorActionTypes): EditorsState => {
   switch (action.type) {
     case INIT_EDITOR_STATE: {

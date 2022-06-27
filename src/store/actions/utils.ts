@@ -1,8 +1,14 @@
-import { nodeNames, CaptionKind, createId, Nodes, findChildrenWithName } from '@curvenote/schema';
+import {
+  nodeNames,
+  CaptionKind,
+  createId,
+  Nodes,
+  findChildrenWithName,
+  process,
+} from '@curvenote/schema';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
-import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';
 
@@ -15,6 +21,7 @@ export const TEST_LINK_COMMON =
 
 export function validateUrl(url: string) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const temp = new URL(url);
   } catch (e) {
     return false;
@@ -82,7 +89,7 @@ export function createFigure(
   initialFigureState: Partial<Nodes.Figure.Attrs> = {},
 ) {
   const Figure = schema.nodes[nodeNames.figure] as NodeType;
-  const kind = determineCaptionKind(node) ?? CaptionKind.fig;
+  const kind = process.determineCaptionKind(node) ?? CaptionKind.fig;
   const attrs: Nodes.Figure.Attrs = {
     id: createId(),
     label: null,

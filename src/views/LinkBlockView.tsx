@@ -1,16 +1,15 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
 import { NodeViewProps } from './types';
 import createNodeView from './NodeView';
 
 function LinkBlock({ node }: NodeViewProps) {
   const { title, url, description } = node.attrs;
   return (
-    <Box display="flex" flexDirection="column">
-      <Box border="1px solid grey">{url}</Box>
-      <Box border="1px solid grey">{title}</Box>
-      <Box border="1px solid grey">{description}</Box>
-    </Box>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ border: '1px solid grey' }}>{url}</div>
+      <div style={{ border: '1px solid grey' }}>{title}</div>
+      <div style={{ border: '1px solid grey' }}>{description}</div>
+    </div>
   );
 }
 

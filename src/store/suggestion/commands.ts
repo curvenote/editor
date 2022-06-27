@@ -1,4 +1,4 @@
-import { nodeNames } from '@curvenote/schema/dist/types';
+import { nodeNames } from '@curvenote/schema';
 import { isInTable } from 'prosemirror-tables';
 import { hasParentNode } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';

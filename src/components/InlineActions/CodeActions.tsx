@@ -54,7 +54,7 @@ const Select = styled(MuiSelect)(() => ({
   '& .MuiSelect-select': {
     padding: 2,
   },
-}));
+})) as any;
 
 function LanguageSeletionDropdown({
   value,
@@ -68,7 +68,7 @@ function LanguageSeletionDropdown({
     <FormControl fullWidth>
       <Select
         disableUnderline
-        onChange={(e) => {
+        onChange={(e: any) => {
           onChanged(e.target.value as LanguageNames);
         }}
         value={value || SUPPORTED_LANGUAGES[0].name}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { NodeSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
@@ -88,7 +88,7 @@ function isValidUrl(str: string) {
 function LinkBlockActions(props: ActionProps) {
   const { stateId, viewId } = props;
   const [labelOpen, setLabelOpen] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch>();
   const classes = useStyles();
   const link = useLinkBlockActions(stateId, viewId);
   const { attrs, onEdit, onOpen, onDelete, node } = link;
@@ -117,7 +117,7 @@ function LinkBlockActions(props: ActionProps) {
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.grid}>
-      <Box ml={2}>
+      <div style={{ marginLeft: 10 }}>
         <LinkTypeSelect
           value="link-block"
           onChange={(value) => {
@@ -126,7 +126,7 @@ function LinkBlockActions(props: ActionProps) {
             }
           }}
         />
-      </Box>
+      </div>
       <MenuIcon kind="divider" />
       <Tooltip title={link.tooltip}>
         <Button

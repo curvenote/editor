@@ -7,6 +7,7 @@ const initialState: AttributesState = {
 };
 
 const AttributesReducer = (
+  // eslint-disable-next-line @typescript-eslint/default-param-last
   state = initialState,
   action: AttributesActionTypes,
 ): AttributesState => {

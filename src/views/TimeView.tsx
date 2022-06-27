@@ -1,6 +1,6 @@
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
-import { formatDatetime } from '@curvenote/schema/dist/nodes/time';
+import { formatDatetime } from '@curvenote/schema';
 import { GetPos } from './types';
 
 class TimeNodeView {

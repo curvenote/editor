@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
 import { types } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
@@ -75,7 +75,7 @@ function LinkActions(props: ActionProps) {
   const [labelOpen, setLabelOpen] = useState(false);
   const classes = useStyles();
   const link = useLinkActions(stateId, viewId);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch>();
   if (!link) return null;
   const { attrs, onEdit, onOpen, onDelete } = link;
 
@@ -99,7 +99,7 @@ function LinkActions(props: ActionProps) {
 
   return (
     <Grid container alignItems="center" justifyContent="center" className={classes.grid}>
-      <Box ml={2}>
+      <div style={{ marginLeft: 10 }}>
         <LinkTypeSelect
           value="link"
           onChange={(value) => {
@@ -110,7 +110,7 @@ function LinkActions(props: ActionProps) {
             }
           }}
         />
-      </Box>
+      </div>
       <MenuIcon kind="divider" />
       <Tooltip title={link.tooltip}>
         <Button

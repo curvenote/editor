@@ -1,14 +1,14 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType, MarkType, Node } from 'prosemirror-model';
-import { NodeSelection, Selection } from 'prosemirror-state';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { findParentNode } from 'prosemirror-utils';
 
 type GetAttrs =
   | {
-      content?: Node<any>;
+      content?: Node;
       [key: string]: any;
     }
-  | ((p: string[]) => { content?: Node<any>; [key: string]: any });
+  | ((p: string[]) => { content?: Node; [key: string]: any });
 
 // https://discuss.prosemirror.net/t/input-rules-for-wrapping-marks/537/11
 export function markInputRule(
@@ -23,7 +23,7 @@ export function markInputRule(
   return new InputRule(regexp, (state, match, start, end) => {
     // Always give up on the input rules that go into math text...
     const parent = findParentNode((n: Node) => n.type === state.schema.nodes.math)(
-      new Selection(state.doc.resolve(start), state.doc.resolve(end)),
+      TextSelection.create(state.doc, start, end),
     );
     if (parent?.node) return null;
     const { getAttrs, getText, addSpace } = options ?? {};

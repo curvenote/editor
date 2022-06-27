@@ -1,4 +1,4 @@
-import { Node, DOMOutputSpecArray } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { openAttributeEditor } from '../store/attrs/actions';
 import { store } from '../connect';
@@ -33,7 +33,7 @@ class WidgetView {
       },
       true,
     );
-    const widgetTag = (node.type.spec.toDOM?.(node) as DOMOutputSpecArray)?.[0] ?? 'span';
+    const widgetTag = (node.type.spec.toDOM?.(node) as any)?.[0] ?? 'span';
     this.widget = document.createElement(widgetTag);
     this.setAttrs(node);
     this.dom.append(this.widget);
@@ -53,9 +53,9 @@ class WidgetView {
   }
 
   setAttrs(node: Node) {
-    const attrs = (node.type.spec.toDOM?.(node) as DOMOutputSpecArray)?.[1] ?? {};
+    const attrs = (node.type.spec.toDOM?.(node) as any)?.[1] ?? {};
     Object.entries(attrs).forEach(([key, value]) => {
-      this.widget.setAttribute(key, value);
+      this.widget.setAttribute(key, value as string);
     });
   }
 }

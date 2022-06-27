@@ -100,7 +100,7 @@ const getCommentsPlugin = (): Plugin<CommentState> => {
       },
     },
     props: {
-      decorations: (state) => commentsPlugin.getState(state).decorations,
+      decorations: (state) => commentsPlugin.getState(state)?.decorations,
     },
   });
   return commentsPlugin;

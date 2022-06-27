@@ -160,8 +160,8 @@ function createWidget(action: PromptAction) {
   return widget;
 }
 
-export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
-  new Plugin({
+export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin => {
+  const imagePlaceholderPlugin: ImagePlaceholderPlugin = new Plugin({
     key,
     state: {
       init() {
@@ -171,7 +171,7 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
         // Adjust decoration positions to changes made by the transaction
         let set: DecorationSet = setIn.map(tr.mapping, tr.doc);
         // See if the transaction adds or removes any placeholders
-        const action: Action = tr.getMeta(this);
+        const action: Action = tr.getMeta(imagePlaceholderPlugin);
         if (!action) return set;
         if ('add' in action) {
           const widget = document.createElement('div');
@@ -195,18 +195,20 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
     },
     props: {
       decorations(state) {
-        return this.getState(state);
+        return imagePlaceholderPlugin.getState(state);
       },
     },
   });
+  return imagePlaceholderPlugin;
+};
 
 const findImagePlaceholder = (state: EditorState, id: string) => {
   const plugin = key.get(state) as ImagePlaceholderPlugin;
   const decos = plugin.getState(state);
-  const found = decos.find(undefined, undefined, (spec) => {
+  const found = decos?.find(undefined, undefined, (spec) => {
     return spec.id === id;
   });
-  return found.length ? found[0].from : null;
+  return found?.length ? found[0].from : null;
 };
 
 function createImageHandlers(

@@ -28,7 +28,7 @@ const getPromptPlugin = (): Plugin<DecorationSet> => {
     },
     props: {
       decorations(state) {
-        return this.getState(state);
+        return promptPlugin.getState(state);
       },
     },
   });
