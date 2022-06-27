@@ -1,4 +1,4 @@
-import { Plugin, PluginKey, Transaction } from 'prosemirror-state';
+import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state';
 import { isNodeSelection } from 'prosemirror-utils';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
@@ -100,7 +100,7 @@ const getCommentsPlugin = (): Plugin<CommentState> => {
       },
     },
     props: {
-      decorations: (state) => commentsPlugin.getState(state).decorations,
+      decorations: (state: EditorState) => commentsPlugin.getState(state).decorations,
     },
   });
   return commentsPlugin;
