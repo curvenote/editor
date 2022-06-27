@@ -1,10 +1,10 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType, MarkType, Node } from 'prosemirror-model';
 declare type GetAttrs = {
-    content?: Node;
+    content?: Node<any>;
     [key: string]: any;
 } | ((p: string[]) => {
-    content?: Node;
+    content?: Node<any>;
     [key: string]: any;
 });
 export declare function markInputRule(regexp: RegExp, markType: MarkType, options?: {

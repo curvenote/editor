@@ -5,4 +5,4 @@ export declare const selecteSelectedSuggestion: (state: State) => number;
 export declare const isSuggestionSelected: (state: State, index: number) => boolean;
 export declare const isSuggestionOpen: (state: State) => boolean;
 export declare function getSuggestionResults<T = SuggestionResult>(state: State): T[];
-export declare function selectSuggestionView(state: State): import("prosemirror-view").EditorView | null;
+export declare function selectSuggestionView(state: State): import("prosemirror-view").EditorView<any> | null;

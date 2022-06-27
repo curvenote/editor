@@ -16,7 +16,7 @@ export declare type Options = {
     modifyTransaction?: (stateKey: any, viewId: string, state: EditorState, transaction: Transaction) => Transaction;
     getDocId: () => string;
     addComment?: (stateKey: any, state: EditorState) => boolean;
-    onDoubleClick?: (stateKey: any, viewId: string | null, view: EditorView, pos: number, event: MouseEvent) => boolean;
+    onDoubleClick?: (stateKey: any, viewId: string | null, view: EditorView<any>, pos: number, event: MouseEvent) => boolean;
     theme: Theme;
     citationPrompt: () => Promise<Nodes.Cite.Attrs[] | null>;
     createLinkSearch: () => Promise<SearchContext>;

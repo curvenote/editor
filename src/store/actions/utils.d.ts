@@ -13,12 +13,12 @@ export declare const addLink: (view: EditorView, data: DataTransfer | null) => b
 export declare function updateNodeAttrsOnView(view: EditorView | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;
 }, select?: boolean | 'after'): void;
-export declare function createFigureCaption(schema: Schema, kind: CaptionKind, src?: string): Node;
-export declare function createFigure(schema: Schema, node: Node, caption?: boolean, initialFigureState?: Partial<Nodes.Figure.Attrs>): Node;
+export declare function createFigureCaption(schema: Schema, kind: CaptionKind, src?: string): Node<Schema<any, any>>;
+export declare function createFigure(schema: Schema, node: Node, caption?: boolean, initialFigureState?: Partial<Nodes.Figure.Attrs>): Node<any>;
 export declare function selectFirstNodeOfTypeInParent(nodeName: nodeNames | nodeNames[], tr: Transaction, parentPos: number): Transaction;
 export declare function insertParagraphAndSelect(schema: Schema, tr: Transaction, side: number): Transaction<any>;
 export declare function getLinkBoundsIfTheyExist(state?: EditorState | null, pos?: number): {
-    from: any;
-    to: any;
-    mark: any;
+    from: number;
+    to: number;
+    mark: import("prosemirror-model").Mark<any>;
 } | null;
