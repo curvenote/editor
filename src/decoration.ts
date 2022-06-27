@@ -124,7 +124,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
       },
     },
     props: {
-      decorations: (state) => plugin.getState(state).decorations,
+      decorations: (state) => plugin.getState(state)?.decorations,
       handlePaste: (view) => cancelIfInsideAndPass(view),
       handleDrop: (view) => cancelIfInsideAndPass(view),
       handleKeyDown(view, event) {
