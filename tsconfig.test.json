@@ -1,8 +1,8 @@
 {
-	"extends": "./tsconfig.json",
-	"compilerOptions": {
-		"allowJs": true,
-		"resolveJsonModule": true,
-	},
-	"include": ["test/**/*", "src/**/*", "src/global.d.ts", "demo/**/*"]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "include": ["test/**/*", "src/**/*", "src/global.d.ts", "demo/**/*"]
 }
