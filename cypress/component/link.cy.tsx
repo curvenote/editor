@@ -47,7 +47,7 @@ it('should create link through link command', async () => {
     store.dispatch(executeCommand(CommandNames.link, viewId1));
   });
   const docEl = container.querySelector('.ProseMirror');
-  const target = docEl?.querySelector(`a[href="${TARGET_URL}"]`);
+  const target = docEl?.querySelector(`a[href="http://${TARGET_URL}"]`);
   expect(target?.innerHTML).to.equal(LINK_TEXT);
 });
 
@@ -130,24 +130,24 @@ describe('inline edit', () => {
     it('should update doc based on url change', async () => {
       const result = await focusOnUrlEdit();
       await userEvent.keyboard('random url here{Enter}');
-
-      assertElExists(
-        result?.container.querySelector('[href="http://testlink.comrandom url here"]'),
-      );
+      assertElExists(result?.container.querySelector('[href="testlink.comrandom url here"]'));
     });
 
     it('should handle mailto url ', async () => {
       const result = await focusOnUrlEdit('');
       await userEvent.keyboard('mailTo:test@hello.com{Enter}');
-
       assertElExists(result?.container.querySelector('[href="mailTo:test@hello.com"]'));
     });
 
     it('should handle file: protocol ', async () => {
       const result = await focusOnUrlEdit('');
-      await userEvent.keyboard('ftp:somewhere.com{Enter}');
-
-      assertElExists(result?.container.querySelector('[href="ftp:somewhere.com"]'));
+      await userEvent.keyboard('file:///users/my/file.md{Enter}');
+      assertElExists(result?.container.querySelector('[href="file:///users/my/file.md"]'));
+    });
+    it('should handle ftp: protocol ', async () => {
+      const result = await focusOnUrlEdit('');
+      await userEvent.keyboard('ftp://somewhere.com{Enter}');
+      assertElExists(result?.container.querySelector('[href="ftp://somewhere.com"]'));
     });
   });
 });

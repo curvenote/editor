@@ -10,6 +10,8 @@ export const TEST_LINK_SPACE =
   /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
 export const TEST_LINK_COMMON_SPACE =
   /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+export const TEST_LINK_COMMON =
+  /^[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
 
 export function validateUrl(url: string) {
   try {
@@ -30,11 +32,11 @@ export function validateEmail(url: string) {
 
 export function normalizeUrl(url: string) {
   const target = url.toLowerCase();
-  if (target.startsWith('mailto:')) {
-    return url;
-  }
-  // prepend http if no protocol
-  return /^(?:ftp|https?|file)/.test(target) ? url : `http://${url}`;
+  if (target.startsWith('mailto:')) return url;
+  if (/^(?:ftp|https?|file):\/\//.test(target)) return url;
+  // prepend http if no protocol and a common url
+  if (TEST_LINK_COMMON.test(url)) return `http://${url}`;
+  return url;
 }
 
 export const addLink = (view: EditorView, data: DataTransfer | null) => {
