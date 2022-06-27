@@ -358,16 +358,16 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.2"
 
-"@curvenote/schema@0.12.13":
-  version "0.12.13"
-  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.12.13.tgz#7b47d3415302bc79de4da7273be8519769e2ed31"
-  integrity sha512-519WdZcXYloaLVgTl5PjYTR6faiZMb54fudFLwxJphHNImftHYwPb0bw3o0oIBlUs5yzNCKv4PFJcw25FI/QAw==
+"@curvenote/schema@0.12.15":
+  version "0.12.15"
+  resolved "https://registry.yarnpkg.com/@curvenote/schema/-/schema-0.12.15.tgz#af1d12e68a8a3b6f2432cdbd0ea44750e7bb5ce2"
+  integrity sha512-bw69i3B+5ALn6wrG7omlObnWNYAoJ8A2m3D2qYFBJF465lqSXxRVWvXctnffPWr18LtpHGEHhZbiCZ/kV9yJbA==
   dependencies:
     "@wordpress/wordcount" "^3.2.2"
     js-yaml "^4.1.0"
     markdown-it "^12.2.0"
     myst-spec "^0.0.4"
-    mystjs "^0.0.9"
+    mystjs "^0.0.10"
     nanoid "^3.1.30"
     orderedmap "^1.1.1"
     prosemirror-collab "^1.2.2"
@@ -6358,10 +6358,10 @@ myst-spec@^0.0.4:
   resolved "https://registry.yarnpkg.com/myst-spec/-/myst-spec-0.0.4.tgz#fb998ec09e330810b454f4643c0116a25a057b80"
   integrity sha512-1j7184Wmg5lhgSXt6AXtG82E0PFJ7ULFPplfshQDzb4nIOLKruYFD0CYWheRPMM/eVqNbNZUzc/LLrhyubsK0Q==
 
-mystjs@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.9.tgz#cd28d0cfbf3576fa3b0ebc64c6b07da0dba27ca3"
-  integrity sha512-r3DL3DRuZKdXHk2GpjEeWwY/qgdc2lIg602m4y63md4IFpt+qqbE7B/mAWNO2FZjZdM8XAz7t0BW7x71z5ry3g==
+mystjs@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/mystjs/-/mystjs-0.0.10.tgz#6f7c52dd033bdad4b1b5529ff5b383ef1aff200a"
+  integrity sha512-Hn9Fu7peO3DJTaITR8RE6DKiLtxt45rA+0hYDJNGfLMW2j8NhXlxrfwB3UrbBSUzwFAJmA1JP05yQfA5W8f3IQ==
   dependencies:
     classnames "^2.3.1"
     hast-util-to-mdast "^8.3.1"
