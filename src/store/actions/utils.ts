@@ -3,7 +3,7 @@ import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemir
 import { ContentNodeWithPos } from 'prosemirror-utils';
 import { EditorView } from 'prosemirror-view';
 import { determineCaptionKind } from '@curvenote/schema/dist/process';
-import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
+import { Fragment, Mark, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';
 
 export const TEST_LINK_SPACE =
@@ -146,7 +146,7 @@ function getLinkBounds(state: EditorState, pos: number) {
   const start = parent.childAfter(parentOffset);
   if (!start.node) return null;
 
-  const link = start.node.marks.find((mark) => mark.type === state.schema.marks.link);
+  const link = start.node.marks.find((mark: Mark) => mark.type === state.schema.marks.link);
   if (!link) return null;
 
   let startIndex = $pos.index();

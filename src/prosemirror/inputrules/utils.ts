@@ -5,10 +5,10 @@ import { findParentNode } from 'prosemirror-utils';
 
 type GetAttrs =
   | {
-      content?: Node<any>;
+      content?: Node;
       [key: string]: any;
     }
-  | ((p: string[]) => { content?: Node<any>; [key: string]: any });
+  | ((p: string[]) => { content?: Node; [key: string]: any });
 
 // https://discuss.prosemirror.net/t/input-rules-for-wrapping-marks/537/11
 export function markInputRule(

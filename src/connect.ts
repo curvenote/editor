@@ -32,7 +32,7 @@ export type Options = {
   onDoubleClick?: (
     stateKey: any,
     viewId: string | null,
-    view: EditorView<any>,
+    view: EditorView,
     pos: number,
     event: MouseEvent,
   ) => boolean;

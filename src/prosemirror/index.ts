@@ -92,7 +92,7 @@ export function createEditorView(
         store.dispatch(selectEditorView(view.dom.id));
         return false;
       },
-      handleDoubleClick: (view: EditorView<any>, pos: number, event: MouseEvent): boolean => {
+      handleDoubleClick: (view: EditorView, pos: number, event: MouseEvent): boolean => {
         const { viewId, stateId } = getSelectedViewId(store.getState());
         return opts.onDoubleClick(stateId, viewId, view, pos, event);
       },

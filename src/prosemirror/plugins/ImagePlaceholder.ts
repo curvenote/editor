@@ -194,7 +194,7 @@ export const getImagePlaceholderPlugin = (): ImagePlaceholderPlugin =>
       },
     },
     props: {
-      decorations(state) {
+      decorations(state: EditorState) {
         return this.getState(state);
       },
     },
