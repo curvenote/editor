@@ -5,9 +5,9 @@ export declare function useLinkActions(stateId: any, viewId: string | null): {
     attrs: types.LinkAttrs | null;
     tooltip: string;
     bounds: {
-        from: number;
-        to: number;
-        mark: import("prosemirror-model").Mark<any>;
+        from: any;
+        to: any;
+        mark: any;
     } | null;
     onOpen: () => Window | null;
     onDelete: () => void;

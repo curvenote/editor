@@ -20,10 +20,10 @@ declare const _default: {
     ImageView: typeof ImageView;
     IFrameView: typeof IFrameView;
     LinkView: typeof LinkView;
-    createLinkBlockView: (node: import("prosemirror-model").Node<any>, view: import("prosemirror-view").EditorView<any>, getPos: boolean | import("./types").GetPos) => import("./NodeView").ReactWrapper;
+    createLinkBlockView: (node: import("prosemirror-model").Node, view: import("prosemirror-view").EditorView, getPos: boolean | import("./types").GetPos) => import("./NodeView").ReactWrapper;
     TimeView: typeof TimeView;
     WidgetView: typeof WidgetView;
-    newWidgetView: (node: import("prosemirror-model").Node<any>, view: import("prosemirror-view").EditorView<any>, getPos: boolean | import("./types").GetPos) => WidgetView;
+    newWidgetView: (node: import("prosemirror-model").Node, view: import("prosemirror-view").EditorView, getPos: boolean | import("./types").GetPos) => WidgetView;
     CodeBlockView: typeof CodeBlockView;
     FootnoteView: typeof FootnoteView;
 };

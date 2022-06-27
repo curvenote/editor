@@ -5,7 +5,7 @@ export declare function getEditorView(state: State, viewId: string | null): {
     view: null;
 } | {
     stateId: string;
-    view: import("prosemirror-view").EditorView<any>;
+    view: import("prosemirror-view").EditorView;
     viewId: string;
 };
 export declare function getEditorState(state: State, stateKey: any | null): {
