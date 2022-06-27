@@ -63,7 +63,7 @@ export function updateEditorState(
 export function applyProsemirrorTransaction(
   stateKey: any,
   viewId: string | null,
-  tr: Transaction | ((tr: Transaction, view: EditorView<any>) => Transaction),
+  tr: Transaction | ((tr: Transaction, view: EditorView) => Transaction),
   focus = false,
 ): AppThunk<boolean> {
   return (dispatch, getState) => {
