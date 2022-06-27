@@ -12,12 +12,20 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 14.x
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
-          path: 'node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('yarn.lock') }}
       - run: yarn install
+      - run: yarn run emoji
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          component: true
+          quiet: true
+          reporter: json
+          record: false
       - run: yarn run lint
       - run: yarn run lint:format

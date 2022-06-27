@@ -25,7 +25,7 @@ import { LanguageNames } from '../../../views/types';
 import { selectSuggestionState } from '../selectors';
 import * as actions from '../../actions/editor';
 import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
-import { createFigure, getLinkBoundsIfTheyExist } from '../../actions/utils';
+import { createFigure, getLinkBoundsIfTheyExist, normalizeUrl } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';
 import { opts } from '../../../connect';
@@ -167,7 +167,9 @@ export function executeCommand(
         const href = prompt('Link Url?');
         if (!href) return false;
         const { from, to } = view.state.selection;
-        view.dispatch(view.state.tr.addMark(from, to, schema.marks.link.create({ href })));
+        view.dispatch(
+          view.state.tr.addMark(from, to, schema.marks.link.create({ href: normalizeUrl(href) })),
+        );
         return true;
       }
       case CommandNames.callout:

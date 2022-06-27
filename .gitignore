@@ -5,3 +5,5 @@ emoji.json
 .yalc/
 yalc.lock
 *.log
+cypress/videos
+cypress/screenshots

@@ -6,10 +6,10 @@ import MenuIcon from '../Menu/Icon';
 import {
   applyProsemirrorTransaction,
   getLinkBoundsIfTheyExist,
+  normalizeUrl,
   removeMark,
   switchLinkType,
-  testLink,
-  testLinkWeak,
+  validateUrl,
 } from '../../store/actions';
 import { ActionProps } from './utils';
 import { getEditorState } from '../../store/state/selectors';
@@ -49,7 +49,7 @@ export function useLinkActions(stateId: any, viewId: string | null) {
   const onEdit = useCallback(
     (newHref: string) => {
       if (!newHref || !linkBounds || !state || !mark) return;
-      const link = mark.create({ href: testLink(newHref) ? newHref : `http://${newHref}` });
+      const link = mark.create({ href: normalizeUrl(newHref) });
       const tr = state.tr
         .removeMark(linkBounds.from, linkBounds.to, mark)
         .addMark(linkBounds.from, linkBounds.to, link);
@@ -83,13 +83,14 @@ function LinkActions(props: ActionProps) {
     return (
       <TextAction
         text={attrs?.href ?? ''}
+        enableSubmitIfInvalid
         onCancel={() => setLabelOpen(false)}
         onSubmit={(t) => {
           onEdit(t);
           setLabelOpen(false);
         }}
-        validate={testLinkWeak}
-        help="Please provide a valid URL"
+        validate={validateUrl}
+        help="URL may be invalid"
       />
     );
   }
@@ -113,8 +114,11 @@ function LinkActions(props: ActionProps) {
       <MenuIcon kind="divider" />
       <Tooltip title={link.tooltip}>
         <Button
+          aria-label="edit link inline"
           className={classes.button}
-          onClick={() => setLabelOpen(true)}
+          onClick={() => {
+            setLabelOpen(true);
+          }}
           size="small"
           disableElevation
         >

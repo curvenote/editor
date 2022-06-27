@@ -17,14 +17,23 @@ const useStyles = makeStyles(() =>
 type Props = {
   text: string;
   help: string;
-  validate: (text: string) => boolean | Promise<boolean>;
+  validate?: (text: string) => boolean | Promise<boolean>;
   onSubmit: (text: string) => void;
   onChange?: (text: string) => void; // eslint-disable-line
   onCancel: () => void;
+  enableSubmitIfInvalid?: boolean;
 };
 
 function TextAction(props: Props) {
-  const { text: initial, help, validate, onSubmit, onCancel, onChange } = props;
+  const {
+    text: initial,
+    help,
+    validate,
+    onSubmit,
+    onCancel,
+    onChange,
+    enableSubmitIfInvalid = false,
+  } = props;
   const classes = useStyles();
   const [text, setText] = useState(initial);
   const [current, setCurrent] = useState(initial);
@@ -34,20 +43,27 @@ function TextAction(props: Props) {
   const updateText: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const t = e.currentTarget.value;
+      if (!validate) {
+        setValid(true);
+        setText(t);
+        setCurrent(t);
+        onChange?.(t);
+        return;
+      }
       setLoading(true);
       setCurrent(t);
       onChange?.(t);
       Promise.all([validate(t)]).then(([b]) => {
         setLoading(false);
-        if (b) {
-          setValid(true);
+        if (enableSubmitIfInvalid || b) {
+          setValid(b);
           setText(t);
           return;
         }
         setValid(false);
       });
     },
-    [onChange, validate],
+    [onChange, validate, enableSubmitIfInvalid],
   );
 
   return (
@@ -62,7 +78,8 @@ function TextAction(props: Props) {
         onChange={updateText}
         onKeyDownCapture={(e) => {
           if (e.key === 'Enter') {
-            if (!valid || loading) return;
+            if (loading) return;
+            if (!valid && !enableSubmitIfInvalid) return;
             e.stopPropagation();
             e.preventDefault();
             onSubmit(text);
@@ -77,7 +94,7 @@ function TextAction(props: Props) {
       <MenuIcon
         kind="enterSave"
         title={valid ? 'Save' : help}
-        disabled={loading || !valid}
+        disabled={loading || (!valid && !enableSubmitIfInvalid)}
         error={!valid}
         onClick={() => onSubmit(text)}
       />

@@ -8,7 +8,12 @@ import {
 import { Schema } from 'prosemirror-model';
 import { createId } from '@curvenote/schema';
 import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
-import { TEST_LINK_COMMON_SPACE, TEST_LINK_SPACE } from '../../store/actions/utils';
+import {
+  normalizeUrl,
+  TEST_LINK_COMMON_SPACE,
+  TEST_LINK_SPACE,
+  validateEmail,
+} from '../../store/actions/utils';
 import { LanguageNames } from '../../views/types';
 
 export const quotes = (schema: Schema) => smartQuotes;
@@ -65,13 +70,21 @@ export const copyright = (schema: Schema) => [
   new InputRule(/(\(r\)\s)$/, '® '),
 ];
 
+function normalize(match: string[]) {
+  const url = match[0].slice(0, -1);
+  if (validateEmail(url)) {
+    return { href: `mailto:${url}`, text: url };
+  }
+  return { href: normalizeUrl(url) };
+}
+
 export const link = (schema: Schema) => [
   markInputRule(TEST_LINK_SPACE, schema.marks.link, {
-    getAttrs: (match: string[]) => ({ href: match[0].slice(0, -1) }),
+    getAttrs: normalize,
     addSpace: true,
   }),
   markInputRule(TEST_LINK_COMMON_SPACE, schema.marks.link, {
-    getAttrs: (match: string[]) => ({ href: match[0].slice(0, -1) }),
+    getAttrs: normalize,
     addSpace: true,
   }),
 ];
