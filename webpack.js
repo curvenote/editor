@@ -12,9 +12,6 @@ module.exports = {
       directory: './dist',
     },
     port: process.env.PORT,
-    onBeforeSetupMiddleware(devServer) {
-      devServer.app.use('/images', express.static(path.resolve('images')));
-    },
   },
   optimization: {
     usedExports: true,
