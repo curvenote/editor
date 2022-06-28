@@ -1,5 +1,5 @@
 {
-  "name": "prosemirror-utils",
+  "name": "@curvenote/prosemirror-utils",
   "version": "1.0.0-0",
   "description": "Utils library for ProseMirror",
   "main": "dist/index.js",
