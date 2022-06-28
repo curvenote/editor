@@ -54,7 +54,7 @@ import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-comma
 import { isEditable } from '../prosemirror/plugins/editable';
 export function renderMath(math, element, inline) {
     return __awaiter(this, void 0, void 0, function () {
-        var render, katex_1, error_1;
+        var render, katex, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -64,8 +64,8 @@ export function renderMath(math, element, inline) {
                     _a.trys.push([1, 3, , 4]);
                     return [4, import('katex')];
                 case 2:
-                    katex_1 = _a.sent();
-                    katex_1.default.render(render, element, {
+                    katex = _a.sent();
+                    katex.default.render(render, element, {
                         displayMode: !inline,
                         throwOnError: false,
                         macros: {

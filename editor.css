@@ -5,8 +5,7 @@
   white-space: pre-wrap;
   -webkit-font-variant-ligatures: none;
   font-variant-ligatures: none;
-  font-feature-settings: "liga" 0;
-  /* the above doesn't seem to work in Edge */
+  font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
   outline: none;
   padding: 2px;
 }
@@ -498,7 +497,7 @@ article .selected p.prompt:before {
 img.placeholder {
   margin-left: 15%;
   width: 70%;
-  box-shadow: 0 0 0 0 black;
+  box-shadow: 0 0 0 0 rgb(0, 0, 0);
   animation: pulsePlaceholder 2s infinite;
   animation-timing-function: ease;
   display: block;
@@ -541,7 +540,7 @@ img.placeholder {
   font-size: small;
 }
 .image-upload-prompt.is-dragover {
-  background-color: #cdcdcd;
+  background-color: rgb(205, 205, 205);
 }
 
 @keyframes pulsePlaceholder {
@@ -653,7 +652,7 @@ h6[numbered]:before {
 }
 
 article .ProseMirror code {
-  color: #e83e8c;
+  color: rgb(232, 62, 140);
   border-radius: 2px;
   padding: 2px;
   margin: 0 1px;

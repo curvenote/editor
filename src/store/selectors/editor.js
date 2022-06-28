@@ -1,5 +1,5 @@
 import { NodeSelection } from 'prosemirror-state';
-import { findParentNode, isNodeSelection, hasParentNode, } from 'prosemirror-utils';
+import { findParentNode, isNodeSelection, hasParentNode, } from 'prosemirror-utils1';
 import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import { getEditorState } from '../state/selectors';

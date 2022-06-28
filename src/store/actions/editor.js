@@ -9,12 +9,12 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { NodeSelection, Selection, TextSelection, } from 'prosemirror-state';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { wrapIn as wrapInPM, setBlockType as setBlockTypePM, toggleMark as toggleMarkPM, selectParentNode, } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { Fragment, NodeRange } from 'prosemirror-model';
 import { nodeNames, createId } from '@curvenote/schema';
-import { replaceSelectedNode, selectParentNodeOfType } from 'prosemirror-utils';
+import { replaceSelectedNode, selectParentNodeOfType, } from 'prosemirror-utils1';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { getEditorState, getSelectedEditorAndViews, getEditorUI, selectionIsChildOf, getSelectedView, getEditorView, } from '../selectors';
@@ -177,8 +177,7 @@ export function replaceSelection(node, attrs, content) {
         var replaceWithNode = replaceSelectedNode(node.create(attrs, nodeContent));
         var tr = replaceWithNode(selectParagraph(editor.state.tr));
         if (node.name === nodes.code_block.name) {
-            var pos = tr.doc.resolve(tr.selection.from + 1);
-            var sel = new Selection(pos, pos);
+            var sel = TextSelection.create(tr.doc, tr.selection.from + 1);
             tr = tr.setSelection(sel);
         }
         return dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr));

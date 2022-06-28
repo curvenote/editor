@@ -158,7 +158,7 @@ function createWidget(action) {
     return widget;
 }
 export var getImagePlaceholderPlugin = function () {
-    return new Plugin({
+    var imagePlaceholderPlugin = new Plugin({
         key: key,
         state: {
             init: function () {
@@ -166,7 +166,7 @@ export var getImagePlaceholderPlugin = function () {
             },
             apply: function (tr, setIn) {
                 var set = setIn.map(tr.mapping, tr.doc);
-                var action = tr.getMeta(this);
+                var action = tr.getMeta(imagePlaceholderPlugin);
                 if (!action)
                     return set;
                 if ('add' in action) {
@@ -193,18 +193,19 @@ export var getImagePlaceholderPlugin = function () {
         },
         props: {
             decorations: function (state) {
-                return this.getState(state);
+                return imagePlaceholderPlugin.getState(state);
             },
         },
     });
+    return imagePlaceholderPlugin;
 };
 var findImagePlaceholder = function (state, id) {
     var plugin = key.get(state);
     var decos = plugin.getState(state);
-    var found = decos.find(undefined, undefined, function (spec) {
+    var found = decos === null || decos === void 0 ? void 0 : decos.find(undefined, undefined, function (spec) {
         return spec.id === id;
     });
-    return found.length ? found[0].from : null;
+    return (found === null || found === void 0 ? void 0 : found.length) ? found[0].from : null;
 };
 function createImageHandlers(view, id, plugin, node) {
     function remove(targetId) {

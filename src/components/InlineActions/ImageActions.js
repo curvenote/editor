@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { isNodeSelection } from 'prosemirror-utils';
+import { isNodeSelection } from 'prosemirror-utils1';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, deleteNode, updateNodeAttrs, createFigure, } from '../../store/actions';
@@ -26,7 +26,7 @@ function ImageActions(props) {
     if (!editorState || !node || !selection || !isNodeSelection(selection))
         return null;
     var pos = selection.from;
-    var width = (node === null || node === void 0 ? void 0 : node.attrs).width;
+    var width = node.attrs.width;
     var onWidth = function (value) {
         dispatch(updateNodeAttrs(stateId, viewId, { node: node, pos: pos }, { width: value }));
     };

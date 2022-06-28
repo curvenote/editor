@@ -1,6 +1,6 @@
 import { nodeNames } from '@curvenote/schema';
 import { Plugin, PluginKey } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { isEditable } from './editable';
 export var key = new PluginKey('prompt');
@@ -26,7 +26,7 @@ var getPromptPlugin = function () {
         },
         props: {
             decorations: function (state) {
-                return this.getState(state);
+                return promptPlugin.getState(state);
             },
         },
     });

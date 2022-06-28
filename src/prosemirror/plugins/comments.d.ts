@@ -3,7 +3,7 @@ import { DecorationSet, EditorView } from 'prosemirror-view';
 export interface CommentState {
     decorations: DecorationSet;
 }
-export declare const key: PluginKey<any, any>;
+export declare const key: PluginKey<any>;
 interface CommentAddAction {
     type: 'add';
     commentId: string;

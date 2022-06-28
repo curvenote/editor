@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Store } from '../src';
 import 'codemirror/lib/codemirror.css';
 import '../styles/index.scss';

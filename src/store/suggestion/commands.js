@@ -7,9 +7,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-import { nodeNames } from '@curvenote/schema/dist/types';
+import { nodeNames } from '@curvenote/schema';
 import { isInTable } from 'prosemirror-tables';
-import { hasParentNode } from 'prosemirror-utils';
+import { hasParentNode } from 'prosemirror-utils1';
 export var CommandNames;
 (function (CommandNames) {
     CommandNames["link"] = "link";

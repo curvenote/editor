@@ -1,4 +1,4 @@
-import { formatDatetime } from '@curvenote/schema/dist/nodes/time';
+import { formatDatetime } from '@curvenote/schema';
 var TimeNodeView = (function () {
     function TimeNodeView(node, view, getPos) {
         this.node = node;

@@ -1,3 +1,4 @@
+import { Node } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import { PopperProps } from '@material-ui/core';
 export declare type ActionProps = {
@@ -5,8 +6,13 @@ export declare type ActionProps = {
     viewId: string | null;
 };
 export declare function getFigure(editorState: EditorState | null): {
-    figure: import("prosemirror-utils").ContentNodeWithPos | undefined;
-    figcaption: import("prosemirror-utils").NodeWithPos | undefined;
+    figure: {
+        pos: number;
+        start: number;
+        depth: number;
+        node: Node;
+    } | undefined;
+    figcaption: import("prosemirror-utils1").NodeWithPos | undefined;
 };
 declare type NodeOrNodeFunction = (() => Element | null) | Element | null;
 export declare type AnchorCache = {

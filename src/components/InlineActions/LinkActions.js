@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { applyProsemirrorTransaction, getLinkBoundsIfTheyExist, normalizeUrl, removeMark, switchLinkType, validateUrl, } from '../../store/actions';
@@ -71,7 +71,7 @@ function LinkActions(props) {
     if (!viewId || !stateId || !attrs)
         return null;
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.grid },
-        React.createElement(Box, { ml: 2 },
+        React.createElement("div", { style: { marginLeft: 10 } },
             React.createElement(LinkTypeSelect, { value: "link", onChange: function (value) {
                     if (value === 'link-block') {
                         dispatch(switchLinkType({ linkType: 'link-block', stateId: stateId, viewId: viewId, url: attrs.href }));

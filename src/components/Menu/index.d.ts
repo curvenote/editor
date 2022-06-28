@@ -1,4 +1,3 @@
-/// <reference types="react" />
 interface Props {
     standAlone?: boolean;
     disabled?: boolean;

@@ -1,4 +1,5 @@
-import { Command, Keymap } from 'prosemirror-commands';
+import type { Command } from 'prosemirror-state';
+export declare type Keymap = Record<string, Command>;
 export declare type AddKey = (key: string, ...cmds: Command[]) => void;
 export declare type CommandList = Record<string, Command[]>;
 export declare function createBind(): {

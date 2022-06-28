@@ -16,7 +16,7 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { Selection, TextSelection } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { nodeNames } from '@curvenote/schema';
 import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
@@ -124,7 +124,7 @@ var CodeBlockNodeView = (function () {
         var change = computeChange(this.node.textContent, this.cm.getValue());
         if (change) {
             var start = this.getPos() + 1;
-            var tr = this.view.state.tr.replaceWith(start + change.from, start + change.to, change.text ? this.view.state.schema.text(change.text) : null);
+            var tr = this.view.state.tr.replaceWith(start + change.from, start + change.to, change.text ? this.view.state.schema.text(change.text) : []);
             this.view.dispatch(tr);
         }
     };
@@ -147,7 +147,7 @@ var CodeBlockNodeView = (function () {
                         return CodeMirror.Pass;
                     var pos = _this.getPos();
                     var schema = view.state.schema;
-                    var paragraph = schema.nodes.paragraph.create('');
+                    var paragraph = schema.nodes.paragraph.create();
                     var tr = view.state.tr.delete(pos, pos + _this.node.nodeSize).insert(pos, paragraph);
                     var selection = view.state.selection;
                     var selectedTr = tr

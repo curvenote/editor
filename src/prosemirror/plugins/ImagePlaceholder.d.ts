@@ -1,7 +1,7 @@
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { DecorationSet, EditorView } from 'prosemirror-view';
 import { UploadImageState } from '../../connect';
-export declare const key: PluginKey<any, any>;
+export declare const key: PluginKey<any>;
 export declare type ImagePlaceholderPlugin = Plugin<DecorationSet>;
 interface PromptProps {
     view: EditorView;

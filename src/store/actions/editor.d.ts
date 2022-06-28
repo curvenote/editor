@@ -1,7 +1,7 @@
 import { Transaction } from 'prosemirror-state';
 import { MarkType, NodeType, Node, Schema } from 'prosemirror-model';
 import { Nodes } from '@curvenote/schema';
-import { ContentNodeWithPos } from 'prosemirror-utils';
+import { ContentNodeWithPos } from 'prosemirror-utils1';
 import { AppThunk } from '../types';
 export declare function updateNodeAttrs(stateKey: any, viewId: string | null, node: Pick<ContentNodeWithPos, 'node' | 'pos'>, attrs: {
     [index: string]: any;
@@ -14,7 +14,7 @@ export declare function toggleMark(stateKey: any, viewId: string | null, mark?: 
 export declare function removeMark(stateKey: any, viewId: string | null, mark: MarkType, from: number, to: number): AppThunk<boolean>;
 export declare function wrapInList(stateKey: string, viewId: string | null, node: NodeType, test?: boolean): AppThunk<boolean>;
 export declare function wrapIn(node: NodeType): AppThunk<boolean>;
-export declare function selectNode(tr: Transaction, select?: boolean | 'after'): Transaction<any>;
+export declare function selectNode(tr: Transaction, select?: boolean | 'after'): Transaction;
 export declare function replaceSelection(node: NodeType, attrs?: {
     [index: string]: any;
 }, content?: Node): AppThunk<boolean>;

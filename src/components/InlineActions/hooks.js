@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { isNodeSelection } from 'prosemirror-utils';
+import { isNodeSelection } from 'prosemirror-utils1';
 import debounce from 'lodash.debounce';
 import { getEditorState } from '../../store/state/selectors';
 import { getNodeFromSelection } from '../../store/ui/utils';

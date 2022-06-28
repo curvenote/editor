@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { types } from '@curvenote/schema';
 import { ActionProps } from './utils';
 export declare function useLinkActions(stateId: any, viewId: string | null): {
@@ -7,7 +6,7 @@ export declare function useLinkActions(stateId: any, viewId: string | null): {
     bounds: {
         from: number;
         to: number;
-        mark: import("prosemirror-model").Mark<any>;
+        mark: import("prosemirror-model").Mark;
     } | null;
     onOpen: () => Window | null;
     onDelete: () => void;

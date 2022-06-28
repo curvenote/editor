@@ -9,9 +9,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { nodeNames, CaptionKind, createId, findChildrenWithName } from '@curvenote/schema';
+import { nodeNames, CaptionKind, createId, findChildrenWithName, process, } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { determineCaptionKind } from '@curvenote/schema/dist/process';
 import { Fragment } from 'prosemirror-model';
 import { opts } from '../../connect';
 export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
@@ -78,7 +77,7 @@ export function createFigure(schema, node, caption, initialFigureState) {
     if (caption === void 0) { caption = false; }
     if (initialFigureState === void 0) { initialFigureState = {}; }
     var Figure = schema.nodes[nodeNames.figure];
-    var kind = (_a = determineCaptionKind(node)) !== null && _a !== void 0 ? _a : CaptionKind.fig;
+    var kind = (_a = process.determineCaptionKind(node)) !== null && _a !== void 0 ? _a : CaptionKind.fig;
     var attrs = __assign(__assign({ id: createId(), label: null, numbered: true, align: 'center' }, initialFigureState), { multipage: (_b = initialFigureState.multipage) !== null && _b !== void 0 ? _b : false, landscape: (_c = initialFigureState.landscape) !== null && _c !== void 0 ? _c : false, fullpage: (_d = initialFigureState.fullpage) !== null && _d !== void 0 ? _d : false });
     if (!caption) {
         var figure_1 = Figure.createAndFill(attrs, Fragment.fromArray([node]));

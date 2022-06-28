@@ -1,5 +1,5 @@
 import { nodeNames } from '@curvenote/schema';
-import { findChildrenByType, findParentNode } from 'prosemirror-utils';
+import { findChildrenByType, findParentNode } from 'prosemirror-utils1';
 export function getFigure(editorState) {
     if (!editorState) {
         return { figure: undefined, figcaption: undefined };

@@ -28,7 +28,7 @@ declare class CodeBlockNodeView implements NodeView {
     updating: boolean;
     constructor(node: Node, view: EditorView, getPos: GetPos);
     forwardSelection(): void;
-    asProseMirrorSelection(doc: any): TextSelection<any>;
+    asProseMirrorSelection(doc: any): TextSelection;
     setSelection(anchor: any, head: any): void;
     valueChanged(): void;
     codeMirrorKeymap(): CodeMirror.KeyMap;

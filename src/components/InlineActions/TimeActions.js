@@ -1,8 +1,8 @@
 import React from 'react';
-import { isNodeSelection } from 'prosemirror-utils';
+import { isNodeSelection } from 'prosemirror-utils1';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
-import { getDatetime } from '@curvenote/schema/dist/nodes/time';
+import { getDatetime } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateNodeAttrs } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';

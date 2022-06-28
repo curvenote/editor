@@ -1,6 +1,6 @@
 import { nodeNames } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { isEditable } from '../prosemirror/plugins/editable';
 export function clickSelectFigure(view, getPos) {
     if (!isEditable(view.state))

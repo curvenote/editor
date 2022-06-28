@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { makeStyles, createStyles, Grid, Button, Tooltip, Box } from '@material-ui/core';
+import { makeStyles, createStyles, Grid, Button, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { NodeSelection } from 'prosemirror-state';
 import MenuIcon from '../Menu/Icon';
@@ -105,7 +105,7 @@ function LinkBlockActions(props) {
     if (!stateId || !viewId)
         return null;
     return (React.createElement(Grid, { container: true, alignItems: "center", justifyContent: "center", className: classes.grid },
-        React.createElement(Box, { ml: 2 },
+        React.createElement("div", { style: { marginLeft: 10 } },
             React.createElement(LinkTypeSelect, { value: "link-block", onChange: function (value) {
                     if (value === 'link') {
                         dispatch(switchLinkType({ linkType: 'link', stateId: stateId, viewId: viewId, url: node === null || node === void 0 ? void 0 : node.attrs.url }));

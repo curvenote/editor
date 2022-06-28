@@ -76,17 +76,17 @@ export var codeBlock = function (schema) { return [
     }),
 ]; };
 export var strong = function (schema) { return [
-    markInputRule(/\*\*([\W\w]+)\*\*$/, schema.marks.strong),
-    markInputRule(/__([\W\w]+)__$/, schema.marks.strong),
+    markInputRule(/\*\*([^*]+)\*\*$/, schema.marks.strong),
+    markInputRule(/__([^_]+)__$/, schema.marks.strong),
 ]; };
 export var strikethrough = function (schema) { return [
     markInputRule(/~([\W\w]+[^\s])~$/, schema.marks.strikethrough),
 ]; };
 export var em = function (schema) { return [
-    markInputRule(/(\s|^)\*(?!\*)([\W\w]+)\*$/, schema.marks.em, {
+    markInputRule(/(\s|^)\*([^*]+)\*$/, schema.marks.em, {
         getText: function (match) { return (match[1] ? " ".concat(match[2]) : match[2]); },
     }),
-    markInputRule(/(\s|^)_(?!_)([\W\w]+)_$/, schema.marks.em, {
+    markInputRule(/(\s|^)_([^_]+)_$/, schema.marks.em, {
         getText: function (match) { return (match[1] ? " ".concat(match[2]) : match[2]); },
     }),
 ]; };

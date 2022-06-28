@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { findChildrenByType, findParentNode } from 'prosemirror-utils';
+import { findChildrenByType, findParentNode } from 'prosemirror-utils1';
 import { useDispatch, useSelector } from 'react-redux';
 import { nodeNames, CaptionKind, findChildrenWithName } from '@curvenote/schema';
 import { NodeSelection, TextSelection } from 'prosemirror-state';

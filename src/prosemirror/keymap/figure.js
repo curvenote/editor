@@ -1,6 +1,6 @@
 import { nodeNames } from '@curvenote/schema';
 import { NodeSelection } from 'prosemirror-state';
-import { findParentNode, findParentNodeOfType } from 'prosemirror-utils';
+import { findParentNode, findParentNodeOfType } from 'prosemirror-utils1';
 import { insertParagraphAndSelect } from '../../store/actions/utils';
 function selectInsideParent(tr, pos) {
     return tr.setSelection(NodeSelection.create(tr.doc, pos - 1)).scrollIntoView();

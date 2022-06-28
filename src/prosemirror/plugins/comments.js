@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { Plugin, PluginKey } from 'prosemirror-state';
-import { isNodeSelection } from 'prosemirror-utils';
+import { isNodeSelection } from 'prosemirror-utils1';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
 import { opts } from '../../connect';
@@ -85,7 +85,7 @@ var getCommentsPlugin = function () {
             },
         },
         props: {
-            decorations: function (state) { return commentsPlugin.getState(state).decorations; },
+            decorations: function (state) { var _a; return (_a = commentsPlugin.getState(state)) === null || _a === void 0 ? void 0 : _a.decorations; },
         },
     });
     return commentsPlugin;

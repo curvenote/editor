@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { SelectionKinds as Kinds } from '../../store/ui/types';
 export declare function useInlineActionProps(): {
     stateId: string | null;
