@@ -1,17 +1,17 @@
 # Utils library for ProseMirror
 
-[![@curvenote/prosemirror-utils on npm](https://img.shields.io/npm/v/@curvenote/prosemirror-utils.svg)](https://www.npmjs.com/package/@curvenote/prosemirror-utils)
-[![License](https://img.shields.io/npm/l/curvenote/prosemirror-utils.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
+[![prosemirror-utils1 on npm](https://img.shields.io/npm/v/prosemirror-utils1.svg)](https://www.npmjs.com/package/prosemirror-utils1)
+[![License](https://img.shields.io/npm/l/prosemirror-utils1.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
 ![CI](https://github.com/curvenote/prosemirror-utils/workflows/CI/badge.svg)
 
 Note: this is a port of prosemirror-utils to typescript and updating dependencies and build.
 
 ## Quick Start
 
-Install `@curvenote/prosemirror-utils` package from npm:
+Install `prosemirror-utils1` package from npm:
 
 ```sh
-npm install @curvenote/prosemirror-utils
+npm install prosemirror-utils1
 ```
 
 ## Public API documentation
