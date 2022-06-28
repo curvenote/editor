@@ -69,7 +69,8 @@
     "prosemirror-transform": "^1.6.0",
     "prosemirror-view": "^1.26.2",
     "rimraf": "^3.0.2",
-    "ts-jest": "^28.0.5"
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.7.4"
   },
   "lint-staged": {
     "*.{js, md}": [
