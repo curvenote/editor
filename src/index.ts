@@ -1,3 +1,4 @@
+export * from './types';
 export * from './selection';
 export * from './node';
 export * from './transforms';
