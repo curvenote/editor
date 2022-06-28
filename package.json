@@ -2,7 +2,9 @@
   "name": "@curvenote/prosemirror-utils",
   "version": "1.0.1",
   "description": "Utils library for ProseMirror",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "author": {
     "name": "Eduard Shvedai",
     "email": "eshvedai@gmail.com",
@@ -12,22 +14,24 @@
     {
       "name": "Eduard Shvedai",
       "email": "eshvedai@atlassian.com"
+    },
+    {
+      "name": "Rowan Cockett",
+      "email": "rowan@curvenote.com"
     }
   ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/atlassian/prosemirror-utils.git"
+    "url": "git://github.com/curvenote/prosemirror-utils.git"
   },
   "keywords": [
     "ProseMirror",
     "utils",
     "helpers"
   ],
-  "typings": "typings.d.ts",
   "files": [
-    "dist",
-    "typings.d.ts"
+    "dist"
   ],
   "scripts": {
     "clean": "rimraf dist",
@@ -75,11 +79,5 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
     "typescript": "^4.7.4"
-  },
-  "lint-staged": {
-    "*.{js, md}": [
-      "prettier --write",
-      "git add"
-    ]
   }
 }
