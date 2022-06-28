@@ -1,7 +1,7 @@
 import { nodeNames } from '@curvenote/schema';
 import { Node } from 'prosemirror-model';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { EditorView } from 'prosemirror-view';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { GetPos } from './types';

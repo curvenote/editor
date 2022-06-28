@@ -7177,10 +7177,10 @@ prosemirror-transform@^1.0.0, prosemirror-transform@^1.1.0, prosemirror-transfor
   dependencies:
     prosemirror-model "^1.0.0"
 
-prosemirror-utils@^1.0.0-0:
-  version "1.0.0-0"
-  resolved "https://registry.yarnpkg.com/prosemirror-utils/-/prosemirror-utils-1.0.0-0.tgz#7dfd112abf69001508a76200f9c8660fda7fa85f"
-  integrity sha512-11hTMG4Qwqlux6Vwp/4m16mLDg6IwWb0/odsWXGtWvvRJo61SfG0RGYlA8H72vExmbnWpiXa7PNenZ6t12Rkqw==
+prosemirror-utils1@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/prosemirror-utils1/-/prosemirror-utils1-1.0.2.tgz#926acb93b45a328b9eb2ccba6c2a9e99410ef727"
+  integrity sha512-BoqBYPFaZX7EX3F8jLmW9/UVqlimbq9pmOY0wP1z52TlwIhm2dM8swNrjutl4UV8/UYOOzw0AxJmmt0b1VpPUw==
 
 prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.13.3, prosemirror-view@^1.26.2:
   version "1.26.2"

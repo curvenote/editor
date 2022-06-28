@@ -5,7 +5,7 @@ import {
   ContentNodeWithPos,
   isNodeSelection,
   hasParentNode,
-} from 'prosemirror-utils';
+} from 'prosemirror-utils1';
 import { nodeNames } from '@curvenote/schema';
 import { getNodeIfSelected } from '../ui/utils';
 import { isEditable } from '../../prosemirror/plugins/editable';

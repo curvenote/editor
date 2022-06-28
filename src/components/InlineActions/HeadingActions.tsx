@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { makeStyles, createStyles, Grid, Menu } from '@material-ui/core';
 import { Node } from 'prosemirror-model';
 import { nodeNames } from '@curvenote/schema';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs, wrapInHeading } from '../../store/actions';

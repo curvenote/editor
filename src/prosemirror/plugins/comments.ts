@@ -1,5 +1,5 @@
 import { Plugin, PluginKey, Transaction } from 'prosemirror-state';
-import { isNodeSelection } from 'prosemirror-utils';
+import { isNodeSelection } from 'prosemirror-utils1';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
 import { opts } from '../../connect';
