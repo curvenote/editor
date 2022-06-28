@@ -23,7 +23,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/curvenote/prosemirror-utils.git"
+    "url": "git://github.com/curvenote/prosemirror-utils1.git"
   },
   "keywords": [
     "ProseMirror",

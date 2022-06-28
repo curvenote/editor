@@ -2,13 +2,13 @@
 
 [![prosemirror-utils1 on npm](https://img.shields.io/npm/v/prosemirror-utils1.svg)](https://www.npmjs.com/package/prosemirror-utils1)
 [![License](https://img.shields.io/npm/l/prosemirror-utils1.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
-![CI](https://github.com/curvenote/prosemirror-utils/workflows/CI/badge.svg)
+![CI](https://github.com/curvenote/prosemirror-utils1/workflows/CI/badge.svg)
 
 Note: this is a port of prosemirror-utils to typescript and updating dependencies and build.
 
 ## Quick Start
 
-Install `prosemirror-utils1` package from npm:
+Install `prosemirror-utils1` package from npm: (notice the 1 at the end!)
 
 ```sh
 npm install prosemirror-utils1
