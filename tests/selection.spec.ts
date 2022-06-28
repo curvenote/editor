@@ -1,13 +1,6 @@
 import { NodeSelection } from 'prosemirror-state';
-import {
-  createEditor,
-  doc,
-  p,
-  blockquote,
-  atomContainer,
-  atomInline,
-  atomBlock
-} from '../test-helpers';
+import { Node } from 'prosemirror-model';
+import { createEditor, doc, p, blockquote, atomContainer, atomInline, atomBlock } from '.';
 import {
   findParentNode,
   findParentDomRef,
@@ -19,36 +12,30 @@ import {
   findPositionOfNodeBefore,
   findDomRefAtPos,
   findParentNodeClosestToPos,
-  findParentNodeOfTypeClosestToPos
+  findParentNodeOfTypeClosestToPos,
 } from '../src';
 
 describe('selection', () => {
   describe('findParentNode', () => {
     it('should find parent node if cursor is directly inside it', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
-      const { node } = findParentNode(
-        node => node.type === schema.nodes.paragraph
-      )(selection);
-      expect(node.type.name).toEqual('paragraph');
+      const { node } = findParentNode((n) => n.type === schema.nodes.paragraph)(selection) ?? {};
+      expect(node?.type.name).toEqual('paragraph');
     });
     it('should find parent node if cursor is inside nested child', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(blockquote(p('<cursor>'))));
-      const { node } = findParentNode(
-        node => node.type === schema.nodes.blockquote
-      )(selection);
-      expect(node.type.name).toEqual('blockquote');
+      const { node } = findParentNode((n) => n.type === schema.nodes.blockquote)(selection) ?? {};
+      expect(node?.type.name).toEqual('blockquote');
     });
     it('should return `undefined` if parent node has not been found', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('<cursor>')));
-      const result = findParentNode(node => node.type === schema.nodes.heading)(
-        selection
-      );
+      const result = findParentNode((node) => node.type === schema.nodes.heading)(selection);
       expect(result).toBeUndefined();
     });
   });
@@ -57,26 +44,25 @@ describe('selection', () => {
     it('should find parent node if a given `$pos` is directly inside it', () => {
       const { state } = createEditor(doc(p('hello')));
       const { paragraph } = state.schema.nodes;
-      const { node } = findParentNodeClosestToPos(
-        state.doc.resolve(2),
-        node => node.type === paragraph
-      );
-      expect(node.type.name).toEqual('paragraph');
+      const { node } =
+        findParentNodeClosestToPos(state.doc.resolve(2), (n: Node) => n.type === paragraph) ?? {};
+      expect(node?.type.name).toEqual('paragraph');
     });
     it('should find parent node if a given `$pos` is inside nested child', () => {
       const { state } = createEditor(doc(blockquote(p())));
       const { nodes } = state.schema;
-      const { node } = findParentNodeClosestToPos(
-        state.doc.resolve(2),
-        node => node.type === nodes.blockquote
-      );
-      expect(node.type.name).toEqual('blockquote');
+      const { node } =
+        findParentNodeClosestToPos(
+          state.doc.resolve(2),
+          (n: Node) => n.type === nodes.blockquote,
+        ) ?? {};
+      expect(node?.type.name).toEqual('blockquote');
     });
     it('should return `undefined` if a parent node has not been found', () => {
       const { state } = createEditor(doc(blockquote(p())));
       const result = findParentNodeClosestToPos(
         state.doc.resolve(3),
-        node => node.type === state.schema.nodes.heading
+        (node: Node) => node.type === state.schema.nodes.heading,
       );
       expect(result).toBeUndefined();
     });
@@ -86,36 +72,36 @@ describe('selection', () => {
     it('should find DOM ref of the parent node if cursor is directly inside it', () => {
       const {
         state: { schema, selection },
-        view
+        view,
       } = createEditor(doc(p('hello <cursor>')));
       const domAtPos = view.domAtPos.bind(view);
       const ref = findParentDomRef(
-        node => node.type === schema.nodes.paragraph,
-        domAtPos
+        (node) => node.type === schema.nodes.paragraph,
+        domAtPos,
       )(selection);
       expect(ref instanceof HTMLParagraphElement).toBe(true);
     });
     it('should find DOM ref of the parent node if cursor is inside nested child', () => {
       const {
         state: { schema, selection },
-        view
+        view,
       } = createEditor(doc(blockquote(p('<cursor>'))));
       const domAtPos = view.domAtPos.bind(view);
       const ref = findParentDomRef(
-        node => node.type === schema.nodes.paragraph,
-        domAtPos
+        (node) => node.type === schema.nodes.paragraph,
+        domAtPos,
       )(selection);
       expect(ref instanceof HTMLParagraphElement).toBe(true);
     });
     it('should return `undefined` if parent node has not been found', () => {
       const {
         state: { schema, selection },
-        view
+        view,
       } = createEditor(doc(blockquote(p('hello'))));
       const domAtPos = view.domAtPos.bind(view);
       const ref = findParentDomRef(
-        node => node.type === schema.nodes.heading,
-        domAtPos
+        (node) => node.type === schema.nodes.heading,
+        domAtPos,
       )(selection);
       expect(ref).toBeUndefined();
     });
@@ -124,20 +110,16 @@ describe('selection', () => {
   describe('hasParentNode', () => {
     it('should return `true` if parent node has been found', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
-      const result = hasParentNode(
-        node => node.type === schema.nodes.paragraph
-      )(selection);
+      const result = hasParentNode((node) => node.type === schema.nodes.paragraph)(selection);
       expect(result).toBe(true);
     });
     it('should return `false` if parent node has not been found', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
-      const result = hasParentNode(node => node.type === schema.nodes.table)(
-        selection
-      );
+      const result = hasParentNode((node) => node.type === schema.nodes.table)(selection);
       expect(result).toBe(false);
     });
   });
@@ -145,14 +127,14 @@ describe('selection', () => {
   describe('findParentNodeOfType', () => {
     it('should find parent node of a given `nodeType` if cursor is directly inside it', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
-      const { node } = findParentNodeOfType(schema.nodes.paragraph)(selection);
-      expect(node.type.name).toEqual('paragraph');
+      const { node } = findParentNodeOfType(schema.nodes.paragraph)(selection) ?? {};
+      expect(node?.type.name).toEqual('paragraph');
     });
     it('should return `undefined` if parent node of a given `nodeType` has not been found', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
       const result = findParentNodeOfType(schema.nodes.table)(selection);
       expect(result).toBeUndefined();
@@ -161,15 +143,13 @@ describe('selection', () => {
       const {
         state: {
           schema: {
-            nodes: { paragraph, blockquote, table }
+            nodes: { paragraph, blockquote: bq, table },
           },
-          selection
-        }
+          selection,
+        },
       } = createEditor(doc(p('hello <cursor>')));
-      const { node } = findParentNodeOfType([table, blockquote, paragraph])(
-        selection
-      );
-      expect(node.type.name).toEqual('paragraph');
+      const { node } = findParentNodeOfType([table, bq, paragraph])(selection) ?? {};
+      expect(node?.type.name).toEqual('paragraph');
     });
   });
 
@@ -177,44 +157,35 @@ describe('selection', () => {
     it('should find parent node of a given `nodeType` if a given `$pos` is directly inside it', () => {
       const { state } = createEditor(doc(p('hello')));
       const { paragraph } = state.schema.nodes;
-      const { node } = findParentNodeOfTypeClosestToPos(
-        state.doc.resolve(2),
-        paragraph
-      );
-      expect(node.type.name).toEqual('paragraph');
+      const { node } = findParentNodeOfTypeClosestToPos(state.doc.resolve(2), paragraph) ?? {};
+      expect(node?.type.name).toEqual('paragraph');
     });
     it('should return `undefined` if parent node of a given `nodeType` has not been found at a given `$pos`', () => {
       const { state } = createEditor(doc(p('hello')));
       const { table } = state.schema;
-      const result = findParentNodeOfTypeClosestToPos(
-        state.doc.resolve(2),
-        table
-      );
+      const result = findParentNodeOfTypeClosestToPos(state.doc.resolve(2), table);
       expect(result).toBeUndefined();
     });
     it('should find parent node of a given `nodeType` at a given `$pos`, if `nodeType` is an array', () => {
       const { state } = createEditor(doc(p('hello')));
-      const { table, blockquote, paragraph } = state.schema.nodes;
-      const { node } = findParentNodeOfTypeClosestToPos(state.doc.resolve(2), [
-        table,
-        blockquote,
-        paragraph
-      ]);
-      expect(node.type.name).toEqual('paragraph');
+      const { table, blockquote: bq, paragraph } = state.schema.nodes;
+      const { node } =
+        findParentNodeOfTypeClosestToPos(state.doc.resolve(2), [table, bq, paragraph]) ?? {};
+      expect(node?.type.name).toEqual('paragraph');
     });
   });
 
   describe('hasParentNodeOfType', () => {
     it('should return `true` if parent node of a given `nodeType` has been found', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
       const result = hasParentNodeOfType(schema.nodes.paragraph)(selection);
       expect(result).toBe(true);
     });
     it('should return `false` if parent node of a given `nodeType` has not been found', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('hello <cursor>')));
       const result = hasParentNodeOfType(schema.nodes.table)(selection);
       expect(result).toBe(false);
@@ -225,25 +196,19 @@ describe('selection', () => {
     it('should find DOM ref of the parent node of a given `nodeType` if cursor is directly inside it', () => {
       const {
         state: { schema, selection },
-        view
+        view,
       } = createEditor(doc(p('hello <cursor>')));
       const domAtPos = view.domAtPos.bind(view);
-      const ref = findParentDomRefOfType(
-        schema.nodes.paragraph,
-        domAtPos
-      )(selection);
+      const ref = findParentDomRefOfType(schema.nodes.paragraph, domAtPos)(selection);
       expect(ref instanceof HTMLParagraphElement).toBe(true);
     });
     it('should return `undefined` if parent node of a given `nodeType` has not been found', () => {
       const {
         state: { schema, selection },
-        view
+        view,
       } = createEditor(doc(p('hello <cursor>')));
       const domAtPos = view.domAtPos.bind(view);
-      const ref = findParentDomRefOfType(
-        schema.nodes.table,
-        domAtPos
-      )(selection);
+      const ref = findParentDomRefOfType(schema.nodes.table, domAtPos)(selection);
       expect(ref).toBeUndefined();
     });
   });
@@ -251,7 +216,7 @@ describe('selection', () => {
   describe('findSelectedNodeOfType', () => {
     it('should return `undefined` if selection is not a NodeSelection', () => {
       const {
-        state: { schema, selection }
+        state: { schema, selection },
       } = createEditor(doc(p('<cursor>')));
       const node = findSelectedNodeOfType(schema.nodes.paragraph)(selection);
       expect(node).toBeUndefined();
@@ -259,66 +224,59 @@ describe('selection', () => {
     it('should return selected node of a given `nodeType`', () => {
       const { state } = createEditor(doc(p('<cursor>one')));
       const tr = state.tr.setSelection(NodeSelection.create(state.doc, 0));
-      const selectedNode = findSelectedNodeOfType(state.schema.nodes.paragraph)(
-        tr.selection
-      );
-      expect(selectedNode.node.type.name).toEqual('paragraph');
+      const selectedNode = findSelectedNodeOfType(state.schema.nodes.paragraph)(tr.selection);
+      expect(selectedNode?.node.type.name).toEqual('paragraph');
     });
     it('should return selected node of one of the given `nodeType`s', () => {
       const { state } = createEditor(doc(p('<cursor>one')));
       const { paragraph, table } = state.schema.nodes;
       const tr = state.tr.setSelection(NodeSelection.create(state.doc, 0));
-      const selectedNode = findSelectedNodeOfType([paragraph, table])(
-        tr.selection
-      );
-      expect(selectedNode.node.type.name).toEqual('paragraph');
+      const selectedNode = findSelectedNodeOfType([paragraph, table])(tr.selection);
+      expect(selectedNode?.node.type.name).toEqual('paragraph');
     });
   });
 
   describe('findPositionOfNodeBefore', () => {
     it('should return `undefined` if there is no nodeBefore', () => {
       const {
-        state: { selection }
+        state: { selection },
       } = createEditor(doc(p('<cursor>')));
       const result = findPositionOfNodeBefore(selection);
       expect(result).toBeUndefined();
     });
     it('should return position of nodeBefore if its a table', () => {
       const {
-        state: { selection }
+        state: { selection },
       } = createEditor(doc(p('text'), blockquote(p(), p()), '<cursor>'));
       const position = findPositionOfNodeBefore(selection);
       expect(position).toEqual(6);
     });
     it('should return position of nodeBefore if its a blockquote', () => {
       const {
-        state: { selection }
+        state: { selection },
       } = createEditor(doc(p('text'), blockquote(p('')), '<cursor>'));
       const position = findPositionOfNodeBefore(selection);
       expect(position).toEqual(6);
     });
     it('should return position of nodeBefore if its a nested leaf node', () => {
       const {
-        state: { selection }
+        state: { selection },
       } = createEditor(
-        doc(
-          p('text'),
-          blockquote(blockquote(blockquote(p('1'), atomBlock(), '<cursor>')))
-        )
+        doc(p('text'), blockquote(blockquote(blockquote(p('1'), atomBlock(), '<cursor>')))),
       );
       const position = findPositionOfNodeBefore(selection);
       expect(position).toEqual(12);
     });
     it('should return position of nodeBefore if its a leaf node', () => {
       const {
-        state: { selection }
+        state: { selection },
       } = createEditor(doc(p('text'), atomBlock(), '<cursor>'));
       const position = findPositionOfNodeBefore(selection);
       expect(position).toEqual(6);
     });
     it('should return position of nodeBefore if its a leaf node with nested inline atom node', () => {
       const {
-        state: { selection }
+        state: { selection },
       } = createEditor(doc(p('text'), atomContainer(atomBlock()), '<cursor>'));
       const position = findPositionOfNodeBefore(selection);
       expect(position).toEqual(6);
@@ -337,7 +295,7 @@ describe('selection', () => {
       const { view } = createEditor(doc(p('one', atomInline(), 'two')));
       const ref = findDomRefAtPos(4, view.domAtPos.bind(view));
       expect(ref instanceof HTMLSpanElement).toBe(true);
-      expect(ref.getAttribute('data-node-type')).toEqual('atomInline');
+      expect(ref?.getAttribute('data-node-type')).toEqual('atomInline');
     });
 
     it('should return DOM reference of a content block node', () => {

@@ -1,3 +1,8 @@
+## 1.0.1 (2022-06-27)
+
+- Port to typescript
+- export esm and cjs builds, no bundle
+
 ## 1.0.0 (2020-09-21)
 
 ### Changed
@@ -10,48 +15,48 @@ We are in the process of deprecating `promisemirror-tables` as the code has beco
 
 The functions removed in this release are:
 
-* addColumnAt
-* addRowAt
-* cloneRowAt
-* convertArrayOfRowsToTableNode
-* convertTableNodeToArrayOfRows
-* createCell
-* createTable
-* emptyCell
-* findCellClosestToPos
-* findCellRectClosestToPos
-* findTable
-* findTableClosestToPos
-* forEachCellInColumn
-* forEachCellInRow
-* getCellsInColumn
-* getCellsInRow
-* getCellsInTable
-* getSelectionRangeInColumn
-* getSelectionRangeInRow
-* getSelectionRect
-* isCellSelection
-* isColumnSelected
-* isRectSelected
-* isRowSelected
-* isTableSelected
-* moveColumn
-* moveRow
-* moveTableColumn
-* moveTableRow
-* removeColumnAt
-* removeColumnClosestToPos
-* removeRowAt
-* removeRowClosestToPos
-* removeSelectedColumns
-* removeSelectedRows
-* removeTable
-* selectColumn
-* selectRow
-* selectTable
-* setCellAttrs
-* tableNodeTypes
-* transpose
+- addColumnAt
+- addRowAt
+- cloneRowAt
+- convertArrayOfRowsToTableNode
+- convertTableNodeToArrayOfRows
+- createCell
+- createTable
+- emptyCell
+- findCellClosestToPos
+- findCellRectClosestToPos
+- findTable
+- findTableClosestToPos
+- forEachCellInColumn
+- forEachCellInRow
+- getCellsInColumn
+- getCellsInRow
+- getCellsInTable
+- getSelectionRangeInColumn
+- getSelectionRangeInRow
+- getSelectionRect
+- isCellSelection
+- isColumnSelected
+- isRectSelected
+- isRowSelected
+- isTableSelected
+- moveColumn
+- moveRow
+- moveTableColumn
+- moveTableRow
+- removeColumnAt
+- removeColumnClosestToPos
+- removeRowAt
+- removeRowClosestToPos
+- removeSelectedColumns
+- removeSelectedRows
+- removeTable
+- selectColumn
+- selectRow
+- selectTable
+- setCellAttrs
+- tableNodeTypes
+- transpose
 
 ## 0.9.6 (2018-08-07)
 
@@ -68,7 +73,8 @@ The functions removed in this release are:
 ### Breaking changes
 
 Changed returning value of all selection utils to `{ node, start, pos}`, where
-  * `start` points to the start position of the node
-  * `pos` points directly before the node
-  * `node` ProseMirror node
-Previously, `pos` used to point to the `start` position of the node.
+
+- `start` points to the start position of the node
+- `pos` points directly before the node
+- `node` ProseMirror node
+  Previously, `pos` used to point to the `start` position of the node.

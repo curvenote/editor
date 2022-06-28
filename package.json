@@ -24,58 +24,57 @@
     "utils",
     "helpers"
   ],
-  "jest": {
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "setupTestFrameworkScriptFile": "./jestFrameworkSetup.js",
-    "testURL": "http://localhost/"
-  },
   "typings": "typings.d.ts",
   "files": [
     "dist",
     "typings.d.ts"
   ],
   "scripts": {
-    "build": "NODE_ENV=production rollup -c",
-    "build_readme": "builddocs --name utils --format markdown --main src/README.md src/*.js > README.md",
-    "build_all": "npm run build && npm run build_readme",
+    "clean": "rimraf dist",
+    "build:readme": "builddocs --name utils --format markdown --main src/README.md src/*.js > README.md",
+    "build:cjs": "tsc --project ./src/tsconfig.json",
+    "build:esm": "tsc --project ./src/tsconfig.json --module ES2020 --outDir ./dist/esm",
+    "declarations": "tsc --project ./src/tsconfig.json --declaration --emitDeclarationOnly --outDir dist/types",
+    "build": "npm-run-all -l clean -p build:cjs build:esm declarations",
+    "lint": "eslint \"src/**/*.ts\" -c .eslintrc.json",
+    "lint:format": "prettier --check \"src/**/*.ts\"",
+    "lint:format:fix": "prettier --write \"src/**/*.ts\"",
     "test": "NODE_ENV=testing jest",
-    "test-ci": "NODE_ENV=testing jest --coverage && codecov",
-    "prepare": "npm run build_all",
-    "precommit": "lint-staged"
+    "prepare": "npm run build"
   },
   "peerDependencies": {
-    "prosemirror-model": "^1.0.0",
-    "prosemirror-state": "^1.0.1"
+    "prosemirror-model": "^1.18.1",
+    "prosemirror-state": "^1.4.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-jest": "^23.6.0",
-    "babel-preset-env": "^1.7.0",
+    "@types/jest": "^28.1.3",
+    "@types/mocha": "^9.1.1",
     "builddocs": "^0.3.2",
-    "codecov": "^3.1.0",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.1.0",
     "husky": "^1.3.0",
-    "jest": "^23.6.0",
-    "jest-diff": "^23.6.0",
-    "lint-staged": "^8.1.0",
-    "prettier": "^1.15.3",
-    "prosemirror-model": "^1.0.0",
-    "prosemirror-schema-basic": "^1.0.0",
-    "prosemirror-state": "^1.0.1",
-    "prosemirror-test-builder": "^1.0.1",
-    "prosemirror-view": "^1.1.1",
-    "rollup": "^0.56.3",
-    "rollup-plugin-babel": "^3.0.3"
+    "jest": "^28.1.1",
+    "jest-diff": "^28.1.1",
+    "jest-environment-jsdom": "^28.1.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "prosemirror-model": "^1.18.1",
+    "prosemirror-schema-basic": "^1.2.0",
+    "prosemirror-state": "^1.4.1",
+    "prosemirror-test-builder": "^1.1.0",
+    "prosemirror-transform": "^1.6.0",
+    "prosemirror-view": "^1.26.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.5"
   },
   "lint-staged": {
     "*.{js, md}": [
       "prettier --write",
       "git add"
     ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailing-comma": "es5"
   }
 }
