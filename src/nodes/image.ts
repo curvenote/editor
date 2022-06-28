@@ -85,7 +85,7 @@ const image: MyNodeSpec<Attrs, Image> = {
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
   const md = `![${state.esc(node.attrs.alt || '')}](${state.esc(src)}${
-    node.attrs.title ? ` ${state.quote(node.attrs.title)}` : ''
+    node.attrs.title ? ` ${(state as any).quote(node.attrs.title)}` : ''
   })`;
   state.write(md);
   state.closeBlock(node);

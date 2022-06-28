@@ -84,7 +84,7 @@ const renderListTableRow: MdFormatSerialize = (state, row) => {
             return;
           }
           if (child.firstChild?.type.name === nodeNames.text) {
-            child.firstChild.text = child.firstChild.text?.replace(/^\n+/, '\n');
+            (child.firstChild as any).text = child.firstChild.text?.replace(/^\n+/, '\n');
           }
         }
         children.push(child);
@@ -191,7 +191,7 @@ export const toGFMMarkdownTable: MdFormatSerialize = (state, node) => {
 
 function renderTableCell(
   state: TexSerializerState,
-  cell: Node<any>,
+  cell: Node,
   i: number,
   spanIdx: number,
   widths: number[],
@@ -213,8 +213,8 @@ function renderTableCell(
     // Render simple things inline, otherwise render a block
     state.renderInline(cell.content.child(0));
   } else {
-    cell.content.forEach((content) => {
-      state.render(content);
+    cell.content.forEach((content, index) => {
+      state.render(content, cell, index);
     });
   }
   if (colspan > 1) state.write('}');
@@ -227,7 +227,7 @@ function renderTableCell(
 /**
  * convert prosemirror table node into latex table
  */
-export function renderNodeToLatex(state: TexSerializerState, node: Node<any>) {
+export function renderNodeToLatex(state: TexSerializerState, node: Node) {
   const { widths, columnSpec, numColumns } = getColumnWidths(node);
   if (!numColumns) {
     throw new Error('invalid table format, no columns');

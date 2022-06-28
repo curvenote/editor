@@ -6,4 +6,9 @@ module.exports = {
   moduleNameMapper: {
     mystjs: '<rootDir>/node_modules/mystjs/dist/index.umd.js',
   },
+  globals: {
+    'ts-jest': {
+      tsconfig: './src/tsconfig.json',
+    },
+  },
 };

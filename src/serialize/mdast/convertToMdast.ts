@@ -93,7 +93,7 @@ export function convertToMdast(node: ProsemirrorNode, opts: MdastOptions): Root 
   const schema = getSchema((opts.useSchema as UseSchema) || 'full');
   const serializer = getSerializer(schema);
   const dom = serializer.serializeFragment(node.content, {
-    document: createDocument(),
+    document: createDocument() as any,
   }) as unknown as Fragment;
   const root = { type: 'root', children: nodeToMdast(dom.children, schema, opts) } as Root;
   const footnotes = selectAll('inlineFootnote', root) as InlineFootnote[];

@@ -1,5 +1,5 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node, Schema } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
 import type { GenericNode } from 'mystjs';
 
 export enum TexFormatTypes {
@@ -16,8 +16,8 @@ export interface TexStatementOptions {
   after?: string;
 }
 
-export interface SharedOptions {
-  tightLists?: boolean | null;
+export interface SharedMarkdownOptions {
+  tightLists?: boolean | undefined;
   indent?: string;
   /**
    * Localize a reference, e.g. take an ID and create a local ID
@@ -31,23 +31,23 @@ export interface SharedOptions {
   localizeLink?: (src: string) => string;
 }
 
-export interface MarkdownOptions extends SharedOptions {
+export interface MarkdownOptions extends SharedMarkdownOptions {
   renderers?: {
     iframe?: 'html' | 'myst';
   };
   createMdastImportId?: () => string;
 }
 
-export interface TexOptions extends SharedOptions {
+export interface TexOptions extends SharedMarkdownOptions {
   format?: TexFormatTypes;
 }
 
-export interface MdastOptions extends SharedOptions {
+export interface MdastOptions extends SharedMarkdownOptions {
   useSchema?: string;
 }
 
 export interface SharedSerializerState extends MarkdownSerializerState {
-  options: SharedOptions;
+  options: SharedMarkdownOptions;
   delim?: string;
   nextCitationInGroup?: number;
   nextCaptionId?: string;
@@ -68,16 +68,16 @@ export interface TexSerializerState extends SharedSerializerState {
   longFigure?: boolean;
 }
 
-export type MdFormatSerialize<S extends Schema<any, any> = any> = (
+export type MdFormatSerialize = (
   state: MdSerializerState,
-  node: Node<S>,
-  parent: Node<S>,
+  node: Node,
+  parent: Node,
   index: number,
 ) => void;
 
-export type TexFormatSerialize<S extends Schema<any, any> = any> = (
+export type TexFormatSerialize = (
   state: TexSerializerState,
-  node: Node<S>,
-  parent: Node<S>,
+  node: Node,
+  parent: Node,
   index: number,
 ) => void;

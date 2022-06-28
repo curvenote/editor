@@ -90,7 +90,7 @@ export function renderPColumn(width: number) {
  * @param node  - node.type.name === 'table'
  * @returns
  */
-export function getColumnWidths(node: Node<any>) {
+export function getColumnWidths(node: Node) {
   // TODO: unsure about rowspans
   let bestMaybeWidths = [];
   let mostNonNulls = 0;

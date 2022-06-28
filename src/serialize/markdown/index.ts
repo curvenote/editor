@@ -24,7 +24,7 @@ const mdNodes: MarkdownSerializerParameters[0] = {
   },
   heading: nodes.Heading.toMarkdown,
   blockquote(state, node) {
-    state.wrapBlock('> ', undefined, node, () => state.renderContent(node));
+    state.wrapBlock('> ', null, node, () => state.renderContent(node));
   },
   code_block: nodes.Code.toMarkdown,
   horizontal_rule(state, node) {
@@ -105,7 +105,7 @@ const mdMarks: MarkdownSerializerParameters[1] = {
       return isPlainURL(mark, href, parent, index, -1)
         ? '>'
         : `](${state.esc(mark.attrs.href)}${
-            mark.attrs.title ? ` ${state.quote(mark.attrs.title)}` : ''
+            mark.attrs.title ? ` ${(state as any).quote(mark.attrs.title)}` : ''
           })`;
     },
   },

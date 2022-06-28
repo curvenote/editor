@@ -94,7 +94,7 @@ export function createSpec<N extends O & { type: string }>(
 function encodeFunctionName(state: MarkdownSerializerState, name: string, value: string) {
   const [first, ...rest] = name;
   const encoded = `r${first.toUpperCase()}${rest.join('')}`;
-  return `${encoded}=${state.quote(value)}`;
+  return `${encoded}=${(state as any).quote(value)}`;
 }
 
 export const nodeToMystRole = (state: MarkdownSerializerState, node: Node, def: NodeDef) => {
@@ -103,7 +103,7 @@ export const nodeToMystRole = (state: MarkdownSerializerState, node: Node, def: 
     if (attr.func) {
       const value = node.attrs[attr.name];
       const valueFunction = node.attrs[`${attr.name}Function`];
-      const prop = `${attr.name}=${state.quote(value ?? '')}`;
+      const prop = `${attr.name}=${(state as any).quote(value ?? '')}`;
       const propFunction = encodeFunctionName(state, attr.name, valueFunction);
       if (valueFunction || attr.func === 'only') {
         if (attr.func === 'only' && valueFunction === attr.default) return null;
@@ -112,7 +112,7 @@ export const nodeToMystRole = (state: MarkdownSerializerState, node: Node, def: 
       return value === attr.default ? null : prop;
     }
     const value = node.attrs[attr.name];
-    return value === attr.default ? null : `${attr.name}=${state.quote(value)}`;
+    return value === attr.default ? null : `${attr.name}=${(state as any).quote(value)}`;
   });
   state.write(values.filter((v) => !!v).join(', '));
   state.write('`');
@@ -126,13 +126,13 @@ export const nodeToMystDirective = (state: MarkdownSerializerState, node: Node, 
     if (attr.func) {
       const value = node.attrs[attr.name];
       const valueFunction = node.attrs[`${attr.name}Function`];
-      const prop = `:${attr.name}: ${state.quote(value ?? '')}`;
-      const propFunction = `:${attr.name}Function: ${state.quote(valueFunction)}`;
+      const prop = `:${attr.name}: ${(state as any).quote(value ?? '')}`;
+      const propFunction = `:${attr.name}Function: ${(state as any).quote(valueFunction)}`;
       if (valueFunction || attr.func === 'only') return propFunction;
       return prop;
     }
     const value = node.attrs[attr.name];
-    return value ? `:${attr.name}: ${state.quote(value)}` : null;
+    return value ? `:${attr.name}: ${(state as any).quote(value)}` : null;
   });
   state.write(values.filter((v) => v !== null).join('\n'));
   state.write('\n```');

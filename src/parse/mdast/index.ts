@@ -44,7 +44,7 @@ export class MarkdownParseState {
   constructor(schema: Schema, handlers: Record<string, TokenHandler>) {
     this.schema = schema;
     this.stack = [{ type: schema.topNodeType, attrs: {}, content: [] }];
-    this.marks = Mark.none;
+    this.marks = [];
     this.handlers = handlers;
   }
 
@@ -55,7 +55,7 @@ export class MarkdownParseState {
   addNode(
     type: NodeType,
     attrs: Attrs,
-    content: ProsemirrorNode<any> | Fragment<any> | ProsemirrorNode<any>[] | undefined,
+    content: ProsemirrorNode | Fragment | ProsemirrorNode[] | undefined,
   ) {
     const top = this.top();
     const node = type.createAndFill(attrs, content, this.marks);
@@ -76,13 +76,13 @@ export class MarkdownParseState {
   // : (Mark)
   // Adds the given mark to the set of active marks.
   openMark(mark: Mark) {
-    this.marks = mark.addToSet(this.marks);
+    (this as any).marks = mark.addToSet(this.marks);
   }
 
   // : (Mark)
   // Removes the given mark from the set of active marks.
   closeMark(mark: Mark) {
-    this.marks = mark.removeFromSet(this.marks);
+    (this as any).marks = mark.removeFromSet(this.marks);
   }
 
   openNode(type: NodeType, attrs: Record<string, any>) {

@@ -116,7 +116,7 @@ export const toMarkdown: MdFormatSerialize = (state, node, parent, index) => {
       const { src, align, width } = image?.attrs as ImageAttrs | IFrameAttrs;
       const href = state.options.localizeImageSrc?.(src) ?? src;
       if (image.type.name === nodeNames.iframe) {
-        state.render(image);
+        state.render(image, parent, index);
         return;
       }
       state.write(`\`\`\`{figure} ${href}\n`);
@@ -141,7 +141,7 @@ export const toMarkdown: MdFormatSerialize = (state, node, parent, index) => {
         return;
       }
       state.nextTableCaption = caption;
-      if (table) state.render(table);
+      if (table) state.render(table, parent, index);
       state.closeBlock(node);
       return;
     }
@@ -188,7 +188,7 @@ function nodeToLaTeXOptions(node: Node) {
   }
 }
 
-function figureContainsTable(node: Node<any>) {
+function figureContainsTable(node: Node) {
   const table = (node.content as any).content.find((n: any) => n.type.name === nodeNames.table);
   return table;
 }

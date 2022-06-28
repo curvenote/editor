@@ -18,7 +18,7 @@ export function getDatetime(object?: Date | string | null): Date {
   return new Date();
 }
 
-export const formatDatetime = (datetime: string | Date | null): { d: Date; f: string } => {
+export function formatDatetime(datetime: string | Date | null): { d: Date; f: string } {
   try {
     const d = getDatetime(datetime);
     const f = format(d, 'LLL d, yyyy');
@@ -26,7 +26,7 @@ export const formatDatetime = (datetime: string | Date | null): { d: Date; f: st
   } catch (e) {
     return formatDatetime(new Date());
   }
-};
+}
 
 export type Attrs = {
   datetime: Date | null;

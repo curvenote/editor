@@ -67,9 +67,9 @@ export const tnodes = builders(schema, {
   code_block: { nodeType: 'code_block', language: 'python' },
   code_block_yaml: { nodeType: 'code_block', language: 'text/x-yaml' },
   code_block_text: { nodeType: 'code_block', language: 'text/plain' },
-});
+}) as any;
 
-export const tdoc = (...args: Parameters<typeof tnodes.doc>) => tnodes.doc('', ...args);
+export const tdoc = (...args: any) => tnodes.doc('', ...args);
 
 export function compare(
   from: (text: string) => ProsemirrorNode,
