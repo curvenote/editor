@@ -1,6 +1,6 @@
-import { nodeNames } from '@curvenote/schema/dist/types';
+import { nodeNames } from '@curvenote/schema';
 import { isInTable } from 'prosemirror-tables';
-import { hasParentNode } from 'prosemirror-utils';
+import { hasParentNode } from 'prosemirror-utils1';
 import { EditorView } from 'prosemirror-view';
 
 export enum CommandNames {

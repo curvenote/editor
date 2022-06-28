@@ -12,8 +12,5 @@ module.exports = merge(common, {
     contentBase: './dist',
     watchContentBase: true,
     port: process.env.PORT,
-    before(app) {
-      app.use('/images', express.static(path.resolve('images')));
-    },
   },
 });

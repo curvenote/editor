@@ -1,10 +1,4 @@
-import {
-  EditorState,
-  NodeSelection,
-  Selection,
-  TextSelection,
-  Transaction,
-} from 'prosemirror-state';
+import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
 import {
   wrapIn as wrapInPM,
   setBlockType as setBlockTypePM,
@@ -14,7 +8,11 @@ import {
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
 import { MarkType, NodeType, Node, Fragment, Schema, NodeRange } from 'prosemirror-model';
 import { Nodes, nodeNames, createId } from '@curvenote/schema';
-import { replaceSelectedNode, selectParentNodeOfType, ContentNodeWithPos } from 'prosemirror-utils';
+import {
+  replaceSelectedNode,
+  selectParentNodeOfType,
+  ContentNodeWithPos,
+} from 'prosemirror-utils1';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
 import { AppThunk } from '../types';
@@ -201,8 +199,7 @@ export function replaceSelection(
     const replaceWithNode = replaceSelectedNode(node.create(attrs, nodeContent));
     let tr = replaceWithNode(selectParagraph(editor.state.tr));
     if (node.name === nodes.code_block.name) {
-      const pos = tr.doc.resolve(tr.selection.from + 1);
-      const sel = new Selection(pos, pos);
+      const sel = TextSelection.create(tr.doc, tr.selection.from + 1);
       tr = tr.setSelection(sel);
     }
     return dispatch(applyProsemirrorTransaction(editor.key, editor.viewId, tr));

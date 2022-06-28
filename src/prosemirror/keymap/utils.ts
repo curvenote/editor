@@ -1,4 +1,7 @@
-import { chainCommands, Command, Keymap } from 'prosemirror-commands';
+import type { Command } from 'prosemirror-state';
+import { chainCommands } from 'prosemirror-commands';
+
+export type Keymap = Record<string, Command>;
 
 export type AddKey = (key: string, ...cmds: Command[]) => void;
 export type CommandList = Record<string, Command[]>;

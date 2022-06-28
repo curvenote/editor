@@ -6,6 +6,7 @@ export const initialState: UIState = {
   selection: null,
 };
 
+// eslint-disable-next-line @typescript-eslint/default-param-last
 const uiReducer = (state = initialState, action: UIActionTypes): UIState => {
   switch (action.type) {
     case SELECT_EDITOR_VIEW: {

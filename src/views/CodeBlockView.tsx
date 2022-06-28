@@ -22,7 +22,7 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { EditorState, Selection, TextSelection, Transaction } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { nodeNames } from '@curvenote/schema';
 import { GetPos, LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
@@ -170,7 +170,7 @@ class CodeBlockNodeView implements NodeView {
       const tr = this.view.state.tr.replaceWith(
         start + change.from,
         start + change.to,
-        change.text ? this.view.state.schema.text(change.text) : null,
+        change.text ? this.view.state.schema.text(change.text) : [],
       );
       this.view.dispatch(tr);
     }
@@ -193,7 +193,7 @@ class CodeBlockNodeView implements NodeView {
         // When you hit backspace in an empty codeblock, create a paragraph and select the text inside of it
         const pos = this.getPos();
         const { schema } = view.state;
-        const paragraph = schema.nodes.paragraph.create('');
+        const paragraph = schema.nodes.paragraph.create();
         const tr = view.state.tr.delete(pos, pos + this.node.nodeSize).insert(pos, paragraph);
         // The selection should be in the same place as before the delete
         // Note, we could replace the node instead, that might be better

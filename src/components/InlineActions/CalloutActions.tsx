@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { findParentNode } from 'prosemirror-utils';
+import { findParentNode } from 'prosemirror-utils1';
 import { Node } from 'prosemirror-model';
 import { nodeNames } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';
