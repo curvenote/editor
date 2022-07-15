@@ -19,14 +19,16 @@ export const TEST_LINK_COMMON_SPACE =
 export const TEST_LINK_COMMON =
   /^[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
 
+const VALID_PROTOCOLS = new Set(['http:', 'https:', 'ftp:']);
 export function validateUrl(url: string) {
+  if (url.includes(' ')) return false;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const temp = new URL(url);
+    const valid = new URL(url);
+    if (VALID_PROTOCOLS.has(valid.protocol)) return true;
+    return false;
   } catch (e) {
     return false;
   }
-  return true;
 }
 // used by chromium: https://stackoverflow.com/a/46181/5465086
 export function validateEmail(url: string) {
