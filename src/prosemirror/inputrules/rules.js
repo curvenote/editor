@@ -48,21 +48,41 @@ export var copyright = function (schema) { return [
     new InputRule(/(\(c\)\s)$/, '© '),
     new InputRule(/(\(r\)\s)$/, '® '),
 ]; };
+var ENDING_PUNCTUATION = /([.;,!])$/;
 function normalize(match) {
-    var url = match[0].slice(0, -1);
+    var url = match[1];
+    var punctuation = url.match(ENDING_PUNCTUATION);
+    if (punctuation) {
+        url = url.replace(ENDING_PUNCTUATION, '');
+    }
     if (validateEmail(url)) {
         return { href: "mailto:".concat(url), text: url };
     }
     return { href: normalizeUrl(url) };
 }
+function getLinkText(match) {
+    var url = match[1];
+    var punctuation = url.match(ENDING_PUNCTUATION);
+    if (punctuation) {
+        return url.replace(ENDING_PUNCTUATION, '');
+    }
+    return url;
+}
+function getTextAfter(match) {
+    var url = match[1];
+    var punctuation = url.match(ENDING_PUNCTUATION);
+    return punctuation ? "".concat(punctuation[1]).concat(match[2]) : match[2];
+}
 export var link = function (schema) { return [
     markInputRule(TEST_LINK_SPACE, schema.marks.link, {
         getAttrs: normalize,
-        addSpace: true,
+        getText: getLinkText,
+        getTextAfter: getTextAfter,
     }),
     markInputRule(TEST_LINK_COMMON_SPACE, schema.marks.link, {
         getAttrs: normalize,
-        addSpace: true,
+        getText: getLinkText,
+        getTextAfter: getTextAfter,
     }),
 ]; };
 export var lists = function (schema) { return [

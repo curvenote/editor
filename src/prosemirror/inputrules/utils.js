@@ -18,8 +18,9 @@ export function markInputRule(regexp, markType, options) {
         var parent = findParentNode(function (n) { return n.type === state.schema.nodes.math; })(TextSelection.create(state.doc, start, end));
         if (parent === null || parent === void 0 ? void 0 : parent.node)
             return null;
-        var _b = options !== null && options !== void 0 ? options : {}, getAttrs = _b.getAttrs, getText = _b.getText, addSpace = _b.addSpace;
+        var _b = options !== null && options !== void 0 ? options : {}, getAttrs = _b.getAttrs, getText = _b.getText, getTextAfter = _b.getTextAfter;
         var attrs = getAttrs instanceof Function ? getAttrs(match) : getAttrs;
+        var textAfter = getTextAfter instanceof Function ? getTextAfter(match) : getTextAfter;
         var tr = state.tr;
         if (state.doc.rangeHasMark(start, end, markType)) {
             return null;
@@ -30,8 +31,8 @@ export function markInputRule(regexp, markType, options) {
         tr.insertText(text);
         tr.addMark(start, start + text.length, mark);
         tr.removeStoredMark(markType);
-        if (addSpace)
-            tr.insertText(' ');
+        if (textAfter)
+            tr.insertText(textAfter);
         return tr;
     });
 }

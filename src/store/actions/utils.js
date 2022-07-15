@@ -13,17 +13,22 @@ import { nodeNames, CaptionKind, createId, findChildrenWithName, process, } from
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { Fragment } from 'prosemirror-model';
 import { opts } from '../../connect';
-export var TEST_LINK_SPACE = /((https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
-export var TEST_LINK_COMMON_SPACE = /((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*))\s$/;
+export var TEST_LINK_SPACE = /((?:https?:\/\/)(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_+.~#?&//=]*))([\s!,;])$/;
+export var TEST_LINK_COMMON_SPACE = /((?:https?:\/\/)?(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b(?:[-a-zA-Z0-9@:%_+.~#?&//=]*))([\s!,;])$/;
 export var TEST_LINK_COMMON = /^[-a-zA-Z0-9@:%._+~#=]{2,256}\.(?:com|ca|space|xyz|org|app|dev|io|net|gov|edu)\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
+var VALID_PROTOCOLS = new Set(['http:', 'https:', 'ftp:']);
 export function validateUrl(url) {
+    if (url.includes(' '))
+        return false;
     try {
-        var temp = new URL(url);
+        var valid = new URL(url);
+        if (VALID_PROTOCOLS.has(valid.protocol))
+            return true;
+        return false;
     }
     catch (e) {
         return false;
     }
-    return true;
 }
 export function validateEmail(url) {
     return String(url)
