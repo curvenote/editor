@@ -17,7 +17,7 @@ export function markInputRule(
   options?: {
     getAttrs?: GetAttrs;
     getText?: (p: string[]) => string;
-    addSpace?: boolean;
+    getTextAfter?: ((p: string[]) => string) | string;
   },
 ) {
   return new InputRule(regexp, (state, match, start, end) => {
@@ -26,8 +26,9 @@ export function markInputRule(
       TextSelection.create(state.doc, start, end),
     );
     if (parent?.node) return null;
-    const { getAttrs, getText, addSpace } = options ?? {};
+    const { getAttrs, getText, getTextAfter } = options ?? {};
     const attrs = getAttrs instanceof Function ? getAttrs(match) : getAttrs;
+    const textAfter = getTextAfter instanceof Function ? getTextAfter(match) : getTextAfter;
     const { tr } = state;
     if (state.doc.rangeHasMark(start, end, markType)) {
       return null;
@@ -38,7 +39,7 @@ export function markInputRule(
     tr.insertText(text);
     tr.addMark(start, start + text.length, mark);
     tr.removeStoredMark(markType);
-    if (addSpace) tr.insertText(' ');
+    if (textAfter) tr.insertText(textAfter);
     return tr;
   });
 }

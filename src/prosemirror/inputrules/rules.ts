@@ -70,22 +70,42 @@ export const copyright = (schema: Schema) => [
   new InputRule(/(\(r\)\s)$/, '® '),
 ];
 
+const ENDING_PUNCTUATION = /([.;,!])$/;
 function normalize(match: string[]) {
-  const url = match[0].slice(0, -1);
+  let url = match[1];
+  const punctuation = url.match(ENDING_PUNCTUATION);
+  if (punctuation) {
+    url = url.replace(ENDING_PUNCTUATION, '');
+  }
   if (validateEmail(url)) {
     return { href: `mailto:${url}`, text: url };
   }
   return { href: normalizeUrl(url) };
 }
+function getLinkText(match: string[]) {
+  const url = match[1];
+  const punctuation = url.match(ENDING_PUNCTUATION);
+  if (punctuation) {
+    return url.replace(ENDING_PUNCTUATION, '');
+  }
+  return url;
+}
+function getTextAfter(match: string[]) {
+  const url = match[1];
+  const punctuation = url.match(ENDING_PUNCTUATION);
+  return punctuation ? `${punctuation[1]}${match[2]}` : match[2];
+}
 
 export const link = (schema: Schema) => [
   markInputRule(TEST_LINK_SPACE, schema.marks.link, {
     getAttrs: normalize,
-    addSpace: true,
+    getText: getLinkText,
+    getTextAfter,
   }),
   markInputRule(TEST_LINK_COMMON_SPACE, schema.marks.link, {
     getAttrs: normalize,
-    addSpace: true,
+    getText: getLinkText,
+    getTextAfter,
   }),
 ];
 

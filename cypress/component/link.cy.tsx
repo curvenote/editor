@@ -170,12 +170,17 @@ describe('generate link while typing', () => {
     });
     return result;
   }
-  async function shouldGenerateLink(input: string, shouldExits: boolean, href = `http://${input}`) {
+  async function shouldGenerateLink(
+    input: string,
+    shouldExits: boolean,
+    href = `http://${input}`,
+    text = input,
+  ) {
     const result = await typeLink(input);
     const anchor = result.container?.querySelector(`a[href="${href}"]`);
     if (shouldExits) {
       if (!assertElExists(anchor)) return;
-      expect(anchor.innerHTML).to.equal(input);
+      expect(anchor.innerHTML).to.equal(text);
     } else {
       expect(anchor).to.be.not.ok;
     }
@@ -185,6 +190,14 @@ describe('generate link while typing', () => {
     await shouldGenerateLink('test.com', true);
     await shouldGenerateLink('test.org', true);
     await shouldGenerateLink('test.net', true);
+  });
+
+  it('should pickup a link with punctuation', async () => {
+    await shouldGenerateLink('test.com.', true, 'http://test.com', 'test.com');
+    await shouldGenerateLink('test.com,', true, 'http://test.com', 'test.com');
+    await shouldGenerateLink('test.com!', true, 'http://test.com', 'test.com');
+    await shouldGenerateLink('test.com;', true, 'http://test.com', 'test.com');
+    await shouldGenerateLink('https://test.com;', true, 'https://test.com', 'https://test.com');
   });
 
   it('should pickup test.xyz', async () => {
@@ -206,7 +219,7 @@ describe('generate link while typing', () => {
     await shouldGenerateLink('http://test.xyz', true, 'http://test.xyz');
   });
 
-  it('should pickup text starting with protocol event tho the link seems unacceptable http://test.md', async () => {
+  it('should pickup text starting with protocol even though the link is not common (http://test.md)', async () => {
     await shouldGenerateLink('http://test.md', true, 'http://test.md');
   });
 
