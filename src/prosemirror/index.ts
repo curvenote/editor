@@ -8,7 +8,7 @@ import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
-import { selectEditorView } from '../store/actions';
+import { updateSelectView } from '../store/actions';
 
 export function createEditorState(
   useSchema: schemas.UseSchema,
@@ -89,7 +89,7 @@ export function createEditorView(
         return uploadIfImagesInSchema(view, (event as DragEvent).dataTransfer);
       },
       handleClick: (view) => {
-        store.dispatch(selectEditorView(view.dom.id));
+        store.dispatch(updateSelectView(view.dom.id));
         return false;
       },
       handleDoubleClick: (view: EditorView, pos: number, event: MouseEvent): boolean => {

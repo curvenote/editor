@@ -42,6 +42,7 @@
     "watch": "tsc -w -p ."
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.3",
     "codemirror": "5.65.0",
     "katex": "^0.15.2",
     "lodash.debounce": "^4.0.8",

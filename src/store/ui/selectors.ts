@@ -1,15 +1,15 @@
 import { PopperPlacementType } from '@material-ui/core';
+import { createSelector } from '@reduxjs/toolkit';
 import { State } from '../types';
-import { getEditorState, getEditorView } from '../state/selectors';
+import { getEditorState, getEditorView, selectEditorViewState } from '../state/selectors';
 
 export function getEditorUI(state: State) {
   return state.editor.ui;
 }
 
-export function getEditorUIStateAndViewIds(state: State) {
-  const { stateId, viewId } = state.editor.ui;
+export const getEditorUIStateAndViewIds = createSelector([getEditorUI], ({ stateId, viewId }) => {
   return { stateId, viewId };
-}
+});
 
 export function isInlineActionOpen(state: State) {
   return state.editor.ui.selection != null;
@@ -34,11 +34,11 @@ export function getSelectedEditorAndViews(state: State) {
   return { ...getEditorState(state, stateId), ...getEditorView(state, viewId), viewId };
 }
 
-export function getSelectedViewId(state: State) {
-  const { stateId, viewId } = getEditorUI(state);
-  return { stateId, viewId };
-}
+export const getSelectedViewId = createSelector([getEditorUI], ({ stateId, viewId }) => ({
+  stateId,
+  viewId,
+}));
 
-export function isEditorViewFocused(state: State, viewId: string | null): boolean {
-  return getEditorView(state, viewId).view?.hasFocus() ?? false;
-}
+export const isEditorViewFocused = createSelector([selectEditorViewState], (editorView) => {
+  return editorView.view?.hasFocus() ?? false;
+});
