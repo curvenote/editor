@@ -21,7 +21,7 @@ export const selectEditorViewState = createSelector(
 );
 
 export const selectEditorState = createSelector(
-  [selectEditors, (_: State, stateKey: string | null) => stateKey],
+  [selectEditors, (_: State, stateKey: any) => stateKey],
   (editors, stateKey) => {
     const blank = {
       key: null,
