@@ -61,9 +61,8 @@ function Attributes() {
   }, isEqual);
   const location = useSelector((state: State) => getAttributeEditorLocation(state), isEqual);
 
-  const attrs = useSelector(
-    (state: State) => (node ? getNodeAttrs(state, stateKey, pos) ?? {} : {}),
-    isEqual,
+  const attrs = useSelector((state: State) =>
+    node ? getNodeAttrs(state, stateKey, pos) ?? {} : {},
   );
   const keys = Object.keys(attrs);
 

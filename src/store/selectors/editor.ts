@@ -41,7 +41,7 @@ export const getParentsOfSelection = createSelector(
 );
 
 export const getNodeAttrs = createSelector(
-  [selectEditorState, (_: State, pos: number) => pos],
+  [selectEditorState, (_: State, stateKey: string | null, pos: number) => pos],
   (editor, pos) => {
     if (editor.state == null) return null;
     const out = editor.state.doc.resolve(pos);
