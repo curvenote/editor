@@ -71,7 +71,7 @@ function Attributes() {
       if (node == null) return;
       dispatch(updateNodeAttrs(stateKey, null, { node, pos }, { [key]: value }));
     },
-    [dispatch, stateKey, node],
+    [dispatch, stateKey, node, pos],
   );
   const onClose = useCallback(() => dispatch(closeAttributeEditor()), []);
 
