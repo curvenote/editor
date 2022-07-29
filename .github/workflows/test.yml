@@ -28,7 +28,5 @@ jobs:
           component: true
           quiet: true
           record: false
-          watchForFileChanges: false
-          watch: false
       - run: yarn run lint
       - run: yarn run lint:format
