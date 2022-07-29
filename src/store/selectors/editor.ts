@@ -71,14 +71,15 @@ function makeSelectionIsMarkedWith<T extends Record<string, any>>() {
       (_: State, stateKey: string | null, types: Record<keyof T, MarkType | undefined>) => types,
     ],
     (editor, types) => {
-      if (editor.state == null) return falseMap(types);
-      const { from, $from, to, empty } = editor.state.selection;
+      const { state: editorState } = editor;
+      if (editorState == null) return falseMap(types);
+      const { from, $from, to, empty } = editorState.selection;
       const active = Object.fromEntries(
         Object.entries(types).map(([key, type]) => {
           const mark = type as MarkType | undefined;
           if (!mark) return [key, false];
-          if (empty) return [key, Boolean(mark.isInSet(editor.state.storedMarks || $from.marks()))];
-          return [key, editor.state.doc.rangeHasMark(from, to, mark)];
+          if (empty) return [key, Boolean(mark.isInSet(editorState.storedMarks || $from.marks()))];
+          return [key, editorState.doc.rangeHasMark(from, to, mark)];
         }),
       );
       return active as Record<keyof T, boolean>;
@@ -95,12 +96,13 @@ function makeSelectSelectionIsChildOf<T extends Record<string, any>>() {
       (_: State, stateKey: string | null, nodes: Record<keyof T, NodeType | undefined>) => nodes,
     ],
     (editor, nodes) => {
-      if (editor.state == null) return falseMap(nodes);
+      const { state: editorState } = editor;
+      if (editorState == null) return falseMap(nodes);
       const active = Object.fromEntries(
         Object.entries(nodes).map(([key, type]) => {
           const node = type as NodeType | undefined;
           if (!node) return [key, false];
-          return [key, hasParentNode((test) => test.type === node)(editor.state.selection)];
+          return [key, hasParentNode((test) => test.type === node)(editorState.selection)];
         }),
       );
       return active as Record<keyof T, boolean>;
