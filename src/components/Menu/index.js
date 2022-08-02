@@ -3,7 +3,6 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Menu } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import isEqual from 'lodash.isequal';
 import { CommandNames } from '../../store/suggestion/commands';
 import { selectors, actions } from '../../store';
 import MenuIcon from './Icon';
@@ -26,6 +25,8 @@ var useStyles = makeStyles(function (theme) {
 });
 function TableMenu(_a) {
     var onClose = _a.onClose, anchor = _a.anchor, isOpen = _a.isOpen, command = _a.command;
+    if (!isOpen)
+        return null;
     function item(title, action) {
         return (React.createElement(MenuAction, { key: action, title: title, action: function () {
                 command(action);
@@ -45,8 +46,8 @@ function TableMenu(_a) {
         item('Toggle header row', CommandNames.toggle_header_row),
         item('Toggle header cells', CommandNames.toggle_header_cell),
     ];
-    return (React.createElement(React.Fragment, null, isOpen && (React.createElement(Menu, { id: "table-menu", anchorEl: anchor, keepMounted: true, open: Boolean(anchor), onClose: onClose },
-        React.createElement("div", { onClick: function () { return onClose(); } }, tableMenu)))));
+    return (React.createElement(Menu, { id: "table-menu", anchorEl: anchor, keepMounted: true, open: Boolean(anchor), onClose: onClose },
+        React.createElement("div", { onClick: function () { return onClose(); } }, tableMenu)));
 }
 function EditorMenu(props) {
     var standAlone = props.standAlone, disabled = props.disabled;
@@ -73,7 +74,7 @@ function EditorMenu(props) {
             linked: schema === null || schema === void 0 ? void 0 : schema.marks.link,
             code: schema === null || schema === void 0 ? void 0 : schema.marks.code,
         });
-    }, isEqual);
+    });
     var parents = useSelector(function (state) {
         return selectors.selectionIsChildOf(state, stateId, {
             ul: schema === null || schema === void 0 ? void 0 : schema.nodes.bullet_list,
@@ -82,12 +83,12 @@ function EditorMenu(props) {
             math: schema === null || schema === void 0 ? void 0 : schema.nodes.math,
             cite_group: schema === null || schema === void 0 ? void 0 : schema.nodes.cite_group,
         });
-    }, isEqual);
+    });
     var nodes = useSelector(function (state) {
         return selectors.selectionIsThisNodeType(state, stateId, {
             cite: schema === null || schema === void 0 ? void 0 : schema.nodes.cite,
         });
-    }, isEqual);
+    });
     var toggleMark = useCallback(function (mark) { return dispatch(actions.toggleMark(stateId, viewId, mark)); }, [stateId, viewId]);
     var wrapInline = function (node) { return dispatch(actions.insertInlineNode(node)); };
     var command = useCallback(function (name) { return dispatch(actions.executeCommand(name, viewId)); }, [stateId, viewId]);

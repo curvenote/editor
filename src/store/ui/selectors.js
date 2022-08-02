@@ -9,14 +9,15 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { getEditorState, getEditorView } from '../state/selectors';
+import { createSelector } from '@reduxjs/toolkit';
+import { getEditorState, getEditorView, selectEditorViewState } from '../state/selectors';
 export function getEditorUI(state) {
     return state.editor.ui;
 }
-export function getEditorUIStateAndViewIds(state) {
-    var _a = state.editor.ui, stateId = _a.stateId, viewId = _a.viewId;
+export var getEditorUIStateAndViewIds = createSelector([getEditorUI], function (_a) {
+    var stateId = _a.stateId, viewId = _a.viewId;
     return { stateId: stateId, viewId: viewId };
-}
+});
 export function isInlineActionOpen(state) {
     return state.editor.ui.selection != null;
 }
@@ -40,12 +41,15 @@ export function getSelectedEditorAndViews(state) {
     var _a = getEditorUI(state), stateId = _a.stateId, viewId = _a.viewId;
     return __assign(__assign(__assign({}, getEditorState(state, stateId)), getEditorView(state, viewId)), { viewId: viewId });
 }
-export function getSelectedViewId(state) {
-    var _a = getEditorUI(state), stateId = _a.stateId, viewId = _a.viewId;
-    return { stateId: stateId, viewId: viewId };
-}
-export function isEditorViewFocused(state, viewId) {
+export var getSelectedViewId = createSelector([getEditorUI], function (_a) {
+    var stateId = _a.stateId, viewId = _a.viewId;
+    return ({
+        stateId: stateId,
+        viewId: viewId,
+    });
+});
+export var isEditorViewFocused = createSelector([selectEditorViewState], function (editorView) {
     var _a, _b;
-    return (_b = (_a = getEditorView(state, viewId).view) === null || _a === void 0 ? void 0 : _a.hasFocus()) !== null && _b !== void 0 ? _b : false;
-}
+    return (_b = (_a = editorView.view) === null || _a === void 0 ? void 0 : _a.hasFocus()) !== null && _b !== void 0 ? _b : false;
+});
 //# sourceMappingURL=selectors.js.map

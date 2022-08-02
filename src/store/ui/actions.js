@@ -13,7 +13,7 @@ import { SELECT_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds, } from './types';
 import { getEditorUI, getInlineActionKind, getSelectedEditorAndViews } from './selectors';
 import { getEditorView } from '../state/selectors';
 import { getSelectionKind } from './utils';
-export function selectEditorView(viewId) {
+export function updateSelectView(viewId) {
     return function (dispatch, getState) {
         var stateId = getEditorView(getState(), viewId).stateId;
         dispatch({
@@ -22,6 +22,7 @@ export function selectEditorView(viewId) {
         });
     };
 }
+export var selectEditorView = updateSelectView;
 export function focusEditorView(viewId, focused) {
     return function (dispatch, getState) {
         var view = getEditorView(getState(), viewId).view;

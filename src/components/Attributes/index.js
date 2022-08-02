@@ -41,14 +41,14 @@ function Attributes() {
         return { node: potentialNode, editing: blank.editing };
     }, isEqual), node = _a.node, editing = _a.editing;
     var location = useSelector(function (state) { return getAttributeEditorLocation(state); }, isEqual);
-    var attrs = useSelector(function (state) { var _a; return (node ? (_a = getNodeAttrs(state, stateKey, pos)) !== null && _a !== void 0 ? _a : {} : {}); }, isEqual);
+    var attrs = useSelector(function (state) { var _a; return node ? (_a = getNodeAttrs(state, stateKey, pos)) !== null && _a !== void 0 ? _a : {} : {}; });
     var keys = Object.keys(attrs);
     var onChange = useCallback(function (key, value) {
         var _a;
         if (node == null)
             return;
         dispatch(updateNodeAttrs(stateKey, null, { node: node, pos: pos }, (_a = {}, _a[key] = value, _a)));
-    }, [dispatch, stateKey, node]);
+    }, [dispatch, stateKey, node, pos]);
     var onClose = useCallback(function () { return dispatch(closeAttributeEditor()); }, []);
     if (!editing || !location || node == null || keys.length === 0)
         return null;

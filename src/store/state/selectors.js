@@ -9,25 +9,38 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+import { createSelector } from '@reduxjs/toolkit';
 import { opts } from '../../connect';
-export function getEditorView(state, viewId) {
+export function selectEditors(state) {
+    return state.editor.state.editors;
+}
+export function selectViews(state) {
+    return state.editor.state.views;
+}
+export var selectEditorViewState = createSelector([selectViews, function (_, viewId) { return viewId; }], function (views, viewId) {
     var blank = { viewId: viewId, stateId: null, view: null };
     if (viewId == null)
         return blank;
-    var view = state.editor.state.views[viewId];
+    var view = views[viewId];
     return __assign({ viewId: viewId }, (view !== null && view !== void 0 ? view : blank));
+});
+function makeSelectEditorState() {
+    var selector = createSelector([selectEditors, function (_, stateKey) { return stateKey; }], function (editors, stateKey) {
+        var blank = {
+            key: null,
+            state: null,
+            viewIds: [],
+            counts: null,
+        };
+        var stateId = opts.transformKeyToId(stateKey);
+        if (!stateId)
+            return blank;
+        var editor = editors[stateId];
+        return editor !== null && editor !== void 0 ? editor : blank;
+    });
+    return selector;
 }
-export function getEditorState(state, stateKey) {
-    var blank = {
-        key: null,
-        state: null,
-        viewIds: [],
-        counts: null,
-    };
-    var stateId = opts.transformKeyToId(stateKey);
-    if (!stateId)
-        return blank;
-    var editor = state.editor.state.editors[stateId];
-    return editor !== null && editor !== void 0 ? editor : blank;
-}
+export var selectEditorState = makeSelectEditorState();
+export var getEditorState = selectEditorState;
+export var getEditorView = selectEditorViewState;
 //# sourceMappingURL=selectors.js.map
