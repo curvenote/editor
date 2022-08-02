@@ -43,6 +43,7 @@ function TableMenu({
   isOpen: boolean;
   command: any;
 }) {
+  if (!isOpen) return null;
   function item(title: string, action: CommandNames) {
     return (
       <MenuAction
@@ -68,21 +69,10 @@ function TableMenu({
     item('Toggle header row', CommandNames.toggle_header_row),
     item('Toggle header cells', CommandNames.toggle_header_cell),
   ];
-
   return (
-    <>
-      {isOpen && (
-        <Menu
-          id="table-menu"
-          anchorEl={anchor}
-          keepMounted
-          open={Boolean(anchor)}
-          onClose={onClose}
-        >
-          <div onClick={() => onClose()}>{tableMenu}</div>
-        </Menu>
-      )}
-    </>
+    <Menu id="table-menu" anchorEl={anchor} keepMounted open={Boolean(anchor)} onClose={onClose}>
+      <div onClick={() => onClose()}>{tableMenu}</div>
+    </Menu>
   );
 }
 
