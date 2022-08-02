@@ -4,7 +4,6 @@ import { Menu, Theme } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarkType, NodeType } from 'prosemirror-model';
-import isEqual from 'lodash.isequal';
 import { CommandNames } from '../../store/suggestion/commands';
 import { selectors, actions } from '../../store';
 import { Dispatch, State } from '../../store/types';
@@ -44,6 +43,7 @@ function TableMenu({
   isOpen: boolean;
   command: any;
 }) {
+  if (!isOpen) return null;
   function item(title: string, action: CommandNames) {
     return (
       <MenuAction
@@ -69,21 +69,10 @@ function TableMenu({
     item('Toggle header row', CommandNames.toggle_header_row),
     item('Toggle header cells', CommandNames.toggle_header_cell),
   ];
-
   return (
-    <>
-      {isOpen && (
-        <Menu
-          id="table-menu"
-          anchorEl={anchor}
-          keepMounted
-          open={Boolean(anchor)}
-          onClose={onClose}
-        >
-          <div onClick={() => onClose()}>{tableMenu}</div>
-        </Menu>
-      )}
-    </>
+    <Menu id="table-menu" anchorEl={anchor} keepMounted open={Boolean(anchor)} onClose={onClose}>
+      <div onClick={() => onClose()}>{tableMenu}</div>
+    </Menu>
   );
 }
 
@@ -114,39 +103,33 @@ function EditorMenu(props: Props) {
   );
   off = off || (disabled as boolean);
 
-  const active = useSelector(
-    (state: State) =>
-      selectors.selectionIsMarkedWith(state, stateId, {
-        strong: schema?.marks.strong,
-        em: schema?.marks.em,
-        sub: schema?.marks.subscript,
-        sup: schema?.marks.superscript,
-        strike: schema?.marks.strikethrough,
-        underline: schema?.marks.underline,
-        linked: schema?.marks.link,
-        code: schema?.marks.code,
-      }),
-    isEqual,
+  const active = useSelector((state: State) =>
+    selectors.selectionIsMarkedWith(state, stateId, {
+      strong: schema?.marks.strong,
+      em: schema?.marks.em,
+      sub: schema?.marks.subscript,
+      sup: schema?.marks.superscript,
+      strike: schema?.marks.strikethrough,
+      underline: schema?.marks.underline,
+      linked: schema?.marks.link,
+      code: schema?.marks.code,
+    }),
   );
 
-  const parents = useSelector(
-    (state: State) =>
-      selectors.selectionIsChildOf(state, stateId, {
-        ul: schema?.nodes.bullet_list,
-        ol: schema?.nodes.ordered_list,
-        table: schema?.nodes.table,
-        math: schema?.nodes.math,
-        cite_group: schema?.nodes.cite_group,
-      }),
-    isEqual,
+  const parents = useSelector((state: State) =>
+    selectors.selectionIsChildOf(state, stateId, {
+      ul: schema?.nodes.bullet_list,
+      ol: schema?.nodes.ordered_list,
+      table: schema?.nodes.table,
+      math: schema?.nodes.math,
+      cite_group: schema?.nodes.cite_group,
+    }),
   );
 
-  const nodes = useSelector(
-    (state: State) =>
-      selectors.selectionIsThisNodeType(state, stateId, {
-        cite: schema?.nodes.cite,
-      }),
-    isEqual,
+  const nodes = useSelector((state: State) =>
+    selectors.selectionIsThisNodeType(state, stateId, {
+      cite: schema?.nodes.cite,
+    }),
   );
 
   // TODO: make this memoized? Needs to be done carefully.

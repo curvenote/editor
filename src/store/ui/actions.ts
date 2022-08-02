@@ -11,7 +11,7 @@ import { getEditorUI, getInlineActionKind, getSelectedEditorAndViews } from './s
 import { getEditorView } from '../state/selectors';
 import { getSelectionKind } from './utils';
 
-export function selectEditorView(viewId: string | null): AppThunk<void> {
+export function updateSelectView(viewId: string | null): AppThunk<void> {
   return (dispatch, getState) => {
     const { stateId } = getEditorView(getState(), viewId);
     dispatch({
@@ -20,6 +20,11 @@ export function selectEditorView(viewId: string | null): AppThunk<void> {
     });
   };
 }
+
+/**
+ * @deprecated use updateSelectView
+ */
+export const selectEditorView = updateSelectView;
 
 export function focusEditorView(viewId: string | null, focused: boolean): AppThunk<void> {
   return (dispatch, getState) => {
