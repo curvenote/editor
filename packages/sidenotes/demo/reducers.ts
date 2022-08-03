@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
-import {
-  State, SidenotesUIActions, Reducer, reducer,
-} from '../src';
+import { State, SidenotesUIActions, Reducer, reducer } from '../src';
 
 const combinedReducers: Reducer = combineReducers({
   sidenotes: reducer,

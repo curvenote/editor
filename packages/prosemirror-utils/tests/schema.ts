@@ -1,15 +1,7 @@
 import { NodeSpec, Schema } from 'prosemirror-model';
 import { nodes, marks } from 'prosemirror-schema-basic';
 
-const {
-  doc,
-  paragraph,
-  text,
-  horizontal_rule: rule,
-  blockquote,
-  heading,
-  code_block,
-} = nodes;
+const { doc, paragraph, text, horizontal_rule: rule, blockquote, heading, code_block } = nodes;
 
 const atomInline: NodeSpec = {
   inline: true,
