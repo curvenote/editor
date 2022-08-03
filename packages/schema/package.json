@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/curvenote/schema.git"
+    "url": "git+https://github.com/curvenote/editor.git"
   },
   "bugs": {
-    "url": "https://github.com/curvenote/schema/issues"
+    "url": "https://github.com/curvenote/editor/issues"
   },
-  "homepage": "https://curvenote.dev/schema",
+  "homepage": "https://github.com/curvenote/editor/tree/main/packages/schema",
   "scripts": {
     "clean": "rimraf dist",
     "build:cjs": "tsc --project ./src/tsconfig.json",

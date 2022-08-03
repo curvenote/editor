@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/curvenote/editor/issues"
   },
-  "homepage": "https://curvenote.dev/editor",
+  "homepage": "https://github.com/curvenote/editor/tree/main/packages/editor",
   "scripts": {
     "clean": "rm -rf dist",
     "compile": "yarn run clean; tsc;",

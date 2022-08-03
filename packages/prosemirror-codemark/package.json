@@ -16,12 +16,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/curvenote/prosemirror-codemark.git"
+    "url": "git+https://github.com/curvenote/editor.git"
   },
   "bugs": {
-    "url": "https://github.com/curvenote/prosemirror-codemark/issues"
+    "url": "https://github.com/curvenote/editor/issues"
   },
-  "homepage": "https://github.com/curvenote/prosemirror-codemark",
+  "homepage": "https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark",
   "scripts": {
     "clean": "rimraf dist",
     "build:cjs": "tsc --project ./src/tsconfig.json",

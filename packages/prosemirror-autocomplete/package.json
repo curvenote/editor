@@ -18,12 +18,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/curvenote/prosemirror-autocomplete.git"
+    "url": "git+https://github.com/curvenote/editor.git"
   },
   "bugs": {
-    "url": "https://github.com/curvenote/prosemirror-autocomplete/issues"
+    "url": "https://github.com/curvenote/editor/issues"
   },
-  "homepage": "https://github.com/curvenote/prosemirror-autocomplete",
+  "homepage": "https://github.com/curvenote/editor/tree/main/packages/prosemirror-autocomplete",
   "scripts": {
     "clean": "rimraf dist",
     "build:cjs": "tsc --project ./src/tsconfig.json",
