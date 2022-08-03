@@ -19,10 +19,10 @@ jobs:
           path: |
             node_modules
             /home/runner/.cache/Cypresss
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
       - run: npm install
-      - run: yarn run lint:format
-      - run: yarn run lint
+      - run: npm run lint:format
+      - run: npm run lint
       - run: npm run build
       - run: npm run test:ci
       - name: Cypress run
