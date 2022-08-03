@@ -1,4 +1,4 @@
-import { PopperPlacementType } from '@material-ui/core';
+import type { PopperPlacementType } from '@material-ui/core';
 import {
   SELECT_EDITOR_VIEW,
   InlineSelection,

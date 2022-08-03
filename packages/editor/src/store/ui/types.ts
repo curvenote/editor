@@ -1,4 +1,4 @@
-import { PopperPlacementType } from '@material-ui/core';
+import type { PopperPlacementType } from '@material-ui/core';
 
 export const SELECT_EDITOR_VIEW = 'SELECT_EDITOR_VIEW';
 export const INLINE_SELECTION = 'INLINE_SELECTION';

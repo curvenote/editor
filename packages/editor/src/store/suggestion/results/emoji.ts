@@ -30,8 +30,8 @@ let fuse: Fuse<EmojiResult> | null = null;
 
 async function getFuse() {
   if (fuse) return fuse;
-  const emoji = await import('./emoji.json');
-  fuse = new Fuse(emoji.emoji, options);
+  const emoji = await import('@curvenote/emoji');
+  fuse = new Fuse(emoji.default.emoji, options);
   return fuse;
 }
 

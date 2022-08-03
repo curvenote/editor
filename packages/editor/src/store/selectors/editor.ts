@@ -1,11 +1,7 @@
 import { MarkType, NodeType } from 'prosemirror-model';
 import { NodeSelection } from 'prosemirror-state';
-import {
-  findParentNode,
-  ContentNodeWithPos,
-  isNodeSelection,
-  hasParentNode,
-} from 'prosemirror-utils1';
+import { findParentNode, isNodeSelection, hasParentNode } from 'prosemirror-utils1';
+import type { ContentNodeWithPos } from 'prosemirror-utils1';
 import { nodeNames } from '@curvenote/schema';
 import { createSelector } from '@reduxjs/toolkit';
 import { getNodeIfSelected } from '../ui/utils';

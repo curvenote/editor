@@ -1,4 +1,5 @@
-import { KEEP_OPEN, AutocompleteAction, ActionKind } from 'prosemirror-autocomplete';
+import { KEEP_OPEN, ActionKind } from 'prosemirror-autocomplete';
+import type { AutocompleteAction } from 'prosemirror-autocomplete';
 import { EditorView } from 'prosemirror-view';
 import { Nodes } from '@curvenote/schema';
 import {

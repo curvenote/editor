@@ -1,5 +1,10 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { Store as RStore, Action, Middleware as RMiddleware, Reducer as RReducer } from 'redux';
+import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import type {
+  Store as RStore,
+  Action,
+  Middleware as RMiddleware,
+  Reducer as RReducer,
+} from 'redux';
 import { types as runtimeTypes } from '@curvenote/runtime';
 import { State as SidenotesState } from 'sidenotes';
 import { EditorsState, EditorActionTypes } from './state/types';

@@ -1,4 +1,4 @@
-import { PopperPlacementType } from '@material-ui/core';
+import type { PopperPlacementType } from '@material-ui/core';
 import { createSelector } from '@reduxjs/toolkit';
 import { State } from '../types';
 import { getEditorState, getEditorView, selectEditorViewState } from '../state/selectors';

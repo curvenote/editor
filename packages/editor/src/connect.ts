@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { Theme } from '@material-ui/core';
+import type { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { Fragment, Node, Schema, Slice } from 'prosemirror-model';
-import { DirectEditorProps, EditorView } from 'prosemirror-view';
+import { EditorView } from 'prosemirror-view';
+import type { DirectEditorProps } from 'prosemirror-view';
 import { Nodes, process } from '@curvenote/schema';
 import { Store } from './store/types';
 import setupComponents from './r-components';

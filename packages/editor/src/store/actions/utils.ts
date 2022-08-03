@@ -7,7 +7,7 @@ import {
   process,
 } from '@curvenote/schema';
 import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
-import { ContentNodeWithPos } from 'prosemirror-utils1';
+import type { ContentNodeWithPos } from 'prosemirror-utils1';
 import { EditorView } from 'prosemirror-view';
 import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
 import { opts } from '../../connect';

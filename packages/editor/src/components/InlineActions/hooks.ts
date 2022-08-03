@@ -22,7 +22,10 @@ export function usePopper(currentEl: Element | null | undefined) {
   const popperRef = useCallback((popperInstance) => setPopper(popperInstance), []);
   // popper update is debounced
   const updatePopper = useMemo(() => {
-    if (!popper) return () => {};
+    if (!popper)
+      return () => {
+        return undefined;
+      };
     return debounce(() => {
       if (popper && popper.reference.isConnected) {
         popper.update();
@@ -32,7 +35,10 @@ export function usePopper(currentEl: Element | null | undefined) {
 
   // updates popper when anchor size changes
   useEffect(() => {
-    if (!currentEl || !updatePopper) return () => {};
+    if (!currentEl || !updatePopper)
+      return () => {
+        return undefined;
+      };
     updatePopper(); // make sure initial position is correct
     const observer = new ResizeObserver(() => {
       updatePopper();
