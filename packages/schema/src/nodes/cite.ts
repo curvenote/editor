@@ -2,7 +2,7 @@ import type { GenericNode } from 'mystjs';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { Cite, CrossReference } from '../spec';
 import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';
-import { normalizeLabel } from './utils';
+import { flattenValues, normalizeLabel } from './utils';
 
 export type Attrs = {
   key: string | null;
@@ -79,7 +79,7 @@ const cite: MyNodeSpec<Attrs & Legacy, Cite | CrossReference> = {
       label: null,
       title: null,
       inline: undefined,
-      text: '', // TODO: get this from children? `Jon et al., 2022`
+      text: flattenValues(node),
     };
   },
   toMyst: (props, options): Cite | CrossReference => {
