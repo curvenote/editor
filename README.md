@@ -55,11 +55,11 @@ The editor package is a monorepo that is built with turborepo. Included in this 
 - [`@curvenote/schema`](https://github.com/curvenote/schema) - the schema for this editor, focused on interactive content, also deals with translation and export.
 - [`prosemirror-autocomplete`](https://github.com/curvenote/editor/tree/main/packages/prosemirror-autocomplete) - A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions.
 - [`prosemirror-codemark`](https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark) - A plugin for [ProseMirror](https://prosemirror.net/) that handles manipulating and navigating inline code marks.
-- [`sidenotes`](https://github.com/curvenote/editor/tree/main/packages/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
 
 ### Related packages
 
 - [`prosemirror-docx`](https://github.com/curvenote/prosemirror-docx) - Export from a [ProseMirror](https://prosemirror.net/) schema to Microsoft Word.
+- [`sidenotes`](https://github.com/curvenote/sidenotes) - Reactive placement of comments, with hooks for multiple inline references.
 - [`@curvenote/article`](https://github.com/curvenote/article) - CSS and styling components and document layout
 - [`@curvenote/components`](https://github.com/curvenote/components) - interactive widgets and web-components
 - [`@curvenote/runtime`](https://github.com/curvenote/runtime) - client-side reactivity built on redux

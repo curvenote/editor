@@ -1,5 +1,0 @@
-*.code-workspace
-node_modules
-dist
-.yalc/
-yalc.lock

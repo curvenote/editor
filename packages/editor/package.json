@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@curvenote/emoji": "1.0.1",
+    "@curvenote/prosemirror-utils": "^1.0.4",
     "@reduxjs/toolkit": "^1.8.3",
     "codemirror": "5.65.0",
     "katex": "^0.15.2",
@@ -55,7 +56,6 @@
     "prosemirror-inputrules": "^1.2.0",
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-tables": "^1.1.1",
-    "@curvenote/prosemirror-utils": "^1.0.4",
     "scroll-into-view-if-needed": "^2.2.29",
     "ts-jest": "^28.0.5",
     "uuid": "^8.3.2"
