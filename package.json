@@ -14,6 +14,7 @@
     "lint": "turbo run lint",
     "lint:format": "turbo run lint:format",
     "test": "turbo run test",
+    "test:ci": "turbo run test --filter schema --filter prosemirror* --filter prosemirror-utils",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepublishOnly": "npm run build",
     "changeset": "changeset",

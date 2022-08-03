@@ -23,10 +23,12 @@ jobs:
       - run: npm install
       - run: yarn run lint:format
       - run: yarn run lint
+      - run: npm run build
       - run: npm run test:ci
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
+          project: ./packages/editor
           component: true
           quiet: true
           record: false
