@@ -1,17 +1,18 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const emoji = require('emoji.json');
 const fs = require('fs');
 
 // The other dataset is from:
 // https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji_pretty.json
 
-const allEmojiData = fs.readFileSync('bin/emoji_pretty.json');
-const allEmoji = JSON.parse(allEmojiData);
+const allEmojiData = fs.readFileSync('src/emoji_pretty.json');
+const allEmoji = JSON.parse(allEmojiData.toString());
 
 const byCode = {};
-allEmoji
-  .forEach((item) => {
-    byCode[item.unified.split('-').join(' ')] = item;
-  });
+allEmoji.forEach((item) => {
+  byCode[item.unified.split('-').join(' ')] = item;
+});
 
 const set = {};
 emoji
@@ -39,7 +40,7 @@ set['neutral face'].o += ' :|';
 set['grinning face'].o += ' :D';
 set['face with tongue'].o += ' :p';
 set['winking face with tongue'].o += ' ;p';
-set['crying face'].o += ' :\'( :’(';
+set['crying face'].o += " :'( :’(";
 const filteredEmoji = Object.entries(set).map(([, item]) => item);
 
 const frequent = [
@@ -56,13 +57,16 @@ const frequent = [
 // Uncomment to see the short text names of emoji
 // console.log(allEmoji.filter((item) => item.text != null).map((i) => [i.text, i.short_name]));
 
-const toTitleCase = (name) => name
-  .toLowerCase()
-  .split(' ')
-  .map((word) => word.slice(0, 1).toUpperCase() + word.slice(1))
-  .join(' ');
+const toTitleCase = (name) =>
+  name
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.slice(0, 1).toUpperCase() + word.slice(1))
+    .join(' ');
 
-fs.writeFile('bin/emoji.json', JSON.stringify({
+const data = JSON.stringify({
   default: frequent.map((i) => ({ ...i, n: toTitleCase(i.n) })),
   emoji: filteredEmoji.map((i) => ({ ...i, n: toTitleCase(i.n) })),
-}), (err) => { if (err) { console.log('Failed to write file.'); } });
+});
+
+fs.writeFileSync('data.json', data);

@@ -8,7 +8,8 @@ import { Schema } from 'prosemirror-model';
 import { columnResizing, tableEditing, goToNextCell } from 'prosemirror-tables';
 import { nodeNames, schemas } from '@curvenote/schema';
 import { Plugin } from 'prosemirror-state';
-import { autocomplete, Trigger } from 'prosemirror-autocomplete';
+import { autocomplete } from 'prosemirror-autocomplete';
+import type { Trigger } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 
 import inputrules from '../inputrules';

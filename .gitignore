@@ -1,9 +1,6 @@
 *.code-workspace
 node_modules
 dist
-emoji.json
 .yalc/
 yalc.lock
 *.log
-cypress/videos
-cypress/screenshots

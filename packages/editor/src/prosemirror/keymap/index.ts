@@ -14,7 +14,7 @@ import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Schema } from 'prosemirror-model';
 import { createId } from '@curvenote/schema';
-import { Command } from 'prosemirror-state';
+import type { Command } from 'prosemirror-state';
 import { store, opts } from '../../connect';
 import { focusSelectedEditorView } from '../../store/ui/actions';
 import { executeCommand } from '../../store/actions';

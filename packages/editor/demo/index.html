@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@curvenote/editor</title>
+    <style>
+      article,
+      .centered {
+        max-width: 800px;
+        margin: auto;
+      }
+      #tex,
+      #html,
+      #myst,
+      #text {
+        white-space: pre-wrap;
+      }
+      #counts {
+        position: fixed;
+        top: 0px;
+        right: 10px;
+        background: white;
+        border: 1px solid whitesmoke;
+        border-top: none;
+      }
+      #counts summary {
+        width: 220px;
+        font-size: larger;
+        text-align: center;
+        cursor: pointer;
+        background-color: #a0a0a0;
+      }
+      #counts dl {
+        color: #4d4d4d;
+        font-family: var(--curvenote-font, sans-serif);
+        line-height: 1.4;
+      }
+      #counts dl dt {
+        float: left;
+        width: 100px;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #counts dl dd {
+        margin-left: 120px;
+      }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P4Z3X7QKB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-4P4Z3X7QKB');
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+      integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="centered">
+      <h1>@curvenote/editor</h1>
+      <a href="https://www.npmjs.com/package/@curvenote/editor" title="@curvenote/editor on npm"
+        ><img src="https://img.shields.io/npm/v/@curvenote/editor.svg"
+      /></a>
+      <a href="https://github.com/curvenote/editor/blob/main/LICENSE" title="MIT License"
+        ><img src="https://img.shields.io/badge/license-MIT-blue.svg"
+      /></a>
+      <a href="https://github.com/curvenote/editor" title="CI"
+        ><img src="https://github.com/curvenote/editor/workflows/CI/badge.svg"
+      /></a>
+    </div>
+    <div id="root"></div>
+    <div id="counts">
+      <details>
+        <summary>Counts</summary>
+        <dl>
+          <dt>Sections:</dt>
+          <dd id="count-sec"></dd>
+          <dt>Figures:</dt>
+          <dd id="count-fig"></dd>
+          <dt>Equations:</dt>
+          <dd id="count-eq"></dd>
+          <dt>Code Blocks:</dt>
+          <dd id="count-code"></dd>
+          <dt>Tables:</dt>
+          <dd id="count-table"></dd>
+          <dt>Words:</dt>
+          <dd id="count-words"></dd>
+          <dt>Characters:</dt>
+          <dd id="count-char"></dd>
+        </dl>
+      </details>
+    </div>
+    <article>
+      <h2>MyST</h2>
+      <pre id="myst"></pre>
+      <h2>LaTeX</h2>
+      <pre id="tex"></pre>
+      <h2>Plain Text</h2>
+      <pre id="text"></pre>
+      <h2>HTML</h2>
+      <pre id="html"></pre>
+    </article>
+  </body>
+</html>
