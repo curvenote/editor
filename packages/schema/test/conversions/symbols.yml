@@ -1,0 +1,63 @@
+cases:
+  - title: symbols in paragraph
+    skip: m2c
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: Hello \ ~}
+            - type: text
+              text: ΑαΒβßΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: Hello \ ~}
+            - type: text
+              value: ΑαΒβßΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω
+  - title: symbols in math
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'Hello < '
+            - type: math
+              content:
+                - type: text
+                  text: < >  δ ⇔
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'Hello < '
+            - type: inlineMath
+              value: < >  δ ⇔
+  - title: symbols in equation
+    curvenote:
+      type: doc
+      content:
+        - type: equation
+          attrs:
+            id: sigma-δ
+            label: null
+            numbered: false
+            title: ''
+          content:
+            - type: text
+              text: δ here
+    mdast:
+      type: root
+      children:
+        - type: math
+          identifier: sigma-δ
+          label: sigma-δ
+          enumerated: false
+          value: δ here

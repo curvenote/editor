@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ProseMirror Autocomplete</title>
+    <link rel="stylesheet" href="https://prosemirror.net/css/editor.css" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P4Z3X7QKB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-4P4Z3X7QKB');
+    </script>
+    <style>
+      article {
+        max-width: 800px;
+        margin: auto;
+      }
+      h1 {
+        font-family: 'Roboto', sans-serif;
+      }
+      p {
+        display: block;
+        text-align: justify;
+        overflow-wrap: break-word;
+        font-size: 17px;
+        line-height: 1.8;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #4d4d4d;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
+      }
+      code {
+        color: rgb(232, 62, 140);
+        padding: 2px;
+        border-radius: 2px;
+        padding: 2px;
+        border: 1px solid rgba(192, 192, 192, 0.5);
+      }
+      a {
+        text-decoration: none;
+      }
+      img {
+        margin-right: 8px;
+      }
+      /* The default ID for the decoration, can override with decorationAttrs = { id: 'something' }  */
+      .autocomplete {
+        color: blue;
+        border: 1px solid #333;
+        border-radius: 2px 2px 0 0;
+        border-bottom-color: white;
+        padding: 2px 5px;
+      }
+      .command {
+        color: red;
+      }
+      #info {
+        margin-top: 1em;
+        background-color: transparent;
+        min-height: 1.5em;
+        display: block;
+      }
+      #suggestion {
+        position: absolute;
+        border-radius: 2px;
+        border: 1px solid #333;
+        min-width: 300px;
+        background-color: white;
+        padding: 10px;
+        transform: translateY(-1px);
+      }
+      /* You actually should do the UI with a mouse enter event rather than css hover */
+      #suggestion:hover .selected {
+        background-color: white;
+      }
+      #suggestion:hover > div:hover,
+      #suggestion .selected {
+        background-color: wheat;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <article>
+      <h1>prosemirror-autocomplete</h1>
+      <a
+        href="https://www.npmjs.com/package/prosemirror-autocomplete"
+        title="prosemirror-autocomplete on npm"
+      >
+        <img src="https://img.shields.io/npm/v/prosemirror-autocomplete.svg" />
+      </a>
+      <a
+        href="https://github.com/curvenote/prosemirror-autocomplete/blob/main/LICENSE"
+        title="MIT License"
+      >
+        <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
+      </a>
+      <a href="https://github.com/curvenote/prosemirror-autocomplete" title="CI">
+        <img src="https://github.com/curvenote/prosemirror-autocomplete/workflows/CI/badge.svg" />
+      </a>
+      <p>
+        <code>prosemirror-autocomplete</code> is a plugin for
+        <a href="https://prosemirror.net/">ProseMirror</a> that adds triggers for
+        <code>#hashtags</code>, <code>@mentions</code>, <code>/menus</code>, and other more complex
+        autocompletions. The <code>prosemirror-autocomplete</code> library can be used to create
+        suggestions similar to Notion, Google Docs or Confluence. The plugin is created and used by
+        <a href="https://curvenote.com">Curvenote</a>.
+      </p>
+      <div><code id="info"></code></div>
+      <div id="editor"></div>
+      <p>
+        Source code and documentation are
+        <a href="https://github.com/curvenote/prosemirror-autocomplete">on GitHub</a>.
+      </p>
+      <p style="clear: both; text-align: center; color: #aaa; padding-top: 50px">
+        Made with love by
+        <a href="https://curvenote.com" target="_blank" style="color: #aaa">
+          <img src="https://curvenote.dev/images/icon.png" style="height: 1em" /> Curvenote
+        </a>
+        <br />
+      </p>
+    </article>
+    <div id="suggestion" style="display: none">
+      <div>Suggestion 1</div>
+      <div>Suggestion 2</div>
+      <div>Suggestion 3</div>
+    </div>
+    <div style="display: none" id="content">
+      <strong>You can type in here!</strong>
+      <p>
+        Try typing mention <code>@</code> or a "slash-menu" <code>/</code>, or <code>[[</code> or
+        <code>{{</code>:
+      </p>
+      <p></p>
+      <p>
+        Complex autocompletes can use <code>RegExp</code> for the trigger, try <code>x =</code> on a
+        new line or a hashtag <code>#</code>!
+      </p>
+      <p></p>
+      <p>You could also add suggestions on <code>object.</code> if you want!</p>
+      <p></p>
+    </div>
+  </body>
+</html>

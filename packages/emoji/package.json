@@ -1,0 +1,28 @@
+{
+  "name": "@curvenote/emoji",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "emoji.json": "^12.1.1",
+    "esbuild": "^0.14.53",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "emoji": "node src/createEmoji.js",
+    "build:cjs": "esbuild index.ts --bundle --outfile=dist/cjs/index.js --platform=node --format=cjs",
+    "build:esm": "esbuild index.ts --bundle --outfile=dist/esm/index.js --platform=node --format=esm",
+    "declarations": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "build": "npm-run-all -l clean emoji -p build:cjs build:esm declarations"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
