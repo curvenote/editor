@@ -16,15 +16,27 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
-          path: |
-            node_modules
-            /home/runner/.cache/Cypresss
+          path: node_modules
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
       - run: npm install
       - run: npm run lint:format
       - run: npm run lint
       - run: npm run build
       - run: npm run test:ci
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+      - run: npm install
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
