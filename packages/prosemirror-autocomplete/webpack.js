@@ -8,10 +8,7 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    static: {
-      directory: './dist',
-    },
-    port: process.env.PORT,
+    port: 3011,
   },
   optimization: {
     usedExports: true,
