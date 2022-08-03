@@ -2,11 +2,11 @@
 
 [![@curvenote/schema on npm](https://img.shields.io/npm/v/@curvenote/schema.svg)](https://www.npmjs.com/package/@curvenote/schema)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/curvenote/editor/blob/main/LICENSE)
-![CI](https://github.com/curvenote/schema/workflows/CI/badge.svg)
+![CI](https://github.com/curvenote/editor/workflows/CI/badge.svg)
 
 Schema for interactive scientific writing, with translations to [MyST flavoured markdown](https://myst-parser.readthedocs.io/en/latest/), LaTeX, and HTML.
 
-![@curvenote/schema in curvenote.com](https://github.com/curvenote/schema/raw/main/images/schema.gif)
+![@curvenote/schema in curvenote.com](https://github.com/curvenote/editor/raw/main/packages/schema/images/schema.gif)
 
 ## Overview & Goals
 
