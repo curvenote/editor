@@ -1,6 +1,6 @@
 import { NodeSelection, EditorState, Selection } from 'prosemirror-state';
 import { Node } from 'prosemirror-model';
-import { findParentNode, isNodeSelection } from 'prosemirror-utils1';
+import { findParentNode, isNodeSelection } from '@curvenote/prosemirror-utils';
 import { nodeNames } from '@curvenote/schema';
 import { getLinkBoundsIfTheyExist } from '../actions/utils';
 import { SelectionKinds } from './types';

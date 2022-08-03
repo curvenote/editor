@@ -22,7 +22,7 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
 import { EditorState, Selection, TextSelection, Transaction } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils1';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 import { nodeNames } from '@curvenote/schema';
 import { GetPos, LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';

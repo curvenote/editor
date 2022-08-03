@@ -1,6 +1,6 @@
 import { nodeNames } from '@curvenote/schema';
 import { Plugin, PluginKey } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils1';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { isEditable } from './editable';
 

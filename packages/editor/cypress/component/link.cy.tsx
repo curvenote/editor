@@ -9,7 +9,7 @@ import {
 } from '../../src/store/actions';
 import { CommandNames } from '../../src/store/suggestion/commands';
 import { TextSelection } from 'prosemirror-state';
-import { setTextSelection } from 'prosemirror-utils1';
+import { setTextSelection } from '@curvenote/prosemirror-utils';
 
 // TODO: abstract these they are copy pasted from demo since the setup logic is shared
 const stateKey = 'myEditor';

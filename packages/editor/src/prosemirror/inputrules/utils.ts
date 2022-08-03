@@ -1,7 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeType, MarkType, Node } from 'prosemirror-model';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { findParentNode } from 'prosemirror-utils1';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 
 type GetAttrs =
   | {

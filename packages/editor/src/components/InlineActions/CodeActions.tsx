@@ -8,7 +8,7 @@ import {
   createStyles,
   Grid,
 } from '@material-ui/core';
-import { findParentNode, replaceParentNodeOfType } from 'prosemirror-utils1';
+import { findParentNode, replaceParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { Node, NodeType } from 'prosemirror-model';
 import { CaptionKind, nodeNames, Nodes } from '@curvenote/schema';
 import { useDispatch, useSelector } from 'react-redux';

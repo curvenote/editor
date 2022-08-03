@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { isNodeSelection } from 'prosemirror-utils1';
+import { isNodeSelection } from '@curvenote/prosemirror-utils';
 import debounce from 'lodash.debounce';
 import { getEditorState } from '../../store/state/selectors';
 import { State } from '../../store';

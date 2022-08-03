@@ -2,7 +2,7 @@ import { nodeNames } from '@curvenote/schema';
 import type { Command } from 'prosemirror-state';
 import { Schema } from 'prosemirror-model';
 import { NodeSelection, Transaction } from 'prosemirror-state';
-import { findParentNode, findParentNodeOfType } from 'prosemirror-utils1';
+import { findParentNode, findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { insertParagraphAndSelect } from '../../store/actions/utils';
 import { AddKey } from './utils';
 

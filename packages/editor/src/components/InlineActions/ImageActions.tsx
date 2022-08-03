@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Grid } from '@material-ui/core';
-import { isNodeSelection } from 'prosemirror-utils1';
+import { isNodeSelection } from '@curvenote/prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import {

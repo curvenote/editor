@@ -1,5 +1,5 @@
 import React from 'react';
-import { isNodeSelection } from 'prosemirror-utils1';
+import { isNodeSelection } from '@curvenote/prosemirror-utils';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { getDatetime } from '@curvenote/schema';
