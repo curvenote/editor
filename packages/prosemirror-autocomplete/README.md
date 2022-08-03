@@ -7,7 +7,7 @@
 
 A plugin for [ProseMirror](https://prosemirror.net/) that adds triggers for `#hashtags`, `@mentions`, `/menus`, and other more complex autocompletions. The `prosemirror-autocomplete` library can be used to create suggestions similar to Notion, Google Docs or Confluence; it is created and used by [Curvenote](https://curvenote.com). The library does not provide a user interface beyond the [demo code](./demo/index.ts).
 
-[![Autocomplete](./demo/autocomplete.gif)](https://curvenote.github.io/prosemirror-autocomplete/)
+[![Autocomplete](https://github.com/curvenote/editor/raw/main/packages/prosemirror-autocomplete/demo/autocomplete.gif)](https://curvenote.github.io/prosemirror-autocomplete/)
 
 ## Install
 

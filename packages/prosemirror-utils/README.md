@@ -2,9 +2,9 @@
 
 [![@curvenote/prosemirror-utils on npm](https://img.shields.io/npm/v/@curvenote/prosemirror-utils.svg)](https://www.npmjs.com/package/@curvenote/prosemirror-utils)
 [![License](https://img.shields.io/npm/l/@curvenote/prosemirror-utils.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0)
-![CI](https://github.com/curvenote/@curvenote/prosemirror-utils/workflows/CI/badge.svg)
+![CI](https://github.com/curvenote/editor/workflows/CI/badge.svg)
 
-This is a port of prosemirror-utils to typescript and updating dependencies and build.
+This is a port of [prosemirror-utils](https://github.com/atlassian/prosemirror-utils) to typescript and updating dependencies and build.
 
 ## Quick Start
 

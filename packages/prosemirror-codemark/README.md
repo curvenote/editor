@@ -9,7 +9,7 @@ A plugin for [ProseMirror](https://prosemirror.net/) that handles manipulating a
 The plugin creates a fake cursor as necessary to show you if the next character you type will or will not be marked.
 `prosemirror-codemark` is created and used by [Curvenote](https://curvenote.com).
 
-[![Codemark](./demo/codemark.gif)](https://curvenote.github.io/prosemirror-codemark/)
+[![Codemark](https://github.com/curvenote/editor/raw/main/packages/prosemirror-codemark/demo/codemark.gif)](https://curvenote.github.io/prosemirror-codemark/)
 
 ## Install
 
