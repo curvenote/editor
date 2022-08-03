@@ -1,5 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-import { Unsubscribe } from 'redux';
+import type { Unsubscribe } from 'redux';
 import { v4 as uuid } from 'uuid';
 import { State, Store } from './store/types';
 

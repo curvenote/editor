@@ -19,7 +19,11 @@ export const InlineAnchor = (props: Props) => {
   const [ref, setRef] = useState<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    if (ref == null || doc == null) return () => {};
+    if (ref == null || doc == null) {
+      return () => {
+        return undefined;
+      };
+    }
     return () => dispatch(disconnectAnchor(doc, ref));
   }, [doc, ref]);
 
