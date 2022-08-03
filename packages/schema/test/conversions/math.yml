@@ -1,0 +1,93 @@
+cases:
+  - title: inline equation
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'A line is '
+            - type: math
+              content:
+                - type: text
+                  text: y = mx + b
+            - type: text
+              text: '!'
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'A line is '
+            - type: inlineMath
+              value: y = mx + b
+            - type: text
+              value: '!'
+  - title: equation
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'A line is:'
+        - type: equation
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            title: ''
+          content:
+            - type: text
+              text: y = mx + b
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'A line is:'
+        - type: math
+          enumerated: false
+          value: y = mx + b
+  - title: numbered equation
+    curvenote:
+      type: doc
+      content:
+        - type: equation
+          attrs:
+            id: my-equation
+            label: null
+            numbered: true
+            title: ''
+          content:
+            - type: text
+              text: y = mx + b
+    mdast:
+      type: root
+      children:
+        - type: math
+          identifier: my-equation
+          label: my-equation
+          enumerated: true
+          value: y = mx + b
+  - title: amsmath
+    curvenote:
+      type: doc
+      content:
+        - type: equation
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            title: ''
+          content:
+            - type: text
+              text: \begin{equation}y = mx + b\end{equation}
+    mdast:
+      type: root
+      children:
+        - type: math
+          enumerated: false
+          value: \begin{equation}y = mx + b\end{equation}

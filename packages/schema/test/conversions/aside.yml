@@ -1,0 +1,20 @@
+cases:
+  - title: aside
+    curvenote:
+      type: doc
+      content:
+        - type: aside
+          content:
+            - type: paragraph
+              content:
+                - type: text
+                  text: 'an aside'
+    mdast:
+      type: root
+      children:
+        - type: margin
+          children:
+            - type: paragraph
+              children:
+                - type: text
+                  value: 'an aside'

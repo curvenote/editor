@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "lib": ["es2019", "DOM"],
+    "sourceMap": true,
+    "outDir": "dist/cjs",
+    "baseUrl": "src",
+    "paths": {
+      "*": ["node_modules/*", "types/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./types", "../../node_modules/@types"],
+    "types": ["node", "jest"],
+    "resolveJsonModule": true,
+    "declaration": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "test/**/*", "demo/**/*"],
+  "exclude": []
+}

@@ -1,0 +1,16 @@
+cases:
+  - title: iframe
+    curvenote:
+      type: doc
+      content:
+        - type: iframe
+          attrs:
+            src: https://example.com
+            align: center
+            width: 100
+    mdast:
+      type: root
+      children:
+        - type: iframe
+          src: https://example.com
+          width: 100%

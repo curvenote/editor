@@ -1,0 +1,136 @@
+cases:
+  - title: inline code
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'some code: '
+            - type: text
+              marks:
+                - type: code
+              text: x == y
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'some code: '
+            - type: inlineCode
+              value: x == y
+  - title: simple code block
+    curvenote:
+      type: doc
+      content:
+        - type: code_block
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            language: null
+            linenumbers: false
+            title: ''
+          content:
+            - type: text
+              text: |-
+                import numpy as np
+                np.array([1, 2, 3])
+    mdast:
+      type: root
+      children:
+        - type: code
+          value: |-
+            import numpy as np
+            np.array([1, 2, 3])
+  - title: code block with metadata
+    curvenote:
+      type: doc
+      content:
+        - type: code_block
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            language: python
+            # linenumbers: true
+            linenumbers: false
+            title: ''
+          content:
+            - type: text
+              text: |-
+                import numpy as np
+                np.array([1, 2, 3])
+    mdast:
+      type: root
+      children:
+        - type: code
+          lang: python
+          # showLineNumbers: true
+          value: |-
+            import numpy as np
+            np.array([1, 2, 3])
+  - title: yaml code block
+    curvenote:
+      type: doc
+      content:
+        - type: code_block
+          attrs:
+            id: null
+            label: null
+            numbered: false
+            language: text/x-yaml
+            linenumbers: false
+            title: ''
+          content:
+            - type: text
+              text: |-
+                hello: there
+    mdast:
+      type: root
+      children:
+        - type: code
+          lang: yaml
+          value: |-
+            hello: there
+  - title: yaml code block inside of figure
+    curvenote:
+      type: doc
+      content:
+        - type: figure
+          attrs:
+            id: my-figure
+            label: null
+            numbered: true
+            align: center
+            multipage: false
+            landscape: false
+            fullpage: false
+          content:
+            - type: code_block
+              attrs:
+                id: null
+                label: null
+                numbered: false
+                language: text/x-yaml
+                linenumbers: false
+                title: ''
+              content:
+                - type: text
+                  text: |-
+                    hello: []
+    mdast:
+      type: root
+      children:
+        - type: container
+          kind: figure
+          identifier: my-figure
+          label: my-figure
+          enumerated: true
+          class: align-center
+          children:
+            - type: code
+              lang: yaml
+              value: |-
+                hello: []

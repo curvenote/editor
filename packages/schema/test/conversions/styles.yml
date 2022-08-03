@@ -1,0 +1,278 @@
+cases:
+  - title: emphasis
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'emphasis: '
+            - type: text
+              marks:
+                - type: em
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'emphasis: '
+            - type: emphasis
+              children:
+                - type: text
+                  value: hello!
+  - title: strong
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'strong: '
+            - type: text
+              marks:
+                - type: strong
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'strong: '
+            - type: strong
+              children:
+                - type: text
+                  value: hello!
+  - title: subscript
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'subscript: '
+            - type: text
+              marks:
+                - type: subscript
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'subscript: '
+            - type: subscript
+              children:
+                - type: text
+                  value: hello!
+  - title: superscript
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'superscript: '
+            - type: text
+              marks:
+                - type: superscript
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'superscript: '
+            - type: superscript
+              children:
+                - type: text
+                  value: hello!
+  - title: underline
+    skip: true
+  - title: emphasis -> strong
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: em
+              text: a
+            - type: text
+              marks:
+                - type: em
+                - type: strong
+              text: b
+            - type: text
+              marks:
+                - type: em
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: emphasis
+              children:
+                - type: text
+                  value: a
+                - type: strong
+                  children:
+                    - type: text
+                      value: b
+                - type: text
+                  value: c
+  - title: strong -> emphasis
+    description: mdast output could be streamlined here
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: strong
+              text: a
+            - type: text
+              marks:
+                - type: em
+                - type: strong
+              text: b
+            - type: text
+              marks:
+                - type: strong
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: strong
+              children:
+                - type: text
+                  value: a
+            - type: emphasis
+              children:
+                - type: strong
+                  children:
+                    - type: text
+                      value: b
+            - type: strong
+              children:
+                - type: text
+                  value: c
+  - title: subscript -> emphasis
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: subscript
+              text: a
+            - type: text
+              marks:
+                - type: em
+                - type: subscript
+              text: b
+            - type: text
+              marks:
+                - type: subscript
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: subscript
+              children:
+                - type: text
+                  value: a
+            - type: emphasis
+              children:
+                - type: subscript
+                  children:
+                    - type: text
+                      value: b
+            - type: subscript
+              children:
+                - type: text
+                  value: c
+  - title: strong -> superscript
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              marks:
+                - type: strong
+              text: a
+            - type: text
+              marks:
+                - type: strong
+                - type: superscript
+              text: b
+            - type: text
+              marks:
+                - type: strong
+              text: c
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: strong
+              children:
+                - type: text
+                  value: a
+                - type: superscript
+                  children:
+                    - type: text
+                      value: b
+                - type: text
+                  value: c
+  - title: escaped symbols
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: '*a*'
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: '*a*'
+  - title: strikethrough
+    curvenote:
+      type: doc
+      content:
+        - type: paragraph
+          content:
+            - type: text
+              text: 'strikethrough: '
+            - type: text
+              marks:
+                - type: strikethrough
+              text: hello!
+    mdast:
+      type: root
+      children:
+        - type: paragraph
+          children:
+            - type: text
+              value: 'strikethrough: '
+            - type: delete
+              children:
+                - type: text
+                  value: hello!

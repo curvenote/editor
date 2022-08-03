@@ -1,0 +1,56 @@
+images:
+  title: images as figures
+  tex: |-
+    \begin{figure}[!htbp]
+      \centering
+      \includegraphics[width=0.7\linewidth]{img.png}
+    \end{figure}
+images_with_caption:
+  title: images as figures with caption
+  tex: |-
+    \begin{figure}[!htbp]
+      \centering
+      \includegraphics[width=0.7\linewidth]{img.png}
+
+      \caption*{
+        hello!
+      }
+    \end{figure}
+table:
+  title: tables as table environment
+  tex: |-
+    \begin{table}[!htbp]
+      \centering
+      \begin{tabular}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+        \toprule
+        Col 1 & An Image Figure \\
+        \bottomrule
+      \end{tabular}
+    \end{table}
+longtable:
+  title: long tables as longtable environment
+  tex: |-
+    \begin{longtable}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \hline
+      Col 1 & An Image Figure \\
+      \hline
+    \end{longtable}
+longtable_with_caption:
+  title: long tables as longtable environment
+  tex: |-
+    \begin{longtable}{p{\dimexpr 0.500\linewidth-2\tabcolsep}p{\dimexpr 0.500\linewidth-2\tabcolsep}}
+      \caption*{
+        This is a caption
+      }
+
+      \hline
+      Col 1 & An Image Figure \\
+      \hline
+    \end{longtable}
+justlong:
+  title: long attribute has no impact on image figures
+  tex: |-
+    \begin{figure}[!htbp]
+      \centering
+      \includegraphics[width=0.7\linewidth]{img.png}
+    \end{figure}
