@@ -1,3 +1,4 @@
+import type { GenericNode } from 'mystjs';
 import { Node } from 'prosemirror-model';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { MdSerializerState, nodeNames } from '../types';
@@ -186,4 +187,18 @@ export function normalizeLabel(
     .trim()
     .toLowerCase();
   return { identifier, label };
+}
+
+/**
+ * Take a node and return a single flattened text value from value/children
+ */
+export function flattenValues(node: GenericNode): string {
+  const { value, children } = node;
+  if (value != null) {
+    return value;
+  }
+  if (children) {
+    return children.reduce((out, child) => `${out}${flattenValues(child)}`, '');
+  }
+  return '';
 }
