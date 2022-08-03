@@ -1,4 +1,5 @@
-import { Attrs, MarkType, Node, NodeType } from 'prosemirror-model';
+import type { Attrs } from 'prosemirror-model';
+import { MarkType, Node, NodeType } from 'prosemirror-model';
 import { NodeWithPos, Predicate } from './types';
 
 // :: (node: ProseMirrorNode, descend: ?boolean) → [{ node: ProseMirrorNode, pos: number }]
