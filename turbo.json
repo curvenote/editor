@@ -3,7 +3,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "api/**", "public/build/**"]
+      "outputs": ["dist/**"]
     },
     "clean": {
       "outputs": []
@@ -19,7 +19,7 @@
       "outputs": []
     },
     "dev": {
-      "cache": false
+      "outputs": []
     }
   }
 }

@@ -20,13 +20,13 @@ jobs:
             node_modules
             /home/runner/.cache/Cypresss
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('yarn.lock') }}
-      - run: yarn install
-      - run: yarn run emoji
+      - run: npm install
+      - run: yarn run lint:format
+      - run: yarn run lint
+      - run: npm run test:ci
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
           component: true
           quiet: true
           record: false
-      - run: yarn run lint
-      - run: yarn run lint:format
