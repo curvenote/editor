@@ -1,0 +1,31 @@
+article {
+  .sidenotes {
+    position: absolute;
+    top: 0px;
+    width: 300px;
+    right: -320px;
+    .sidenote {
+      position: absolute;
+      width: 280px;
+      transition: all 300ms cubic-bezier(0.655, 0.18, 0.3, 1.255);
+      left: 10px;
+    }
+    .sidenote p {
+      text-align: left;
+    }
+    .sidenote.selected {
+      left: -10px;
+      opacity: 1;
+      z-index: 1;
+    }
+  }
+  .anchor:hover {
+    background-color: var(--sidenoteAnchorColorHover, #f7cf69b6);
+  }
+  .anchor.selected {
+    background-color: var(--sidenoteAnchorColorSelected, #f5c955);
+  }
+  .anchor {
+    background-color: var(--sidenoteAnchorColor, #f8e4b1);
+  }
+}
