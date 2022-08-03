@@ -1,5 +1,11 @@
 ## 1.0.1 (2022-06-27)
 
+## 1.0.4
+
+### Patch Changes
+
+- 4359937: Move to editor monorepo
+
 - Port to typescript
 - export esm and cjs builds, no bundle
 
