@@ -1,5 +1,5 @@
-import { GenericNode } from 'mystjs';
-import { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
+import type { GenericNode } from 'mystjs';
+import type { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
 import { MystNode } from '../spec';
 import { MdastOptions } from '../serialize/types';
 

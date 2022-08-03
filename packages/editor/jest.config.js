@@ -7,7 +7,6 @@ module.exports = {
       tsconfig: 'tsconfig.test.json',
     },
   },
-  // transformIgnorePatterns: [],
   moduleNameMapper: {
     '\\.(css|scss|html)$': 'identity-obj-proxy',
   },

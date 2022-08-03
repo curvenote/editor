@@ -1,11 +1,7 @@
-import {
-  DOMOutputSpec,
-  DOMSerializer,
-  Mark,
-  Node as ProsemirrorNode,
-  Schema,
-} from 'prosemirror-model';
-import { GenericNode, selectAll } from 'mystjs';
+import type { DOMOutputSpec } from 'prosemirror-model';
+import { DOMSerializer, Mark, Node as ProsemirrorNode, Schema } from 'prosemirror-model';
+import type { GenericNode } from 'mystjs';
+import { selectAll } from 'mystjs';
 import {
   FootnoteReference,
   FootnoteDefinition,

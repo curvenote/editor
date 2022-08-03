@@ -1,4 +1,4 @@
-import { GenericNode } from 'mystjs';
+import type { GenericNode } from 'mystjs';
 import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import { Cite, CrossReference } from '../spec';
 import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';

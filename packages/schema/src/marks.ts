@@ -1,5 +1,5 @@
-import { GenericNode } from 'mystjs';
-import { MarkSpec } from 'prosemirror-model';
+import type { GenericNode } from 'mystjs';
+import type { MarkSpec } from 'prosemirror-model';
 import {
   MystNode,
   Abbreviation,

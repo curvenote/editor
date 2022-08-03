@@ -1,5 +1,5 @@
 import { Node as ProsemirrorNode } from 'prosemirror-model';
-import { GenericNode } from 'mystjs';
+import type { GenericNode } from 'mystjs';
 import { Root } from '../../spec';
 import { convertToMdast, convertToMdastSnippet } from './convertToMdast';
 import { MdastOptions } from '../types';

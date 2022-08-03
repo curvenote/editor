@@ -1,5 +1,6 @@
 import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node, AttributeSpec } from 'prosemirror-model';
+import { Node } from 'prosemirror-model';
+import type { AttributeSpec } from 'prosemirror-model';
 import { NodeDef, Attr, MyNodeSpec } from '../types';
 
 export const DEFAULT_FORMAT = '.1f';

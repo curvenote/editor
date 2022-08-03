@@ -1,6 +1,6 @@
 import OrderedMap from 'orderedmap';
-import { GenericNode } from 'mystjs';
-import { NodeSpec } from 'prosemirror-model';
+import type { GenericNode } from 'mystjs';
+import type { NodeSpec } from 'prosemirror-model';
 import { addListNodes } from 'prosemirror-schema-list';
 import {
   Blockquote,
