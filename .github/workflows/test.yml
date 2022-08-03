@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v1
@@ -23,9 +23,7 @@ jobs:
       - run: npm run lint
       - run: npm run build
       - run: npm run test:ci
-
-jobs:
-  build:
+  cypress:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v1
