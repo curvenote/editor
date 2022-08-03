@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "build:cypress": "turbo run build --filter schema --filter prosemirror* --filter prosemirror-utils --filter sidenotes",
     "dev": "turbo run dev --parallel",
     "start": "turbo run start --parallel",
     "clean": "turbo run clean --parallel && find . -name '.turbo' -type d -prune -exec rm -rf '{}' +",

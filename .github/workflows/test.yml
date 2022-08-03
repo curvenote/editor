@@ -49,6 +49,7 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
       - run: npm install
+      - run: npm run build:cypress
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
