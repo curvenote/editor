@@ -8,8 +8,8 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "postinstall": "turbo run build --filter @curvenote/blocks",
     "dev": "turbo run dev --parallel",
+    "start": "turbo run start --parallel",
     "clean": "turbo run clean --parallel && find . -name '.turbo' -type d -prune -exec rm -rf '{}' +",
     "lint": "turbo run lint",
     "lint:format": "turbo run lint:format",

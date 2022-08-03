@@ -40,7 +40,6 @@
     "dev": "webpack --config webpack.dev.js",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.js",
     "lint:format": "prettier --check \"src/**/*.ts\" \"styles/**/*.scss\" \"src/**/*.tsx\"",
-    "lint:format:fix": "prettier --write \"src/**/*.ts\" \"styles/**/*.scss\" \"src/**/*.tsx\"",
     "watch": "tsc -w -p ."
   },
   "devDependencies": {
@@ -53,7 +52,6 @@
     "@types/uuid": "^8.3.4",
     "classnames": "^2.3.1",
     "css-loader": "^6.7.1",
-    "dotenv": "^10.0.0",
     "eslint-config-curvenote": "*",
     "express": "^4.18.1",
     "html-webpack-plugin": "^5.5.0",

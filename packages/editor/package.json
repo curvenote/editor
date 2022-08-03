@@ -37,7 +37,6 @@
     "dev:autocomplete": "cd ../prosemirror-autocomplete; yalc publish; cd ../editor; yalc link prosemirror-autocomplete",
     "lint": "eslint \"src/**/*.ts\" -c .eslintrc.js",
     "lint:format": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\"",
-    "lint:format:fix": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
     "watch": "tsc -w -p ."
   },
   "dependencies": {
