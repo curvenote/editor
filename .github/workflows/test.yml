@@ -7,8 +7,21 @@ on:
     branches: [main]
 
 jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+      - run: npm install
   test:
     runs-on: ubuntu-latest
+    needs: [install]
     steps:
       - uses: actions/setup-node@v1
         with:
@@ -25,6 +38,7 @@ jobs:
       - run: npm run test:ci
   cypress:
     runs-on: ubuntu-latest
+    needs: [install]
     steps:
       - uses: actions/setup-node@v1
         with:
