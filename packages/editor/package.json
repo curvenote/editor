@@ -22,9 +22,9 @@
   "homepage": "https://github.com/curvenote/editor/tree/main/packages/editor",
   "scripts": {
     "clean": "rm -rf dist",
-    "compile": "yarn run clean; tsc;",
-    "build": "yarn run compile; yarn run css; webpack --config webpack.prod.js",
-    "prepublishOnly": "yarn run build; yarn run css;",
+    "compile": "npm run clean; tsc;",
+    "build": "npm run compile; npm run css; webpack --config webpack.prod.js",
+    "prepublishOnly": "npm run build",
     "css": "sass styles/index.scss dist/editor.css",
     "css:watch": "sass --watch styles/index.scss dist/editor.css",
     "test": "cypress run --component",
