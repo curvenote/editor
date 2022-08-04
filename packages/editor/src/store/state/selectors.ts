@@ -1,6 +1,7 @@
 import { StateCounter } from '@curvenote/schema/dist/types/types';
 import { createSelector } from '@reduxjs/toolkit';
-import { EditorState } from 'prosemirror-state';
+import type { EditorState } from 'prosemirror-state';
+import type { EditorView } from 'prosemirror-view';
 import { opts } from '../../connect';
 import { State } from '../types';
 
@@ -12,8 +13,15 @@ export function selectViews(state: State) {
   return state.editor.state.views;
 }
 
-export const selectEditorViewState = createSelector(
-  [selectViews, (_: State, viewId: string | null) => viewId],
+export const selectEditorViewState: (
+  state: State,
+  viewId: string | null,
+) => {
+  viewId: string | null;
+  stateId: string | null;
+  view: EditorView | null;
+} = createSelector(
+  [selectViews, (state: State, viewId: string | null) => viewId],
   (views, viewId) => {
     const blank = { viewId, stateId: null, view: null };
     if (viewId == null) return blank;

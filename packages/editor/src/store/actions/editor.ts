@@ -310,7 +310,9 @@ export function toggleCitationBrackets(): AppThunk<boolean> {
     const hasParenthesis = parent.type.name === schema.nodes.cite_group.name;
     if (hasParenthesis) {
       const nodes: Node[] = [];
-      parent.forEach((n) => nodes.push(n));
+      parent.forEach((n) => {
+        nodes.push(n);
+      });
       const frag = Fragment.from(nodes);
       selectParentNode(editor.state, (tr) => {
         const tr2 = tr.deleteSelection().insert(tr.selection.head, frag).scrollIntoView();

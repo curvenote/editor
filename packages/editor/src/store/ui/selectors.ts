@@ -7,7 +7,10 @@ export function getEditorUI(state: State) {
   return state.editor.ui;
 }
 
-export const getEditorUIStateAndViewIds = createSelector([getEditorUI], ({ stateId, viewId }) => {
+export const getEditorUIStateAndViewIds: (state: State) => {
+  stateId: string | null;
+  viewId: string | null;
+} = createSelector([getEditorUI], ({ stateId, viewId }) => {
   return { stateId, viewId };
 });
 
@@ -34,11 +37,17 @@ export function getSelectedEditorAndViews(state: State) {
   return { ...getEditorState(state, stateId), ...getEditorView(state, viewId), viewId };
 }
 
-export const getSelectedViewId = createSelector([getEditorUI], ({ stateId, viewId }) => ({
+export const getSelectedViewId: (state: State) => {
+  stateId: string | null;
+  viewId: string | null;
+} = createSelector([getEditorUI], ({ stateId, viewId }) => ({
   stateId,
   viewId,
 }));
 
-export const isEditorViewFocused = createSelector([selectEditorViewState], (editorView) => {
-  return editorView.view?.hasFocus() ?? false;
-});
+export const isEditorViewFocused: (state: State, viewId: string | null) => boolean = createSelector(
+  [selectEditorViewState],
+  (editorView) => {
+    return editorView.view?.hasFocus() ?? false;
+  },
+);
