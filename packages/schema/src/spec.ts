@@ -1,4 +1,4 @@
-import {
+import type {
   PhrasingContent,
   FlowContent,
   Math as SpecMath,

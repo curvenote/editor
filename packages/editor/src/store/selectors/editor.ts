@@ -1,13 +1,12 @@
-import type { Attrs } from 'prosemirror-model';
-import { MarkType, NodeType } from 'prosemirror-model';
+import type { Attrs, MarkType, NodeType } from 'prosemirror-model';
 import { NodeSelection } from 'prosemirror-state';
 import { findParentNode, isNodeSelection, hasParentNode } from '@curvenote/prosemirror-utils';
 import type { ContentNodeWithPos } from '@curvenote/prosemirror-utils';
-import { nodeNames } from '@curvenote/schema';
+import type { nodeNames } from '@curvenote/schema';
 import { createSelector } from '@reduxjs/toolkit';
 import { getNodeIfSelected } from '../ui/utils';
 import { selectEditorState } from '../state/selectors';
-import { State } from '../types';
+import type { State } from '../types';
 import { getEditorUI } from '../ui/selectors';
 
 const predicate = () => true;

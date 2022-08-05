@@ -1,7 +1,7 @@
-import { Nodes } from '@curvenote/schema';
-import { Schema } from 'prosemirror-model';
+import type { Nodes } from '@curvenote/schema';
+import type { Schema } from 'prosemirror-model';
 import { selectSuggestionState } from '../selectors';
-import { AppThunk } from '../../types';
+import type { AppThunk } from '../../types';
 
 export function chooseSelection(result: Nodes.Mention.Attrs): AppThunk<void> {
   return (dispatch, getState) => {

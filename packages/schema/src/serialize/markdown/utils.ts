@@ -1,6 +1,6 @@
-import { Node as ProsemirrorNode, Mark, Node } from 'prosemirror-model';
-import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { MdSerializerState } from '../types';
+import type { Node as ProsemirrorNode, Mark, Node } from 'prosemirror-model';
+import type { MarkdownSerializerState } from 'prosemirror-markdown';
+import type { MdSerializerState } from '../types';
 
 export type MarkSerializerMethod = (
   state: MarkdownSerializerState,

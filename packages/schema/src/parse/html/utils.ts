@@ -1,4 +1,4 @@
-import { Parser } from '../types';
+import type { Parser } from '../types';
 
 export function setInnerHTML(element: Element, content: string, DOMParser: Parser) {
   // NOTE: doing a naive .innerHTML does not copy over some attributes e.g. ":value"

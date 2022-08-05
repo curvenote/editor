@@ -1,5 +1,6 @@
 import type { MarkType, Node } from 'prosemirror-model';
-import { EditorState, PluginKey } from 'prosemirror-state';
+import type { EditorState } from 'prosemirror-state';
+import { PluginKey } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import type { Options } from './types';
 

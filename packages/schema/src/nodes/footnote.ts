@@ -1,6 +1,7 @@
-import { FlowContent, InlineFootnote, NoAttrs } from '../spec';
-import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { MyNodeSpec, NodeGroups, Props } from './types';
+import type { FlowContent, InlineFootnote, NoAttrs } from '../spec';
+import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import type { MyNodeSpec, Props } from './types';
+import { NodeGroups } from './types';
 
 const footnote: MyNodeSpec<NoAttrs, InlineFootnote> = {
   attrs: {},

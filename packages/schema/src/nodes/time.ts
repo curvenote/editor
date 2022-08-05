@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
-import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { Time } from '../spec';
-import { NodeGroups, MyNodeSpec } from './types';
+import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import type { Time } from '../spec';
+import type { MyNodeSpec } from './types';
+import { NodeGroups } from './types';
 
 export function getDatetime(object?: Date | string | null): Date {
   if (object == null) {

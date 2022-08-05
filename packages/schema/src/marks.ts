@@ -1,6 +1,6 @@
 import type { GenericNode } from 'mystjs';
 import type { MarkSpec } from 'prosemirror-model';
-import {
+import type {
   MystNode,
   Abbreviation,
   Emphasis,
@@ -14,8 +14,9 @@ import {
   Underline,
   Strikethrough,
 } from './spec';
-import { MarkGroups, Props } from './nodes/types';
-import { MdastOptions } from './serialize/types';
+import type { Props } from './nodes/types';
+import { MarkGroups } from './nodes/types';
+import type { MdastOptions } from './serialize/types';
 
 export interface MyMarkSpec<N extends MystNode> extends MarkSpec {
   attrsFromMyst: (t: GenericNode) => Record<string, any>;

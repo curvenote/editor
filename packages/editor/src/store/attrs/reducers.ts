@@ -1,4 +1,5 @@
-import { ATTRIBUTES_SHOW_EDITOR, AttributesState, AttributesActionTypes } from './types';
+import type { AttributesState, AttributesActionTypes } from './types';
+import { ATTRIBUTES_SHOW_EDITOR } from './types';
 
 const initialState: AttributesState = {
   show: false,

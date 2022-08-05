@@ -1,10 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { nodeNames, createId } from '@curvenote/schema';
-import { Fragment, Node } from 'prosemirror-model';
-import { Plugin, PluginKey, EditorState } from 'prosemirror-state';
-import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
+import type { Node } from 'prosemirror-model';
+import { Fragment } from 'prosemirror-model';
+import type { EditorState } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
+import type { EditorView } from 'prosemirror-view';
+import { Decoration, DecorationSet } from 'prosemirror-view';
 import { v4 as uuid } from 'uuid';
-import { opts, UploadImageState } from '../../connect';
+import type { UploadImageState } from '../../connect';
+import { opts } from '../../connect';
 import { createFigure } from '../../store/actions/utils';
 import { getNodeIfSelected } from '../../store/ui/utils';
 

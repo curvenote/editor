@@ -1,8 +1,8 @@
 import { inputRules } from 'prosemirror-inputrules';
-import { Schema } from 'prosemirror-model';
+import type { Schema } from 'prosemirror-model';
 import codemark from 'prosemirror-codemark';
 
-import { Plugin } from 'prosemirror-state';
+import type { Plugin } from 'prosemirror-state';
 import * as rules from './rules';
 
 export * from './rules';

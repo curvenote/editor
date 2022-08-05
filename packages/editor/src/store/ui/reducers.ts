@@ -1,4 +1,5 @@
-import { SELECT_EDITOR_VIEW, UIState, UIActionTypes, INLINE_SELECTION } from './types';
+import type { UIState, UIActionTypes } from './types';
+import { SELECT_EDITOR_VIEW, INLINE_SELECTION } from './types';
 
 export const initialState: UIState = {
   stateId: null,

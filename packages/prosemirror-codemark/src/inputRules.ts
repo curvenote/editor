@@ -1,6 +1,6 @@
 import type { MarkType } from 'prosemirror-model';
-import { Plugin, TextSelection, Transaction } from 'prosemirror-state';
-import type { PluginSpec } from 'prosemirror-state';
+import { Plugin, TextSelection } from 'prosemirror-state';
+import type { PluginSpec, Transaction } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import type { Options } from './types';
 import { getMarkType, MAX_MATCH } from './utils';

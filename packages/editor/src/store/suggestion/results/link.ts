@@ -1,9 +1,11 @@
-import { Schema } from 'prosemirror-model';
-import { Nodes, ReferenceKind } from '@curvenote/schema';
-import { AppThunk } from '../../types';
+import type { Schema } from 'prosemirror-model';
+import type { Nodes } from '@curvenote/schema';
+import { ReferenceKind } from '@curvenote/schema';
+import type { AppThunk } from '../../types';
 import { selectSuggestionState } from '../selectors';
-import { LinkResult } from '../types';
-import { opts, SearchContext } from '../../../connect';
+import type { LinkResult } from '../types';
+import type { SearchContext } from '../../../connect';
+import { opts } from '../../../connect';
 import { insertInlineNode } from '../../actions/editor';
 
 let context: SearchContext | null = null;

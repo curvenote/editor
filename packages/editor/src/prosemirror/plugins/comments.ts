@@ -1,6 +1,8 @@
-import { Plugin, PluginKey, Transaction } from 'prosemirror-state';
+import type { Transaction } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
 import { isNodeSelection } from '@curvenote/prosemirror-utils';
-import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
+import type { EditorView } from 'prosemirror-view';
+import { Decoration, DecorationSet } from 'prosemirror-view';
 import { actions, selectors, store } from 'sidenotes';
 import { opts } from '../../connect';
 

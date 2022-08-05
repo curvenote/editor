@@ -1,7 +1,7 @@
-import { types } from '@curvenote/runtime';
-import { ReferenceKind } from '@curvenote/schema';
-import { EditorView } from 'prosemirror-view';
-import { CommandResult } from './commands';
+import type { types } from '@curvenote/runtime';
+import type { ReferenceKind } from '@curvenote/schema';
+import type { EditorView } from 'prosemirror-view';
+import type { CommandResult } from './commands';
 
 export const UPDATE_SUGGESTION = 'UPDATE_SUGGESTION';
 export const UPDATE_RESULTS = 'UPDATE_RESULTS';

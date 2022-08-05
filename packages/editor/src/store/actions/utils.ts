@@ -1,15 +1,11 @@
-import {
-  nodeNames,
-  CaptionKind,
-  createId,
-  Nodes,
-  findChildrenWithName,
-  process,
-} from '@curvenote/schema';
-import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import type { Nodes } from '@curvenote/schema';
+import { nodeNames, CaptionKind, createId, findChildrenWithName, process } from '@curvenote/schema';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import type { ContentNodeWithPos } from '@curvenote/prosemirror-utils';
-import { EditorView } from 'prosemirror-view';
-import { Fragment, Node, NodeType, Schema } from 'prosemirror-model';
+import type { EditorView } from 'prosemirror-view';
+import type { Node, NodeType, Schema } from 'prosemirror-model';
+import { Fragment } from 'prosemirror-model';
 import { opts } from '../../connect';
 
 export const TEST_LINK_SPACE =

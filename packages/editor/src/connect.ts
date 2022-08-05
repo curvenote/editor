@@ -1,14 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import type { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
-import { EditorState, Transaction } from 'prosemirror-state';
-import { Fragment, Node, Schema, Slice } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
-import type { DirectEditorProps } from 'prosemirror-view';
-import { Nodes, process } from '@curvenote/schema';
-import { Store } from './store/types';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import type { Node, Schema, Slice } from 'prosemirror-model';
+import { Fragment } from 'prosemirror-model';
+import type { EditorView, DirectEditorProps } from 'prosemirror-view';
+import type { Nodes } from '@curvenote/schema';
+import { process } from '@curvenote/schema';
+import type { Store } from './store/types';
 import setupComponents from './r-components';
-import { LinkResult } from './store/suggestion/types';
+import type { LinkResult } from './store/suggestion/types';
 
 export type SearchContext = {
   search: (query?: string) => LinkResult[];

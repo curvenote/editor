@@ -1,10 +1,5 @@
-import {
-  SuggestionState,
-  SuggestionActionTypes,
-  UPDATE_SUGGESTION,
-  UPDATE_RESULTS,
-  SELECT_SUGGESTION,
-} from './types';
+import type { SuggestionState, SuggestionActionTypes } from './types';
+import { UPDATE_SUGGESTION, UPDATE_RESULTS, SELECT_SUGGESTION } from './types';
 
 const initialState: SuggestionState = {
   view: null,

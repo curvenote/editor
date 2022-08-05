@@ -1,5 +1,6 @@
-import { PluginKey, Selection } from 'prosemirror-state';
-import { DecorationSet } from 'prosemirror-view';
+import type { Selection } from 'prosemirror-state';
+import { PluginKey } from 'prosemirror-state';
+import type { DecorationSet } from 'prosemirror-view';
 
 export const pluginKey = new PluginKey('autocomplete');
 

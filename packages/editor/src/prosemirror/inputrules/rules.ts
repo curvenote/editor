@@ -5,7 +5,7 @@ import {
   textblockTypeInputRule,
   smartQuotes,
 } from 'prosemirror-inputrules';
-import { Schema } from 'prosemirror-model';
+import type { Schema } from 'prosemirror-model';
 import { createId } from '@curvenote/schema';
 import { changeNodeRule, markInputRule, replaceNodeRule } from './utils';
 import {

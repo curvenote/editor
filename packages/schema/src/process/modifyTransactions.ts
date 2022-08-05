@@ -1,10 +1,10 @@
-import { Transaction } from 'prosemirror-state';
-import { Node } from 'prosemirror-model';
-import { CaptionKind, NumberedNode } from '../nodes/types';
+import type { Transaction } from 'prosemirror-state';
+import type { Node } from 'prosemirror-model';
+import type { CaptionKind, NumberedNode } from '../nodes/types';
 import { nodeNames } from '../types';
 import { createId } from '../utils';
-import { Attrs as FigcaptionAttrs } from '../nodes/figcaption';
-import { Attrs as FigureAttrs } from '../nodes/figure';
+import type { Attrs as FigcaptionAttrs } from '../nodes/figcaption';
+import type { Attrs as FigureAttrs } from '../nodes/figure';
 import { determineCaptionKind } from './utils';
 
 type CaptionState = {

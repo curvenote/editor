@@ -1,8 +1,8 @@
-import type { DOMOutputSpec } from 'prosemirror-model';
-import { DOMSerializer, Mark, Node as ProsemirrorNode, Schema } from 'prosemirror-model';
+import type { DOMOutputSpec, Mark, Node as ProsemirrorNode, Schema } from 'prosemirror-model';
+import { DOMSerializer } from 'prosemirror-model';
 import type { GenericNode } from 'mystjs';
 import { selectAll } from 'mystjs';
-import {
+import type {
   FootnoteReference,
   FootnoteDefinition,
   Root,
@@ -10,11 +10,13 @@ import {
   FlowContent,
   InlineFootnote,
 } from '../../spec';
-import { createDocument, Fragment, Node, Text } from './document';
+import type { Fragment, Text } from './document';
+import { createDocument, Node } from './document';
 import { markNames, nodeNames } from '../../types';
-import { Props } from '../../nodes/types';
-import { getSchema, UseSchema } from '../../schemas';
-import { MdastOptions } from '../types';
+import type { Props } from '../../nodes/types';
+import type { UseSchema } from '../../schemas';
+import { getSchema } from '../../schemas';
+import type { MdastOptions } from '../types';
 import { createId } from '../../utils';
 
 type CreateNodeSpec = (node: ProsemirrorNode) => DOMOutputSpec;

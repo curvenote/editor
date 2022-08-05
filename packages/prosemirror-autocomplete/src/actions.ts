@@ -1,6 +1,6 @@
-import { Plugin } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { AutocompleteTrMeta } from './types';
+import type { Plugin } from 'prosemirror-state';
+import type { EditorView } from 'prosemirror-view';
+import type { AutocompleteTrMeta } from './types';
 import { pluginKey } from './utils';
 
 export function openAutocomplete(view: EditorView, trigger: string, filter?: string) {

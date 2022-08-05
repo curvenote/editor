@@ -1,6 +1,8 @@
-import { NodeSelection, Selection, Transaction } from 'prosemirror-state';
-import { Fragment, Node, NodeType, ResolvedPos } from 'prosemirror-model';
-import { Predicate } from './types';
+import type { Transaction } from 'prosemirror-state';
+import { NodeSelection, Selection } from 'prosemirror-state';
+import type { NodeType, ResolvedPos } from 'prosemirror-model';
+import { Fragment, Node } from 'prosemirror-model';
+import type { Predicate } from './types';
 
 // :: ($pos: ResolvedPos, predicate: (node: ProseMirrorNode) → boolean) → ?{pos: number, start: number, depth: number, node: ProseMirrorNode}
 // Iterates over parent nodes starting from the given `$pos`, returning the closest node and its start position `predicate` returns truthy for. `start` points to the start position of the node, `pos` points directly before the node.

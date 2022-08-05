@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isNodeSelection } from '@curvenote/prosemirror-utils';
 import debounce from 'lodash.debounce';
 import { getEditorState } from '../../store/state/selectors';
-import { State } from '../../store';
+import type { State } from '../../store';
 import { getNodeFromSelection } from '../../store/ui/utils';
 
 export function useInlineActionNode(stateId: any) {

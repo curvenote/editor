@@ -1,7 +1,7 @@
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { cleanWhitespaceChars } from '../clean';
 import { indent } from '../indent';
-import { TexFormatSerialize, TexSerializerState, TexStatementOptions } from '../types';
+import type { TexFormatSerialize, TexSerializerState, TexStatementOptions } from '../types';
 
 export function createLatexStatement(
   opts: string | ((state: TexSerializerState, node: Node) => TexStatementOptions | null),

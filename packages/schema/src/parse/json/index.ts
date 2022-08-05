@@ -1,6 +1,7 @@
-import { Node as ProsemirrorNode } from 'prosemirror-model';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
-import { getSchema, UseSchema } from '../../schemas';
+import type { UseSchema } from '../../schemas';
+import { getSchema } from '../../schemas';
 
 export function fromJSON(
   content: string | Record<string, any>,

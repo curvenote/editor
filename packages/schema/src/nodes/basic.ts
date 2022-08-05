@@ -2,7 +2,7 @@ import OrderedMap from 'orderedmap';
 import type { GenericNode } from 'mystjs';
 import type { NodeSpec } from 'prosemirror-model';
 import { addListNodes } from 'prosemirror-schema-list';
-import {
+import type {
   Blockquote,
   Break,
   FlowContent,
@@ -14,7 +14,8 @@ import {
   PhrasingContent,
   ThematicBreak,
 } from '../spec';
-import { MyNodeSpec, NodeGroups, Props } from './types';
+import type { MyNodeSpec, Props } from './types';
+import { NodeGroups } from './types';
 import { nodeNames } from '../types';
 
 export const doc: NodeSpec = {

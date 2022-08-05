@@ -1,6 +1,6 @@
 import { InputRule } from 'prosemirror-inputrules';
-import { Plugin } from 'prosemirror-state';
-import { OpenAutocomplete, Trigger } from './types';
+import type { Plugin } from 'prosemirror-state';
+import type { OpenAutocomplete, Trigger } from './types';
 import { inSuggestion } from './utils';
 
 export function createInputRule(plugin: Plugin, type: Trigger) {

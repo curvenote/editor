@@ -1,8 +1,11 @@
 import { tableNodes } from 'prosemirror-tables';
-import { Fragment, Node } from 'prosemirror-model';
-import { PhrasingContent, Table, TableCell, TableRow } from '../spec';
-import { MdFormatSerialize, nodeNames, TexFormatSerialize, TexSerializerState } from '../types';
-import { NodeGroups, Props } from './types';
+import type { Node } from 'prosemirror-model';
+import { Fragment } from 'prosemirror-model';
+import type { PhrasingContent, Table, TableCell, TableRow } from '../spec';
+import type { MdFormatSerialize, TexFormatSerialize, TexSerializerState } from '../types';
+import { nodeNames } from '../types';
+import type { Props } from './types';
+import { NodeGroups } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
 import { writeMdastSnippet, getColumnWidths, hasFancyTable, renderPColumn } from './utils';

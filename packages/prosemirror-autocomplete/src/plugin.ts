@@ -1,6 +1,7 @@
-import { Plugin } from 'prosemirror-state';
+import type { Plugin } from 'prosemirror-state';
 import { inputRules } from 'prosemirror-inputrules';
-import { Options, ActionKind, AutocompleteAction } from './types';
+import type { Options, AutocompleteAction } from './types';
+import { ActionKind } from './types';
 import { getDecorationPlugin } from './decoration';
 import { createInputRule } from './inputRules';
 

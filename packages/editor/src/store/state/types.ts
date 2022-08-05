@@ -1,6 +1,6 @@
-import { EditorState, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { types, schemas } from '@curvenote/schema';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import type { EditorView } from 'prosemirror-view';
+import type { types, schemas } from '@curvenote/schema';
 
 export const INIT_EDITOR_STATE = 'INIT_EDITOR_STATE';
 export const SUBSCRIBE_EDITOR_VIEW = 'SUBSCRIBE_EDITOR_VIEW';

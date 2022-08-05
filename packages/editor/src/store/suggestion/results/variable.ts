@@ -1,10 +1,11 @@
-import { EditorView } from 'prosemirror-view';
-import { Schema } from 'prosemirror-model';
+import type { EditorView } from 'prosemirror-view';
+import type { Schema } from 'prosemirror-model';
 import { KEEP_OPEN, closeAutocomplete } from 'prosemirror-autocomplete';
-import { AppThunk, State, Dispatch } from '../../types';
+import type { AppThunk, State, Dispatch } from '../../types';
 import { selectSuggestionState, selectSuggestionView } from '../selectors';
 import { insertInlineNode, insertVariable } from '../../actions/editor';
-import { variableTrigger, VariableResult, SuggestionKind } from '../types';
+import type { VariableResult } from '../types';
+import { variableTrigger, SuggestionKind } from '../types';
 
 type VarSuggestionKinds = SuggestionKind.variable | SuggestionKind.display;
 

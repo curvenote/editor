@@ -1,7 +1,8 @@
 import type { GenericNode } from 'mystjs';
-import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { Cite, CrossReference } from '../spec';
-import { NodeGroups, MyNodeSpec, ReferenceKind } from './types';
+import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import type { Cite, CrossReference } from '../spec';
+import type { MyNodeSpec } from './types';
+import { NodeGroups, ReferenceKind } from './types';
 import { flattenValues, normalizeLabel } from './utils';
 
 export type Attrs = {

@@ -1,5 +1,6 @@
-import { MarkdownSerializer, MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node as ProsemirrorNode } from 'prosemirror-model';
+import type { MarkdownSerializerState } from 'prosemirror-markdown';
+import { MarkdownSerializer } from 'prosemirror-markdown';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
 import * as nodes from '../../nodes';
 import { cleanWhitespaceChars } from '../clean';
 

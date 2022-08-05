@@ -1,6 +1,5 @@
-import type { Attrs } from 'prosemirror-model';
-import { MarkType, Node, NodeType } from 'prosemirror-model';
-import { NodeWithPos, Predicate } from './types';
+import type { Attrs, MarkType, Node, NodeType } from 'prosemirror-model';
+import type { NodeWithPos, Predicate } from './types';
 
 // :: (node: ProseMirrorNode, descend: ?boolean) → [{ node: ProseMirrorNode, pos: number }]
 // Flattens descendants of a given `node`. It doesn't descend into a node when descend argument is `false` (defaults to `true`).

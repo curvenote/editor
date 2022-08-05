@@ -1,17 +1,17 @@
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Plugin } from 'prosemirror-state';
-import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
+import type { EditorView } from 'prosemirror-view';
+import { Decoration, DecorationSet } from 'prosemirror-view';
 import { closeAutocomplete } from './actions';
-import {
+import type {
   ActiveAutocompleteState,
   AutocompleteTrMeta,
   FromTo,
-  KEEP_OPEN,
   Options,
   AutocompleteAction,
-  ActionKind,
   AutocompleteState,
 } from './types';
+import { KEEP_OPEN, ActionKind } from './types';
 import { inSuggestion, pluginKey } from './utils';
 
 const inactiveAutocompleteState: AutocompleteState = {

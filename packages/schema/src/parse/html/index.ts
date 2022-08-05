@@ -1,7 +1,8 @@
 import { DOMParser as DOMParserPM } from 'prosemirror-model';
 import { setInnerHTML } from './utils';
-import { Parser } from '../types';
-import { getSchema, UseSchema } from '../../schemas';
+import type { Parser } from '../types';
+import type { UseSchema } from '../../schemas';
+import { getSchema } from '../../schemas';
 
 export function fromHTML(
   content: string,

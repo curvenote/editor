@@ -1,4 +1,4 @@
-import { Node as ProsemirrorNode } from 'prosemirror-model';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
 import { MarkdownSerializer } from 'prosemirror-markdown';
 import {
   blankTex,
@@ -10,7 +10,8 @@ import {
 import * as nodes from '../../nodes';
 import { isPlainURL } from '../markdown/utils';
 import { nodeNames } from '../../types';
-import { TexFormatTypes, TexOptions, TexSerializerState } from '../types';
+import type { TexOptions, TexSerializerState } from '../types';
+import { TexFormatTypes } from '../types';
 import { getIndent } from '../indent';
 
 function createMarkOpenClose(name?: string) {

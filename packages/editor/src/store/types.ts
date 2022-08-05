@@ -5,21 +5,22 @@ import type {
   Middleware as RMiddleware,
   Reducer as RReducer,
 } from 'redux';
-import { types as runtimeTypes } from '@curvenote/runtime';
-import { State as SidenotesState } from 'sidenotes';
-import { EditorsState, EditorActionTypes } from './state/types';
-import { UIState, UIActionTypes, SelectionKinds } from './ui/types';
-import {
+import type { types as runtimeTypes } from '@curvenote/runtime';
+import type { State as SidenotesState } from 'sidenotes';
+import type { EditorsState, EditorActionTypes } from './state/types';
+import type { UIState, UIActionTypes } from './ui/types';
+import { SelectionKinds } from './ui/types';
+import type {
   SuggestionState,
   SuggestionActionTypes,
-  SuggestionKind,
   SuggestionResult,
   EmojiResult,
   CommandResult,
   VariableResult,
   LinkResult,
 } from './suggestion/types';
-import { AttributesState, AttributesActionTypes } from './attrs/types';
+import { SuggestionKind } from './suggestion/types';
+import type { AttributesState, AttributesActionTypes } from './attrs/types';
 
 export interface State {
   editor: {

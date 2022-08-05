@@ -1,4 +1,4 @@
-import { State, SuggestionResult } from '../types';
+import type { State, SuggestionResult } from '../types';
 
 export const selectSuggestionState = (state: State) => state.editor.suggestion;
 export const selectSuggestionKind = (state: State) => state.editor.suggestion.kind;

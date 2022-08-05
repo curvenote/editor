@@ -1,6 +1,7 @@
-import type { Attrs } from 'prosemirror-model';
-import { NodeSelection, Transaction } from 'prosemirror-state';
-import { Fragment, Mark, Node, NodeType } from 'prosemirror-model';
+import type { Attrs, Mark, Node, NodeType } from 'prosemirror-model';
+import type { Transaction } from 'prosemirror-state';
+import { NodeSelection } from 'prosemirror-state';
+import { Fragment } from 'prosemirror-model';
 import { findParentNodeOfType, findPositionOfNodeBefore } from './selection';
 import {
   cloneTr,

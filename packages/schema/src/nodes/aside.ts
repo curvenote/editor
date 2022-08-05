@@ -1,7 +1,8 @@
 import { createLatexStatement } from '../serialize/tex/utils';
-import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { Margin, FlowContent } from '../spec';
-import { NodeGroups, MyNodeSpec } from './types';
+import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import type { Margin, FlowContent } from '../spec';
+import type { MyNodeSpec } from './types';
+import { NodeGroups } from './types';
 
 const aside: MyNodeSpec<Record<string, never>, Margin> = {
   attrs: {},

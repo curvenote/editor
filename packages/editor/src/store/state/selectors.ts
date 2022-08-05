@@ -1,9 +1,9 @@
-import { StateCounter } from '@curvenote/schema/dist/types/types';
+import type { StateCounter } from '@curvenote/schema/dist/types/types';
 import { createSelector } from '@reduxjs/toolkit';
 import type { EditorState } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import { opts } from '../../connect';
-import { State } from '../types';
+import type { State } from '../types';
 
 export function selectEditors(state: State) {
   return state.editor.state.editors;

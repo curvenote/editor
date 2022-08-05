@@ -1,7 +1,7 @@
-import { EditorView } from 'prosemirror-view';
-import { Node } from 'prosemirror-model';
-import { Nodes } from '@curvenote/schema';
-import { GetPos } from './types';
+import type { EditorView } from 'prosemirror-view';
+import type { Node } from 'prosemirror-model';
+import type { Nodes } from '@curvenote/schema';
+import type { GetPos } from './types';
 
 class MentionNodeView {
   node: Node;

@@ -1,8 +1,9 @@
-import { Node } from 'prosemirror-model';
-import { Caption, Container, Image, Legend, Table } from '../spec';
-import { MdFormatSerialize } from '../serialize/types';
+import type { Node } from 'prosemirror-model';
+import type { Caption, Container, Image, Legend, Table } from '../spec';
+import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { AlignOptions, CaptionKind, MyNodeSpec, NodeGroups, NumberedNode } from './types';
+import type { AlignOptions, MyNodeSpec, NumberedNode } from './types';
+import { CaptionKind, NodeGroups } from './types';
 import { determineCaptionKind } from '../process/utils';
 import {
   getColumnWidths,

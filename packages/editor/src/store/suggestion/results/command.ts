@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js';
-import { EditorView } from 'prosemirror-view';
-import { Fragment, Node, Schema } from 'prosemirror-model';
+import type { EditorView } from 'prosemirror-view';
+import type { Node, Schema } from 'prosemirror-model';
+import { Fragment } from 'prosemirror-model';
 import {
   addColumnAfter,
   addColumnBefore,
@@ -17,14 +18,15 @@ import {
   isInTable,
 } from 'prosemirror-tables';
 
-import { Transaction } from 'prosemirror-state';
+import type { Transaction } from 'prosemirror-state';
 import { openAutocomplete } from 'prosemirror-autocomplete';
 import { nodeNames, createId } from '@curvenote/schema';
-import { AppThunk } from '../../types';
+import type { AppThunk } from '../../types';
 import { LanguageNames } from '../../../views/types';
 import { selectSuggestionState } from '../selectors';
 import * as actions from '../../actions/editor';
-import { ALL_COMMANDS, CommandResult, CommandNames } from '../commands';
+import type { CommandResult } from '../commands';
+import { ALL_COMMANDS, CommandNames } from '../commands';
 import { createFigure, getLinkBoundsIfTheyExist, normalizeUrl } from '../../actions/utils';
 import { getEditorView } from '../../state/selectors';
 import { getYouTubeId, getMiroId, getLoomId, getVimeoId } from './utils';

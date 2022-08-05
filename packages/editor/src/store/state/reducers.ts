@@ -1,4 +1,5 @@
 import { process } from '@curvenote/schema';
+import type { EditorActionTypes, EditorsState } from './types';
 import {
   INIT_EDITOR_STATE,
   UPDATE_EDITOR_STATE,
@@ -6,8 +7,6 @@ import {
   UNSUBSCRIBE_EDITOR_VIEW,
   RESET_ALL_EDITORS_AND_VIEWS,
   RESET_ALL_VIEWS,
-  EditorActionTypes,
-  EditorsState,
   RESET_EDITOR_AND_VIEWS,
 } from './types';
 import { createEditorState } from '../../prosemirror';

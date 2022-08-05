@@ -1,10 +1,11 @@
-import { EditorState } from 'prosemirror-state';
+import type { EditorState } from 'prosemirror-state';
 import { count as wordcount } from '@wordpress/wordcount';
-import * as Nodes from '../nodes';
-import { NumberedNode, ReferenceKind } from '../nodes/types';
+import type * as Nodes from '../nodes';
+import type { NumberedNode } from '../nodes/types';
+import { ReferenceKind } from '../nodes/types';
 import { nodeNames } from '../types';
 import { toText } from '../serialize/text';
-import { Counter, CounterMeta, Reference, StateCounter, WordCounter } from './types';
+import type { Counter, CounterMeta, Reference, StateCounter, WordCounter } from './types';
 import { findChildrenWithName } from '../utils';
 
 function push<K extends ReferenceKind, T extends CounterMeta>(
