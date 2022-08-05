@@ -27,7 +27,7 @@
     "build:esm": "tsc --project ./src/tsconfig.json --module ES2020 --outDir ./dist/esm",
     "declarations": "tsc  --project ./src/tsconfig.json --declaration --emitDeclarationOnly --outDir dist/types",
     "build": "npm-run-all -l clean -p build:cjs build:esm declarations",
-    "build:watch": "tsc --project ./src/tsconfig.json -w",
+    "dev": "tsc --project ./src/tsconfig.json --module ES2020 --outDir ./dist/esm -w --preserveWatchOutput",
     "prepublishOnly": "yarn build",
     "test": "jest src test",
     "test:watch": "jest --watchAll",
