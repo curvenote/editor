@@ -1,5 +1,6 @@
-import { ATTRIBUTES_SHOW_EDITOR, AttributesActionTypes } from './types';
-import { AppThunk } from '../types';
+import type { AttributesActionTypes } from './types';
+import { ATTRIBUTES_SHOW_EDITOR } from './types';
+import type { AppThunk } from '../types';
 
 export const openAttributeEditor =
   (show: boolean, pos: number, dom: Element): AppThunk<void> =>

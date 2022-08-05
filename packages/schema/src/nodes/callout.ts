@@ -1,7 +1,8 @@
-import { Admonition, FlowContent } from '../spec';
-import { MdFormatSerialize } from '../serialize/types';
+import type { Admonition, FlowContent } from '../spec';
+import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { MyNodeSpec, NodeGroups } from './types';
+import type { MyNodeSpec } from './types';
+import { NodeGroups } from './types';
 
 export enum CalloutKinds {
   'active' = 'active',

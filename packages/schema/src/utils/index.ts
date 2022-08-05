@@ -1,6 +1,6 @@
 import { customAlphabet } from 'nanoid';
-import { Node } from 'prosemirror-model';
-import { nodeNames } from '../types';
+import type { Node } from 'prosemirror-model';
+import type { nodeNames } from '../types';
 
 export function clamp(val: number, min: number, max: number) {
   return Math.min(Math.max(val, min), max);

@@ -1,6 +1,6 @@
-import { types } from '@curvenote/runtime';
+import type { types } from '@curvenote/runtime';
 import { register as basicRegister } from '@curvenote/components';
-import { Store } from './store/types';
+import type { Store } from './store/types';
 
 // Stamps WebComponents onto a global variable, if we don't guard the registration we will need to deregister
 // TODO: instance editor properly...

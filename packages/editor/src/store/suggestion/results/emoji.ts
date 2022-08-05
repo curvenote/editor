@@ -1,8 +1,8 @@
 import Fuse from 'fuse.js';
-import { Schema } from 'prosemirror-model';
-import { AppThunk } from '../../types';
+import type { Schema } from 'prosemirror-model';
+import type { AppThunk } from '../../types';
 import { selectSuggestionState } from '../selectors';
-import { EmojiResult } from '../types';
+import type { EmojiResult } from '../types';
 
 const options = {
   shouldSort: true,

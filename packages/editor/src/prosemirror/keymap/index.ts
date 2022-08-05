@@ -12,7 +12,7 @@ import {
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
-import { Schema } from 'prosemirror-model';
+import type { Schema } from 'prosemirror-model';
 import { createId } from '@curvenote/schema';
 import type { Command } from 'prosemirror-state';
 import { store, opts } from '../../connect';
@@ -20,7 +20,8 @@ import { focusSelectedEditorView } from '../../store/ui/actions';
 import { executeCommand } from '../../store/actions';
 import { buildFigureKeymap } from './figure';
 import { CommandNames } from '../../store/suggestion/commands';
-import { AddKey, createBind, flattenCommandList, Keymap } from './utils';
+import type { AddKey, Keymap } from './utils';
+import { createBind, flattenCommandList } from './utils';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 

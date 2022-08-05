@@ -1,6 +1,7 @@
-import { Heading, PhrasingContent } from '../spec';
-import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import { NodeGroups, MyNodeSpec, NumberedNode } from './types';
+import type { Heading, PhrasingContent } from '../spec';
+import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import type { MyNodeSpec, NumberedNode } from './types';
+import { NodeGroups } from './types';
 import {
   getNumberedAttrs,
   getNumberedDefaultAttrs,

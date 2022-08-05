@@ -1,4 +1,5 @@
-import { Plugin, EditorState, PluginKey, Transaction } from 'prosemirror-state';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
 
 const key = new PluginKey('editable');
 

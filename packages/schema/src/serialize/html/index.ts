@@ -1,5 +1,7 @@
-import { Node as ProsemirrorNode, DOMSerializer } from 'prosemirror-model';
-import { getSchema, UseSchema } from '../../schemas';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
+import { DOMSerializer } from 'prosemirror-model';
+import type { UseSchema } from '../../schemas';
+import { getSchema } from '../../schemas';
 
 export function toHTML(doc: ProsemirrorNode, useSchema: UseSchema, document: Document) {
   const schema = getSchema(useSchema);

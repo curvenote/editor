@@ -1,7 +1,8 @@
-import { NodeDef, NodeGroups } from '../types';
-import { MdFormatSerialize } from '../../serialize/types';
+import type { NodeDef } from '../types';
+import { NodeGroups } from '../types';
+import type { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
-import { Range } from '../../spec';
+import type { Range } from '../../spec';
 
 export type Attrs = {
   value?: string;

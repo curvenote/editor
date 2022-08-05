@@ -1,5 +1,5 @@
-import { MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node } from 'prosemirror-model';
+import type { MarkdownSerializerState } from 'prosemirror-markdown';
+import type { Node } from 'prosemirror-model';
 import type { GenericNode } from 'mystjs';
 
 export enum TexFormatTypes {

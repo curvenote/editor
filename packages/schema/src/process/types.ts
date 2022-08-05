@@ -1,4 +1,4 @@
-import { ReferenceKind } from '../nodes/types';
+import type { ReferenceKind } from '../nodes/types';
 
 export type CounterMeta = Record<string, string | number | boolean | null>;
 

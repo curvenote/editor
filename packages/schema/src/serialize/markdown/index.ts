@@ -1,8 +1,9 @@
-import { MarkdownSerializer, MarkdownSerializerState } from 'prosemirror-markdown';
-import { Node as ProsemirrorNode } from 'prosemirror-model';
+import type { MarkdownSerializer } from 'prosemirror-markdown';
+import { MarkdownSerializerState } from 'prosemirror-markdown';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
 import { isPlainURL, backticksFor, wrapMark } from './utils';
 import * as nodes from '../../nodes';
-import { MarkdownOptions, MdSerializerState } from '../types';
+import type { MarkdownOptions, MdSerializerState } from '../types';
 import { cleanWhitespaceChars } from '../clean';
 import { toMdastSnippet } from '../mdast';
 

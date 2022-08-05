@@ -1,5 +1,5 @@
-import { LinkAttrs } from './marks';
-import { AlignOptions } from './nodes/types';
+import type { LinkAttrs } from './marks';
+import type { AlignOptions } from './nodes/types';
 
 export * from './process/types';
 export * from './parse/types';

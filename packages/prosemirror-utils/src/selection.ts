@@ -1,7 +1,8 @@
-import { NodeType, ResolvedPos } from 'prosemirror-model';
-import { NodeSelection, Selection } from 'prosemirror-state';
+import type { NodeType, ResolvedPos } from 'prosemirror-model';
+import type { NodeSelection } from 'prosemirror-state';
+import { Selection } from 'prosemirror-state';
 import { equalNodeType, findParentNodeClosestToPos, isNodeSelection } from './helpers';
-import { DomAtPos, Predicate } from './types';
+import type { DomAtPos, Predicate } from './types';
 
 // :: (predicate: (node: ProseMirrorNode) → boolean) → (selection: Selection) → ?{pos: number, start: number, depth: number, node: ProseMirrorNode}
 // Iterates over parent nodes, returning the closest node and its start position `predicate` returns truthy for. `start` points to the start position of the node, `pos` points directly before the node.

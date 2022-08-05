@@ -1,9 +1,10 @@
 import type { GenericNode } from 'mystjs';
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import { MdSerializerState, nodeNames } from '../types';
+import type { MdSerializerState } from '../types';
+import { nodeNames } from '../types';
 import { clamp, createId } from '../utils';
-import { NodeSpecAttrs, NumberedNode } from './types';
+import type { NodeSpecAttrs, NumberedNode } from './types';
 
 export const getImageWidth = (width?: number | string | null) => {
   if (typeof width === 'number') {

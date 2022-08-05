@@ -1,5 +1,4 @@
-import type { DecorationAttrs } from 'prosemirror-view';
-import { DecorationSet, EditorView } from 'prosemirror-view';
+import type { DecorationAttrs, DecorationSet, EditorView } from 'prosemirror-view';
 
 export const KEEP_OPEN = 'KEEP_OPEN';
 

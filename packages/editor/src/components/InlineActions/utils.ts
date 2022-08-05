@@ -1,7 +1,7 @@
 import { nodeNames } from '@curvenote/schema';
 import { findChildrenByType, findParentNode } from '@curvenote/prosemirror-utils';
-import { Node } from 'prosemirror-model';
-import { EditorState } from 'prosemirror-state';
+import type { Node } from 'prosemirror-model';
+import type { EditorState } from 'prosemirror-state';
 import type { PopperProps } from '@material-ui/core';
 
 export type ActionProps = {

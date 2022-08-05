@@ -1,5 +1,6 @@
 import type { MarkType } from 'prosemirror-model';
-import { EditorState, Plugin, TextSelection, Transaction } from 'prosemirror-state';
+import type { EditorState, Plugin, Transaction } from 'prosemirror-state';
+import { TextSelection } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import type { CodemarkState, CursorMetaTr } from './types';
 import { MAX_MATCH, safeResolve } from './utils';

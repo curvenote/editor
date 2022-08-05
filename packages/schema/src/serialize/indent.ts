@@ -1,4 +1,4 @@
-import { SharedSerializerState } from './types';
+import type { SharedSerializerState } from './types';
 
 const INDENT = '  ';
 

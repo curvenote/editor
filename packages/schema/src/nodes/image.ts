@@ -1,7 +1,8 @@
-import { Image } from '../spec';
+import type { Image } from '../spec';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import { NodeGroups, NumberedNode, MyNodeSpec, AlignOptions } from './types';
-import { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
+import type { NumberedNode, MyNodeSpec, AlignOptions } from './types';
+import { NodeGroups } from './types';
+import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import {
   getImageWidth,
   readBooleanDomAttr,

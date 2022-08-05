@@ -1,4 +1,5 @@
-import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import { NodeSelection, TextSelection } from 'prosemirror-state';
 import {
   wrapIn as wrapInPM,
   setBlockType as setBlockTypePM,
@@ -6,13 +7,15 @@ import {
   selectParentNode,
 } from 'prosemirror-commands';
 import { wrapInList as wrapInListPM, liftListItem } from 'prosemirror-schema-list';
-import { MarkType, NodeType, Node, Fragment, Schema, NodeRange } from 'prosemirror-model';
-import { Nodes, nodeNames, createId } from '@curvenote/schema';
+import type { MarkType, NodeType, Node, Schema } from 'prosemirror-model';
+import { Fragment, NodeRange } from 'prosemirror-model';
+import type { Nodes } from '@curvenote/schema';
+import { nodeNames, createId } from '@curvenote/schema';
 import { replaceSelectedNode, selectParentNodeOfType } from '@curvenote/prosemirror-utils';
 import type { ContentNodeWithPos } from '@curvenote/prosemirror-utils';
 import { liftTarget } from 'prosemirror-transform';
 import { dispatchCommentAction } from '../../prosemirror/plugins/comments';
-import { AppThunk } from '../types';
+import type { AppThunk } from '../types';
 import {
   getEditorState,
   getSelectedEditorAndViews,

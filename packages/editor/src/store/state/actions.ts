@@ -1,8 +1,10 @@
-import { EditorState, NodeSelection, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { schemas, process } from '@curvenote/schema';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import { NodeSelection } from 'prosemirror-state';
+import type { EditorView } from 'prosemirror-view';
+import type { schemas } from '@curvenote/schema';
+import { process } from '@curvenote/schema';
+import type { EditorActionTypes } from './types';
 import {
-  EditorActionTypes,
   UPDATE_EDITOR_STATE,
   INIT_EDITOR_STATE,
   SUBSCRIBE_EDITOR_VIEW,
@@ -11,10 +13,10 @@ import {
   RESET_ALL_VIEWS,
   RESET_EDITOR_AND_VIEWS,
 } from './types';
-import { AppThunk } from '../types';
+import type { AppThunk } from '../types';
 import { getEditorState, getEditorView } from './selectors';
 import { opts } from '../../connect';
-import { LinkType } from '../../components/types';
+import type { LinkType } from '../../components/types';
 import { getLinkBoundsIfTheyExist } from '../actions/utils';
 
 export function initEditorState(

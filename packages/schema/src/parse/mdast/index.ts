@@ -1,14 +1,16 @@
-import { Fragment, Mark, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
+import type { Fragment, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
+import { Mark } from 'prosemirror-model';
 import type { GenericNode } from 'mystjs';
 import { select, selectAll, remove } from 'mystjs';
-import {
+import type {
   FlowContent,
   FootnoteDefinition,
   FootnoteReference,
   Root,
   InlineFootnote,
 } from '../../spec';
-import { getSchema, UseSchema } from '../../schemas';
+import type { UseSchema } from '../../schemas';
+import { getSchema } from '../../schemas';
 import { markNames, nodeNames } from '../../types';
 
 type Attrs = Record<string, any>;

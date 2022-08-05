@@ -1,21 +1,23 @@
-import { KEEP_OPEN, ActionKind } from 'prosemirror-autocomplete';
-import type { AutocompleteAction } from 'prosemirror-autocomplete';
-import { EditorView } from 'prosemirror-view';
-import { Nodes } from '@curvenote/schema';
-import {
+import { ActionKind } from 'prosemirror-autocomplete';
+import type { AutocompleteAction, KEEP_OPEN } from 'prosemirror-autocomplete';
+import type { EditorView } from 'prosemirror-view';
+import type { Nodes } from '@curvenote/schema';
+import type {
   SuggestionActionTypes,
+  Range,
+  EmojiResult,
+  VariableResult,
+  LinkResult,
+} from './types';
+import {
   SuggestionKind,
   UPDATE_SUGGESTION,
   UPDATE_RESULTS,
   SELECT_SUGGESTION,
-  Range,
-  EmojiResult,
   variableTrigger,
-  VariableResult,
-  LinkResult,
 } from './types';
-import { CommandResult } from './commands';
-import { AppThunk } from '../types';
+import type { CommandResult } from './commands';
+import type { AppThunk } from '../types';
 import { selectSuggestionState } from './selectors';
 import * as emoji from './results/emoji';
 import * as command from './results/command';

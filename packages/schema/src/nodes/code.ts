@@ -1,7 +1,8 @@
-import { Code } from '../spec';
+import type { Code } from '../spec';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { MdFormatSerialize } from '../serialize/types';
-import { NodeGroups, NumberedNode, MyNodeSpec } from './types';
+import type { MdFormatSerialize } from '../serialize/types';
+import type { NumberedNode, MyNodeSpec } from './types';
+import { NodeGroups } from './types';
 import {
   convertToBooleanAttribute,
   readBooleanDomAttr,

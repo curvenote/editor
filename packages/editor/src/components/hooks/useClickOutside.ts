@@ -1,4 +1,5 @@
-import { useEffect, MutableRefObject } from 'react';
+import type { MutableRefObject } from 'react';
+import { useEffect } from 'react';
 
 export default function useClickOutside(
   ref: MutableRefObject<Element | null>,

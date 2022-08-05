@@ -1,5 +1,6 @@
 import { DOMParser as DOMParserPM } from 'prosemirror-model';
-import { getSchema, UseSchema } from '../../schemas';
+import type { UseSchema } from '../../schemas';
+import { getSchema } from '../../schemas';
 
 export function fromText(content: string, useSchema: UseSchema, document: Document) {
   const schema = getSchema(useSchema);

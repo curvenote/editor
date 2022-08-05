@@ -1,5 +1,6 @@
 import { schemas, fromHTML } from '@curvenote/schema';
-import { EditorState, Transaction } from 'prosemirror-state';
+import type { Transaction } from 'prosemirror-state';
+import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
 import { store, opts } from '../connect';

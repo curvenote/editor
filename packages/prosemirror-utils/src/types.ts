@@ -1,5 +1,5 @@
-import { Node as ProsemirrorNode } from 'prosemirror-model';
-import { Transaction } from 'prosemirror-state';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
+import type { Transaction } from 'prosemirror-state';
 
 export type Predicate<T = ProsemirrorNode> = (arg: T) => boolean;
 

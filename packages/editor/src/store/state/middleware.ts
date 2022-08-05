@@ -1,5 +1,6 @@
-import { Middleware } from '../types';
-import { UpdateEditorState, UPDATE_EDITOR_STATE } from './types';
+import type { Middleware } from '../types';
+import type { UpdateEditorState } from './types';
+import { UPDATE_EDITOR_STATE } from './types';
 
 const updateProsemirrorViewsMiddleware: Middleware = (store) => (next) => (action) => {
   const result = next(action);

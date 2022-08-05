@@ -1,4 +1,4 @@
-import { State } from '../types';
+import type { State } from '../types';
 
 export const showAttributeEditor = (state: State) => state.editor.attrs.show;
 export const getAttributeEditorLocation = (state: State) => state.editor.attrs.location;

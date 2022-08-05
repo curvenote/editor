@@ -1,8 +1,9 @@
 import type { GenericNode } from 'mystjs';
-import { Caption, FlowContent } from '../spec';
-import { MdFormatSerialize } from '../serialize/types';
+import type { Caption, FlowContent } from '../spec';
+import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import { MyNodeSpec, NodeGroups, CaptionKind } from './types';
+import type { MyNodeSpec } from './types';
+import { NodeGroups, CaptionKind } from './types';
 import { nodeNames } from '../types';
 
 export type Attrs = {
