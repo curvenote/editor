@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.14.53",
-    "eslint-config-curvenote": "*",
+    "eslint-config-curvenote": "^0.0.1",
     "prettier": "latest",
     "turbo": "latest"
   },
