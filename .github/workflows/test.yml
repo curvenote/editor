@@ -51,9 +51,11 @@ jobs:
       - run: npm install
       - run: npm run build:cypress
       - name: Cypress run
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v2
         with:
+          cache-key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           project: ./packages/editor
           component: true
+          browser: chrome
           quiet: true
           record: false
