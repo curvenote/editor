@@ -19,7 +19,8 @@ import { NodeGroups } from './types';
 import { nodeNames } from '../types';
 
 export const doc: NodeSpec = {
-  content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
+  // content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
+  content: `${NodeGroups.newBlock}+`,
 };
 
 export const docParagraph: NodeSpec = {
@@ -30,6 +31,21 @@ export const docComment: NodeSpec = {
   content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${nodeNames.equation})+`, // browsers will completely collapse the node when it's empty `+` is necessary
 };
 
+export const newTopNode = {
+  attrs: {},
+  content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
+  group: NodeGroups.newBlock,
+
+  parseDOM: [
+    {
+      tag: 'div.new-block',
+    },
+  ],
+
+  toDOM() {
+    return ['div', { class: 'new-block' }, 0];
+  },
+};
 export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {
   attrs: {},
   content: `${NodeGroups.inline}*`,

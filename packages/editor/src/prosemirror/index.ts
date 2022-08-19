@@ -54,6 +54,7 @@ export function createEditorView(
         iframe: views.IFrameView,
         link: views.LinkView,
         link_block: views.createLinkBlockView,
+        newTopNode: views.createTopBlockView,
         time: views.TimeView,
         mention: views.MentionView,
         button: views.newWidgetView,

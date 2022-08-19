@@ -1,5 +1,5 @@
 import React from 'react';
-import { NodeViewProps } from './types';
+import type { NodeViewProps } from './types';
 import createNodeView from './NodeView';
 
 function LinkBlock({ node }: NodeViewProps) {

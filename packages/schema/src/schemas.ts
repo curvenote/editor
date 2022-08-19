@@ -49,6 +49,7 @@ export const reactiveNodes = {
 export const nodes = {
   // Basic markdown
   doc: basic.doc,
+  newTopNode: basic.newTopNode,
   text: basic.text,
   paragraph: basic.paragraph,
   heading: Nodes.Heading.default,
@@ -129,7 +130,7 @@ export function getSchema(useSchema: UseSchema) {
   if (typeof useSchema === 'string') {
     switch (useSchema) {
       case 'full':
-        return new Schema(presets.full);
+        return new Schema(presets.full as any);
       case 'paragraph':
         return new Schema(presets.paragraph);
       case 'comment':

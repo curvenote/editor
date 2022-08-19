@@ -23,6 +23,7 @@ export enum ReferenceKind {
 export enum NodeGroups {
   'top' = 'topblock',
   'block' = 'block',
+  'newBlock' = 'newBlock',
   'heading' = 'heading',
   'blockOrHeading' = '(block | heading)+',
   'blockOrEquation' = '(block | equation)+',

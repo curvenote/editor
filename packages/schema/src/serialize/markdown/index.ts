@@ -19,6 +19,9 @@ const mdNodes: MarkdownSerializerParameters[0] = {
   text(state, node) {
     state.text(cleanWhitespaceChars(node.text ?? ''));
   },
+  newTopNode(state, node) {
+    state.text('not supported!!');
+  },
   paragraph(state, node) {
     state.renderInline(node);
     state.closeBlock(node);
