@@ -31,8 +31,10 @@ export const docComment: NodeSpec = {
   content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${nodeNames.equation})+`, // browsers will completely collapse the node when it's empty `+` is necessary
 };
 
-export const newTopNode = {
+export const BLOCK_NODE_NAME = 'newTopBlock'; // NOTE: This cannot be named block unless we can rename nodeGroup.block
+export const block: NodeSpec = {
   attrs: {},
+  draggable: true,
   content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
   group: NodeGroups.newBlock,
 

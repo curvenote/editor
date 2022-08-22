@@ -6,7 +6,7 @@ import { createLinkBlockView } from './LinkBlockView';
 import { TimeView } from './TimeView';
 import { MentionView } from './Mention';
 import { CodeBlockView } from './CodeBlockView';
-import { createTopBlockView } from './NewTopBlock';
+import { createTopBlockView } from './Block';
 import { FootnoteView } from './FootnoteView';
 import createNodeView from './NodeView';
 import WidgetView, { newWidgetView } from './WidgetView';

@@ -13,6 +13,7 @@ import { nodeNames } from '../../types';
 import type { TexOptions, TexSerializerState } from '../types';
 import { TexFormatTypes } from '../types';
 import { getIndent } from '../indent';
+import { BLOCK_NODE_NAME } from '../../nodes/basic';
 
 function createMarkOpenClose(name?: string) {
   return {
@@ -90,7 +91,7 @@ export const texSerializer = new MarkdownSerializer(
     },
     image: nodes.Image.toTex,
     figure: nodes.Figure.toTex,
-    newTopNode(state, node) {
+    [BLOCK_NODE_NAME](state, node) {
       state.text('not supported!!');
     },
     figcaption: nodes.Figcaption.toTex,

@@ -21,9 +21,9 @@ export enum ReferenceKind {
 }
 
 export enum NodeGroups {
+  'newBlock' = 'newBlock', // NOTE: naming here needs some work (requirements: avoid collision)
   'top' = 'topblock',
   'block' = 'block',
-  'newBlock' = 'newBlock',
   'heading' = 'heading',
   'blockOrHeading' = '(block | heading)+',
   'blockOrEquation' = '(block | equation)+',

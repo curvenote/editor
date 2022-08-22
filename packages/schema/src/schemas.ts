@@ -49,7 +49,7 @@ export const reactiveNodes = {
 export const nodes = {
   // Basic markdown
   doc: basic.doc,
-  newTopNode: basic.newTopNode,
+  [basic.BLOCK_NODE_NAME]: basic.block,
   text: basic.text,
   paragraph: basic.paragraph,
   heading: Nodes.Heading.default,

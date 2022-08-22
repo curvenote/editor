@@ -1,4 +1,4 @@
-import { schemas, fromHTML } from '@curvenote/schema';
+import { schemas, fromHTML, BLOCK_NODE_NAME } from '@curvenote/schema';
 import type { Transaction } from 'prosemirror-state';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
@@ -54,7 +54,7 @@ export function createEditorView(
         iframe: views.IFrameView,
         link: views.LinkView,
         link_block: views.createLinkBlockView,
-        newTopNode: views.createTopBlockView,
+        [BLOCK_NODE_NAME]: views.createTopBlockView,
         time: views.TimeView,
         mention: views.MentionView,
         button: views.newWidgetView,
