@@ -18,7 +18,7 @@ const iframe: MyNodeSpec<Attrs, Iframe> = {
     align: { default: 'center' },
     width: { default: DEFAULT_IMAGE_WIDTH },
   },
-  group: NodeGroups.block,
+  group: NodeGroups.content,
   draggable: true,
   parseDOM: [
     {

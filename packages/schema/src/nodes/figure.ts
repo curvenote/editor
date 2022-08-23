@@ -31,7 +31,7 @@ export type Attrs = NumberedNode & {
 };
 
 const figure: MyNodeSpec<Attrs, Container> = {
-  group: NodeGroups.block,
+  group: NodeGroups.content,
   content: NodeGroups.insideFigure,
   isolating: true,
   attrs: {

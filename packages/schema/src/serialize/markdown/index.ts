@@ -2,11 +2,11 @@ import type { MarkdownSerializer } from 'prosemirror-markdown';
 import { MarkdownSerializerState } from 'prosemirror-markdown';
 import type { Node as ProsemirrorNode } from 'prosemirror-model';
 import { isPlainURL, backticksFor, wrapMark } from './utils';
-import { BLOCK_NODE_NAME } from '../../nodes/basic';
 import * as nodes from '../../nodes';
 import type { MarkdownOptions, MdSerializerState } from '../types';
 import { cleanWhitespaceChars } from '../clean';
 import { toMdastSnippet } from '../mdast';
+import { nodeNames } from '../../types';
 
 type MarkdownSerializerParameters = ConstructorParameters<typeof MarkdownSerializer>;
 
@@ -20,7 +20,7 @@ const mdNodes: MarkdownSerializerParameters[0] = {
   text(state, node) {
     state.text(cleanWhitespaceChars(node.text ?? ''));
   },
-  [BLOCK_NODE_NAME](state, node) {
+  [nodeNames.block](state, node) {
     state.text('not supported!!');
   },
   paragraph(state, node) {

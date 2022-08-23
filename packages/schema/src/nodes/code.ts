@@ -69,7 +69,7 @@ const code_block: MyNodeSpec<Attrs, Code> = {
   },
   content: `${NodeGroups.text}*`,
   marks: '',
-  group: NodeGroups.block,
+  group: NodeGroups.content,
   code: true,
   defining: true,
   parseDOM: [

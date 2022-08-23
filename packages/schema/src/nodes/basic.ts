@@ -20,7 +20,7 @@ import { nodeNames } from '../types';
 
 export const doc: NodeSpec = {
   // content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
-  content: `${NodeGroups.newBlock}+`,
+  content: `${NodeGroups.block}+`,
 };
 
 export const docParagraph: NodeSpec = {
@@ -28,15 +28,14 @@ export const docParagraph: NodeSpec = {
 };
 
 export const docComment: NodeSpec = {
-  content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${nodeNames.equation})+`, // browsers will completely collapse the node when it's empty `+` is necessary
+  content: `(${NodeGroups.content} | ${NodeGroups.heading} | ${nodeNames.equation})+`, // browsers will completely collapse the node when it's empty `+` is necessary
 };
 
-export const BLOCK_NODE_NAME = 'newTopBlock'; // NOTE: This cannot be named block unless we can rename nodeGroup.block
 export const block: NodeSpec = {
   attrs: {},
   draggable: true,
-  content: `(${NodeGroups.block} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
-  group: NodeGroups.newBlock,
+  content: `(${NodeGroups.content} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
+  group: NodeGroups.block,
 
   parseDOM: [
     {
@@ -51,7 +50,7 @@ export const block: NodeSpec = {
 export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {
   attrs: {},
   content: `${NodeGroups.inline}*`,
-  group: NodeGroups.block,
+  group: NodeGroups.content,
   parseDOM: [{ tag: 'p' }],
   toDOM() {
     return ['p', 0];
@@ -65,8 +64,8 @@ export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {
 
 export const blockquote: MyNodeSpec<NoAttrs, Blockquote> = {
   attrs: {},
-  content: `${NodeGroups.block}+`,
-  group: NodeGroups.block,
+  content: `${NodeGroups.content}+`,
+  group: NodeGroups.content,
   defining: true,
   parseDOM: [{ tag: 'blockquote' }],
   toDOM() {
@@ -82,7 +81,7 @@ export const blockquote: MyNodeSpec<NoAttrs, Blockquote> = {
 /** Horizontal rule */
 export const horizontal_rule: MyNodeSpec<NoAttrs, ThematicBreak> = {
   attrs: {},
-  group: NodeGroups.block,
+  group: NodeGroups.content,
   parseDOM: [{ tag: 'hr' }],
   toDOM() {
     return ['hr', { class: 'break' }];
@@ -110,8 +109,8 @@ export const hard_break: MyNodeSpec<NoAttrs, Break> = {
 
 const listNodes = addListNodes(
   OrderedMap.from({}),
-  `paragraph ${NodeGroups.block}*`,
-  NodeGroups.block,
+  `paragraph ${NodeGroups.content}*`,
+  NodeGroups.content,
 ) as OrderedMap<MyNodeSpec<any, any>>;
 
 export type OrderedListAttrs = {

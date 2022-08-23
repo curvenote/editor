@@ -4,6 +4,7 @@ import * as basic from './nodes/basic';
 import { nodes as tableNodes } from './nodes/table';
 import * as basicMarks from './marks';
 import * as Nodes from './nodes';
+import { nodeNames } from './types';
 
 export const listNodes = {
   ordered_list: basic.ordered_list,
@@ -49,7 +50,7 @@ export const reactiveNodes = {
 export const nodes = {
   // Basic markdown
   doc: basic.doc,
-  [basic.BLOCK_NODE_NAME]: basic.block,
+  [nodeNames.block]: basic.block,
   text: basic.text,
   paragraph: basic.paragraph,
   heading: Nodes.Heading.default,

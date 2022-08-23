@@ -35,4 +35,17 @@
   margin: 8px 0px;
   border-radius: 4px;
   border: 1px solid gray;
+  position: relative;
+  &:hover {
+    .block-controls {
+      display: flex;
+    }
+  }
+
 }
+
+
+  .selected-block-control {
+    background-color: grey;
+    display: 'flex';
+  }

@@ -30,7 +30,7 @@ const image: MyNodeSpec<Attrs, Image> = {
     align: { default: 'center' }, // Deprecated, use figure
     caption: { default: false }, // Deprecated, use figcaption
   },
-  group: NodeGroups.block,
+  group: NodeGroups.content,
   draggable: true,
   parseDOM: [
     {

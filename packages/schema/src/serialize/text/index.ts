@@ -3,6 +3,7 @@ import { MarkdownSerializer } from 'prosemirror-markdown';
 import type { Node as ProsemirrorNode } from 'prosemirror-model';
 import * as nodes from '../../nodes';
 import { cleanWhitespaceChars } from '../clean';
+import { nodeNames } from '../../types';
 
 function simpleInlineRender(state: MarkdownSerializerState, node: ProsemirrorNode) {
   state.renderInline(node);
@@ -62,6 +63,7 @@ export const textSerializer = new MarkdownSerializer(
     figcaption: simpleBlockRender,
     time: nodes.Time.toMarkdown, // This is just the time! :)
     callout: simpleBlockRender,
+    [nodeNames.block]: simpleBlockRender,
     aside: simpleBlockRender,
     // Technical
     math: simpleInlineRender,

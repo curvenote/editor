@@ -21,13 +21,13 @@ export enum ReferenceKind {
 }
 
 export enum NodeGroups {
-  'newBlock' = 'newBlock', // NOTE: naming here needs some work (requirements: avoid collision)
-  'top' = 'topblock',
-  'block' = 'block',
+  'block' = 'block', // NOTE: naming here needs some work (requirements: avoid collision)
+  'top' = 'topcontent',
+  'content' = 'content',
   'heading' = 'heading',
-  'blockOrHeading' = '(block | heading)+',
-  'blockOrEquation' = '(block | equation)+',
-  'blockOrEquationOrHeading' = '(block | heading | equation)+',
+  'blockOrHeading' = '(content | heading)+',
+  'blockOrEquation' = '(content | equation)+',
+  'blockOrEquationOrHeading' = '(content | heading | equation)+',
   'inline' = 'inline',
   'text' = 'text',
   'cite' = 'cite',
