@@ -32,19 +32,29 @@ export const docComment: NodeSpec = {
 };
 
 export const block: NodeSpec = {
-  attrs: {},
+  attrs: { id: { default: null } },
   draggable: true,
   content: `(${NodeGroups.content} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
   group: NodeGroups.block,
-
   parseDOM: [
     {
-      tag: 'div.new-block',
+      tag: 'div.block',
+      getAttrs(dom) {
+        console.log('getAttrs', dom);
+        if (dom instanceof HTMLElement) {
+          return {
+            id: dom.getAttribute('id') || null,
+          };
+        }
+        return {
+          id: null,
+        };
+      },
     },
   ],
 
-  toDOM() {
-    return ['div', { class: 'new-block' }, 0];
+  toDOM({ attrs: { id } }) {
+    return ['div', { class: 'new-block', id }, 0];
   },
 };
 export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {

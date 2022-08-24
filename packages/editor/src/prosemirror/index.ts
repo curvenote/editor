@@ -1,4 +1,4 @@
-import { schemas, fromHTML, BLOCK_NODE_NAME, nodeNames } from '@curvenote/schema';
+import { schemas, fromHTML, nodeNames } from '@curvenote/schema';
 import type { Transaction } from 'prosemirror-state';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';

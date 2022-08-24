@@ -20,6 +20,8 @@ import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
+import { statePlugin } from './state';
+export { getPluginState as getStatePluginState } from './state';
 
 function tablesPlugins(schema: Schema) {
   // Don't add plugins if they are not in the schema
@@ -96,6 +98,7 @@ export function getPlugins(
     ];
   }
   return [
+    statePlugin(),
     editablePlugin(startEditable),
     getPromptPlugin(),
     ...autocomplete({

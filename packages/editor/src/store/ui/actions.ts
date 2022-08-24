@@ -1,6 +1,6 @@
 import type { PopperPlacementType } from '@material-ui/core';
-import type { InlineSelection, UIActionTypes } from './types';
-import { SELECT_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds } from './types';
+import type { InlineSelection, SelectBlockAction, UIActionTypes } from './types';
+import { SELECT_BLOCK, SELECT_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds } from './types';
 import type { AppThunk } from '../types';
 import { getEditorUI, getInlineActionKind, getSelectedEditorAndViews } from './selectors';
 import { getEditorView } from '../state/selectors';
@@ -13,6 +13,13 @@ export function updateSelectView(viewId: string | null): AppThunk<void> {
       type: SELECT_EDITOR_VIEW,
       payload: { stateId, viewId },
     });
+  };
+}
+
+export function selectBlock(blockId: string | null): SelectBlockAction {
+  return {
+    type: SELECT_BLOCK,
+    payload: blockId,
   };
 }
 

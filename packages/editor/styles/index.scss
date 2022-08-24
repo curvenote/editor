@@ -36,16 +36,29 @@
   border-radius: 4px;
   border: 1px solid gray;
   position: relative;
+  .block-controls{
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      left: -15px;
+      cursor: all-scroll;
+      background-color: black;
+      color: white;
+
+  }
   &:hover {
     .block-controls {
       display: flex;
     }
   }
 
+  .selected-block-control {
+    background-color: grey;
+    display: flex;
+  }
 }
 
 
-  .selected-block-control {
-    background-color: grey;
-    display: 'flex';
-  }
