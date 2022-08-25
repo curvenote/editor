@@ -1,5 +1,5 @@
 import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
-import type { EditorState, Transaction } from 'prosemirror-state';
+import type { EditorState } from 'prosemirror-state';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 
@@ -29,17 +29,10 @@ function findParentBlock(state: EditorState) {
 function createDecorations(state: EditorState) {
   const parentBlock = findParentBlock(state);
   if (!parentBlock) return DecorationSet.empty;
-  // console.log('parentBlock', parentBlock, state.selection.$from);
   return DecorationSet.create(state.doc, [
-    Decoration.widget(
-      parentBlock.start,
-      (() => {
-        const dom = document.createElement('div');
-        console.log('creating new node');
-        dom.innerHTML = 'Decoration Block Controls?';
-        return dom;
-      })(),
-    ),
+    Decoration.node(parentBlock.pos, parentBlock.pos + parentBlock.node.nodeSize, {
+      selected: 'true', // can this be technically anything
+    }),
   ]);
 }
 
@@ -62,37 +55,15 @@ export const statePlugin = (): Plugin => {
     state: {
       init: (config, state) => {
         const parentBlock = findParentBlock(state);
-        if (!parentBlock) return { decorations: DecorationSet.empty, parentBlock: null };
-        // console.log('plugin init config', {
-        //   decorations: createDecorations(state),
-        //   parentBlock: parentBlock,
-        // });
-        return { decorations: createDecorations(state), parentBlock: parentBlock };
+        if (!parentBlock) return { decorations: DecorationSet.empty, state: null };
+        return { decorations: createDecorations(state), state: getState(state) };
       },
       apply(tr, value, oldState, newState) {
-        const prevPluginState: any = plugin.getState(oldState);
-        if (!tr.docChanged) {
-          return {
-            decorations: createDecorations(newState),
-            parentBlock: prevPluginState.parentBlock,
-          };
-        }
-        const { parentBlock, decorations } = prevPluginState;
-        const newParentBlockSearchResult = findParentBlock(newState);
-        console.log('compare', newParentBlockSearchResult, parentBlock);
-        // TODO: how to compare whether the block has changed
-        if (newParentBlockSearchResult?.node.eq(parentBlock.node)) {
-          // update decorations
-          console.log('updating ');
-          return {
-            decorations: createDecorations(newState),
-            parentBlock,
-          };
-        }
-        // create new decorations
+        const parentBlock = findParentBlock(newState);
+        if (!parentBlock) return { decorations: DecorationSet.empty, state: null };
         return {
           decorations: createDecorations(newState),
-          parentBlock: newParentBlockSearchResult,
+          state: getState(newState),
         };
       },
       toJSON(state) {

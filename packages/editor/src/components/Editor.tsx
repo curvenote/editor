@@ -6,8 +6,6 @@ import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
 import type { Dispatch, State } from '../store';
 import { actions, selectors } from '../store';
-import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
-import { selectBlock } from '../store/actions';
 
 type Props = {
   stateKey: any;
@@ -44,12 +42,6 @@ const Editor = (props: Props) => {
       // Cannot use react event loop here.
 
       editorView.current?.updateState(next);
-
-      const parentBlock = findParentNodeOfTypeClosestToPos(
-        next.selection.$from,
-        next.schema.nodes.block,
-      );
-      dispatch(selectBlock(parentBlock?.node.attrs.id || null));
     });
     editorView.current.dom.id = viewId;
     if (className) editorView.current.dom.classList.add(...className.split(' '));

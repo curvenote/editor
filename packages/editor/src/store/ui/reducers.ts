@@ -1,5 +1,5 @@
 import type { UIState, UIActionTypes } from './types';
-import { SELECT_BLOCK, SELECT_EDITOR_VIEW, INLINE_SELECTION } from './types';
+import { SELECT_EDITOR_VIEW, INLINE_SELECTION } from './types';
 
 export const initialState: UIState = {
   stateId: null,
@@ -11,13 +11,6 @@ export const initialState: UIState = {
 // eslint-disable-next-line @typescript-eslint/default-param-last
 const uiReducer = (state = initialState, action: UIActionTypes): UIState => {
   switch (action.type) {
-    case SELECT_BLOCK: {
-      if (action.payload === state.selectedBlock) return state;
-      return {
-        ...state,
-        selectedBlock: action.payload,
-      };
-    }
     case SELECT_EDITOR_VIEW: {
       const { stateId, viewId } = action.payload;
       if (state.stateId === stateId && state.viewId === viewId) {

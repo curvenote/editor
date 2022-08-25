@@ -34,7 +34,7 @@
   padding: 12px 16px;
   margin: 8px 0px;
   border-radius: 4px;
-  border: 1px solid gray;
+  border: 1px solid black;
   position: relative;
   .block-controls{
       display: none;
@@ -45,7 +45,7 @@
       top: 0px;
       left: -15px;
       cursor: all-scroll;
-      background-color: black;
+      background-color: gray;
       color: white;
 
   }
@@ -56,7 +56,7 @@
   }
 
   .selected-block-control {
-    background-color: grey;
+    background-color: black;
     display: flex;
   }
 }

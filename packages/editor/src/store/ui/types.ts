@@ -2,7 +2,6 @@ import type { PopperPlacementType } from '@material-ui/core';
 
 export const SELECT_EDITOR_VIEW = 'SELECT_EDITOR_VIEW';
 export const INLINE_SELECTION = 'INLINE_SELECTION';
-export const SELECT_BLOCK = 'EDITOR/SELECT_BLOCK';
 
 export enum SelectionKinds {
   link = 'link',
@@ -48,9 +47,4 @@ export interface InlineSelectionAction {
   payload: InlineSelection | null;
 }
 
-export interface SelectBlockAction {
-  type: typeof SELECT_BLOCK;
-  payload: string | null;
-}
-
-export type UIActionTypes = SelectEditorViewAction | InlineSelectionAction | SelectBlockAction;
+export type UIActionTypes = SelectEditorViewAction | InlineSelectionAction;

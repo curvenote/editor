@@ -18,9 +18,6 @@ export function isInlineActionOpen(state: State) {
   return state.editor.ui.selection != null;
 }
 
-export function selectSelectedBlockId(state: State) {
-  return state.editor.ui.selectedBlock;
-}
 export function getInlineActionAnchorEl(state: State) {
   return state.editor.ui.selection?.anchorEl ?? null;
 }
