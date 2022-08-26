@@ -1,4 +1,5 @@
 import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
+import { nodeNames } from '@curvenote/schema';
 import type { EditorState } from 'prosemirror-state';
 import { NodeSelection, Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
@@ -11,8 +12,25 @@ export const getPluginState = (state?: EditorState | null): boolean => {
   return plugin?.getState(state) ?? false;
 };
 
+function findParentBlock(state: EditorState) {
+  if (
+    state.selection instanceof NodeSelection &&
+    state.selection.node.type.name === nodeNames.block
+  ) {
+    return {
+      pos: state.selection.from,
+      node: state.selection.node,
+    };
+  }
+
+  return findParentNodeOfTypeClosestToPos(
+    state.selection.$from,
+    state.schema.nodes[nodeNames.block],
+  );
+}
+
 function getSelectedBlockState(state: EditorState) {
-  const result = findParentNodeOfTypeClosestToPos(state.selection.$from, state.schema.nodes.block);
+  const result = findParentBlock(state);
   return result;
 }
 
@@ -20,10 +38,6 @@ function getState(state: EditorState) {
   return {
     selectedBlock: getSelectedBlockState(state),
   };
-}
-
-function findParentBlock(state: EditorState) {
-  return findParentNodeOfTypeClosestToPos(state.selection.$from, state.schema.nodes.block);
 }
 
 function createDecorations(state: EditorState) {
@@ -69,7 +83,9 @@ export const statePlugin = (): Plugin => {
       },
       apply(tr, value, oldState, newState) {
         const parentBlock = findParentBlock(newState);
-        if (!parentBlock) return { decorations: DecorationSet.empty, state: null };
+        if (!parentBlock) {
+          return { decorations: DecorationSet.empty, state: null };
+        }
         return {
           decorations: createDecorations(newState),
           state: getState(newState),
