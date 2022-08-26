@@ -1,6 +1,6 @@
 import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 import type { EditorState } from 'prosemirror-state';
-import { Plugin, PluginKey } from 'prosemirror-state';
+import { NodeSelection, Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 
 const key = new PluginKey('state');
@@ -42,6 +42,15 @@ export const statePlugin = (): Plugin => {
     props: {
       decorations(state) {
         return this.getState(state).decorations;
+      },
+      handleClickOn(view, pos, node, nodePos, event, direct) {
+        // drect makes sure only directly clicking on a node to set the selection
+        if (direct && node.type.name === 'block' && !(event.target instanceof HTMLButtonElement)) {
+          view.dispatch(
+            view.state.tr.setSelection(new NodeSelection(view.state.doc.resolve(nodePos))),
+          );
+          return true; // prevent default from happening if returns true
+        }
       },
       handleDOMEvents: {
         mouseover(this, view, event) {
