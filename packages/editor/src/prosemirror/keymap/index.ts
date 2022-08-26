@@ -2,6 +2,7 @@ import {
   wrapIn,
   setBlockType,
   chainCommands,
+  splitBlock,
   toggleMark,
   exitCode,
   joinUp,
@@ -12,9 +13,10 @@ import {
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
-import type { Schema } from 'prosemirror-model';
+import type { Node, Schema } from 'prosemirror-model';
 import { createId } from '@curvenote/schema';
 import type { Command } from 'prosemirror-state';
+import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
 import { store, opts } from '../../connect';
 import { focusSelectedEditorView } from '../../store/ui/actions';
 import { executeCommand } from '../../store/actions';
@@ -22,6 +24,9 @@ import { buildFigureKeymap } from './figure';
 import { CommandNames } from '../../store/suggestion/commands';
 import type { AddKey, Keymap } from './utils';
 import { createBind, flattenCommandList } from './utils';
+import { ContactsOutlined, ContactSupportOutlined } from '@material-ui/icons';
+import { v4 } from 'uuid';
+import { paragraph } from '@curvenote/schema/dist/types/nodes/basic';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
@@ -83,6 +88,27 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
   }
 
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
+  console.log('schema', schema.nodes.block);
+
+  const blockNode = schema.nodes.block;
+  if (blockNode) {
+    const command: Command = (state, dispatch, view) => {
+      if (!dispatch || !view) return false;
+      const paragraphNode = state.schema.nodes.paragraph.createAndFill({}) as Node;
+      const from = state.selection.from;
+      dispatch(
+        state.tr
+          .replaceSelectionWith(blockNode.createAndFill({ id: v4() }, [paragraphNode]) as Node)
+          .scrollIntoView(),
+      );
+      const $pos = view.state.doc.resolve(from + 2);
+      view?.dispatch(view.state.tr.setSelection(new TextSelection($pos)));
+      return true;
+    };
+
+    bind('Mod-Enter', command);
+    if (mac) bind('Ctrl-Enter', command);
+  }
   if (schema.nodes.hard_break) {
     const br = schema.nodes.hard_break;
     const cmd = chainCommands(exitCode, (state, dispatch) => {
@@ -90,9 +116,11 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
       dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView());
       return true;
     });
-    bind('Mod-Enter', cmd);
+    if (!blockNode) {
+      bind('Mod-Enter', cmd);
+      if (mac) bind('Ctrl-Enter', cmd);
+    }
     bind('Shift-Enter', cmd);
-    if (mac) bind('Ctrl-Enter', cmd);
   }
 
   if (schema.nodes.list_item) {
