@@ -303,10 +303,10 @@ type Props = {
   node: Node;
   getPos: GetPos;
   selected?: boolean;
-  ref: React.RefObject<HTMLButtonElement>;
+  toggleBtnRef: React.RefObject<HTMLButtonElement>;
 };
 
-function FancyControl({ view, node, getPos, selected, ref }: Props) {
+function FancyControl({ view, node, getPos, selected, toggleBtnRef: ref }: Props) {
   return (
     <div
       className={classNames('block-controls', {
@@ -332,11 +332,10 @@ function FancyControl({ view, node, getPos, selected, ref }: Props) {
   );
 }
 
-function FancyBlockControls({ view, node, getPos, selected, ref }: Props) {
-  // console.log('we be rendering', { view, node, getPos, selected });
+function FancyBlockControls({ view, node, getPos, selected, toggleBtnRef: ref }: Props) {
   return (
     // <Provider store={ref.store()}> we bring this back if needed
-    <FancyControl view={view} node={node} getPos={getPos} selected={selected} ref={ref} />
+    <FancyControl view={view} node={node} getPos={getPos} selected={selected} toggleBtnRef={ref} />
     // </Provider>
   );
 }
@@ -359,7 +358,7 @@ class BlockNodeView implements NodeView {
 
   getPos: GetPos;
 
-  dotMenuToggleBtn = React.createRef<HTMLButtonElement>();
+  dotMenuToggleBtn: React.RefObject<HTMLButtonElement>;
 
   constructor(node: Node, view: EditorView, getPos: GetPos, decorations: readonly Decoration[]) {
     this.node = node;
@@ -367,6 +366,7 @@ class BlockNodeView implements NodeView {
     this.getPos = getPos;
     this.dom = document.createElement('div');
     this.dom.setAttribute('id', node.attrs.id);
+    this.dotMenuToggleBtn = React.createRef<HTMLButtonElement>();
 
     const selected = isSelected(decorations);
 
@@ -396,7 +396,7 @@ class BlockNodeView implements NodeView {
         view={this.view}
         node={node}
         getPos={this.getPos}
-        ref={this.dotMenuToggleBtn}
+        toggleBtnRef={this.dotMenuToggleBtn}
         selected={selected}
       />,
       this.blockControls,
@@ -423,7 +423,7 @@ class BlockNodeView implements NodeView {
   }
 
   ignoreMutation(mutation: MutationRecord) {
-    return mutation.target !== this.dotMenuToggleBtn.current;
+    return mutation.target === this.dotMenuToggleBtn.current;
   }
 }
 
