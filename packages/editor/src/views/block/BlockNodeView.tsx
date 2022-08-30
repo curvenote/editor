@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { styled, keyframes } from '@stitches/react';
 import { violet, mauve, blackA } from '@radix-ui/colors';
 import {
@@ -12,12 +12,13 @@ import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import type { Node } from 'prosemirror-model';
 import { render } from 'react-dom';
 import type { NodeView, EditorView, Decoration } from 'prosemirror-view';
-import { isEditable } from '../prosemirror/plugins/editable';
-import type { GetPos } from './types';
+import { isEditable } from '../../prosemirror/plugins/editable';
+import type { GetPos } from '../types';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { nodeNames } from '@curvenote/schema';
 import classNames from 'classnames';
 import { v4 } from 'uuid';
+import { ProsemirrorContext } from './prosemirrorProvider';
 
 function addBlock(view: EditorView, node: Node, getPos: GetPos, before: boolean) {
   const blockPos = getPos();
@@ -215,12 +216,28 @@ export const DropdownMenuDemo = ({ buttonRef }: { buttonRef: any }) => {
   const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
   const [urlsChecked, setUrlsChecked] = React.useState(false);
   const [person, setPerson] = React.useState('pedro');
+  const { viewCtx, nodeCtx } = useContext(ProsemirrorContext);
+  if (!viewCtx || !nodeCtx) return null;
 
+  const { view } = viewCtx;
+  const { getPos } = nodeCtx;
   return (
     <Box>
-      <DropdownMenu>
+      <DropdownMenu
+        onOpenChange={() => {
+          view.dispatch(
+            view.state.tr.setSelection(new NodeSelection(view.state.doc.resolve(getPos()))),
+          );
+        }}
+      >
         <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Customise options" ref={buttonRef}>
+          <IconButton
+            aria-label="Customise options"
+            ref={buttonRef}
+            onClick={() => {
+              console.log('onClick');
+            }}
+          >
             <HamburgerMenuIcon />
           </IconButton>
         </DropdownMenuTrigger>
@@ -299,23 +316,24 @@ function BlockControlMenu({ buttonRef }: { buttonRef: React.RefObject<HTMLButton
 }
 
 type Props = {
-  view: EditorView;
-  node: Node;
-  getPos: GetPos;
   selected?: boolean;
   toggleBtnRef: React.RefObject<HTMLButtonElement>;
+  blockControlRef: React.RefObject<HTMLDivElement>;
 };
 
-function FancyControl({ view, node, getPos, selected, toggleBtnRef: ref }: Props) {
+function FancyControl({ toggleBtnRef: ref, blockControlRef, selected }: Props) {
+  const { viewCtx, nodeCtx } = useContext(ProsemirrorContext);
+  if (!viewCtx || !nodeCtx) return null;
   return (
     <div
       className={classNames('block-controls', {
         'selected-block-control': selected,
       })}
+      ref={blockControlRef}
     >
       <button
         onClick={() => {
-          addBlock(view, node, getPos, true);
+          addBlock(viewCtx.view, nodeCtx.node, nodeCtx.getPos, true);
         }}
       >
         +
@@ -323,7 +341,7 @@ function FancyControl({ view, node, getPos, selected, toggleBtnRef: ref }: Props
       <BlockControlMenu buttonRef={ref} />
       <button
         onClick={() => {
-          addBlock(view, node, getPos, false);
+          addBlock(viewCtx.view, nodeCtx.node, nodeCtx.getPos, false);
         }}
       >
         +
@@ -332,11 +350,21 @@ function FancyControl({ view, node, getPos, selected, toggleBtnRef: ref }: Props
   );
 }
 
-function FancyBlockControls({ view, node, getPos, selected, toggleBtnRef: ref }: Props) {
+function FancyBlockControls({
+  view,
+  node,
+  getPos,
+  selected,
+  toggleBtnRef: ref,
+  blockControlRef,
+}: { view: EditorView; node: Node; getPos: () => number } & Props) {
+  const viewCtx = useMemo(() => ({ view, state: view.state }), [view, view.state]);
+  const nodeCtx = useMemo(() => ({ node, getPos }), [node, getPos]);
   return (
     // <Provider store={ref.store()}> we bring this back if needed
-    <FancyControl view={view} node={node} getPos={getPos} selected={selected} toggleBtnRef={ref} />
-    // </Provider>
+    <ProsemirrorContext.Provider value={{ viewCtx, nodeCtx }}>
+      <FancyControl toggleBtnRef={ref} blockControlRef={blockControlRef} selected={selected} />
+    </ProsemirrorContext.Provider>
   );
 }
 
@@ -350,7 +378,7 @@ class BlockNodeView implements NodeView {
   // The node's representation in the editor (empty, for now)
   dom: HTMLDivElement;
   contentDOM: HTMLDivElement;
-  blockControls: HTMLDivElement;
+  blockControlsContainer: HTMLDivElement;
 
   node: Node;
 
@@ -359,6 +387,7 @@ class BlockNodeView implements NodeView {
   getPos: GetPos;
 
   dotMenuToggleBtn: React.RefObject<HTMLButtonElement>;
+  blockControlRef: React.RefObject<HTMLDivElement>;
 
   constructor(node: Node, view: EditorView, getPos: GetPos, decorations: readonly Decoration[]) {
     this.node = node;
@@ -367,12 +396,13 @@ class BlockNodeView implements NodeView {
     this.dom = document.createElement('div');
     this.dom.setAttribute('id', node.attrs.id);
     this.dotMenuToggleBtn = React.createRef<HTMLButtonElement>();
+    this.blockControlRef = React.createRef<HTMLDivElement>();
 
     const selected = isSelected(decorations);
 
     console.log('create new ', node.attrs.id);
     const blockControls = document.createElement('div');
-    this.blockControls = blockControls;
+    this.blockControlsContainer = blockControls;
     blockControls.setAttribute('contenteditable', 'false');
 
     this.renderFansyBlockControls(node, selected);
@@ -397,9 +427,10 @@ class BlockNodeView implements NodeView {
         node={node}
         getPos={this.getPos}
         toggleBtnRef={this.dotMenuToggleBtn}
+        blockControlRef={this.blockControlRef}
         selected={selected}
       />,
-      this.blockControls,
+      this.blockControlsContainer,
     );
   }
 
@@ -423,7 +454,11 @@ class BlockNodeView implements NodeView {
   }
 
   ignoreMutation(mutation: MutationRecord) {
-    return mutation.target === this.dotMenuToggleBtn.current;
+    console.log('mutation', mutation.target, this.blockControlRef.current);
+    return (
+      mutation.target === this.dotMenuToggleBtn.current ||
+      mutation.target === this.blockControlRef.current
+    );
   }
 }
 
