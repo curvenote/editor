@@ -18,8 +18,6 @@ import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { nodeNames } from '@curvenote/schema';
 import classNames from 'classnames';
 import { v4 } from 'uuid';
-import { ref } from '../connect';
-import { Provider } from 'react-redux';
 
 function addBlock(view: EditorView, node: Node, getPos: GetPos, before: boolean) {
   const blockPos = getPos();
@@ -213,7 +211,7 @@ const IconButton = styled('button', {
   '&:focus': { boxShadow: `0 0 0 2px black` },
 });
 
-export const DropdownMenuDemo = () => {
+export const DropdownMenuDemo = ({ buttonRef }: { buttonRef: any }) => {
   const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
   const [urlsChecked, setUrlsChecked] = React.useState(false);
   const [person, setPerson] = React.useState('pedro');
@@ -222,7 +220,7 @@ export const DropdownMenuDemo = () => {
     <Box>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Customise options">
+          <IconButton aria-label="Customise options" ref={buttonRef}>
             <HamburgerMenuIcon />
           </IconButton>
         </DropdownMenuTrigger>
@@ -292,10 +290,10 @@ export const DropdownMenuDemo = () => {
   );
 };
 
-function Menu() {
+function BlockControlMenu({ buttonRef }: { buttonRef: React.RefObject<HTMLButtonElement> }) {
   return (
     <div>
-      <DropdownMenuDemo />
+      <DropdownMenuDemo buttonRef={buttonRef} />
     </div>
   );
 }
@@ -305,9 +303,10 @@ type Props = {
   node: Node;
   getPos: GetPos;
   selected?: boolean;
+  ref: React.RefObject<HTMLButtonElement>;
 };
 
-function FancyControl({ view, node, getPos, selected }: Props) {
+function FancyControl({ view, node, getPos, selected, ref }: Props) {
   return (
     <div
       className={classNames('block-controls', {
@@ -321,7 +320,7 @@ function FancyControl({ view, node, getPos, selected }: Props) {
       >
         +
       </button>
-      <Menu />
+      <BlockControlMenu buttonRef={ref} />
       <button
         onClick={() => {
           addBlock(view, node, getPos, false);
@@ -333,11 +332,11 @@ function FancyControl({ view, node, getPos, selected }: Props) {
   );
 }
 
-function FancyBlockControls({ view, node, getPos, selected }: Props) {
+function FancyBlockControls({ view, node, getPos, selected, ref }: Props) {
   // console.log('we be rendering', { view, node, getPos, selected });
   return (
     // <Provider store={ref.store()}> we bring this back if needed
-    <FancyControl view={view} node={node} getPos={getPos} selected={selected} />
+    <FancyControl view={view} node={node} getPos={getPos} selected={selected} ref={ref} />
     // </Provider>
   );
 }
@@ -360,6 +359,8 @@ class BlockNodeView implements NodeView {
 
   getPos: GetPos;
 
+  dotMenuToggleBtn = React.createRef<HTMLButtonElement>();
+
   constructor(node: Node, view: EditorView, getPos: GetPos, decorations: readonly Decoration[]) {
     this.node = node;
     this.view = view;
@@ -373,10 +374,8 @@ class BlockNodeView implements NodeView {
     const blockControls = document.createElement('div');
     this.blockControls = blockControls;
     blockControls.setAttribute('contenteditable', 'false');
-    render(
-      <FancyBlockControls view={view} node={node} getPos={getPos} selected={selected} />,
-      this.blockControls,
-    );
+
+    this.renderFansyBlockControls(node, selected);
     this.dom.appendChild(blockControls);
 
     const contentContainer = document.createElement('div');
@@ -391,29 +390,40 @@ class BlockNodeView implements NodeView {
     this.dom.classList.remove('ProseMirror-selectednode');
   }
 
+  renderFansyBlockControls(node: Node, selected?: boolean) {
+    render(
+      <FancyBlockControls
+        view={this.view}
+        node={node}
+        getPos={this.getPos}
+        ref={this.dotMenuToggleBtn}
+        selected={selected}
+      />,
+      this.blockControls,
+    );
+  }
+
   update(node: Node, decorations: readonly any[]) {
     console.log('update', node.attrs.id);
     if (!this.view || !this.getPos) return false;
     if (decorations.length === 0) {
-      render(
-        <FancyBlockControls view={this.view} node={node} getPos={this.getPos} />,
-        this.blockControls,
-      );
+      this.renderFansyBlockControls(node);
       return true;
     }
 
     const selected = isSelected(decorations);
 
-    render(
-      <FancyBlockControls view={this.view} node={node} getPos={this.getPos} selected={selected} />,
-      this.blockControls,
-    );
+    this.renderFansyBlockControls(node, selected);
     return true;
   }
 
   selectNode() {
     if (!isEditable(this.view.state) || !this.getPos) return;
     this.dom.classList.add('ProseMirror-selectednode');
+  }
+
+  ignoreMutation(mutation: MutationRecord) {
+    return mutation.target !== this.dotMenuToggleBtn.current;
   }
 }
 
