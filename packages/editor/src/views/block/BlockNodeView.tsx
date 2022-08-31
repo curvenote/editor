@@ -10,10 +10,24 @@ import type { NodeView, EditorView, Decoration } from 'prosemirror-view';
 import { isEditable } from '../../prosemirror/plugins/editable';
 import type { GetPos } from '../types';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
-import { nodeNames } from '@curvenote/schema';
+import { nodeNames, toTex, toMarkdown } from '@curvenote/schema';
 import classNames from 'classnames';
 import { v4 } from 'uuid';
 import { ProsemirrorContext } from './prosemirrorProvider';
+
+// TODO: move to shared util?
+function copyToClipboard(text: string) {
+  return new Promise<void>((res, rej) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        res();
+      },
+      (err) => {
+        rej(err);
+      },
+    );
+  });
+}
 
 function moveBlock(view: EditorView, node: Node, up: boolean) {
   const { nodeBefore, pos: fromPos } = view.state.selection.$from;
@@ -239,9 +253,6 @@ const IconButton = styled('button', {
 });
 
 export const DropdownMenuDemo = ({ buttonRef }: { buttonRef: any }) => {
-  const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
-  const [urlsChecked, setUrlsChecked] = React.useState(false);
-  const [person, setPerson] = React.useState('pedro');
   const { viewCtx, nodeCtx } = useContext(ProsemirrorContext);
   if (!viewCtx || !nodeCtx) return null;
 
@@ -292,8 +303,20 @@ export const DropdownMenuDemo = ({ buttonRef }: { buttonRef: any }) => {
               <DropdownMenuItem>
                 Copy Block<RightSlot>⌘+C</RightSlot>
               </DropdownMenuItem>
-              <DropdownMenuItem>Copy as Markdown</DropdownMenuItem>
-              <DropdownMenuItem>Copy as Latex</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  copyToClipboard(toMarkdown(node));
+                }}
+              >
+                Copy as Markdown
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  copyToClipboard(toTex(node));
+                }}
+              >
+                Copy as Latex
+              </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
 
