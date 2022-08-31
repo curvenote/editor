@@ -1,12 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { styled, keyframes } from '@stitches/react';
 import { violet, mauve, blackA } from '@radix-ui/colors';
-import {
-  HamburgerMenuIcon,
-  DotFilledIcon,
-  CheckIcon,
-  ChevronRightIcon,
-} from '@radix-ui/react-icons';
+import { HamburgerMenuIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
 import type { Node } from 'prosemirror-model';
@@ -19,6 +14,37 @@ import { nodeNames } from '@curvenote/schema';
 import classNames from 'classnames';
 import { v4 } from 'uuid';
 import { ProsemirrorContext } from './prosemirrorProvider';
+
+function moveBlock(view: EditorView, node: Node, up: boolean) {
+  const { nodeBefore, pos: fromPos } = view.state.selection.$from;
+  const { pos: toPos, nodeAfter } = view.state.selection.$to;
+
+  if ((!nodeBefore && up) || (!nodeAfter && !up)) return;
+
+  const prevPos = nodeBefore ? fromPos - nodeBefore?.content.size - 2 : 0;
+  const nextPos = nodeAfter ? toPos + nodeAfter?.content.size + 2 : view.state.doc.content.size - 1;
+  const destinationPos = up ? prevPos : nextPos;
+
+  const transaction = view.state.tr.insert(destinationPos, node).deleteSelection();
+  view.dispatch(transaction);
+  console.log('moveblock', {
+    up,
+    destinationPos,
+    selection: view.state.selection,
+    selecting: up ? destinationPos : destinationPos - (node?.content.size ?? 0) - 2,
+  });
+  view.dispatch(
+    view.state.tr
+      .setSelection(
+        new NodeSelection(
+          view.state.doc.resolve(
+            up ? destinationPos : destinationPos - (node?.content.size ?? 0) - 2,
+          ),
+        ),
+      )
+      .scrollIntoView(),
+  );
+}
 
 function addBlock(view: EditorView, node: Node, getPos: GetPos, before: boolean) {
   const blockPos = getPos();
@@ -171,7 +197,7 @@ const StyledItemIndicator = styled(DropdownMenuPrimitive.ItemIndicator, {
 });
 
 // Exports
-export const DropdownMenu = DropdownMenuPrimitive.Root;
+export const DropdownMenu = styled(DropdownMenuPrimitive.Root, {});
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 export const DropdownMenuContent = Content;
 export const DropdownMenuItem = StyledItem;
@@ -219,88 +245,63 @@ export const DropdownMenuDemo = ({ buttonRef }: { buttonRef: any }) => {
   const { viewCtx, nodeCtx } = useContext(ProsemirrorContext);
   if (!viewCtx || !nodeCtx) return null;
 
-  const { view } = viewCtx;
-  const { getPos } = nodeCtx;
+  const { view, state } = viewCtx;
+  const { getPos, node } = nodeCtx;
   return (
     <Box>
       <DropdownMenu
-        onOpenChange={() => {
-          view.dispatch(
-            view.state.tr.setSelection(new NodeSelection(view.state.doc.resolve(getPos()))),
-          );
+        onOpenChange={(opened) => {
+          if (opened) {
+            view.dispatch(
+              view.state.tr.setSelection(new NodeSelection(view.state.doc.resolve(getPos()))),
+            );
+          }
         }}
       >
         <DropdownMenuTrigger asChild>
-          <IconButton
-            aria-label="Customise options"
-            ref={buttonRef}
-            onClick={() => {
-              console.log('onClick');
-            }}
-          >
+          <IconButton aria-label="Customise options" ref={buttonRef}>
             <HamburgerMenuIcon />
           </IconButton>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent sideOffset={5}>
-          <DropdownMenuItem>
-            New Tab <RightSlot>⌘+T</RightSlot>
+          <DropdownMenuItem
+            onClick={() => {
+              moveBlock(view, node, true);
+            }}
+          >
+            Move Up
+            <RightSlot>⌥+&#8593;</RightSlot>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            New Window <RightSlot>⌘+N</RightSlot>
+          <DropdownMenuItem
+            onClick={() => {
+              moveBlock(view, node, false);
+            }}
+          >
+            Move Down <RightSlot>⌥+&#8595;</RightSlot>
           </DropdownMenuItem>
-          <DropdownMenuItem disabled>
-            New Private Window <RightSlot>⇧+⌘+N</RightSlot>
-          </DropdownMenuItem>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              More Tools
+              Copy
               <RightSlot>
                 <ChevronRightIcon />
               </RightSlot>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent sideOffset={2} alignOffset={-5}>
               <DropdownMenuItem>
-                Save Page As… <RightSlot>⌘+S</RightSlot>
+                Copy Block<RightSlot>⌘+C</RightSlot>
               </DropdownMenuItem>
-              <DropdownMenuItem>Create Shortcut…</DropdownMenuItem>
-              <DropdownMenuItem>Name Window…</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Developer Tools</DropdownMenuItem>
+              <DropdownMenuItem>Copy as Markdown</DropdownMenuItem>
+              <DropdownMenuItem>Copy as Latex</DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
+
           <DropdownMenuSeparator />
-          <DropdownMenuCheckboxItem
-            checked={bookmarksChecked}
-            onCheckedChange={setBookmarksChecked}
-          >
-            <DropdownMenuItemIndicator>
-              <CheckIcon />
-            </DropdownMenuItemIndicator>
-            Show Bookmarks <RightSlot>⌘+B</RightSlot>
-          </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem checked={urlsChecked} onCheckedChange={setUrlsChecked}>
-            <DropdownMenuItemIndicator>
-              <CheckIcon />
-            </DropdownMenuItemIndicator>
-            Show Full URLs
-          </DropdownMenuCheckboxItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>People</DropdownMenuLabel>
-          <DropdownMenuRadioGroup value={person} onValueChange={setPerson}>
-            <DropdownMenuRadioItem value="pedro">
-              <DropdownMenuItemIndicator>
-                <DotFilledIcon />
-              </DropdownMenuItemIndicator>
-              Pedro Duarte
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="colm">
-              <DropdownMenuItemIndicator>
-                <DotFilledIcon />
-              </DropdownMenuItemIndicator>
-              Colm Tuite
-            </DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
+
+          <DropdownMenuItem>
+            Remove <RightSlot>{'\u232b'}</RightSlot>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </Box>
@@ -435,7 +436,7 @@ class BlockNodeView implements NodeView {
   }
 
   update(node: Node, decorations: readonly any[]) {
-    console.log('update', node.attrs.id);
+    console.log('update', node.attrs.id, decorations);
     if (!this.view || !this.getPos) return false;
     if (decorations.length === 0) {
       this.renderFansyBlockControls(node);
@@ -454,7 +455,6 @@ class BlockNodeView implements NodeView {
   }
 
   ignoreMutation(mutation: MutationRecord) {
-    console.log('mutation', mutation.target, this.blockControlRef.current);
     return (
       mutation.target === this.dotMenuToggleBtn.current ||
       mutation.target === this.blockControlRef.current
