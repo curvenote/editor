@@ -1,6 +1,6 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { styled, keyframes } from '@stitches/react';
-import { violet, mauve, blackA } from '@radix-ui/colors';
+import { violet, mauve, blackA, whiteA } from '@radix-ui/colors';
 import { HamburgerMenuIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
@@ -155,6 +155,7 @@ function SubContent(props: any) {
 const itemStyles = {
   all: 'unset',
   fontSize: 13,
+  cursor: 'pointer',
   lineHeight: 1,
   color: violet.violet11,
   borderRadius: 3,
@@ -243,13 +244,14 @@ const IconButton = styled('button', {
   height: 35,
   width: 35,
   display: 'inline-flex',
+  cursor: 'pointer',
   alignItems: 'center',
   justifyContent: 'center',
-  color: violet.violet11,
-  backgroundColor: 'white',
-  boxShadow: `0 2px 10px ${blackA.blackA7}`,
+  color: whiteA.whiteA1,
+  backgroundColor: 'transparent',
+  // boxShadow: `0 2px 10px ${blackA.blackA7}`,
   '&:hover': { backgroundColor: violet.violet3 },
-  '&:focus': { boxShadow: `0 0 0 2px black` },
+  // '&:focus': { boxShadow: `0 0 0 2px black` },
 });
 
 export const DropdownMenuDemo = ({ buttonRef }: { buttonRef: any }) => {

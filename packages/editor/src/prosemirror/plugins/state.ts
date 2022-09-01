@@ -61,7 +61,9 @@ export const statePlugin = (): Plugin => {
         // drect makes sure only directly clicking on a node to set the selection
         if (direct && node.type.name === 'block' && !(event.target instanceof HTMLButtonElement)) {
           view.dispatch(
-            view.state.tr.setSelection(new NodeSelection(view.state.doc.resolve(nodePos))),
+            view.state.tr
+              .setSelection(new NodeSelection(view.state.doc.resolve(nodePos)))
+              .scrollIntoView(),
           );
           return true; // prevent default from happening if returns true
         }
