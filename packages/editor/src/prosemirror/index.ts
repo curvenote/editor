@@ -19,7 +19,10 @@ export function createEditorState(
   startEditable: boolean,
 ) {
   const schema = schemas.getSchema(useSchema);
-  const plugins = getPlugins(useSchema, schema, stateKey, version, startEditable);
+  const plugins = [
+    ...getPlugins(useSchema, schema, stateKey, version, startEditable),
+    ...opts.plugins,
+  ];
   let state: EditorState;
   try {
     const data = JSON.parse(content);
@@ -31,6 +34,7 @@ export function createEditorState(
     const doc = fromHTML(content, schema, document, DOMParser);
     state = EditorState.create({ doc, plugins });
   }
+
   return state;
 }
 
