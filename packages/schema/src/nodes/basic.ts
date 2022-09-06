@@ -40,7 +40,6 @@ export const block: NodeSpec = {
     {
       tag: 'div.block',
       getAttrs(dom) {
-        console.log('getAttrs', dom);
         if (dom instanceof HTMLElement) {
           return {
             id: dom.getAttribute('id') || null,
@@ -54,7 +53,7 @@ export const block: NodeSpec = {
   ],
 
   toDOM({ attrs: { id } }) {
-    return ['div', { class: 'new-block', id }, 0];
+    return ['div', { class: 'block', id }, 0];
   },
 };
 export const paragraph: MyNodeSpec<NoAttrs, Paragraph> = {
