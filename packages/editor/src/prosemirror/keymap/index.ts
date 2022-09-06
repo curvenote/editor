@@ -14,7 +14,7 @@ import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirr
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import type { Node, Schema } from 'prosemirror-model';
-import { createId } from '@curvenote/schema';
+import { createId, nodeNames } from '@curvenote/schema';
 import type { Command } from 'prosemirror-state';
 import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
 import { store, opts } from '../../connect';
@@ -27,6 +27,7 @@ import { createBind, flattenCommandList } from './utils';
 import { ContactsOutlined, ContactSupportOutlined } from '@material-ui/icons';
 import { v4 } from 'uuid';
 import { paragraph } from '@curvenote/schema/dist/types/nodes/basic';
+import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
@@ -95,14 +96,22 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
     const command: Command = (state, dispatch, view) => {
       if (!dispatch || !view) return false;
       const paragraphNode = state.schema.nodes.paragraph.createAndFill({}) as Node;
-      const from = state.selection.from;
       dispatch(
-        state.tr
-          .replaceSelectionWith(blockNode.createAndFill({ id: v4() }, [paragraphNode]) as Node)
-          .scrollIntoView(),
+        state.tr.replaceSelectionWith(
+          blockNode.createAndFill({ id: v4() }, [paragraphNode]) as Node,
+        ),
       );
-      const $pos = view.state.doc.resolve(from + 2);
-      view?.dispatch(view.state.tr.setSelection(new TextSelection($pos)));
+
+      const result = findParentNodeOfTypeClosestToPos(
+        view.state.selection.$from,
+        view.state.schema.nodes[nodeNames.block],
+      );
+      if (result) {
+        const $pos = view.state.doc.resolve(
+          result.pos - (view.state.selection.$from.nodeBefore?.content.size ?? 4),
+        );
+        view?.dispatch(view.state.tr.setSelection(new NodeSelection($pos)));
+      }
       return true;
     };
 
