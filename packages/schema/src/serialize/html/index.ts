@@ -10,3 +10,11 @@ export function toHTML(doc: ProsemirrorNode, useSchema: UseSchema, document: Doc
   div.appendChild(frag);
   return div.innerHTML;
 }
+
+export function toHTMLAsNode(doc: ProsemirrorNode, useSchema: UseSchema, document: Document) {
+  const schema = getSchema(useSchema);
+  const div = document.createElement('div');
+  const frag = DOMSerializer.fromSchema(schema).serializeNode(doc, { document });
+  div.appendChild(frag);
+  return div.innerHTML;
+}
