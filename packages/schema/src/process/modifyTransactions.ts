@@ -76,6 +76,7 @@ export function modifyTransactionToValidDocState(tr: Transaction): Transaction {
         return false;
       }
       case nodeNames.heading:
+      case nodeNames.block:
       case nodeNames.equation: {
         const { id } = node.attrs as NumberedNode;
         const nextId = ensureIdIsValidOrCreateId(id);
