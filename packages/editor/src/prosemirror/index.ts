@@ -17,11 +17,12 @@ export function createEditorState(
   content: string,
   version: number,
   startEditable: boolean,
+  { plugins: extraPlugins = opts.plugins }: { plugins?: any[] } = {},
 ) {
   const schema = schemas.getSchema(useSchema);
   const plugins = [
     ...getPlugins(useSchema, schema, stateKey, version, startEditable),
-    ...opts.plugins,
+    ...extraPlugins,
   ];
   let state: EditorState;
   try {
@@ -42,6 +43,7 @@ export function createEditorView(
   dom: HTMLDivElement,
   state: EditorState,
   dispatch: (tr: Transaction) => void,
+  { nodeViews: extraNodeViews = opts.nodeViews }: { nodeViews?: any } = {},
 ): EditorView {
   let shiftKey = false; // https://discuss.prosemirror.net/t/change-transformpasted-behaviour-when-shift-key-is-pressed/949/3
   const editorView = new EditorView(
@@ -67,7 +69,7 @@ export function createEditorView(
         range: views.newWidgetView,
         switch: views.newWidgetView,
         variable: views.newWidgetView,
-        ...opts.nodeViews,
+        ...extraNodeViews,
       },
       // This can be set in the middleware `tr.setMeta(editable, false)`
       editable: (s) => isEditable(s),

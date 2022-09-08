@@ -3,7 +3,7 @@ import { Plugin, PluginKey } from 'prosemirror-state';
 import { isNodeSelection } from '@curvenote/prosemirror-utils';
 import type { EditorView } from 'prosemirror-view';
 import { Decoration, DecorationSet } from 'prosemirror-view';
-import { actions, selectors, store } from 'sidenotes';
+import { actions, selectors, store as storeFromSideNode } from 'sidenotes';
 import { opts } from '../../connect';
 
 export interface CommentState {
@@ -75,7 +75,8 @@ const reducer = (
   }
 };
 
-const getCommentsPlugin = (): Plugin<CommentState> => {
+const getCommentsPlugin = (store = storeFromSideNode): Plugin<CommentState> => {
+  console.log('COMMENTS PLUGIN init', store);
   const commentsPlugin: Plugin<CommentState> = new Plugin({
     key,
     state: {

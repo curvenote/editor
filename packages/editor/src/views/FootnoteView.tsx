@@ -1,14 +1,16 @@
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { StepMap } from 'prosemirror-transform';
 import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
-import { Transaction, EditorState, TextSelection } from 'prosemirror-state';
+import type { Transaction } from 'prosemirror-state';
+import { EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { getInlinePlugins } from '../prosemirror/plugins';
 import { MathView } from './MathView';
-import { GetPos } from './types';
+import type { GetPos } from './types';
+import type { Store } from '../store';
 
 class FootnoteNodeView {
   // The node's representation in the editor (empty, for now)
@@ -25,7 +27,7 @@ class FootnoteNodeView {
 
   getPos: GetPos;
 
-  constructor(node: Node, view: EditorView, getPos: GetPos) {
+  constructor(node: Node, view: EditorView, getPos: GetPos, store: Store) {
     this.node = node;
     this.outerView = view;
     this.getPos = getPos;
@@ -54,7 +56,7 @@ class FootnoteNodeView {
         state: EditorState.create({
           doc: this.node,
           plugins: [
-            ...getInlinePlugins(this.outerView.state.schema),
+            ...getInlinePlugins(this.outerView.state.schema, { store }),
             keymap({
               'Mod-a': () => {
                 const { doc, tr } = this.innerView.state;
@@ -179,6 +181,8 @@ class FootnoteNodeView {
   }
 }
 
-export function FootnoteView(node: Node, view: EditorView, getPos: GetPos) {
-  return new FootnoteNodeView(node, view, getPos);
+export function createFootnoteViewFactory(store: Store) {
+  return (node: Node, view: EditorView, getPos: GetPos) => {
+    return new FootnoteNodeView(node, view, getPos, store);
+  };
 }

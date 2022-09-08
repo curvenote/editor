@@ -14,12 +14,13 @@ import type { Trigger } from 'prosemirror-autocomplete';
 import { buildBasicKeymap, buildCommentKeymap, buildKeymap, captureTab } from '../keymap';
 
 import inputrules from '../inputrules';
-import { store } from '../../connect';
+import { opts, store as storeFromConnect } from '../../connect';
 import { editablePlugin } from './editable';
 import { handleSuggestion } from '../../store/suggestion/actions';
 import commentsPlugin from './comments';
 import { getImagePlaceholderPlugin } from './ImagePlaceholder';
 import getPromptPlugin from './prompts';
+import type { Store } from '../../store';
 
 function tablesPlugins(schema: Schema) {
   // Don't add plugins if they are not in the schema
@@ -85,7 +86,7 @@ export function getPlugins(
       ...autocomplete({
         triggers: getTriggers(schema, true),
         reducer(action) {
-          return store.dispatch(handleSuggestion(action));
+          return storeFromConnect.dispatch(handleSuggestion(action));
         },
       }),
       ...inputrules(schema),
@@ -101,7 +102,7 @@ export function getPlugins(
     ...autocomplete({
       triggers: getTriggers(schema, false),
       reducer(action) {
-        return store.dispatch(handleSuggestion(action));
+        return storeFromConnect.dispatch(handleSuggestion(action));
       },
     }),
     getImagePlaceholderPlugin(),
@@ -117,10 +118,10 @@ export function getPlugins(
   ];
 }
 
-export function getInlinePlugins(schema: Schema): Plugin[] {
+export function getInlinePlugins(schema: Schema, { store }: { store: Store }): Plugin[] {
   return [
     editablePlugin(true),
-    commentsPlugin(),
+    commentsPlugin(store),
     ...inputrules(schema),
     keymap(buildBasicKeymap(schema)),
     keymap(baseKeymap),
