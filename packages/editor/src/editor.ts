@@ -6,6 +6,8 @@ import { createEditorState, createEditorView } from './prosemirror';
 import type { EditorState, Transaction } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import {
+  initEditorState,
+  registerEditorState,
   selectEditorView,
   subscribeView,
   unsubscribeView,
@@ -68,30 +70,7 @@ function modifyTransaction(stateKey: any, viewId: string, state: EditorState, tr
   return next;
 }
 
-// function createStore() {
-//   const combinedReducers = combineReducers({
-//     editor: reducer,
-//     // runtime: runtime.reducer,
-//     // sidenotes: sidenotes.reducer,
-//   });
-//   return configureStore({
-//     reducer: combineReducers({
-//       editor: reducer,
-//     }),
-//     middleware: (getDefaultMiddleware: any) => {
-//       return [
-//         ...middleware,
-//         ...getDefaultMiddleware({
-//           serializableCheck: false,
-//           immutableCheck: false,
-//         }),
-//       ];
-//     },
-//   });
-// }
-
 interface InitOpiton {
-  store: Store;
   stateKey: string;
   viewId: string;
   content: string;
@@ -101,31 +80,22 @@ interface InitOpiton {
   cssClass?: string;
 }
 
-export function createEditor(options: Options) {
+export function createEditor(store: Store, options: Options) {
   const entityStorage = createStorage<Entities>({});
   const config = {
     autoUnsubscribe: false,
   };
 
+  setup(store, options);
   return {
     init(
       dom: HTMLDivElement,
-      {
-        store,
-        stateKey,
-        autoUnsubscribe,
-        content,
-        disabled,
-        viewId,
-        version = 0,
-        cssClass,
-      }: InitOpiton,
+      { stateKey, autoUnsubscribe, content, disabled, viewId, version = 0, cssClass }: InitOpiton,
     ) {
       if (entityStorage.has('view')) {
         console.warn('View already exists. This happens when you call init() twice.');
         return;
       }
-      setup(store, options);
       config.autoUnsubscribe = !!autoUnsubscribe;
       const initialState = createInitialState({
         stateKey,
@@ -134,23 +104,31 @@ export function createEditor(options: Options) {
         version,
       });
 
-      const view = createEditorView(dom, initialState, (tr) => {
-        const mtr = modifyTransaction(stateKey, viewId, view.state, tr);
-        const next = view.state.apply(mtr);
-        // store?.dispatch(updateEditorState(stateKey, viewId, next, tr));
-        // Immidiately update the view.
-        // This is important for properly handling selections.
-        // Cannot use react event loop here.
+      const view = createEditorView(
+        dom,
+        initialState,
+        (tr) => {
+          const mtr = modifyTransaction(stateKey, viewId, view.state, tr);
+          const next = view.state.apply(mtr);
+          store?.dispatch(updateEditorState(stateKey, viewId, next, tr));
+          // Immidiately update the view.
+          // This is important for properly handling selections.
+          // Cannot use react event loop here.
 
-        view.updateState(next);
-      });
+          view.updateState(next);
+        },
+        { store },
+      );
+      view.dom.id = viewId;
       view.dom.onfocus = () => {
         store?.dispatch(selectEditorView(viewId));
       };
 
+      store.dispatch(registerEditorState(stateKey, initialState));
+
       if (cssClass) view.dom.classList.add(...cssClass.split(' '));
       // TODO: revive
-      // store?.dispatch(subscribeView(stateKey, viewId, view));
+      store?.dispatch(subscribeView(stateKey, viewId, view));
       entityStorage.update({ view, store });
     },
     destroy() {
