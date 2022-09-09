@@ -1,4 +1,5 @@
 export { default as Editor } from './Editor';
+export { default as NextEditor } from './NextEditor';
 
 export { default as EditorMenu } from './Menu';
 export { default as SelectWidth } from './InlineActions/SelectWidth';

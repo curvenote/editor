@@ -1,11 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 import { createTheme } from '@material-ui/core';
 import { ReferenceKind } from '@curvenote/schema';
 import { Fragment } from 'prosemirror-model';
 import type { Store, LinkResult } from '../src';
-import Editor from '../src/components/NewEditor';
-import { actions, createEditor } from '../src';
+import {
+  middleware,
+  EditorMenu,
+  Suggestions,
+  actions,
+  createEditor,
+  Attributes,
+  InlineActions,
+} from '../src';
+import SuggestionSwitch from '../src/components/Suggestion/Switch';
+import InlineActionSwitch from '../src/components/InlineActions/Switch';
+import Editor from '../src/components/NextEditor';
 import rootReducer from './reducers';
 import 'codemirror/lib/codemirror.css';
 import '../styles/index.scss';
@@ -45,7 +55,7 @@ export function createStore(): Store {
     reducer: rootReducer,
     middleware: (getDefaultMiddleware: any) => {
       return [
-        // ...middleware,
+        ...middleware,
         ...getDefaultMiddleware({
           serializableCheck: false,
           immutableCheck: false,
@@ -72,6 +82,9 @@ function createOptions(store: Store) {
         setTimeout(() => resolve('https://curvenote.dev/images/logo.png'), 2000),
       );
     },
+    getDocId() {
+      return docId;
+    },
     addComment() {
       newComment();
       return true;
@@ -80,9 +93,6 @@ function createOptions(store: Store) {
       // eslint-disable-next-line no-console
       console.log('Double click', stateId, viewId);
       return false;
-    },
-    getDocId() {
-      return docId;
     },
     theme,
     citationPrompt: async () => [
@@ -101,19 +111,27 @@ function createOptions(store: Store) {
 }
 
 export function DemoEditor({ content, store = createStore() }: { content: string; store?: Store }) {
-  const editor = useMemo(() => createEditor(createOptions(store)), []);
+  const editor = useMemo(() => createEditor(store, createOptions(store)), []);
+  useEffect(() => {
+    window.store = store;
+    return () => {
+      window.store = undefined;
+    };
+  }, [store]);
   return (
     <Provider store={store}>
       <h1>Next</h1>
       <React.StrictMode>
         <article id={docId} className="content centered">
-          <Editor
-            editor={editor}
-            stateKey={stateKey}
-            viewId={viewId1}
-            initialContent={content}
-            store={store}
-          />
+          <EditorMenu standAlone />
+          <InlineActions>
+            <InlineActionSwitch />
+          </InlineActions>
+          <Editor editor={editor} stateKey={stateKey} viewId={viewId1} initialContent={content} />
+          <Suggestions>
+            <SuggestionSwitch />
+          </Suggestions>
+          <Attributes />
         </article>
       </React.StrictMode>
     </Provider>

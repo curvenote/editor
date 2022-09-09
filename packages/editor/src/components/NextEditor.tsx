@@ -10,20 +10,17 @@ type Props = {
   // for redux, keep for now
   viewId: string;
   initialContent: string;
-  store: Store;
 };
 
 const Editor = (props: Props) => {
-  const { editor, initialContent, stateKey, viewId, store } = props;
-
-  const dispatch = useDispatch<Dispatch>();
+  const { editor, initialContent, stateKey, viewId } = props;
 
   const [editorDom, setEditorDom] = useState<HTMLDivElement | null>(null);
   const ref = useCallback((el) => setEditorDom(el), []);
 
   useEffect(() => {
     if (!editorDom || !editor) return;
-    editor.init(editorDom, { content: initialContent, stateKey, viewId, store });
+    editor.init(editorDom, { content: initialContent, stateKey, viewId });
     return () => {
       editor.destroy();
     };

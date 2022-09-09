@@ -3,13 +3,14 @@ import type { Transaction } from 'prosemirror-state';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
-import { store, opts } from '../connect';
+import { store as storeFromOpts, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 import { updateSelectView } from '../store/actions';
+import { createFootnoteViewFactory } from '../views/FootnoteView';
 
 export function createEditorState(
   useSchema: schemas.UseSchema,
@@ -43,7 +44,10 @@ export function createEditorView(
   dom: HTMLDivElement,
   state: EditorState,
   dispatch: (tr: Transaction) => void,
-  { nodeViews: extraNodeViews = opts.nodeViews }: { nodeViews?: any } = {},
+  {
+    nodeViews: extraNodeViews = opts.nodeViews,
+    store = storeFromOpts,
+  }: { nodeViews?: any; store?: any } = {},
 ): EditorView {
   let shiftKey = false; // https://discuss.prosemirror.net/t/change-transformpasted-behaviour-when-shift-key-is-pressed/949/3
   const editorView = new EditorView(
@@ -55,7 +59,7 @@ export function createEditorView(
         math: views.MathView,
         equation: views.EquationView,
         code_block: views.CodeBlockView,
-        footnote: views.FootnoteView,
+        footnote: createFootnoteViewFactory(store),
         image: views.ImageView,
         iframe: views.IFrameView,
         link: views.LinkView,

@@ -1,6 +1,7 @@
 import { process } from '@curvenote/schema';
 import type { EditorActionTypes, EditorsState } from './types';
 import {
+  REGISTER_EDITOR_STATE,
   INIT_EDITOR_STATE,
   UPDATE_EDITOR_STATE,
   SUBSCRIBE_EDITOR_VIEW,
@@ -19,6 +20,23 @@ export const initialState: EditorsState = {
 // eslint-disable-next-line @typescript-eslint/default-param-last
 const editorReducer = (state = initialState, action: EditorActionTypes): EditorsState => {
   switch (action.type) {
+    case REGISTER_EDITOR_STATE: {
+      const { stateKey, stateId, state: editorState } = action.payload;
+      if (state.editors[stateId] !== undefined) return state;
+      const counts = process.countState(editorState);
+      return {
+        ...state,
+        editors: {
+          ...state.editors,
+          [stateId]: {
+            state: editorState,
+            viewIds: [],
+            key: stateKey,
+            counts,
+          },
+        },
+      };
+    }
     case INIT_EDITOR_STATE: {
       const { useSchema, stateKey, stateId, content, editable, version } = action.payload;
       if (state.editors[stateId] !== undefined) return state;
