@@ -34,6 +34,7 @@ export const docComment: NodeSpec = {
 export const block: NodeSpec = {
   attrs: { id: { default: null } },
   draggable: true,
+  isolating: true,
   content: `(${NodeGroups.content} | ${NodeGroups.heading} | ${NodeGroups.top})+`,
   group: NodeGroups.block,
   parseDOM: [

@@ -3,12 +3,12 @@ import type { InlineSelection, UIActionTypes } from './types';
 import { SELECT_EDITOR_VIEW, INLINE_SELECTION, SelectionKinds } from './types';
 import type { AppThunk } from '../types';
 import { getEditorUI, getInlineActionKind, getSelectedEditorAndViews } from './selectors';
-import { getEditorView } from '../state/selectors';
+import { selectEditorViewState } from '../state/selectors';
 import { getSelectionKind } from './utils';
 
 export function updateSelectView(viewId: string | null): AppThunk<void> {
   return (dispatch, getState) => {
-    const { stateId } = getEditorView(getState(), viewId);
+    const { stateId } = selectEditorViewState(getState(), viewId);
     dispatch({
       type: SELECT_EDITOR_VIEW,
       payload: { stateId, viewId },
@@ -23,7 +23,7 @@ export const selectEditorView = updateSelectView;
 
 export function focusEditorView(viewId: string | null, focused: boolean): AppThunk<void> {
   return (dispatch, getState) => {
-    const { view } = getEditorView(getState(), viewId);
+    const { view } = selectEditorViewState(getState(), viewId);
     if (!view) return;
     if (focused) {
       view.focus();

@@ -13,10 +13,9 @@ import {
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
-import type { Node, Schema } from 'prosemirror-model';
+import type { Schema } from 'prosemirror-model';
 import { createId, nodeNames } from '@curvenote/schema';
-import type { Command } from 'prosemirror-state';
-import { EditorState, NodeSelection, TextSelection } from 'prosemirror-state';
+import type { Command, EditorState } from 'prosemirror-state';
 import { store, opts } from '../../connect';
 import { focusSelectedEditorView } from '../../store/ui/actions';
 import { executeCommand } from '../../store/actions';
@@ -24,9 +23,6 @@ import { buildFigureKeymap } from './figure';
 import { CommandNames } from '../../store/suggestion/commands';
 import type { AddKey, Keymap } from './utils';
 import { createBind, flattenCommandList } from './utils';
-import { ContactsOutlined, ContactSupportOutlined } from '@material-ui/icons';
-import { v4 } from 'uuid';
-import { paragraph } from '@curvenote/schema/dist/types/nodes/basic';
 import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
@@ -62,6 +58,16 @@ interface CommandOptions {
   figureCommands: boolean;
 }
 
+function getNonSplittableNodes(state: EditorState) {
+  return [
+    state.schema.nodes[nodeNames.figcaption],
+    state.schema.nodes[nodeNames.table],
+    state.schema.nodes[nodeNames.aside],
+    state.schema.nodes[nodeNames.code_block],
+    state.schema.nodes[nodeNames.callout],
+  ];
+}
+
 function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: CommandOptions) {
   bind('Mod-z', undoInputRule, undo);
   bind('Mod-Z', redo);
@@ -95,23 +101,15 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
   if (blockNode) {
     const command: Command = (state, dispatch, view) => {
       if (!dispatch || !view) return false;
-      const paragraphNode = state.schema.nodes.paragraph.createAndFill({}) as Node;
-      dispatch(
-        state.tr.replaceSelectionWith(
-          blockNode.createAndFill({ id: v4() }, [paragraphNode]) as Node,
-        ),
-      );
-
-      const result = findParentNodeOfTypeClosestToPos(
-        view.state.selection.$from,
-        view.state.schema.nodes[nodeNames.block],
-      );
-      if (result) {
-        const $pos = view.state.doc.resolve(
-          result.pos - (view.state.selection.$from.nodeBefore?.content.size ?? 4),
-        );
-        view?.dispatch(view.state.tr.setSelection(new NodeSelection($pos)));
+      if (findParentNodeOfTypeClosestToPos(state.selection.$from, getNonSplittableNodes(state))) {
+        return false;
       }
+      const location = findParentNodeOfTypeClosestToPos(
+        state.selection.$from,
+        state.schema.nodes[nodeNames.block],
+      );
+      if (!location) return true;
+      dispatch(state.tr.split(state.selection.$from.pos, location.depth + 1));
       return true;
     };
 

@@ -6,15 +6,12 @@ import { createEditorState, createEditorView } from './prosemirror';
 import type { EditorState, Transaction } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import {
-  initEditorState,
   registerEditorState,
-  selectEditorView,
+  updateSelectView,
   subscribeView,
-  unsubscribeView,
   updateEditorState,
 } from './store/actions';
 import type { Store } from './store';
-import { reducer, middleware } from './store';
 
 function createStorage<T extends { [key: string]: any }>(initial: T) {
   const storage: T = initial;
@@ -121,7 +118,7 @@ export function createEditor(store: Store, options: Options) {
       );
       view.dom.id = viewId;
       view.dom.onfocus = () => {
-        store?.dispatch(selectEditorView(viewId));
+        store?.dispatch(updateSelectView(viewId));
       };
 
       store.dispatch(registerEditorState(stateKey, initialState));

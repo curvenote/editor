@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import type { Dispatch, State, Store } from '../store';
-import { actions, selectors } from '../store';
-import { createEditor, Editor } from '../editor';
+import { Editor } from '../editor';
 
 type Props = {
   editor: Editor;
