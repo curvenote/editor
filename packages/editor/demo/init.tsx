@@ -103,8 +103,8 @@ export function DemoEditor({ content, store = createStore() }: { content: string
     store.dispatch(actions.initEditorState('full', stateKey, true, content, 0));
     store.subscribe(() => {
       const myst = document.getElementById('myst');
-      // const text = document.getElementById('text');
-      // const tex = document.getElementById('tex');
+      const text = document.getElementById('text');
+      const tex = document.getElementById('tex');
       const html = document.getElementById('html');
       const editor = store.getState().editor.state.editors[stateKey];
       if (myst) {
@@ -114,20 +114,20 @@ export function DemoEditor({ content, store = createStore() }: { content: string
           myst.innerText = 'Error converting to markdown';
         }
       }
-      // if (tex) {
-      //   try {
-      //     tex.innerText = toTex(editor.state.doc);
-      //   } catch (error) {
-      //     tex.innerText = 'There was an error :(';
-      //   }
-      // }
-      // if (text) {
-      //   try {
-      //     text.innerText = toText(editor.state.doc);
-      //   } catch (error) {
-      //     text.innerText = 'There was an error :(';
-      //   }
-      // }
+      if (tex) {
+        try {
+          tex.innerText = toTex(editor.state.doc);
+        } catch (error) {
+          tex.innerText = 'There was an error :(';
+        }
+      }
+      if (text) {
+        try {
+          text.innerText = toText(editor.state.doc);
+        } catch (error) {
+          text.innerText = 'There was an error :(';
+        }
+      }
       if (html) {
         html.innerText = toHTML(editor.state.doc, editor.state.schema, document);
       }

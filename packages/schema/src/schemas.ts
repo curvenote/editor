@@ -190,7 +190,6 @@ export function getSchema(useSchema: UseSchema) {
       case 'article':
         return new Schema(presets.article);
       case 'full':
-        console.log('full schemal', presets.full);
         return new Schema(presets.full);
       case 'paragraph':
         return new Schema(presets.paragraph);
