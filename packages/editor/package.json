@@ -58,7 +58,7 @@
     "prosemirror-inputrules": "^1.2.0",
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-tables": "^1.1.1",
-    "react-router-dom": "6",
+    "react-router-dom": "^5",
     "scroll-into-view-if-needed": "^2.2.29",
     "ts-jest": "^28.0.5",
     "uuid": "^8.3.2"

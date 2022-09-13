@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { DemoEditor } from './init';
 import { DemoEditor as NextEditor } from './NewEditorDemo';
 import snippet, { snippetNext } from './snippet';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { styled } from '@stitches/react';
 
 const Container = styled('div', {
@@ -37,10 +37,14 @@ function App() {
           </Ul>
         </nav>
 
-        <Routes>
-          <Route path="/" element={<DemoEditor content={snippet} />}></Route>
-          <Route path="/article" element={<NextEditor content={snippetNext} />}></Route>
-        </Routes>
+        <Switch>
+          <Route exact path="/">
+            <DemoEditor content={snippet} />
+          </Route>
+          <Route exact path="/article">
+            <NextEditor content={snippetNext} />
+          </Route>
+        </Switch>
       </Container>
     </>
   );
