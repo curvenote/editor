@@ -123,7 +123,7 @@ export function buildFigureKeymap(schema: Schema, bind: AddKey) {
     bind('Shift-Enter', handleEnter);
     bind('Mod-Enter', handleEnter);
     bind('Enter', handleEnter);
-    bind('Backspace', backspaceAfterFigure, backspaceInFigure);
-    bind('Delete', deleteBeforeFigure, deleteInFigure);
+    // bind('Backspace', backspaceAfterFigure, backspaceInFigure);
+    // bind('Delete', deleteBeforeFigure, deleteInFigure);
   }
 }

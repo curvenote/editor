@@ -50,7 +50,7 @@ function createInitialState({
   editable: boolean;
   version: number;
 }) {
-  return createEditorState('full', stateKey, content, version, editable);
+  return createEditorState('article', stateKey, content, version, editable);
 }
 
 function modifyTransaction(stateKey: any, viewId: string, state: EditorState, tr: Transaction) {
