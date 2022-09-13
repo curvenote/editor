@@ -10,28 +10,44 @@ const Container = styled('div', {
   margin: 'auto',
   width: 800,
 });
+const Ul = styled('ul', {
+  listStyle: 'none',
+  fontSize: 24,
+  marginTop: 16,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  li: {
+    padding: 16,
+  },
+});
 
 function App() {
   return (
-    <Router>
+    <>
       <Container>
         <nav>
-          <ul>
+          <Ul>
             <li>
               <Link to="/">Legacy</Link>
             </li>
             <li>
-              <Link to="/next">Next</Link>
+              <Link to="/article">Article</Link>
             </li>
-          </ul>
+          </Ul>
         </nav>
 
         <Routes>
           <Route path="/" element={<DemoEditor content={snippet} />}></Route>
-          <Route path="/next" element={<NextEditor content={snippetNext} />}></Route>
+          <Route path="/article" element={<NextEditor content={snippetNext} />}></Route>
         </Routes>
       </Container>
-    </Router>
+    </>
   );
 }
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>,
+  document.getElementById('root'),
+);

@@ -120,7 +120,6 @@ export function DemoEditor({ content, store = createStore() }: { content: string
   }, [store]);
   return (
     <Provider store={store}>
-      <h1>Next</h1>
       <React.StrictMode>
         <article id={docId} className="content centered">
           <EditorMenu standAlone />
