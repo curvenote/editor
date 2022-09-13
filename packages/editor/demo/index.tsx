@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { DemoEditor } from './init';
 import { DemoEditor as NextEditor } from './NewEditorDemo';
-import snippet from './snippet';
+import snippet, { snippetNext } from './snippet';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { styled } from '@stitches/react';
 
@@ -28,7 +28,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<DemoEditor content={snippet} />}></Route>
-          <Route path="/next" element={<NextEditor content={snippet} />}></Route>
+          <Route path="/next" element={<NextEditor content={snippetNext} />}></Route>
         </Routes>
       </Container>
     </Router>

@@ -2,8 +2,7 @@ import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import type { MdFormatSerialize } from '../serialize/types';
 import type { Iframe } from '../spec';
-import type { MyNodeSpec, AlignOptions } from './types';
-import { NodeGroups } from './types';
+import type { MyNodeSpec, AlignOptions, NodeGroup } from './types';
 import { getImageWidth } from './utils';
 
 export type Attrs = {
@@ -12,48 +11,50 @@ export type Attrs = {
   width: number | null;
 };
 
-const iframe: MyNodeSpec<Attrs, Iframe> = {
-  attrs: {
-    src: {},
-    align: { default: 'center' },
-    width: { default: DEFAULT_IMAGE_WIDTH },
-  },
-  group: NodeGroups.content,
-  draggable: true,
-  parseDOM: [
-    {
-      tag: 'iframe[src]',
-      getAttrs(dom: any) {
-        return {
-          src: dom.getAttribute('src'),
-          align: dom.getAttribute('align') ?? 'center',
-          width: getImageWidth(dom.getAttribute('width')),
-        };
-      },
+export function createIframeSpec(nodeGroup: NodeGroup): MyNodeSpec<Attrs, Iframe> {
+  return {
+    attrs: {
+      src: {},
+      align: { default: 'center' },
+      width: { default: DEFAULT_IMAGE_WIDTH },
     },
-  ],
-  toDOM(node) {
-    const { src, align, width } = node.attrs;
-    return [
-      'iframe',
+    group: nodeGroup.content,
+    draggable: true,
+    parseDOM: [
       {
-        src,
-        align,
-        width: `${width}%`,
+        tag: 'iframe[src]',
+        getAttrs(dom: any) {
+          return {
+            src: dom.getAttribute('src'),
+            align: dom.getAttribute('align') ?? 'center',
+            width: getImageWidth(dom.getAttribute('width')),
+          };
+        },
       },
-    ];
-  },
-  attrsFromMyst: (node) => ({
-    src: node.src,
-    align: 'center',
-    width: getImageWidth(node.width),
-  }),
-  toMyst: (node) => ({
-    type: 'iframe',
-    src: node.src,
-    width: node.width,
-  }),
-};
+    ],
+    toDOM(node) {
+      const { src, align, width } = node.attrs;
+      return [
+        'iframe',
+        {
+          src,
+          align,
+          width: `${width}%`,
+        },
+      ];
+    },
+    attrsFromMyst: (node) => ({
+      src: node.src,
+      align: 'center',
+      width: getImageWidth(node.width),
+    }),
+    toMyst: (node) => ({
+      type: 'iframe',
+      src: node.src,
+      width: node.width,
+    }),
+  };
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const renderer = state.options.renderers?.iframe ?? 'html';
@@ -89,5 +90,3 @@ export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.write('```');
   state.closeBlock(node);
 };
-
-export default iframe;

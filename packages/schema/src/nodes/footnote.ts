@@ -1,13 +1,13 @@
 import type { FlowContent, InlineFootnote, NoAttrs } from '../spec';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { MyNodeSpec, Props } from './types';
-import { NodeGroups } from './types';
+import { LEGACY_NODE_GROUPS } from './types';
 import { nodeNames } from '../types';
 
 const footnote: MyNodeSpec<NoAttrs, InlineFootnote> = {
   attrs: {},
-  group: NodeGroups.inline,
-  content: `(${NodeGroups.text} | ${nodeNames.math})*`,
+  group: LEGACY_NODE_GROUPS.inline,
+  content: `(${LEGACY_NODE_GROUPS.text} | ${nodeNames.math})*`,
   inline: true,
   draggable: true,
   // This makes the view treat the node as a leaf, even though it

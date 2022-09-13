@@ -4,7 +4,7 @@ import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import type { MdSerializerState } from '../types';
 import { nodeNames } from '../types';
 import { clamp, createId } from '../utils';
-import type { NodeSpecAttrs, NumberedNode } from './types';
+import type { NodeDef, NodeGroup, NodeSpecAttrs, NumberedNode } from './types';
 
 export const getImageWidth = (width?: number | string | null) => {
   if (typeof width === 'number') {
@@ -202,4 +202,12 @@ export function flattenValues(node: GenericNode): string {
     return children.reduce((out, child) => `${out}${flattenValues(child)}`, '');
   }
   return '';
+}
+
+export function buildDef(
+  nodeGroup: NodeGroup,
+  def: Omit<NodeDef, 'group'>,
+  groupOption: keyof NodeGroup = 'inline',
+) {
+  return { ...def, group: nodeGroup[groupOption] } as NodeDef;
 }

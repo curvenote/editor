@@ -20,25 +20,52 @@ export enum ReferenceKind {
   table = 'table',
 }
 
-export enum NodeGroups {
-  'block' = 'block', // NOTE: naming here needs some work (requirements: avoid collision)
-  'top' = 'topcontent',
-  'content' = 'content',
-  'heading' = 'heading',
-  'blockOrHeading' = '(content | heading)+',
-  'blockOrEquation' = '(content | equation)+',
-  'blockOrEquationOrHeading' = '(content | heading | equation)+',
-  'inline' = 'inline',
-  'text' = 'text',
-  'cite' = 'cite',
+export const LEGACY_NODE_GROUPS = {
+  top: 'topblock',
+  content: 'block',
+  heading: 'heading',
+  blockOrHeading: '(block | heading)+',
+  blockOrEquation: '(block | equation)+',
+  blockOrEquationOrHeading: '(block | heading | equation)+',
+  inline: 'inline',
+  text: 'text',
+  cite: 'cite',
   // This allows you to drag images in/out and reposition the figure caption
   // It does mean that the figure can be empty, which is not good
   // We need to delete this empty figure in a post processing step
   // This also allows two figure captions
   // 'insideFigure' = 'figcaption{0,1} (image | code_block | iframe | table)* figcaption{0,1}',
   // 'insideFigure' = '(figcaption | image | code_block | iframe | table)+',
-  'insideFigure' = '(figcaption | image | iframe | table | code_block){1,2}',
-}
+  insideFigure: '(figcaption | image | iframe | table | code_block){1,2}',
+} as const;
+
+export const ARTICLE_NODE_GROUPS = {
+  block: 'block', // NOTE: naming here needs some work (requirements: avoid collision)
+  top: 'topcontent',
+  content: 'content',
+  heading: 'heading',
+  blockOrHeading: '(content | heading)+',
+  blockOrEquation: '(content | equation)+',
+  blockOrEquationOrHeading: '(content | heading | equation)+',
+  inline: 'inline',
+  text: 'text',
+  cite: 'cite',
+  // This allows you to drag images in/out and reposition the figure caption
+  // It does mean that the figure can be empty, which is not good
+  // We need to delete this empty figure in a post processing step
+  // This also allows two figure captions
+  // 'insideFigure' = 'figcaption{0,1} (image | code_block | iframe | table)* figcaption{0,1}',
+  // 'insideFigure' = '(figcaption | image | code_block | iframe | table)+',
+  insideFigure: '(figcaption | image | iframe | table | code_block){1,2}',
+} as const;
+
+export type LegacyNodeGroup = typeof LEGACY_NODE_GROUPS;
+export type NextNodeGroup = typeof ARTICLE_NODE_GROUPS;
+export type NodeGroup = LegacyNodeGroup | NextNodeGroup;
+export const NODE_GROUPS = {
+  article: ARTICLE_NODE_GROUPS,
+  legacy: LEGACY_NODE_GROUPS,
+};
 
 export enum MarkGroups {
   'format' = 'format',
@@ -85,5 +112,5 @@ export type NodeDef = {
   mystType: string;
   attrs: Attr[];
   inline: boolean;
-  group: NodeGroups;
+  group: string;
 };

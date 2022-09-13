@@ -1,17 +1,10 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import isEqual from 'lodash.isequal';
-import {
-  TextField,
-  makeStyles,
-  Theme,
-  createStyles,
-  Popover,
-  Paper,
-  Typography,
-} from '@material-ui/core';
-import { schemas } from '@curvenote/schema';
-import { State, Dispatch } from '../../store/types';
+import type { Theme } from '@material-ui/core';
+import { TextField, makeStyles, createStyles, Popover, Paper, Typography } from '@material-ui/core';
+import { schemas, NODE_GROUPS } from '@curvenote/schema';
+import type { State, Dispatch } from '../../store/types';
 import { closeAttributeEditor, updateNodeAttrs } from '../../store/actions';
 import {
   getEditorUI,
@@ -42,7 +35,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const NODES_WITH_ATTRS = new Set(Object.keys(schemas.reactiveNodes));
+export const NODES_WITH_ATTRS = new Set(
+  Object.keys(schemas.createReactiveNodeSpec(NODE_GROUPS.legacy)),
+);
 
 function Attributes() {
   const classes = useStyles();

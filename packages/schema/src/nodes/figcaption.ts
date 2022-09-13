@@ -3,7 +3,7 @@ import type { Caption, FlowContent } from '../spec';
 import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MyNodeSpec } from './types';
-import { NodeGroups, CaptionKind } from './types';
+import { LEGACY_NODE_GROUPS, CaptionKind } from './types';
 import { nodeNames } from '../types';
 
 export type Attrs = {
@@ -11,10 +11,11 @@ export type Attrs = {
 };
 
 const figcaption: MyNodeSpec<Attrs, Caption> = {
-  content: `${NodeGroups.inline}*`,
+  content: `${LEGACY_NODE_GROUPS.inline}*`,
   attrs: {
     kind: { default: null },
   },
+  isolating: true,
   draggable: false,
   defining: true,
   toDOM(node) {

@@ -1,7 +1,6 @@
 import type { Image } from '../spec';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
-import type { NumberedNode, MyNodeSpec, AlignOptions } from './types';
-import { NodeGroups } from './types';
+import type { NumberedNode, MyNodeSpec, AlignOptions, NodeGroup } from './types';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import {
   getImageWidth,
@@ -20,68 +19,70 @@ export type Attrs = NumberedNode & {
   caption: boolean;
 };
 
-const image: MyNodeSpec<Attrs, Image> = {
-  attrs: {
-    ...getNumberedDefaultAttrs(), // Deprecated, use figure
-    src: {},
-    alt: { default: null },
-    title: { default: null },
-    width: { default: DEFAULT_IMAGE_WIDTH },
-    align: { default: 'center' }, // Deprecated, use figure
-    caption: { default: false }, // Deprecated, use figcaption
-  },
-  group: NodeGroups.content,
-  draggable: true,
-  parseDOM: [
-    {
-      tag: 'img[src]',
-      getAttrs(dom) {
-        return {
-          ...getNumberedAttrs(dom), // Deprecated, use figure
-          src: dom.getAttribute('src'),
-          title: dom.getAttribute('title'),
-          alt: dom.getAttribute('alt'),
-          align: dom.getAttribute('align') ?? 'center', // Deprecated, use figure
-          width: getImageWidth(dom.getAttribute('width')),
-          caption: readBooleanDomAttr(dom, 'caption'),
-        };
-      },
+export function createImageNodeSpec(nodeGroup: NodeGroup): MyNodeSpec<Attrs, Image> {
+  return {
+    attrs: {
+      ...getNumberedDefaultAttrs(), // Deprecated, use figure
+      src: {},
+      alt: { default: null },
+      title: { default: null },
+      width: { default: DEFAULT_IMAGE_WIDTH },
+      align: { default: 'center' }, // Deprecated, use figure
+      caption: { default: false }, // Deprecated, use figcaption
     },
-  ],
-  toDOM(node) {
-    const { src, alt, title, width, align } = node.attrs;
-    return [
-      'img',
+    group: nodeGroup.content,
+    draggable: true,
+    parseDOM: [
       {
-        ...setNumberedAttrs(node.attrs), // Deprecated, use figure
-        src,
-        align,
-        alt: alt || undefined,
-        title: title || undefined,
-        width: `${width}%`,
+        tag: 'img[src]',
+        getAttrs(dom) {
+          return {
+            ...getNumberedAttrs(dom), // Deprecated, use figure
+            src: dom.getAttribute('src'),
+            title: dom.getAttribute('title'),
+            alt: dom.getAttribute('alt'),
+            align: dom.getAttribute('align') ?? 'center', // Deprecated, use figure
+            width: getImageWidth(dom.getAttribute('width')),
+            caption: readBooleanDomAttr(dom, 'caption'),
+          };
+        },
       },
-    ];
-  },
-  attrsFromMyst: (token) => ({
-    id: null, // Deprecated, use figure / container
-    label: null, // Deprecated, use figure / container
-    numbered: false, // Deprecated, use figure / container
-    src: token.url || '',
-    alt: token.alt || '',
-    title: token.title || '',
-    width: getImageWidth(token.width),
-    align: token.align || 'center',
-    caption: false,
-  }),
-  toMyst: (props, opts): Image => ({
-    type: 'image',
-    url: opts.localizeImageSrc?.(props.src) || props.src,
-    alt: props.alt || undefined,
-    title: props.title || undefined,
-    align: undefined,
-    width: `${getImageWidth(props.width)}%` || undefined,
-  }),
-};
+    ],
+    toDOM(node) {
+      const { src, alt, title, width, align } = node.attrs;
+      return [
+        'img',
+        {
+          ...setNumberedAttrs(node.attrs), // Deprecated, use figure
+          src,
+          align,
+          alt: alt || undefined,
+          title: title || undefined,
+          width: `${width}%`,
+        },
+      ];
+    },
+    attrsFromMyst: (token) => ({
+      id: null, // Deprecated, use figure / container
+      label: null, // Deprecated, use figure / container
+      numbered: false, // Deprecated, use figure / container
+      src: token.url || '',
+      alt: token.alt || '',
+      title: token.title || '',
+      width: getImageWidth(token.width),
+      align: token.align || 'center',
+      caption: false,
+    }),
+    toMyst: (props, opts): Image => ({
+      type: 'image',
+      url: opts.localizeImageSrc?.(props.src) || props.src,
+      alt: props.alt || undefined,
+      title: props.title || undefined,
+      align: undefined,
+      width: `${getImageWidth(props.width)}%` || undefined,
+    }),
+  };
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const src = state.options.localizeImageSrc?.(node.attrs.src) || node.attrs.src;
@@ -118,5 +119,3 @@ export const toTex: TexFormatSerialize = (state, node) => {
   state.write(`\\includegraphics[width=${width / 100}\\linewidth]{${src}}`);
   state.closeBlock(node);
 };
-
-export default image;
