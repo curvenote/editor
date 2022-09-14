@@ -78,7 +78,7 @@ export function liftContentOutOfNode(
     if (editorState == null) return false;
     const $from = editorState.doc.resolve(node.pos + 1);
     const $to = editorState.doc.resolve(node.pos + node.node.nodeSize - 1);
-    const range = new NodeRange($from, $to, 1);
+    const range = new NodeRange($from, $to, $from.depth);
     const target = liftTarget(range);
     if (target == null) return false;
     const tr = editorState.tr.lift(range, target);
