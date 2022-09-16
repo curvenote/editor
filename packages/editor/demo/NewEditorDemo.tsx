@@ -29,7 +29,7 @@ declare global {
   }
 }
 
-const stateKey = 'myEditor';
+const DEFAULT_STATE_KEY = 'myEditor';
 const viewId1 = 'view1';
 const docId = 'docId';
 const someLinks: LinkResult[] = [
@@ -110,7 +110,17 @@ function createOptions(store: Store) {
   } as Options;
 }
 
-export function DemoEditor({ content, store = createStore() }: { content: string; store?: Store }) {
+export function DemoEditor({
+  content,
+  store = createStore(),
+  stateKey = DEFAULT_STATE_KEY,
+  viewId = viewId1,
+}: {
+  content: string;
+  store?: Store;
+  viewId?: string;
+  stateKey?: string;
+}) {
   const editor = useMemo(() => createEditor(store, createOptions(store)), []);
   useEffect(() => {
     window.store = store;
@@ -126,7 +136,7 @@ export function DemoEditor({ content, store = createStore() }: { content: string
           <InlineActions>
             <InlineActionSwitch />
           </InlineActions>
-          <Editor editor={editor} stateKey={stateKey} viewId={viewId1} initialContent={content} />
+          <Editor editor={editor} stateKey={stateKey} viewId={viewId} initialContent={content} />
           <Suggestions>
             <SuggestionSwitch />
           </Suggestions>

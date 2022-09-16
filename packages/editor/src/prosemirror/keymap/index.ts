@@ -2,7 +2,6 @@ import {
   wrapIn,
   setBlockType,
   chainCommands,
-  splitBlock,
   toggleMark,
   exitCode,
   joinUp,

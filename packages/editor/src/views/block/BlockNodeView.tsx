@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { styled, keyframes } from '@stitches/react';
 import { violet, mauve, blackA, whiteA } from '@radix-ui/colors';
 import { HamburgerMenuIcon, ChevronRightIcon } from '@radix-ui/react-icons';
@@ -461,7 +461,6 @@ class BlockNodeView implements NodeView {
   }
 
   update(node: Node, decorations: readonly any[]) {
-    console.log('update', node.attrs.id, decorations);
     if (!this.view || !this.getPos) return false;
     if (decorations.length === 0) {
       this.renderFansyBlockControls(node);
