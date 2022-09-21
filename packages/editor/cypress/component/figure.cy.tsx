@@ -13,8 +13,10 @@ const FIGURE_CONTENT = `
   console.log("Hello editing!");
 }</code></pre>
 `;
-const IMAGE_CONTENT = '<img src="https://curvenote.dev/images/logo.png" align="center" width="70%" />'
-const IFRAME_CONTENT = '<iframe src="https://www.loom.com/embed/524085f9c64e4652a12bd81a374d58df" align="center" width="70%" ></iframe>'
+const IMAGE_CONTENT =
+  '<img src="https://curvenote.dev/images/logo.png" align="center" width="70%" />';
+const IFRAME_CONTENT =
+  '<iframe src="https://www.loom.com/embed/524085f9c64e4652a12bd81a374d58df" align="center" width="70%" ></iframe>';
 function generateFigureSnippet(content: string) {
   const SNIPPET_WITH_TABLE = `
 		<div class="block" id="first">
@@ -37,12 +39,20 @@ it('should render curvenote link with the correct attributes', () => {
   expect(container.querySelector('figcaption')?.innerHTML).to.be.eq('this is caption!');
 });
 
-[TABLE_FIGURE_SNIPPET, CODEBLOCK_FIGURE_SNIPPET, IMAGE_FIGURE_SNIPPET, IFRAME_FIGURE_SNIPPET].forEach((snippet) => {
+[
+  TABLE_FIGURE_SNIPPET,
+  CODEBLOCK_FIGURE_SNIPPET,
+  IMAGE_FIGURE_SNIPPET,
+  IFRAME_FIGURE_SNIPPET,
+].forEach((snippet) => {
   it('should create one new paragraph below the figure if hit enter within figure caption', async () => {
     const store = createStore();
     const { container } = render(
       <DemoEditor content={snippet} store={store} stateKey={stateKey} viewId={viewId1} />,
     );
+    await waitFor(() => {
+      expect(container.querySelector('figcaption')).to.be.ok;
+    })
     const figcaption = container.querySelector('figcaption') as HTMLElement;
     userEvent.click(figcaption);
     await userEvent.keyboard('hello{Enter}{Enter}', { delay: 10 });
@@ -50,6 +60,6 @@ it('should render curvenote link with the correct attributes', () => {
       expect(
         container.querySelectorAll('#first > div')[1]?.querySelectorAll(':scope > p').length, // there should be one and only one paragraph gets created;
       ).to.eq(1);
-    })
+    });
   });
 });
