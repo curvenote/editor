@@ -107,7 +107,7 @@ export function createEditor(store: Store, options: Options) {
         (tr) => {
           const mtr = modifyTransaction(stateKey, viewId, view.state, tr);
           const next = view.state.apply(mtr);
-          store?.dispatch(updateEditorState(stateKey, viewId, next, tr));
+          store.dispatch(updateEditorState(stateKey, viewId, next, tr));
           // Immidiately update the view.
           // This is important for properly handling selections.
           // Cannot use react event loop here.
@@ -118,14 +118,14 @@ export function createEditor(store: Store, options: Options) {
       );
       view.dom.id = viewId;
       view.dom.onfocus = () => {
-        store?.dispatch(updateSelectView(viewId));
+        store.dispatch(updateSelectView(viewId));
       };
 
       store.dispatch(registerEditorState(stateKey, initialState));
 
       if (cssClass) view.dom.classList.add(...cssClass.split(' '));
       // TODO: revive
-      store?.dispatch(subscribeView(stateKey, viewId, view));
+      store.dispatch(subscribeView(stateKey, viewId, view));
       entityStorage.update({ view, store });
     },
     destroy() {

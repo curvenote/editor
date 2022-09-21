@@ -112,3 +112,5 @@ export function createEditorView(
   );
   return editorView;
 }
+
+export * from './utils';

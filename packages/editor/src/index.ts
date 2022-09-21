@@ -12,6 +12,11 @@ export type { Options } from './connect';
 export { runtime, collab };
 
 export { isEditable, setEditable } from './prosemirror/plugins/editable';
-export { createEditorState } from './prosemirror';
+export {
+  createEditorState,
+  deleteNodePM,
+  liftContentOutOfNodePM,
+  updateNodeAttrsPM,
+} from './prosemirror';
 
 export { createEditor } from './editor';
