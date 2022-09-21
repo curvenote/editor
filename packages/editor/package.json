@@ -111,6 +111,7 @@
     "@types/react": "^17.0.47",
     "@types/react-dom": "^17.0.17",
     "@types/react-redux": "^7.1.24",
+    "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^8.3.4",
     "classnames": "^2.3.1",
     "copy-webpack-plugin": "^11.0.0",
