@@ -131,7 +131,7 @@ export const marks = {
   abbr: basicMarks.abbr,
 };
 
-function createPresets() {
+export function createPresets() {
   const legacyBasicNodeSpecs = basic.createBasicNodeSpecs(LEGACY_NODE_GROUPS);
   const legacyNodeSpecs = createLegacyNodeSpecs();
   const articleNodeSpecs = createArticleNodeSpecs();

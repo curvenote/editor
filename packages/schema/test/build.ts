@@ -1,9 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Node as ProsemirrorNode, Schema } from 'prosemirror-model';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
+import { Schema } from 'prosemirror-model';
 import { builders } from 'prosemirror-test-builder';
 import * as src from '../src';
 
-const schema = new Schema(src.schemas.presets.full);
+const schema = new Schema(src.schemas.createPresets().full);
 
 export const tnodes = builders(schema, {
   p: { nodeType: 'paragraph' },
