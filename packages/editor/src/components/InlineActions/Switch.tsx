@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import isEqual from 'lodash.isequal';
-import { State } from '../../store/types';
+import type { State } from '../../store/types';
 import { SelectionKinds as Kinds } from '../../store/ui/types';
 import { getEditorUIStateAndViewIds, getInlineActionKind } from '../../store/ui/selectors';
 import LinkActions from './LinkActions';
@@ -28,7 +28,7 @@ export function useInlineActionProps() {
   };
 }
 
-function InlineActionSwitch() {
+function InlineActionSwitch({ hideCallout }: { hideCallout?: boolean }) {
   const { stateId, viewId, kind } = useInlineActionProps();
   return (
     <>
@@ -37,7 +37,7 @@ function InlineActionSwitch() {
       {kind === Kinds.figure && <FigureImageActions {...{ stateId, viewId }} />}
       {kind === Kinds.image && <ImageActions {...{ stateId, viewId }} />}
       {kind === Kinds.iframe && <ImageActions {...{ stateId, viewId }} />}
-      {kind === Kinds.callout && <CalloutActions {...{ stateId, viewId }} />}
+      {!hideCallout && kind === Kinds.callout && <CalloutActions {...{ stateId, viewId }} />}
       {kind === Kinds.heading && <HeadingActions {...{ stateId, viewId }} />}
       {/* {kind === Kinds.math && <AlignActions view={view} />} */}
       {kind === Kinds.equation && <EquationActions {...{ stateId, viewId }} />}
