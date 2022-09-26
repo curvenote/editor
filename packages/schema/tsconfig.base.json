@@ -5,11 +5,11 @@
     "target": "es6",
     "noImplicitAny": true,
     "strict": true,
+    "baseUrl": "src",
     "moduleResolution": "node",
     "lib": ["es2019", "DOM"],
     "sourceMap": true,
     "outDir": "dist/cjs",
-    "baseUrl": "src",
     "paths": {
       "*": ["node_modules/*", "types/*"]
     },

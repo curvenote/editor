@@ -1,30 +1,33 @@
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { Margin, FlowContent } from '../spec';
-import type { MyNodeSpec } from './types';
-import { NodeGroups } from './types';
+import type { MyNodeSpec, NodeGroup } from './types';
 
-const aside: MyNodeSpec<Record<string, never>, Margin> = {
-  attrs: {},
-  group: NodeGroups.top,
-  content: NodeGroups.blockOrHeading,
-  toDOM() {
-    return ['aside', { class: 'margin' }, 0];
-  },
-  parseDOM: [
-    { tag: 'aside' }, // This is legacy and should be removed!
-    { tag: 'aside.margin' },
-  ],
-  attrsFromMyst() {
-    return {};
-  },
-  toMyst(props) {
-    return {
-      type: 'margin',
-      children: (props.children || []) as FlowContent[],
-    };
-  },
-};
+export function createAsideNodeSpec(
+  nodeGroup: NodeGroup,
+): MyNodeSpec<Record<string, never>, Margin> {
+  return {
+    attrs: {},
+    group: nodeGroup.top,
+    content: nodeGroup.blockOrHeading,
+    toDOM() {
+      return ['aside', { class: 'margin' }, 0];
+    },
+    parseDOM: [
+      { tag: 'aside' }, // This is legacy and should be removed!
+      { tag: 'aside.margin' },
+    ],
+    attrsFromMyst() {
+      return {};
+    },
+    toMyst(props) {
+      return {
+        type: 'margin',
+        children: (props.children || []) as FlowContent[],
+      };
+    },
+  };
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
@@ -44,5 +47,3 @@ export const toTex: TexFormatSerialize = createLatexStatement(
     state.renderContent(node);
   },
 );
-
-export default aside;

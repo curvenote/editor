@@ -1,8 +1,8 @@
 import type { GenericNode } from 'mystjs';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { Cite, CrossReference } from '../spec';
-import type { MyNodeSpec } from './types';
-import { NodeGroups, ReferenceKind } from './types';
+import type { MyNodeSpec, NodeGroup } from './types';
+import { ReferenceKind } from './types';
 import { flattenValues, normalizeLabel } from './utils';
 
 export type Attrs = {
@@ -15,94 +15,98 @@ export type Attrs = {
 
 type Legacy = { inline: undefined };
 
-const cite: MyNodeSpec<Attrs & Legacy, Cite | CrossReference> = {
-  attrs: {
-    key: { default: null },
-    title: { default: '' },
-    kind: { default: null },
-    label: { default: null },
-    // TODO: This has been renamed to text - need to deprecate
-    inline: { default: null },
-    text: { default: '' },
-  },
-  inline: true,
-  marks: '',
-  group: NodeGroups.inline,
-  draggable: true,
-  parseDOM: [
-    {
-      tag: 'cite',
-      getAttrs(dom: any) {
-        return {
-          key:
-            dom.getAttribute('key') ??
-            dom.getAttribute('data-key') ??
-            dom.getAttribute('data-cite'),
-          title: dom.getAttribute('title') ?? '',
-          kind: dom.getAttribute('kind') || 'cite',
-          label: dom.getAttribute('label') || null,
-          // inline is for legacy
-          inline: undefined,
-          // `text` is the rendered text e.g. "Jon et. al, 2020" OR is "Table %s"
-          text: dom.getAttribute('inline') ?? dom.textContent ?? '',
-        };
-      },
+export function createCiteNodeSpec(
+  nodeGroup: NodeGroup,
+): MyNodeSpec<Attrs & Legacy, Cite | CrossReference> {
+  return {
+    attrs: {
+      key: { default: null },
+      title: { default: '' },
+      kind: { default: null },
+      label: { default: null },
+      // TODO: This has been renamed to text - need to deprecate
+      inline: { default: null },
+      text: { default: '' },
     },
-  ],
-  toDOM(node) {
-    const { key, kind, text, label, title } = node.attrs as Attrs;
-    return [
-      'cite',
+    inline: true,
+    marks: '',
+    group: nodeGroup.inline,
+    draggable: true,
+    parseDOM: [
       {
-        key: key || undefined,
-        kind: kind ?? 'cite',
-        title: title || undefined,
-        label: label || undefined, // Should we remove this?!?!
+        tag: 'cite',
+        getAttrs(dom: any) {
+          return {
+            key:
+              dom.getAttribute('key') ??
+              dom.getAttribute('data-key') ??
+              dom.getAttribute('data-cite'),
+            title: dom.getAttribute('title') ?? '',
+            kind: dom.getAttribute('kind') || 'cite',
+            label: dom.getAttribute('label') || null,
+            // inline is for legacy
+            inline: undefined,
+            // `text` is the rendered text e.g. "Jon et. al, 2020" OR is "Table %s"
+            text: dom.getAttribute('inline') ?? dom.textContent ?? '',
+          };
+        },
       },
-      text || '',
-    ];
-  },
-  attrsFromMyst: (node) => {
-    if (node.type === 'crossReference') {
-      const crossRef = node as CrossReference;
+    ],
+    toDOM(node) {
+      const { key, kind, text, label, title } = node.attrs as Attrs;
+      return [
+        'cite',
+        {
+          key: key || undefined,
+          kind: kind ?? 'cite',
+          title: title || undefined,
+          label: label || undefined, // Should we remove this?!?!
+        },
+        text || '',
+      ];
+    },
+    attrsFromMyst: (node) => {
+      if (node.type === 'crossReference') {
+        const crossRef = node as CrossReference;
+        return {
+          key: crossRef.identifier ?? null,
+          kind: ReferenceKind.fig, // we loose this information?!
+          label: null,
+          title: null,
+          inline: undefined,
+          text: (node.children?.[0] as GenericNode)?.value || node.label || node.identifier || '',
+        };
+      }
       return {
-        key: crossRef.identifier ?? null,
-        kind: ReferenceKind.fig, // we loose this information?!
+        key: node.identifier ?? null,
+        kind: ReferenceKind.cite,
         label: null,
         title: null,
         inline: undefined,
-        text: (node.children?.[0] as GenericNode)?.value || node.label || node.identifier || '',
+        text: flattenValues(node),
       };
-    }
-    return {
-      key: node.identifier ?? null,
-      kind: ReferenceKind.cite,
-      label: null,
-      title: null,
-      inline: undefined,
-      text: flattenValues(node),
-    };
-  },
-  toMyst: (props, options): Cite | CrossReference => {
-    if (props.kind === ReferenceKind.cite) {
-      const citeKey = options.localizeCitation?.(props.key ?? '') ?? props.key ?? '';
-      const { identifier, label } = normalizeLabel(citeKey) ?? {};
+    },
+    toMyst: (props, options): Cite | CrossReference => {
+      if (props.kind === ReferenceKind.cite) {
+        const citeKey = options.localizeCitation?.(props.key ?? '') ?? props.key ?? '';
+        const { identifier, label } = normalizeLabel(citeKey) ?? {};
+        return {
+          type: 'cite',
+          identifier,
+          label,
+        };
+      }
+      const localizedId = options.localizeId?.(props.key ?? '') ?? props.key ?? '';
+      const { identifier, label } = normalizeLabel(localizedId) ?? {};
       return {
-        type: 'cite',
+        type: 'crossReference',
         identifier,
         label,
+        children: [{ type: 'text', value: props.text || '' }],
       };
-    }
-    const localizedId = options.localizeId?.(props.key ?? '') ?? props.key ?? '';
-    const { identifier, label } = normalizeLabel(localizedId) ?? {};
-    return {
-      type: 'crossReference',
-      identifier,
-      label,
-      children: [{ type: 'text', value: props.text || '' }],
-    };
-  },
-};
+    },
+  };
+}
 
 function getPrependedText(kind: ReferenceKind): string {
   switch (kind) {
@@ -164,5 +168,3 @@ export const toTex: TexFormatSerialize = (state, node) => {
   const id = state.options.localizeId?.(key ?? '') ?? key;
   if (id) state.write(`${prepend}\\ref{${id}}`);
 };
-
-export default cite;

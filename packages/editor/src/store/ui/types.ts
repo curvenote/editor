@@ -31,6 +31,7 @@ export type UIState = {
   stateId: string | null;
   viewId: string | null;
   selection: InlineSelection | null;
+  selectedBlock: string | null;
 };
 
 export interface SelectEditorViewAction {

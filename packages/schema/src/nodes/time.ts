@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { Time } from '../spec';
 import type { MyNodeSpec } from './types';
-import { NodeGroups } from './types';
+import { LEGACY_NODE_GROUPS } from './types';
 
 export function getDatetime(object?: Date | string | null): Date {
   if (object == null) {
@@ -34,7 +34,7 @@ export type Attrs = {
 };
 
 const time: MyNodeSpec<Attrs, Time> = {
-  group: NodeGroups.inline,
+  group: LEGACY_NODE_GROUPS.inline,
   inline: true,
   marks: '',
   draggable: true,

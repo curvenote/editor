@@ -1,7 +1,6 @@
 import type { Heading, PhrasingContent } from '../spec';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import type { MyNodeSpec, NumberedNode } from './types';
-import { NodeGroups } from './types';
+import type { MyNodeSpec, NodeGroup, NumberedNode } from './types';
 import {
   getNumberedAttrs,
   getNumberedDefaultAttrs,
@@ -18,38 +17,40 @@ export type Attrs = NumberedNode & {
   level: number;
 };
 
-const heading: MyNodeSpec<Attrs, Heading> = {
-  attrs: {
-    ...getNumberedDefaultAttrs(),
-    level: { default: 1 },
-  },
-  content: `${NodeGroups.inline}*`,
-  group: NodeGroups.heading,
-  defining: true,
-  parseDOM: [
-    { tag: 'h1', getAttrs: getAttrs(1) },
-    { tag: 'h2', getAttrs: getAttrs(2) },
-    { tag: 'h3', getAttrs: getAttrs(3) },
-    { tag: 'h4', getAttrs: getAttrs(4) },
-    { tag: 'h5', getAttrs: getAttrs(5) },
-    { tag: 'h6', getAttrs: getAttrs(6) },
-  ],
-  toDOM(node) {
-    return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
-  },
-  attrsFromMyst: (token) => ({
-    id: null,
-    label: null,
-    numbered: token.enumerated ?? false,
-    level: token.depth,
-  }),
-  toMyst: (props) => ({
-    type: 'heading',
-    depth: parseInt(props.tag.slice(1), 10),
-    enumerated: readBooleanAttr(props.numbered),
-    children: (props.children || []) as PhrasingContent[],
-  }),
-};
+export function createHeadingNodeSpec(nodeGroup: NodeGroup): MyNodeSpec<Attrs, Heading> {
+  return {
+    attrs: {
+      ...getNumberedDefaultAttrs(),
+      level: { default: 1 },
+    },
+    content: `${nodeGroup.inline}*`,
+    group: nodeGroup.heading,
+    defining: true,
+    parseDOM: [
+      { tag: 'h1', getAttrs: getAttrs(1) },
+      { tag: 'h2', getAttrs: getAttrs(2) },
+      { tag: 'h3', getAttrs: getAttrs(3) },
+      { tag: 'h4', getAttrs: getAttrs(4) },
+      { tag: 'h5', getAttrs: getAttrs(5) },
+      { tag: 'h6', getAttrs: getAttrs(6) },
+    ],
+    toDOM(node) {
+      return [`h${node.attrs.level}`, setNumberedAttrs(node.attrs), 0];
+    },
+    attrsFromMyst: (token) => ({
+      id: null,
+      label: null,
+      numbered: token.enumerated ?? false,
+      level: token.depth,
+    }),
+    toMyst: (props) => ({
+      type: 'heading',
+      depth: parseInt(props.tag.slice(1), 10),
+      enumerated: readBooleanAttr(props.numbered),
+      children: (props.children || []) as PhrasingContent[],
+    }),
+  };
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   // TODO: Put the id in:
@@ -73,5 +74,3 @@ export const toTex: TexFormatSerialize = (state, node) => {
   }
   state.closeBlock(node);
 };
-
-export default heading;

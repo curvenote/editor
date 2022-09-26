@@ -7,6 +7,7 @@ export * from './serialize/types';
 export type { LinkAttrs, AlignOptions };
 
 export enum nodeNames {
+  block = 'block',
   text = 'text',
   paragraph = 'paragraph',
   heading = 'heading',

@@ -1,5 +1,5 @@
 import type { MyNodeSpec } from './types';
-import { NodeGroups } from './types';
+import { LEGACY_NODE_GROUPS } from './types';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { Mention } from '../spec';
 
@@ -9,7 +9,7 @@ export interface Attrs {
 }
 
 const mention: MyNodeSpec<Attrs, Mention> = {
-  group: NodeGroups.inline,
+  group: LEGACY_NODE_GROUPS.inline,
   attrs: { label: { default: '' }, user: { default: '' } },
   inline: true,
   draggable: true,

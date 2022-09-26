@@ -1,14 +1,12 @@
 import type { NodeSelection, EditorState, Selection } from 'prosemirror-state';
 import type { Node } from 'prosemirror-model';
-import { findParentNode, isNodeSelection } from '@curvenote/prosemirror-utils';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 import { nodeNames } from '@curvenote/schema';
 import { getLinkBoundsIfTheyExist } from '../actions/utils';
 import { SelectionKinds } from './types';
 
-export function getNodeFromSelection(selection?: Selection) {
-  if (!selection || !isNodeSelection(selection)) return null;
-  const nodeSelection = selection as NodeSelection;
-  return nodeSelection.node;
+export function getNodeFromSelection(selection?: Selection): Node | undefined {
+  return (selection as NodeSelection)?.node ?? undefined;
 }
 
 export function getNodeIfSelected(state: EditorState | null, nodeName?: nodeNames) {

@@ -17,6 +17,7 @@ export const getEditorUIStateAndViewIds: (state: State) => {
 export function isInlineActionOpen(state: State) {
   return state.editor.ui.selection != null;
 }
+
 export function getInlineActionAnchorEl(state: State) {
   return state.editor.ui.selection?.anchorEl ?? null;
 }

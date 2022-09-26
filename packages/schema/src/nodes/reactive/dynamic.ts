@@ -1,8 +1,8 @@
-import type { NodeDef } from '../types';
-import { NodeGroups } from '../types';
+import type { NodeGroup } from '../types';
+import { LEGACY_NODE_GROUPS } from '../types';
 import type { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
-import type { Dynamic } from '../../spec';
+import { buildDef } from '../utils';
 
 export type Attrs = {
   value?: string;
@@ -17,7 +17,7 @@ export type Attrs = {
   stepFunction?: string;
 };
 
-export const def: NodeDef = {
+const ref = {
   tag: 'r-dynamic',
   name: 'r:dynamic',
   mystType: 'reactiveDynamic',
@@ -30,9 +30,11 @@ export const def: NodeDef = {
     attr('step', true, '1'),
   ],
   inline: true,
-  group: NodeGroups.inline,
 };
 
-export const spec = createSpec<Dynamic>(def);
-export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystRole(state, node, def);
-export default spec;
+export function createNodeSpec(nodeGroup: NodeGroup) {
+  return createSpec(buildDef(nodeGroup, ref));
+}
+
+export const toMarkdown: MdFormatSerialize = (state, node) =>
+  nodeToMystRole(state, node, buildDef(LEGACY_NODE_GROUPS, ref));

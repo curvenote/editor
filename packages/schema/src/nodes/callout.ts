@@ -1,8 +1,7 @@
 import type { Admonition, FlowContent } from '../spec';
 import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import type { MyNodeSpec } from './types';
-import { NodeGroups } from './types';
+import type { MyNodeSpec, NodeGroup } from './types';
 
 export enum CalloutKinds {
   'active' = 'active',
@@ -64,45 +63,47 @@ export function admonitionToCalloutKind(kind?: string): CalloutKinds {
   }
 }
 
-const callout: MyNodeSpec<Attrs, Admonition> = {
-  group: NodeGroups.top,
-  content: NodeGroups.blockOrEquationOrHeading,
-  attrs: {
-    kind: { default: CalloutKinds.info },
-  },
-  toDOM(node) {
-    return ['aside', { class: `callout ${node.attrs.kind}` }, 0];
-  },
-  parseDOM: [
-    {
-      tag: 'aside.callout',
-      getAttrs(dom: any) {
-        if (dom.classList.contains(CalloutKinds.active)) return { kind: CalloutKinds.active };
-        if (dom.classList.contains(CalloutKinds.success)) return { kind: CalloutKinds.success };
-        if (dom.classList.contains(CalloutKinds.info)) return { kind: CalloutKinds.info };
-        if (dom.classList.contains(CalloutKinds.warning)) return { kind: CalloutKinds.warning };
-        if (dom.classList.contains(CalloutKinds.danger)) return { kind: CalloutKinds.danger };
-        return { kind: CalloutKinds.info };
-      },
-      // aside is also parsed, and this is higher priority
-      priority: 60,
+export function createCalloutNodeSpec(nodeGroup: NodeGroup): MyNodeSpec<Attrs, Admonition> {
+  return {
+    group: nodeGroup.top,
+    content: nodeGroup.blockOrEquationOrHeading,
+    attrs: {
+      kind: { default: CalloutKinds.info },
     },
-  ],
-  attrsFromMyst: (token) => ({
-    kind: admonitionToCalloutKind(token.kind),
-  }),
-  toMyst: (props) => {
-    let calloutKind = props.class.split(' ')[1];
-    if (!Object.values(AdmonitionKinds).includes(calloutKind as AdmonitionKinds)) {
-      calloutKind = calloutKindToAdmonition(calloutKind as CalloutKinds);
-    }
-    return {
-      type: 'admonition',
-      kind: calloutKind,
-      children: (props.children || []) as FlowContent[],
-    };
-  },
-};
+    toDOM(node) {
+      return ['aside', { class: `callout ${node.attrs.kind}` }, 0];
+    },
+    parseDOM: [
+      {
+        tag: 'aside.callout',
+        getAttrs(dom: any) {
+          if (dom.classList.contains(CalloutKinds.active)) return { kind: CalloutKinds.active };
+          if (dom.classList.contains(CalloutKinds.success)) return { kind: CalloutKinds.success };
+          if (dom.classList.contains(CalloutKinds.info)) return { kind: CalloutKinds.info };
+          if (dom.classList.contains(CalloutKinds.warning)) return { kind: CalloutKinds.warning };
+          if (dom.classList.contains(CalloutKinds.danger)) return { kind: CalloutKinds.danger };
+          return { kind: CalloutKinds.info };
+        },
+        // aside is also parsed, and this is higher priority
+        priority: 60,
+      },
+    ],
+    attrsFromMyst: (token) => ({
+      kind: admonitionToCalloutKind(token.kind),
+    }),
+    toMyst: (props) => {
+      let calloutKind = props.class.split(' ')[1];
+      if (!Object.values(AdmonitionKinds).includes(calloutKind as AdmonitionKinds)) {
+        calloutKind = calloutKindToAdmonition(calloutKind as CalloutKinds);
+      }
+      return {
+        type: 'admonition',
+        kind: calloutKind,
+        children: (props.children || []) as FlowContent[],
+      };
+    },
+  };
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
@@ -124,5 +125,3 @@ export const toTex = createLatexStatement(
     state.renderContent(node);
   },
 );
-
-export default callout;

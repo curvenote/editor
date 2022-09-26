@@ -1,8 +1,7 @@
 import type { Code } from '../spec';
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MdFormatSerialize } from '../serialize/types';
-import type { NumberedNode, MyNodeSpec } from './types';
-import { NodeGroups } from './types';
+import type { NumberedNode, MyNodeSpec, NodeGroup } from './types';
 import {
   convertToBooleanAttribute,
   readBooleanDomAttr,
@@ -60,65 +59,67 @@ function langToLanguage(lang?: string): string | undefined {
   return lang.toLowerCase();
 }
 
-const code_block: MyNodeSpec<Attrs, Code> = {
-  attrs: {
-    ...getNumberedDefaultAttrs(),
-    language: { default: null },
-    linenumbers: { default: false },
-    title: { default: '' },
-  },
-  content: `${NodeGroups.text}*`,
-  marks: '',
-  group: NodeGroups.block,
-  code: true,
-  defining: true,
-  parseDOM: [
-    {
-      tag: 'pre',
-      preserveWhitespace: 'full',
-      getAttrs(dom) {
-        return {
-          ...getNumberedAttrs(dom),
-          language: dom.getAttribute('language') || null,
-          linenumbers: readBooleanDomAttr(dom, 'linenumbers'),
-          title: dom.getAttribute('title') ?? '',
-        };
-      },
+export function createCodeBlockSpec(nodeGroup: NodeGroup): MyNodeSpec<Attrs, Code> {
+  return {
+    attrs: {
+      ...getNumberedDefaultAttrs(),
+      language: { default: null },
+      linenumbers: { default: false },
+      title: { default: '' },
     },
-  ],
-  toDOM(node) {
-    const { language, title, linenumbers } = node.attrs;
-    return [
-      'pre',
+    content: `${nodeGroup.text}*`,
+    marks: '',
+    group: nodeGroup.content,
+    code: true,
+    defining: true,
+    parseDOM: [
       {
-        ...setNumberedAttrs(node.attrs),
-        language,
-        title,
-        linenumbers: convertToBooleanAttribute(linenumbers),
+        tag: 'pre',
+        preserveWhitespace: 'full',
+        getAttrs(dom) {
+          return {
+            ...getNumberedAttrs(dom),
+            language: dom.getAttribute('language') || null,
+            linenumbers: readBooleanDomAttr(dom, 'linenumbers'),
+            title: dom.getAttribute('title') ?? '',
+          };
+        },
       },
-      ['code', 0],
-    ];
-  },
-  attrsFromMyst: (token) => ({
-    id: token.identifier || null,
-    label: token.label || null,
-    numbered: false,
-    language: langToLanguage(token.lang) || null,
-    linenumbers: token.showLineNumbers || false,
-    title: '',
-  }),
-  toMyst: (props) => {
-    if (props.children?.length === 1) {
-      return {
-        type: 'code',
-        lang: languageToLang(props.language || undefined),
-        showLineNumbers: props.linenumbers || undefined,
-        value: props.children[0].value || '',
-      };
-    }
-    throw new Error(`Code block node does not have one child`);
-  },
-};
+    ],
+    toDOM(node) {
+      const { language, title, linenumbers } = node.attrs;
+      return [
+        'pre',
+        {
+          ...setNumberedAttrs(node.attrs),
+          language,
+          title,
+          linenumbers: convertToBooleanAttribute(linenumbers),
+        },
+        ['code', 0],
+      ];
+    },
+    attrsFromMyst: (token) => ({
+      id: token.identifier || null,
+      label: token.label || null,
+      numbered: false,
+      language: langToLanguage(token.lang) || null,
+      linenumbers: token.showLineNumbers || false,
+      title: '',
+    }),
+    toMyst: (props) => {
+      if (props.children?.length === 1) {
+        return {
+          type: 'code',
+          lang: languageToLang(props.language || undefined),
+          showLineNumbers: props.linenumbers || undefined,
+          value: props.children[0].value || '',
+        };
+      }
+      throw new Error(`Code block node does not have one child`);
+    },
+  };
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   const { language } = node.attrs;
@@ -139,5 +140,3 @@ export const toTex = createLatexStatement(
     state.renderContent(node);
   },
 );
-
-export default code_block;

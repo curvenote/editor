@@ -1,7 +1,8 @@
 import runtime from '@curvenote/runtime';
 import * as sidenotes from 'sidenotes';
 import { combineReducers } from 'redux';
-import { State, EditorActions, Reducer, reducer } from '../src';
+import type { State, EditorActions, Reducer } from '../src';
+import { reducer } from '../src';
 
 const combinedReducers: Reducer = combineReducers({
   editor: reducer,

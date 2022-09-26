@@ -13,8 +13,8 @@ import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirr
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import type { Schema } from 'prosemirror-model';
-import { createId } from '@curvenote/schema';
-import type { Command } from 'prosemirror-state';
+import { createId, nodeNames } from '@curvenote/schema';
+import type { Command, EditorState } from 'prosemirror-state';
 import { store, opts } from '../../connect';
 import { focusSelectedEditorView } from '../../store/ui/actions';
 import { executeCommand } from '../../store/actions';
@@ -22,6 +22,7 @@ import { buildFigureKeymap } from './figure';
 import { CommandNames } from '../../store/suggestion/commands';
 import type { AddKey, Keymap } from './utils';
 import { createBind, flattenCommandList } from './utils';
+import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const mac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false;
 
@@ -56,6 +57,16 @@ interface CommandOptions {
   figureCommands: boolean;
 }
 
+function getNonSplittableNodes(state: EditorState) {
+  return [
+    state.schema.nodes[nodeNames.figcaption],
+    state.schema.nodes[nodeNames.table],
+    state.schema.nodes[nodeNames.aside],
+    state.schema.nodes[nodeNames.code_block],
+    state.schema.nodes[nodeNames.callout],
+  ];
+}
+
 function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: CommandOptions) {
   bind('Mod-z', undoInputRule, undo);
   bind('Mod-Z', redo);
@@ -83,6 +94,27 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
   }
 
   if (schema.nodes.blockquote) bind('Ctrl->', wrapIn(schema.nodes.blockquote));
+  console.log('schema', schema.nodes.block);
+
+  const blockNode = schema.nodes.block;
+  if (blockNode) {
+    const command: Command = (state, dispatch, view) => {
+      if (!dispatch || !view) return false;
+      if (findParentNodeOfTypeClosestToPos(state.selection.$from, getNonSplittableNodes(state))) {
+        return false;
+      }
+      const location = findParentNodeOfTypeClosestToPos(
+        state.selection.$from,
+        state.schema.nodes[nodeNames.block],
+      );
+      if (!location) return true;
+      dispatch(state.tr.split(state.selection.$from.pos, location.depth + 1));
+      return true;
+    };
+
+    bind('Mod-Enter', command);
+    if (mac) bind('Ctrl-Enter', command);
+  }
   if (schema.nodes.hard_break) {
     const br = schema.nodes.hard_break;
     const cmd = chainCommands(exitCode, (state, dispatch) => {
@@ -90,9 +122,11 @@ function addAllCommands(stateKey: any, schema: Schema, bind: AddKey, options?: C
       dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView());
       return true;
     });
-    bind('Mod-Enter', cmd);
+    if (!blockNode) {
+      bind('Mod-Enter', cmd);
+      if (mac) bind('Ctrl-Enter', cmd);
+    }
     bind('Shift-Enter', cmd);
-    if (mac) bind('Ctrl-Enter', cmd);
   }
 
   if (schema.nodes.list_item) {

@@ -6,7 +6,8 @@ import { createLinkBlockView } from './LinkBlockView';
 import { TimeView } from './TimeView';
 import { MentionView } from './Mention';
 import { CodeBlockView } from './CodeBlockView';
-import { FootnoteView } from './FootnoteView';
+import { createTopBlockView } from './block';
+import { createFootnoteViewFactory } from './FootnoteView';
 import createNodeView from './NodeView';
 import WidgetView, { newWidgetView } from './WidgetView';
 import { clickSelectFigure } from './utils';
@@ -23,10 +24,11 @@ export default {
   ImageView,
   IFrameView,
   LinkView,
+  createTopBlockView,
   createLinkBlockView,
   TimeView,
   WidgetView,
   newWidgetView,
   CodeBlockView,
-  FootnoteView,
+  createFootnoteViewFactory,
 };

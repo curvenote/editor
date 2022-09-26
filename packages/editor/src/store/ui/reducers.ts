@@ -5,6 +5,7 @@ export const initialState: UIState = {
   stateId: null,
   viewId: null,
   selection: null,
+  selectedBlock: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

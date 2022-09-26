@@ -40,7 +40,11 @@
   "dependencies": {
     "@curvenote/emoji": "1.0.1",
     "@curvenote/prosemirror-utils": "^1.0.4",
+    "@radix-ui/colors": "^0.1.8",
+    "@radix-ui/react-dropdown-menu": "^1.0.0",
+    "@radix-ui/react-icons": "^1.1.1",
     "@reduxjs/toolkit": "^1.8.3",
+    "@stitches/react": "^1.2.8",
     "codemirror": "5.65.0",
     "katex": "^0.15.2",
     "lodash.debounce": "^4.0.8",
@@ -54,6 +58,7 @@
     "prosemirror-inputrules": "^1.2.0",
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-tables": "^1.1.1",
+    "react-router-dom": "^5",
     "scroll-into-view-if-needed": "^2.2.29",
     "ts-jest": "^28.0.5",
     "uuid": "^8.3.2"
@@ -106,6 +111,7 @@
     "@types/react": "^17.0.47",
     "@types/react-dom": "^17.0.17",
     "@types/react-redux": "^7.1.24",
+    "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^8.3.4",
     "classnames": "^2.3.1",
     "copy-webpack-plugin": "^11.0.0",

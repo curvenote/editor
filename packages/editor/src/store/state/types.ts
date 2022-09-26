@@ -2,6 +2,7 @@ import type { EditorState, Transaction } from 'prosemirror-state';
 import type { EditorView } from 'prosemirror-view';
 import type { types, schemas } from '@curvenote/schema';
 
+export const REGISTER_EDITOR_STATE = 'REGISTER_EDITOR_STATE';
 export const INIT_EDITOR_STATE = 'INIT_EDITOR_STATE';
 export const SUBSCRIBE_EDITOR_VIEW = 'SUBSCRIBE_EDITOR_VIEW';
 export const UNSUBSCRIBE_EDITOR_VIEW = 'UNSUBSCRIBE_EDITOR_VIEW';
@@ -37,6 +38,15 @@ export interface InitEditorState {
     editable: boolean;
     content: string;
     version: number;
+  };
+}
+
+export interface RegisterEditorState {
+  type: typeof REGISTER_EDITOR_STATE;
+  payload: {
+    stateKey: string;
+    stateId: string;
+    state: EditorState;
   };
 }
 
@@ -85,6 +95,7 @@ export interface ResetEditorAndViews {
 
 export type EditorActionTypes =
   | InitEditorState
+  | RegisterEditorState
   | UpdateEditorState
   | SubscribeEditorView
   | UnsubscribeEditorView

@@ -2,8 +2,8 @@ import type { Node } from 'prosemirror-model';
 import type { Caption, Container, Image, Legend, Table } from '../spec';
 import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
-import type { AlignOptions, MyNodeSpec, NumberedNode } from './types';
-import { CaptionKind, NodeGroups } from './types';
+import type { AlignOptions, MyNodeSpec, NodeGroup, NumberedNode } from './types';
+import { CaptionKind } from './types';
 import { determineCaptionKind } from '../process/utils';
 import {
   getColumnWidths,
@@ -30,78 +30,81 @@ export type Attrs = NumberedNode & {
   fullpage: boolean;
 };
 
-const figure: MyNodeSpec<Attrs, Container> = {
-  group: NodeGroups.block,
-  content: NodeGroups.insideFigure,
-  isolating: true,
-  attrs: {
-    ...getNumberedDefaultAttrs(),
-    align: { default: 'center' },
-    multipage: { default: false },
-    landscape: { default: false },
-    fullpage: { default: false },
-  },
-  toDOM(node) {
-    const { align, multipage, landscape, fullpage } = node.attrs;
-    return [
-      'figure',
-      {
-        ...setNumberedAttrs(node.attrs),
-        align,
-        multipage,
-        landscape,
-        fullpage,
-      },
-      0,
-    ];
-  },
-  parseDOM: [
-    {
-      tag: 'figure',
-      getAttrs(dom) {
-        return {
-          ...getNumberedAttrs(dom),
-          align: dom.getAttribute('align') ?? 'center',
-          multipage: readBooleanDomAttr(dom, 'multipage'),
-          landscape: readBooleanDomAttr(dom, 'landscape'),
-          fullpage: readBooleanDomAttr(dom, 'fullpage'),
-        };
-      },
+export function createFigureNodeSpec(nodeGroup: NodeGroup) {
+  const figure: MyNodeSpec<Attrs, Container> = {
+    group: nodeGroup.content,
+    content: nodeGroup.insideFigure,
+    isolating: true,
+    attrs: {
+      ...getNumberedDefaultAttrs(),
+      align: { default: 'center' },
+      multipage: { default: false },
+      landscape: { default: false },
+      fullpage: { default: false },
     },
-  ],
-  attrsFromMyst: (token) => {
-    const match = token.class?.match(/align-(left|right|center)/);
-    return {
-      id: token.identifier || null,
-      label: null, // This is deprecated
-      numbered: token.enumerated || false,
-      align: (match ? match[1] : 'center') as AlignOptions,
-      multipage: false,
-      landscape: false,
-      fullpage: false,
-    };
-  },
-  toMyst: (props, options) => {
-    let containerKind: 'figure' | 'table' = 'figure';
-    props.children?.forEach((child) => {
-      if (child.type === 'image' || child.type === 'table') {
-        child.align = props.align || undefined;
-      }
-      if (child.type === 'table') {
-        containerKind = 'table';
-      }
-    });
-    const localizedId = options.localizeId?.(props.id ?? '') ?? props.id ?? '';
-    return {
-      type: 'container',
-      kind: containerKind,
-      ...normalizeLabel(localizedId),
-      enumerated: readBooleanAttr(props.numbered),
-      class: props.align ? `align-${props.align}` : undefined,
-      children: (props.children || []) as (Caption | Legend | Image | Table)[],
-    };
-  },
-};
+    toDOM(node) {
+      const { align, multipage, landscape, fullpage } = node.attrs;
+      return [
+        'figure',
+        {
+          ...setNumberedAttrs(node.attrs),
+          align,
+          multipage,
+          landscape,
+          fullpage,
+        },
+        0,
+      ];
+    },
+    parseDOM: [
+      {
+        tag: 'figure',
+        getAttrs(dom) {
+          return {
+            ...getNumberedAttrs(dom),
+            align: dom.getAttribute('align') ?? 'center',
+            multipage: readBooleanDomAttr(dom, 'multipage'),
+            landscape: readBooleanDomAttr(dom, 'landscape'),
+            fullpage: readBooleanDomAttr(dom, 'fullpage'),
+          };
+        },
+      },
+    ],
+    attrsFromMyst: (token) => {
+      const match = token.class?.match(/align-(left|right|center)/);
+      return {
+        id: token.identifier || null,
+        label: null, // This is deprecated
+        numbered: token.enumerated || false,
+        align: (match ? match[1] : 'center') as AlignOptions,
+        multipage: false,
+        landscape: false,
+        fullpage: false,
+      };
+    },
+    toMyst: (props, options) => {
+      let containerKind: 'figure' | 'table' = 'figure';
+      props.children?.forEach((child) => {
+        if (child.type === 'image' || child.type === 'table') {
+          child.align = props.align || undefined;
+        }
+        if (child.type === 'table') {
+          containerKind = 'table';
+        }
+      });
+      const localizedId = options.localizeId?.(props.id ?? '') ?? props.id ?? '';
+      return {
+        type: 'container',
+        kind: containerKind,
+        ...normalizeLabel(localizedId),
+        enumerated: readBooleanAttr(props.numbered),
+        class: props.align ? `align-${props.align}` : undefined,
+        children: (props.children || []) as (Caption | Legend | Image | Table)[],
+      };
+    },
+  };
+  return figure;
+}
 
 export const toMarkdown: MdFormatSerialize = (state, node, parent, index) => {
   state.ensureNewLine();
@@ -254,5 +257,3 @@ export const toTex = createLatexStatement(
     state.containsTable = false;
   },
 );
-
-export default figure;

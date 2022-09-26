@@ -2,7 +2,11 @@ import { nodeNames } from '@curvenote/schema';
 import type { Command, Transaction } from 'prosemirror-state';
 import type { Schema } from 'prosemirror-model';
 import { NodeSelection } from 'prosemirror-state';
-import { findParentNode, findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import {
+  findParentNode,
+  findParentNodeOfType,
+  findParentNodeOfTypeClosestToPos,
+} from '@curvenote/prosemirror-utils';
 import { insertParagraphAndSelect } from '../../store/actions/utils';
 import type { AddKey } from './utils';
 
@@ -11,10 +15,18 @@ function selectInsideParent(tr: Transaction, pos: number) {
   return tr.setSelection(NodeSelection.create(tr.doc, pos - 1)).scrollIntoView();
 }
 
+// since we are just moving out of figurecaption not moving to the root of doc so we use diff depth between figure and figcaption
+const DEPTH_DIFF_BETWEEN_CAPTION_AND_FIGURE = 1;
 const handleEnter: Command = function handleEnter(state, dispatch) {
   const { $head } = state.selection;
   if ($head.parent.type.name === nodeNames.figure) {
-    dispatch?.(insertParagraphAndSelect(state.schema, state.tr, $head.end() + $head.depth));
+    dispatch?.(
+      insertParagraphAndSelect(
+        state.schema,
+        state.tr,
+        $head.end() + DEPTH_DIFF_BETWEEN_CAPTION_AND_FIGURE,
+      ),
+    );
     return true;
   }
   if ($head.parent.type.name !== nodeNames.figcaption) return false;
@@ -27,12 +39,24 @@ const handleEnter: Command = function handleEnter(state, dispatch) {
     dispatch?.(state.tr.deleteRange(from, to));
     return true;
   }
-  if (figure.pos + figure.node.nodeSize === $head.pos + $head.depth) {
-    dispatch?.(insertParagraphAndSelect(state.schema, state.tr, $head.end() + $head.depth));
+  if (figure.pos + figure.node.nodeSize === $head.pos + 1) {
+    dispatch?.(
+      insertParagraphAndSelect(
+        state.schema,
+        state.tr,
+        $head.end() + DEPTH_DIFF_BETWEEN_CAPTION_AND_FIGURE,
+      ),
+    );
     return true;
   }
   if (figure.start === $head.pos - 1) {
-    dispatch?.(insertParagraphAndSelect(state.schema, state.tr, $head.start() - $head.depth));
+    dispatch?.(
+      insertParagraphAndSelect(
+        state.schema,
+        state.tr,
+        $head.start() - DEPTH_DIFF_BETWEEN_CAPTION_AND_FIGURE,
+      ),
+    );
     return true;
   }
   dispatch?.(selectInsideParent(state.tr, $head.start()));
@@ -123,7 +147,7 @@ export function buildFigureKeymap(schema: Schema, bind: AddKey) {
     bind('Shift-Enter', handleEnter);
     bind('Mod-Enter', handleEnter);
     bind('Enter', handleEnter);
-    bind('Backspace', backspaceAfterFigure, backspaceInFigure);
-    bind('Delete', deleteBeforeFigure, deleteInFigure);
+    // bind('Backspace', backspaceAfterFigure, backspaceInFigure);
+    // bind('Delete', deleteBeforeFigure, deleteInFigure);
   }
 }

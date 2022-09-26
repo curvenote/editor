@@ -6,6 +6,7 @@ import * as nodes from '../../nodes';
 import type { MarkdownOptions, MdSerializerState } from '../types';
 import { cleanWhitespaceChars } from '../clean';
 import { toMdastSnippet } from '../mdast';
+import { nodeNames } from '../../types';
 
 type MarkdownSerializerParameters = ConstructorParameters<typeof MarkdownSerializer>;
 
@@ -18,6 +19,9 @@ function mdPostProcess(md: string): string {
 const mdNodes: MarkdownSerializerParameters[0] = {
   text(state, node) {
     state.text(cleanWhitespaceChars(node.text ?? ''));
+  },
+  [nodeNames.block](state, node) {
+    state.text('not supported!!');
   },
   paragraph(state, node) {
     state.renderInline(node);

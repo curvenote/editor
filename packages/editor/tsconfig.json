@@ -8,7 +8,6 @@
       "esnext"
     ],
     "outDir": "dist",
-    "baseUrl": "./src",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -35,6 +34,7 @@
     "demo/**/*"
   ],
   "exclude": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "dist"
   ]
 }

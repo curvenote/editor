@@ -1,15 +1,16 @@
-import { schemas, fromHTML } from '@curvenote/schema';
+import { schemas, fromHTML, nodeNames } from '@curvenote/schema';
 import type { Transaction } from 'prosemirror-state';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { getSelectedViewId } from '../store/selectors';
-import { store, opts } from '../connect';
+import { store as storeFromOpts, opts } from '../connect';
 import views from '../views';
 import { isEditable } from './plugins/editable';
 import { addLink } from '../store/actions/utils';
 import { getPlugins } from './plugins';
 import { uploadAndInsertImages } from './plugins/ImagePlaceholder';
 import { updateSelectView } from '../store/actions';
+import { createFootnoteViewFactory } from '../views/FootnoteView';
 
 export function createEditorState(
   useSchema: schemas.UseSchema,
@@ -17,9 +18,13 @@ export function createEditorState(
   content: string,
   version: number,
   startEditable: boolean,
+  { plugins: extraPlugins = opts.plugins }: { plugins?: any[] } = {},
 ) {
   const schema = schemas.getSchema(useSchema);
-  const plugins = getPlugins(useSchema, schema, stateKey, version, startEditable);
+  const plugins = [
+    ...getPlugins(useSchema, schema, stateKey, version, startEditable),
+    ...extraPlugins,
+  ];
   let state: EditorState;
   try {
     const data = JSON.parse(content);
@@ -31,6 +36,7 @@ export function createEditorState(
     const doc = fromHTML(content, schema, document, DOMParser);
     state = EditorState.create({ doc, plugins });
   }
+
   return state;
 }
 
@@ -38,6 +44,10 @@ export function createEditorView(
   dom: HTMLDivElement,
   state: EditorState,
   dispatch: (tr: Transaction) => void,
+  {
+    nodeViews: extraNodeViews = opts.nodeViews,
+    store = storeFromOpts,
+  }: { nodeViews?: any; store?: any } = {},
 ): EditorView {
   let shiftKey = false; // https://discuss.prosemirror.net/t/change-transformpasted-behaviour-when-shift-key-is-pressed/949/3
   const editorView = new EditorView(
@@ -49,11 +59,12 @@ export function createEditorView(
         math: views.MathView,
         equation: views.EquationView,
         code_block: views.CodeBlockView,
-        footnote: views.FootnoteView,
+        footnote: createFootnoteViewFactory(store),
         image: views.ImageView,
         iframe: views.IFrameView,
         link: views.LinkView,
         link_block: views.createLinkBlockView,
+        [nodeNames.block]: views.createTopBlockView,
         time: views.TimeView,
         mention: views.MentionView,
         button: views.newWidgetView,
@@ -62,7 +73,7 @@ export function createEditorView(
         range: views.newWidgetView,
         switch: views.newWidgetView,
         variable: views.newWidgetView,
-        ...opts.nodeViews,
+        ...extraNodeViews,
       },
       // This can be set in the middleware `tr.setMeta(editable, false)`
       editable: (s) => isEditable(s),
@@ -101,3 +112,5 @@ export function createEditorView(
   );
   return editorView;
 }
+
+export * from './utils';

@@ -1,8 +1,9 @@
-import type { NodeDef } from '../types';
-import { NodeGroups } from '../types';
+import type { NodeGroup } from '../types';
+import { LEGACY_NODE_GROUPS } from '../types';
 import type { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
 import type { Display } from '../../spec';
+import { buildDef } from '../utils';
 
 export type Attrs = {
   value?: string;
@@ -11,15 +12,16 @@ export type Attrs = {
   transformFunction?: string;
 };
 
-export const def: NodeDef = {
+const def = {
   tag: 'r-display',
   name: 'r:display',
   mystType: 'reactiveDisplay',
   attrs: [attr('value'), attr('format', false), attr('transform', 'only', '')],
   inline: true,
-  group: NodeGroups.inline,
 };
+export function createNodeSpec(nodeGroup: NodeGroup) {
+  return createSpec<Display>(buildDef(nodeGroup, def));
+}
 
-export const spec = createSpec<Display>(def);
-export const toMarkdown: MdFormatSerialize = (state, node) => nodeToMystRole(state, node, def);
-export default spec;
+export const toMarkdown: MdFormatSerialize = (state, node) =>
+  nodeToMystRole(state, node, buildDef(LEGACY_NODE_GROUPS, def));

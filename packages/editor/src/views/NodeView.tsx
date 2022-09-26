@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Node } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
+import type { Node } from 'prosemirror-model';
+import type { EditorView } from 'prosemirror-view';
 import { ThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { opts, ref } from '../connect';
-import { GetPos, NodeViewProps } from './types';
+import type { GetPos, NodeViewProps } from './types';
 
 export type Options = {
   wrapper: 'span' | 'div';
   className?: string;
   enableSelectionHighlight?: boolean;
+  containsChildren?: boolean;
 };
 
 export type ClassWrapperProps = {
@@ -55,6 +56,8 @@ class ClassWrapper extends Component<ClassWrapperProps, ClassWrapperState> {
 export class ReactWrapper {
   dom: HTMLElement;
 
+  contentDOM?: HTMLElement | null;
+
   node: Node;
 
   view: EditorView;
@@ -76,8 +79,12 @@ export class ReactWrapper {
     this.getPos = getPos;
     this.isSelectionHighlightEnabled = !!options.enableSelectionHighlight;
     this.dom = document.createElement(options.wrapper);
+    if (options.containsChildren) {
+      this.contentDOM = this.dom;
+    }
     if (options.className) this.dom.classList.add(options.className);
 
+    console.log('this', this);
     render(
       <ThemeProvider theme={opts.theme}>
         <Provider store={ref.store()}>
@@ -128,7 +135,7 @@ export class ReactWrapper {
 
 function createNodeView(
   Editor: React.FunctionComponent<NodeViewProps>,
-  options: Options = { wrapper: 'div' },
+  options: Options = { wrapper: 'div', containsChildren: false },
 ) {
   return (node: Node, view: EditorView, getPos: boolean | GetPos) =>
     new ReactWrapper(Editor, { node, view, getPos: getPos as GetPos }, options);

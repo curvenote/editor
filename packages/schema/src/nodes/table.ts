@@ -4,67 +4,68 @@ import { Fragment } from 'prosemirror-model';
 import type { PhrasingContent, Table, TableCell, TableRow } from '../spec';
 import type { MdFormatSerialize, TexFormatSerialize, TexSerializerState } from '../types';
 import { nodeNames } from '../types';
-import type { Props } from './types';
-import { NodeGroups } from './types';
+import type { NodeGroup, Props } from './types';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import { indent } from '../serialize/indent';
 import { writeMdastSnippet, getColumnWidths, hasFancyTable, renderPColumn } from './utils';
 
-export const nodes = tableNodes({
-  tableGroup: NodeGroups.top,
-  cellContent: NodeGroups.blockOrEquation,
-  cellAttributes: {
-    background: {
-      default: null,
-      getFromDOM(dom: any) {
-        return dom.style.backgroundColor || null;
-      },
-      setDOMAttr(value: any, attrs: any) {
-        // eslint-disable-next-line prefer-template
-        if (value) attrs.style = (attrs.style || '') + `background-color: ${value};`;
+export function createTableNodeSpec(nodeGroup: NodeGroup) {
+  const nodes = tableNodes({
+    tableGroup: nodeGroup.top,
+    cellContent: nodeGroup.blockOrEquation,
+    cellAttributes: {
+      background: {
+        default: null,
+        getFromDOM(dom: any) {
+          return dom.style.backgroundColor || null;
+        },
+        setDOMAttr(value: any, attrs: any) {
+          // eslint-disable-next-line prefer-template
+          if (value) attrs.style = (attrs.style || '') + `background-color: ${value};`;
+        },
       },
     },
-  },
-});
+  });
+  nodes.table.attrsFromMyst = () => ({});
+  nodes.table.toMyst = (props: Props): Table => {
+    if (props.children?.length === 1 && props.children[0].type === 'table') {
+      return props.children[0] as Table;
+    }
+    return { type: 'table', align: undefined, children: (props.children || []) as TableRow[] };
+  };
 
-nodes.table.attrsFromMyst = () => ({});
-nodes.table.toMyst = (props: Props): Table => {
-  if (props.children?.length === 1 && props.children[0].type === 'table') {
-    return props.children[0] as Table;
+  nodes.table_row.attrsFromMyst = () => ({});
+  nodes.table_row.toMyst = (props: Props): TableRow => ({
+    type: 'tableRow',
+    children: (props.children || []) as TableCell[],
+  });
+
+  function ifGreaterThanOne(num?: number): undefined | number {
+    if (!num) return undefined;
+    return num === 1 ? undefined : num;
   }
-  return { type: 'table', align: undefined, children: (props.children || []) as TableRow[] };
-};
 
-nodes.table_row.attrsFromMyst = () => ({});
-nodes.table_row.toMyst = (props: Props): TableRow => ({
-  type: 'tableRow',
-  children: (props.children || []) as TableCell[],
-});
+  nodes.table_header.attrsFromMyst = () => ({});
+  nodes.table_header.toMyst = (props: Props): TableCell => ({
+    type: 'tableCell',
+    header: true,
+    align: props.align || undefined,
+    colspan: ifGreaterThanOne(props.colspan),
+    rowspan: ifGreaterThanOne(props.rowspan),
+    children: (props.children || []) as PhrasingContent[],
+  });
 
-function ifGreaterThanOne(num?: number): undefined | number {
-  if (!num) return undefined;
-  return num === 1 ? undefined : num;
+  nodes.table_cell.attrsFromMyst = () => ({});
+  nodes.table_cell.toMyst = (props: Props): TableCell => ({
+    type: 'tableCell',
+    header: undefined,
+    align: props.align || undefined,
+    colspan: ifGreaterThanOne(props.colspan),
+    rowspan: ifGreaterThanOne(props.rowspan),
+    children: (props.children || []) as PhrasingContent[],
+  });
+  return nodes;
 }
-
-nodes.table_header.attrsFromMyst = () => ({});
-nodes.table_header.toMyst = (props: Props): TableCell => ({
-  type: 'tableCell',
-  header: true,
-  align: props.align || undefined,
-  colspan: ifGreaterThanOne(props.colspan),
-  rowspan: ifGreaterThanOne(props.rowspan),
-  children: (props.children || []) as PhrasingContent[],
-});
-
-nodes.table_cell.attrsFromMyst = () => ({});
-nodes.table_cell.toMyst = (props: Props): TableCell => ({
-  type: 'tableCell',
-  header: undefined,
-  align: props.align || undefined,
-  colspan: ifGreaterThanOne(props.colspan),
-  rowspan: ifGreaterThanOne(props.rowspan),
-  children: (props.children || []) as PhrasingContent[],
-});
 
 /**
  * Create a "row" using a list-table

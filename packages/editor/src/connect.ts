@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import type { Theme } from '@material-ui/core';
 import * as sidenotes from 'sidenotes';
-import type { EditorState, Transaction } from 'prosemirror-state';
+import type { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import type { Node, Schema, Slice } from 'prosemirror-model';
 import { Fragment } from 'prosemirror-model';
 import type { EditorView, DirectEditorProps } from 'prosemirror-view';
@@ -19,6 +19,7 @@ export type UploadImageState = string;
 
 export type Options = {
   transformKeyToId: (key: any) => string | null;
+  plugins?: Plugin[];
   handlePaste?: (view: EditorView, event: ClipboardEvent, slice: Slice) => boolean;
   uploadImage: (file: File, node: Node | null) => Promise<UploadImageState | null>;
   modifyTransaction?: (
@@ -55,7 +56,9 @@ type Ref<T> = {
 
 export const ref: Ref<Store> = {
   store() {
-    if (ref._store === undefined) throw new Error('Must init store.');
+    if (ref._store === undefined) {
+      throw new Error('Must init store.');
+    }
     return ref._store;
   },
   opts() {
@@ -128,5 +131,8 @@ export const opts: Required<Options> = {
   },
   get nodeViews() {
     return ref.opts().nodeViews ?? {};
+  },
+  get plugins() {
+    return ref.opts().plugins ?? [];
   },
 };

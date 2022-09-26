@@ -5,23 +5,14 @@ import { Button, createTheme } from '@material-ui/core';
 import { toHTML, toMarkdown, toTex, ReferenceKind, process, toText } from '@curvenote/schema';
 import { Sidenote, AnchorBase } from 'sidenotes';
 import { Fragment } from 'prosemirror-model';
-import {
-  actions,
-  Editor,
-  EditorMenu,
-  Store,
-  setup,
-  Suggestions,
-  Attributes,
-  InlineActions,
-  LinkResult,
-} from '../src';
+import type { Store, LinkResult } from '../src';
+import { actions, Editor, EditorMenu, setup, Suggestions, Attributes, InlineActions } from '../src';
 import rootReducer from './reducers';
 import middleware from './middleware';
 import 'codemirror/lib/codemirror.css';
 import '../styles/index.scss';
 import 'sidenotes/dist/sidenotes.css';
-import { Options } from '../src/connect';
+import type { Options } from '../src/connect';
 import SuggestionSwitch from '../src/components/Suggestion/Switch';
 import InlineActionSwitch from '../src/components/InlineActions/Switch';
 
@@ -142,15 +133,15 @@ export function DemoEditor({ content, store = createStore() }: { content: string
       }
       // Update the counter
       const counts = process.countState(editor.state);
-      const words = process.countWords(editor.state);
+      // const words = process.countWords(editor.state);
       const updates = {
         'count-sec': `${counts.sec.all.length} (${counts.sec.total})`,
         'count-fig': `${counts.fig.all.length} (${counts.fig.total})`,
         'count-eq': `${counts.eq.all.length} (${counts.eq.total})`,
         'count-code': `${counts.code.all.length} (${counts.code.total})`,
         'count-table': `${counts.table.all.length} (${counts.table.total})`,
-        'count-words': `${words.words}`,
-        'count-char': `${words.characters_including_spaces}  (${words.characters_excluding_spaces})`,
+        // 'count-words': `${words.words}`,
+        // 'count-char': `${words.characters_including_spaces}  (${words.characters_excluding_spaces})`,
       };
       Object.entries(updates).forEach(([key, count]) => {
         const el = document.getElementById(key);

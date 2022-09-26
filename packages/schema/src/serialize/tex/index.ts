@@ -90,6 +90,9 @@ export const texSerializer = new MarkdownSerializer(
     },
     image: nodes.Image.toTex,
     figure: nodes.Figure.toTex,
+    [nodeNames.block](state, node) {
+      state.text('not supported!!');
+    },
     figcaption: nodes.Figcaption.toTex,
     footnote: nodes.Footnote.toTex,
     iframe: blankTexLines,

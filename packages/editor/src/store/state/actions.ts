@@ -5,6 +5,7 @@ import type { schemas } from '@curvenote/schema';
 import { process } from '@curvenote/schema';
 import type { EditorActionTypes } from './types';
 import {
+  REGISTER_EDITOR_STATE,
   UPDATE_EDITOR_STATE,
   INIT_EDITOR_STATE,
   SUBSCRIBE_EDITOR_VIEW,
@@ -19,6 +20,18 @@ import { opts } from '../../connect';
 import type { LinkType } from '../../components/types';
 import { getLinkBoundsIfTheyExist } from '../actions/utils';
 
+export function registerEditorState(stateKey: any, state: EditorState): EditorActionTypes {
+  const stateId = opts.transformKeyToId(stateKey);
+  if (stateId == null) throw new Error('Must have a state ID');
+  return {
+    type: REGISTER_EDITOR_STATE,
+    payload: {
+      stateKey,
+      stateId,
+      state,
+    },
+  };
+}
 export function initEditorState(
   useSchema: schemas.UseSchema,
   stateKey: any,

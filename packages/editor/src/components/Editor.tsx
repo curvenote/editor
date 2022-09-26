@@ -1,20 +1,22 @@
 import React, { useEffect, useRef } from 'react';
-import { EditorView } from 'prosemirror-view';
+import type { EditorView } from 'prosemirror-view';
 import { useDispatch, useSelector } from 'react-redux';
-import { EditorState, Transaction } from 'prosemirror-state';
+import type { EditorState, Transaction } from 'prosemirror-state';
 import { opts } from '../connect';
 import { createEditorView } from '../prosemirror';
-import { Dispatch, State, actions, selectors } from '../store';
+import type { Dispatch, State } from '../store';
+import { actions, selectors } from '../store';
 
 type Props = {
   stateKey: any;
   viewId: string;
   className?: string;
   autoUnsubscribe?: boolean;
+  store?: any;
 };
 
 const Editor = (props: Props) => {
-  const { stateKey, viewId, className, autoUnsubscribe } = props;
+  const { stateKey, viewId, className, autoUnsubscribe, store } = props;
 
   const dispatch = useDispatch<Dispatch>();
 
@@ -38,6 +40,7 @@ const Editor = (props: Props) => {
       // Immidiately update the view.
       // This is important for properly handling selections.
       // Cannot use react event loop here.
+
       editorView.current?.updateState(next);
     });
     editorView.current.dom.id = viewId;
