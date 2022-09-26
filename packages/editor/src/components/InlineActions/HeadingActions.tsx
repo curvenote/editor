@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { makeStyles, createStyles, Grid, Menu } from '@material-ui/core';
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { nodeNames } from '@curvenote/schema';
 import { findParentNode } from '@curvenote/prosemirror-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '../Menu/Icon';
 import { updateNodeAttrs, wrapInHeading } from '../../store/actions';
 import { getEditorState } from '../../store/selectors';
-import { Dispatch, State } from '../../store';
-import { ActionProps } from './utils';
+import type { Dispatch, State } from '../../store';
+import type { ActionProps } from './utils';
 import MenuAction from '../Menu/Action';
 import Keyboard from '../Keyboard';
 import { getNodeFromSelection } from '../../store/ui/utils';
