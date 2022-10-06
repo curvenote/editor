@@ -172,17 +172,17 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
             return closeAutocomplete(view);
           case ActionKind.enter: {
             // Only trigger the cancel if it is not expliticly handled in the select
-            const result = reducer({ ...action, kind: ActionKind.enter });
+            const result = reducer({ ...action, kind: ActionKind.enter, event });
             if (result === KEEP_OPEN) return true;
             return result || closeAutocomplete(view);
           }
           case ActionKind.up:
           case ActionKind.down:
-            return Boolean(reducer({ ...action, kind }));
+            return Boolean(reducer({ ...action, kind, event }));
           case ActionKind.left:
           case ActionKind.right:
             if (!type?.allArrowKeys) return false;
-            return Boolean(reducer({ ...action, kind }));
+            return Boolean(reducer({ ...action, kind, event }));
           default:
             break;
         }
