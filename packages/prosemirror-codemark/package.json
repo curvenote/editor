@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
-    "@types/prosemirror-schema-basic": "^1.0.2",
     "copyfiles": "^2.4.1",
     "css-loader": "^6.7.1",
     "eslint": "^8.21.0",
