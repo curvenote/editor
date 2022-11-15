@@ -164,6 +164,7 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
           filter,
           range: { from, to },
           type,
+          event,
         };
         switch (kind) {
           case ActionKind.close:
