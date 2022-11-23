@@ -41,6 +41,7 @@ export type AutocompleteAction = {
   filter?: string;
   range: FromTo;
   type: Trigger | null;
+  event?: KeyboardEvent;
 };
 
 export interface OpenAutocomplete {
