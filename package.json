@@ -1,16 +1,13 @@
 {
-  "name": "@curvenote/monorepo-editor",
-  "version": "0.0.0",
   "private": true,
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
   "scripts": {
     "build": "turbo run build",
     "build:cypress": "turbo run build --filter schema --filter prosemirror* --filter prosemirror-utils --filter sidenotes --filter emoji",
-    "dev": "turbo run dev --parallel",
-    "start": "turbo run start --parallel",
+    "start": "turbo run start",
+    "start:editor": "turbo run start --filter editor",
     "clean": "turbo run clean --parallel && find . -name '.turbo' -type d -prune -exec rm -rf '{}' +",
     "lint": "turbo run lint",
     "lint:format": "turbo run lint:format",
