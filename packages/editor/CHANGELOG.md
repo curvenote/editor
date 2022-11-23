@@ -1,5 +1,17 @@
 # @curvenote/editor
 
+## 0.17.6
+
+### Patch Changes
+
+- Updated dependencies [d8dd567]
+- Updated dependencies [ec9683b]
+- Updated dependencies [ed1b67b]
+  - prosemirror-autocomplete@0.4.3
+  - prosemirror-codemark@0.4.2
+  - @curvenote/prosemirror-utils@1.0.5
+  - @curvenote/schema@0.12.18
+
 ## 0.17.5
 
 ### Patch Changes

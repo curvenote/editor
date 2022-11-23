@@ -1,5 +1,11 @@
 ## 1.0.1 (2022-06-27)
 
+## 1.0.5
+
+### Patch Changes
+
+- d8dd567: Update READMEs after monorepo changes
+
 ## 1.0.4
 
 ### Patch Changes
