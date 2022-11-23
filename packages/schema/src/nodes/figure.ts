@@ -154,7 +154,8 @@ export const toMarkdown: MdFormatSerialize = (state, node, parent, index) => {
       return;
     }
     default:
-      throw new Error(`Unknown figure kind: "${kind}"`);
+      console.log(`Unknown figure kind: "${kind}", id=${id}, children=${node.childCount}`);
+      return;
   }
 };
 
