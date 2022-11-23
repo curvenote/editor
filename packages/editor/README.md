@@ -40,7 +40,7 @@ We think this is for two reasons:
 - Reactivity powered by `@curvenote/components` and `@curvenote/runtime`, which are [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
 - Real-time collaboration is possible through middleware integrations. See [prosemirror-collab](https://github.com/ProseMirror/prosemirror-collab).
   - We will (eventually) improve support for cursors and highlights. See Roadmap.
-- See [demo/index.tsx](/demo/index.tsx) for an example setup.
+- See [demo/index.tsx](/packages/editor/demo/index.tsx) for an example setup.
 
 ## Getting Started
 
@@ -51,4 +51,4 @@ npm install
 npm run start
 ```
 
-See the [demo folder](/demo/index.tsx) from more details on how to get started.
+See the [demo folder](/packages/editor/demo/index.tsx) from more details on how to get started.
