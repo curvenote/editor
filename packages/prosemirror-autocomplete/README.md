@@ -109,7 +109,7 @@ Provide the trigger in the matched group and anything before in a non-capture gr
 
 ## Defining a Reducer
 
-The library does not provide a user interface beyond the [demo code](./demo/index.ts), you will have to do that when you get an action from the autocomplete plugin. You can _either_ use the handlers `onOpen`, `onArrow`, `onFilter`, `onEnter`, and `onClose` _or_ you can define a single reducer that will take over these responsibilities. Note: you cannot use handlers and a reducer.
+The library does not provide a user interface beyond the [demo code](./demo/index.ts), you will have to do that when you get an action from the autocomplete plugin. You can _either_ use the handlers `onOpen`, `onArrow`, `onFilter`, `onEnter`, and `onClose` _or_ you can define a single reducer that will take over these responsibilities. Note: you cannot use handlers and a reducer. You can also access the original keyboard event on the action, as `action.event`. If the action was not created by a keyboard event, that property will not be available.
 
 ```ts
 import { AutocompleteAction, KEEP_OPEN } from 'prosemirror-autocomplete';
