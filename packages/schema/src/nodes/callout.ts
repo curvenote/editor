@@ -1,4 +1,4 @@
-import type { Admonition, FlowContent } from '../spec';
+import type { Admonition, FlowContent } from '../nodespec';
 import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MyNodeSpec } from './types';

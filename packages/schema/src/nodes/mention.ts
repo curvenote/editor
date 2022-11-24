@@ -1,7 +1,7 @@
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import type { Mention } from '../spec';
+import type { Mention } from '../nodespec';
 
 export interface Attrs {
   label: string;

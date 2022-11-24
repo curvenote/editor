@@ -1,7 +1,7 @@
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import type { StaticPhrasingContent, LinkBlock } from '../spec';
+import type { StaticPhrasingContent, LinkBlock } from '../nodespec';
 
 export interface Attrs {
   title: string;

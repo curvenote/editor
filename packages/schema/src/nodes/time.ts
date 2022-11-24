@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import type { Time } from '../spec';
+import type { Time } from '../nodespec';
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';
 

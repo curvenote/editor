@@ -1,6 +1,6 @@
 import type { GenericNode } from 'mystjs';
 import type { NodeSpec, AttributeSpec, ParseRule } from 'prosemirror-model';
-import type { MystNode } from '../spec';
+import type { MystNode } from '../nodespec';
 import type { MdastOptions } from '../serialize/types';
 
 export enum CaptionKind {

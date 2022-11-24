@@ -1,4 +1,4 @@
-import type { Heading, PhrasingContent } from '../spec';
+import type { Heading, PhrasingContent } from '../nodespec';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { MyNodeSpec, NumberedNode } from './types';
 import { NodeGroups } from './types';

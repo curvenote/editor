@@ -1,6 +1,6 @@
 export * as schemas from './schemas';
 export * as Nodes from './nodes';
-export * as spec from './spec';
+export * as spec from './nodespec';
 export * as types from './types';
 export * from './utils';
 

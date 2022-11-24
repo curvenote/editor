@@ -1,7 +1,7 @@
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import { writeDirectiveOptions } from '../serialize/markdown/utils';
 import type { MdFormatSerialize } from '../serialize/types';
-import type { Iframe } from '../spec';
+import type { Iframe } from '../nodespec';
 import type { MyNodeSpec, AlignOptions } from './types';
 import { NodeGroups } from './types';
 import { getImageWidth } from './utils';

@@ -1,4 +1,4 @@
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { TexFormatTypes } from '../src/serialize/types';
 import { tnodes, tdoc } from './build';
 import { toTex } from '../src';

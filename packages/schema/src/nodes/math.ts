@@ -1,4 +1,4 @@
-import type { InlineMath } from '../spec';
+import type { InlineMath } from '../nodespec';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';

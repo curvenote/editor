@@ -1,6 +1,6 @@
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import type { Margin, FlowContent } from '../spec';
+import type { Margin, FlowContent } from '../nodespec';
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';
 

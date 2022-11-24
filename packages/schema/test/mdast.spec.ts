@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { Root } from '../src/spec';
+import type { Root } from '../src/nodespec';
 import { fromJSON, fromMdast, toMdast, toYAML } from '../src';
 import { transformNumericalFootnotes } from '../src/serialize/mdast/convertToMdast';
 

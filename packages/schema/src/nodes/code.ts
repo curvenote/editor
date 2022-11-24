@@ -1,4 +1,4 @@
-import type { Code } from '../spec';
+import type { Code } from '../nodespec';
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MdFormatSerialize } from '../serialize/types';
 import type { NumberedNode, MyNodeSpec } from './types';

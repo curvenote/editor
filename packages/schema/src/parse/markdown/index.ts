@@ -1,5 +1,5 @@
 import { MyST } from 'mystjs';
-import type { Root } from '../../spec';
+import type { Root } from '../../nodespec';
 import { fromMdast } from '../mdast';
 import type { UseSchema } from '../../schemas';
 

@@ -13,7 +13,7 @@ import type {
   Paragraph,
   PhrasingContent,
   ThematicBreak,
-} from '../spec';
+} from '../nodespec';
 import type { MyNodeSpec, Props } from './types';
 import { NodeGroups } from './types';
 import { nodeNames } from '../types';

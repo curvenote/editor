@@ -1,5 +1,5 @@
 import type { Node } from 'prosemirror-model';
-import type { Caption, Container, Image, Legend, Table } from '../spec';
+import type { Caption, Container, Image, Legend, Table } from '../nodespec';
 import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { AlignOptions, MyNodeSpec, NumberedNode } from './types';

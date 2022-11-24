@@ -1,7 +1,7 @@
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';
-import type { Cite, CiteGroup } from '../spec';
+import type { Cite, CiteGroup } from '../nodespec';
 
 export type Attrs = Record<string, never>;
 

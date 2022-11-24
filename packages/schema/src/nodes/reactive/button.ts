@@ -2,7 +2,7 @@ import type { NodeDef } from '../types';
 import { NodeGroups } from '../types';
 import type { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, nodeToMystRole, createSpec } from './utils';
-import type { Button } from '../../spec';
+import type { Button } from '../../nodespec';
 
 export type Attrs = {
   label?: string;

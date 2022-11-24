@@ -13,7 +13,7 @@ import type {
   Superscript,
   Underline,
   Strikethrough,
-} from './spec';
+} from './nodespec';
 import type { Props } from './nodes/types';
 import { MarkGroups } from './nodes/types';
 import type { MdastOptions } from './serialize/types';

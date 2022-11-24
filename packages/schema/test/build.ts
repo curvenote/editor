@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Node as ProsemirrorNode, Schema } from 'prosemirror-model';
+import type { Node as ProsemirrorNode } from 'prosemirror-model';
+import { Schema } from 'prosemirror-model';
 import { builders } from 'prosemirror-test-builder';
 import * as src from '../src';
 

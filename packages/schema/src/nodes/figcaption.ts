@@ -1,5 +1,5 @@
 import type { GenericNode } from 'mystjs';
-import type { Caption, FlowContent } from '../spec';
+import type { Caption, FlowContent } from '../nodespec';
 import type { MdFormatSerialize } from '../serialize/types';
 import { createLatexStatement } from '../serialize/tex/utils';
 import type { MyNodeSpec } from './types';

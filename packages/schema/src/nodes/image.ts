@@ -1,4 +1,4 @@
-import type { Image } from '../spec';
+import type { Image } from '../nodespec';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import type { NumberedNode, MyNodeSpec, AlignOptions } from './types';
 import { NodeGroups } from './types';

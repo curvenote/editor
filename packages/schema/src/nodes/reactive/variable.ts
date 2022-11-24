@@ -2,7 +2,7 @@ import type { NodeDef } from '../types';
 import { NodeGroups } from '../types';
 import type { MdFormatSerialize } from '../../serialize/types';
 import { createAttr as attr, createSpec, DEFAULT_FORMAT, nodeToMystDirective } from './utils';
-import type { Variable } from '../../spec';
+import type { Variable } from '../../nodespec';
 
 export type Attrs = {
   name: string;

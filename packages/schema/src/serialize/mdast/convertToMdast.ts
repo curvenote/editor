@@ -9,7 +9,7 @@ import type {
   Text as MystText,
   FlowContent,
   InlineFootnote,
-} from '../../spec';
+} from '../../nodespec';
 import type { Fragment, Text } from './document';
 import { createDocument, Node } from './document';
 import { markNames, nodeNames } from '../../types';

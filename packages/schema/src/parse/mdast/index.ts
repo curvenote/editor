@@ -8,7 +8,7 @@ import type {
   FootnoteReference,
   Root,
   InlineFootnote,
-} from '../../spec';
+} from '../../nodespec';
 import type { UseSchema } from '../../schemas';
 import { getSchema } from '../../schemas';
 import { markNames, nodeNames } from '../../types';

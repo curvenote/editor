@@ -1,10 +1,10 @@
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import YAML from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
 import { TexFormatTypes } from '../src/serialize/types';
 import { tnodes, tdoc } from './build';
-import { toTex } from '../src';
+import { toTex } from '../src/serialize/tex';
 
 const { p, figureF, figureT, img, figcaptionF, figcaptionT, table, table_row, table_cell } = tnodes;
 

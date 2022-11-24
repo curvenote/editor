@@ -1,6 +1,6 @@
 import type { MyNodeSpec, NumberedNode } from './types';
 import { NodeGroups } from './types';
-import type { Math } from '../spec';
+import type { Math } from '../nodespec';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import {
   getAttr,

@@ -1,7 +1,7 @@
 import { tableNodes } from 'prosemirror-tables';
 import type { Node } from 'prosemirror-model';
 import { Fragment } from 'prosemirror-model';
-import type { PhrasingContent, Table, TableCell, TableRow } from '../spec';
+import type { PhrasingContent, Table, TableCell, TableRow } from '../nodespec';
 import type { MdFormatSerialize, TexFormatSerialize, TexSerializerState } from '../types';
 import { nodeNames } from '../types';
 import type { Props } from './types';

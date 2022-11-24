@@ -1,4 +1,4 @@
-import type { FlowContent, InlineFootnote, NoAttrs } from '../spec';
+import type { FlowContent, InlineFootnote, NoAttrs } from '../nodespec';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
 import type { MyNodeSpec, Props } from './types';
 import { NodeGroups } from './types';
