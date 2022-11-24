@@ -26,7 +26,7 @@
   "homepage": "https://github.com/curvenote/editor/tree/main/packages/prosemirror-autocomplete",
   "scripts": {
     "clean": "rimraf dist",
-    "build:cjs": "tsc --project ./src/tsconfig.json",
+    "build:cjs": "tsc --project ./src/tsconfig.json --module commonjs --outDir ./dist/cjs",
     "build:esm": "tsc --project ./src/tsconfig.json --module ES2020 --outDir ./dist/esm",
     "declarations": "tsc  --project ./src/tsconfig.json --declaration --emitDeclarationOnly --outDir dist/types",
     "build": "npm-run-all -l clean -p build:cjs build:esm declarations",
