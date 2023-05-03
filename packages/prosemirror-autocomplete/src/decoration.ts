@@ -143,7 +143,6 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
         const checkCancelOnSpace = type?.cancelOnFirstSpace ?? true;
         if (
           checkCancelOnSpace &&
-          filter.length === 0 &&
           (event.key === ' ' || event.key === 'Spacebar')
         ) {
           closeAutocomplete(view);
