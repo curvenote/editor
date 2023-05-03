@@ -60,11 +60,11 @@ export type AutocompleteTrMeta = OpenAutocomplete | CloseAutocomplete;
 export type Trigger = {
   name: string;
   trigger: string | RegExp;
-  /** When `true`, a space anywhere in the filter cancels autocompletion.
-   * Overrides `cancelOnFirstSpace`.  (default: `false`) */
+  /** When `true`, a space anywhere in the filter cancels autocompletion, and
+   * the value of `cancelOnFirstSpace` is ignored.  (default: `false`) */
   cancelOnSpace?: boolean;
   /** When `true`, a space in the initial position of the filter cancels
-   * autocompletion.  (default: `true`) */
+   * autocompletion, while spaces elsewhere are allowed.  (default: `true`) */
   cancelOnFirstSpace?: boolean;
   allArrowKeys?: boolean; // Default is false
   decorationAttrs?: DecorationAttrs;
