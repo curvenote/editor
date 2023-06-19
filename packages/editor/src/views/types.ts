@@ -62,4 +62,4 @@ export const SUPPORTED_LANGUAGES = [
   { name: LanguageNames.Rust, label: 'Rust' },
 ];
 
-export type GetPos = () => number;
+export type GetPos = () => number | undefined;

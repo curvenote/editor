@@ -159,7 +159,7 @@ class MathOrEquationView {
 
     if (!tr.getMeta('fromOutside')) {
       const outerTr = this.outerView.state.tr;
-      const offsetMap = StepMap.offset(this.getPos() + 1);
+      const offsetMap = StepMap.offset((this.getPos() ?? 0) + 1);
       for (let i = 0; i < transactions.length; i += 1) {
         const { steps } = transactions[i];
         for (let j = 0; j < steps.length; j += 1) outerTr.step(steps[j].map(offsetMap) as any);

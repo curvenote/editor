@@ -1,15 +1,15 @@
 import { nodeNames } from '@curvenote/schema';
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { NodeSelection, TextSelection } from 'prosemirror-state';
 import { findParentNode } from '@curvenote/prosemirror-utils';
-import { EditorView } from 'prosemirror-view';
+import type { EditorView } from 'prosemirror-view';
 import { isEditable } from '../prosemirror/plugins/editable';
-import { GetPos } from './types';
+import type { GetPos } from './types';
 
 export function clickSelectFigure(view: EditorView, getPos: GetPos) {
   if (!isEditable(view.state)) return;
   const figure = findParentNode((n: Node) => n.type.name === nodeNames.figure)(
-    TextSelection.create(view.state.doc, getPos()),
+    TextSelection.create(view.state.doc, getPos() ?? 0),
   );
   if (!figure) return;
   view.dispatch(view.state.tr.setSelection(NodeSelection.create(view.state.doc, figure.pos)));
