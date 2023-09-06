@@ -1,4 +1,4 @@
-import type { GenericNode } from 'mystjs';
+import type { GenericNode } from 'myst-common';
 import type { Node } from 'prosemirror-model';
 import { DEFAULT_IMAGE_WIDTH } from '../defaults';
 import type { MdSerializerState } from '../types';
