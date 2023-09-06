@@ -1,14 +1,15 @@
-import { Node } from 'prosemirror-model';
+import type { Node } from 'prosemirror-model';
 import { StepMap } from 'prosemirror-transform';
 import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
-import { Transaction, EditorState, TextSelection } from 'prosemirror-state';
+import type { Transaction } from 'prosemirror-state';
+import { EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { chainCommands, deleteSelection, newlineInCode } from 'prosemirror-commands';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { getInlinePlugins } from '../prosemirror/plugins';
 import { MathView } from './MathView';
-import { GetPos } from './types';
+import type { GetPos } from './types';
 
 class FootnoteNodeView {
   // The node's representation in the editor (empty, for now)
@@ -133,7 +134,7 @@ class FootnoteNodeView {
 
     if (!tr.getMeta('fromOutside')) {
       const outerTr = this.outerView.state.tr;
-      const offsetMap = StepMap.offset(this.getPos() + 1);
+      const offsetMap = StepMap.offset((this.getPos() ?? 0) + 1);
       for (let i = 0; i < transactions.length; i += 1) {
         const { steps } = transactions[i];
         for (let j = 0; j < steps.length; j += 1) outerTr.step(steps[j].map(offsetMap) as any);

@@ -3,8 +3,8 @@
  */
 
 import CodeMirror from 'codemirror';
-import { EditorView, NodeView } from 'prosemirror-view';
-import { Node } from 'prosemirror-model';
+import type { EditorView, NodeView } from 'prosemirror-view';
+import type { Node } from 'prosemirror-model';
 import { undo, redo } from 'prosemirror-history';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/javascript/javascript';
@@ -21,10 +21,12 @@ import 'codemirror/mode/sql/sql';
 import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/go/go';
-import { EditorState, Selection, TextSelection, Transaction } from 'prosemirror-state';
+import type { EditorState, Transaction } from 'prosemirror-state';
+import { Selection, TextSelection } from 'prosemirror-state';
 import { findParentNode } from '@curvenote/prosemirror-utils';
 import { nodeNames } from '@curvenote/schema';
-import { GetPos, LanguageNames, SUPPORTED_LANGUAGES } from './types';
+import type { GetPos } from './types';
+import { LanguageNames, SUPPORTED_LANGUAGES } from './types';
 import { isEditable } from '../prosemirror/plugins/editable';
 import { focusEditorView, insertParagraphAndSelect } from '../store/actions';
 import { store } from '../connect';
@@ -150,7 +152,7 @@ class CodeBlockNodeView implements NodeView {
   }
 
   asProseMirrorSelection(doc: any) {
-    const offset = this.getPos() + 1;
+    const offset = (this.getPos() ?? 0) + 1;
     const anchor = this.cm.indexFromPos(this.cm.getCursor('anchor')) + offset;
     const head = this.cm.indexFromPos(this.cm.getCursor('head')) + offset;
     return TextSelection.create(doc, anchor, head);
@@ -166,7 +168,7 @@ class CodeBlockNodeView implements NodeView {
   valueChanged() {
     const change = computeChange(this.node.textContent, this.cm.getValue());
     if (change) {
-      const start = this.getPos() + 1;
+      const start = (this.getPos() ?? 0) + 1;
       const tr = this.view.state.tr.replaceWith(
         start + change.from,
         start + change.to,
@@ -191,7 +193,7 @@ class CodeBlockNodeView implements NodeView {
       Backspace: () => {
         if (this.node.textContent.length > 0) return CodeMirror.Pass;
         // When you hit backspace in an empty codeblock, create a paragraph and select the text inside of it
-        const pos = this.getPos();
+        const pos = this.getPos() ?? 0;
         const { schema } = view.state;
         const paragraph = schema.nodes.paragraph.create();
         const tr = view.state.tr.delete(pos, pos + this.node.nodeSize).insert(pos, paragraph);
@@ -227,7 +229,7 @@ class CodeBlockNodeView implements NodeView {
     )
       return CodeMirror.Pass;
     this.view.focus();
-    const targetPos = this.getPos() + (dir < 0 ? 0 : this.node.nodeSize);
+    const targetPos = (this.getPos() ?? 0) + (dir < 0 ? 0 : this.node.nodeSize);
     const selection = Selection.near(this.view.state.doc.resolve(targetPos), dir);
     this.view.dispatch(this.view.state.tr.setSelection(selection).scrollIntoView());
     this.view.focus();

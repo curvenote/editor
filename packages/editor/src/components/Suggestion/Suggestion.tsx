@@ -5,7 +5,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { isSuggestionSelected } from '../../store/selectors';
-import { Dispatch, State } from '../../store';
+import type { Dispatch, State } from '../../store';
 import { chooseSelection, selectSuggestion } from '../../store/actions';
 
 const useStyles = makeStyles<Theme, { selectOnHover: boolean }>(() =>
@@ -15,7 +15,8 @@ const useStyles = makeStyles<Theme, { selectOnHover: boolean }>(() =>
       cursor: 'pointer',
       clear: 'both',
       '&:hover': {
-        backgroundColor: ({ selectOnHover }) => (selectOnHover ? 'transparent' : '#f5f5f5'),
+        backgroundColor: ({ selectOnHover }: { selectOnHover: boolean }) =>
+          selectOnHover ? 'transparent' : '#f5f5f5',
       },
     },
     selected: {
