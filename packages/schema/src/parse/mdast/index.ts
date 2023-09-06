@@ -1,7 +1,8 @@
 import type { Fragment, Node as ProsemirrorNode, NodeType, Schema } from 'prosemirror-model';
 import { Mark } from 'prosemirror-model';
-import type { GenericNode } from 'mystjs';
-import { select, selectAll, remove } from 'mystjs';
+import type { GenericNode } from 'myst-common';
+import { select, selectAll } from 'unist-util-select';
+import { remove } from 'unist-util-remove';
 import type {
   FlowContent,
   FootnoteDefinition,
