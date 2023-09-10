@@ -1,7 +1,9 @@
+import type { PluginKey } from 'prosemirror-state';
 import type { MarkType } from 'prosemirror-model';
 
 export type Options = {
   markType?: MarkType;
+  pluginKey?: string | PluginKey;
 };
 
 export type CodemarkState = {
