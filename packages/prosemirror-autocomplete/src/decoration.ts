@@ -140,10 +140,13 @@ export function getDecorationPlugin(reducer: Required<Options>['reducer']) {
         // Be defensive, just in case the trigger doesn't exist
         const filter = text.slice(trigger?.length ?? 1);
 
-        const checkCancelOnSpace = type?.cancelOnFirstSpace ?? true;
+        const cancelOnFirstSpace = type?.cancelOnFirstSpace ?? true;
+        const cancelOnSpace = type?.cancelOnSpace ?? false;
+        const checkCancelOnSpace = cancelOnFirstSpace || cancelOnSpace;
+
         if (
           checkCancelOnSpace &&
-          filter.length === 0 &&
+          (cancelOnSpace || filter.length === 0) &&
           (event.key === ' ' || event.key === 'Spacebar')
         ) {
           closeAutocomplete(view);

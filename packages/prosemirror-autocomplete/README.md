@@ -103,7 +103,8 @@ Provide the trigger in the matched group and anything before in a non-capture gr
 
 - `name: string`: the trigger is passed in the action, you can use this to descriminate handler calls
 - `trigger: string | RegExp`: used to trigger an autocomplete suggestion - described above
-- `cancelOnFirstSpace?: boolean`, cancels the auto complete on first space, default is true
+- `cancelOnSpace?: boolean` (default `false`) When `true`, a space anywhere in the filter cancels autocompletion, and the value of `cancelOnFirstSpace` is ignored.  Default is `false`.
+- `cancelOnFirstSpace?: boolean` (default `true`) When `true`, only a space in the initial position of the filter will cancel autocompletion, while spaces elsewhere are allowed.  Default is `true`.
 - `allArrowKeys?: boolean`: Use left/right arrow keys, default is false
 - `decorationAttrs?: DecorationAttrs`, passed to the `<span>` element directly through prosemirror
 
