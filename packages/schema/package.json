@@ -39,7 +39,7 @@
     "@wordpress/wordcount": "^3.11.0",
     "js-yaml": "^4.1.0",
     "markdown-it": "^12.2.0",
-    "myst-spec": "^0.0.4",
+    "myst-spec": "^0.0.5",
     "mystjs": "^0.0.15",
     "nanoid": "^3.3.4",
     "orderedmap": "^1.1.1",

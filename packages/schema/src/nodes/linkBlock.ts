@@ -1,19 +1,19 @@
 import type { MyNodeSpec } from './types';
 import { NodeGroups } from './types';
 import type { MdFormatSerialize, TexFormatSerialize } from '../serialize/types';
-import type { StaticPhrasingContent, LinkBlock } from '../nodespec';
+import type { StaticPhrasingContent, Card } from '../nodespec';
 
 export interface Attrs {
   title: string;
   description: string;
-  url: string;
+  link: string;
 }
 
 const LINK_BLOCK_CLASS = 'link-block';
 
-const link_block: MyNodeSpec<Attrs, LinkBlock> = {
+const link_block: MyNodeSpec<Attrs, Card> = {
   attrs: {
-    url: { default: '' },
+    link: { default: '' },
     title: { default: '' },
     description: { default: '' },
   },
@@ -28,7 +28,7 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
       tag: `div.${LINK_BLOCK_CLASS}`,
       getAttrs(dom: any) {
         const attrs = {
-          url: dom.getAttribute('data-url') || null,
+          link: dom.getAttribute('data-url') || null,
           title: dom.getAttribute('title') || '',
           description: dom.textContent || '',
         };
@@ -54,16 +54,18 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
       description = token.children[0].value;
     }
     return {
-      url: token.url,
+      link: token.link || '',
       title: token.title || '',
+      header: token.header || '',
+      footer: token.footer || '',
       description,
     };
   },
   toMyst: (props) => {
     return {
-      type: 'linkBlock',
-      url: props['data-url'],
-      title: props.title || undefined,
+      type: 'card',
+      title: props.title || props['data-url'],
+      link: props['data-url'],
       children: (props.children || []) as StaticPhrasingContent[],
     };
   },
@@ -71,9 +73,8 @@ const link_block: MyNodeSpec<Attrs, LinkBlock> = {
 
 export const toMarkdown: MdFormatSerialize = (state, node) => {
   state.ensureNewLine();
-  state.write(`\`\`\`{link-block} ${node.attrs.url}\n`);
-  if (node.attrs.title) state.write(`:title: ${node.attrs.title}\n`);
-  if (node.attrs.thumbnail) state.write(`:thumbnail: ${node.attrs.thumbnail}\n`);
+  state.write(`\`\`\`{card} ${node.attrs.title}\n`);
+  state.write(`:link: ${node.attrs.url}\n`);
   if (node.attrs.description) state.write(`${node.attrs.description}\n`);
   state.ensureNewLine();
   state.write('```');

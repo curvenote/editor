@@ -111,11 +111,12 @@ export type TableCell = SpecTableCell & {
   rowspan?: number;
 };
 
-export type LinkBlock = {
-  type: 'linkBlock';
-  url: string;
-  thumbnail?: string;
-  title?: string;
+export type Card = {
+  type: 'card';
+  title: string;
+  link?: string;
+  header?: string;
+  footer?: string;
   children: StaticPhrasingContent[];
 };
 
