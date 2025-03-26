@@ -26,7 +26,8 @@
     "resolveJsonModule": true,
     // Ignore node_modules, etc.
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts", "tests/**/*"]
