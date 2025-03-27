@@ -1,9 +1,6 @@
-import { Plugin } from 'prosemirror-state';
 import type { PluginSpec } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
-import type { CodemarkState, CursorMetaTr, Options } from './types';
-import { getMarkType, pluginKey, safeResolve } from './utils';
-import { createInputRule } from './inputRules';
 import {
   onArrowLeft,
   onArrowRight,
@@ -13,6 +10,9 @@ import {
   stepOutside,
   stepOutsideNextTrAndPass,
 } from './actions';
+import { createInputRule } from './inputRules';
+import type { CodemarkState, CursorMetaTr, Options } from './types';
+import { getMarkType, safeResolve } from './utils';
 
 function toDom(): Node {
   const span = document.createElement('span');
@@ -21,8 +21,9 @@ function toDom(): Node {
 }
 
 export function getDecorationPlugin(opts?: Options) {
+  const pluginKey = opts?.pluginKey || new PluginKey('codemark');
   const plugin: Plugin<CodemarkState> = new Plugin({
-    key: pluginKey,
+    key: typeof pluginKey === 'string' ? new PluginKey(pluginKey) : pluginKey,
     appendTransaction: (trs, oldState, newState) => {
       const prev = plugin.getState(oldState) as CodemarkState;
       const meta = trs[0]?.getMeta(plugin) as CursorMetaTr | null;
