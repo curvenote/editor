@@ -1,4 +1,4 @@
-import type { GenericNode } from 'mystjs';
+import type { GenericNode } from 'myst-common';
 import type { MarkSpec } from 'prosemirror-model';
 import type {
   MystNode,

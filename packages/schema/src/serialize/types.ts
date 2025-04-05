@@ -1,6 +1,6 @@
 import type { MarkdownSerializerState } from 'prosemirror-markdown';
 import type { Node } from 'prosemirror-model';
-import type { GenericNode } from 'mystjs';
+import type { GenericNode } from 'myst-common';
 
 export enum TexFormatTypes {
   'tex' = 'tex',
