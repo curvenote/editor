@@ -14,7 +14,7 @@ const options: Options = {
   reducer,
   triggers: [
     // For demo purposes, make the `#` and `@` easier to create
-    { name: 'hashtag', trigger: /(#)$/ },
+    { name: 'hashtag', trigger: /(#)$/, cancelOnSpace: true },
     { name: 'mention', trigger: /(@)$/ },
     { name: 'emoji', trigger: ':' },
     { name: 'link', trigger: '[[', cancelOnFirstSpace: false },
